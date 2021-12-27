@@ -93,35 +93,35 @@ easy to mount a remote machine's `/etc/nixos` and get to work on it.
         + Yatse gives an error about Event Server not working?
             + gonna just ignore this. it doesn't seem to affect anything?
     + bluetooth
+    + remove secrets from advancedsettings.xml
+    + overlay/storage/.kodi/userdata/addon_data/skin.estuary/settings.xml
 
-    - overlay/storage/.kodi/userdata/addon_data/skin.estuary/settings.xml
     - tubecast
         - out/storage/.kodi/userdata/addon_data/plugin.video.youtube/api_keys.json
         - tubed
             - remove?
             - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
 
-    - version control all of this
-        - cleanup jpi/kodi. reuse that space? urg, jpi will become misnamed :cry:
-        - remove secrets from advancedsettings.xml
     - deploy
         - change hostname to "dallben"
         - replace old pi
         - pair bluetooth controllers
         - test stopping parsec when inside gurgi: ssh config
-    - cleanup
-        - kodi skip "Add-on migration in progress..." ?
-        - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets)
-        - contribute back to https://github.com/DarthPJB/parsec-gaming-nix/blob/main/default.nix
-        - ~/.parsec/user.bin
+
+    - more secrets/polish
+        - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets) ~/.parsec/user.bin
         - bluetooth connection secrets?
-        - DRY up username "dallben" throughout various nix files. maybe
-          introduce some concept of a "main"/"admin" user?
+    - cleanup
+        - DRY up username "dallben" throughout various nix files. maybe introduce some concept of a "main"/"admin" user?
         - DRY up devicename in advancedsettings.xml
     - TODO: upstream
+        - contribute back to https://github.com/DarthPJB/parsec-gaming-nix/blob/main/default.nix
         - webui broken: https://github.com/NixOS/nixpkgs/issues/145116
             - wrapper symlinks are preventing us from getting past this block of code: https://github.com/xbmc/xbmc/blob/4ac445c4a9f3080895bfcc34e7115e2de5b66d22/xbmc/utils/FileUtils.cpp#L299-L319
                 - i've worked around this for now by hacking on pkgs/applications/video/kodi/wrapper.nix
         - auto enable relevant plugins.
             - see custom nixpkgs: pkgs/applications/video/kodi/wrapper.nix. can we upstream this?
             - i think we can do better by making these look like "system" addons. this file looks very relevant: /nix/store/1c9asw9zw87f74vsdhl4yanwcj5b3i0n-kodi-19.3-env/share/kodi/system/addon-manifest.xml (see xbmc/addons/AddonManager.cpp and xbmc/addons/AddonDatabase.cpp)
+    - version control all of this
+        - cleanup jpi/kodi. reuse that space? urg, jpi will become misnamed :cry:
+    - Lastly: do it all again from scratch
