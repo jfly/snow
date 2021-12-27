@@ -23,7 +23,7 @@
       ./parsec
     ];
 
-  networking.hostName = "dallben2";
+  networking.hostName = "dallben";
   # Disable the firewall. Kodi needs to expose various ports to function, and
   # we're behind a NAT anyways...
   networking.firewall.enable = false;

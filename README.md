@@ -60,8 +60,8 @@ Editing files remotely can get old fast. There's a `mount` script that makes it
 easy to mount a remote machine's `/etc/nixos` and get to work on it.
 
     tools/mount.sh
-    cd dallben2/
-    ssh dallben2 ./snix.sh
+    cd dallben/
+    ssh dallben ./snix.sh
 
 # TODO
     + passwordless sudo?
@@ -97,23 +97,29 @@ easy to mount a remote machine's `/etc/nixos` and get to work on it.
     + overlay/storage/.kodi/userdata/addon_data/skin.estuary/settings.xml
     + tubecast
         + out/storage/.kodi/userdata/addon_data/plugin.video.youtube/api_keys.json
+    + deploy
+        + nuke kodi 19 dbs on clark
+        + change hostname to "dallben"
+        + replace old pi
+        + pair bluetooth keyboard + mouse
+        + pair ds4 controllers
+        + test stopping parsec when inside gurgi: ssh config
+    + controllers are paired, but not controlling kodi
 
-    - deploy
-        - nuke kodi 19 dbs on clark
-        - change hostname to "dallben"
-        - replace old pi
-        - pair bluetooth controllers
-        - test stopping parsec when inside gurgi: ssh config
+    - high priority polish
+        - exiting kodi turns off tv? turn off all that cec stuff
+        - windows controls sometimes go a bit wonky. perhaps related to kodi still running in the background?
+            - stop_parsec.sh causes a scary error message about parsec crashing
 
     - more secrets/polish
         - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets) ~/.parsec/user.bin
         - bluetooth connection secrets?
-        - what to do with tubed
-            - remove?
-            - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
     - cleanup
         - DRY up username "dallben" throughout various nix files. maybe introduce some concept of a "main"/"admin" user?
         - DRY up devicename in advancedsettings.xml
+        - what to do with tubed
+            - remove?
+            - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
     - TODO: upstream
         - contribute back to https://github.com/DarthPJB/parsec-gaming-nix/blob/main/default.nix
         - webui broken: https://github.com/NixOS/nixpkgs/issues/145116

@@ -4,6 +4,7 @@ let
   my_kodi_packages = pkgs.callPackage ./kodi-packages {};
   my_kodi_with_packages = pkgs.kodi.withPackages (builtin_kodi_packages: [
     builtin_kodi_packages.a4ksubtitles
+    builtin_kodi_packages.joystick
     my_kodi_packages.media
     my_kodi_packages.autoreceiver
     my_kodi_packages.parsec
