@@ -105,11 +105,13 @@ easy to mount a remote machine's `/etc/nixos` and get to work on it.
         + pair ds4 controllers
         + test stopping parsec when inside gurgi: ssh config
     + controllers are paired, but not controlling kodi
+    + exiting kodi turns off tv? turn off all that cec stuff
 
     - high priority polish
-        - exiting kodi turns off tv? turn off all that cec stuff
+        - what *should* exiting kodi do?
         - windows controls sometimes go a bit wonky. perhaps related to kodi still running in the background?
             - stop_parsec.sh causes a scary error message about parsec crashing
+        - should we try a higher resolution?
 
     - more secrets/polish
         - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets) ~/.parsec/user.bin

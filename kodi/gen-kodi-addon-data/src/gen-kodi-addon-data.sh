@@ -3,15 +3,15 @@
 set -e
 cd "$(dirname "$0")"
 
-addon_data_dir="$HOME/.kodi/userdata/addon_data"
+userdata_dir="$HOME/.kodi/userdata"
 
-echo -n "Regenerating $addon_data_dir..."
-mkdir -p "$addon_data_dir"
-rsync -av ./addon_data/ "$addon_data_dir"
+echo -n "Regenerating $userdata_dir..."
+mkdir -p "$userdata_dir"
+rsync -a ./ "$userdata_dir"
 echo " done!"
 
 # Kodi expects the contents of this directory to be writeable. Don't disappoint
 # it.
-echo "Marking it all writeable..."
-chmod u+w -R "$addon_data_dir"
+echo -n "Marking it all writeable..."
+chmod u+w -R "$userdata_dir"
 echo " done!"
