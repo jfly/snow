@@ -1,0 +1,29 @@
+<sources>
+    <programs>
+        <default pathversion="1"></default>
+    </programs>
+    <video>
+        <default pathversion="1"></default>
+        <source>
+            <name>shows</name>
+            <path pathversion="1">/mnt/media/shows/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>movies</name>
+            <path pathversion="1">/mnt/media/movies/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </video>
+    <music>
+        <default pathversion="1"></default>
+        <source>
+            <name>music</name>
+            <path pathversion="1">/mnt/media/music/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </music>
+    <pictures>
+        <default pathversion="1"></default>
+    </pictures>
+</sources>
