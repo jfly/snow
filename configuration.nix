@@ -24,6 +24,9 @@
     ];
 
   networking.hostName = "dallben2";
+  # Disable the firewall. Kodi needs to expose various ports to function, and
+  # we're behind a NAT anyways...
+  networking.firewall.enable = false;
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";

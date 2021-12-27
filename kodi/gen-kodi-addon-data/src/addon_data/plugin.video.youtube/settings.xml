@@ -1,0 +1,6 @@
+<settings version="2">
+    <setting id="kodion.video.quality" default="true">4</setting>
+    <setting id="kodion.setup_wizard">false</setting>
+    <setting id="youtube.region" default="true">US</setting>
+    <setting id="youtube.language" default="true">en-US</setting>
+</settings>

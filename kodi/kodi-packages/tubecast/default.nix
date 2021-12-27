@@ -15,7 +15,9 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     bottle
     requests
-    #<<< https://github.com/enen92/script.tubecast/commit/9f25748be5db79526e456c3a4b073bbf33b55b08 >>> tubed
+    # This plugin optionally depends on tubed or youtube. Both plugins seem to
+    # have issues with api keys, pick your poison.
+    # tubed
     youtube
   ];
 

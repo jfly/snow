@@ -95,14 +95,11 @@ easy to mount a remote machine's `/etc/nixos` and get to work on it.
     + bluetooth
     + remove secrets from advancedsettings.xml
     + overlay/storage/.kodi/userdata/addon_data/skin.estuary/settings.xml
-
-    - tubecast
-        - out/storage/.kodi/userdata/addon_data/plugin.video.youtube/api_keys.json
-        - tubed
-            - remove?
-            - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
+    + tubecast
+        + out/storage/.kodi/userdata/addon_data/plugin.video.youtube/api_keys.json
 
     - deploy
+        - nuke kodi 19 dbs on clark
         - change hostname to "dallben"
         - replace old pi
         - pair bluetooth controllers
@@ -111,6 +108,9 @@ easy to mount a remote machine's `/etc/nixos` and get to work on it.
     - more secrets/polish
         - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets) ~/.parsec/user.bin
         - bluetooth connection secrets?
+        - what to do with tubed
+            - remove?
+            - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
     - cleanup
         - DRY up username "dallben" throughout various nix files. maybe introduce some concept of a "main"/"admin" user?
         - DRY up devicename in advancedsettings.xml
