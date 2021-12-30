@@ -5,11 +5,17 @@ Playing around with NixOS
 https://docs.google.com/document/d/1LtwhNzlWBPv61b5ysdFDaDuw3bote0nc9ObSiC2ZJ7s/
 
 ## BIOS setup ##
+    - Update bios. https://wiki.archlinux.org/title/Intel_NUC links to
+      instructions for the "Visual BIOS", but we actually have the "Aptio
+      BIOS":
+      https://www.intel.com/content/www/us/en/download/19485/bios-update-fncml357.html
     - F2 while booting to get into the BIOS
     - Bios > Boot > Secure Boot > Secure Boot: Set to "Disabled"
     - Bios > Performance > Cooling > Fan Control Mode: Set to "Quiet"
     - Bios > Power > Power > After Power Failure: Set to "Power On"
-    - TODO: update bios! https://wiki.archlinux.org/title/Intel_NUC
+    - Bios > Advanced > Onboard Devices > HDMI CEC Control: Uncheck this box!
+      (the Pulse-Eight adapter doesn't play nicely with this setting. See
+      https://github.com/Pulse-Eight/libcec/issues/445.)
 
 ## Set up USB drive ##
     wget https://channels.nixos.org/nixos-21.11/latest-nixos-minimal-x86_64-linux.iso
