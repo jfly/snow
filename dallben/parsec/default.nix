@@ -1,9 +1,6 @@
 { pkgs, lib, ... }:
 
 {
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "parsec"
-  ];
   environment.systemPackages = with pkgs; [
     (callPackage ./parsec.nix {})
     (pkgs.writeShellScriptBin "stop_parsec.sh" "pkill parsecd")
