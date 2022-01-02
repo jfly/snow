@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
-  my_kodi_packages = pkgs.callPackage ./kodi-packages {};
+  my_kodi_packages = pkgs.callPackage ./kodi-packages { inherit config; };
   my_kodi_with_packages = pkgs.kodi.withPackages (builtin_kodi_packages: [
     builtin_kodi_packages.a4ksubtitles
     builtin_kodi_packages.joystick
@@ -30,7 +30,7 @@ in
     fsType = "nfs";
   };
 
-  users.users.dallben.extraGroups = [
+  users.users.${config.variables.kodiUsername}.extraGroups = [
     # Needed to access /dev/ttyACM0, which is used by libcec. See
     # https://flameeyes.blog/2020/06/25/kodi-nuc-and-cec-adapters/ for details.
     "dialout"

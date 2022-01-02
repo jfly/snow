@@ -1,7 +1,7 @@
 <advancedsettings version="1.0">
     <!-- Enable remote control: https://kodi.wiki/view/Smartphone/tablet_remotes#Manually_enabling_remote_control -->
     <services>
-	<devicename>dallben</devicename>
+	<devicename>@host_name@</devicename>
         <esenabled>true</esenabled>
         <esallinterfaces>true</esallinterfaces>
         <webserver>true</webserver>
@@ -35,14 +35,9 @@
         <cleanonupdate>true</cleanonupdate> <!-- Also clean library during library update -->
     </musiclibrary>
 
-    <setting id="locale.timezone">America/Los_Angeles</setting>
+    <setting id="locale.timezone">@time_zone@</setting>
     <setting id="locale.timezonecountry">United States</setting>
     <setting id="locale.subtitlelanguage">forced_only</setting> <!-- Default value was "original" -->
 
-    <setting id="services.airplay">false</setting> <!-- This seems to default to true in LibreELEC -->
-
-    <!-- Audio configuration specific to raspberry pi -->
-    <setting id="audiooutput.channels">4</setting> <!-- This is the fourth option: "3.1". This doesn't matter in the event that passthrough audio is used, but the documentation says that sometimes passthrough audio is *not* used, so it seeems like it's worth giving this the correct value. -->
-    <setting id="audiooutput.passthrough">true</setting>
-    <setting id="audiooutput.passthroughdevice">PI:HDMI</setting>
+    <setting id="services.airplay">false</setting>
 </advancedsettings>

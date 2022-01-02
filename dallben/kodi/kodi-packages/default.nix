@@ -1,4 +1,4 @@
-{ newScope, pkgs }:
+{ config, newScope, pkgs }:
 
 let self = rec {
   # Pull some all of pkgs.kodiPackages into scope + cleverly make the new kodi
@@ -16,6 +16,6 @@ let self = rec {
 
   # Mine! No intention of upstreaming these.
   autoreceiver = callPackage ./autoreceiver {};
-  media = callPackage ./media {};
+  media = callPackage ./media { inherit config; };
   parsec = callPackage ./parsec {};
 }; in self

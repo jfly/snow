@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # Use the latest kernel because the default (5.10) doesn't have this fix for
@@ -8,7 +8,7 @@
 
   # Enable audio
   hardware.pulseaudio.enable = true;
-  users.users.dallben.extraGroups = [
+  users.users.${config.variables.kodiUsername}.extraGroups = [
     "audio"  # From https://nixos.wiki/wiki/PulseAudio#Enabling_PulseAudio
   ];
 }
