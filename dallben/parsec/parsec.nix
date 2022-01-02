@@ -1,4 +1,5 @@
 # Copied from https://github.com/DarthPJB/parsec-gaming-nix/blob/main/default.nix
+# TODO: upstream my changes?
 
 { lib, stdenv, fetchurl, alsaLib, dbus, libGL, libpulseaudio, libva
 , openssl, udev, xorg, wayland, autoPatchelfHook }:

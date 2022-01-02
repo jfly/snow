@@ -6,7 +6,6 @@
 
   # Enable hardware accelerated video playback
   # (copied from https://nixos.wiki/wiki/Accelerated_Video_Playback)
-  # TODO <<< https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/intel/kaby-lake/default.nix >>>
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };

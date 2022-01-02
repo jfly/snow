@@ -20,7 +20,7 @@ buildKodiAddon rec {
     tubed-api
   ];
 
-  # >>> TODO: explain should use https://forum.kodi.tv/showthread.php?tid=274751 instead. or maybe Kodi::GetAddonPath()? https://forum.kodi.tv/showthread.php?tid=336534 <<<
+  # TODO: explain should use https://forum.kodi.tv/showthread.php?tid=274751 instead. or maybe Kodi::GetAddonPath()? https://forum.kodi.tv/showthread.php?tid=336534
   # This has to be done in postInstall because toKodiAddon
   # (pkgs/applications/video/kodi/build-kodi-addon.nix)'s `installPhase` copies
   # from `$src` rather than `.`
