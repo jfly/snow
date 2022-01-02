@@ -2,7 +2,12 @@
 
 {
   environment.systemPackages = with pkgs; [
-    (callPackage ./parsec.nix {})
+    (callPackage (import (builtins.fetchTarball {
+      name = "parsec-gaming-nix";
+      url = "https://github.com/DarthPJB/parsec-gaming-nix/archive/354e8313bf5574cbc16133ee0e7d6845c858bc01.tar.gz";
+      # Hash obtained using `nix-prefetch-url --unpack <url>`
+      sha256 = "0wnvl27wbhfza2svnqi8daxb98729wwn97gas5jwfz7niv9rgbah";
+    })) {})
     (pkgs.writeShellScriptBin "stop_parsec.sh" "pkill parsecd")
   ];
 
