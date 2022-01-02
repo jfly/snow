@@ -53,19 +53,3 @@ so we're doing something simple right now:
     cd snow
     cp dallben/secrets.nix.example dallben/secrets.nix
     # edit dallben/secrets.nix!
-
-# TODO #
-
-- what *should* exiting kodi do?
-- windows controls sometimes go a bit wonky. perhaps related to kodi still running in the background?
-    - stop_parsec.sh causes a scary error message about parsec crashing
-- more secrets/polish
-    - parsec login secret ($PARSEC_USER_BIN_BASE64 in clark:/mtn/media/.build-secrets/jpi-kodi.secrets) ~/.parsec/user.bin
-    - bluetooth connection secrets?
-- cleanup
-    - DRY up username "dallben" throughout various nix files. maybe introduce some concept of a "main"/"admin" user?
-    - DRY up devicename in advancedsettings.xml
-    - what to do with tubed
-        - remove?
-        - grep privacy.policy.accepted ~/.kodi/ -r: /home/dallben/.kodi/userdata/addon_data/plugin.video.tubed/settings.xml:    <setting id="privacy.policy.accepted">10222020</setting>
-- Lastly: do it all again from scratch
