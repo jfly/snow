@@ -5,6 +5,7 @@ rec {
     [
       ./boot.nix
       ./network.nix
+      ./nas.nix
     ];
 
   deployment.targetUser = "root";

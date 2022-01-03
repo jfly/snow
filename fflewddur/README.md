@@ -44,3 +44,16 @@ The machine should boot up, and you should be able to ssh to it:
 ## Deploying ##
 
     morph deploy snow.nix --on="fflewddur" switch
+
+## Adding another drive ##
+
+Connect the new drive. Find it in `lsblk`. The rest of this example will be for `/dev/sda`.
+
+    nix-shell -p parted
+    DRIVE=/dev/sda
+    parted "$DRIVE" -- mklabel gpt
+    parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
+    mkfs.ext4 "${DRIVE}1"
+
+Get the UUID of the partition you just created (I use `lsblk -f /dev/sda1`).
+Add it to `nas_drive_uuids` in `nas.nix`.
