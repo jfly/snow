@@ -27,7 +27,9 @@ Now on the freshly booted machine.
 
     $ mkdir ~/.ssh
     $ curl https://github.com/jfly.keys > ~/.ssh/authorized_keys
-    # At this point, you can continue from laptop by doing `ssh nixos@nixos`.
+
+At this point, you can continue from a laptop by doing `ssh nixos@nixos`.
+
     # Partition
     $ sudo su
     $ parted /dev/nvme0n1 -- mklabel gpt
