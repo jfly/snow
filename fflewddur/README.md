@@ -2,25 +2,26 @@ Our primary NAS running on that old gaming PC James gave me forever ago.
 
 ## Bootstrapping ##
 
-I tried out PXE booting this time. pixiecore is a pretty slick all-in-one tool!
+Build a custom live cd:
 
-1. Start pixiecore on another machine on the same network: `sudo pixiecore quick xyz --dhcp-no-bind`
-2. F12 while booting. Enter BIOS Setup > BIOS Features
-   - Boot Mode Selection: UEFI and Legacy - UEFI netboot just doesn't seem to work for some reason
-   - LAN PXE Boot Option ROM: Enabled
+    $ cd livecd
+    # edit `networking.hostName` in iso.nix
+    # make sure you have a nixos channel pointing at something stable like 21.11
+    $ nix-build '<nixos/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
+    $ sudo dd if=./result/iso/nixos-21.11.334984.08370e1e271-x86_64-linux.iso of=USB_DEVICE_HERE status=progress conv=fsync
+
+1. Insert live USB drive you just created.
+1. F12 while booting. Enter BIOS Setup > BIOS Features
+   - Boot Mode Selection: UEFI only
+   - LAN PXE Boot Option ROM: Disabled
+   - Storage Boot Option Control: UEFI Only
    - F10 to save and exit
-3. F12 while booting. Select "Realtek PXE B05 D00"
-4. If that works, you'll be looking at the netboot.xyz menu. Go to Distributions > Linux Network Installs > NixOS > nixos-21.11
+3. F12 while booting. Select "UEFI: CBM", then the regular NixOS Installer.
 
-Now on the freshly booted machine:
+The machine should boot up, and you should be able to ssh to it:
 
-    $ mkdir ~/.ssh
-    $ curl https://github.com/jfly.keys > ~/.ssh/authorized_keys
-
-At this point, you can continue from a laptop by doing `ssh nixos@nixos`.
-
+    $ ssh root@fflewddur
     # Partition
-    $ sudo su
     $ parted /dev/sda -- mklabel gpt
     $ parted /dev/sda -- mkpart primary 512MiB -0
     $ parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
@@ -33,7 +34,13 @@ At this point, you can continue from a laptop by doing `ssh nixos@nixos`.
     $ mkdir /mnt/boot
     $ mount /dev/disk/by-label/boot /mnt/boot
     $ nixos-generate-config --root /mnt
-    # Hack on /mnt/etc/nixos/configuration.nix to change it to an EFI boot loader
-    # Also change the hostname to "fflewddur"
+    # Hack on /mnt/etc/nixos/configuration.nix:
+    #  - Change `networking.hostName` to "fflewddur".
+    #  - Add `services.openssh.enable = true;`
+    #  - Add `users.users.root.openssh.authorizedKeys.keys`
     $ nixos-install --no-root-passwd
     $ reboot
+
+## Deploying ##
+
+    morph deploy snow.nix --on="fflewddur" switch

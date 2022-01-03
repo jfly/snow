@@ -38,4 +38,5 @@ in
     inherit pkgs;
   };
   "dallben" = import dallben/configuration.nix;
+  "fflewddur" = import fflewddur/configuration.nix;
 }

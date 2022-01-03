@@ -55,3 +55,5 @@ so we're doing something simple right now:
     cd snow
     cp dallben/secrets.nix.example dallben/secrets.nix
     # edit dallben/secrets.nix!
+
+    morph deploy snow.nix --on="dallben" switch
