@@ -1,7 +1,5 @@
-{pkgs}:
+{pkgs, secrets}:
 
-let secrets = (import ../../secrets.nix);
-in
 pkgs.stdenv.mkDerivation {
   name = "gen-kodi-addon-data";
   src = ./src;

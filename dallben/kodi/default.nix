@@ -1,7 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, secrets, ... }:
 
 let
-  my_kodi_packages = pkgs.callPackage ./kodi-packages { inherit config; };
+  my_kodi_packages = pkgs.callPackage ./kodi-packages {
+    inherit config;
+    inherit secrets;
+  };
   my_kodi_with_packages = pkgs.kodi.withPackages (builtin_kodi_packages: [
     builtin_kodi_packages.a4ksubtitles
     builtin_kodi_packages.joystick
@@ -13,7 +16,9 @@ let
   # This is unfortunate: it just doesn't seem to be possible to set some kodi
   # settings without creating files in the ~/.kodi/userdata/addon_data
   # directory. So, we wrap kodi to give us an opportunity to do that.
-  genKodiAddonData = pkgs.callPackage ./gen-kodi-addon-data {};
+  genKodiAddonData = pkgs.callPackage ./gen-kodi-addon-data {
+    inherit secrets;
+  };
   my_kodi = pkgs.symlinkJoin {
     name = "kodi";
     paths = [ my_kodi_with_packages ];

@@ -1,7 +1,5 @@
-{ pkgs, config }:
+{ pkgs, config, secrets }:
 
-let secrets = (import ../../../secrets.nix);
-in
 pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   name = "media";
   src = ./src;
