@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ $# -ne 1 ]; then
+
+    echo "Usage: $0 [target]
+
+To deploy all machines:
+
+    ./deploy '*'
+
+To deploy one machine:
+
+    ./deploy 'dallben'
+"
+    exit 1
+fi
+
+tools/deage
+morph deploy snow.nix --on="$1" switch

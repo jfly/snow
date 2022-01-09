@@ -4,8 +4,10 @@ Short for snowdon, the street on which I started playing around with Nix.
 
 # deploy
 
-    morph deploy snow.nix switch
+To deploy all machines:
 
-# TODO
+    ./deploy '*'
 
-- version control dallben/secrets.nix with git-crypt?
+To deploy one machine:
+
+    ./deploy 'dallben'

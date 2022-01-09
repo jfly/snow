@@ -46,14 +46,5 @@ At this point, you can continue from a laptop by doing `ssh nixos@nixos`.
     $ nixos-install
     $ reboot
 
-## Deploying ##
-
-I don't want to take the time to figure out a good secrets management solution,
-so we're doing something simple right now:
-
-    git clone <this repo>
-    cd snow
-    cp dallben/secrets.nix.example dallben/secrets.nix
-    # edit dallben/secrets.nix!
-
-    morph deploy snow.nix --on="dallben" switch
+Now the machine is bootstrapped and ready for regular deployment (see top level
+README for instructions).
