@@ -29,7 +29,10 @@ rec {
   services.xserver.layout = "us";
 
   # Enable ssh.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+  };
 
   # Allow ssh access as root user.
   users.users.root = {
