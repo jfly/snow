@@ -8,12 +8,12 @@ let
     config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
       "parsec"
     ];
-    # Patch python rxv package. We can remove this once
-    # https://github.com/wuub/rxv/pull/90 is merged up, released, and nixpkgs
-    # has been updated to use it.
     overlays = [(
       self: super:
       rec {
+        # Patch python rxv package. We can remove this once
+        # https://github.com/wuub/rxv/pull/90 is merged up, released, and nixpkgs
+        # has been updated to use it.
         python3 = super.python3.override {
           # Careful, we're using a different self and super here!
           packageOverrides = self: super: {
@@ -29,6 +29,14 @@ let
           };
         };
         python3Packages = python3.pkgs;
+
+        deage = rec {
+          file = encrypted: (
+            let hashed = builtins.hashString "sha256" (pkgs.lib.strings.removeSuffix "\n" encrypted);
+            in ./.sensitive-decrypted-secrets + "/${hashed}.secret"
+          );
+          string = encrypted: builtins.readFile(file encrypted);
+        };
       }
     )];
   };

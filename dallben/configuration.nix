@@ -1,9 +1,6 @@
 { config, pkgs, ... }:
 
 rec {
-  _module.args = {
-    secrets = (import ./secrets.nix);
-  };
   imports =
     [
       ./variables.nix

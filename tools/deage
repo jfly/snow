@@ -5,53 +5,64 @@ import re
 import sys
 import subprocess
 from rich import print
+from hashlib import sha256
 from textwrap import dedent
 
 AGE_ARMOR_RE = re.compile(
-    r"-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
+    r" *-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
     re.DOTALL,
 )
 
-PRIVATE_KEY_PATH = "keys/age-private-key.txt"
+DECRYPTED_SECRETS_DIR = ".sensitive-decrypted-secrets"
+PRIVATE_KEY_PATH = os.path.join(DECRYPTED_SECRETS_DIR, "age-private-key.txt")
 
 def decrypt(encrypted: str) -> str:
     p = subprocess.run(
         ["age", "-i", PRIVATE_KEY_PATH, "--decrypt"],
         input=encrypted,
         check=True,
-        capture_output=True,
+        stdout=subprocess.PIPE,
         text=True,
     )
     return p.stdout
 
-def decrypt_file(src: str, dest: str):
+def extract_and_decrypt_secrets(src: str):
     with open(src, "r") as f:
         document = f.read()
 
-    decrypted = AGE_ARMOR_RE.sub(lambda m: decrypt(m.group(0)), document)
-    with open(dest, "w") as f:
-        f.write(decrypted)
+    for m in AGE_ARMOR_RE.finditer(document):
+        encrypted = dedent(m.group(0))
+        hash_encrypted = sha256(encrypted.encode('utf8')).hexdigest()
+        decrypted = decrypt(encrypted)
+        with open(os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret"), "w") as f:
+            f.write(decrypted)
 
 
-def main():
+def sanity_check_private_key():
+    private_key_problem = None
     if not os.path.isfile(PRIVATE_KEY_PATH):
+        private_key_problem = f"Could not find {PRIVATE_KEY_PATH}"
+    elif os.path.getsize(PRIVATE_KEY_PATH) == 0:
+        private_key_problem = f"{PRIVATE_KEY_PATH} is empty!"
+
+    if private_key_problem is not None:
+        os.makedirs(os.path.dirname(PRIVATE_KEY_PATH), exist_ok=True)
         print(dedent(f"""\
-            [bold red]Could not find: {PRIVATE_KEY_PATH}[/bold red]
+            [bold red]{private_key_problem}[/bold red]
 
-            Have you decrypted the age private key?
+            Have you successfully decrypted the age private key?
 
-                age --decrypt -i ~/.ssh/id_rsa keys/age-private-key.txt.age > keys/age-private-key.txt
+                age --decrypt -i ~/.ssh/id_rsa tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
         """), file=sys.stderr)
         sys.exit(1)
 
+def main():
+    sanity_check_private_key()
+
     for root, _, files in os.walk("."):
         for file in files:
-            file_noext, ext = os.path.splitext(file)
-            if ext == ".aged":
-                decrypt_file(
-                    src=os.path.join(root, file),  # foo.nix.aged
-                    dest=os.path.join(root, file_noext),  # food.nix
-                )
+            if file.endswith(".nix"):
+                extract_and_decrypt_secrets(os.path.join(root, file))
 
 if __name__ == "__main__":
     main()

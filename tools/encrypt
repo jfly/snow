@@ -8,10 +8,10 @@ from textwrap import dedent
 
 def encrypt(thing: str) -> str:
     p = subprocess.run(
-        ["age", "-R", "keys/age-public-key.txt", "--encrypt", "--armor"],
+        ["age", "-R", "tools/age-public-key.txt", "--encrypt", "--armor"],
         input=thing,
         check=True,
-        capture_output=True,
+        stdout=subprocess.PIPE,
         text=True,
     )
     return p.stdout
