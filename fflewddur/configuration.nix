@@ -6,6 +6,7 @@ rec {
       ./boot.nix
       ./network.nix
       ./nas.nix
+      ./snow-backup.nix
     ];
 
   deployment.targetUser = "root";
@@ -37,7 +38,7 @@ rec {
   };
 
   # Some useful packages to have globally installed.
-  environment.systemPackages = with pkgs; [
-    vim
+  environment.systemPackages = [
+    pkgs.vim
   ];
 }

@@ -34,8 +34,11 @@ def extract_and_decrypt_secrets(src: str):
         encrypted = dedent(m.group(0))
         hash_encrypted = sha256(encrypted.encode('utf8')).hexdigest()
         decrypted = decrypt(encrypted)
-        with open(os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret"), "w") as f:
+        secret_file = os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret")
+        with open(secret_file, "w") as f:
             f.write(decrypted)
+
+        os.chmod(secret_file, 0o640)
 
 
 def sanity_check_private_key():
@@ -58,6 +61,11 @@ def sanity_check_private_key():
 
 def main():
     sanity_check_private_key()
+
+    for root, _, files in os.walk("."):
+        for file in files:
+            if file.endswith(".secret"):
+                os.unlink(os.path.join(root, file))
 
     for root, _, files in os.walk("."):
         for file in files:
