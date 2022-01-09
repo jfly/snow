@@ -25,6 +25,7 @@ let
     '';
   };
   clark-backup = pkgs.writeShellScriptBin "clark-backup" ''
+    set -e
     # Urg, hacking around nix store permissions...
     tmp=$(mktemp)
     function finish {
@@ -33,13 +34,29 @@ let
     trap finish EXIT
     cp "${keypair.private}" "$tmp"
     chmod o-r "$tmp"
-    rsync -avP --dry-run -e "ssh -i $tmp" clark@clark:/mnt/media/ /mnt/media/
+    ${pkgs.rsync}/bin/rsync -avP -e "${pkgs.openssh}/bin/ssh -i $tmp" clark@clark:/mnt/media/ /mnt/media/
   '';
 in
 {
   programs.ssh.knownHosts = {
     "clark" = {
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgSFJufFHoF0Zw3oTme7zRyogS1nTIIfoQXhk1NWyfu";
+    };
+  };
+
+  systemd = {
+    timers.clark-backup = {
+      description = "clark backup timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "daily";
+        Unit = "clark-backup.service";
+      };
+    };
+    services.clark-backup = {
+      description = "Backup clark";
+      enable = true;
+      script = "${clark-backup}/bin/clark-backup";
     };
   };
 
