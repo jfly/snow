@@ -21,7 +21,7 @@ First, change some BIOS settings.
 Now set up a USB drive, and boot from it with ethernet connected.
 
     $ wget https://channels.nixos.org/nixos-21.11/latest-nixos-minimal-x86_64-linux.iso
-    $ sudo dd bs=4M if=./latest-nixos-minimal-x86_64-linux.iso of=/dev/sda conv=fsync oflag=direct status=progress
+    $ sudo dd bs=4M if=./latest-nixos-minimal-x86_64-linux.iso of=USB_DEVICE_HERE conv=fsync oflag=direct status=progress
 
 Now on the freshly booted machine.
 
