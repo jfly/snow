@@ -13,6 +13,7 @@ let
         imports = [ cfg ];
         nixpkgs.pkgs = lib.mkForce pkgs;
         nixpkgs.localSystem.system = system;
+        deployment.targetUser = "root";
       };
 in
 {

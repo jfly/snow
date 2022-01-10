@@ -1,11 +1,6 @@
 { config, pkgs, lib, ... }:
 
 {
-  deployment.targetUser = "root";
-
-  # This configuration worked on 09-03-2021 nixos-unstable @ commit 102eb68ceec
-  # The image used https://hydra.nixos.org/build/134720986
-
   boot = {
     kernelPackages = pkgs.linuxPackages_rpi4;
     tmpOnTmpfs = true;
@@ -31,7 +26,7 @@
   hardware.enableRedistributableFirmware = true;
 
   networking = {
-    hostName = "fflam"; # Define your hostname.
+    hostName = "fflam";
     networkmanager = {
       enable = true;
     };
