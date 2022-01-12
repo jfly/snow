@@ -11,6 +11,11 @@ in
   # Force use of our custom pkgs above rather than the one from morph.
   _module.args.pkgs = lib.mkForce pkgs;
 
+  imports =
+    [
+      ./nas.nix
+    ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_rpi4;
     tmpOnTmpfs = true;

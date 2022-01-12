@@ -44,23 +44,23 @@ in
     };
   };
 
-  systemd = {
-    timers.clark-backup = {
-      description = "clark backup timer";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "daily";
-        Unit = "clark-backup.service";
-      };
-    };
-    services.clark-backup = {
-      description = "Backup clark";
-      enable = true;
-      script = "${clark-backup}/bin/clark-backup";
-    };
-  };
+  #<<< systemd = {
+  #<<<   timers.clark-backup = {
+  #<<<     description = "clark backup timer";
+  #<<<     wantedBy = [ "timers.target" ];
+  #<<<     timerConfig = {
+  #<<<       OnCalendar = "daily";
+  #<<<       Unit = "clark-backup.service";
+  #<<<     };
+  #<<<   };
+  #<<<   services.clark-backup = {
+  #<<<     description = "Backup clark";
+  #<<<     enable = true;
+  #<<<     script = "${clark-backup}/bin/clark-backup";
+  #<<<   };
+  #<<< };
 
   environment.systemPackages = [
-    clark-backup
+    #<<< clark-backup
   ];
 }
