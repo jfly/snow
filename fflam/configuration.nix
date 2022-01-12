@@ -14,6 +14,7 @@ in
   imports =
     [
       ./nas.nix
+      ./snow-backup.nix
     ];
 
   boot = {
