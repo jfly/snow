@@ -24,12 +24,19 @@ in
       device = builtins.concatStringsSep ":" (builtins.attrNames nas_drive_uuids);
       fsType = "fuse.mergerfs";
       options = [
+        # From https://github.com/trapexit/mergerfs#basic-setup "You need mmap"
+        # (sqlite needs mmap, home-assistant uses sqlite)
+        "allow_other"
         "use_ino"
-        "noforget"
         "cache.files=partial"
         "dropcacheonclose=true"
-        "allow_other"
         "category.create=mfs"
+        # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
+        "noforget"
+        "inodecalc=path-hash"
+        # Useful to preserve permissions with so many different applications
+        # writing to the shared filesystem. This may not be necessary as the
+        # writes start coming in over NFS instead?
         "posix_acl=true"
       ];
     };
@@ -38,6 +45,6 @@ in
   # Set up NFS server.
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /mnt/media 192.168.1.0/24(rw,sync,insecure,all_squash,fsid=root,anonuid=1000,anongid=1000)
+    /mnt/media 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=root,anonuid=1000,anongid=1000)
   '';
 }
