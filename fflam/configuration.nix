@@ -1,6 +1,16 @@
-{ config, pkgs, lib, ... }:
+let
+  pkgs = (import ../sources.nix).pkgs {
+    system = "aarch64-linux";
+    overlays = import ../overlays;
+  };
+in
+
+{ config, lib, ... }:
 
 {
+  # Force use of our custom pkgs above rather than the one from morph.
+  _module.args.pkgs = lib.mkForce pkgs;
+
   boot = {
     kernelPackages = pkgs.linuxPackages_rpi4;
     tmpOnTmpfs = true;

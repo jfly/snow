@@ -1,6 +1,16 @@
-{ config, pkgs, ... }:
+let
+  pkgs = (import ../sources.nix).pkgs {
+    system = "x86_64-linux";
+    overlays = import ../overlays;
+  };
+in
+
+{ config, lib, ... }:
 
 rec {
+  # Force use of our custom pkgs above rather than the one from morph.
+  _module.args.pkgs = lib.mkForce pkgs;
+
   imports =
     [
       ./boot.nix

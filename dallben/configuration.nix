@@ -1,6 +1,19 @@
-{ config, pkgs, ... }:
+let
+  pkgs = (import ../sources.nix).pkgs {
+    system = "x86_64-linux";
+    overlays = import ../overlays;
+    config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+      "parsec"
+    ];
+  };
+in
+
+{ config, lib, ... }:
 
 rec {
+  # Force use of our custom pkgs above rather than the one from morph.
+  _module.args.pkgs = lib.mkForce pkgs;
+
   imports =
     [
       ./variables.nix
@@ -16,9 +29,6 @@ rec {
       ./parsec
     ];
 
-  #<<<
-  nixpkgs.overlays = import ../overlays;
-  #<<<
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
