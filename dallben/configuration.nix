@@ -69,6 +69,7 @@ rec {
     ];
     openssh.authorizedKeys.keys = users.users.root.openssh.authorizedKeys.keys;
     hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
+    uid = 1000;
   };
 
   # Some useful packages to have globally installed.

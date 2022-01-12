@@ -28,7 +28,7 @@ let
 in
 {
   fileSystems."/mnt/media" = {
-    device = "clark:/";
+    device = "fflewddur:/";
     fsType = "nfs";
   };
 
