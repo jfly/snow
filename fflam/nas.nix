@@ -3,9 +3,8 @@
 let
   # Want to add a new drive? See fflewddur's README.md for instructions.
   nas_drive_uuids = {
-    #<<< TODO: this is a separate partition on clark, whoopsies. "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
-    "/mnt/disk2" = "ead4242e-e2c5-479a-b14f-2a0101200d7f";
-    "/mnt/disk3" = "f17a98d0-6547-47f5-b9d1-08c1ca4a233a";
+    "/mnt/disk1" = "ead4242e-e2c5-479a-b14f-2a0101200d7f";
+    "/mnt/disk2" = "f17a98d0-6547-47f5-b9d1-08c1ca4a233a";
   };
 in
 {
