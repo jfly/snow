@@ -9,6 +9,7 @@
     TZ = "America/Los_Angeles";
   };
   extraOptions = [
-    "--network=clark"
+    "--network=host"
+    "--privileged=true"
   ];
 }
