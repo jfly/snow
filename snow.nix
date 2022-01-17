@@ -6,6 +6,7 @@ let
   };
 in
 {
+  "clark" = mkHost clark/configuration.nix;
   "dallben" = mkHost dallben/configuration.nix;
   "fflewddur" = mkHost fflewddur/configuration.nix;
   "fflam" = mkHost fflam/configuration.nix;

@@ -1,4 +1,6 @@
-Our primary NAS running on that old gaming PC James gave me forever ago.
+clark is an Intel NUC I bought years ago. He has worn many hats over the years:
+HTPC, NAS, container playground. Now he just runs some services. Eventually I'd
+like to try out Kubernetes with him.
 
 ## Bootstrapping ##
 
@@ -13,16 +15,11 @@ Build a custom live cd:
     $ sudo dd if=./result/iso/nixos-21.11.334984.08370e1e271-x86_64-linux.iso of=USB_DEVICE_HERE status=progress conv=fsync
 
 1. Insert live USB drive you just created.
-1. F12 while booting. Enter BIOS Setup > BIOS Features
-   - Boot Mode Selection: UEFI only
-   - LAN PXE Boot Option ROM: Disabled
-   - Storage Boot Option Control: UEFI Only
-   - F10 to save and exit
-3. F12 while booting. Select "UEFI: CBM", then the regular NixOS Installer.
+1. F10 while booting to select that USB drive.
 
 The machine should boot up, and you should be able to ssh to it:
 
-    $ ssh root@fflewddur
+    $ ssh root@clark
     # Partition
     $ parted /dev/sda -- mklabel gpt
     $ parted /dev/sda -- mkpart primary 512MiB -0
@@ -37,7 +34,7 @@ The machine should boot up, and you should be able to ssh to it:
     $ mount /dev/disk/by-label/boot /mnt/boot
     $ nixos-generate-config --root /mnt
     # Hack on /mnt/etc/nixos/configuration.nix:
-    #  - Change `networking.hostName` to "fflewddur".
+    #  - Change `networking.hostName` to "clark".
     #  - Add `services.openssh.enable = true;`
     #  - Add `users.users.root.openssh.authorizedKeys.keys`
     $ nixos-install --no-root-passwd
@@ -45,17 +42,4 @@ The machine should boot up, and you should be able to ssh to it:
 
 ## Deploying ##
 
-    ./deploy fflewddur
-
-## Adding another drive ##
-
-Connect the new drive. Find it in `lsblk`. The rest of this example will be for `/dev/sda`.
-
-    nix-shell -p parted
-    DRIVE=/dev/sda
-    parted "$DRIVE" -- mklabel gpt
-    parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
-    mkfs.ext4 "${DRIVE}1"
-
-Get the UUID of the partition you just created (I use `lsblk -f /dev/sda1`).
-Add it to `nas_drive_uuids` in `nas.nix`.
+    ./deploy clark
