@@ -2,7 +2,7 @@
 
 let
   nginx-conf = ./etc/nginx/nginx.conf;
-  service-htpc-conf = ./etc/nginx/service-htpc.conf;
+  service-snow-web-conf = ./etc/nginx/service-snow-web.conf;
   webroot = ./webroot;
 
   autogen-lefqdn-entrypoint = ./autogen-lefqdn-entrypoint.sh;
@@ -29,7 +29,7 @@ in
   volumes = [
     "/mnt/media/state/snow-web/nginx/ssl:/etc/nginx/ssl"
     "${nginx-conf}:/etc/nginx/nginx.conf"
-    "${service-htpc-conf}:/etc/nginx/service-htpc.conf"
+    "${service-snow-web-conf}:/etc/nginx/service-snow-web.conf"
     "${auth-root}:/etc/nginx/auth/root"
     "${webroot}:/webroot"
     "${autogen-lefqdn-entrypoint}:/custom-entrypoint.sh"
