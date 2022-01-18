@@ -1,20 +1,51 @@
 { config, pkgs, lib, ... }:
 
+let
+  parsec = pkgs.callPackage (import (builtins.fetchTarball {
+    name = "parsec-gaming-nix";
+    # Using a fork for now. Hopefully
+    # https://github.com/DarthPJB/parsec-gaming-nix/pull/2/files gets merged
+    # up.
+    url = "https://github.com/jfly/parsec-gaming-nix/archive/d63893d6ed3fd9c1a4107e0874c44b5b34f190bb.tar.gz";
+    # Hash obtained using `nix-prefetch-url --unpack <url>`
+    sha256 = "051zlain933islqnlwmhgikinlmylhcww5qs3cj89nxq0vn8wfhv";
+  })) {};
+  my_parsec = pkgs.writeShellScriptBin "parsecd" ''
+    # This script wraps the real parsecd so it can exit 0 if stopped by stop_parsec.sh.
+
+    CAUGHT_TERM=""
+    _term() {
+      CAUGHT_TERM="yep"
+      echo "Caught SIGTERM signal! Forwarding that onto $CHILD_PID" >/dev/stderr
+      kill -TERM "$CHILD_PID" 2>/dev/null
+    }
+    trap _term SIGTERM
+
+    ${parsec}/bin/parsecd "$@" &
+    CHILD_PID=$!
+    wait "$CHILD_PID"
+    RET=$?
+    if [ -n "$CAUGHT_TERM" ]; then
+      echo "Caught SIGTERM signal! Treating that as a graceful shutdown." >/dev/stderr
+      exit 0
+    fi
+    echo "Parsec exited on its own. Bubbling up its exit code." >/dev/stderr
+    exit "$RET"
+  '';
+in
 {
-  environment.systemPackages = with pkgs; [
-    (callPackage (import (builtins.fetchTarball {
-      name = "parsec-gaming-nix";
-      url = "https://github.com/DarthPJB/parsec-gaming-nix/archive/354e8313bf5574cbc16133ee0e7d6845c858bc01.tar.gz";
-      # Hash obtained using `nix-prefetch-url --unpack <url>`
-      sha256 = "0wnvl27wbhfza2svnqi8daxb98729wwn97gas5jwfz7niv9rgbah";
-    })) {})
-    (pkgs.writeShellScriptBin "stop_parsec.sh" "pkill parsecd")
+  environment.systemPackages = [
+    my_parsec
+    (pkgs.writeShellScriptBin "stop_parsec.sh" "sudo pkill parsecd")
   ];
 
   # Give gurgi ssh access so it can run stop_parsec.sh
   # TODO: lock down permissions so that's the *only* thing it can do.
   users.users.gurgi = {
     isNormalUser = true;
+    extraGroups = [
+      "wheel"  # Enable `sudo` for the user.
+    ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPog+FoId+C37SnL1VfwRE11pGzzvxOM0GL0HjOL1Qqf gurgi@snowdon"
     ];

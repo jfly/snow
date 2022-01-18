@@ -4,7 +4,7 @@ import xbmcgui
 
 xbmcgui.Dialog().notification(
     heading="Parsec",
-    message="Starting Parsec twoooo!",
+    message="Starting Parsec!",
     time=5000,
 )
 
