@@ -3,10 +3,7 @@
 let
   parsec = pkgs.callPackage (import (builtins.fetchTarball {
     name = "parsec-gaming-nix";
-    # Using a fork for now. Hopefully
-    # https://github.com/DarthPJB/parsec-gaming-nix/pull/2/files gets merged
-    # up.
-    url = "https://github.com/jfly/parsec-gaming-nix/archive/d63893d6ed3fd9c1a4107e0874c44b5b34f190bb.tar.gz";
+    url = "https://github.com/DarthPJB/parsec-gaming-nix/archive/06bd13c9aa68ca0991d592f753be12679e842c83.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
     sha256 = "051zlain933islqnlwmhgikinlmylhcww5qs3cj89nxq0vn8wfhv";
   })) {};
