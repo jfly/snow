@@ -17,6 +17,7 @@ rec {
       ./network.nix
       ./containers.nix
       ./mysql.nix
+      ./dns.nix
     ];
 
   fileSystems."/mnt/media" = {
