@@ -14,5 +14,6 @@
   virtualisation.oci-containers.containers = {
     snow-web = import ./snow-web { inherit pkgs; };
     home-assistant = import ./home-assistant {};
+    wallabag = import ./wallabag { inherit pkgs; };
   };
 }

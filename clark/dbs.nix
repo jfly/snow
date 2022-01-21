@@ -18,4 +18,16 @@ in
       isSystemUser = true;
     };
   };
+
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_14;
+    dataDir = "/mnt/media/postgresql/";
+    enableTCPIP = true;
+    authentication = pkgs.lib.mkOverride 10 ''
+      local all all trust
+      host all all ::1/128 md5
+      host all all 0.0.0.0/0 md5
+    '';
+  };
 }

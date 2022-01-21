@@ -16,7 +16,7 @@ rec {
       ./boot.nix
       ./network.nix
       ./containers.nix
-      ./mysql.nix
+      ./dbs.nix
       ./dns.nix
     ];
 
