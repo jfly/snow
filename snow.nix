@@ -1,9 +1,9 @@
 let
   mkHost = cfg: { ... }:
-  {
-    imports = [ cfg ];
-    deployment.targetUser = "root";
-  };
+    {
+      imports = [ cfg ];
+      deployment.targetUser = "root";
+    };
 in
 {
   "clark" = mkHost clark/configuration.nix;

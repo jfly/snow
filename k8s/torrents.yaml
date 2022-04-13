@@ -1,0 +1,55 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: torrents
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: torrents
+  template:
+    metadata:
+      labels:
+        app: torrents
+    spec:
+      containers:
+        - name: torrents
+          image: traefik/whoami
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: torrents
+
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: torrents
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: torrents
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  tls:
+    - hosts:
+      - torrents.clark.snowdon.jflei.com
+      secretName: torrents-tls
+  rules:
+  - host: torrents.clark.snowdon.jflei.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: torrents
+              port:
+                number: 80

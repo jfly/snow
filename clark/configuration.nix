@@ -1,5 +1,5 @@
 let
-  pkgs = (import ../sources.nix).pkgs {
+  pkgs = (import ../sources.nix).pkgs-21_11 {
     system = "x86_64-linux";
     overlays = import ../overlays;
   };
@@ -60,5 +60,6 @@ rec {
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim
+    pkgs.mosh
   ];
 }

@@ -75,4 +75,9 @@ in
     wallabag = import ./wallabag { inherit pkgs; };
     vpn-test = import ./vpn-test {};
   };
+
+  # Set up a kubernetes cluser with k3s
+  services.k3s.enable = true;
+  services.k3s.role = "server";
+  environment.systemPackages = [ pkgs.k3s ];
 }

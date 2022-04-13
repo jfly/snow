@@ -23,9 +23,7 @@ in
   image = "umputun/nginx-le:latest";
   entrypoint = "/custom-entrypoint.sh";
   ports = [
-    "80:80"
-    "443:443"
-    "9090:9090"
+    "8080:80"
   ];
   volumes = [
     "/mnt/media/state/snow-web/nginx/ssl:/etc/nginx/ssl"
@@ -39,10 +37,7 @@ in
   ];
   environment = {
     TZ = "America/Los_Angeles";
-    LETSENCRYPT = "true";
-    LE_EMAIL = "jeremyfleischman@gmail.com";
-    # Note: No need to set LE_FQDN because we're doing something
-    # clever. See autogen-lefqdn-entrypoint.sh script for details.
+    LETSENCRYPT = "false";
   };
   extraOptions = [
     "--network=clark"

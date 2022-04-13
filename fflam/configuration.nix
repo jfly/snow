@@ -1,5 +1,5 @@
 let
-  pkgs = (import ../sources.nix).pkgs {
+  pkgs = (import ../sources.nix).pkgs-21_11 {
     system = "aarch64-linux";
     overlays = import ../overlays;
   };
