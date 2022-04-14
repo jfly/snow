@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: snow-authsecret
+data:
+  # To create an encoded user:password pair:
+  #   htpasswd -nb user password | openssl base64
+  users: |
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0cHdjUVVQeGVZeHFPMnoy
+    ZUZXdE4wOGRJMkNDSmExL1ZjR0ZFRkh3Sm0wCk8zZUhva2k0L2VPOXZVTjVLWmV5
+    VHlFeXo3cC9nNGxOUGtuS2NyOGFnME0KLS0tIDVTS1FhOWNmQjd1NG9VZlc3eU1m
+    Y2FQSDlRQVBGNTREVDlCZTAxdnoxaDAKeAVCRdncr6KcSrYCURjhB2pC/mvo1ecV
+    LgvcCRnKhNZ2CEFSwWeZXnLNaEw0NLSae1JH+kHQ4Y8Wyen9Y6nzUtl9XpgaWKcR
+    BPnyzb6A+AglYpNaNWljYJjOixo=
+    -----END AGE ENCRYPTED FILE-----

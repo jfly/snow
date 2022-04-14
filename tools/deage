@@ -9,7 +9,7 @@ from hashlib import sha256
 from textwrap import dedent
 
 AGE_ARMOR_RE = re.compile(
-    r" *-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
+    r"(?P<ws_prefix> *)(?P<aged>-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----)",
     re.DOTALL,
 )
 
@@ -31,7 +31,7 @@ def extract_and_decrypt_secrets(src: str):
         document = f.read()
 
     for m in AGE_ARMOR_RE.finditer(document):
-        encrypted = dedent(m.group(0))
+        encrypted = dedent(m.group('aged'))
         hash_encrypted = sha256(encrypted.encode('utf8')).hexdigest()
         decrypted = decrypt(encrypted)
         secret_file = os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret")
@@ -59,10 +59,27 @@ def sanity_check_private_key():
         """), file=sys.stderr)
         sys.exit(1)
 
+def deage_file(aged_filename: str):
+    assert aged_filename.endswith(".aged")
+    deaged_filename = aged_filename.removesuffix(".aged") + ".secret"
+
+    with open(aged_filename, "r") as f:
+        aged_doc = f.read()
+
+    def decrypt_match(m):
+        prefix = m.group('ws_prefix')
+        encrypted = dedent(m.group('aged'))
+        return prefix + decrypt(encrypted)
+
+    deaged_doc = AGE_ARMOR_RE.sub(decrypt_match, aged_doc)
+
+    with open(deaged_filename, "w") as f:
+        f.write(deaged_doc)
+
 def main():
     sanity_check_private_key()
 
-    for root, _, files in os.walk("."):
+    for root, _, files in os.walk(DECRYPTED_SECRETS_DIR):
         for file in files:
             if file.endswith(".secret"):
                 os.unlink(os.path.join(root, file))
@@ -71,6 +88,8 @@ def main():
         for file in files:
             if file.endswith(".nix"):
                 extract_and_decrypt_secrets(os.path.join(root, file))
+            elif file.endswith(".aged"):
+                deage_file(os.path.join(root, file))
 
 if __name__ == "__main__":
     main()

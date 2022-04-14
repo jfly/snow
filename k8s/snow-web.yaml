@@ -28,7 +28,7 @@ metadata:
   name: http-to-https
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: http-to-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-http-to-https@kubernetescrd
 spec:
   defaultBackend:
     # This is weird, because there shouldn't be any
@@ -53,7 +53,6 @@ spec:
     - hosts:
       - clark.snowdon.jflei.com
       # TODO - sonarr.clark.snowdon.jflei.com
-      # TODO - torrents.clark.snowdon.jflei.com
       secretName: snow-web-tls
   rules:
   - host: clark.snowdon.jflei.com

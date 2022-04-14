@@ -1,1 +1,2 @@
 .sensitive-decrypted-secrets
+**/*.secret

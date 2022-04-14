@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 if [ $# -eq 0 ]; then
 
@@ -17,6 +17,30 @@ To deploy one machine:
     exit 1
 fi
 
+function deploy_k8s() {
+    # TODO: look into alternatives for this. Some ideas:
+    #  - flux: https://fluxcd.io/
+    #  - pulumi: https://www.pulumi.com/registry/packages/kubernetes/
+
+    # Install cert-manager
+    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
+
+    for f in k8s/*{.yaml,.yaml.secret}; do
+        kubectl apply -f "$f"
+    done
+}
+
+function deploy_nix() {
+    local target="$1"
+    morph deploy snow.nix --on="$target" switch "$@"
+}
+
 tools/deage
-target="$1"; shift
-morph deploy snow.nix --on="$target" switch "$@"
+target="$1"
+shift
+
+if [ "$target" = "k8s" ]; then
+    deploy_k8s
+else
+    deploy_nix "$target"
+fi
