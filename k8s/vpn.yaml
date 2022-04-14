@@ -1,0 +1,53 @@
+# Based on https://docs.k8s-at-home.com/guides/pod-gateway/
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vpn
+  labels:
+    routed-gateway: "true"
+
+---
+# Install pod-gateway helm chart: https://github.com/k8s-at-home/charts/tree/master/charts/stable/pod-gateway
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: vpn-gateway
+  namespace: default
+  labels:
+spec:
+  chart: pod-gateway
+  repo: https://k8s-at-home.com/charts/
+  version: 5.2.1
+  targetNamespace: default
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/pod-gateway/values.yaml
+  valuesContent: |-
+    routed_namespaces: [vpn]
+    settings:
+      # Route internal K8s and local home traffic in to the default K8S gateway
+      # (from https://docs.k8s-at-home.com/guides/pod-gateway/#routed-pod-fails-to-init)
+      NOT_ROUTED_TO_GATEWAY_CIDRS: "10.42.0.0/16 10.43.0.0/16"
+
+---
+# Ensure that even if something goes wrong, traffic won't leak outside of the vpn.
+# https://docs.k8s-at-home.com/guides/pod-gateway/#network-policy
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: vpn-namespace
+  namespace: vpn
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    # Only allow ingress from K8S
+    - ipBlock:
+        cidr: 10.0.0.0/8
+  egress:
+  - to:
+    # Only allow egress to K8S
+    - ipBlock:
+        cidr: 10.0.0.0/8
+  policyTypes:
+    - Ingress
+    - Egress

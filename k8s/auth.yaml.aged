@@ -14,3 +14,12 @@ data:
     LgvcCRnKhNZ2CEFSwWeZXnLNaEw0NLSae1JH+kHQ4Y8Wyen9Y6nzUtl9XpgaWKcR
     BPnyzb6A+AglYpNaNWljYJjOixo=
     -----END AGE ENCRYPTED FILE-----
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: snowauth
+spec:
+  basicAuth:
+    secret: snow-authsecret
