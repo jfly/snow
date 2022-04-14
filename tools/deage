@@ -9,7 +9,7 @@ from hashlib import sha256
 from textwrap import dedent
 
 AGE_ARMOR_RE = re.compile(
-    r"(?P<ws_prefix> *)(?P<aged>-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----)",
+    r"(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
     re.DOTALL,
 )
 
@@ -31,7 +31,7 @@ def extract_and_decrypt_secrets(src: str):
         document = f.read()
 
     for m in AGE_ARMOR_RE.finditer(document):
-        encrypted = dedent(m.group('aged'))
+        encrypted = dedent(m.group(0))
         hash_encrypted = sha256(encrypted.encode('utf8')).hexdigest()
         decrypted = decrypt(encrypted)
         secret_file = os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret")
@@ -68,7 +68,7 @@ def deage_file(aged_filename: str):
 
     def decrypt_match(m):
         prefix = m.group('ws_prefix')
-        encrypted = dedent(m.group('aged'))
+        encrypted = dedent(m.group(0))
         return prefix + decrypt(encrypted)
 
     deaged_doc = AGE_ARMOR_RE.sub(decrypt_match, aged_doc)

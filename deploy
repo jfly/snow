@@ -32,6 +32,7 @@ function deploy_k8s() {
 
 function deploy_nix() {
     local target="$1"
+    shift
     morph deploy snow.nix --on="$target" switch "$@"
 }
 
@@ -42,5 +43,5 @@ shift
 if [ "$target" = "k8s" ]; then
     deploy_k8s
 else
-    deploy_nix "$target"
+    deploy_nix "$target" "$@"
 fi
