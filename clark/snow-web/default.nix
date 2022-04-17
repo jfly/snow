@@ -5,8 +5,6 @@ let
   service-snow-web-conf = ./etc/nginx/service-snow-web.conf;
   webroot = ./webroot;
 
-  autogen-lefqdn-entrypoint = ./autogen-lefqdn-entrypoint.sh;
-  upstream-entrypoint = ./upstream-entrypoint.sh;
   password = pkgs.deage.string ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB4NzRNQzQ4ZVJuRGc4UWJh
@@ -21,7 +19,6 @@ in
 
 {
   image = "umputun/nginx-le:latest";
-  entrypoint = "/custom-entrypoint.sh";
   ports = [
     "8080:80"
   ];
@@ -31,8 +28,6 @@ in
     "${service-snow-web-conf}:/etc/nginx/service-snow-web.conf"
     "${auth-root}:/etc/nginx/auth/root"
     "${webroot}:/webroot"
-    "${autogen-lefqdn-entrypoint}:/custom-entrypoint.sh"
-    "${upstream-entrypoint}:/entrypoint.sh"
     "/mnt/media:/mnt/media"
   ];
   environment = {
