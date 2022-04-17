@@ -1,0 +1,89 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wallabag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallabag
+  template:
+    metadata:
+      labels:
+        app: wallabag
+    spec:
+      volumes:
+      containers:
+        - name: wallabag
+          image: wallabag/wallabag:2.4.2
+          env:
+            - name: POSTGRES_USER
+              value: "wallabag"
+            - name: POSTGRES_PASSWORD
+              value: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZktsMUF2STRnUXdYNjlE
+                OWJiWVRHazJEeHpUWEVaTDV3bDd5L21ndWdVCnZmZExDR0pMNFBJM0Jxb29EVUs0
+                YldkY0F0eDJGZHdBelZwZ1o2S3FWY1EKLS0tIHNpRVM1d2UxVWZ3bm1IcnpRbmJZ
+                WDNqRzB5aVdsY2pSUm8zK2tHMlpOU28KjfTZzv8jBPM5NzaKgwRUywso4aPvYJhZ
+                evNLRn765Hk4v4va2ATcChpLOoOq4dbMtordjQ==
+                -----END AGE ENCRYPTED FILE-----
+            - name: POPULATE_DATABASE
+              value: "False"
+            - name: SYMFONY__ENV__DATABASE_DRIVER
+              value: "pdo_pgsql"
+            - name: SYMFONY__ENV__DATABASE_HOST
+              value: "clark"
+            - name: SYMFONY__ENV__DATABASE_PORT
+              value: "5432"
+            - name: SYMFONY__ENV__DATABASE_NAME
+              value: "wallabag"
+            - name: SYMFONY__ENV__DATABASE_USER
+              value: "wallabag"
+            - name: SYMFONY__ENV__DATABASE_PASSWORD
+              value: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZktsMUF2STRnUXdYNjlE
+                OWJiWVRHazJEeHpUWEVaTDV3bDd5L21ndWdVCnZmZExDR0pMNFBJM0Jxb29EVUs0
+                YldkY0F0eDJGZHdBelZwZ1o2S3FWY1EKLS0tIHNpRVM1d2UxVWZ3bm1IcnpRbmJZ
+                WDNqRzB5aVdsY2pSUm8zK2tHMlpOU28KjfTZzv8jBPM5NzaKgwRUywso4aPvYJhZ
+                evNLRn765Hk4v4va2ATcChpLOoOq4dbMtordjQ==
+                -----END AGE ENCRYPTED FILE-----
+            - name: SYMFONY__ENV__DOMAIN_NAME
+              value: "https://wallabag.clark.snowdon.jflei.com"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallabag
+
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: wallabag
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: wallabag
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  tls:
+    - hosts:
+      - wallabag.clark.snowdon.jflei.com
+      secretName: wallabag-tls
+  rules:
+  - host: wallabag.clark.snowdon.jflei.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: wallabag
+              port:
+                number: 80

@@ -189,30 +189,6 @@ spec:
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: wallabag
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-spec:
-  tls:
-    - hosts:
-      - wallabag.clark.snowdon.jflei.com
-      secretName: wallabag-tls
-  rules:
-  - host: wallabag.clark.snowdon.jflei.com
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: snow-web
-              port:
-                number: 80
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
   name: tnoodle-redirect
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod

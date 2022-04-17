@@ -33,7 +33,6 @@ in
   virtualisation.oci-containers.containers = {
     snow-web = import ./snow-web { inherit pkgs; };
     home-assistant = import ./home-assistant {};
-    wallabag = import ./wallabag { inherit pkgs; };
   };
 
   # Set up a kubernetes cluser with k3s
