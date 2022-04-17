@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  api_key = pkgs.deage.string ''
+  password = pkgs.deage.string ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBQQVRFTUlCZWx5Q2h3eTBV
     L1NPVzlCUkF0NXJHdGJHQ21RU241YWx6UVJVCkp3OXlqbTZPaDk2dXh4eHdrcW9z
@@ -15,23 +15,11 @@ let
       containers.clark.snowdon.jflei.com:
         auth:
           username: k8s
-          password: ${api_key}
+          password: ${password}
   '';
 in
 {
-  # Hack copied from
-  # https://discourse.nixos.org/t/docker-podman-network-create-nix/13569
-  systemd.services."docker-network-clark" = {
-    serviceConfig.Type = "oneshot";
-    requiredBy = [ "docker-snow-web.service" "docker-home-assistant.service" ];
-    script = ''
-      export PATH=${pkgs.docker}/bin:$PATH
-      docker network inspect clark > /dev/null 2>&1 || docker network create clark
-    '';
-  };
-
   virtualisation.oci-containers.containers = {
-    snow-web = import ./snow-web { inherit pkgs; };
     home-assistant = import ./home-assistant {};
   };
 

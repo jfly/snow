@@ -213,22 +213,41 @@ spec:
                 port:
                   number: 80
 ---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: snow-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snow-web
+  template:
+    metadata:
+      labels:
+        app: snow-web
+    spec:
+      hostname: snow-web
+      volumes:
+      - name: mnt-media
+        hostPath:
+          path: /mnt/media
+      containers:
+        - name: snow-web
+          image: containers.clark.snowdon.jflei.com/snow-web:latest
+          volumeMounts:
+            - name: mnt-media
+              mountPath: /mnt/media
+
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: snow-web
+
 spec:
   ports:
-    - protocol: TCP
+    - name: http
       port: 80
-      targetPort: 8080
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: snow-web
-subsets:
-  - addresses:
-      - ip: 192.168.1.100
-    ports:
-      - port: 8080
+  selector:
+    app: snow-web
