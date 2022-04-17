@@ -1,0 +1,2 @@
+[Misc]
+openCommand = transmission-remote -a %s

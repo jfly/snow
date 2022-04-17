@@ -1,0 +1,149 @@
+# Based on https://docs.k8s-at-home.com/guides/pod-gateway/
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vpn
+  labels:
+    routed-gateway: "true"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wireguard
+data:
+  # cat wireguard.conf | base64 -w 0 | tools/encrypt
+  vpnConfigfile: |
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlSHlSdjd6bXZUR3NocG5F
+    WHAwaStVKzNqQ0JlY3ArMkk1a1VkVC9NYURBCnQrN1hGN3BXeUdkSnR4VEYyL1RH
+    S2JvSkNlNE1vRjdKeEVlTy9kRUZFQk0KLS0tIDIydENnWDhRczBURGF2Zmhna0Ra
+    ejNyc0NOb2krRE9CSC9ZKzY2UklWdDAK4Sa7F/EcZ+9VAhU3Lm+RMAn7+1uozZwe
+    Soatql3LDyDKJ3W7jEu8zzj+3JokJdC6ai/59doMbj6zhF303TEnGVu/CjMko46l
+    4B1ymsHllVVkTzz/P9h9Iupc2CPyNS2tKeVVxeDLT2/5pWDleJezxVYbvXEZKz63
+    mepNrKyN3jk0GIrPOTyOYvOCVOZvjgHsST+RmMJdH4yn73L/jVMbW2S0AhRf+RuV
+    /cykouyAA7e/RJD4a1E8zwIR62o5NxuUd9IICLgrPYN7IOdVE53kDWhEqJ7jKsgm
+    gAT6ENwxiCZ90QBTuRNRnbafJ6WZjCv+i8h1uHXZGxKG5crSkCijC32/5rAah+l5
+    2JzNW8q16VRx2EiDNA9ntk9oIS7U6kt8oOzzkdjZOpoQ2sRWrvOfTc05rNqzwH8m
+    GoiaRfy+pok8x7MawUIx8JFp46bGDKsE4HGRVAqCAswfvi7E3MG5793vg/Fo6uVs
+    eIbcrEaJ73My7TagTZ9rv9NSXtp7BZoWTyEGOR+CYrOq6e67jKd+fg==
+    -----END AGE ENCRYPTED FILE-----
+---
+# Install pod-gateway helm chart: https://github.com/k8s-at-home/charts/tree/master/charts/stable/pod-gateway
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: vpn-gateway
+  namespace: default
+  labels:
+spec:
+  chart: pod-gateway
+  repo: https://k8s-at-home.com/charts/
+  version: 5.2.1
+  targetNamespace: default
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/pod-gateway/values.yaml
+  valuesContent: |-
+    routed_namespaces: [vpn]
+    settings:
+      VPN_INTERFACE: wg0
+      VPN_BLOCK_OTHER_TRAFFIC: true
+      # Allow VPN traffic over this port
+      VPN_TRAFFIC_PORT: 51820
+      # Route internal K8s and local home traffic in to the default K8S gateway
+      # (from https://docs.k8s-at-home.com/guides/pod-gateway/#routed-pod-fails-to-init)
+      NOT_ROUTED_TO_GATEWAY_CIDRS: "10.42.0.0/16 10.43.0.0/16"
+
+    publicPorts:
+    - hostname: transmission
+      IP: 10 # must be an integer between 2 and VXLAN_GATEWAY_FIRST_DYNAMIC_IP (20 by default)
+      ports:
+      - type: udp
+        port: 61207
+      - type: tcp
+        port: 61207
+
+    addons:
+      vpn:
+        enabled: true
+        type: wireguard
+
+        # Force use of the modern (?) iptables. If we let it fall back to the legacy mode, it fails when running ip6tables-restore:
+        #
+        # $ k logs deploy/vpn-gateway-pod-gateway wireguard
+        # [INFO] Running iptables in legacy mode
+        # [#] ip link add wg0 type wireguard
+        # [#] wg setconf wg0 /dev/fd/63
+        # [#] ip -4 address add 10.67.182.177/32 dev wg0
+        # [#] ip -6 address add fc00:bbbb:bbbb:bb01::4:b6b0/128 dev wg0
+        # [#] ip link set mtu 1370 up dev wg0
+        # [#] resolvconf -a wg0 -m 0 -x
+        # [#] wg set wg0 fwmark 51820
+        # [#] ip -6 route add ::/0 dev wg0 table 51820
+        # [#] ip -6 rule add not fwmark 51820 table 51820
+        # [#] ip -6 rule add table main suppress_prefixlength 0
+        # [#] ip6tables-restore -n
+        # ip6tables-restore v1.8.4 (legacy): ip6tables-restore: unable to initialize table 'raw'
+        #
+        # Error occurred at line: 1
+        # Try `ip6tables-restore -h' or 'ip6tables-restore --help' for more information.
+        # [#] resolvconf -d wg0 -f
+        # [#] ip -6 rule delete table 51820
+        # [#] ip -6 rule delete table main suppress_prefixlength 0
+        # [#] ip link delete dev wg0
+        # [ERROR] Received non-zero exit code (2) executing the command sudo /usr/bin/wg-quick up "${INTERFACE}" on line 10.
+        #
+        # TODO: file an issue with https://github.com/k8s-at-home/container-images/tree/main/apps/wireguard
+        env:
+          IPTABLES_BACKEND: nft
+        configFileSecret: wireguard
+
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - if [ $(curl -s https://am.i.mullvad.net/json | jq '.mullvad_exit_ip') = "true" ]; then exit 0; else exit $?; fi
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          failureThreshold: 1
+
+        networkPolicy:
+          enabled: true
+
+          egress:
+            - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+              ports:
+              # VPN_TRAFFIC_PORT
+              - port: 51820
+                protocol: UDP
+            - to:
+                # Allow traffic within K8S - change if your K8S cluster uses a different CIDR
+              - ipBlock:
+                  cidr: 10.0.0.0/8
+
+---
+# Ensure that even if something goes wrong, traffic won't leak outside of the vpn.
+# https://docs.k8s-at-home.com/guides/pod-gateway/#network-policy
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: vpn-namespace
+  namespace: vpn
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    # Only allow ingress from K8S
+    - ipBlock:
+        cidr: 10.0.0.0/8
+  egress:
+  - to:
+    # Only allow egress to K8S
+    - ipBlock:
+        cidr: 10.0.0.0/8
+  policyTypes:
+    - Ingress
+    - Egress

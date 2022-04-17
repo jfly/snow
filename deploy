@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+shopt -s globstar
 
 if [ $# -eq 0 ]; then
 
@@ -17,6 +18,15 @@ To deploy one machine:
     exit 1
 fi
 
+function build_containers() {
+    for f in **/Dockerfile; do
+        dir=$(dirname "$f")
+        fq_image_name=containers.clark.snowdon.jflei.com/$(basename "$dir"):latest
+        docker build "$dir" -t "$fq_image_name"
+        docker push "$fq_image_name"
+    done
+}
+
 function deploy_k8s() {
     # TODO: look into alternatives for this. Some ideas:
     #  - flux: https://fluxcd.io/
@@ -25,7 +35,7 @@ function deploy_k8s() {
     # Install cert-manager
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
 
-    for f in k8s/*{.yaml,.yaml.secret}; do
+    for f in k8s/**/*{.yaml,.yaml.secret}; do
         kubectl apply -f "$f"
     done
 }
@@ -41,6 +51,7 @@ target="$1"
 shift
 
 if [ "$target" = "k8s" ]; then
+    build_containers
     deploy_k8s
 else
     deploy_nix "$target" "$@"

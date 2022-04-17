@@ -1,36 +1,46 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: torrents
+  name: transmission
   namespace: vpn
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: torrents
+      app: transmission
   template:
     metadata:
       labels:
-        app: torrents
+        app: transmission
     spec:
+      hostname: transmission
+      volumes:
+      - name: mnt-media
+        hostPath:
+          path: /mnt/media
       containers:
-        - name: torrents
-          image: traefik/whoami
+        - name: transmission
+          image: containers.clark.snowdon.jflei.com/transmission:latest
           ports:
-            - containerPort: 80
+            - containerPort: 61207
+          volumeMounts:
+            - name: mnt-media
+              mountPath: /mnt/media
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: torrents
+  name: transmission
   namespace: vpn
 
 spec:
   ports:
     - name: http
       port: 80
+      targetPort: 9091
   selector:
-    app: torrents
+    app: transmission
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
@@ -54,6 +64,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: torrents
+              name: transmission
               port:
                 number: 80

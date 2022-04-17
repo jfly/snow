@@ -9,8 +9,8 @@ from hashlib import sha256
 from textwrap import dedent
 
 AGE_ARMOR_RE = re.compile(
-    r"(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
-    re.DOTALL,
+    r"^(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
+    re.DOTALL | re.MULTILINE,
 )
 
 DECRYPTED_SECRETS_DIR = ".sensitive-decrypted-secrets"

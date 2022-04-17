@@ -4,7 +4,7 @@ metadata:
   name: snow-authsecret
 data:
   # To create an encoded user:password pair:
-  #   htpasswd -nb user password | openssl base64
+  # docker run --entrypoint htpasswd httpd:2 -Bbn USERNAME PASSWORD | base64 | tools/encrypt
   users: |
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0cHdjUVVQeGVZeHFPMnoy
