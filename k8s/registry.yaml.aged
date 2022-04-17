@@ -46,10 +46,16 @@ spec:
           - name: auth-htpasswd
             mountPath: "/auth/htpasswd"
             subPath: passwd
+          - name: registry-data
+            mountPath: "/var/lib/registry"
       volumes:
       - name: auth-htpasswd
         secret:
           secretName: registry-auth
+      # TODO: look into Longhorn for persistent volumes
+      - name: registry-data
+        hostPath:
+          path: /mnt/media/k8s-state
 
 ---
 apiVersion: v1
