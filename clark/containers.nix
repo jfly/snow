@@ -19,10 +19,6 @@ let
   '';
 in
 {
-  virtualisation.oci-containers.containers = {
-    home-assistant = import ./home-assistant {};
-  };
-
   # Set up a kubernetes cluser with k3s
   services.k3s = {
       enable = true;

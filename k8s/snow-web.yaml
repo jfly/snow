@@ -143,30 +143,6 @@ spec:
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: home-assistant
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-spec:
-  tls:
-    - hosts:
-      - home-assistant.clark.snowdon.jflei.com
-      secretName: home-assistant-tls
-  rules:
-  - host: home-assistant.clark.snowdon.jflei.com
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: snow-web
-              port:
-                number: 80
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
   name: kodi
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
