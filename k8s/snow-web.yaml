@@ -12,6 +12,20 @@ spec:
       - http01:
           ingress:
             class: traefik
+            podTemplate:
+              metadata:
+                labels:
+                  # Opt this pod *out* of the VPN gateway. The temporary
+                  # `cm-acme-http-solver-*` pod that gets created gets stuff in
+                  # the "CreateContainerConfigError" state when being applied
+                  # to Ingress's in our "vpn" namespace. I *think* that's
+                  # because the gateway admission controller modifies this pod
+                  # to try to mount something at /config, but cert-manager
+                  # *also* tries to mount something at /config, and I don't
+                  # think the two get along. Rather than try to figure out how
+                  # to get the two to play together nicely, it's easier to just
+                  # opt this pod out of the VPN situation entirely.
+                  setGateway: "false"
         selector: {}
 ---
 apiVersion: traefik.containo.us/v1alpha1

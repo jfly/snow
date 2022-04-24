@@ -20,6 +20,11 @@
 
     <videolibrary>
         <cleanonupdate>true</cleanonupdate> <!-- Also clean library during library update -->
+
+        <!-- These settings can be removed once we're on Kodi 20, when they default to true. See https://kodi.wiki/view/Import-export_library/Video and https://github.com/xbmc/xbmc/pull/20842 for details. -->
+        <exportautothumbs>true</exportautothumbs>
+        <importwatchedstate>true</importwatchedstate>
+        <importresumepoint>true</importresumepoint>
     </videolibrary>
 
     <musicdatabase>

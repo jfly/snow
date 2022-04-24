@@ -57,6 +57,9 @@ rec {
     ];
   };
 
+  # TODO: actually share this configuration between the hosts
+  users.groups.media = { gid=1002; };
+
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim

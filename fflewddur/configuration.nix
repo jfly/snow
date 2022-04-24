@@ -53,6 +53,9 @@ rec {
     hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
   };
 
+  # TODO: actually share this configuration between the hosts
+  users.groups.media = { gid=1002; };
+
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim

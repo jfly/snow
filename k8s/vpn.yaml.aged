@@ -103,7 +103,7 @@ spec:
             command:
               - sh
               - -c
-              - if [ $(curl -s https://am.i.mullvad.net/json | jq '.mullvad_exit_ip') = "true" ]; then exit 0; else exit $?; fi
+              - if [ $(curl -s https://am.i.mullvad.net/json | jq '.mullvad_exit_ip') = "true" ]; then exit 0; else exit 1; fi
           initialDelaySeconds: 30
           periodSeconds: 60
           failureThreshold: 1

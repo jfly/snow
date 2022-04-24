@@ -55,7 +55,7 @@ spec:
       # TODO: look into Longhorn for persistent volumes
       - name: registry-data
         hostPath:
-          path: /mnt/media/k8s-state
+          path: /state/registry
 
 ---
 apiVersion: v1

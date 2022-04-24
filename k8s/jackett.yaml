@@ -1,73 +1,78 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: home-assistant
+  name: jackett
+  namespace: vpn
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: home-assistant
+      app: jackett
   template:
     metadata:
       labels:
-        app: home-assistant
+        app: jackett
     spec:
       volumes:
       # TODO: look into k8s persistent volumes for this
-      - name: ha-config
+      - name: jackett-config
         hostPath:
-          path: /state/ha-config
-      - name: ttyacm
+          path: /state/jackett-config
+      - name: mnt-media
         hostPath:
-          type: CharDevice
-          path: /dev/ttyACM0
+          path: /mnt/media
       containers:
-        - name: home-assistant
-          image: homeassistant/home-assistant:stable
-          securityContext:
-            privileged: true
+        - name: jackett
+          image: cr.hotio.dev/hotio/jackett
           env:
             - name: TZ
               value: "America/Los_Angeles"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1002"
+            - name: UMASK
+              value: "002"
           volumeMounts:
-            - name: ha-config
+            - name: jackett-config
               mountPath: /config
-            - name: ttyacm
-              mountPath: /dev/ttyACM0
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: home-assistant
+  name: jackett
+  namespace: vpn
 
 spec:
   ports:
     - name: http
       port: 80
-      targetPort: 8123
+      targetPort: 9117
   selector:
-    app: home-assistant
+    app: jackett
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: home-assistant
+  name: jackett
+  namespace: vpn
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth@kubernetescrd
 spec:
   tls:
     - hosts:
-      - home-assistant.clark.snowdon.jflei.com
-      secretName: home-assistant-tls
+      - jackett.clark.snowdon.jflei.com
+      secretName: jackett-tls
   rules:
-  - host: home-assistant.clark.snowdon.jflei.com
+  - host: jackett.clark.snowdon.jflei.com
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: home-assistant
+              name: jackett
               port:
                 number: 80

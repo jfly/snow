@@ -8,7 +8,7 @@ in
   services.mysql = {
     enable = true;
     package = pkgs.mariadb;
-    dataDir = "/mnt/media/mysql/";
+    dataDir = "/state/mysql";
   };
 
   ids.uids.mysql = pkgs.lib.mkOverride 0 mysql_id;
@@ -22,7 +22,7 @@ in
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_14;
-    dataDir = "/mnt/media/postgresql/";
+    dataDir = "/state/postgresql";
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
       local all all trust

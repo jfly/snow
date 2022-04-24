@@ -1,0 +1,23 @@
+# Provides an abstraction for speaking to kodi.
+# Right now this points at an *actual* kodi, but someday it may instead become
+# a headless kodi.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kodi
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: kodi
+subsets:
+  - addresses:
+      - ip: 192.168.1.77  # dallben.snowdon.jflei.com
+    ports:
+      - port: 8080

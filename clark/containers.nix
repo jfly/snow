@@ -25,5 +25,21 @@ in
       role = "server";
       extraFlags = "--private-registry ${k3s_registries_conf}";
   };
+  system.activationScripts = {
+      # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
+      # It gets source IPs to show up correctly when going through proxies, but
+      # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
+      # we'll find out when that day comes.
+      k3s_config = ''
+        echo "apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/traefik.z.yaml
+      '';
+  };
   environment.systemPackages = [ pkgs.k3s ];
 }
