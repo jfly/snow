@@ -1,15 +1,7 @@
-let
-  pkgs = (import ../sources.nix).pkgs-21_11 {
-    system = "x86_64-linux";
-    overlays = import ../overlays;
-  };
-in
-
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 rec {
-  # Force use of our custom pkgs above rather than the one from morph.
-  _module.args.pkgs = lib.mkForce pkgs;
+  nixpkgs.system = "x86_64-linux";
 
   imports =
     [
@@ -57,12 +49,8 @@ rec {
     ];
   };
 
-  # TODO: actually share this configuration between the hosts
-  users.groups.media = { gid=1002; };
-
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim
-    pkgs.mosh
   ];
 }

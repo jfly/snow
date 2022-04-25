@@ -3,7 +3,7 @@ in
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.morph
+    pkgs.colmena
     pkgs.age
     (pkgs.python3.withPackages (py-pkgs: [py-pkgs.rich]))
     pkgs.kubectl

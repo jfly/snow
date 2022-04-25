@@ -43,7 +43,7 @@ function deploy_k8s() {
 function deploy_nix() {
     local target="$1"
     shift
-    morph deploy snow.nix --on="$target" switch "$@"
+    colmena apply --on "$target" "$@"
 }
 
 tools/deage

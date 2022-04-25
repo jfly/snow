@@ -1,15 +1,7 @@
-let
-  pkgs = (import ../sources.nix).pkgs-21_11 {
-    system = "aarch64-linux";
-    overlays = import ../overlays;
-  };
-in
-
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  # Force use of our custom pkgs above rather than the one from morph.
-  _module.args.pkgs = lib.mkForce pkgs;
+  nixpkgs.system = "aarch64-linux";
 
   imports =
     [
@@ -46,13 +38,6 @@ in
     networkmanager = {
       enable = true;
     };
-  };
-
-  environment.systemPackages = with pkgs; [
-    vim
-  ];
-  environment.variables = {
-    EDITOR = "vim";
   };
 
   # Enable ssh.
