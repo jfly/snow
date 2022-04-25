@@ -29,6 +29,7 @@
       wget
       curl
       mosh
+      tmux
     ];
 
     environment.variables = {

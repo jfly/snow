@@ -17,5 +17,6 @@
     "rpc-whitelist": "*",
     "rpc-whitelist-enabled": "false",
     "upload-limit": 100,
-    "upload-limit-enabled": 0
+    "upload-limit-enabled": 0,
+    "umask": 2
 }
