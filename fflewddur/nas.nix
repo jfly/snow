@@ -25,7 +25,7 @@ in
       fsType = "fuse.mergerfs";
       options = [
         # From https://github.com/trapexit/mergerfs#basic-setup "You need mmap"
-        # (sqlite needs mmap, home-assistant uses sqlite)
+        # (sqlite needs mmap, home-assistant uses sqlite).
         "allow_other"
         "use_ino"
         "cache.files=partial"
@@ -34,10 +34,8 @@ in
         # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
         "noforget"
         "inodecalc=path-hash"
-        # Useful to preserve permissions with so many different applications
-        # writing to the shared filesystem. This may not be necessary as the
-        # writes start coming in over NFS instead?
-        "posix_acl=true"
+        # <<<< testing >>>
+        "nfsopenhack=all"
       ];
     };
   };
