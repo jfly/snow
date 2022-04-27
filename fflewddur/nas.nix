@@ -24,18 +24,15 @@ in
       device = builtins.concatStringsSep ":" (builtins.attrNames nas_drive_uuids);
       fsType = "fuse.mergerfs";
       options = [
-        # From https://github.com/trapexit/mergerfs#basic-setup "You need mmap"
-        # (sqlite needs mmap, home-assistant uses sqlite).
+        # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
         "allow_other"
         "use_ino"
-        "cache.files=partial"
+        "cache.files=off"
         "dropcacheonclose=true"
         "category.create=mfs"
         # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
         "noforget"
         "inodecalc=path-hash"
-        # <<<< testing >>>
-        "nfsopenhack=all"
       ];
     };
   };
