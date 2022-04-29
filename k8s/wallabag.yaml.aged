@@ -20,7 +20,7 @@ spec:
             - name: POSTGRES_USER
               value: "wallabag"
             - name: POSTGRES_PASSWORD
-              value: |
+              value: |-
                 -----BEGIN AGE ENCRYPTED FILE-----
                 YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZktsMUF2STRnUXdYNjlE
                 OWJiWVRHazJEeHpUWEVaTDV3bDd5L21ndWdVCnZmZExDR0pMNFBJM0Jxb29EVUs0
@@ -41,7 +41,7 @@ spec:
             - name: SYMFONY__ENV__DATABASE_USER
               value: "wallabag"
             - name: SYMFONY__ENV__DATABASE_PASSWORD
-              value: |
+              value: |-
                 -----BEGIN AGE ENCRYPTED FILE-----
                 YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZktsMUF2STRnUXdYNjlE
                 OWJiWVRHazJEeHpUWEVaTDV3bDd5L21ndWdVCnZmZExDR0pMNFBJM0Jxb29EVUs0

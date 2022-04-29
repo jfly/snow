@@ -161,13 +161,25 @@
             </div>
         </a>
     </div>
+    <div class="box">
+        <a href="#" data-subdomain="keycloak" data-path="/realms/snow/account/">
+            <div class="boxInner">
+                <img src="images/snowflake.svg"></img>
+            </div>
+        </a>
+        <a class="help" data-subdomain="auth" data-path="/_oauth/logout">logout</a>
+    </div>
 </div>
 
 <script>
     (function() {
         let links = document.querySelectorAll("a[data-subdomain]");
         links.forEach(link => {
-            link.href = location.protocol + "//" + link.dataset.subdomain + "." + location.host;
+            let url = location.protocol + "//" + link.dataset.subdomain + "." + location.host;
+            if(link.dataset.path) {
+                url += link.dataset.path;
+            }
+            link.href = url;
         });
     })();
 </script>

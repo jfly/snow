@@ -62,6 +62,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth@kubernetescrd
 spec:
   tls:
     - hosts:
@@ -241,31 +242,3 @@ spec:
       port: 80
   selector:
     app: snow-web
----
-#<<< TODO: remove once we're done testing snowauth2
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: media2
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth2@kubernetescrd
-spec:
-  tls:
-    - hosts:
-      - media2.clark.snowdon.jflei.com
-      secretName: media2-tls
-  rules:
-  - host: media2.clark.snowdon.jflei.com
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: snow-web
-              port:
-                number: 80
-#<<<
----

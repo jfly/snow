@@ -14,7 +14,7 @@ metadata:
   name: wireguard
 data:
   # cat wireguard.conf | base64 -w 0 | tools/encrypt
-  vpnConfigfile: |
+  vpnConfigfile: |-
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlSHlSdjd6bXZUR3NocG5F
     WHAwaStVKzNqQ0JlY3ArMkk1a1VkVC9NYURBCnQrN1hGN3BXeUdkSnR4VEYyL1RH

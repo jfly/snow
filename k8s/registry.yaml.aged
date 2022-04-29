@@ -4,7 +4,7 @@ metadata:
   name: registry-auth
 # echo -e "$(docker run --entrypoint htpasswd httpd:2 -Bbn USERNAME PASSWORD)\n$(docker run --entrypoint htpasswd httpd:2 -Bbn USERNAME PASSWORD)" | base64 -w 0 | tools/encrypt
 data:
-  passwd: |
+  passwd: |-
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBycWJXRTNoUWRUN1dyUGlY
     azVOQjRqQ3F6aGM3cGduTDlKdHhBWnBGcG1NCjBmMmxnYnlYaG84QVd0dGZURTlv

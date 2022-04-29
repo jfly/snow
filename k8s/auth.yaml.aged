@@ -1,33 +1,7 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: snow-authsecret
-data:
-  # To create an encoded user:password pair:
-  # docker run --entrypoint htpasswd httpd:2 -Bbn USERNAME PASSWORD | base64 | tools/encrypt
-  users: |
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0cHdjUVVQeGVZeHFPMnoy
-    ZUZXdE4wOGRJMkNDSmExL1ZjR0ZFRkh3Sm0wCk8zZUhva2k0L2VPOXZVTjVLWmV5
-    VHlFeXo3cC9nNGxOUGtuS2NyOGFnME0KLS0tIDVTS1FhOWNmQjd1NG9VZlc3eU1m
-    Y2FQSDlRQVBGNTREVDlCZTAxdnoxaDAKeAVCRdncr6KcSrYCURjhB2pC/mvo1ecV
-    LgvcCRnKhNZ2CEFSwWeZXnLNaEw0NLSae1JH+kHQ4Y8Wyen9Y6nzUtl9XpgaWKcR
-    BPnyzb6A+AglYpNaNWljYJjOixo=
-    -----END AGE ENCRYPTED FILE-----
-
----
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: snowauth
-spec:
-  basicAuth:
-    secret: snow-authsecret
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: snowauth2
 spec:
   forwardAuth:
     address: http://snowauth.default.svc.cluster.local
@@ -41,7 +15,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth2@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth@kubernetescrd
 spec:
   tls:
     - hosts:
@@ -93,19 +67,24 @@ spec:
               name: traefik-forward-auth-secrets
               key: traefik-forward-auth-secret
         - name: DEFAULT_PROVIDER
-          value: generic-oauth
-        - name: PROVIDERS_GENERIC_OAUTH_AUTH_URL
-          value: https://github.com/login/oauth/authorize
-        - name: PROVIDERS_GENERIC_OAUTH_TOKEN_URL
-          value: https://github.com/login/oauth/access_token
-        - name: PROVIDERS_GENERIC_OAUTH_USER_URL
-          value: https://api.github.com/user
-        - name: PROVIDERS_GENERIC_OAUTH_CLIENT_ID
-          value: 027e298f704aaf0f9543
-        - name: PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
-          value: 07d40b850b3800f72982f5dd9d6149eec3755168
+          value: oidc
+        - name: PROVIDERS_OIDC_ISSUER_URL
+          value: https://keycloak.clark.snowdon.jflei.com/realms/snow
+        - name: PROVIDERS_OIDC_CLIENT_ID
+          value: snowauth
+        - name: PROVIDERS_OIDC_CLIENT_SECRET
+          value: |-
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUQmw5L0FPNjJueFJjaVNo
+            OTJYSmZ2aTVpUkp2dE1JclVnRHoxZE1oR2drCkJWZlRvR09TQlVPZE9uSThqZXZF
+            QnAxRlUyN3pYQ1UzNkJUekVCbzRRRkkKLS0tIDZaaG1vQnoyaHJtb1BFTkIvejd0
+            VVBqaWdFV0hsRFJnVlRmR3VhYmkzSmsK8K/g76XKntePZf8ebloxCZeJ1+lJX63m
+            R+/ntGuxvlBbHJYiYpk2wuVij+o+QZDyrG72ETue5mH5BA6JlNYl2Q==
+            -----END AGE ENCRYPTED FILE-----
         - name: WHITELIST
           value: jeremyfleischman@gmail.com
+        - name: LOGOUT_REDIRECT
+          value: https://clark.snowdon.jflei.com
 ---
 apiVersion: v1
 kind: Secret
@@ -116,7 +95,15 @@ metadata:
 type: Opaque
 data:
   # openssl rand -hex 16 | base64 -w 0
-  traefik-forward-auth-secret: ZDgyY2JmM2QxMTBlNDUyZDc3YWRlNDhkMjIwYTk2MTMK
+  traefik-forward-auth-secret: |-
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzVEVxR201NVloZWxsNnoy
+    eVIwS1BVM0F1VEplczFyd05wcEV1RU9oOTBzCm1UMVErZGowRDlrY2hJRnQxQlpa
+    Ny80QVpRLzl1RFpFaWNVWS9ISFJrc0kKLS0tIFJZY3hvTjVjU0FjU2IwWEs2T2dV
+    WnRmOElDTDJqbnVYWjBnRkJZM1BrT2sK4VjkE6X/B3Av6uWLKQfCzl5nyuC+XqPj
+    Aq0bYMrADpSLjbWXtCxOS15h+2SF5Hazd9KOpX3xap1fsUGsB9AlceHDqqukGIIY
+    K5x2VA==
+    -----END AGE ENCRYPTED FILE-----
 ---
 apiVersion: v1
 kind: Service
