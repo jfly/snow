@@ -23,3 +23,110 @@ metadata:
 spec:
   basicAuth:
     secret: snow-authsecret
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: snowauth2
+spec:
+  forwardAuth:
+    address: http://snowauth.default.svc.cluster.local
+    authResponseHeaders:
+      - X-Forwarded-User
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: auth
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-snowauth2@kubernetescrd
+spec:
+  tls:
+    - hosts:
+      - auth.clark.snowdon.jflei.com
+      secretName: auth-tls
+  rules:
+  - host: auth.clark.snowdon.jflei.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: snowauth
+              port:
+                number: 80
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: snowauth
+  labels:
+    app: snowauth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snowauth
+  template:
+    metadata:
+      labels:
+        app: snowauth
+    spec:
+      containers:
+      - image: thomseddon/traefik-forward-auth:2
+        name: snowauth
+        ports:
+        - containerPort: 4181
+          protocol: TCP
+        env:
+        - name: COOKIE_DOMAIN
+          value: clark.snowdon.jflei.com
+
+        - name: AUTH_HOST
+          value: auth.clark.snowdon.jflei.com
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: traefik-forward-auth-secrets
+              key: traefik-forward-auth-secret
+        - name: DEFAULT_PROVIDER
+          value: generic-oauth
+        - name: PROVIDERS_GENERIC_OAUTH_AUTH_URL
+          value: https://github.com/login/oauth/authorize
+        - name: PROVIDERS_GENERIC_OAUTH_TOKEN_URL
+          value: https://github.com/login/oauth/access_token
+        - name: PROVIDERS_GENERIC_OAUTH_USER_URL
+          value: https://api.github.com/user
+        - name: PROVIDERS_GENERIC_OAUTH_CLIENT_ID
+          value: 027e298f704aaf0f9543
+        - name: PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET
+          value: 07d40b850b3800f72982f5dd9d6149eec3755168
+        - name: WHITELIST
+          value: jeremyfleischman@gmail.com
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-forward-auth-secrets
+  labels:
+    app: traefik-forward-auth
+type: Opaque
+data:
+  # openssl rand -hex 16 | base64 -w 0
+  traefik-forward-auth-secret: ZDgyY2JmM2QxMTBlNDUyZDc3YWRlNDhkMjIwYTk2MTMK
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snowauth
+
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 4181
+  selector:
+    app: snowauth
