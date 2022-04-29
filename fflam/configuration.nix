@@ -38,6 +38,8 @@
     networkmanager = {
       enable = true;
     };
+    # Disable the firewall. I'm just not used to having one, and we're behind a NAT anyways...
+    firewall.enable = false;
   };
 
   # Enable ssh.
