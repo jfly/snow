@@ -21,6 +21,9 @@ let
       export PATH=$PATH:${pkgs.findutils}/bin
       export PATH=$PATH:${pkgs.gnutar}/bin
 
+      # Ensure these files are read + writeable by group.
+      umask 002
+
       # Create a backup with today's date
       backup=/mnt/media/backups/clark-state-$(date -I).tar
       wip_backup=$backup.wip
