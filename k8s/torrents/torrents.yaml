@@ -18,6 +18,16 @@ spec:
       - name: mnt-media
         hostPath:
           path: /mnt/media
+      # TODO: look into Longhorn for persistent volumes
+      - name: transmission-stats
+        hostPath:
+          path: /state/transmission/stats.json
+      - name: transmission-resume
+        hostPath:
+          path: /state/transmission/resume
+      - name: transmission-torrents
+        hostPath:
+          path: /state/transmission/torrents
       containers:
         - name: transmission
           image: containers.clark.snowdon.jflei.com/transmission:latest
@@ -26,6 +36,12 @@ spec:
           volumeMounts:
             - name: mnt-media
               mountPath: /mnt/media
+            - name: transmission-stats
+              mountPath: /root/.config/transmission-daemon/stats.json
+            - name: transmission-resume
+              mountPath: /root/.config/transmission-daemon/resume
+            - name: transmission-torrents
+              mountPath: /root/.config/transmission-daemon/torrents
 
 ---
 apiVersion: v1
