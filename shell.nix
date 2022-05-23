@@ -1,4 +1,4 @@
-let pkgs = (import ./sources.nix).pkgs-unstable {};
+let pkgs = (import ./sources.nix).nixos-unstable {};
 in
 
 pkgs.mkShell {

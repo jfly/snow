@@ -1,22 +1,22 @@
 {
   meta = {
-    nixpkgs = (import ./sources.nix).pkgs-unstable {};
+    nixpkgs = (import ./sources.nix).nixos-unstable {};
 
     # Colmena doesn't require it, but put every single host in here. I'd prefer
     # to *not* have a fallback value defined for nixpkgs at all.
     # https://github.com/zhaofengli/colmena/issues/54 tracks that feature
     # request for Colmena.
     nodeNixpkgs = rec {
-      clark = (import ./sources.nix).pkgs-21_11 {
+      clark = (import ./sources.nix).nixos-21_11 {
         overlays = import ./overlays;
       };
-      dallben = (import ./sources.nix).pkgs-unstable {
+      dallben = (import ./sources.nix).nixos-unstable {
         overlays = import ./overlays;
       };
-      fflewddur = (import ./sources.nix).pkgs-21_11 {
+      fflewddur = (import ./sources.nix).nixos-21_11 {
         overlays = import ./overlays;
       };
-      fflam = (import ./sources.nix).pkgs-21_11 {
+      fflam = (import ./sources.nix).nixos-21_11 {
         overlays = import ./overlays;
       };
     };
