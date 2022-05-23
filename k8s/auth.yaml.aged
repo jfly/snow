@@ -82,7 +82,7 @@ spec:
             R+/ntGuxvlBbHJYiYpk2wuVij+o+QZDyrG72ETue5mH5BA6JlNYl2Q==
             -----END AGE ENCRYPTED FILE-----
         - name: WHITELIST
-          value: jeremyfleischman@gmail.com
+          value: jeremyfleischman@gmail.com,mdfleischman@gmail.com
         - name: LOGOUT_REDIRECT
           value: https://clark.snowdon.jflei.com
 ---
