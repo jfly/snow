@@ -7,13 +7,13 @@ let self = rec {
 
   # TODO: these should all get upstreamed to
   #       nixpkgs/pkgs/top-level/kodi-packages.nix
-  bottle = callPackage ./bottle {};
-  tubecast = callPackage ./tubecast {};
+  bottle = callPackage ./bottle { };
+  tubecast = callPackage ./tubecast { };
 
   # Mine! No intention of upstreaming these.
-  autoreceiver = callPackage ./autoreceiver {};
+  autoreceiver = callPackage ./autoreceiver { };
   media = callPackage ./media {
     inherit config;
   };
-  parsec = callPackage ./parsec {};
+  parsec = callPackage ./parsec { };
 }; in self

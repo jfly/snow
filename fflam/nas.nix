@@ -13,12 +13,14 @@ in
     mergerfs-tools
   ];
 
-  fileSystems = (builtins.mapAttrs (mnt_path: uuid: {
+  fileSystems = (builtins.mapAttrs
+    (mnt_path: uuid: {
       device = "/dev/disk/by-uuid/${uuid}";
       fsType = "ext4";
       options =
         [ "rw" "user" "auto" ];
-    }) nas_drive_uuids) // {
+    })
+    nas_drive_uuids) // {
     "/mnt/media" = {
       device = builtins.concatStringsSep ":" (builtins.attrNames nas_drive_uuids);
       fsType = "fuse.mergerfs";

@@ -1,7 +1,7 @@
 { pkgs }:
 
 let
-  receiver = pkgs.callPackage ../../receiver {};
+  receiver = pkgs.callPackage ../../receiver { };
 in
 pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   name = "kodi-autoreceiver";

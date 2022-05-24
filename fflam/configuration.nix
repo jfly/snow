@@ -15,11 +15,11 @@
     initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
     # ttyAMA0 is the serial console broken out to the GPIO
     kernelParams = [
-        "8250.nr_uarts=1"
-        "console=ttyAMA0,115200"
-        "console=tty1"
-        # Some gui programs need this
-        "cma=128M"
+      "8250.nr_uarts=1"
+      "console=ttyAMA0,115200"
+      "console=tty1"
+      # Some gui programs need this
+      "cma=128M"
     ];
   };
 

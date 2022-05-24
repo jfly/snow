@@ -15,7 +15,7 @@ let
   # This is unfortunate: it just doesn't seem to be possible to set some kodi
   # settings without creating files in the ~/.kodi/userdata/addon_data
   # directory. So, we wrap kodi to give us an opportunity to do that.
-  genKodiAddonData = pkgs.callPackage ./gen-kodi-addon-data {};
+  genKodiAddonData = pkgs.callPackage ./gen-kodi-addon-data { };
   my_kodi = pkgs.symlinkJoin {
     name = "kodi";
     paths = [ my_kodi_with_packages ];

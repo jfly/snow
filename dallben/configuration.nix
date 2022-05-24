@@ -59,7 +59,7 @@ rec {
   users.users.${config.variables.kodiUsername} = {
     isNormalUser = true;
     extraGroups = [
-      "wheel"  # Enable `sudo` for the user.
+      "wheel" # Enable `sudo` for the user.
     ];
     openssh.authorizedKeys.keys = users.users.root.openssh.authorizedKeys.keys;
     hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";

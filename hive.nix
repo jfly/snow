@@ -1,6 +1,6 @@
 {
   meta = {
-    nixpkgs = (import ./sources.nix).nixos-unstable {};
+    nixpkgs = (import ./sources.nix).nixos-unstable { };
 
     # Colmena doesn't require it, but put every single host in here. I'd prefer
     # to *not* have a fallback value defined for nixpkgs at all.
@@ -39,7 +39,7 @@
       EDITOR = "vim";
     };
 
-    users.groups.media = { gid=1002; };
+    users.groups.media = { gid = 1002; };
   };
 
   "clark" = import clark/configuration.nix;

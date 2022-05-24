@@ -18,44 +18,44 @@ let
           password: ${password}
   '';
   state-backup = pkgs.writeShellScriptBin "state-backup" ''
-      export PATH=$PATH:${pkgs.findutils}/bin
-      export PATH=$PATH:${pkgs.gnutar}/bin
+    export PATH=$PATH:${pkgs.findutils}/bin
+    export PATH=$PATH:${pkgs.gnutar}/bin
 
-      # Ensure these files are read + writeable by group.
-      umask 002
+    # Ensure these files are read + writeable by group.
+    umask 002
 
-      # Create a backup with today's date
-      backup=/mnt/media/backups/clark-state-$(date -I).tar
-      wip_backup=$backup.wip
-      tar cfp "$wip_backup" /state
-      mv "$wip_backup" "$backup"
+    # Create a backup with today's date
+    backup=/mnt/media/backups/clark-state-$(date -I).tar
+    wip_backup=$backup.wip
+    tar cfp "$wip_backup" /state
+    mv "$wip_backup" "$backup"
 
-      # Remove backups more than 10 days old
-      find /mnt/media/backups -type f -mtime +10 -delete
+    # Remove backups more than 10 days old
+    find /mnt/media/backups -type f -mtime +10 -delete
   '';
 in
 {
   # Set up a kubernetes cluser with k3s
   services.k3s = {
-      enable = true;
-      role = "server";
-      extraFlags = "--private-registry ${k3s_registries_conf}";
+    enable = true;
+    role = "server";
+    extraFlags = "--private-registry ${k3s_registries_conf}";
   };
   system.activationScripts = {
-      # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
-      # It gets source IPs to show up correctly when going through proxies, but
-      # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
-      # we'll find out when that day comes.
-      k3s_config = ''
-        echo "apiVersion: helm.cattle.io/v1
-kind: HelmChartConfig
-metadata:
-  name: traefik
-  namespace: kube-system
-spec:
-  valuesContent: |-
-    externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/traefik.z.yaml
-      '';
+    # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
+    # It gets source IPs to show up correctly when going through proxies, but
+    # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
+    # we'll find out when that day comes.
+    k3s_config = ''
+              echo "apiVersion: helm.cattle.io/v1
+      kind: HelmChartConfig
+      metadata:
+        name: traefik
+        namespace: kube-system
+      spec:
+        valuesContent: |-
+          externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/traefik.z.yaml
+    '';
   };
   environment.systemPackages = [ pkgs.k3s ];
 
