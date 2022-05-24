@@ -19,6 +19,9 @@
       fflam = (import ./sources.nix).nixos-21_11 {
         overlays = import ./overlays;
       };
+      pattern = (import ./sources.nix).nixos-unstable {
+        overlays = import ./overlays;
+      };
     };
   };
 
@@ -43,4 +46,5 @@
   "dallben" = import dallben/configuration.nix;
   "fflewddur" = import fflewddur/configuration.nix;
   "fflam" = import fflam/configuration.nix;
+  "pattern" = import pattern/configuration.nix;
 }
