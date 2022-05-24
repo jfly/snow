@@ -10,3 +10,6 @@ switch_case_indent = true
 
 [*.yaml{,.aged}]
 indent_size = 2
+
+[*.nix]
+indent_size = 2
