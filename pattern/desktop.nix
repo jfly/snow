@@ -1,16 +1,69 @@
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  alacritty = (pkgs.callPackage ../dotfiles/my-nix/with-alacritty { });
+  polybar = pkgs.polybar.override {
+    mpdSupport = true;
+  };
+  polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
+in
 {
-  ### Desktop
-  # services.xserver.enable = true;
+  services.xserver = {
+    enable = true;
+    autorun = true;
+    displayManager = {
+      defaultSession = "none+xmonad";
+      autoLogin.enable = true;
+      autoLogin.user = "jeremy";
+    };
+    windowManager.xmonad = {
+      enable = true;
+      config = ../dotfiles/my-nix/xmonad/xmonad.hs;
+      extraPackages = s: [ s.xmonad-contrib ];
+    };
+  };
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  # Enable touchpad.
+  services.xserver.libinput.enable = true;
 
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  # Enable sound with pipewire.
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # TODO: figure out how to enable native GPU, I know this machine has one!
+  services.xserver.videoDrivers = [ "modesetting" ];
+  services.xserver.useGlamor = true;
+
+  environment.systemPackages = with pkgs; [
+    alacritty
+    dmenu
+    qutebrowser
+  ];
+
+  # TODO: achieve parity with /home/jeremy/src/github.com/jfly/dotfiles/homies/xinitrc
+  programs.nm-applet.enable = true;
+
+  systemd.user.services = {
+    "polybar" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${polybar}/bin/polybar --config=${polybarConfig}";
+      };
+    };
+    "pasystray" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      path = [ pkgs.pavucontrol ];
+      serviceConfig = {
+        ExecStart = "${pkgs.pasystray}/bin/pasystray";
+      };
+    };
+  };
 }

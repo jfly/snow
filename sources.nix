@@ -7,9 +7,9 @@
   });
   nixos-unstable = import (builtins.fetchTarball {
     name = "nixos-unstable";
-    url = "https://github.com/NixOS/nixpkgs/archive/cbe587c735b734405f56803e267820ee1559e6c1.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs/archive/dfd82985c273aac6eced03625f454b334daae2e8.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "0jii8slqbwbvrngf9911z3al1s80v7kk8idma9p9k0d5fm3g4z7h";
+    sha256 = "1ipd1k1gvxh9sbg4w4cpa3585q09gvsq8xbjvxnnmfjib6r6xx4i";
   });
   nixos-generators = import (builtins.fetchTarball {
     name = "nixos-generators";

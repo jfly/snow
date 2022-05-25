@@ -21,6 +21,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  swapDevices = [{ device = "/swapfile"; size = 2048; }];
+
   # i18n stuff
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -29,6 +31,8 @@
   environment.systemPackages = with pkgs; [
     vim
   ];
+
+  services.logind.lidSwitch = "ignore";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

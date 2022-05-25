@@ -16,13 +16,15 @@
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/718bb923-2c41-47ec-9817-52d0941c7e9d";
+      device = "/dev/disk/by-uuid/89aeb981-8ff8-4618-886c-0d53e4c37fd8";
       fsType = "ext4";
     };
 
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/19453826-f702-48b0-99f1-37a377a2ce9a";
+
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/C9BC-7AA3";
+      device = "/dev/disk/by-uuid/BA79-1433";
       fsType = "vfat";
     };
 
