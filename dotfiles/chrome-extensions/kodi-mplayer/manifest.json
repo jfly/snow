@@ -1,0 +1,9 @@
+{
+    "name": "Kodi MPlayer",
+    "version": "1.0",
+    "manifest_version": 2,
+    "content_scripts": [{
+        "js": ["index.user.js"],
+        "matches": ["http://xbmc.clark.jflei.com/*"]
+    }]
+}

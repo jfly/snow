@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+DB=/tmp/data.db
+
+echo -n "Attempting to connect to phone. You may need to answer a prompt on your phone..." &> /dev/stderr
+sudo adb -d shell "which su" &> /dev/null < /dev/null
+if [ $? -ne 0 ]; then
+    echo
+    echo "It appears the attached phone is not rooted (could not find a 'su' binary)."
+    echo "This tool will not work if your phone is not rooted. Exiting."
+    exit 1
+fi
+sudo adb -d shell "su -c 'cat /data/data/com.google.android.apps.authenticator2/databases/databases'" > "$DB" 2> /dev/null < /dev/null
+if [ $? -eq 0 ]; then
+    echo "success!" &> /dev/stderr
+else
+    echo "No attached phone found. Attach your phone via usb and try again." &> /dev/stderr
+    exit 1
+fi
+
+function cleanup {
+    # Securely delete database file.
+    # Copied from https://www.cyberciti.biz/tips/linux-how-to-delete-file-securely.html.
+    shred -n 200 -z -u "$DB"
+}
+trap cleanup EXIT
+
+# Copied from https://wiki.archlinux.org/index.php/Google_Authenticator#Command_line
+sqlite3 "$DB" 'SELECT email,secret FROM accounts;' | while read A
+do
+    NAME=`echo "$A" | cut -d '|' -f 1`
+    KEY=`echo "$A" | cut -d '|' -f 2`
+    CODE=`oathtool --totp -b "$KEY"`
+    echo -e "$CODE\t$NAME"
+done

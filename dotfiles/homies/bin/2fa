@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+OPTIONS=$(2fa-cli)
+SELECTED=$(picker-popup "$OPTIONS")
+
+SELECTED_2FA=$(echo "$SELECTED" | grep -Eo "[0-9]+")
+
+if [ -z "$SELECTED_2FA" ]; then
+    exit 1
+fi
+
+echo -n "$SELECTED_2FA" | clipit
+xdotool key --clearmodifiers ctrl+shift+v

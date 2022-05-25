@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DEVICE_NAME=bluez_card.28_11_A5_36_83_33
+CURRENT_PROFILE=$(pactl list | grep -Pzo "(?s)device.name = \"$DEVICE_NAME\".*?Active Profile:\N*" | head --bytes=-1 | grep -Po '(?<=Active Profile: ).*')
+
+if [[ $CURRENT_PROFILE == *"-sink-"* ]]; then
+    b-bose-call
+    NEW_PROFILE="headset-head-unit"
+elif [[ $CURRENT_PROFILE == "headset-"* ]]; then
+    b-bose-music
+    NEW_PROFILE="a2dp-sink"
+else
+    echo "Unrecognized profile '$CURRENT_PROFILE' for device '$DEVICE_NAME'" >/dev/stderr
+    exit 1
+fi
+
+pactl set-card-profile "$DEVICE_NAME" "$NEW_PROFILE"

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+ls *.mp4 | sed -e "s/^/file '/;s/$/'/" > .tmp-remove-me
+function cleanup {
+    rm -f .tmp-remove-me
+}
+trap cleanup EXIT
+ffmpeg -safe 0 -f concat -i .tmp-remove-me -c copy -f matroska - | mpv -
+
+#<<< FILENAME=$1
+#<<< mkfifo "$FILENAME"
+#<<< ls *.mp4 | sed -e "s/^/file '/;s/$/'/" > .tmp-remove-me
+#<<< function cleanup {
+#<<<     rm -f "FILENAME"
+#<<<     rm -f .tmp-remove-me
+#<<< }
+#<<< trap cleanup EXIT
+#<<< ffmpeg -safe 0 -f concat -i .tmp-remove-me -c copy -y "$FILENAME"
+
+#<<< sudo modprobe v4l2loopback
+#<<< ls *.mp4 | sed -e "s/^/file '/;s/$/'/" > .tmp-remove-me
+#<<< function cleanup {
+#<<<     rm -f .tmp-remove-me
+#<<< }
+#<<< trap cleanup EXIT
+#<<< ffmpeg -re -safe 0 -f concat -i .tmp-remove-me -c copy -f v4l2 -vf format=yuv420p /dev/video4
+#<<< #<<< ffmpeg -re -i '/home/jeremy/media/clark/deercam/deercam/2020-07-04/video_001/01.22.42-01.26.31[R][0@0][0].mp4' -f v4l2 -vf format=yuv420p /dev/video4

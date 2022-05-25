@@ -1,0 +1,8 @@
+Ideas:
+
++ swapping workspaces?
+- dynamic workspaces?
+- programmatic control over xmonad? https://www.reddit.com/r/xmonad/comments/6d8q6t/sending_commands_to_xmonad_on_the_fly/di0s20b/
+
+- OOOH, how about having a truly dedicated workspace for each "project"???
+- which might be a little weird because the order of things in the status bar wouldn't reflect what mod+2 does. https://wiki.haskell.org/Xmonad/General_xmonad.hs_config_tips#Do_not_show_scratchpad_workspace_in_status_bar_or_dynamicLog might be how we'd fix that

@@ -1,0 +1,19 @@
+https://discord.com/channels/275729591505780736/275735607962107904/757427930711457834
+
+I'm streaming to a Mac from windows. I was running DS4 windows on the host machine but the game (Wasteland 3) still recognized the controller as a DS4 and wants me to use the touchpad to open the inventory menu. Theres no way to remap the buttons in the game. Suggestions?
+come to brazil09/20/2020
+nothing I can suggest you on mac, the touchpad isn't used on parsec
+if the guest was on windows, you could at least use ds4windows to remap the touchpad to something
+ds4windows on the host won't do anything if the controller isn't directly on the host
+oh you should keep settings > host > virtual gamepad type as xbox 360
+if you don't want the game to see it as dualshock 4
+Colesl4w09/20/2020
+hm alright I'll give that a shot
+that did in fact solve the issue. disappointing that the touchpad cant be used but oh well
+come to brazil09/20/2020
+vigem, which parsec uses, doesn't have that yet iirc
+
+
+============================================================
+
+lol, mentions detroit become human: https://github.com/Ryochan7/DS4Windows/issues/952

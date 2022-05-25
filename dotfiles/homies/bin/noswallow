@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Wrapper script to suppress xmonad's swallowing behavior.
+
+echo -e "\e]2;xmonad-no-swallow\007"
+"$@"

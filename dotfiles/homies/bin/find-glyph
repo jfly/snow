@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+import subprocess
+import sys
+
+char = sys.argv[1]
+charset = hex(ord(char)).lstrip('0x')
+
+subprocess.check_call(['fc-list', f':charset={charset}'])

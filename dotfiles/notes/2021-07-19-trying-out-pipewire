@@ -1,0 +1,26 @@
+# https://www.guyrutenberg.com/2021/06/24/replacing-pulseaudio-with-pipewire-0-3-30/
+# https://roosnaflak.com/tech-and-research/transitioning-to-pipewire/
+$ sudo pacman -S pipewire pipewire-{alsa,jack,media-session,pulse}
+:: pipewire-pulse and pulseaudio are in conflict. Remove pulseaudio? [y/N] y
+:: pipewire-pulse and pulseaudio-bluetooth are in conflict. Remove pulseaudio-bluetooth? [y/N] y
+error: failed to prepare transaction (could not satisfy dependencies)
+:: removing pulseaudio breaks dependency 'pulseaudio=14.2-3' required by pulseaudio-equalizer
+:: removing pulseaudio breaks dependency 'pulseaudio=14.2-3' required by pulseaudio-jack
+:: removing pulseaudio breaks dependency 'pulseaudio=14.2-3' required by pulseaudio-lirc
+:: removing pulseaudio breaks dependency 'pulseaudio=14.2-3' required by pulseaudio-zeroconf
+
+$ sudo pacman -R pulseaudio-equalizer pulseaudio-jack pulseaudio-lirc pulseaudio-zeroconf pulseaudio pulseaudio-bluetooth
+checking dependencies...
+error: failed to prepare transaction (could not satisfy dependencies)
+:: removing pulseaudio-bluetooth breaks dependency 'pulseaudio-bluetooth' required by gnome-bluetooth
+:: removing pulseaudio breaks dependency 'pulseaudio' required by paprefs
+:: removing pulseaudio breaks dependency 'pulseaudio' required by pulseaudio-alsa
+
+$ sudo pacman -R pulseaudio-equalizer pulseaudio-jack pulseaudio-alsa pulseaudio-lirc pulseaudio-zeroconf pulseaudio pulseaudio-bluetooth paprefs
+checking dependencies...
+error: failed to prepare transaction (could not satisfy dependencies)
+:: removing pulseaudio-bluetooth breaks dependency 'pulseaudio-bluetooth' required by gnome-bluetooth
+
+$ sudo pacman -R pulseaudio-equalizer pulseaudio-jack pulseaudio-alsa pulseaudio-lirc pulseaudio-zeroconf pulseaudio pulseaudio-bluetooth paprefs gnome-bluetooth
+
+# and it looks like blueman still works after this

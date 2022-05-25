@@ -1,0 +1,46 @@
+<!--
+    Unfortunately, this is not quite enough to get a fresh Kodi bootstrapped:
+    The problem is that these sources get added, but they won't get scraped
+    until they have content types, and there's apparently no good way to *set*
+    the content type except via the Kodi UI, and the values end up stored in the
+    db? It's hard to find a clear
+    conversation about this online, see
+    https://www.reddit.com/r/kodi/comments/64plwy/comment/dg445ne/?utm_source=share&utm_medium=web2x&context=3
+    for the least confused comment I can find about it.
+
+    There's probably something clever we can do instead. Some wild ideas:
+    - do something at the SQL level: bootstrap with an actual db dump, or tweak
+      a fresh db Just Enough to get it working?
+    - find (or build) an API to set the content type of these sources?
+    - expand this xml format to have attributes for content type that kodi can
+      understand?
+-->
+<sources>
+    <programs>
+        <default pathversion="1"></default>
+    </programs>
+    <video>
+        <default pathversion="1"></default>
+        <source>
+            <name>shows</name>
+            <path pathversion="1">/home/jeremy/media/shows</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>movies</name>
+            <path pathversion="1">/home/jeremy/media/movies</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </video>
+    <music>
+        <default pathversion="1"></default>
+        <source>
+            <name>music</name>
+            <path pathversion="1">/mnt/media/beets</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </music>
+    <pictures>
+        <default pathversion="1"></default>
+    </pictures>
+</sources>

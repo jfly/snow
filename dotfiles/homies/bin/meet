@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+URL=https://meet.google.com/zhw-huyd-oam
+echo -n "$URL" | clipit
+
+# For some reason, my "Honor" profile is actually set up as "Profile 9"? I
+# found this by navigating to chrome://version/.
+chromium --profile-directory="Profile 9" --app="$URL"

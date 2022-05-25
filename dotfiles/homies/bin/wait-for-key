@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import sys
+import signal
+import subprocess
+
+def wait_for_key(keycode):
+    cmd = "xinput list | grep -Po 'id=\K\d+(?=.*slave\s*keyboard)' | xargs -P0 -n1 xinput test"
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    for line in p.stdout:
+        line = line.decode('utf-8').strip()
+        if re.match(r"key press.*{}".format(keycode), line):
+            return
+
+def main():
+    # Idea copied from https://stackoverflow.com/a/322317
+    # We need to do this to avoid creating a bunch of orphaned `xinput test`
+    # commands that never exit.
+    os.setpgrp() # create new process group, become its leader
+    try:
+        wait_for_key(107)
+    finally:
+        os.killpg(0, signal.SIGKILL)
+
+if __name__ == "__main__":
+    main()

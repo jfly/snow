@@ -1,0 +1,56 @@
+autoperipherals
+
+# https://wiki.archlinux.org/index.php/HiDPI
+xrdb -merge ~/.Xresources
+
+# volnoti is a volume notification daemon
+volnoti -t 1
+
+# Enable numlock on boot (thanks James!)
+numlockx on
+
+if [ -x "$(which pasystray 2>/dev/null)" ]; then
+    pasystray &
+fi
+
+if [ -x "$(which nm-applet 2>/dev/null)" ]; then
+    nm-applet --indicator &
+fi
+
+if [ -x "$(which blueman-applet 2>/dev/null)" ]; then
+    blueman-applet &
+fi
+
+if [ -x "$(which dunst 2>/dev/null)" ]; then
+    dunst &
+fi
+
+if [ -x "$(which xsettingsd 2>/dev/null)" ]; then
+    touch ~/.xsettingsd
+    xsettingsd &
+fi
+
+if [ -x "$(which flameshot 2>/dev/null)" ]; then
+    # See https://wiki.archlinux.org/index.php/Flameshot#Option_2:_Run_as_background_process
+    flameshot &
+fi
+
+# From https://wiki.archlinux.org/index.php/GNOME/Keyring#xinitrc_method.
+if [ -x "$(which gnome-keyring-daemon 2>/dev/null)" ]; then
+    dbus-update-activation-environment --systemd DISPLAY
+    eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+    export SSH_AUTH_SOCK
+fi
+
+if [ -x "$(which mcg 2>/dev/null)" ]; then
+    mcg &
+fi
+
+if [ -x "$(which polybar 2>/dev/null)" ]; then
+    polybar &
+fi
+
+# xmonad doesn't set a cursor.
+xsetroot -cursor_name left_ptr
+
+exec xmonad

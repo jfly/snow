@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function nm_con_toggle() {
+    __con_id="$1"
+    if nmcli connection show --active | grep "$1" > /dev/null; then
+        echo "Disabling $__con_id"
+        nmcli con down id "$__con_id"
+    else
+        echo "Enabling $__con_id"
+        nmcli con up id "$__con_id"
+    fi
+}
+
+nm_con_toggle "jeremy-fleischman-macbook.config"

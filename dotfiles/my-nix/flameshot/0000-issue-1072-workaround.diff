@@ -1,0 +1,27 @@
+commit e5e711e501c0476f3b79a3b5f2c96c919ac6b923
+Author: Jeremy Fleischman <jeremyfleischman@gmail.com>
+Date:   Tue Jan 18 17:30:01 2022 -0800
+
+    Remove `Qt::BypassWindowManagerHint`
+
+    This is a workaround/fix for
+    https://github.com/flameshot-org/flameshot/issues/1072#issuecomment-928095098.
+    This works great for me on xmonad, but I haven't vetted this well enough
+    to know if it would work well for every Linux user. I really would like
+    to get this upstreamed someday.
+
+diff --git a/src/widgets/capture/capturewidget.cpp b/src/widgets/capture/capturewidget.cpp
+index c34a5f11..0a4db33d 100644
+--- a/src/widgets/capture/capturewidget.cpp
++++ b/src/widgets/capture/capturewidget.cpp
+@@ -135,8 +135,9 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
+ #else
+ // Call cmake with -DFLAMESHOT_DEBUG_CAPTURE=ON to enable easier debugging
+ #if !defined(FLAMESHOT_DEBUG_CAPTURE)
+-        setWindowFlags(Qt::BypassWindowManagerHint | Qt::WindowStaysOnTopHint |
++        setWindowFlags(Qt::WindowStaysOnTopHint |
+                        Qt::FramelessWindowHint | Qt::Tool);
++
+         resize(pixmap().size());
+ #endif
+ #endif

@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Folowing the instructions from:
+#  https://wiki.jenkins.io/display/JENKINS/Remote+access+API#RemoteaccessAPI-Submittingjobs
+
+JENKINS_USERNAME=jfly
+JENKINS_TOKEN=$(tr -d '\n' < ~/.config/h4-jenkins-token) # Created at https://build.honordev.com/user/jfly/configure
+JENKINS_URL=https://build.honordev.com
+
+function get_remote_repo_owner() {
+    # Given the name of a remote, return the GitHub owner. Here's an example
+    # output of 'git remote -v':
+    #
+    #    origin	git@github.com:jfly/external-web.git (fetch)
+    #    origin	git@github.com:jfly/external-web.git (push)
+    #    upstream	git@github.com:joinhonor/external-web.git (fetch)
+    #    upstream	git@github.com:joinhonor/external-web.git (push)
+    #
+    # In this case, the remote 'origin' maps to GitHub owner 'jfly', and
+    # 'upstream' maps to 'joinhonor'.
+    remote_name="$1"
+    github_owner=$(git remote -v | grep "$remote_name.*push" | grep -Po '(?<=:).*(?=/)')
+    echo -n "$github_owner"
+}
+
+function get_remote_repo_name() {
+    # Given the name of a remote, return the repository name. Here's an example
+    # output of 'git remote -v':
+    #
+    #    origin	git@github.com:jfly/external-web.git (fetch)
+    #    origin	git@github.com:jfly/external-web.git (push)
+    #    upstream	git@github.com:joinhonor/external-web.git (fetch)
+    #    upstream	git@github.com:joinhonor/external-web.git (push)
+    #
+    # In this case, the remote 'origin' maps to GitHub repo 'external-web', and
+    # 'upstream' also maps to 'external-web'.
+    remote_name="$1"
+    repo_name=$(git remote -v | grep "$remote_name.*push" | grep -Po '(?<=/).*(?=.git)')
+    echo -n "$repo_name"
+}
+
+function get_tracking_info() {
+    # Parse 'git status -sb' to figure out information about the remote branch
+    # our local branch is tracking. The output looks something like this:
+    #    ## jfly/dockering...upstream/jfly/dockering
+    #
+    # In this case, we'd return 'upstream/jfly/dockering', where 'upstream' is
+    # the remote name, and 'jfly/dockering' is the remote branch.
+    # In general, this looks like 'REMOTE_NAME/BRANCH_NAME'
+    tracking_info=$(git status -sb | grep -Po '(?<=\.\.\.)[^ ]*')
+    remote_name=$(echo "$tracking_info" | grep -o '^[^/]*')
+    branch_name=$(echo "$tracking_info" | grep -Po '(?<=/).*')
+    echo "$remote_name" "$branch_name"
+}
+
+# We assume the user is trying to push code to their 'origin' remote.
+DEST_REPO_NAME="$(get_remote_repo_name 'origin')"
+
+# Figure out the remote name and branch name our local branch is tracking.
+read -r SOURCE_REMOTE_NAME SOURCE_BRANCH <<< "$(get_tracking_info)"
+# Convert that remote name to a GitHub repository owner.
+SOURCE_REPO_OWNER="$(get_remote_repo_owner "$SOURCE_REMOTE_NAME")"
+
+# The build bot job is the project name suffixed with "-build-bot"
+JOB_NAME=${DEST_REPO_NAME}-build-bot
+SOURCE_BRANCHES="$SOURCE_BRANCH"
+PUSH_TO_DEST=${PUSH_TO_DEST:-false}
+
+curl -X POST --user "$JENKINS_USERNAME:$JENKINS_TOKEN" \
+    "$JENKINS_URL/job/$JOB_NAME/buildWithParameters?delay=10sec&SOURCE_REPO_OWNER=${SOURCE_REPO_OWNER}&SOURCE_BRANCHES=${SOURCE_BRANCHES}&PUSH_TO_DEST=${PUSH_TO_DEST}"
+
+echo "Just kicked off a build of ${SOURCE_REPO_OWNER}/${SOURCE_BRANCHES}. Check on it over at ${JENKINS_URL}/job/${JOB_NAME}/"

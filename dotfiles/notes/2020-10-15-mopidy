@@ -1,0 +1,20 @@
+https://wiki.archlinux.org/index.php/Music_Player_Daemon
+https://mopidy.com/
+
+    sudo pacman -S mopidy
+
+
+/home/jeremy/.config/mopidy/mopidy.conf
+    ...
+    [file]
+    media_dirs = ~/media/clark/music
+    ...
+
+sudo python3 -m pip install Mopidy-MPD
+
+# ncmcpp?
+    sudo pacman -S ncmpcpp
+    press "2" to get into file browser mode
+
+# vimpc
+    https://aur.archlinux.org/packages/vimpc-git/

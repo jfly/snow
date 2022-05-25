@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec wine '/home/jeremy/.wine/drive_c/Program Files/SketchUp/SketchUp 2017/SketchUp.exe'

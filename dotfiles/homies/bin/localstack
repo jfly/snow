@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 SERVICES" >/dev/stderr
+    echo "" >/dev/stderr
+    echo "Ex:" >/dev/stderr
+    echo "" >/dev/stderr
+    echo "    $0 sqs,s3" >/dev/stderr
+    exit 1
+fi
+
+docker run --rm -it -p 4566:4566 -p 4571:4571 -e "SERVICES=$1" -e "DEBUG=1" localstack/localstack

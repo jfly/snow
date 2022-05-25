@@ -1,0 +1,155 @@
+###
+### Powerlevel10k
+###
+ZSH_THEME="powerlevel10k/powerlevel10k"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+##################################
+
+###
+### Load oh-my-zsh
+###
+export ZSH=~/.oh-my-zsh
+plugins=(git)
+plugins+=(z)
+plugins+=(sd)
+source $ZSH/oh-my-zsh.sh
+##################################
+
+###
+### Load aliases
+###
+source ~/.commonrc/aliases
+##################################
+
+###
+### Configure less
+###
+export LESS="--no-init --quit-if-one-screen --RAW-CONTROL-CHARS"
+##################################
+
+###
+### HACK ALERT: unset some problematic environment variables inherited from
+### with-alacritty
+###
+##################################
+unset LD_LIBRARY_PATH
+unset LC_CTYPE
+unset LIBGL_DRIVERS_PATH
+unset LIBVA_DRIVERS_PATH
+
+###
+### Misc default programs
+###
+export VISUAL=vim
+export EDITOR=vim
+
+if [ -n "$DISPLAY" ]; then
+    export BROWSER=chromium
+else
+    export BROWSER=elinks
+fi
+##################################
+
+###
+### Set up asdf-vm + direnv
+###
+# This needs to happen after we load oh-my-zsh
+source "$HOME/.asdf/completions/asdf.bash"
+source ${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc
+
+## Python stuff
+# Make sure we never `pip install` things outside of a virtualenv.
+export PIP_REQUIRE_VIRTUALENV=true
+export ASDF_PYTHON_PATCHES_DIRECTORY="$HOME/.dotfiles/asdf-python-patches"
+##################################
+
+###
+### Set up FZF
+###
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
+##################################
+
+###
+### Don't add commands to the history if they start with a space.
+###
+setopt HIST_IGNORE_SPACE
+
+###
+### Bash-like navigation
+### Copied from: https://stackoverflow.com/a/10860628/1739415
+### Also see https://stackoverflow.com/a/3483679/1739415
+###
+# Bind ctrl-u to cut to beginning of line.
+bindkey "^U" backward-kill-line
+
+# Change behavior of alt-b and alt-f to behave more like bash with regards to
+# trailing whitespace.
+autoload -Uz forward-word-match
+zle -N forward-word forward-word-match
+zstyle ':zle:*' skip-whitespace-first true
+zstyle ':zle:*' word-chars ''
+
+# Hide files from make autocompletion suggestions.
+zstyle ':completion:*:*:make:*' tag-order 'targets'
+
+# Bind alt-backspace to delete one not so aggressive word backwards.
+bindkey '^[^?' backward-kill-word
+
+### Bind ctrl-w to delete one aggressive word backwards.
+backward-kill-dir() {
+    local WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+    zle backward-kill-word
+}
+zle -N backward-kill-dir
+bindkey "^W" backward-kill-dir
+##################################
+
+###
+### Fix output of time to look more like bash.
+### See https://superuser.com/a/71890.
+###
+export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
+##################################
+
+###
+### Set up alt-c to pick a commit
+###
+fzf-commit-widget() {
+  LBUFFER="${LBUFFER}$(pick_commit)"
+  local ret=$?
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  return $ret
+}
+zle     -N    fzf-commit-widget
+bindkey '\ec' fzf-commit-widget
+##################################
+
+###
+### Nix
+###
+# From https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs
+#  > Channels are a way of distributing Nix software, but they are being phased
+#  > out. Even though they are still used by default, it is recommended to avoid
+#  > channels and <nixpkgs> by always setting NIX_PATH= to be empty.
+export NIX_PATH=""
+# From https://nixos.wiki/wiki/Locales:
+#   > You may need to set the environmental variable LOCALE_ACHIVE to point to
+#   > your system's locale-achive.
+export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
+# Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
+export NIX_BUILD_SHELL=nix-zshell
+##################################
+
+# I am a special snowflake
+# source $HOME/.h4.zshrc

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Validate command line arguments
+function print_usage_and_exit {
+    echo -n "Usage: $0 [output_filename.mp4]"
+    echo
+    exit
+}
+if [ $# -lt 1 ]; then
+    print_usage_and_exit
+fi
+
+OUTPUT_FILENAME=$1
+
+function do_and_log {
+    __msg="$1"
+    shift
+    echo -n "${__msg}..."
+    "$@" > /dev/null
+    echo "done!"
+}
+
+do_and_log "Enabling touch indicator" adb shell settings put system show_touches 1
+
+function finish {
+    sleep 0.5 # Hmm... if we try to immediately grab the file it's empty? Sleeping seems to help...
+    echo ""
+    do_and_log "Disabling touch indicator" adb shell settings put system show_touches 0
+    do_and_log "Copying recorded video to $OUTPUT_FILENAME" adb pull "$TMP_REMOTE_FILENAME" "$OUTPUT_FILENAME"
+    do_and_log "Cleaning up $TMP_REMOTE_FILENAME on Android phone" adb shell rm "$TMP_REMOTE_FILENAME"
+}
+trap finish EXIT
+
+TMP_REMOTE_FILENAME=/sdcard/video.mp4
+do_and_log "Recording! Press ctrl-c to stop" adb shell screenrecord "$TMP_REMOTE_FILENAME"

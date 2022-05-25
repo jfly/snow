@@ -1,0 +1,9 @@
+{
+	"auths": {
+		"542313659077.dkr.ecr.us-west-2.amazonaws.com": {},
+		"900965112463.dkr.ecr.us-west-2.amazonaws.com": {},
+		"containers.clark.snowdon.jflei.com": {}
+	},
+	"detachKeys": "ctrl-^,q",
+	"credsStore": "secretservice"
+}

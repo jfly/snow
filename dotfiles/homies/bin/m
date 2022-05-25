@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+colorscheme set current base16-cupcake
+function finish {
+    colorscheme clear current
+}
+trap finish EXIT
+
+mosh "$@" -- tmux new -A -s jfly

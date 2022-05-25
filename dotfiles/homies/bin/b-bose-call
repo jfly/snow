@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+pactl set-card-profile bluez_card.28_11_A5_36_83_33 headset-head-unit
+
+# Hackity hack: wait for the new sink and source to show up.
+sleep 0.5
+pactl set-default-sink bluez_output.28_11_A5_36_83_33.headset-head-unit
+pactl set-default-source bluez_input.28_11_A5_36_83_33.headset-head-unit

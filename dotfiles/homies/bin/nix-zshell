@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
+
+# when using nix-shell, we will be invoked like this:
+#
+#     /path/to/result --rcfile /path/to/file
+#
+# When using nix-shell -i, we will be invoked like this:
+#
+#     /path/to/result /path/to/file
+#
+# We use the presence of --rcfile to decide if we're supposed
+# to be run interactively or not.
+
+if [[ "$1" = "--rcfile" ]]; then
+  rcfile="$2"
+  source "$rcfile"
+
+  exec /usr/bin/zsh --emulate zsh
+else
+  exec /usr/bin/bash "$@"
+fi

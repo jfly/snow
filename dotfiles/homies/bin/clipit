@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ $# -gt 0 ]; then
+    echo -n "$1" | exec xclip -selection clipboard -i
+else
+    exec xclip -selection clipboard -i
+fi

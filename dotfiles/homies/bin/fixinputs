@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check if xorg is running. If not, there's nothing to do! Exit cleanly.
+if ! xset q &>/dev/null; then
+    echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+    exit 0
+fi
+
+# https://wiki.archlinux.org/index.php/Mouse_acceleration
+xset m 2.5 0
+
+# Turn off capslock just in case it's on.
+# Normally, I run fixinputs right after noticing that my capslock key is
+# actually doing capslock and not escape. I then run fixinputs, and it's
+# nice for fixinputs to actually disable capslock, because I didn't want
+# it on in the first place!
+capslockx off
+
+# Speed up keyrepeat
+xset r rate 200 30

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# First confirm that we can connect to clark.
+echo -n "Testing connection..."
+ssh -L 4242:192.168.1.1:80 clark exit
+echo "success!"
+
+(
+    sleep 0.1
+    URL=http://localhost:4242
+    echo "Opening browser to $URL"
+    xdg-open "$URL"
+)&
+
+ssh -L 4242:192.168.1.1:80 clark

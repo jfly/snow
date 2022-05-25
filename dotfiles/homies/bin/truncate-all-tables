@@ -1,0 +1,11 @@
+for table in $(echo 'show tables' | mcli sonasandboxdb | tail +2); do echo "TRUNCATE TABLE $table" | mcli sonasandboxdb --no-warn; done
+
+tables=$(echo 'show tables' | mcli sonasandboxdb | tail +2)
+
+query_string="USE $BACKEND_DATABASE; SET FOREIGN_KEY_CHECKS = 0;"
+for table in "$tables"; do
+    query_string="$query_string TRUNCATE TABLE \`$table\`; "
+done
+query_string="$query_string SET FOREIGN_KEY_CHECKS = 1;"
+
+echo $query_string

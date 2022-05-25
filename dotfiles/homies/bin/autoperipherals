@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+# Check if xorg is running. If not, there's nothing to do! Exit cleanly.
+if ! xset q &>/dev/null; then
+    echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+    exit 0
+fi
+
+function main() {
+    HDMI1_STATUS=$(</sys/class/drm/card0/card0-HDMI-A-1/status)
+    DP1_STATUS=$(</sys/class/drm/card0/card0-DP-1/status)
+    DP2_STATUS=$(</sys/class/drm/card0/card0-DP-2/status)
+    DP4_STATUS=$(</sys/class/drm/card0/card0-DP-4/status)
+    DP5_STATUS=$(</sys/class/drm/card0/card0-DP-5/status)
+
+    if [ "$HDMI1_STATUS" == "connected" ]; then
+        LAYOUT_NAME=hdmi
+        XFT_DPI=$((1024 * 96))
+
+        xrandr --output HDMI1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off --output eDP1 --off --output DP2 --off
+
+        # Switch to HDMI audio.
+        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
+    elif [ "$DP1_STATUS" == "connected" ]; then
+        LAYOUT_NAME=dp1
+        XFT_DPI=$((1024 * 96))
+
+        xrandr --output DP1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
+        # Switch to HDMI audio.
+        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
+
+        # Disable wifi and connect to ethernet.
+        # TODO - only do this at honor, not at SF desk...
+        # sudo nmcli device disconnect wlp4s0
+        # sudo nmcli device connect eth0
+    elif [ "$DP2_STATUS" == "connected" ] || [ "$DP4_STATUS" == "connected" ] || [ "$DP5_STATUS" == "connected" ]; then
+        LAYOUT_NAME=dp4
+        XFT_DPI=$((1024 * 96))
+
+        xrandr --output DP1-2 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
+        # Switch to HDMI audio.
+        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
+
+        # Disable wifi and connect to ethernet.
+        # TODO - only do this at honor, not at SF desk...
+        # sudo nmcli device disconnect wlp4s0
+        # sudo nmcli device connect eth0
+    else
+        LAYOUT_NAME=mobile
+        XFT_DPI=$((1024 * 133))
+
+        xrandr --output HDMI1 --off --output VIRTUAL1 --off --output DP1 --off --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP2 --off
+
+        # Switch to laptop speakers.
+        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo+input:analog-stereo
+
+        # Disable ethernet and connect to wifi.
+        # TODO - unclear why we need the sudo here. Without it, I get "Error:
+        # Device activation failed: Not authorized to control networking."
+        # sudo nmcli device disconnect eth0
+        # sudo nmcli device connect wlp4s0
+    fi
+
+    setbg
+
+    # Change DPI and notify everyone via XSETTINGS.
+    # See https://utcc.utoronto.ca/~cks/space/blog/linux/XSettingsNotes?showcomments
+    # and https://github.com/GNOME/gtk/blob/1a1373779f87ce928a45a9371512d207445f615f/gdk/x11/xsettings-client.c#L399
+    echo "Xft/DPI $XFT_DPI" >~/.xsettingsd
+    killall -HUP xsettingsd
+    # Notify alacritty about the font size change, because alacritty doesn't understand the
+    # XSETTINGS protocol yet =( See
+    # https://github.com/alacritty/alacritty/issues/2886 for details. size 8
+    # looks decent on a 96 DPI monitor, and 11 looks pretty decent on a 133 DPI
+    # monitor.
+    local font_size
+    font_size=$(echo "rate=(11 - 8) / (133.0 - 96.0 ); 8 + ($XFT_DPI / 1024.0 - 96) * rate" | bc -l)
+    with-alacritty set global font.size "$font_size"
+
+    # notify-send blocks until something receives the message. When booting,
+    # we have not started dunst yet, so we need to run notify-send in the background.
+    notify-send "Detected environment $LAYOUT_NAME" &
+
+    # Note, we intentionally run fixinputs last, because xmodmap blocks if you're holding any keys down.
+    # See: https://forums.fedoraforum.org/showthread.php?296298-xmodmap-please-release-the-following-keys-within-2-seconds
+    fixinputs
+}
+
+# There's no way it's good to be running this command simultaneously.
+if pgrep autoperipherals | grep -v $$; then
+    echo "I see an autoperipherals command already running, let's not step on its toes."
+    exit 1
+fi
+main

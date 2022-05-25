@@ -1,0 +1,9 @@
+[Icon Theme]
+Name=jfly-icons
+
+Directories=tray
+
+[tray]
+Size=64
+Context=Applications
+Type=scalable

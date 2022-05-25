@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+import os
+import shlex
+import subprocess
+import sys
+import time
+
+SELECTION_FILENAME = "/tmp/picker-popup.selected"
+
+
+def remove_if_exists(filename):
+    try:
+        os.remove(filename)
+    except OSError:
+        pass
+
+
+def main():
+    remove_if_exists(SELECTION_FILENAME)
+    options = shlex.quote("\n".join(sys.argv[1:]))
+    bash_cmd = f'echo {options} | fzf > {SELECTION_FILENAME}'
+    subprocess.check_call(["alacritty", "--class", "picker", "-e", "bash", "-c", bash_cmd])
+    time.sleep(0.1)  # Hackity hack
+
+    with open(SELECTION_FILENAME, "r") as f:
+        print(f.read())
+
+
+if __name__ == "__main__":
+    main()

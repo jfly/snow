@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Some useful docs:
+# https://nixos.wiki/wiki/Nixpkgs/Create_and_debug_packages#Using_nix-shell_for_package_development
+
+set -e
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 attrPath"
+    echo ""
+    echo "Use this script to start hacking on a nix package."
+    exit 1
+fi
+
+function cd_into_git_repo() {
+    local d=$1
+    if [ ! -d "$d" ]; then
+        mkdir -p "$d"
+    fi
+    cd "$d"
+    if [ ! -d .git ]; then
+        git init
+    fi
+}
+
+attr_path=$1
+
+hack_dir=~/tmp/nix-hack/$attr_path
+cd_into_git_repo "$hack_dir"
+nix develop -f ~/src/github.com/NixOS/nixpkgs "$attr_path"

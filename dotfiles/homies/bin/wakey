@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Copied from https://stackoverflow.com/a/38032038/1739415
+adb shell input keyevent 26 #Pressing the lock button
+adb shell input touchscreen swipe 930 880 930 180 #Swipe UP
+#adb shell input text XXXX #Entering your passcode
+#adb shell input keyevent 66 #Pressing Enter

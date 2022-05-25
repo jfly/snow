@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+OPTIONS=$(xclip -select clipboard -out | format-uuid.py)
+SELECTED=$(picker-popup "$OPTIONS")
+
+if [ -z "$SELECTED" ]; then
+    exit 1
+fi
+
+echo -n "$SELECTED" | clipit

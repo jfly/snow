@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+xdg-open 'https://docs.google.com/drawings/create?usp=drive_web&folder=0B19qewZi_eidTG5SVlhEWkxIb0U'

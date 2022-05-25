@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+DIR=~/media/clark/
+mkdir -p "$DIR"
+sshfs -o allow_root,reconnect clark@clark:/mnt/media "$DIR"

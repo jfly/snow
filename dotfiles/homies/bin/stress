@@ -1,0 +1,28 @@
+#!/bin/bash
+
+success_count=0
+fail_count=0
+
+function print_results() {
+    echo "****************************"
+    echo "Runs: $((success_count + fail_count))"
+    echo "Successes: $success_count"
+    echo "Failures: $fail_count"
+    echo "****************************"
+}
+
+function finish() {
+    print_results
+    exit
+}
+
+trap finish INT
+
+while true; do
+    if "$@"; then
+        (( success_count++ ))
+    else
+        (( fail_count++ ))
+    fi
+    print_results
+done

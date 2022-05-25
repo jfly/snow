@@ -1,0 +1,20 @@
+urg, kernel panic "not syncing" means *nothing* gets written to disk?
+
+investigated setting up kdump crashkernel, but have to compile my own kernel: https://wiki.archlinux.org/index.php/Kdump
+
+opted to rotate monitor 90 degrees, hopefully that will be enough to see what happens next time. pretty simple to do:
+    # At runtime
+    echo 1 | sudo tee /sys/class/graphics/fbcon/rotate
+    # Permanently
+    ~ @clark> cat /boot/refind_linux.conf
+    "Boot with standard options"  "root=UUID=91a5f7a3-26bf-4bea-b853-45f10f0cdd2d initrd=intel-ucode.img initrd=initramfs-linux.img fbcon=rotate:1"
+    ...
+
+
+Also changed to a smaller font size:
+    $ sudo pacman -S terminus-font
+    $ cat /etc/vconsole.conf
+    # Switching to a really tiny font to help debug kernel panics
+    # FONT=LatGrkCyr-12x22
+    FONT=ter-112n
+

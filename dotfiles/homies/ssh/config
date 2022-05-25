@@ -1,0 +1,72 @@
+Include config.d/*
+
+ServerAliveInterval 120
+AddKeysToAgent yes
+
+### jfly stuff
+Host ocf
+HostName ssh.ocf.berkeley.edu
+User jfly
+###
+
+### Snowdon stuff
+# Asus router @ Snowdon
+Host strider
+HostName strider
+User admin
+
+Host clark
+HostName clark.snowdon.jflei.com
+User root
+ForwardAgent yes
+
+Host dallben
+ProxyJump clark
+User dallben
+
+Host fflewddur
+User root
+
+Host fflam
+User root
+
+Host jpi
+HostName jpi
+User pi
+
+Host thermometer
+HostName thermometer
+User root
+
+Host thermostat
+HostName thermostat
+User root
+
+Host garage
+HostName garage
+User root
+
+Host sonic
+User jfly
+HostName sh.sonic.net
+
+Host ramscan
+User alarm
+
+### San Clemente stuff
+Host kent
+HostName kent.sc.jflei.com
+User kent
+#ForwardAgent yes
+
+Host sc-router
+User root
+HostName router.sc.jflei.com
+KexAlgorithms diffie-hellman-group14-sha1
+###
+
+### cottage
+Host cottage-router
+    User root
+    HostName 192.168.1.1
+    StrictHostKeyChecking no

@@ -1,0 +1,8 @@
+*.swp
+*.swo
+.envrc
+.envrc.local
+.direnv
+
+# Workaround for https://neovim.discourse.group/t/pyright-unable-to-resolve-imports-that-are-in-my-pythonpath/1289/1
+pyrightconfig.json

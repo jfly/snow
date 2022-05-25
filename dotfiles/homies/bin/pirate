@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ssh clark -t -- k3s kubectl exec -it deploy/transmission transmission -nvpn -- bash

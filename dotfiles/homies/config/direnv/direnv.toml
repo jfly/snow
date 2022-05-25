@@ -1,0 +1,8 @@
+[global]
+strict_env = true
+
+[whitelist]
+prefix = [
+    "/home/jeremy/src/github.com/joinhonor",
+    "/home/jeremy/src/scratch",
+]

@@ -1,0 +1,70 @@
+[alias]
+    update-submodules = submodule update --init --recursive
+    upgrade-submodules = submodule update --init --remote
+    lg = log --graph --all --decorate
+    lol = log --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lola = log --graph --all --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    web = "!xdg-open `git ls-remote --get-url origin | sed 's_.*[/:]\\(.\\+/.\\+\\)\\.git$_https://github.com/\\1_'`"
+    x = "grep -I '<<<'"
+    rium = ! git rebase -i --autosquash $(git my-main)
+    modify-files = ! git grep -I -z --full-name -l '.' ':(exclude).gitmodules' | xargs -0 modify-files.py
+    sed = ! git grep -I -z --full-name -l '.' ':(exclude).gitmodules' | xargs -0 sed
+[user]
+    name = Jeremy Fleischman
+    email = jeremyfleischman@gmail.com
+[commit]
+    gpgsign = true
+    verbose = true
+[push]
+    default = simple
+    recurseSubmodules = check
+[core]
+    excludesfile = ~/.gitignore_global
+    pager = delta --diff-so-fancy --dark
+[credential]
+    helper = cache --timeout=3600
+[pager]
+    branch = false
+[branch]
+    sort = -authordate
+[sendemail]
+    smtpEncryption = tls
+    smtpServer = smtp.gmail.com
+    smtpUser = jeremyfleischman@gmail.com
+    smtpServerPort = 587
+[merge]
+    conflictStyle = diff3
+[diff]
+    renameLimit = 906
+
+[color]
+    ui = true
+[color "diff-highlight"]
+    oldNormal = 196 bold
+    oldHighlight = 196 bold 52
+    newNormal = 34 bold
+    newHighlight = 34 bold 22
+[color "diff"]
+    meta = 130
+    frag = 33 bold dim
+    commit = 172 bold
+    old = 196 bold
+    new = 34 bold
+    whitespace = red reverse
+[tag]
+    sort = version:refname
+
+# Allow local customizations in the .gitconfig_local file
+[include]
+    path = ~/.gitconfig_local
+[pull]
+    rebase = false
+[init]
+    defaultBranch = main
+
+[rebase]
+    instructionFormat = "%d %s"
+[submodule]
+    recurse = true
+[status]
+    submoduleSummary = true

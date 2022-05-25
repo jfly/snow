@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+
+dir_prefix=~/tmp/$(date -I)-pyhack
+suffix=1
+while true; do
+    maybe_dir="$dir_prefix-$suffix"
+    if [ ! -d "$maybe_dir" ]; then
+        dir="$maybe_dir"
+        break
+    fi
+    echo "Looks like $maybe_dir exists. Continuing search..." >/dev/stderr
+    suffix=$((suffix + 1))
+done
+
+mkdir "$dir"
+cd "$dir"
+asdf local python 3.10.2
+echo "use asdf
+layout python" >".envrc"
+direnv allow
+echo "$dir"

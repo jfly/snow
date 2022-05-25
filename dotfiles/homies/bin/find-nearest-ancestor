@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+pstree -lps $$ | grep -Eo "$1\([0-9]+\)" | grep -Eo '[0-9]+'

@@ -1,0 +1,31 @@
+######## setup w/ static ip by editing config.txt #############
+# Make sure network manager is *not* managing enp0s31f6:
+# /etc/NetworkManager/NetworkManager.conf
+sudo systemctl restart NetworkManager.service
+
+# mount sdcard boot partition to /mnt
+vi /mnt/cmdline.txt  # :set noeol
+# add something like this:
+console=serial0,115200 console=tty1 root=PARTUUID=56cd6262-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait ip=192.168.111.200::192.168.111.1:255.255.255.0:rpi:eth0:off
+
+
+ip link set up dev enp0s31f6
+ip addr add 192.168.111.49/24 dev enp0s31f6 # arbitrary address
+
+# on boot, it counts down from 110 with "Waiting up to 110 more seconds for network"
+
+######## failed attempt w/ dnsmasq ##############
+# Make sure network manager is *not* managing enp0s31f6:
+# /etc/NetworkManager/NetworkManager.conf
+sudo systemctl restart NetworkManager.service
+
+sudo pacman -S dnsmasq
+systemctl start dnsmasq.service
+
+# Edit /etc/dnsmasq.conf as per https://wiki.archlinux.org/index.php/dnsmasq#DHCP_server
+
+ip link set up dev enp0s31f6
+ip addr add 192.168.111.49/24 dev enp0s31f6 # arbitrary address
+
+sudo systemctl start dnsmasq  # Now start dnsmasq!
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# From https://bbs.archlinux.org/viewtopic.php?pid=1719775#p1719775
+sudo bash -c "rfkill block bluetooth; rfkill unblock bluetooth"
+
+# cd to script directory
+# http://stackoverflow.com/a/3355423/1739415
+cd "$(dirname "$0")"
+echo `whoami` ran fixblue on `date` >> fixblue.runs

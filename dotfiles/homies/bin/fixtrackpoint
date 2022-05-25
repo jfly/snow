@@ -1,0 +1,7 @@
+#!/bin/bash
+sudo bash -c "rmmod psmouse; sleep 1; modprobe psmouse"
+
+# cd to script directory
+# http://stackoverflow.com/a/3355423/1739415
+cd "$(dirname "$0")"
+echo `whoami` ran fixtrackpoint on `date` >> fixtrackpoint.runs

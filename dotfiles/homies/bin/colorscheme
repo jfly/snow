@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+shopt -s globstar # enable ** glob expansion
+
+cd "$(dirname "$0")"
+
+function _get_terminal_pid() {
+    local terminal_pid
+
+    terminal_pid=""
+    # First search for an ancestor terminal process.
+    terminal_pid=$(pstree -spl $$ | grep -Eo 'alacritty\([0-9]+\)' | grep -o '[0-9]*' | tail -1)
+
+    # If there isn't an ancestor terminal process, then look at the currently
+    # focused window, but make sure it's a terminal process and not some poor
+    # other process.
+    if [ -z "$terminal_pid" ]; then
+        terminal_pid=$(xdotool getwindowpid "$(xdotool getwindowfocus)")
+        exe_name=$(basename "$(readlink "/proc/${terminal_pid}/exe")")
+        if [ "$exe_name" != "alacritty" ]; then
+            echo "The currently focused window is: '${exe_name}', but I expected 'alacritty'"
+            exit 1
+        fi
+    fi
+
+    echo "$terminal_pid"
+}
+
+function _get_location() {
+    local location=$1
+    if [ "$location" = "current" ]; then
+        _get_terminal_pid
+    else
+        echo "$location"
+    fi
+}
+
+function _get_json_colorscheme() {
+    local colorscheme=$1
+    local file
+    file=$(ls ~/.dotfiles/colorschemes/**/"$colorscheme.yml" 2>/dev/null)
+
+    # We are legitimately trying to pass a dollarsign character to yq here.
+    # shellcheck disable=SC2016
+    yq --arg cs "$colorscheme" '.colors + {name: $cs}' "$file"
+}
+
+# Validate command line arguments
+function _print_usage_and_exit() {
+    local name
+    name=$(basename "$0")
+    cat <<EOF
+## Usage
+
+    $name set [current|global|PID] [colorscheme]
+    $name get [current|global|PID]
+    $name cycle [current|global|PID] [colorscheme]...
+    $name clear [current|global|PID]
+    $name list
+
+## Examples
+
+### Set the colorscheme for the current terminal
+
+    $name set current light
+
+### Get the colorscheme for the current terminal
+
+    $name get current
+
+### Cycle through the given colorschemes
+
+    $name cycle current dark light
+
+### Reset the colorscheme for the current terminal to the global default
+
+    $name clear current
+
+### Get a list of available colorschemes
+
+    $name list
+EOF
+    exit 1
+}
+
+function _list() {
+    for f in ~/.dotfiles/colorschemes/**/*.yml; do
+        f="$(basename "$f")"
+        echo "${f%.yml}"
+    done
+}
+function _ls() {
+    _list "$@"
+}
+
+function _set() {
+    if [ $# -ne 2 ]; then
+        _print_usage_and_exit
+    fi
+
+    local location=$1
+    local colorscheme=$2
+
+    with-alacritty set "$(_get_location "$location")" colors "$(_get_json_colorscheme "$colorscheme")"
+}
+
+function _get() {
+    if [ $# -ne 1 ]; then
+        _print_usage_and_exit
+    fi
+
+    local location=$1
+
+    with-alacritty get "$(_get_location "$location")" | jq --raw-output '.colors.name'
+}
+
+function _index_of_in() {
+    local findme=$1
+    shift
+
+    local found_index=-1
+    local i=0
+    for colorscheme in "$@"; do
+        if [ "$colorscheme" = "$findme" ]; then
+            found_index=$i
+        fi
+        i=$((i + 1))
+    done
+    echo "$found_index"
+}
+
+function _get_ancestor_locations() {
+    local location=$1
+
+    if [ "$location" = "global" ]; then
+        echo "global"
+    else
+        echo "$location global"
+    fi
+}
+
+function _cycle() {
+    if [ $# -eq 0 ]; then
+        _print_usage_and_exit
+    fi
+
+    local location=$1
+    shift
+
+    if [ $# -eq 0 ]; then
+        echo "Must specify at least one colorscheme to cycle through!"
+        exit 1
+    fi
+
+    local curr=""
+    for ancestor_location in $(_get_ancestor_locations "$location"); do
+        curr=$(_get "$ancestor_location")
+        if [ -n "$curr" ] && [ "$curr" != "null" ]; then
+            break
+        fi
+    done
+    if [ -z "$curr" ]; then
+        echo "Could not discover current colorscheme. Giving up!"
+        exit 1
+    fi
+
+    local found_index
+    found_index=$(_index_of_in "$curr" "$@")
+    next_index=$(((found_index + 1) % $#))
+
+    # Offset by 1 to skip past $0
+    next_index=$((1 + next_index))
+
+    local next_colorscheme=${!next_index}
+    _set "$location" "$next_colorscheme"
+}
+
+function _clear() {
+    if [ $# -ne 1 ]; then
+        _print_usage_and_exit
+    fi
+
+    local location=$1
+
+    with-alacritty clear "$(_get_location "$location")" colors
+}
+
+if [ $# -eq 0 ]; then
+    _print_usage_and_exit
+fi
+
+subcommand_pretty=$1
+subcommand=_"$subcommand_pretty"
+shift
+
+if [[ $(type -t "$subcommand") == function ]]; then
+    $subcommand "$@"
+else
+    echo "Unrecognized subcommand: $subcommand_pretty"
+    exit 1
+fi

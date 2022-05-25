@@ -1,0 +1,512 @@
+let mapleader = " "
+
+" Easy copying of path to file
+nnoremap <leader>cf :let @+ = expand("%")<CR>
+
+" http://vim.wikia.com/wiki/Indenting_source_code
+" http://stackoverflow.com/a/234578
+filetype plugin indent on
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+
+syntax on
+syntax enable
+
+" Always use light "dim" colorscheme. We have to explicitly set
+" background=light here because vim is smart enough to detect the *actual*
+" configured colors and set this automatically. See
+" https://github.com/neovim/neovim/pull/9509. Unfortunately, it's not smart enough to
+" re-detect this if you change your terminal's colorscheme after starting vim,
+" and I don't even want to think about what it would take to get that to work
+" over ssh...
+" Instead, we use the `dim` colorscheme, which is designed to leave all the
+" careful color choosing up to our terminal emulator itself. See
+" https://jeffkreeftmeijer.com/vim-16-color/ for details.
+set background=light
+colorscheme dim
+
+" Cross file search
+nnoremap <leader>* :Rg<Space><C-R><C-W>
+noremap ]q :cnext<CR>
+noremap [q :cprevious<CR>
+
+" http://vim.wikia.com/wiki/256_colors_in_vim
+set t_Co=256
+
+" Search case insensitive, unless there's a capital letter (smartcase),
+" or * or # was used to initiate a search (huge thanks to Justin Jaffray for
+" writing the scripts for this last trick!)
+set hlsearch
+set incsearch
+set smartcase
+set ignorecase
+nnoremap * :call feedkeys("/\\C\\<" . expand("<cword>") . "\\>\r")<CR>
+nnoremap # :call feedkeys("?\\C\\<" . expand("<cword>") . "\\>\r")<CR>
+
+" http://usevim.com/2012/10/19/vim101-set-hidden/
+set hidden
+
+" Always show status line
+set laststatus=2
+
+" Prevent the cursor from changing the current column when jumping to other
+" lines within the window?
+set nostartofline
+
+" http://vim.wikia.com/wiki/Easier_buffer_switching
+set wildchar=<Tab> wildmenu wildmode=full
+set wildcharm=<C-Z>
+
+"""""" filetypes {{{
+au BufRead,BufNewFile Vagrantfile set filetype=ruby
+au BufRead,BufNewFile *.jy set filetype=python
+au BufRead,BufNewFile *.yaml.aged set filetype=yaml
+"""""" }}}
+
+"""""" mergetool configuration {{{
+let g:mergetool_layout = 'mr'
+let g:mergetool_prefer_revision = 'local'
+" Turn off syntax and spell checking highlighting for all splits, so it doesn't distract me from diff highlighting.
+function s:on_mergetool_set_layout(split)
+    set syntax=off
+    set nospell
+endfunction
+let g:MergetoolSetLayoutCallback = function('s:on_mergetool_set_layout')
+nmap <leader>mt <plug>(MergetoolToggle)
+"""""" }}}
+
+"""""" Git stuff {{{
+noremap <leader>mf :GFiles?<CR>
+noremap <leader>gb :Git blame<CR>
+"""""" }}}
+
+"""""" FZF configuration {{{
+noremap <c-p> :Files<CR>
+noremap <leader>b :Buffers<CR>
+noremap <leader><leader> <C-^>
+let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_preview_window = ''
+"""""" }}}
+
+"""""" vim-test configuration
+function! ShtuffStrategy(cmd)
+    call system("shtuff into " . shellescape(getcwd()) . " " . shellescape("clear;" . a:cmd))
+endfunction
+
+let g:test#custom_strategies = {'fat_runner': function('ShtuffStrategy')}
+let g:test#strategy = "fat_runner"
+
+" vim-test transformation to run nose tests via `make singletest`.
+" If a command looks like "nosetests ...", transform it to
+" "make singletest NOSEARGS='...'"
+function! HonorTransform(cmd) abort
+    " Check if we're in a repo that has a singletest target. If it does not,
+    " who knows what's going on. Give vim-test's unmodified command a chance.
+    let output = system("grep singletest: Makefile*")
+    if v:shell_error != 0
+        return a:cmd
+    endif
+
+    if a:cmd =~ '.py:'
+        " We're probably running a single single test, and therefore we set
+        " the amount of parallelism to 1, so pdb and other stuff works well.
+        " There might be a better way of detecting if we're inside of
+        " `TestFile`...
+        let l:parallelism="PARALLELISM=1"
+    else
+        let l:parallelism=""
+    endif
+    if a:cmd =~ '^nosetests '
+        let l:cmd_sans_nosetests = "-s ".substitute(a:cmd, '^nosetests ', '', '')
+        let l:new_cmd = 'make singletest '.l:parallelism.' NOSEARGS='.shellescape(l:cmd_sans_nosetests)
+    elseif a:cmd =~ '^pipenv run pytest '
+        let l:cmd_sans_nosetests = "-s ".substitute(a:cmd, '^pipenv run pytest ', '', '')
+        let l:new_cmd = 'make singletest '.l:parallelism.' PYTESTARGS='.shellescape(l:cmd_sans_nosetests)
+    else
+        let l:new_cmd = a:cmd
+    endif
+    return l:new_cmd
+endfunction
+
+if executable('nosetests')
+    let test#python#runner = 'nose'
+else
+    let test#python#runner = 'pytest'
+endif
+
+let g:test#custom_transformations = {'honor': function('HonorTransform')}
+let g:test#transformation = 'honor'
+
+let test#custom_runners = {'HonorJs': ['HonorRunner']}
+""""""
+
+nnoremap <leader>ts :w<CR>:TestSuite<CR>
+nnoremap <leader>tf :w<CR>:TestFile<CR>
+nnoremap <leader>tn :w<CR>:TestNearest<CR>
+nnoremap <leader>tv :w<CR>:TestVisit<CR>
+nnoremap <leader>tl :w<CR>:call system("shtuff into " . shellescape(getcwd()) . " \x1BOA")<CR>
+""""""
+
+"""""" ToggleTest between file and corresponding test file.
+function! Mapped(fn, l)
+    """" Copied from https://learnvimscriptthehardway.stevelosh.com/chapters/39.html
+    let new_list = deepcopy(a:l)
+    call map(new_list, string(a:fn) . '(v:val)')
+    return new_list
+endfunction
+function! Reversed(l)
+    """" Copied from https://learnvimscriptthehardway.stevelosh.com/chapters/39.html
+    let new_list = deepcopy(a:l)
+    call reverse(new_list)
+    return new_list
+endfunction
+
+function! GetToggleFile(path)
+    """" This is a two way mapping of "normal" suffixes to/from test suffixes.
+    """" If the given path has and of these suffixes, we'll search for a file
+    """" ending with the opposite type of suffix. This should let you easily
+    """" toggle to/from test files.
+    let l:mappings = [
+        \[[".py"], ["_test.py"]],
+        \[[".js", ".jsx", ".ts", ".tsx"], [".test.js", ".test.jsx", ".test.ts", ".test.tsx"]],
+    \]
+    let l:reverse_mappings = Mapped(function("Reversed"), l:mappings)
+    let l:unknown_suffix = v:true
+    for [l:suffixes, l:other_suffixes] in l:mappings + l:reverse_mappings
+        for l:suffix in l:suffixes
+            let l:basename = a:path[0:-(len(l:suffix)+1)]
+            let l:potential_suffix = a:path[-len(l:suffix):-1]
+
+            """" Does the end of the path match this suffix we're looking at?
+            if l:potential_suffix ==? l:suffix
+                let l:unknown_suffix = v:false
+                """" It does match! Let's try appending every possible
+                """" other_suffix and if the file exists, that's the winner.
+                for l:other_suffix in l:other_suffixes
+                    let l:other_path = l:basename . l:other_suffix
+                    if filereadable(l:other_path)
+                        return l:other_path
+                    endif
+                endfor
+            endif
+        endfor
+    endfor
+
+    """" Uh oh, we don't recognize this suffix. Return empty string as an
+    """" indicator that we don't know what to do with this path. Does
+    """" vimscript support throwing and catching errors...?
+    if l:unknown_suffix
+        return ""
+    endif
+
+    """" This file doesn't exist, but maybe the user wants to write a new
+    """" test! Help them out by opening up a new buffer with an appropriate
+    """" filename.
+    return l:other_path
+endfunction
+
+function! ToggleTest(path)
+    let l:other_path = GetToggleFile(a:path)
+    if len(l:other_path) == 0
+        echo "I'm not sure how to toggle " . a:path
+        return
+    endif
+    :execute 'edit' l:other_path
+endfunction
+nnoremap <leader>tt :call ToggleTest(expand('%'))<CR>
+""""""
+
+"""""" lightline configuration
+" From https://github.com/itchyny/lightline.vim#introduction
+set noshowmode
+let g:lightline = {'colorscheme': '16color'}
+let g:lightline.tabline = {
+            \ 'left': [ [ 'buffers' ] ],
+            \ 'right': [ [ 'close'] ] }
+let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
+let g:lightline.component_type = { 'buffers': 'tabsel' }
+let g:lightline.separator = { 'left': '', 'right': '' }
+let g:lightline.subseparator = {'left': '', 'right': '' }
+" Only show the buffers if there's more than 1 open.
+" From https://github.com/mengelbrecht/lightline-bufferline/issues/99
+set showtabline=2
+let g:lightline#bufferline#min_buffer_count = 2
+""""""
+
+"" Turn off folding
+set nofoldenable
+
+" http://unix.stackexchange.com/a/30757
+set tabpagemax=100
+
+" https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
+set backupcopy=yes
+
+""""""" Enable the Prettier fixer
+" Disable all linters.
+let g:ale_linters_explicit=1
+
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
+\   'typescriptreact': ['prettier'],
+\   'css': ['prettier'],
+\   'python': ['black', 'isort'],
+\   'rust': ['rustfmt'],
+\   'nix': ['nixpkgs-fmt'],
+\}
+" Automatically run ALEFix on save.
+let g:ale_fix_on_save = 1
+" Easily toggle autoformatting (ta). Yes, this steps into the <leader>t... shortcut
+" prefix that I use for vim-test. Hopefully this isn't too confusing.
+function! ToggleAutoFormatting()
+    let g:ale_fix_on_save = g:ale_fix_on_save ? 0 : 1
+    echo "Autoformatting is now " . (g:ale_fix_on_save ? "on" : "off")
+endfunction
+nnoremap <leader>ta :call ToggleAutoFormatting()<CR>
+" Haskell configuration.
+let g:ale_haskell_ghc_options = '-fno-code -v0 -dynamic'
+" I haven't fully investigated this, but without this setting, black fails to
+" import our generated thrift files.
+let g:ale_python_black_change_directory = 0
+"""""""
+
+""""""" Easy debugging.
+autocmd FileType python nnoremap <leader>d o__import__('pdb').set_trace()#<<<<Esc>
+autocmd FileType python nnoremap <leader>D O__import__('pdb').set_trace()#<<<<Esc>
+autocmd FileType sh nnoremap <leader>d oecho -n "paused..." && read -r #<<<<Esc>
+autocmd FileType sh nnoremap <leader>D Oecho -n "paused..." && read -r #<<<<Esc>
+autocmd FileType ruby nnoremap <leader>d odebugger  #<<<<Esc>
+autocmd FileType ruby nnoremap <leader>D Odebugger  #<<<<Esc>
+
+autocmd FileType python nnoremap <leader>o o__import__('os').environ['JFLY'] = '1'#<<<<Esc>
+autocmd FileType python nnoremap <leader>l oif __import__('os').environ.get('JFLY'): __import__('pdb').set_trace()#<<<<Esc>
+"""""""
+
+if has('nvim')
+    map ]s :lua vim.diagnostic.goto_next()<cr>
+    map [s :lua vim.diagnostic.goto_prev()<cr>
+
+    " Configuration modified from
+    " https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion and
+    " https://github.com/hrsh7th/nvim-cmp/#recommended-configuration
+    lua << EOF
+
+    -- Copied from https://github.com/neovim/nvim-lspconfig/wiki/UI-customization#change-diagnostic-symbols-in-the-sign-column-gutter
+    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+    for type, icon in pairs(signs) do
+      local hl = "DiagnosticSign" .. type
+      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+    end
+
+    local nvim_lsp = require('lspconfig')
+
+    -- Use an on_attach function to only map the following keys
+    -- after the language server attaches to the current buffer
+    local on_attach = function(client, bufnr)
+      local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+      local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+      -- Mappings.
+      local opts = { noremap=true, silent=true }
+
+      -- See `:help vim.lsp.*` for documentation on any of the below functions
+      buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+      buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+      buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+      buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+
+      buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+
+      buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+      buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+      buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+      buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+    end
+
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+    -- null-ls is good for wrapping misc tools (such as shellcheck) up into
+    -- something LSP compatible.
+    local null_ls = require("null-ls")
+    local shfmt = null_ls.builtins.formatting.shfmt;
+    table.insert(shfmt._opts.args, "-s");  -- add the -s parameter to shfmt
+    local sources = {
+       null_ls.builtins.diagnostics.shellcheck,
+       shfmt,
+    }
+    null_ls.setup {
+      sources = sources,
+
+      -- auto format on save
+      on_attach = function(client)
+        if client.resolved_capabilities.document_formatting then
+          vim.cmd([[
+            augroup LspFormatting
+              autocmd! * <buffer>
+              autocmd BufWritePre <buffer> lua if vim.g.ale_fix_on_save == 1 then vim.lsp.buf.formatting_sync() end
+            augroup END
+          ]])
+        end
+      end,
+    }
+
+    -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+    local servers = { 'pyright', 'rust_analyzer' }
+    for _, lsp in ipairs(servers) do
+      nvim_lsp[lsp].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = {
+          debounce_text_changes = 150,
+        },
+        settings = {
+            python = {
+                analysis = {
+                    typeCheckingMode = "basic",
+                },
+            },
+        },
+      }
+    end
+
+    -- Filter out noisy diagnostics messages from pyright
+    -- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
+    function filter(arr, func)
+        -- Filter in place
+        -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
+        local new_index = 1
+        local size_orig = #arr
+        for old_index, v in ipairs(arr) do
+            if func(v, old_index) then
+                arr[new_index] = v
+                new_index = new_index + 1
+            end
+        end
+        for i = new_index, size_orig do arr[i] = nil end
+    end
+    function filter_diagnostics(diagnostic)
+        -- Only filter out Pyright stuff for now
+        if diagnostic.source ~= "Pyright" then
+            return true
+        end
+
+        -- Allow kwargs to be unused, sometimes you want many functions to take the
+        -- same arguments but you don't use all the arguments in all the functions,
+        -- so kwargs is used to suck up all the extras
+        if diagnostic.message == '"kwargs" is not accessed' then
+            return false
+        end
+
+        -- Allow variables starting with an underscore
+        if string.match(diagnostic.message, '"_.+" is not accessed') then
+            return false
+        end
+
+        return true
+    end
+    function custom_on_publish_diagnostics(a, params, client_id, c, config)
+        filter(params.diagnostics, filter_diagnostics)
+        vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
+    end
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(custom_on_publish_diagnostics, {})
+
+    -- Set completeopt to have a better completion experience
+    vim.o.completeopt = 'menuone,noselect'
+
+    -- nvim-cmp setup
+    local cmp = require 'cmp'
+    cmp.setup {
+      mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm {
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = true,
+        },
+        ['<Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          else
+            fallback()
+          end
+        end,
+        ['<S-Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          else
+            fallback()
+          end
+        end,
+      },
+      sources = {
+        { name = 'nvim_lsp' },
+      },
+    }
+EOF
+else
+    """"""" Configure coc
+    "<<< let g:coc_global_extensions = ['coc-tsserver']
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    function! s:show_documentation()
+      if &filetype == 'vim'
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+    nmap <silent> <leader>g <Plug>(coc-definition)
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gr <Plug>(coc-references)
+    """""""
+endif
+
+"""""""
+" Copied from https://github.com/FatBoyXPC/dotfiles/commit/1bae9190f0d4291d08850bf5483986f185bc26fd
+command! Mapsn call fzf#vim#maps('n', 0)
+command! Mapsx call fzf#vim#maps('x', 0)
+command! Mapso call fzf#vim#maps('o', 0)
+command! Mapsi call fzf#vim#maps('i', 0)
+command! Mapsv call fzf#vim#maps('v', 0)
+command! Mapsa call fzf#vim#maps('a', 0)
+"""""""
+
+""""""" Misc shortcuts
+nnoremap <leader>a ggVG
+"""""""
+
+""""""" Make it easier to interface with the system clipboard.
+noremap <leader>y "+y
+noremap <leader>p "+p
+noremap <leader>P "+P
+"""""""
+
+""""""" Easily move blocks of code around.
+" Copied from https://vim.fandom.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+"""""""
+
+""""""" easier notetaking
+let g:markdown_folding = 1  " https://bitcrowd.dev/folding-sections-of-markdown-in-vim
+function! NewNoteHeader()
+    execute "normal! o# " . strftime('%F %R %z') . ": "
+    startinsert!
+endfunction
+
+noremap <leader>nn :e ~/.dotfiles/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
+autocmd FileType markdown noremap <leader>nh :call NewNoteHeader()<CR>
+"""""""

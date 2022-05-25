@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Copied from https://superuser.com/a/561105
+exec perl -pe 's/\x1b\[[0-9;]*[mG]//g'
