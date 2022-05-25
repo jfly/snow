@@ -1,9 +1,9 @@
 [submodule "dotbot"]
-	path = dotbot
+	path = dotfiles/dotbot
 	url = https://github.com/anishathalye/dotbot
 [submodule "aconfmgr"]
-	path = aconfmgr-src
+	path = dotfiles/aconfmgr-src
 	url = https://github.com/CyberShadow/aconfmgr
 [submodule "colorschemes/base16"]
-	path = colorschemes/base16
+	path = dotfiles/colorschemes/base16
 	url = https://github.com/aarowill/base16-alacritty.git
