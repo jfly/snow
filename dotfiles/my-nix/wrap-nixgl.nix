@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-    nixgl = pkgs.callPackage (import ./sources.nix).nixgl {};
+  nixgl = pkgs.callPackage (import ./sources.nix).nixgl { };
 in
 
 wrap-me: (

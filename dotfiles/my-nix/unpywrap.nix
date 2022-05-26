@@ -15,21 +15,21 @@
 # TODO: seek help upstream with nix to see if there's a more appropriate
 # way of accomplishing all this.
 pyapp: pkgs.symlinkJoin {
-    name = pyapp.name;
-    paths = [ pyapp ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      rm -r $out/bin/*
-      for full_path in ${pyapp}/bin/.*-wrapped; do
-        f=$(basename $full_path)
-        f=''${f#.}  # remove leading dot
-        f=''${f%-wrapped}  # remove trailing -wrapped
+  name = pyapp.name;
+  paths = [ pyapp ];
+  buildInputs = [ pkgs.makeWrapper ];
+  postBuild = ''
+    rm -r $out/bin/*
+    for full_path in ${pyapp}/bin/.*-wrapped; do
+      f=$(basename $full_path)
+      f=''${f#.}  # remove leading dot
+      f=''${f%-wrapped}  # remove trailing -wrapped
 
-        # Add the -s parameter to the python #!, because we're bypassing
-        # the wrapper script that sets the PYTHONNOUSERSITE env var.
-        sed "1s/\(.*\)/\1 -s/" ${pyapp}/bin/.$f-wrapped > $out/bin/$f
+      # Add the -s parameter to the python #!, because we're bypassing
+      # the wrapper script that sets the PYTHONNOUSERSITE env var.
+      sed "1s/\(.*\)/\1 -s/" ${pyapp}/bin/.$f-wrapped > $out/bin/$f
 
-        chmod +x $out/bin/$f
-      done
-    '';
+      chmod +x $out/bin/$f
+    done
+  '';
 }

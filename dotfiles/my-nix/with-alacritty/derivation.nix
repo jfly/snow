@@ -7,14 +7,14 @@ with python3Packages; buildPythonApplication {
   pytestFlagsArray = [ "--ignore=result" ];
 
   propagatedBuildInputs = [
-      mergedeep
-      psutil
-      pyxdg
+    mergedeep
+    psutil
+    pyxdg
   ];
 
   nativeBuildInputs = [
-      black
-      pytest
+    black
+    pytest
   ];
 
   src = ./.;

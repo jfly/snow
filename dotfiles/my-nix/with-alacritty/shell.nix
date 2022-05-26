@@ -1,3 +1,3 @@
-{ pkgs ? ((import ../sources.nix).nixpkgs {}) }:
+{ pkgs ? ((import ../sources.nix).nixpkgs { }) }:
 
-pkgs.callPackage ./derivation.nix {}
+pkgs.callPackage ./derivation.nix { }

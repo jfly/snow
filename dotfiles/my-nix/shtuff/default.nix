@@ -3,7 +3,8 @@
 , ps
 , writeShellScriptBin
 , callPackage
-, unpywrap ? (callPackage ../unpywrap.nix {}),
+, unpywrap ? (callPackage ../unpywrap.nix { })
+,
 }:
 
 let shtuff = with python3.pkgs; buildPythonApplication rec {
