@@ -40,6 +40,10 @@ function _get_json_colorscheme() {
     local colorscheme=$1
     local file
     file=$(ls ~/.dotfiles/colorschemes/**/"$colorscheme.yml" 2>/dev/null)
+    if [ -z "$file" ]; then
+        echo "Could not find colorscheme: $colorscheme" >/dev/stderr
+        exit 1
+    fi
 
     # We are legitimately trying to pass a dollarsign character to yq here.
     # shellcheck disable=SC2016
@@ -102,7 +106,10 @@ function _set() {
     local location=$1
     local colorscheme=$2
 
-    with-alacritty set "$(_get_location "$location")" colors "$(_get_json_colorscheme "$colorscheme")"
+    location="$(_get_location "$location")"
+    colorscheme="$(_get_json_colorscheme "$colorscheme")"
+
+    with-alacritty set "$location" colors "$colorscheme"
 }
 
 function _get() {
