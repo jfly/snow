@@ -6,6 +6,7 @@ let
     mpdSupport = true;
   };
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
+  space2meta = pkgs.callPackage ./space2meta.nix { };
 in
 {
   services.xserver = {
@@ -65,5 +66,15 @@ in
         ExecStart = "${pkgs.pasystray}/bin/pasystray";
       };
     };
+  };
+
+  services.interception-tools = {
+    enable = true;
+    udevmonConfig = ''
+      - JOB: ${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc -m 1 | ${space2meta}/bin/space2meta | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE
+        DEVICE:
+          EVENTS:
+            EV_KEY: [KEY_CAPSLOCK, KEY_ESC, KEY_SPACE]
+    '';
   };
 }
