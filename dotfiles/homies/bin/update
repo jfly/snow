@@ -3,3 +3,5 @@
 set -e
 
 pacaur -Syuu
+asdf update
+asdf plugin update --all
