@@ -38,6 +38,7 @@ in
   environment.systemPackages = with pkgs; [
     vim
     git
+    ripgrep
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in
     # dotfiles/my-nix.
