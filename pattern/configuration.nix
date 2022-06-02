@@ -8,6 +8,7 @@
   deployment.targetUser = "jeremy";
   nix.trustedUsers = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
+  deployment.allowLocalDeployment = true;
 
   imports =
     [
