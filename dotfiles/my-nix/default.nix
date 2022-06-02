@@ -1,7 +1,7 @@
-let
-  pkgs = (import ./sources.nix).nixpkgs { };
-  wrapNixGL = pkgs.callPackage ./wrap-nixgl.nix { };
-in
+{ pkgs ? (import ./sources.nix).nixpkgs { }
+, wrapNixGL ? pkgs.callPackage ./wrap-nixgl.nix { }
+,
+}:
 
 {
   ### Media

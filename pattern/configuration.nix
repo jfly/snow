@@ -4,6 +4,12 @@
 
 { config, pkgs, ... }:
 
+let
+  # We're runnning a real NixOS environment here: we don't need to wrap
+  # our GUI programs with NixGl, yay!
+  nopNixGL = wrap-me: wrap-me;
+in
+
 {
   deployment.targetUser = "jeremy";
   nix.trustedUsers = [ "root" "@wheel" ];
@@ -31,7 +37,16 @@
 
   environment.systemPackages = with pkgs; [
     vim
-  ];
+    git
+  ] ++ (
+    # Some hackiness to extract the derivations from the attrset in
+    # dotfiles/my-nix.
+    builtins.attrValues (
+      lib.attrsets.filterAttrs
+        (k: v: k != "override" && k != "overrideDerivation")
+        (callPackage ../dotfiles/my-nix { wrapNixGL = nopNixGL; })
+    )
+  );
 
   services.logind.lidSwitch = "ignore";
 
