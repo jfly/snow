@@ -19,7 +19,7 @@ To deploy one machine:
 fi
 
 function build_containers() {
-    for f in **/Dockerfile; do
+    for f in k8s/**/Dockerfile; do
         dir=$(dirname "$f")
         fq_image_name=containers.clark.snowdon.jflei.com/$(basename "$dir"):latest
         docker build "$dir" -t "$fq_image_name"
