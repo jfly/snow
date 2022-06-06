@@ -5,64 +5,64 @@ AddKeysToAgent yes
 
 ### jfly stuff
 Host ocf
-HostName ssh.ocf.berkeley.edu
-User jfly
+    HostName ssh.ocf.berkeley.edu
+    User jfly
 ###
 
 ### Snowdon stuff
 # Asus router @ Snowdon
 Host strider
-HostName strider
-User admin
+    HostName strider
+    User admin
 
 Host clark
-HostName clark.snowdon.jflei.com
-User root
-ForwardAgent yes
+    HostName clark.snowdon.jflei.com
+    User root
+    ForwardAgent yes
 
 Host dallben
-ProxyJump clark
-User dallben
+    ProxyJump clark
+    User dallben
 
 Host fflewddur
-User root
+    User root
 
 Host fflam
-User root
+    User root
 
 Host jpi
-HostName jpi
-User pi
+    HostName jpi
+    User pi
 
 Host thermometer
-HostName thermometer
-User root
+    HostName thermometer
+    User root
 
 Host thermostat
-HostName thermostat
-User root
+    HostName thermostat
+    User root
 
 Host garage
-HostName garage
-User root
+    HostName garage
+    User root
 
 Host sonic
-User jfly
-HostName sh.sonic.net
+    User jfly
+    HostName sh.sonic.net
 
 Host ramscan
-User alarm
+    User alarm
 
 ### San Clemente stuff
 Host kent
-HostName kent.sc.jflei.com
-User kent
-#ForwardAgent yes
+    HostName kent.sc.jflei.com
+    User kent
+    #ForwardAgent yes
 
 Host sc-router
-User root
-HostName router.sc.jflei.com
-KexAlgorithms diffie-hellman-group14-sha1
+    User root
+    HostName router.sc.jflei.com
+    KexAlgorithms diffie-hellman-group14-sha1
 ###
 
 ### cottage

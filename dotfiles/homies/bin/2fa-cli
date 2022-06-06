@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 DB=/tmp/data.db
 
-echo -n "Attempting to connect to phone. You may need to answer a prompt on your phone..." &> /dev/stderr
-sudo adb -d shell "which su" &> /dev/null < /dev/null
-if [ $? -ne 0 ]; then
-    echo
-    echo "It appears the attached phone is not rooted (could not find a 'su' binary)."
-    echo "This tool will not work if your phone is not rooted. Exiting."
+# This environment variable effects `adb` commands.
+export ANDROID_SERIAL=R52NA0P8H4K
+
+ping=$(adb shell "echo ping" </dev/null) || true
+if [ "$ping" != "ping" ]; then
+    echo "" >/dev/stderr
+    echo "Failed to run 'echo ping' over adb shell" >/dev/stderr
     exit 1
 fi
-sudo adb -d shell "su -c 'cat /data/data/com.google.android.apps.authenticator2/databases/databases'" > "$DB" 2> /dev/null < /dev/null
-if [ $? -eq 0 ]; then
-    echo "success!" &> /dev/stderr
-else
-    echo "No attached phone found. Attach your phone via usb and try again." &> /dev/stderr
+
+if ! adb shell "which su" &>/dev/null </dev/null; then
+    echo "It appears the attached phone is not rooted (could not find a 'su' binary)." >/dev/stderr
+    echo "This tool will not work if your phone is not rooted. Exiting." >/dev/stderr
     exit 1
 fi
+
+adb shell "su -c 'cat /data/data/com.google.android.apps.authenticator2/databases/databases'" >"$DB" 2>/dev/null </dev/null
 
 function cleanup {
     # Securely delete database file.
@@ -26,10 +30,9 @@ function cleanup {
 trap cleanup EXIT
 
 # Copied from https://wiki.archlinux.org/index.php/Google_Authenticator#Command_line
-sqlite3 "$DB" 'SELECT email,secret FROM accounts;' | while read A
-do
-    NAME=`echo "$A" | cut -d '|' -f 1`
-    KEY=`echo "$A" | cut -d '|' -f 2`
-    CODE=`oathtool --totp -b "$KEY"`
+sqlite3 "$DB" 'SELECT email,secret FROM accounts;' | while read -r A; do
+    NAME=$(echo "$A" | cut -d '|' -f 1)
+    KEY=$(echo "$A" | cut -d '|' -f 2)
+    CODE=$(oathtool --totp -b "$KEY")
     echo -e "$CODE\t$NAME"
 done

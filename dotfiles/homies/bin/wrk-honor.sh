@@ -10,6 +10,7 @@ function terminalOn() {
     sleep 0.1 # slow down spawning terminals so windows get positioned (hopefully) deterministically
 }
 
+sudo systemctl start docker
 cd ~/src/github.com/joinhonor/external-api
 terminalOn "make run" "be"
 terminalOn $'docker compose up -d database\nshtuff-as-pwd' "be"

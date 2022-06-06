@@ -3,10 +3,9 @@
 host=$1
 port=$2
 
-two_factors=$(2fa-cli)
-if [ $? -eq 0 ]; then
+if two_factors=$(2fa-cli 2>&1); then
     second_factor=$(echo "$two_factors" | grep bastion | cut -f 1)
-    echo "Identified attached phone! Copying two factor key ($second_factor) to clipboard" &> /dev/stderr
+    echo "Identified attached phone! Copying two factor key ($second_factor) to clipboard" &>/dev/stderr
     echo "$second_factor" | clipit
 fi
 

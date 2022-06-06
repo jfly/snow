@@ -1,39 +1,39 @@
-### Honor stuff
+# vi: ft=sshconfig
+
 Host bastion.honordev.com bastion
-Hostname bastion.honordev.com
-ForwardAgent yes
-ControlMaster auto
-ControlPath ~/.ssh/%r@%h:%p
-ServerAliveInterval 60
-ProxyCommand 2fa-bastion %h %p
-User jeremy
+    Hostname bastion.honordev.com
+    ForwardAgent yes
+    ControlMaster auto
+    ControlPath ~/.ssh/%r@%h:%p
+    ServerAliveInterval 60
+    ProxyCommand 2fa-bastion %h %p
+    User jeremy
 
 Host h4g2g
-Hostname g2g.honordev.com
-User pi
+    Hostname g2g.honordev.com
+    User pi
 
 Host h4interview
-Hostname bugs.honor-projects.com
-IdentityFile ~/.ssh/aws/experimental-eng-interview.pem
-User ubuntu
-RemoteCommand tmux attach
-RequestTTY yes
+    Hostname bugs.honor-projects.com
+    IdentityFile ~/.ssh/aws/experimental-eng-interview.pem
+    User ubuntu
+    RemoteCommand tmux attach
+    RequestTTY yes
 
 Host h4webhook-tunnel
-IdentityFile ~/.ssh/aws/experimental-hackday.pem
-IdentitiesOnly yes
-Hostname 34.219.121.184
-User ubuntu
-RemoteForward 4001 localhost:5050
+    IdentityFile ~/.ssh/aws/experimental-hackday.pem
+    IdentitiesOnly yes
+    Hostname 34.219.121.184
+    User ubuntu
+    RemoteForward 4001 localhost:5050
 
 Host h4mac
-IdentityFile ~/.ssh/aws/experimental-jeremy.pem
-IdentitiesOnly yes
-Hostname 10.1.25.182
-ProxyJump bastion
-User ec2-user
+    IdentityFile ~/.ssh/aws/experimental-jeremy.pem
+    IdentitiesOnly yes
+    Hostname 10.1.25.182
+    ProxyJump bastion
+    User ec2-user
 
 Host h4-*
-ProxyCommand h4-bastion-proxy %h %p %n
-User jeremy
-###
+    ProxyCommand h4-bastion-proxy %h %p %n
+    User jeremy
