@@ -98,7 +98,7 @@ spec:
           env:
             - name: POSTGRES_PASSWORD
               # pwgen -s 20 1 | tools/encrypt
-              value:
+              value: |-
                 -----BEGIN AGE ENCRYPTED FILE-----
                 YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBEbWJra1FwZzVuaFlxQTh4
                 Wm9URnRuRUVRVWJya0hMUmNKZlZiMVJ6NHlZCm1tMkJnOTFoQ0lvVjdXSGl2SXUz

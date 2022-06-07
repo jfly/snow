@@ -11,4 +11,5 @@ pkgs.mkShell {
     pkgs.nixpkgs-fmt
     pkgs.just
   ];
+  KUBECONFIG = "k8s/kube/config.secret";
 }

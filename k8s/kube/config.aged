@@ -1,0 +1,93 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: |-
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwanFVVTJ5OGwzNW16Z21t
+      bEUwbzRZRXVpek9yeVVNc2g1R3lLRDROL2xRCnlyaTEvWWl0cDYvTnAwMkNjR3pJ
+      VUdyMGIrOVhLbUhmbE1aSlNaNkdOSXcKLS0tIDNYNnpxblJWU285dXZ3TnZRVHZ5
+      Q211clB1YTE4R0NleG9zUVI0bERTVTQKS0s15LFlAQFKqrexRM2C7vZh5mGkTcUF
+      lhKW5sKuyqETGcHyMO4O88pRTCerTn6VYEZ21qI1Veh6UGww7t1w1DYneGWGTQP/
+      jdWG/xW8VwJ13T8A7aXGns/FBIRWg/lr/SUckiVdSIxsI6gwG01lqPvsszkkdO3t
+      oPrURa+xl8ViRM3nV3F68uNavl2BYb6HoMP3quS2a3Mk5ov9p7X58cpk4SnLEbnU
+      CpeDEerXsSjX8zHFwLosYkBkhcYm4rTnJsHeFBtMvBc8w8y81BCmpM1Y/JtQR4Mz
+      0Wmot6zdS/sYL5hBxComNGAj1JiXjbDs8kEi2mQz7ErAIDBMkYnMz9Io2M53YIKN
+      5DTaZjt7BOj+9YRs0Cy4ywXqMQMQncbS1Ai0MXZoRX0sZwBzUW4aNSk/SFmf/7sJ
+      6bW54KdJspSR3W8XQFixybpCZ4TtOYt0E2GIJ6xfcHfNN7+47YK1khOGvOHXW/kn
+      EdeLQAtu/d8hp1ZRa+A/xJRL76/r+fI+Xou+3p88h6p8Qnv0e7Xtm0r068tmhDG/
+      6yqxhTKeI9a2EpTfkqcM7tNJvEWpsBzXn82YkJritGLO9ujrtPelrU4w8tdTxFcX
+      RbwR1zaMs5rw2Ee8Ev5m3CwAqtrwhuy5dUnEJ+6AGdt/Af5MwsV57U1v2xh7Y+cZ
+      EWWhGsQkXBsxWlfwFHJPJDXLNpIjW1GvWnviUYr+M3icMLqxUX4ItPUUCNDQdS41
+      oXdLtx497J+78oaFjf/IZXFUyGznG4uUytdwJcasa/X4icjYA6AKZS8sZiZk+R5f
+      OIpBt4sKt8WDB8TtLxpMg6kMqCV6Qse3Ex8djSvKNo/xN6TNFSa4ucZabjOz4z9u
+      kmRZz2FRef8mnPHI0r6hodK/N0BmIKmKL58ObvRxOM6VAoPVpRmsv0uhSJf71FZU
+      Cv4b0E8rVye7RHZUF8ZXN3EwF+IiYHBvR2skguiPE00h+W47QXmw2GD9R67MW12R
+      BGME8pFqFcbJCc/AjOgthgv7uTO5sj2yMl64mdvegoRGsbEIJSttOvjCfUYQjxap
+      -----END AGE ENCRYPTED FILE-----
+    server: https://clark:6443
+  name: default
+contexts:
+- context:
+    cluster: default
+    user: default
+  name: default
+current-context: default
+kind: Config
+preferences: {}
+users:
+- name: default
+  user:
+    client-certificate-data: |-
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvRitxL0crbGx6UnZIS1hJ
+      YVhNcHBDWFF4NlhXVGs1VTJhU2h3MkdUQ0VvCjl2ZGo5dDJhVmFVRUFwQzA2ZlpF
+      RWpqc2Q0L0VkSlQ1OTBlS1ZsVUJFVmsKLS0tIGJ6bmlHQkZ6eVVIZWNrSUhnLzdG
+      WEVBU25BdnVjMnJ1RHZ2Ry9JV1RqRjgKuWmIb0CrgNbMuEKmicZMV7Tf6km6jJVu
+      5IoiWSs0TOixLqlkeBVsBaDypxfI66jQ/feusdWgsSKbjJg97y6i1WAmXff64jSU
+      r7qUtlFQx/jfqJNiXsR8spVPNBAIE6J12pgDRyMvtLaXAPdz6DcIWByDq3YD/Qgw
+      UeNJgtRc/TLbCo23FWt9S4xLBqBSkejAFJPNAIEwDn7+7bQhR8bv7fwa8wO2uG3V
+      r4TE48BdLG/G5q1+nr0fVzNkW3aMyaJDV1lNO3u823jRvPNd/EopEJ5DDRwjBRjO
+      cEw9T07k94OnPdoys6yt2VzjEGNcg77IBJdZpLIdQEWL5dTm3AxSP4tUGM/YPod7
+      a4c98PQOHUgsvK2wsDxfFlhqmhBUdOH+8idmZRt+fMot/f68CA8UnTYisDuUcsj+
+      F91cBZUabIyOMPIeN0VS1NfzYRouVUgDC2w28nVWVndq++FFscHwZQ4RgGJG6CrT
+      4PdHCvrnj27F5mLZsa0IqzRkodgGW5emL96c5PcIUWSlCo5i+UOBJZR3rxV89KvN
+      06lAyjTXxjjU2cbEOOGTJeVKxILkonv7dW4EqgHVnBi8mGSUx/chY/SC0A55LPuF
+      vfH4Inocjq5EqHljAaoGjSQICUOh1HAGXonE0cfiIYvMm4tPTjWRxkzX7NvfrNCT
+      sklsXKUCXP01dBmmBmo/gkAc3SrfAo8Tgtd5/S5JLTaDXiS/NiOrRBoSaGR5L6Vr
+      8VAZ+AZKYFphC8qo77aYbLnHvkL/JEKL+OhD3jzcsMGyfqvmrMySff9E1deFGGPx
+      0iIv3ubhKOYr/BOk7/xUd8ui9iyWzk79lAydRJxxo7QUHp6XK4GzCPOn5FY8T3q5
+      rGLmFEsMwqizwhMdtXSIk3SsUDHrqGkSLH3/dPGIHegyjnBF+WM2DYUGZY71VpvQ
+      f/yLRZ0KFUwkFd/5DyHuIz961Wz2X3cd9SmHLBJH8//56NuxZqE0y/p0s6aBcWyt
+      ogbTMBE9bw/IQ6zdI0IfQqd00Px0WNmGEatefk+Xsjkwd7QL/9hYgbGb1Zx9ya9M
+      Ziw1QeR9fYtBFPp5Me4l7DNV8MmGFY1Qd1UgpmaADi+DutWM4zu/4JNMf3nabeB4
+      d/JaigbabuRQtyzuogz68JK64MvTAhFc5DF4a7w8HOJQdqwAe7azIEHs2TKSkPGW
+      3TrcJxhxsktLiPVnK1bFV0ViecbyWiiZQa1pAtRCdO4815TVxzl3EkIT2vAD/Ses
+      tKXVvWHXMJv6fA5qlpXNnX6M0VsGc64GS0MNfepw/F8zgjtLfHBq8qmMXxoPWBVB
+      PxHvi08CsR5hz1COdRlh9qZIWheogw0IXQhEXRVByYRHY7PyhvjwbRpEeVeMA4NG
+      /qsdLFf4BgGQ4gEgKHuGYDHSf8SeWvWn1czdiIiLbC3DSj16UXcrEqckfKar7b1H
+      Z2/zC0ondqD+wci2Q0KDGq4d7VAKbaHUXrdRhrdCIXk9oOGRSwy7in0Cr+1ek+xt
+      +7ogk/0zZD5nIAp5GnSumAWPQ4m8/0A8BF+V+Z9ux4SovLa8vHfO0zGGATqmD7U/
+      pIqq5lZx7udzXAm6oKoNeb2MsLPqr9bssGfD/vxM8RRTLCA8aVIgyrmvHoh5xhSG
+      8XkgJHPoPYXhNR3GCD3bLIrbW60D8uKvzEoynbVhk9+o2+IZtSNPYG6We5LA+MdG
+      y/o4HjMaKAcUj25uQISsNrWvV806GjSgcNbu/JWTV09ElPZ25kmwJjKslRVxPpQ0
+      jfgXpXmc3IqqgTNp05y08cnOIjaZWV8OfPB8VPxpHBH79m8YAdC4lEnxmhjbzTlf
+      Qa6iuzaEvZxBezr0q8r3Zh58X9WvnwBxkQ6oyk/N5GvjTIiPNfSviqLKtYApEUhB
+      aOFuAHvLuXvPu26R+JOlSkcXPPhlWtJJRVG/Z489dTYZx1u+c8Rv/YrR2EKpsGKG
+      1KSpkFJ9l8c0Qjg1+g/mkuf77d752wRTqrd4w0xo/kX6u4K+JAc/aYjQA/sPfvOP
+      cblghnNxhc6c7ZaixBPkYzFJiFmVh3a712s0v1Z1IaN2rZFUqol40Uf7y1kQvsVQ
+      a7120y5+Snd6CQaCXuJRDhJ3jRL5n4yaKsrG4MgrEmFF98Kd
+      -----END AGE ENCRYPTED FILE-----
+    client-key-data: |-
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZZmxselVTMjVhNHNyTjl4
+      c1FieUt2eXhtckdsWThNRnBrbitHbDZVdVZrCjk2UE5wVi9yUlZ6ay9ueU9qL0N6
+      UC9sRU1tTXBVajhIaUcrN3ZNaGE2YzQKLS0tIG50RTZIQWgrbjZRVUJyc0s0ZU0y
+      M1FKcEgwdnI3UzVSNllNR1lvMVlzNFkKa/pqYEOTONRNqOYCC3pMZeafVJZKUGcn
+      SUatqvJKyR1csRF8jrayHY8kAmaey1YxMDNVD6bkJvclkw/IRuxingYobF82bXMe
+      2YTg+KIED5UCXLjV09r8SOUTtJbYJmlUO+1l53rrUw2oEf5NKWUW/85qOC15wDtI
+      XWvOaVdShFFddOOCxliyk4k5aKwvsWh78wJjyJGP1CZdJ/8zdOOELO5TRGVAL8wR
+      /ubi9NlPXzMk2mABdIbELFG8pFavS8r25ZruoVrThq7SgvLlNwcquwMtR0iUqiPb
+      ZgnK/a99P9CX0N5aGW+omiUCjWPe+F2p9RJj/OHutokbAJLTllZJ0ZxxTa7W8COn
+      pwhh1NHiuBaFso2ydlnZsIjir6auhCV30bp/feS7G99PAcNJonfy0EBBkoZg0S8+
+      qxWIx03MapGy/4A+Q4GImVhrzqvZm9hP
+      -----END AGE ENCRYPTED FILE-----
