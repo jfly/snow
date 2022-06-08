@@ -1,0 +1,97 @@
+# Install minion helm chart: https://github.com/minio/minio/tree/master/helm/minio
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: minio
+  namespace: default
+  labels:
+spec:
+  chart: minio
+  repo: https://charts.min.io/
+  version: 4.0.2
+  targetNamespace: default
+  valuesContent: |-
+    # Only needed if Keycloak SSO breaks.
+    rootUser: root
+    rootPassword: |-
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNYU0vVlhkcUptUm1YMk5D
+      U014TDhlVHFlY3o1RUpJV3BlSW43MFY0aEI4CjVwUTlXdDlmcTV3NzBrOGYrdVht
+      Z1V1YWw4TVZZejlsWmtzWDNycW14ZFEKLS0tIEpOZXRvTjBnS012SXMwSUVXK2lC
+      UDlVTmRqSUFBdTl4VnpwcHo4OGxXS2sKNFxvlf303wUpCrFf/6zibekrzkjVbfcA
+      a8Z41Pqw58jSPKWJA8ux/fNMKtHh+KxmNRakGQ==
+      -----END AGE ENCRYPTED FILE-----
+    replicas: 1
+
+    # TODO: look into running non-root with the media group.
+    securityContext:
+      enabled: false
+
+    persistence:
+      enabled: true
+      existingClaim: minio-pv-claim
+    resources:
+      requests:
+        memory: 256Mi
+    mode: standalone
+    environment:
+      MINIO_IDENTITY_OPENID_CONFIG_URL: "https://keycloak.clark.snowdon.jflei.com/realms/snow/.well-known/openid-configuration"
+      MINIO_IDENTITY_OPENID_CLIENT_ID: "minio"
+      MINIO_IDENTITY_OPENID_CLIENT_SECRET: |-
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1d2xDd1ZiMXN2ZS93TThN
+        aFhFNnNOWXVFZEJmUWJVSHJrN2NiUTc5WnlnCjdQREtVcGdBMzhOOTRWWjdDdmhK
+        TjBuM1FlWWpqcVV3TlJtNit3d29TcmsKLS0tIENaUXAyakZIVW11UHBTNDZ1V252
+        c01BVlNCTG0vc2JsQmtCemd3OWdFZ1UKvHcv58v64X0YbNRgyzM30N9lbVZjTUK7
+        CaD6JANUnrHIdB7ubkGRUmScf6kma1g8W/6CVcVDuhAVPDpVD9to4w==
+        -----END AGE ENCRYPTED FILE-----
+      MINIO_BROWSER_REDIRECT_URL: "https://console.minio.clark.snowdon.jflei.com"
+
+    users:
+      - accessKey: jfly
+        secretKey: |-
+          -----BEGIN AGE ENCRYPTED FILE-----
+          YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBDS3NmckJ3d096OVEydU94
+          eVhCTTd6bTczY21CcGVHVDBMS0d2SCtLRVNnClNuUjJQTVUvb2tCdFA3NmpGWVFC
+          eEdmMXAyelpLYkZVYk1wNW5GVU11YlUKLS0tIHd3c24rSDdlOVZwc2tnbGpQM1ZJ
+          d0tTVWJyT3NLUmlmaFJwTkpoSEdjekEK86pCUZS0akwdIAz9HPDbh/5WEALjkvVO
+          3MLwxwnCJidC/RKWi7Q54/0ve2NdLPaBAG9IoA==
+          -----END AGE ENCRYPTED FILE-----
+        policy: consoleAdmin
+
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      hosts:
+        - minio.clark.snowdon.jflei.com
+      tls:
+        - hosts:
+          - minio.clark.snowdon.jflei.com
+          secretName: minio-tls
+
+    consoleIngress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      hosts:
+        - console.minio.clark.snowdon.jflei.com
+      tls:
+        - hosts:
+          - console.minio.clark.snowdon.jflei.com
+          secretName: console-minio-tls
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
