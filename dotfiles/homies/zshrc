@@ -136,6 +136,13 @@ bindkey '\ec' fzf-commit-widget
 ##################################
 
 ###
+### SSH
+###
+##################################
+export SSH_ASKPASS=mfa-askpass
+export SSH_ASKPASS_REQUIRE=force
+
+###
 ### Nix
 ###
 # From https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs

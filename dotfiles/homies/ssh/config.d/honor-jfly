@@ -6,7 +6,6 @@ Host bastion.honordev.com bastion
     ControlMaster auto
     ControlPath ~/.ssh/%r@%h:%p
     ServerAliveInterval 60
-    ProxyCommand 2fa-bastion %h %p
     User jeremy
 
 Host h4g2g
