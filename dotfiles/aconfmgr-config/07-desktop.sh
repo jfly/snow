@@ -193,7 +193,8 @@ AddPackage yt-dlp                             # A youtube-dl fork with additiona
 AddPackage --foreign xcwd-git # xcwd is a simple tool that prints the current working directory of the currently focused window.
 
 ### PDF
-AddPackage evince # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
+AddPackage evince  # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
+AddPackage pdfgrep # A tool to search text in PDF files
 
 ### GTK
 IgnorePath '/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache'
@@ -227,6 +228,7 @@ IgnorePath '/usr/share/fonts/*'
 ### Windows compatibility
 AddPackage dos2unix   # Text file format converter
 AddPackage wine       # A compatibility layer for running Windows programs
+AddPackage winetricks # Script to install various redistributable runtime libraries in Wine.
 AddPackage wine-gecko # Wine's built-in replacement for Microsoft's Internet Explorer
 AddPackage wine-mono  # Wine's built-in replacement for Microsoft's .NET Framework
 AddPackage mtools     # A collection of utilities to access MS-DOS disks
