@@ -23,7 +23,7 @@ spec:
           path: /mnt/media
       containers:
         - name: jackett
-          image: cr.hotio.dev/hotio/jackett
+          image: cr.hotio.dev/hotio/jackett:release-0.20.1246
           env:
             - name: TZ
               value: "America/Los_Angeles"
