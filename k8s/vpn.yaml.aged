@@ -16,18 +16,18 @@ data:
   # cat wireguard.conf | base64 -w 0 | tools/encrypt
   vpnConfigfile: |-
     -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlSHlSdjd6bXZUR3NocG5F
-    WHAwaStVKzNqQ0JlY3ArMkk1a1VkVC9NYURBCnQrN1hGN3BXeUdkSnR4VEYyL1RH
-    S2JvSkNlNE1vRjdKeEVlTy9kRUZFQk0KLS0tIDIydENnWDhRczBURGF2Zmhna0Ra
-    ejNyc0NOb2krRE9CSC9ZKzY2UklWdDAK4Sa7F/EcZ+9VAhU3Lm+RMAn7+1uozZwe
-    Soatql3LDyDKJ3W7jEu8zzj+3JokJdC6ai/59doMbj6zhF303TEnGVu/CjMko46l
-    4B1ymsHllVVkTzz/P9h9Iupc2CPyNS2tKeVVxeDLT2/5pWDleJezxVYbvXEZKz63
-    mepNrKyN3jk0GIrPOTyOYvOCVOZvjgHsST+RmMJdH4yn73L/jVMbW2S0AhRf+RuV
-    /cykouyAA7e/RJD4a1E8zwIR62o5NxuUd9IICLgrPYN7IOdVE53kDWhEqJ7jKsgm
-    gAT6ENwxiCZ90QBTuRNRnbafJ6WZjCv+i8h1uHXZGxKG5crSkCijC32/5rAah+l5
-    2JzNW8q16VRx2EiDNA9ntk9oIS7U6kt8oOzzkdjZOpoQ2sRWrvOfTc05rNqzwH8m
-    GoiaRfy+pok8x7MawUIx8JFp46bGDKsE4HGRVAqCAswfvi7E3MG5793vg/Fo6uVs
-    eIbcrEaJ73My7TagTZ9rv9NSXtp7BZoWTyEGOR+CYrOq6e67jKd+fg==
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUNFMrNzZkbm5lZURZUndD
+    QVNJOEQzZVB2S0xybjFuMzZtZlR1UjlnZ0RJClQwRXA0UHFqNUZDRjdnRnZLTEFi
+    QzVQckgrbkhpUG1EN0FyNmpHSjlwSWMKLS0tIHJ0VnB4ZmhXQm5paG8zUUVNTTdO
+    L0VhbmN5eFZwM3lGdHVtK3lFeTVxQWMKNSAdB8uUcGZaUWo8JaA0OT/eYqLdkOmE
+    EfAgyikBVGbvdk2mROcc+NHl4ZFQCiouf2JFGAw7iK44pWpQwx2ALRuXxW7IK7s3
+    GdzSb6thb8cg3FqnCzkNEfSLKhjwUKyGsbSyHfFbWyzyTJ3qtA3GOnpXrj3bmFv1
+    cBX+C8YVTasG9S7QPfCkLQHldoEeqp/NnQGx9oqVVx3u4NbD9HZogZ6likU0WLPw
+    3sPnHyJXtXDEHgkJjcBDhktpZvXluV4Wt4/Ii5w7KUnpzlPmg4AUhRo9Vg547W2q
+    xHxjwbptSHG2cYjlBUqKQIiNIGFCHv5XY2olSER4v6PF7vmUdpk10uFpfALgupJz
+    Edy2nQUMu71jRxujnezrudWcm5prwr7KjQFiTW3kTsLUsdyFVydQHsdnlcnqZdyY
+    GmnRCPxrtc7eykUAUKdZ7GXpgBFM6lrYWkSZErGKHXm0Mn133aCfKR6twT1lLf0u
+    1sd1q/q2fKgzFKRU7S0W7u8Ck2cPSLg9B5D/b10hIXo=
     -----END AGE ENCRYPTED FILE-----
 ---
 # Install pod-gateway helm chart: https://github.com/k8s-at-home/charts/tree/master/charts/stable/pod-gateway
@@ -50,7 +50,12 @@ spec:
       VPN_BLOCK_OTHER_TRAFFIC: true
       # Allow VPN traffic over this port
       VPN_TRAFFIC_PORT: 51820
-      # Route internal K8s and local home traffic in to the default K8S gateway
+      # The default value for VPN_LOCAL_CIDRS routes all of 10.0.0.0/8 to the
+      # default K8S gateway, which breaks communication with ip addresses on
+      # our VPN subnet (mullvad provides a DNS server at 10.64.0.1 that we'd
+      # like to use).
+      VPN_LOCAL_CIDRS: "10.42.0.0/16 10.43.0.0/16"
+      # Route internal K8s and local home traffic to the default K8S gateway
       # (from https://docs.k8s-at-home.com/guides/pod-gateway/#routed-pod-fails-to-init)
       NOT_ROUTED_TO_GATEWAY_CIDRS: "10.42.0.0/16 10.43.0.0/16"
 
