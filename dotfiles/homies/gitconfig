@@ -68,3 +68,5 @@
     recurse = true
 [status]
     submoduleSummary = true
+[remote "origin"]
+    prune = true
