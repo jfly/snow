@@ -1,3 +1,55 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: keycloak-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-db
+  template:
+    metadata:
+      labels:
+        app: keycloak-db
+    spec:
+      volumes:
+      # TODO: look into k8s persistent volumes for this
+      - name: keycloak-db
+        hostPath:
+          path: /state/keycloak-db
+      containers:
+        - name: db
+          image: postgres:14.3
+          env:
+            - name: POSTGRES_PASSWORD
+              # pwgen -s 20 1 | tools/encrypt
+              value: |-
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwcmxSaWV2ajU5eXNMWlEx
+                bzV2dVc2a09vdUFQWWsyaTFUSjcrOGRkUDNNClkzaGJvZlFtNU93NnpvUlpRTDNk
+                bnNYc2Nrd3orazlOZ1ZydWZWeUdkTjgKLS0tIE41UnJldTVYaVErWENVaHJmbzIz
+                WHFta2Ywd1Fjb1BuMmN1VmFiU01BL2cK1EiPpCXFNE0ADqep6YfLLLOyiMmTqSGH
+                5WcFzMpyfnOSO2u9kAukhRB1tqTU6Znx7TbI7Q==
+                -----END AGE ENCRYPTED FILE-----
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+          volumeMounts:
+            - name: keycloak-db
+              mountPath: /var/lib/postgresql/data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-db
+spec:
+  ports:
+    - name: psql
+      port: 5432
+  selector:
+    app: keycloak-db
+---
 # Copied from https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak-ingress.yaml
 
 apiVersion: networking.k8s.io/v1
@@ -60,7 +112,7 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:18.0.0
-        args: ["start-dev"]
+        args: ["start", "--auto-build"]
         env:
         - name: KEYCLOAK_ADMIN
           value: "admin"
@@ -69,8 +121,25 @@ spec:
             secretKeyRef:
               name: keycloak-secrets
               key: keycloak-admin-password
+        - name: KC_HOSTNAME
+          value: "keycloak.clark.snowdon.jflei.com"
         - name: KC_PROXY
           value: "edge"
+        - name: KC_DB
+          value: postgres
+        - name: KC_DB_URL
+          value: "jdbc:postgresql://keycloak-db.default.svc.cluster.local/postgres"
+        - name: KC_DB_USERNAME
+          value: "postgres"
+        - name: KC_DB_PASSWORD
+          value: |-
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwcmxSaWV2ajU5eXNMWlEx
+            bzV2dVc2a09vdUFQWWsyaTFUSjcrOGRkUDNNClkzaGJvZlFtNU93NnpvUlpRTDNk
+            bnNYc2Nrd3orazlOZ1ZydWZWeUdkTjgKLS0tIE41UnJldTVYaVErWENVaHJmbzIz
+            WHFta2Ywd1Fjb1BuMmN1VmFiU01BL2cK1EiPpCXFNE0ADqep6YfLLLOyiMmTqSGH
+            5WcFzMpyfnOSO2u9kAukhRB1tqTU6Znx7TbI7Q==
+            -----END AGE ENCRYPTED FILE-----
         ports:
         - name: http
           containerPort: 8080

@@ -75,14 +75,14 @@ spec:
         - name: PROVIDERS_OIDC_CLIENT_SECRET
           value: |-
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUQmw5L0FPNjJueFJjaVNo
-            OTJYSmZ2aTVpUkp2dE1JclVnRHoxZE1oR2drCkJWZlRvR09TQlVPZE9uSThqZXZF
-            QnAxRlUyN3pYQ1UzNkJUekVCbzRRRkkKLS0tIDZaaG1vQnoyaHJtb1BFTkIvejd0
-            VVBqaWdFV0hsRFJnVlRmR3VhYmkzSmsK8K/g76XKntePZf8ebloxCZeJ1+lJX63m
-            R+/ntGuxvlBbHJYiYpk2wuVij+o+QZDyrG72ETue5mH5BA6JlNYl2Q==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBITU1jZkhTeU5zRVd6eG1y
+            b3FKVVBFMFdHdnF2dnptZmVUZWFjMVIyb3lVCnNrQmt1bmpOTmRuTkx5bkxpMEdt
+            RXVJbElxaGZjYnRZRFRWdWNoVkVXSjgKLS0tIG80S1NHR29MYm04V0VJUXA5OUFw
+            UXlRUUhUazVTbUo4bkFqMURLUjdlVjQK3uVLJMRcBpSz2f6xr1eFCneTJRlLYm+c
+            H3DT+BQ4s2vizRtcs7wghE1x0kAQJPsQVoSp3RLFnn8akyKs3ePtDA==
             -----END AGE ENCRYPTED FILE-----
         - name: WHITELIST
-          value: jeremyfleischman@gmail.com,mdfleischman@gmail.com,rmeresman@gmail.com
+          value: jeremyfleischman@gmail.com,rmeresman@gmail.com
         - name: LOGOUT_REDIRECT
           value: https://clark.snowdon.jflei.com
 ---
