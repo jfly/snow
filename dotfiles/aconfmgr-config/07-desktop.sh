@@ -232,6 +232,7 @@ AddPackage winetricks # Script to install various redistributable runtime librar
 AddPackage wine-gecko # Wine's built-in replacement for Microsoft's Internet Explorer
 AddPackage wine-mono  # Wine's built-in replacement for Microsoft's .NET Framework
 AddPackage mtools     # A collection of utilities to access MS-DOS disks
+IgnorePath '/usr/share/.mono/*'
 
 ### Redshift
 AddPackage redshift           # Adjusts the color temperature of your screen according to your surroundings.
