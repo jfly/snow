@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec guvcview --device $(realpath /dev/v4l/by-id/usb-HES-9734-191212_Integrated_Webcam_HD-video-index0)
