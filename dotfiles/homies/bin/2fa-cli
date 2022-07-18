@@ -20,7 +20,7 @@ if ! adb shell "which su" &>/dev/null </dev/null; then
     exit 1
 fi
 
-adb shell "su -c 'cat /data/data/com.google.android.apps.authenticator2/databases/databases'" >"$DB" 2>/dev/null </dev/null
+adb shell "su -c 'cat /data/data/org.liberty.android.freeotpplus/databases/otp-token-db'" >"$DB" 2>/dev/null </dev/null
 
 function cleanup {
     # Securely delete database file.
@@ -29,10 +29,11 @@ function cleanup {
 }
 trap cleanup EXIT
 
-# Copied from https://wiki.archlinux.org/index.php/Google_Authenticator#Command_line
-sqlite3 "$DB" 'SELECT email,secret FROM accounts;' | while read -r A; do
-    NAME=$(echo "$A" | cut -d '|' -f 1)
-    KEY=$(echo "$A" | cut -d '|' -f 2)
+# Modified from https://wiki.archlinux.org/index.php/Google_Authenticator#Command_line
+sqlite3 "$DB" 'SELECT issuer,label,secret FROM otp_tokens;' | while read -r A; do
+    ISSUER=$(echo "$A" | cut -d '|' -f 1)
+    LABEL=$(echo "$A" | cut -d '|' -f 2)
+    KEY=$(echo "$A" | cut -d '|' -f 3)
     CODE=$(oathtool --totp -b "$KEY")
-    echo -e "$CODE\t$NAME"
+    echo -e "$CODE\t$ISSUER ($LABEL)"
 done

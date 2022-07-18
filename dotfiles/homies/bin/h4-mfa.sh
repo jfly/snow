@@ -12,7 +12,7 @@ fi
 MFA=""
 # First, try to get the 2fa from an attached cell phone.
 if two_factors=$(2fa-cli 2>&1); then
-    MFA=$(echo "$two_factors" | grep "Amazon Web Services" | cut -f 1)
+    MFA=$(echo "$two_factors" | grep "Amazon Web Services (jeremy@honor)" | cut -f 1)
 fi
 
 # If we couldn't get a MFA from an attached phone, just prompt the user.
