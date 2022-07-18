@@ -9,11 +9,16 @@ Host ocf
     User jfly
 ###
 
-### Snowdon stuff
-# Asus router @ Snowdon
+### Home stuff
+# Primary router (asus)
 Host strider
     HostName strider
     User admin
+
+# Secondary router (tp-link)
+Host aragorn
+    HostName aragorn
+    User root
 
 Host clark
     HostName clark.snowdon.jflei.com
