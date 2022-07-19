@@ -43,7 +43,7 @@ function deploy_k8s() {
 function deploy_nix() {
     local target="$1"
     shift
-    if [ "$target" = $(hostname)  ]; then
+    if [ "$target" = "$(hostname)" ]; then
         colmena apply-local --sudo "$@"
     else
         colmena apply --on "$target" "$@"
