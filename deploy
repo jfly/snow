@@ -28,16 +28,17 @@ function build_containers() {
 }
 
 function deploy_k8s() {
-    # TODO: look into alternatives for this. Some ideas:
-    #  - flux: https://fluxcd.io/
-    #  - pulumi: https://www.pulumi.com/registry/packages/kubernetes/
-
     # Install cert-manager
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
 
     for f in k8s/**/*{.yaml,.yaml.secret}; do
         kubectl apply -f "$f"
     done
+
+    (
+        cd k8s-pulumi
+        pulumi up --yes
+    )
 }
 
 function deploy_nix() {

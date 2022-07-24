@@ -1,0 +1,6 @@
+name: k8s-pulumi
+backend:
+  url: s3://pulumi?endpoint=minio.clark.snowdon.jflei.com&s3ForcePathStyle=true
+runtime:
+  name: python
+description: Declarative management of the snow k8s cluster

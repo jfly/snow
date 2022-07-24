@@ -33,59 +33,6 @@ spec:
               port:
                 number: 80
 ---
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: snowauth
-  labels:
-    app: snowauth
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: snowauth
-  template:
-    metadata:
-      labels:
-        app: snowauth
-    spec:
-      containers:
-      - image: thomseddon/traefik-forward-auth:2
-        name: snowauth
-        ports:
-        - containerPort: 4181
-          protocol: TCP
-        env:
-        - name: COOKIE_DOMAIN
-          value: clark.snowdon.jflei.com
-
-        - name: AUTH_HOST
-          value: auth.clark.snowdon.jflei.com
-        - name: SECRET
-          valueFrom:
-            secretKeyRef:
-              name: traefik-forward-auth-secrets
-              key: traefik-forward-auth-secret
-        - name: DEFAULT_PROVIDER
-          value: oidc
-        - name: PROVIDERS_OIDC_ISSUER_URL
-          value: https://keycloak.clark.snowdon.jflei.com/realms/snow
-        - name: PROVIDERS_OIDC_CLIENT_ID
-          value: snowauth
-        - name: PROVIDERS_OIDC_CLIENT_SECRET
-          value: |-
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBITU1jZkhTeU5zRVd6eG1y
-            b3FKVVBFMFdHdnF2dnptZmVUZWFjMVIyb3lVCnNrQmt1bmpOTmRuTkx5bkxpMEdt
-            RXVJbElxaGZjYnRZRFRWdWNoVkVXSjgKLS0tIG80S1NHR29MYm04V0VJUXA5OUFw
-            UXlRUUhUazVTbUo4bkFqMURLUjdlVjQK3uVLJMRcBpSz2f6xr1eFCneTJRlLYm+c
-            H3DT+BQ4s2vizRtcs7wghE1x0kAQJPsQVoSp3RLFnn8akyKs3ePtDA==
-            -----END AGE ENCRYPTED FILE-----
-        - name: WHITELIST
-          value: jeremyfleischman@gmail.com,rmeresman@gmail.com
-        - name: LOGOUT_REDIRECT
-          value: https://clark.snowdon.jflei.com
----
 apiVersion: v1
 kind: Secret
 metadata:

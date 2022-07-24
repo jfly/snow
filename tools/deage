@@ -16,6 +16,7 @@ AGE_ARMOR_RE = re.compile(
 DECRYPTED_SECRETS_DIR = ".sensitive-decrypted-secrets"
 PRIVATE_KEY_PATH = os.path.join(DECRYPTED_SECRETS_DIR, "age-private-key.txt")
 
+
 def decrypt(encrypted: str) -> str:
     p = subprocess.run(
         ["age", "-i", PRIVATE_KEY_PATH, "--decrypt"],
@@ -26,13 +27,14 @@ def decrypt(encrypted: str) -> str:
     )
     return p.stdout
 
+
 def extract_and_decrypt_secrets(src: str):
     with open(src, "r") as f:
         document = f.read()
 
     for m in AGE_ARMOR_RE.finditer(document):
         encrypted = dedent(m.group(0))
-        hash_encrypted = sha256(encrypted.encode('utf8')).hexdigest()
+        hash_encrypted = sha256(encrypted.encode("utf8")).hexdigest()
         decrypted = decrypt(encrypted)
         secret_file = os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret")
         with open(secret_file, "w") as f:
@@ -50,14 +52,20 @@ def sanity_check_private_key():
 
     if private_key_problem is not None:
         os.makedirs(os.path.dirname(PRIVATE_KEY_PATH), exist_ok=True)
-        print(dedent(f"""\
-            [bold red]{private_key_problem}[/bold red]
+        print(
+            dedent(
+                f"""\
+                [bold red]{private_key_problem}[/bold red]
 
-            Have you successfully decrypted the age private key?
+                Have you successfully decrypted the age private key?
 
-                age --decrypt -i ~/.ssh/id_rsa tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
-        """), file=sys.stderr)
+                    age --decrypt -i ~/.ssh/id_rsa tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
+                """
+            ),
+            file=sys.stderr,
+        )
         sys.exit(1)
+
 
 def deage_file(aged_filename: str):
     assert aged_filename.endswith(".aged")
@@ -67,7 +75,7 @@ def deage_file(aged_filename: str):
         aged_doc = f.read()
 
     def decrypt_match(m):
-        prefix = m.group('ws_prefix')
+        prefix = m.group("ws_prefix")
         encrypted = dedent(m.group(0))
         return prefix + decrypt(encrypted)
 
@@ -75,6 +83,7 @@ def deage_file(aged_filename: str):
 
     with open(deaged_filename, "w") as f:
         f.write(deaged_doc)
+
 
 def main():
     sanity_check_private_key()
@@ -86,10 +95,11 @@ def main():
 
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".nix"):
+            if file.endswith(".nix") or file.endswith(".py"):
                 extract_and_decrypt_secrets(os.path.join(root, file))
             elif file.endswith(".aged"):
                 deage_file(os.path.join(root, file))
+
 
 if __name__ == "__main__":
     main()
