@@ -1,14 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  parsec = pkgs.callPackage
-    (import (builtins.fetchTarball {
-      name = "parsec-gaming-nix";
-      url = "https://github.com/DarthPJB/parsec-gaming-nix/archive/06bd13c9aa68ca0991d592f753be12679e842c83.tar.gz";
-      # Hash obtained using `nix-prefetch-url --unpack <url>`
-      sha256 = "051zlain933islqnlwmhgikinlmylhcww5qs3cj89nxq0vn8wfhv";
-    }))
-    { };
+  parsec = pkgs.callPackage (import ../../sources.nix).parsec-gaming { };
   my_parsec = pkgs.writeShellScriptBin "parsecd" ''
     # This script wraps the real parsecd so it can exit 0 if stopped by stop_parsec.sh.
 

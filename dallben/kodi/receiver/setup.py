@@ -9,5 +9,6 @@ setup(
     scripts=[
         "receiver-on.py",
         "tv-on.py",
+        "tv-off.py",
     ],
 )
