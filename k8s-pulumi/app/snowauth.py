@@ -1,4 +1,3 @@
-import pulumi
 import pulumi_kubernetes as kubernetes
 
 from .deage import deage
@@ -6,6 +5,27 @@ from .deage import deage
 
 class SnowAuth:
     def __init__(self):
+        kubernetes.core.v1.Service(
+            "snowauth",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="snowauth",
+                namespace="default",
+            ),
+            spec=kubernetes.core.v1.ServiceSpecArgs(
+                ports=[
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="http",
+                        port=80,
+                        protocol="TCP",
+                        target_port=4181,
+                    )
+                ],
+                selector={
+                    "app": "snowauth",
+                },
+            ),
+        )
+
         kubernetes.apps.v1.Deployment(
             "snowauth",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
@@ -97,5 +117,4 @@ class SnowAuth:
                     ),
                 ),
             ),
-            opts=pulumi.ResourceOptions(protect=True),
         )

@@ -51,16 +51,3 @@ data:
     Aq0bYMrADpSLjbWXtCxOS15h+2SF5Hazd9KOpX3xap1fsUGsB9AlceHDqqukGIIY
     K5x2VA==
     -----END AGE ENCRYPTED FILE-----
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: snowauth
-
-spec:
-  ports:
-    - name: http
-      port: 80
-      targetPort: 4181
-  selector:
-    app: snowauth
