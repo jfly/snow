@@ -7,4 +7,4 @@
   )
   {
     src = ./.;
-  }).defaultNix.default
+  }).defaultNix.packages.${builtins.currentSystem}.knock
