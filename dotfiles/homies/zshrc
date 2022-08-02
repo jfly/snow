@@ -60,9 +60,8 @@ fi
 ###
 ### Set up asdf-vm + direnv
 ###
-# This needs to happen after we load oh-my-zsh
-source "$HOME/.asdf/completions/asdf.bash"
-source ${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc
+export H4_SHIMLESS_DEVELOPMENT=1
+source $HOME/.h4.zshrc
 
 ## Python stuff
 # Make sure we never `pip install` things outside of a virtualenv.
@@ -157,6 +156,3 @@ export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 # Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
 export NIX_BUILD_SHELL=nix-zshell
 ##################################
-
-# I am a special snowflake
-# source $HOME/.h4.zshrc
