@@ -58,6 +58,7 @@ AddPackage socat   # Multipurpose relay (useful with remote-pdb!)
 IgnorePath '*.pyc' # There's a surprising number of these files scattered around. I guess a lot of tools like to use Python somewhere internally.
 
 ### Misc
+AddPackage tcpdump             # Powerful command-line packet analyzer
 AddPackage gdb                 # The GNU Debugger
 AddPackage nasm                # 80x86 assembler designed for portability and modularity
 AddPackage m4                  # The GNU macro processor
