@@ -9,7 +9,6 @@ main() {
     zsh_prompt blue
     zsh_prompt green "git --no-pager diff"
     git_diff
-    cdk
 }
 
 dim=$(tput dim)
@@ -113,10 +112,6 @@ zsh_prompt() {
     echo -en "${bgWhite}${black} 16:20:42 ${bg}${white}${sep}${text} ~/dev/project ${bgWhite}${dir}${sep}"
     echo -e "${black}  master ${icons} ${bgReset}${white}${sep}${reset}"
     echo -e "${bold}${green}\$${reset} ${2}"
-}
-
-cdk() {
-    echo -e " ${Bblack}this is bright black${reset}"
 }
 
 all() {

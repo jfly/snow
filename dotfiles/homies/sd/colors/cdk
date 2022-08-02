@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+Bblack=$'\e[90m'
+reset=$'\e[0m'
+
+echo -e " ${Bblack}this is bright black${reset}"
