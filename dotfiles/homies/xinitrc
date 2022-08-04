@@ -9,6 +9,14 @@ volnoti -t 1
 # Enable numlock on boot (thanks James!)
 numlockx on
 
+###
+### MPD
+### Using socket based authentication is nice as it lets us do things like `mpc insert file:///...`
+###
+##################################
+export MPD_HOST=$HOME/.local/state/mpd/socket
+##################################
+
 if [ -x "$(which pasystray 2>/dev/null)" ]; then
     pasystray &
 fi
