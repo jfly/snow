@@ -54,6 +54,7 @@
   mycli = pkgs.callPackage ./mycli { };
   shtuff = pkgs.callPackage ./shtuff { };
   yq = pkgs.yq;
+  miller = pkgs.miller;
 
   ### Debug utils
   strace = pkgs.strace;
