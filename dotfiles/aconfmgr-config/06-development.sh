@@ -106,6 +106,8 @@ AddPackage direnv # Even though I use asdf-direnv, it's nice to test out if it w
 AddPackage pyenv # Easily switch between multiple versions of Python
 # Needed by asdf installed MySQL. Hopefully we can remove this someday.
 AddPackage --foreign ncurses5-compat-libs # System V Release 4.0 curses emulation library, ABI 5
+# Needed to docker pull (configured by dev setup script)
+AddPackage --foreign amazon-ecr-credential-helper # A credential helper for the Docker daemon that makes it easier to use Amazon EC2 Container Registry.
 # Needed to compile thrift
 AddPackage flex    # A tool for generating text-scanning programs
 AddPackage pkgconf # Package compiler and linker metadata toolkit
