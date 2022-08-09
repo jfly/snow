@@ -12,7 +12,7 @@ in
 
 {
   deployment.targetUser = "jeremy";
-  nix.trustedUsers = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
   deployment.allowLocalDeployment = true;
 
