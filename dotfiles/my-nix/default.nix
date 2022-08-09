@@ -1,4 +1,4 @@
-{ pkgs ? (import ./sources.nix).nixpkgs { }
+{ pkgs ? (import ../../sources.nix).nixos-unstable { }
 , wrapNixGL ? pkgs.callPackage ./wrap-nixgl.nix { }
 ,
 }:
