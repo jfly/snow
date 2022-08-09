@@ -68,4 +68,7 @@
 
   ### bin scripts
   paste-list = (pkgs.callPackage ./paste-list { }).paste-list;
+
+  # TODO: isolate to fixinputs
+  capslockx = pkgs.callPackage ../../shared/capslockx {};
 }
