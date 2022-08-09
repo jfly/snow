@@ -26,8 +26,11 @@
 
   ### Text editors
   neovim = pkgs.callPackage ./nvim { };
+  # TODO: don't install these globally, instead just make them available
+  # to neovim.
   pyright = pkgs.pyright;
   vscode = pkgs.vscodium;
+  xclip = pkgs.xclip;
 
   ### Git
   git = pkgs.git;
