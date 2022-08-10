@@ -1,5 +1,4 @@
 ### Desktop/gui
-AddPackage dunst                      # Customizable and lightweight notification-daemon
 AddPackage xorg-server                # Xorg X server
 AddPackage xorg-server-xvfb           # Virtual framebuffer X server
 AddPackage xorg-xclock                # X clock

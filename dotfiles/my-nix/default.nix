@@ -44,6 +44,7 @@
   shfmt = pkgs.shfmt;
 
   ### Desktop
+  dunst = pkgs.callPackage ./dunst { };
   xmonad = pkgs.callPackage ./xmonad { };
   volnoti = pkgs.callPackage ./volnoti.nix { };
   polybar = pkgs.callPackage ./polybar.nix { };
@@ -70,5 +71,5 @@
   paste-list = (pkgs.callPackage ./paste-list { }).paste-list;
 
   # TODO: isolate to fixinputs
-  capslockx = pkgs.callPackage ../../shared/capslockx {};
+  capslockx = pkgs.callPackage ../../shared/capslockx { };
 }

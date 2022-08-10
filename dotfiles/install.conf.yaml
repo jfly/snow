@@ -29,7 +29,6 @@
     ~/sd: homies/sd
     ~/.config/with-alacritty: homies/config/with-alacritty
     ~/.config/chromium-flags.conf: homies/config/chromium-flags.conf
-    ~/.config/dunst: homies/config/dunst
     ~/.config/fontconfig: homies/config/fontconfig
     ~/.config/git: homies/config/git
     ~/.config/mpd/mpd.conf: homies/config/mpd/mpd.conf
