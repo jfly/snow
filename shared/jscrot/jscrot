@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Change into script directory.
+cd "$(dirname "$0")"
+
+RUNTIME_DIR=$XDG_RUNTIME_DIR/jscrot
+mkdir -p "$RUNTIME_DIR"
+PID_FILE=$RUNTIME_DIR/jscrot.pid
+
+if [ -e "$PID_FILE" ]; then
+    kill "$(cat "$PID_FILE")"
+    echo "I see an ongoing jscrot, I'm going to kill it and exit"
+    # Just in case that process doesn't exist, or never got to clean up after
+    # itself, nuke that file so we at least can run next time.
+    rm -f "$PID_FILE"
+    exit 1
+fi
+
+# Sound notification to let one know when recording is about to start (and ends)
+beep() {
+    paplay ./bell.oga &
+}
+
+SCREENSHOTS_DIR=$HOME/screenshots
+mkdir -p "$SCREENSHOTS_DIR"
+
+file_noext=$SCREENSHOTS_DIR/"$(date +"%Y-%m-%d_%H-%M-%S")_$HOSTNAME"
+
+ask_user_for_region() {
+    local flameshot
+    # It appears flameshot needs some sort of "final action" besides
+    # --print-geometry to get the "accept" action to work, so this --path
+    # /dev/null is a workaround for that. This doesn't feel right to me.
+    # TODO: file a bug with flameshot and see about fixing it.
+    flameshot=$(flameshot gui --print-geometry --path /dev/null 2>/dev/null)
+    read -r W H X Y < <(echo "$flameshot" | python -c 'import sys, re; print(" ".join(re.split(r"[x+]", sys.stdin.read())), end="")')
+}
+
+if [ $# -eq 0 ]; then
+    file=${file_noext}.png
+    flameshot full --path "$file"
+elif [ "$1" == "--video" ]; then
+    file=${file_noext}.gif
+    ask_user_for_region
+    byzanz-record --verbose --cursor --exec="savepid '$PID_FILE' bash -c 'while true; do sleep 1; done'" --delay=0 --x="$X" --y="$Y" --width="$W" --height="$H" "$file"
+    beep
+    # TODO - copying this file doesn't work. see https://bugs.chromium.org/p/chromium/issues/detail?id=356210
+elif [ "$1" == "--select" ]; then
+    file=${file_noext}.png
+    flameshot gui --path "$file"
+    if [ ! -f "$file" ]; then
+        exit 1
+    fi
+else
+    echo "Unrecognized parameter: $1"
+    exit 1
+fi
+
+# TODO - cleanup? see https://unix.stackexchange.com/a/247846
+# For gif, maybe generate html and data uri?
+# Copy that file to the clipboard.
+xclip -selection clipboard -t "image/${file##*.}" "$file"

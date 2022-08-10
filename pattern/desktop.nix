@@ -8,6 +8,7 @@ let
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
+  jscrot = pkgs.callPackage ../shared/jscrot {};
 in
 {
   services.xserver = {
@@ -46,12 +47,21 @@ in
     alacritty
     dmenu
     qutebrowser
+    jscrot
+    viewnior
   ];
 
-  # TODO: achieve parity with /home/jeremy/src/github.com/jfly/dotfiles/homies/xinitrc
   programs.nm-applet.enable = true;
 
   systemd.user.services = {
+    # TODO: run autoperipherals, load ~/.Xresources
+    # TODO: enable numlock on boot
+    # TODO: add blueman-applet
+    # TODO: add xsettingsd
+    # TODO: add gnome-keyring
+    # TODO: add mcg
+    # TODO: add volnoti
+
     "polybar" = {
       enable = true;
       wantedBy = [ "graphical-session.target" ];
