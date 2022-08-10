@@ -15,9 +15,6 @@
   #### MPD
   ashuffle = pkgs.ashuffle;
 
-  ### Screenshots
-  flameshot = pkgs.callPackage ./flameshot { };
-
   ### Ebooks
   # calibre needs to be wrapped with nixGL to run on non-NixOS distributions.
   # See https://github.com/NixOS/nixpkgs/issues/132045 for details.
@@ -51,6 +48,7 @@
   # kodi needs to be wrapped with nixGL to run on non-NixOS distributions.
   kodi = wrapNixGL (pkgs.callPackage ./kodi { });
   with-alacritty = wrapNixGL (pkgs.callPackage ./with-alacritty { });
+  jscrot = (pkgs.callPackage ../../shared/jscrot { });
 
   ### Development
   xxd = pkgs.xxd;

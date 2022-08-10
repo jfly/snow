@@ -1,8 +1,9 @@
-{pkgs}:
+{ pkgs }:
 
-let bell = pkgs.runCommand "" {} ''
-  cp ${./bell.oga} $out
-'';
+let
+  bell = pkgs.runCommand "" { } ''
+    cp ${./bell.oga} $out
+  '';
 in
 pkgs.writeShellApplication {
   name = "jscrot";
@@ -11,8 +12,9 @@ pkgs.writeShellApplication {
     pkgs.maim
     pkgs.python3
     pkgs.byzanz
-    pkgs.pulseaudio  # provides paplay
+    pkgs.pulseaudio # provides paplay
     (pkgs.callPackage ../savepid { })
+    (pkgs.callPackage ../flameshot { })
   ];
-  text = builtins.replaceStrings ["./bell.oga"] [(builtins.toString bell)] (builtins.readFile ./jscrot);
+  text = builtins.replaceStrings [ "./bell.oga" ] [ (builtins.toString bell) ] (builtins.readFile ./jscrot);
 }

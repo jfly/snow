@@ -38,11 +38,6 @@ if [ -x "$(which xsettingsd 2>/dev/null)" ]; then
     xsettingsd &
 fi
 
-if [ -x "$(which flameshot 2>/dev/null)" ]; then
-    # See https://wiki.archlinux.org/index.php/Flameshot#Option_2:_Run_as_background_process
-    flameshot &
-fi
-
 # From https://wiki.archlinux.org/index.php/GNOME/Keyring#xinitrc_method.
 if [ -x "$(which gnome-keyring-daemon 2>/dev/null)" ]; then
     dbus-update-activation-environment --systemd DISPLAY
