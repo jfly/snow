@@ -7,6 +7,7 @@ let
   };
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
+  dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
 in
 {
   services.xserver = {
@@ -64,6 +65,14 @@ in
       path = [ pkgs.pavucontrol ];
       serviceConfig = {
         ExecStart = "${pkgs.pasystray}/bin/pasystray";
+      };
+    };
+    "dunst" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${dunst}/bin/dunst";
       };
     };
   };
