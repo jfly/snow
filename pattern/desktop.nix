@@ -23,6 +23,8 @@ in
       config = ../dotfiles/my-nix/xmonad/xmonad.hs;
       extraPackages = s: [ s.xmonad-contrib ];
     };
+    autoRepeatDelay = 300;
+    autoRepeatInterval = 30;
   };
 
   # Enable touchpad.
