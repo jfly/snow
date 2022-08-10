@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+colorscheme cycle global light dark
