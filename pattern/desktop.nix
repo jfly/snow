@@ -1,6 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
+  username = "jeremy";
   alacritty = (pkgs.callPackage ../dotfiles/my-nix/with-alacritty { });
   polybar = pkgs.polybar.override {
     mpdSupport = true;
@@ -17,7 +18,7 @@ in
     displayManager = {
       defaultSession = "none+xmonad";
       autoLogin.enable = true;
-      autoLogin.user = "jeremy";
+      autoLogin.user = username;
     };
     windowManager.xmonad = {
       enable = true;
@@ -31,36 +32,21 @@ in
   # Enable touchpad.
   services.xserver.libinput.enable = true;
 
-  # Enable sound with pipewire.
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   # TODO: figure out how to enable native GPU, I know this machine has one!
   services.xserver.videoDrivers = [ "modesetting" ];
   services.xserver.useGlamor = true;
 
-  environment.systemPackages = with pkgs; [
-    alacritty
-    dmenu
-    qutebrowser
-    jscrot
-    viewnior
-  ];
-
   programs.nm-applet.enable = true;
 
   systemd.user.services = {
-    # TODO: run autoperipherals, load ~/.Xresources
+    # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
     # TODO: enable numlock on boot
     # TODO: add blueman-applet
     # TODO: add xsettingsd
     # TODO: add gnome-keyring
     # TODO: add mcg
     # TODO: add volnoti
+    # TODO: set up ssh agent
 
     "polybar" = {
       enable = true;
@@ -98,4 +84,40 @@ in
             EV_KEY: [KEY_CAPSLOCK, KEY_ESC, KEY_SPACE]
     '';
   };
+
+  # Lock the screen on suspend. Trick copied from
+  # https://wiki.archlinux.org/title/Slock#Lock_on_suspend.
+  programs.slock.enable = true;
+  systemd.services = {
+    "slock" = {
+      enable = true;
+      description = "Lock X session using slock for user";
+      before = [ "sleep.target" ];
+      wantedBy = [ "sleep.target" ];
+      environment.DISPLAY = ":0";
+      serviceConfig = {
+        User = username;
+        ExecStartPre = "${pkgs.xorg.xset}/bin/xset dpms force suspend";
+        ExecStart = "/run/wrappers/bin/slock"; # use the setuid slock wrapper
+      };
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    qutebrowser
+    gnome.eog
+    feh
+    (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
+
+    ### Debugging
+    arandr
+    xorg.xkill
+    xorg.xev
+
+    # TODO: consolidate with xmonad
+    alacritty
+    jscrot
+    xdotool
+    dmenu
+  ];
 }

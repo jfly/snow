@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   # We're runnning a real NixOS environment here: we don't need to wrap
@@ -11,6 +11,13 @@ let
 in
 
 {
+  nixpkgs = {
+    system = "x86_64-linux";
+    config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "parsec"
+    ];
+  };
+
   deployment.targetUser = "jeremy";
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
@@ -21,6 +28,7 @@ in
       ./hardware-configuration.nix # Include the results of the hardware scan.
       ./network.nix
       ./users.nix
+      ./audio.nix
       ./desktop.nix
     ];
 
