@@ -103,11 +103,29 @@ in
     };
   };
 
+  nixpkgs.config.chromium.commandLineArgs = builtins.concatStringsSep " " [
+    "--oauth2-client-id=77185425430.apps.googleusercontent.com"
+    "--oauth2-client-secret=OTJgUOQcT7lO7GsGZq2G4IlT"
+  ];
+
   environment.systemPackages = with pkgs; [
+    (pkgs.symlinkJoin {
+      name = "chromium";
+      paths = [ chromium ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/chromium \
+          --set GOOGLE_DEFAULT_CLIENT_ID 77185425430.apps.googleusercontent.com \
+          --set GOOGLE_DEFAULT_CLIENT_SECRET OTJgUOQcT7lO7GsGZq2G4IlT
+      '';
+    })
     qutebrowser
     gnome.eog
     feh
     (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
+    mpv
+    yt-dlp
+    evince
 
     ### Debugging
     arandr
@@ -119,5 +137,6 @@ in
     jscrot
     xdotool
     dmenu
+    xcwd
   ];
 }
