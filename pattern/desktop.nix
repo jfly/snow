@@ -32,11 +32,25 @@ in
   # Enable touchpad.
   services.xserver.libinput.enable = true;
 
-  # TODO: figure out how to enable native GPU, I know this machine has one!
+  # This enables the intel gpu, but not the builtin NVIDIA card. See
+  # https://wiki.archlinux.org/title/System76_Oryx_Pro#Graphics for more
+  # information.
+  # TODO: figure this out, it could be pretty cool =)
   services.xserver.videoDrivers = [ "modesetting" ];
   services.xserver.useGlamor = true;
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
 
   programs.nm-applet.enable = true;
+
+  # TODO: set up fonts
 
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
@@ -104,8 +118,10 @@ in
   };
 
   nixpkgs.config.chromium.commandLineArgs = builtins.concatStringsSep " " [
-    "--oauth2-client-id=77185425430.apps.googleusercontent.com"
-    "--oauth2-client-secret=OTJgUOQcT7lO7GsGZq2G4IlT"
+    "--enable-features=VaapiVideoDecoder"
+    "--disable-features=UseChromeOSDirectVideoDecoder"
+    "--enable-gpu-rasterization"
+    "--enable-zero-copy"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -113,6 +129,9 @@ in
       name = "chromium";
       paths = [ chromium ];
       buildInputs = [ makeWrapper ];
+      # Adding these as command line flags doesn't seem to work. Perhaps
+      # because we don't have this patch?
+      # https://github.com/archlinux/svntogit-packages/blob/2aa76e8dfdd647d1ca0fe1d8780459660407bad2/chromium/trunk/use-oauth2-client-switches-as-default.patch
       postBuild = ''
         wrapProgram $out/bin/chromium \
           --set GOOGLE_DEFAULT_CLIENT_ID 77185425430.apps.googleusercontent.com \
@@ -131,6 +150,8 @@ in
     arandr
     xorg.xkill
     xorg.xev
+    libva-utils
+    glxinfo
 
     # TODO: consolidate with xmonad
     alacritty
