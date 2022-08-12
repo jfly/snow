@@ -59,6 +59,9 @@ in
   );
 
   services.logind.lidSwitch = "ignore";
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
