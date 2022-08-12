@@ -11,6 +11,7 @@ let
 in
 
 {
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   nixpkgs = {
     system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [

@@ -2,13 +2,21 @@
 
 # This was largely copied from nixos/modules/services/x11/window-managers/xmonad.nix
 let
+  jscrot = pkgs.callPackage ../jscrot { };
+  jvol = pkgs.callPackage ../../shared/jvol { };
   haskellPkgs = pkgs.haskellPackages;
   xmonadAndPackages = [ haskellPkgs.xmonad haskellPkgs.xmonad-contrib ];
   xmonadEnv = haskellPkgs.ghcWithPackages (p: xmonadAndPackages);
+  xmonadHs = pkgs.substituteAll {
+    src = ./xmonad.hs;
+    inherit (pkgs) libnotify;
+    inherit jscrot jvol;
+  };
   configured = pkgs.writers.writeHaskellBin "xmonad"
     {
       libraries = xmonadAndPackages;
-    } ./xmonad.hs;
+    }
+    xmonadHs;
 in
 
 pkgs.runCommandLocal "xmonad"

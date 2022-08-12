@@ -42,13 +42,12 @@
 
   ### Desktop
   dunst = pkgs.callPackage ./dunst { };
-  xmonad = pkgs.callPackage ./xmonad { };
+  xmonad = pkgs.callPackage ../../shared/xmonad { };
   volnoti = pkgs.callPackage ./volnoti.nix { };
   polybar = pkgs.callPackage ./polybar.nix { };
   # kodi needs to be wrapped with nixGL to run on non-NixOS distributions.
   kodi = wrapNixGL (pkgs.callPackage ./kodi { });
   with-alacritty = wrapNixGL (pkgs.callPackage ./with-alacritty { });
-  jscrot = (pkgs.callPackage ../../shared/jscrot { });
 
   ### Development
   xxd = pkgs.xxd;

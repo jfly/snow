@@ -52,12 +52,6 @@ windowPlacement = composeAll ([
         appName =? "picker" --> doFloat
     ] ++ workspaceSenders) where role = stringProperty "WM_WINDOW_ROLE"
 
--- https://github.com/hcchu/dotfiles/blob/master/.xmonad/xmonad.hs
-muteAndShowVolume = "set_volume.py toggle-mute; show-volume.sh"
-changeVolume s = "set_volume.py " ++ s ++ "; show-volume.sh"
-
--- https://obsproject.com/forum/threads/hotkey-to-mute-mic-input.22852/
-toggleMicMute = "pactl set-source-mute $(pacmd list-sources|awk '/\\* index:/{ print $3 }') toggle; show-mic-mute.sh"
 changeBrightness s = "sudo change-brightness.py " ++ s ++ "; show-brightness.sh"
 
 fullscreenChrome :: X ()
@@ -94,7 +88,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
 
     -- quit, or restart
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
-    , ((modMask              , xK_q     ), spawn "xmonad --restart") -- %! Restart xmonad
+    , ((modMask              , xK_q     ), sequence_ [
+        spawn "@libnotify@/bin/notify-send 'Restarting xmonad'",
+        (restart "xmonad" True)
+    ])
 
     -- http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Hooks-ManageDocks.html
     , ((modMask, xK_b), sendMessage ToggleStruts)
@@ -122,10 +119,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     -- Run demenu2 with custom font
     , ((modMask, xK_p), spawn "dmenu_run -fn 'Monospace:size=11:bold:antialias=true'")
 
-    , ((0, xF86XK_AudioMute), spawn muteAndShowVolume)
-    , ((0, xF86XK_AudioRaiseVolume), spawn $ changeVolume "5+")
-    , ((0, xF86XK_AudioLowerVolume), spawn $ changeVolume "5-")
-    , ((0, xF86XK_AudioMicMute), spawn toggleMicMute)
+    , ((0, xF86XK_AudioMute), spawn "@jvol@/bin/jvol toggle-mute")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "@jvol@/bin/jvol +5%")
+    , ((0, xF86XK_AudioLowerVolume), spawn $ "@jvol@/bin/jvol -5%")
+    , ((0, xF86XK_AudioMicMute), spawn "@jvol@/bin/jvol toggle-mic-mute")
     , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
     , ((0, xF86XK_AudioPrev), spawn "mpc prev")
     , ((0, xF86XK_AudioNext), spawn "mpc next")
@@ -144,9 +141,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     -- Prompt the user for an area of the screen
     -- note the sleep 0.2 as a workaround for the ancient:
     --  https://code.google.com/p/xmonad/issues/detail?id=476
-    , ((0, xK_Print), spawn "sleep 0.2; jscrot --select")
-    , ((controlMask, xK_Print), spawn "jscrot --video")
-    , ((shiftMask, xK_Print), spawn "jscrot")
+    , ((0, xK_Print), spawn "sleep 0.2; @jscrot@/bin/jscrot --select")
+    , ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video")
+    , ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot")
 
     , ((controlMask .|. altMask, xK_Left), spawn "xrandr -o right && setbg")
     , ((controlMask .|. altMask, xK_Right), spawn "xrandr -o left && setbg")
@@ -168,7 +165,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
 isNotInfixOf a b = not (a `isInfixOf` b)
 
 main = do
-    xmonad $ docks $ ewmh desktopConfig {
+    dirs <- getDirectories
+    let conf = docks $ ewmh desktopConfig {
         manageHook = manageDocks <+> manageSpawn <+> windowPlacement <+> manageHook desktopConfig,
         handleEventHook = handleEventHook def <+> Hacks.windowedFullscreenFixEventHook <+> swallowEventHook (className =? "Alacritty" <&&> fmap ( "xmonad-no-swallow" `isNotInfixOf`) title) (return True),
         layoutHook = myLayout,
@@ -177,4 +175,4 @@ main = do
         XMonad.borderWidth = myBorderWidth,
         XMonad.keys = myKeys,
         workspaces = myWorkspaces
-    }
+    } in launch conf dirs

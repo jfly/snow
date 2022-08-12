@@ -9,7 +9,8 @@ let
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
-  jscrot = pkgs.callPackage ../shared/jscrot {};
+  volnoti = pkgs.callPackage ../dotfiles/my-nix/volnoti.nix { };
+  xmonad = pkgs.callPackage ../shared/xmonad { };
 in
 {
   services.xserver = {
@@ -20,10 +21,14 @@ in
       autoLogin.enable = true;
       autoLogin.user = username;
     };
-    windowManager.xmonad = {
-      enable = true;
-      config = ../dotfiles/my-nix/xmonad/xmonad.hs;
-      extraPackages = s: [ s.xmonad-contrib ];
+    windowManager = {
+      session = [{
+        name = "xmonad";
+        start = ''
+          systemd-cat -t xmonad -- ${xmonad}/bin/xmonad &
+          waitPID=$!
+        '';
+      }];
     };
     autoRepeatDelay = 300;
     autoRepeatInterval = 30;
@@ -42,7 +47,7 @@ in
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       vaapiVdpau
       libvdpau-va-gl
     ];
@@ -59,7 +64,6 @@ in
     # TODO: add xsettingsd
     # TODO: add gnome-keyring
     # TODO: add mcg
-    # TODO: add volnoti
     # TODO: set up ssh agent
 
     "polybar" = {
@@ -68,6 +72,14 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${polybar}/bin/polybar --config=${polybarConfig}";
+      };
+    };
+    "volnoti" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${volnoti}/bin/volnoti --no-daemon --timeout 1";
       };
     };
     "pasystray" = {
@@ -155,7 +167,6 @@ in
 
     # TODO: consolidate with xmonad
     alacritty
-    jscrot
     xdotool
     dmenu
     xcwd
