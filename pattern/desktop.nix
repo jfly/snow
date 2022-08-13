@@ -9,7 +9,7 @@ let
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
-  volnoti = pkgs.callPackage ../shared/volnoti.nix { };
+  volnoti = pkgs.callPackage ../shared/volnoti { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
 in
 {
