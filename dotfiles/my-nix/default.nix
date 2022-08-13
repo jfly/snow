@@ -43,7 +43,6 @@
   ### Desktop
   dunst = pkgs.callPackage ./dunst { };
   xmonad = pkgs.callPackage ../../shared/xmonad { };
-  volnoti = pkgs.callPackage ./volnoti.nix { };
   polybar = pkgs.callPackage ./polybar.nix { };
   # kodi needs to be wrapped with nixGL to run on non-NixOS distributions.
   kodi = wrapNixGL (pkgs.callPackage ./kodi { });
@@ -69,4 +68,8 @@
 
   # TODO: isolate to fixinputs
   capslockx = pkgs.callPackage ../../shared/capslockx { };
+
+  # TODO: remove one we're fully on nixos and no longer need this in our path
+  #       (it's referenced in xinitrc).
+  volnoti = pkgs.callPackage ../../shared/volnoti { };
 }

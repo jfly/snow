@@ -119,10 +119,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     -- Run demenu2 with custom font
     , ((modMask, xK_p), spawn "dmenu_run -fn 'Monospace:size=11:bold:antialias=true'")
 
-    , ((0, xF86XK_AudioMute), spawn "@jvol@/bin/jvol toggle-mute")
-    , ((0, xF86XK_AudioRaiseVolume), spawn "@jvol@/bin/jvol +5%")
-    , ((0, xF86XK_AudioLowerVolume), spawn $ "@jvol@/bin/jvol -5%")
-    , ((0, xF86XK_AudioMicMute), spawn "@jvol@/bin/jvol toggle-mic-mute")
+    , ((0, xF86XK_AudioMute), spawn "@jvol@/bin/jvol toggle sink")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "@jvol@/bin/jvol set sink 5%-")
+    , ((0, xF86XK_AudioLowerVolume), spawn $ "@jvol@/bin/jvol set sink 5%-")
+    , ((0, xF86XK_AudioMicMute), spawn "@jvol@/bin/jvol toggle source")
     , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
     , ((0, xF86XK_AudioPrev), spawn "mpc prev")
     , ((0, xF86XK_AudioNext), spawn "mpc next")

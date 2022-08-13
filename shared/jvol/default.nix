@@ -1,6 +1,11 @@
-{ pkgs }:
+{ pkgs ? (import ../../sources.nix).nixos-unstable { }
+, volnoti ? pkgs.callPackage (import ../volnoti) { }
+}:
 
-# TODO <<< actually fill this in with something real >>>
-pkgs.writeShellScriptBin "jvol" ''
-  echo "this is a placeholder"
-''
+with pkgs.python3Packages; buildPythonApplication {
+  pname = "jvol";
+  version = "1.0";
+  format = "pyproject";
+
+  src = ./.;
+}
