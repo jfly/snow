@@ -139,9 +139,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((modMask .|. shiftMask, xK_d), spawn "xdotool key --clearmodifiers XF86AudioPrev")
 
     -- Prompt the user for an area of the screen
-    -- note the sleep 0.2 as a workaround for the ancient:
-    --  https://code.google.com/p/xmonad/issues/detail?id=476
-    , ((0, xK_Print), spawn "sleep 0.2; @jscrot@/bin/jscrot --select")
+    , ((0, xK_Print), spawn "@jscrot@/bin/jscrot --select")
     , ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video")
     , ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot")
 
