@@ -52,8 +52,6 @@ windowPlacement = composeAll ([
         appName =? "picker" --> doFloat
     ] ++ workspaceSenders) where role = stringProperty "WM_WINDOW_ROLE"
 
-changeBrightness s = "sudo change-brightness.py " ++ s ++ "; show-brightness.sh"
-
 fullscreenChrome :: X ()
 fullscreenChrome = do
     sendMessage ToggleStruts
@@ -127,10 +125,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((0, xF86XK_AudioPrev), spawn "mpc prev")
     , ((0, xF86XK_AudioNext), spawn "mpc next")
 
-    , ((0, xF86XK_MonBrightnessDown), spawn $ changeBrightness "5%-")
-    , ((0, xF86XK_MonBrightnessUp), spawn $ changeBrightness "5%+")
-    , ((0, xF86XK_HomePage), spawn $ changeBrightness "5%-")
-    , ((0, xF86XK_Search), spawn $ changeBrightness "5%+")
+    , ((0, xF86XK_MonBrightnessDown), spawn "@jbright@/bin/jbright set 5%-")
+    , ((0, xF86XK_MonBrightnessUp), spawn "@jbright@/bin/jbright set 5%+")
     , ((shiftMask, xK_F4), spawn "colorscheme clear current")
     , ((shiftMask, xK_F5), spawn "colorscheme cycle current dark light")
     -- Create our own play/pause and prev/next buttons.

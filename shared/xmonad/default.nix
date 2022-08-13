@@ -4,13 +4,14 @@
 let
   jscrot = pkgs.callPackage ../jscrot { };
   jvol = pkgs.callPackage ../../shared/jvol { };
+  jbright = pkgs.callPackage ../../shared/jbright { };
   haskellPkgs = pkgs.haskellPackages;
   xmonadAndPackages = [ haskellPkgs.xmonad haskellPkgs.xmonad-contrib ];
   xmonadEnv = haskellPkgs.ghcWithPackages (p: xmonadAndPackages);
   xmonadHs = pkgs.substituteAll {
     src = ./xmonad.hs;
     inherit (pkgs) libnotify;
-    inherit jscrot jvol;
+    inherit jscrot jvol jbright;
   };
   configured = pkgs.writers.writeHaskellBin "xmonad"
     {

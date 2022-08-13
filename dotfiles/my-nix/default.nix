@@ -47,6 +47,11 @@
   # kodi needs to be wrapped with nixGL to run on non-NixOS distributions.
   kodi = wrapNixGL (pkgs.callPackage ./kodi { });
   with-alacritty = wrapNixGL (pkgs.callPackage ./with-alacritty { });
+  # I'm not sure if these really ought to be globally installed or not.
+  # xmonad is pointing at them directly, but maybe it's nice to be able
+  # to easily call them from the command line?
+  jvol = pkgs.callPackage ../../shared/jvol { };
+  jbright = pkgs.callPackage ../../shared/jbright { };
 
   ### Development
   xxd = pkgs.xxd;
