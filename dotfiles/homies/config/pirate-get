@@ -1,8 +1,0 @@
-[Misc]
-; specify a custom command for opening the magnet
-; ex. myprogram --open %s
-; %s represent the magnet uri
-openCommand = transmission-remote -a %s
-
-; Skip trying thepiratebay.org, since it never seems to work =(
-; mirror = ""

@@ -55,11 +55,6 @@
     ~/.themes: homies/themes
     ~/.config/gtk-3.0: homies/config/gtk-3.0
 
-    # clark specific
-    ~/.config/pirate-get:
-        if: '[ hostname = "clark" ]'
-        path: homies/config/pirate-get
-
     ~/.ssh: ~/Dropbox/linux-secrets/kaladin-ssh
     ~/.gnupg: ~/Dropbox/linux-secrets/gnupg/
     ~/.lolcommits: ~/Dropbox/pics/lolcommits
