@@ -59,7 +59,6 @@ in
 
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
-    # TODO: add blueman-applet
     # TODO: add xsettingsd
     # TODO: add gnome-keyring
     # TODO: add mcg
@@ -107,6 +106,17 @@ in
         ExecStart = "${pkgs.numlockx}/bin/numlockx on";
       };
     };
+  };
+
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+  # The blueman-applet service is defined in a way such that it is
+  # triggered by dbus. I'd rather just have it start up, so here we make
+  # some tweaks.
+  systemd.user.services."blueman-applet" = {
+    enable = true;
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
   };
 
   services.interception-tools = {
