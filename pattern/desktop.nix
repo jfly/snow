@@ -59,7 +59,6 @@ in
 
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
-    # TODO: enable numlock on boot
     # TODO: add blueman-applet
     # TODO: add xsettingsd
     # TODO: add gnome-keyring
@@ -96,6 +95,16 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${dunst}/bin/dunst";
+      };
+    };
+    "numlock-on" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.numlockx}/bin/numlockx on";
       };
     };
   };
