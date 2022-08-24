@@ -64,7 +64,6 @@ in
     # TODO: add xsettingsd
     # TODO: add gnome-keyring
     # TODO: add mcg
-    # TODO: set up ssh agent
 
     "polybar" = {
       enable = true;
@@ -110,6 +109,16 @@ in
             EV_KEY: [KEY_CAPSLOCK, KEY_ESC, KEY_SPACE]
     '';
   };
+
+  # Set up ssh agent
+  programs.ssh = {
+    startAgent = true;
+    enableAskPassword = true;
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+  };
+  environment.variables.SSH_ASKPASS_REQUIRE = "prefer";
 
   # Lock the screen on suspend. Trick copied from
   # https://wiki.archlinux.org/title/Slock#Lock_on_suspend.
