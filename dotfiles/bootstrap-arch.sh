@@ -17,6 +17,11 @@ doit() {
     ## Install some more things
     nix-env -irf my-nix '.*'
 
+    ## Install even more things
+    local home_manager
+    home_manager=$(nix-build my-nix -A home-manager --no-out-link)
+    "$home_manager/activate"
+
     ## Generate locales
     sudo locale-gen
 

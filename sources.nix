@@ -29,4 +29,11 @@
     # Hash obtained using `nix-prefetch-url --unpack <url>`
     sha256 = "18adz8bli9gq619mm8y7m8irjbh9dg0mg31wrrcrky7w3al8g7ph";
   });
+  home-manager-unstable = import (builtins.fetchTarball
+    {
+      name = "home-manager-unstable";
+      url = "https://github.com/nix-community/home-manager/archive/8675cfa549e1240c9d2abb1c878bc427eefcf926.tar.gz";
+      # Hash obtained using `nix-prefetch-url --unpack <url>`
+      sha256 = "0lw47ddid8x7cfg1c26h8v52x9nl667p0ha78rgvyxd6j6si8126";
+    } + "/home-manager/home-manager.nix");
 }

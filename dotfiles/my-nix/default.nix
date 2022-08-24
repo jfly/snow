@@ -1,9 +1,8 @@
 { pkgs ? (import ../../sources.nix).nixos-unstable { }
 , wrapNixGL ? pkgs.callPackage ./wrap-nixgl.nix { }
-,
 }:
 
-{
+rec {
   ### Media
   #### Beets
   beets = pkgs.beets;
@@ -77,4 +76,10 @@
   # TODO: remove one we're fully on nixos and no longer need this in our path
   #       (it's referenced in xinitrc).
   volnoti = pkgs.callPackage ../../shared/volnoti { };
+
+  home-manager = (pkgs.callPackage (import ../../sources.nix).home-manager-unstable
+    {
+      confPath = ../../shared/home.nix;
+      check = false;
+    }).activationPackage;
 }
