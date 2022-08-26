@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, lib, ... }:
 
 let
@@ -11,6 +7,11 @@ let
 in
 
 {
+  snow.user = {
+    name = "jeremy";
+    uid = 1000;
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
   nixpkgs = {
     system = "x86_64-linux";
@@ -19,7 +20,7 @@ in
     ];
   };
 
-  deployment.targetUser = "jeremy";
+  deployment.targetUser = config.snow.user.name;
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
   deployment.allowLocalDeployment = true;

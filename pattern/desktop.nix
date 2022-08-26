@@ -1,7 +1,6 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  username = "jeremy";
   alacritty = (pkgs.callPackage ../dotfiles/my-nix/with-alacritty { });
   polybar = pkgs.polybar.override {
     mpdSupport = true;
@@ -19,7 +18,7 @@ in
     displayManager = {
       defaultSession = "none+xmonad";
       autoLogin.enable = true;
-      autoLogin.user = username;
+      autoLogin.user = config.snow.user.name;
     };
     windowManager = {
       session = [{
@@ -33,6 +32,11 @@ in
     autoRepeatDelay = 300;
     autoRepeatInterval = 30;
   };
+
+  # Enable dconf. I'm a bit torn about this: some applications like to
+  # save settings here, which means if we reprovision, we lose those
+  # settings.
+  programs.dconf.enable = true;
 
   # Enable touchpad.
   services.xserver.libinput.enable = true;
@@ -60,9 +64,6 @@ in
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
     # TODO: add xsettingsd
-    # TODO: add gnome-keyring
-    # TODO: add mcg
-
     "polybar" = {
       enable = true;
       wantedBy = [ "graphical-session.target" ];
@@ -150,7 +151,7 @@ in
       wantedBy = [ "sleep.target" ];
       environment.DISPLAY = ":0";
       serviceConfig = {
-        User = username;
+        User = config.snow.user.name;
         ExecStartPre = "${pkgs.xorg.xset}/bin/xset dpms force suspend";
         ExecStart = "/run/wrappers/bin/slock"; # use the setuid slock wrapper
       };
