@@ -17,7 +17,7 @@ if [[ "$1" = "--rcfile" ]]; then
   rcfile="$2"
   source "$rcfile"
 
-  exec /usr/bin/zsh --emulate zsh
+  exec zsh --emulate zsh
 else
-  exec /usr/bin/bash "$@"
+  exec bash "$@"
 fi

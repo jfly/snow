@@ -13,11 +13,13 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 ###
 ### Load oh-my-zsh
 ###
-export ZSH=~/.oh-my-zsh
-plugins=(git)
-plugins+=(z)
-plugins+=(sd)
-[[ ! -f $ZSH/oh-my-zsh.sh ]] || source $ZSH/oh-my-zsh.sh
+if [ -z "$ZSH" ]; then
+    export ZSH=~/.oh-my-zsh
+    plugins=(git)
+    plugins+=(z)
+    plugins+=(sd)
+    source $ZSH/oh-my-zsh.sh
+fi
 ##################################
 
 ###
@@ -154,5 +156,5 @@ export NIX_PATH=""
 #   > your system's locale-achive.
 export LOCALE_ARCHIVE="${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
 # Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
-export NIX_BUILD_SHELL=nix-zshell
+export NIX_BUILD_SHELL=${NIX_BUILD_SHELL:-nix-zshell}
 ##################################
