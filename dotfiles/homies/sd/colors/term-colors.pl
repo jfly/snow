@@ -1,4 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env nix-shell
+#!nix-shell -i perl -p perl
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz
 
 use strict;
 

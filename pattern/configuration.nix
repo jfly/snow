@@ -31,6 +31,7 @@ in
       ./network.nix
       ./users.nix
       ./audio.nix
+      ./home.nix
       ./shell
       ./desktop.nix
     ];
@@ -47,8 +48,6 @@ in
   services.xserver.layout = "us";
 
   environment.systemPackages = with pkgs; [
-    vim
-    git
     ripgrep
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in

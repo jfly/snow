@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p python3
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz
 
 import sys
 from gitlib import parse_remote
@@ -8,7 +10,7 @@ import argparse
 
 # Subclass ArgumentParser to get help to print to stderr. This is nice because
 # callers expect this script to only print a path to stdout (see the `co`
-# function that calls this script).
+# shell function that calls this script).
 class StdErrParser(argparse.ArgumentParser):
     def print_help(self, *args, **kwargs):
         super().print_help(*args, **kwargs, file=sys.stderr)

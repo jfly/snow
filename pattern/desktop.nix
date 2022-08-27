@@ -46,7 +46,6 @@ in
   # information.
   # TODO: figure this out, it could be pretty cool =)
   services.xserver.videoDrivers = [ "modesetting" ];
-  services.xserver.useGlamor = true;
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
