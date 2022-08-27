@@ -1,3 +1,5 @@
+export HOSTNAME=$(hostname)
+
 ###
 ### Powerlevel10k
 ###
@@ -5,15 +7,18 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-ZSH_THEME="powerlevel10k/powerlevel10k"
+
+if [ "$HOSTNAME" = "dallben" ]; then
+    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+    source ~/.p10k.zsh
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+fi
 ##################################
 
 ###
 ### Load oh-my-zsh
 ###
-if [ -z "$ZSH" ]; then
+if [ "$HOSTNAME" = "dallben" ]; then
     export ZSH=~/.oh-my-zsh
     plugins=(git)
     plugins+=(z)
@@ -25,7 +30,9 @@ fi
 ###
 ### Load aliases
 ###
-[[ ! -f $HOME/.commonrc/aliases ]] || source ~/.commonrc/aliases
+if [ "$HOSTNAME" = "dallben" ]; then
+    source ~/.commonrc/aliases
+fi
 ##################################
 
 ###
@@ -39,10 +46,12 @@ export LESS="--no-init --quit-if-one-screen --RAW-CONTROL-CHARS"
 ### with-alacritty
 ###
 ##################################
-unset LD_LIBRARY_PATH
-unset LC_CTYPE
-unset LIBGL_DRIVERS_PATH
-unset LIBVA_DRIVERS_PATH
+if [ "$HOSTNAME" = "dallben" ]; then
+    unset LD_LIBRARY_PATH
+    unset LC_CTYPE
+    unset LIBGL_DRIVERS_PATH
+    unset LIBVA_DRIVERS_PATH
+fi
 
 ###
 ### Misc default programs
@@ -61,7 +70,9 @@ fi
 ### Set up asdf-vm + direnv
 ###
 export H4_SHIMLESS_DEVELOPMENT=1
-[[ ! -f $HOME/.h4.zshrc ]] || source $HOME/.h4.zshrc
+if [ "$HOSTNAME" = "dallben" ]; then
+    source $HOME/.h4.zshrc
+fi
 
 ## Python stuff
 # Make sure we never `pip install` things outside of a virtualenv.
@@ -74,7 +85,7 @@ export ASDF_PYTHON_PATCHES_DIRECTORY="$HOME/.dotfiles/asdf-python-patches"
 ###
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-if [ -d /usr/share/fzf ]; then
+if [ "$HOSTNAME" = "dallben" ]; then
     source /usr/share/fzf/key-bindings.zsh
     source /usr/share/fzf/completion.zsh
 fi
@@ -140,8 +151,10 @@ bindkey '\ec' fzf-commit-widget
 ### SSH
 ###
 ##################################
-export SSH_ASKPASS=mfa-askpass
-export SSH_ASKPASS_REQUIRE=force
+if [ "$HOSTNAME" = "dallben" ]; then
+    export SSH_ASKPASS=mfa-askpass
+    export SSH_ASKPASS_REQUIRE=force
+fi
 
 ###
 ### Nix
