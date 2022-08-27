@@ -1,15 +1,13 @@
 ###
 ### Powerlevel10k
 ###
-ZSH_THEME="powerlevel10k/powerlevel10k"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+ZSH_THEME="powerlevel10k/powerlevel10k"
 ##################################
 
 ###
@@ -19,13 +17,13 @@ export ZSH=~/.oh-my-zsh
 plugins=(git)
 plugins+=(z)
 plugins+=(sd)
-source $ZSH/oh-my-zsh.sh
+[[ ! -f $ZSH/oh-my-zsh.sh ]] || source $ZSH/oh-my-zsh.sh
 ##################################
 
 ###
 ### Load aliases
 ###
-source ~/.commonrc/aliases
+[[ ! -f $HOME/.commonrc/aliases ]] || source ~/.commonrc/aliases
 ##################################
 
 ###
@@ -61,7 +59,7 @@ fi
 ### Set up asdf-vm + direnv
 ###
 export H4_SHIMLESS_DEVELOPMENT=1
-source $HOME/.h4.zshrc
+[[ ! -f $HOME/.h4.zshrc ]] || source $HOME/.h4.zshrc
 
 ## Python stuff
 # Make sure we never `pip install` things outside of a virtualenv.
@@ -74,8 +72,10 @@ export ASDF_PYTHON_PATCHES_DIRECTORY="$HOME/.dotfiles/asdf-python-patches"
 ###
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+if [ -d /usr/share/fzf ]; then
+    source /usr/share/fzf/key-bindings.zsh
+    source /usr/share/fzf/completion.zsh
+fi
 ##################################
 
 ###
@@ -150,9 +150,9 @@ export SSH_ASKPASS_REQUIRE=force
 #  > channels and <nixpkgs> by always setting NIX_PATH= to be empty.
 export NIX_PATH=""
 # From https://nixos.wiki/wiki/Locales:
-#   > You may need to set the environmental variable LOCALE_ACHIVE to point to
+#   > You may need to set the environmental variable LOCALE_ARCHIVE to point to
 #   > your system's locale-achive.
-export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
+export LOCALE_ARCHIVE="${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
 # Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
 export NIX_BUILD_SHELL=nix-zshell
 ##################################

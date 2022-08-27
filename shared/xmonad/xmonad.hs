@@ -48,6 +48,7 @@ windowPlacement = composeAll ([
 
         -- Music stuff
         className =? "Mcg" --> doShift musicWs,
+        title =? "CoverGrid" --> doShift musicWs,
 
         appName =? "picker" --> doFloat
     ] ++ workspaceSenders) where role = stringProperty "WM_WINDOW_ROLE"

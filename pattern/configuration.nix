@@ -31,6 +31,7 @@ in
       ./network.nix
       ./users.nix
       ./audio.nix
+      ./shell
       ./desktop.nix
     ];
 
