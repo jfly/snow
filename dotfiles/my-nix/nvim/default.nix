@@ -26,6 +26,22 @@ let
       echo 'highlight! link diffAdded DiffAdd' >> $f
     '';
   });
+  conflictMarker = "<" + "<<";
+  tcommentOverrides = pkgs.writeText "tcomment-overrides" ''
+    " Add some missing definitions
+    call tcomment#type#Define('bash', '#${conflictMarker} %s')
+    call tcomment#type#Define('zsh', '#${conflictMarker} %s')
+    call tcomment#type#Define('dockerfile', '#${conflictMarker} %s')
+
+    " Override the c definition
+    call tcomment#type#Define('c', tcomment#GetLineC('//${conflictMarker} %s'))
+
+    " Override the Python definition to make black happy
+    call tcomment#type#Define('python', '# ${conflictMarker} %s')
+
+    " Override the VIM definition
+    call tcomment#type#Define('vim', '"${conflictMarker} %s')
+  '';
 in
 
 pkgs.neovim.override {
@@ -49,26 +65,17 @@ pkgs.neovim.override {
 
             # Match simple lines like:
             #     call tcomment#type#Define('aap', '# %s')
-            sed -i "s/\(Define('.*', *'\S\+\)\( %s.*\)/\1<<<\2/" $f
+            sed -i "s/\(Define('.*', *'\S\+\)\( %s.*\)/\1${conflictMarker}\2/" $f
 
             # Match lines like:
             #     call tcomment#type#Define('cpp', tcomment#GetLineC('// %s'))
-            sed -i "s/\(tcomment#GetLineC('\S\+\)\( %s\)/\1<<<\2/" $f
+            sed -i "s/\(tcomment#GetLineC('\S\+\)\( %s\)/\1${conflictMarker}\2/" $f
 
             # Match lines like:
             #     call tcomment#type#Define('clojure', {'commentstring': '; %s', 'count': 2})
-            sed -i "s/\('commentstring': \+'\S\+\)\( %s\)/\1<<<\2/" $f
+            sed -i "s/\('commentstring': \+'\S\+\)\( %s\)/\1${conflictMarker}\2/" $f
 
-            # Add some missing definitions
-            echo "call tcomment#type#Define('bash', '#<<< %s')" >> $f
-            echo "call tcomment#type#Define('zsh', '#<<< %s')" >> $f
-            echo "call tcomment#type#Define('dockerfile', '#<<< %s')" >> $f
-
-            # Override the c definition
-            echo "call tcomment#type#Define('c', tcomment#GetLineC('//<<< %s'))" >> $f
-
-            # Override the Python definition to make black happy
-            echo "call tcomment#type#Define('python', '# <<< %s')" >> $f
+            cat ${tcommentOverrides} >> $f
           '';
         }))
 
