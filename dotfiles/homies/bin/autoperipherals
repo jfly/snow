@@ -18,53 +18,22 @@ function main() {
         XFT_DPI=$((1024 * 96))
 
         xrandr --output HDMI1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off --output eDP1 --off --output DP2 --off
-
-        # Switch to HDMI audio.
-        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
     elif [ "$DP1_STATUS" == "connected" ]; then
         LAYOUT_NAME=dp1
         XFT_DPI=$((1024 * 96))
 
         xrandr --output DP1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
-        # Switch to HDMI audio.
-        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
-
-        # Disable wifi and connect to ethernet.
-        # TODO - only do this at honor, not at SF desk...
-        # sudo nmcli device disconnect wlp4s0
-        # sudo nmcli device connect eth0
     elif [ "$DP2_STATUS" == "connected" ] || [ "$DP4_STATUS" == "connected" ] || [ "$DP5_STATUS" == "connected" ]; then
         LAYOUT_NAME=dp4
         XFT_DPI=$((1024 * 96))
 
         xrandr --output DP1-2 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
         # Switch to HDMI audio.
-        # TODO - for some reason, only one of these profiles is available, but it seems to change randomly.
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:analog-stereo
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo+input:stereo-fallback
-
-        # Disable wifi and connect to ethernet.
-        # TODO - only do this at honor, not at SF desk...
-        # sudo nmcli device disconnect wlp4s0
-        # sudo nmcli device connect eth0
     else
         LAYOUT_NAME=mobile
         XFT_DPI=$((1024 * 133))
 
         xrandr --output HDMI1 --off --output VIRTUAL1 --off --output DP1 --off --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP2 --off
-
-        # Switch to laptop speakers.
-        pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo+input:analog-stereo
-
-        # Disable ethernet and connect to wifi.
-        # TODO - unclear why we need the sudo here. Without it, I get "Error:
-        # Device activation failed: Not authorized to control networking."
-        # sudo nmcli device disconnect eth0
-        # sudo nmcli device connect wlp4s0
     fi
 
     setbg

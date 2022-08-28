@@ -226,5 +226,9 @@ in
     xdotool
     dmenu
     xcwd
+
+    # TODO: consolidate with autoperipherals
+    libnotify
+    bc
   ];
 }
