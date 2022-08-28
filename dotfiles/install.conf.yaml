@@ -24,8 +24,6 @@
     ~/.zprofile: homies/zprofile
     ~/.commonrc: homies/commonrc
 
-    ~/bin: homies/bin
-    ~/sd: homies/sd
     ~/.config/with-alacritty: homies/config/with-alacritty
     ~/.config/chromium-flags.conf: homies/config/chromium-flags.conf
     ~/.config/fontconfig: homies/config/fontconfig

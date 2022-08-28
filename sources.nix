@@ -36,6 +36,6 @@ rec {
       # Hash obtained using `nix-prefetch-url --unpack <url>`
       sha256 = "0lw47ddid8x7cfg1c26h8v52x9nl667p0ha78rgvyxd6j6si8126";
     };
-  home-manager-unstable = import (home-manager-unstable-tarball + "/home-manager/home-manager.nix");
+  home-manager-modules = import (home-manager-unstable-tarball + "/modules");
   home-manager-nixos = import (home-manager-unstable-tarball + "/nixos");
 }

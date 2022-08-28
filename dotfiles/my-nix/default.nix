@@ -77,9 +77,11 @@ rec {
   #       (it's referenced in xinitrc).
   volnoti = pkgs.callPackage ../../shared/volnoti { };
 
-  home-manager = (pkgs.callPackage (import ../../sources.nix).home-manager-unstable
+  home-manager = (pkgs.callPackage (import ../../sources.nix).home-manager-modules
     {
-      confPath = ../../shared/home.nix;
+      configuration = import ../../shared/home.nix {
+        username = "jeremy";
+      };
       check = false;
     }).activationPackage;
 }

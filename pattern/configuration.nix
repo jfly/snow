@@ -31,7 +31,7 @@ in
       ./network.nix
       ./users.nix
       ./audio.nix
-      ./home.nix
+      ./home-manager.nix
       ./shell
       ./desktop.nix
     ];
@@ -49,6 +49,7 @@ in
 
   environment.systemPackages = with pkgs; [
     ripgrep
+    (pkgs.callPackage ../shared/sd { })
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in
     # dotfiles/my-nix.
