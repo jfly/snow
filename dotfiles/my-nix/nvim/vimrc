@@ -373,87 +373,86 @@ lua << EOF
         },
       }
     end
-EOF
-"""""""
 
--- Filter out noisy diagnostics messages from pyright
--- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
-function filter(arr, func)
-    -- Filter in place
-    -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
-    local new_index = 1
-    local size_orig = #arr
-    for old_index, v in ipairs(arr) do
-        if func(v, old_index) then
-            arr[new_index] = v
-            new_index = new_index + 1
+    -- Filter out noisy diagnostics messages from pyright
+    -- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
+    function filter(arr, func)
+        -- Filter in place
+        -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
+        local new_index = 1
+        local size_orig = #arr
+        for old_index, v in ipairs(arr) do
+            if func(v, old_index) then
+                arr[new_index] = v
+                new_index = new_index + 1
+            end
         end
+        for i = new_index, size_orig do arr[i] = nil end
     end
-    for i = new_index, size_orig do arr[i] = nil end
-end
-function filter_diagnostics(diagnostic)
-    -- Only filter out Pyright stuff for now
-    if diagnostic.source ~= "Pyright" then
+    function filter_diagnostics(diagnostic)
+        -- Only filter out Pyright stuff for now
+        if diagnostic.source ~= "Pyright" then
+            return true
+        end
+
+        -- Allow kwargs to be unused, sometimes you want many functions to take the
+        -- same arguments but you don't use all the arguments in all the functions,
+        -- so kwargs is used to suck up all the extras
+        if diagnostic.message == '"kwargs" is not accessed' then
+            return false
+        end
+
+        -- Allow variables starting with an underscore
+        if string.match(diagnostic.message, '"_.+" is not accessed') then
+            return false
+        end
+
         return true
     end
-
-    -- Allow kwargs to be unused, sometimes you want many functions to take the
-    -- same arguments but you don't use all the arguments in all the functions,
-    -- so kwargs is used to suck up all the extras
-    if diagnostic.message == '"kwargs" is not accessed' then
-        return false
+    function custom_on_publish_diagnostics(a, params, client_id, c, config)
+        filter(params.diagnostics, filter_diagnostics)
+        vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
     end
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(custom_on_publish_diagnostics, {})
 
-    -- Allow variables starting with an underscore
-    if string.match(diagnostic.message, '"_.+" is not accessed') then
-        return false
-    end
+    -- Set completeopt to have a better completion experience
+    vim.o.completeopt = 'menuone,noselect'
 
-    return true
-end
-function custom_on_publish_diagnostics(a, params, client_id, c, config)
-    filter(params.diagnostics, filter_diagnostics)
-    vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
-end
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(custom_on_publish_diagnostics, {})
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
-
--- nvim-cmp setup
-local cmp = require 'cmp'
-cmp.setup {
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end,
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-  },
-}
+    -- nvim-cmp setup
+    local cmp = require 'cmp'
+    cmp.setup {
+      mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm {
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = true,
+        },
+        ['<Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          else
+            fallback()
+          end
+        end,
+        ['<S-Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          else
+            fallback()
+          end
+        end,
+      },
+      sources = {
+        { name = 'nvim_lsp' },
+      },
+    }
 EOF
+"""""""
 
 """""""
 " Copied from https://github.com/FatBoyXPC/dotfiles/commit/1bae9190f0d4291d08850bf5483986f185bc26fd
