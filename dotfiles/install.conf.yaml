@@ -17,8 +17,6 @@
     - ~/Dropbox/pics/lolcommits
 
 - link:
-    ~/.dotfiles: ""
-
     ~/.bash_profile: homies/bash_profile
     ~/.bashrc: homies/bashrc
     ~/.zprofile: homies/zprofile
@@ -27,7 +25,6 @@
     ~/.config/with-alacritty: homies/config/with-alacritty
     ~/.config/chromium-flags.conf: homies/config/chromium-flags.conf
     ~/.config/fontconfig: homies/config/fontconfig
-    ~/.config/git: homies/config/git
     ~/.config/mpd/mpd.conf: homies/config/mpd/mpd.conf
     ~/.config/polybar: homies/config/polybar
     ~/.config/systemd: homies/config/systemd
@@ -36,8 +33,6 @@
     ~/.config/direnv/lib: homies/config/direnv/lib
     ~/.config/wireplumber: homies/config/wireplumber
     ~/.docker/config.json: homies/docker/config.json
-    ~/.gitconfig: homies/gitconfig
-    ~/.gitignore_global: homies/gitignore_global
     ~/.local/share/icons/jfly-icons: homies/.local/share/icons/jfly-icons
     ~/.jupyter/nbconfig: homies/jupyter/nbconfig
     ~/.mplayer: homies/mplayer

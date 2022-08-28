@@ -10,5 +10,9 @@
     home-manager.users.${config.snow.user.name} = (import ../shared/home.nix {
       username = config.snow.user.name;
     });
+
+    environment.systemPackages = with pkgs; [
+      delta # TODO: consolidate with git configuration
+    ];
   };
 }
