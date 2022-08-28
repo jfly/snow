@@ -14,7 +14,7 @@ let
     # below.
     postBuild = ''
       for f in $out/bin/*; do
-          wrapProgram $f --set ALACRITTY_TWEAKER_ALACRITTY_BIN ${alacritty}/bin/alacritty
+          wrapProgram $f --set WITH_ALACRITTY_RAW_ALACRITTY_BIN ${alacritty}/bin/alacritty
       done
     '';
   };

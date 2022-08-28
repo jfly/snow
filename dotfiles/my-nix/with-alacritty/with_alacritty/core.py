@@ -291,5 +291,5 @@ def start_new_terminal(args: list[str]):
     # invokes `with-alacritty alacritty`, so every single time they start
     # alacritty, they're actually starting a wrapped alacritty that can be
     # configured by with-alacritty.
-    alacritty_bin = os.environ.get("ALACRITTY_TWEAKER_ALACRITTY_BIN", "alacritty")
+    alacritty_bin = os.environ.get("WITH_ALACRITTY_RAW_ALACRITTY_BIN", "alacritty")
     os.execvp(alacritty_bin, ["alacritty", "--config-file", str(merged_path), *args])
