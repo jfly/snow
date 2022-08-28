@@ -287,15 +287,14 @@ autocmd FileType python nnoremap <leader>o o__import__('os').environ['JFLY'] = '
 autocmd FileType python nnoremap <leader>l oif __import__('os').environ.get('JFLY'): __import__('pdb').set_trace()#<<<<Esc>
 """""""
 
-if has('nvim')
-    map ]s :lua vim.diagnostic.goto_next()<cr>
-    map [s :lua vim.diagnostic.goto_prev()<cr>
+""""""" LSP configuration
+map ]s :lua vim.diagnostic.goto_next()<cr>
+map [s :lua vim.diagnostic.goto_prev()<cr>
 
-    " Configuration modified from
-    " https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion and
-    " https://github.com/hrsh7th/nvim-cmp/#recommended-configuration
-    lua << EOF
-
+" Configuration modified from
+" https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion and
+" https://github.com/hrsh7th/nvim-cmp/#recommended-configuration
+lua << EOF
     -- Copied from https://github.com/neovim/nvim-lspconfig/wiki/UI-customization#change-diagnostic-symbols-in-the-sign-column-gutter
     local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
     for type, icon in pairs(signs) do
@@ -374,101 +373,87 @@ if has('nvim')
         },
       }
     end
+EOF
+"""""""
 
-    -- Filter out noisy diagnostics messages from pyright
-    -- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
-    function filter(arr, func)
-        -- Filter in place
-        -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
-        local new_index = 1
-        local size_orig = #arr
-        for old_index, v in ipairs(arr) do
-            if func(v, old_index) then
-                arr[new_index] = v
-                new_index = new_index + 1
-            end
+-- Filter out noisy diagnostics messages from pyright
+-- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
+function filter(arr, func)
+    -- Filter in place
+    -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
+    local new_index = 1
+    local size_orig = #arr
+    for old_index, v in ipairs(arr) do
+        if func(v, old_index) then
+            arr[new_index] = v
+            new_index = new_index + 1
         end
-        for i = new_index, size_orig do arr[i] = nil end
     end
-    function filter_diagnostics(diagnostic)
-        -- Only filter out Pyright stuff for now
-        if diagnostic.source ~= "Pyright" then
-            return true
-        end
-
-        -- Allow kwargs to be unused, sometimes you want many functions to take the
-        -- same arguments but you don't use all the arguments in all the functions,
-        -- so kwargs is used to suck up all the extras
-        if diagnostic.message == '"kwargs" is not accessed' then
-            return false
-        end
-
-        -- Allow variables starting with an underscore
-        if string.match(diagnostic.message, '"_.+" is not accessed') then
-            return false
-        end
-
+    for i = new_index, size_orig do arr[i] = nil end
+end
+function filter_diagnostics(diagnostic)
+    -- Only filter out Pyright stuff for now
+    if diagnostic.source ~= "Pyright" then
         return true
     end
-    function custom_on_publish_diagnostics(a, params, client_id, c, config)
-        filter(params.diagnostics, filter_diagnostics)
-        vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
+
+    -- Allow kwargs to be unused, sometimes you want many functions to take the
+    -- same arguments but you don't use all the arguments in all the functions,
+    -- so kwargs is used to suck up all the extras
+    if diagnostic.message == '"kwargs" is not accessed' then
+        return false
     end
-    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(custom_on_publish_diagnostics, {})
 
-    -- Set completeopt to have a better completion experience
-    vim.o.completeopt = 'menuone,noselect'
+    -- Allow variables starting with an underscore
+    if string.match(diagnostic.message, '"_.+" is not accessed') then
+        return false
+    end
 
-    -- nvim-cmp setup
-    local cmp = require 'cmp'
-    cmp.setup {
-      mapping = {
-        ['<C-p>'] = cmp.mapping.select_prev_item(),
-        ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm {
-          behavior = cmp.ConfirmBehavior.Replace,
-          select = true,
-        },
-        ['<Tab>'] = function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          else
-            fallback()
-          end
-        end,
-        ['<S-Tab>'] = function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          else
-            fallback()
-          end
-        end,
-      },
-      sources = {
-        { name = 'nvim_lsp' },
-      },
-    }
-EOF
-else
-    """"""" Configure coc
-    "<<< let g:coc_global_extensions = ['coc-tsserver']
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-    function! s:show_documentation()
-      if &filetype == 'vim'
-        execute 'h '.expand('<cword>')
+    return true
+end
+function custom_on_publish_diagnostics(a, params, client_id, c, config)
+    filter(params.diagnostics, filter_diagnostics)
+    vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
+end
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(custom_on_publish_diagnostics, {})
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noselect'
+
+-- nvim-cmp setup
+local cmp = require 'cmp'
+cmp.setup {
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
       else
-        call CocAction('doHover')
-      endif
-    endfunction
-    nmap <silent> <leader>g <Plug>(coc-definition)
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gr <Plug>(coc-references)
-    """""""
-endif
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end,
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+  },
+}
+EOF
 
 """""""
 " Copied from https://github.com/FatBoyXPC/dotfiles/commit/1bae9190f0d4291d08850bf5483986f185bc26fd
