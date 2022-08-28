@@ -1,27 +1,32 @@
 import configparser
 import pathlib
-import re
 import subprocess
-import sys
 import tempfile
-from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Dict, List, Set
+from typing import Dict, List
 
-from .types import (BleKey, BluetoothDevice, IdentityResolvingKey,
-                    LocalSignatureKey, LongTermKey, MacAddress)
+from .types import (
+    BleKey,
+    BluetoothDevice,
+    IdentityResolvingKey,
+    LocalSignatureKey,
+    LongTermKey,
+    MacAddress,
+)
 
 
 def get_only_element(arr):
     assert len(arr) == 1, f"Expected exactly 1 element in: {arr}"
     return arr[0]
 
+
 @dataclass
 class RegistryNode:
     parent_path: str
     name: str
-    subnode_by_name: Dict[str, 'RegistryNode']
+    subnode_by_name: Dict[str, "RegistryNode"]
     value_by_name: Dict[str, bytes]
+
 
 class Registry:
     def __init__(self, path_to_registry: pathlib.Path):
@@ -29,20 +34,25 @@ class Registry:
 
     def read_path(self, path_in_registry):
         out = tempfile.mktemp(".reg")
-        subprocess.check_call([
-            "reged",
-            "-x",
-            str(self._path_to_registry),
-            "\\",
-            path_in_registry,
-            out,
-        ], stdout=subprocess.DEVNULL)
+        subprocess.check_call(
+            [
+                "reged",
+                "-x",
+                str(self._path_to_registry),
+                "\\",
+                path_in_registry,
+                out,
+            ],
+            stdout=subprocess.DEVNULL,
+        )
         with open(out, "r") as file:
             raw_reg_contents = file.read()
             # Skip the "Windows Registry Editor ..." first line.
             raw_reg_contents = raw_reg_contents.split("\n", 1)[1]
         config = configparser.ConfigParser()
-        config.optionxform = str  # Preserve the case of the option names
+        config.optionxform = lambda optionstr: str(
+            optionstr
+        )  # Preserve the case of the option names
         config.read_string(raw_reg_contents, str(self._path_to_registry))
 
         node_by_path = {}
@@ -66,7 +76,7 @@ class Registry:
                 node_by_path[node.parent_path].subnode_by_name[node.name] = node
 
         root_keys = list(root_nodes.keys())
-        root_keys.remove('DEFAULT')
+        root_keys.remove("DEFAULT")
         root_key = get_only_element(root_keys)
         return root_nodes[root_key]
 
@@ -112,13 +122,12 @@ class Registry:
             # hex(b):<QWORD value (as comma-delimited list of 8 hexadecimal values, in little endian byte order)>
             values = raw_data.split(",")[::-1]
             assert len(values) == 8
-            value = int(''.join(values), 16)
+            value = int("".join(values), 16)
         elif win_type == "dword":
             value = int(raw_data, 16)
-        elif win_type == 'Fingerprint':
-            value = "TODO" #<<<
+        elif win_type == "Fingerprint":
+            assert False  # TODO: implement?
         else:
-            __import__('pdb').set_trace()#<<<
             assert False, f"Unrecognized type: {win_type}"
 
         return value
@@ -131,17 +140,21 @@ class Windows:
         self._devices_node = self._registry.read_path(devices_path)
 
     def _get_device_name(self, mac_address):
-        device_node = self._devices_node.subnode_by_name[mac_address.format(caps=False, separator='')]
-        name = device_node.value_by_name['Name']
+        device_node = self._devices_node.subnode_by_name[
+            mac_address.format(caps=False, separator="")
+        ]
+        name = device_node.value_by_name["Name"]
         # Remove null terminator
         assert name[-1] == 0
         name = name[:-1]
-        return name.decode('utf8')
+        return name.decode("utf8")
 
     def get_devices(self, adapter: MacAddress) -> List[BluetoothDevice]:
-        keys_path = fr"ControlSet001\Services\BTHPORT\Parameters\Keys"
+        keys_path = rf"ControlSet001\Services\BTHPORT\Parameters\Keys"
         keys_node = self._registry.read_path(keys_path)
-        adapter_node = keys_node.subnode_by_name[adapter.format(caps=False, separator='')]
+        adapter_node = keys_node.subnode_by_name[
+            adapter.format(caps=False, separator="")
+        ]
 
         devices = []
 
@@ -166,13 +179,15 @@ class Windows:
             mac_address = MacAddress(key)
             link_key = BleKey(
                 long_term_key=LongTermKey(
-                    key=node.value_by_name['LTK'],
-                    key_length=node.value_by_name['KeyLength'],
-                    rand=node.value_by_name['ERand'],
-                    e_div=node.value_by_name['EDIV'],
+                    key=node.value_by_name["LTK"],
+                    key_length=node.value_by_name["KeyLength"],
+                    rand=node.value_by_name["ERand"],
+                    e_div=node.value_by_name["EDIV"],
                 ),
-                identity_resolving_key=IdentityResolvingKey(key=node.value_by_name['IRK']),
-                local_signature_key=LocalSignatureKey(key=node.value_by_name['CSRK']),
+                identity_resolving_key=IdentityResolvingKey(
+                    key=node.value_by_name["IRK"]
+                ),
+                local_signature_key=LocalSignatureKey(key=node.value_by_name["CSRK"]),
             )
             device = BluetoothDevice(
                 mac_address=mac_address,
