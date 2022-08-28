@@ -23,6 +23,10 @@ in
       bin = ../dotfiles/homies/bin;
       ".config/git" = ../dotfiles/homies/config/git;
       ".gitignore_global" = ../dotfiles/homies/gitignore_global;
+
+      # Create and set a custom GTK theme.
+      ".themes" = ../dotfiles/homies/themes;
+      ".config/gtk-3.0" = ../dotfiles/homies/config/gtk-3.0;
     }) // {
     # zsh really wants this file to exist. If it doesn't, it'll give
     # us a friendly (but *annoying*) welcome message.

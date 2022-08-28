@@ -33,7 +33,6 @@
     ~/.config/direnv/lib: homies/config/direnv/lib
     ~/.config/wireplumber: homies/config/wireplumber
     ~/.docker/config.json: homies/docker/config.json
-    ~/.local/share/icons/jfly-icons: homies/.local/share/icons/jfly-icons
     ~/.jupyter/nbconfig: homies/jupyter/nbconfig
     ~/.mplayer: homies/mplayer
     ~/.p10k.zsh: homies/p10k.zsh
@@ -42,10 +41,6 @@
     ~/.tmux.conf: homies/tmux.conf
     ~/.xinitrc: homies/xinitrc
     ~/.Xresources: homies/Xresources
-
-    # Create and set a custom GTK theme.
-    ~/.themes: homies/themes
-    ~/.config/gtk-3.0: homies/config/gtk-3.0
 
     ~/.ssh: ~/Dropbox/linux-secrets/kaladin-ssh
     ~/.gnupg: ~/Dropbox/linux-secrets/gnupg/
