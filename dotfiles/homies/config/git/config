@@ -20,7 +20,6 @@
 	recurseSubmodules = check
 [core]
 	excludesfile = ~/.gitignore_global
-	pager = delta --diff-so-fancy --dark
 [credential]
 	helper = cache --timeout=3600
 [pager]
@@ -70,3 +69,20 @@
 	submoduleSummary = true
 [remote "origin"]
 	prune = true
+
+###
+### Delta configuration (copied from
+### https://github.com/dandavison/delta#get-started)
+###
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true  # use n and N to move between diff sections
+	syntax-theme = base16
+[merge]
+	conflictstyle = diff3
+[diff]
+	colorMoved = default
+#####
