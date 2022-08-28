@@ -58,8 +58,6 @@ in
 
   programs.nm-applet.enable = true;
 
-  # TODO: set up fonts
-
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
     # TODO: add xsettingsd
@@ -157,6 +155,30 @@ in
     };
   };
 
+  ###
+  ### Fonts!
+  ###
+  fonts =
+    {
+      fontDir.enable = true;
+      # Disable the default fonts, things are more predictable that way.
+      enableDefaultFonts = false;
+      fonts = with pkgs; [
+        (nerdfonts.override {
+          fonts = [
+            "UbuntuMono" # my preferred monospace font
+            "Noto" # has emojis
+          ];
+        })
+      ];
+      fontconfig = {
+        defaultFonts = {
+          monospace = [ "UbuntuMono Nerd Font Mono" ];
+        };
+      };
+    };
+  ##########
+
   nixpkgs.config.chromium.commandLineArgs = builtins.concatStringsSep " " [
     "--enable-features=VaapiVideoDecoder"
     "--disable-features=UseChromeOSDirectVideoDecoder"
@@ -186,12 +208,18 @@ in
     yt-dlp
     evince
 
+    ### Compression/archives
+    unzip
+
     ### Debugging
     arandr
     xorg.xkill
     xorg.xev
     libva-utils
     glxinfo
+
+    ### Debugging fonts
+    gucharmap
 
     # TODO: consolidate with xmonad
     alacritty
