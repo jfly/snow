@@ -111,3 +111,5 @@ AddPackage --foreign amazon-ecr-credential-helper # A credential helper for the 
 # Needed to compile thrift
 AddPackage flex    # A tool for generating text-scanning programs
 AddPackage pkgconf # Package compiler and linker metadata toolkit
+# Experimental new tool
+AddPackage --foreign aws-sam-cli-bin # CLI tool to build, test, debug, and deploy Serverless applications using AWS SAM

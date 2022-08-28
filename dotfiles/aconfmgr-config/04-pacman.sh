@@ -29,11 +29,6 @@ AddPackage --foreign pacaur # An AUR helper that minimizes user interaction
 
 ### GPG
 AddPackage gnupg
-CreateLink /etc/systemd/user/sockets.target.wants/dirmngr.socket /usr/lib/systemd/user/dirmngr.socket
-CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-browser.socket /usr/lib/systemd/user/gpg-agent-browser.socket
-CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-extra.socket /usr/lib/systemd/user/gpg-agent-extra.socket
-CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-ssh.socket /usr/lib/systemd/user/gpg-agent-ssh.socket
-CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent.socket /usr/lib/systemd/user/gpg-agent.socket
 
 ### Auto update pacman mirrorlist
 AddPackage reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list.

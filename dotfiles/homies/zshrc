@@ -8,7 +8,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
     source ~/.p10k.zsh
     ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -18,7 +18,7 @@ fi
 ###
 ### Load oh-my-zsh
 ###
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     export ZSH=~/.oh-my-zsh
     plugins=(git)
     plugins+=(z)
@@ -30,7 +30,7 @@ fi
 ###
 ### Load aliases
 ###
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     source ~/.commonrc/aliases
 fi
 ##################################
@@ -46,7 +46,7 @@ export LESS="--no-init --quit-if-one-screen --RAW-CONTROL-CHARS"
 ### with-alacritty
 ###
 ##################################
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     unset LD_LIBRARY_PATH
     unset LC_CTYPE
     unset LIBGL_DRIVERS_PATH
@@ -70,7 +70,7 @@ fi
 ### Set up asdf-vm + direnv
 ###
 export H4_SHIMLESS_DEVELOPMENT=1
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     source $HOME/.h4.zshrc
 fi
 
@@ -85,7 +85,7 @@ export ASDF_PYTHON_PATCHES_DIRECTORY="$HOME/.dotfiles/asdf-python-patches"
 ###
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     source /usr/share/fzf/key-bindings.zsh
     source /usr/share/fzf/completion.zsh
 fi
@@ -151,7 +151,7 @@ bindkey '\ec' fzf-commit-widget
 ### SSH
 ###
 ##################################
-if [ "$HOSTNAME" = "dallben" ]; then
+if [ "$HOSTNAME" = "dalinar" ]; then
     export SSH_ASKPASS=mfa-askpass
     export SSH_ASKPASS_REQUIRE=force
 fi
@@ -169,5 +169,5 @@ export NIX_PATH=""
 #   > your system's locale-achive.
 export LOCALE_ARCHIVE="${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
 # Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
-export NIX_BUILD_SHELL=${NIX_BUILD_SHELL:-nix-zshell}
+export NIX_BUILD_SHELL=nix-zshell
 ##################################

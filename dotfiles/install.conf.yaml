@@ -19,7 +19,6 @@
 - link:
     ~/.bash_profile: homies/bash_profile
     ~/.bashrc: homies/bashrc
-    ~/.zprofile: homies/zprofile
     ~/.commonrc: homies/commonrc
 
     ~/.config/with-alacritty: homies/config/with-alacritty

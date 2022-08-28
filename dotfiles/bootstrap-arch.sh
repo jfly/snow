@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 cd "$(dirname "$0")"
 
 if [ "$EUID" -eq 0 ]; then

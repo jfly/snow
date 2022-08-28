@@ -16,9 +16,6 @@
 
     source ${../../dotfiles/homies/zshrc}
     source ${../../dotfiles/homies/commonrc/aliases}
-
-    # Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
-    export NIX_BUILD_SHELL=${./nix-zshell}
   '';
 
   environment.systemPackages = with pkgs; [

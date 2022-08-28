@@ -1,5 +1,9 @@
-#/bin/sh
+#!/usr/bin/env bash
 
 WAV_FOLDER=$(dirname "$0")/wav
 
-"$@" && ( play $WAV_FOLDER/ootinee.wav > /dev/null & ) || ( play $WAV_FOLDER/doh.wav > /dev/null & )
+if "$@"; then
+    play -q "$WAV_FOLDER/ootinee.wav" &
+else
+    play -q "$WAV_FOLDER/doh.wav" &
+fi

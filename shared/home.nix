@@ -29,15 +29,37 @@ in
       ".themes" = ../dotfiles/homies/themes;
       ".config/gtk-3.0" = ../dotfiles/homies/config/gtk-3.0;
     }) // {
-    # zsh really wants this file to exist. If it doesn't, it'll give
-    # us a friendly (but *annoying*) welcome message.
-    ".zshrc".text = "";
+    ".zshrc".text = ''
+      if [ "$(hostname)" = "dalinar" ]; then
+        source ${../dotfiles/homies/zshrc}
+      else
+        true
+        # zsh really wants this file to exist. If it doesn't, it'll give
+        # us a friendly (but *annoying*) welcome message.
+      fi
+    '';
     ".profile".text = ''
-      # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
-      # This is a workaround for
-      # https://github.com/NixOS/nixpkgs/issues/188545.
-      if [ -z "$_DID_SYSTEMD_CAT" ]; then
-        export PATH=$HOME/bin:$PATH
+      if [ "$(hostname)" = "dalinar" ]; then
+        # Start with a fresh PATH.
+        export PATH=""
+
+        source ~/.commonrc/path.sh
+
+        ###
+        ### Workaround for that ridiculous Java bug on xmonad
+        ### https://wiki.archlinux.org/index.php/Java#Applications_not_resizing_with_WM.2C_menus_immediately_closing
+        ###
+        export _JAVA_AWT_WM_NONREPARENTING=1
+
+        # startx at login
+        [[ -z $DISPLAY && $XDG_VTNR -eq 1 && -z $TMUX ]] && exec startx
+      else
+        # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
+        # This is a workaround for
+        # https://github.com/NixOS/nixpkgs/issues/188545.
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          export PATH=$HOME/bin:$PATH
+        fi
       fi
     '';
     ".zprofile".text = ''
