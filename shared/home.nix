@@ -19,6 +19,7 @@ in
     (name: target:
       lib.nameValuePair name (link target))
     {
+      ".dotfiles" = ../dotfiles;
       sd = ../dotfiles/homies/sd;
       bin = ../dotfiles/homies/bin;
       ".config/git" = ../dotfiles/homies/config/git;

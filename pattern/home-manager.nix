@@ -13,6 +13,7 @@
 
     environment.systemPackages = with pkgs; [
       delta # TODO: consolidate with git configuration
+      jq # TODO: ~/bin/colorscheme needs this
     ];
   };
 }
