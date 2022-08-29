@@ -17,7 +17,7 @@
     idle_threshold = 120
 
     ### Text ###
-    font = Monospace 11
+    font = Monospace 14
     line_height = 0
     markup = full
     format = "<b>%s</b>\n%b"
@@ -30,16 +30,18 @@
     show_indicators = true
 
     ### Icons ###
+    enable_recursive_icon_lookup = true
+    icon_theme = Adwaita
     icon_position = left
     max_icon_size = 128
-    icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
 
     ### History ###
     sticky_history = true
     history_length = 20
 
     ### Misc/Advanced ###
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = @dmenu@/bin/dmenu -p dunst:
+    browser = @xdg_utils@/bin/xdg-open
     always_run_script = true
     title = Dunst
     class = Dunst

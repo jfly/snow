@@ -54,19 +54,6 @@ if [ "$HOSTNAME" = "dalinar" ]; then
 fi
 
 ###
-### Misc default programs
-###
-export VISUAL=vim
-export EDITOR=vim
-
-if [ -n "$DISPLAY" ]; then
-    export BROWSER=chromium
-else
-    export BROWSER=elinks
-fi
-##################################
-
-###
 ### Set up asdf-vm + direnv
 ###
 export H4_SHIMLESS_DEVELOPMENT=1

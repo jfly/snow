@@ -58,6 +58,11 @@ in
 
   programs.nm-applet.enable = true;
 
+  services.xserver.displayManager.importedVariables = [
+    "PATH"
+    "BROWSER"
+  ];
+
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
     # TODO: add xsettingsd
@@ -90,6 +95,15 @@ in
       enable = true;
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
+      # stage2ServiceConfig in nixos/lib/systemd-lib.nix really wants to give
+      # us a default PATH. However, dunst currently uses xdg-open to fire up a
+      # browser, and *that* needs a PATH with whatever default browser we've
+      # got set up. So, it's better to use systemctl's "user environment block"
+      # (populated by xsessionWrapper when it calls `systemctl
+      # import-environment`), because that'll have the right PATH and BROWSER,
+      # but to inherit that PATH, we have to make sure we don't specify a PATH
+      # whatsoever.
+      path = lib.mkForce [ ];
       serviceConfig = {
         ExecStart = "${dunst}/bin/dunst";
       };

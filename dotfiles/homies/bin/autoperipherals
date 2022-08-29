@@ -28,7 +28,6 @@ function main() {
         XFT_DPI=$((1024 * 96))
 
         xrandr --output DP1-2 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
-        # Switch to HDMI audio.
     else
         LAYOUT_NAME=mobile
         XFT_DPI=$((1024 * 133))

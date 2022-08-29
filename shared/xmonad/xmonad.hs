@@ -148,6 +148,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     -- Dunst shortcuts
     , ((controlMask, xK_space), spawn "dunstctl close")
     , ((controlMask, xK_grave), spawn "dunstctl history-pop")
+    , ((controlMask .|. shiftMask, xK_period), spawn "dunstctl context")
 
     , ((modMask, xK_a), spawn "autoperipherals")
     ] ++

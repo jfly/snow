@@ -7,7 +7,8 @@
 # TODO: either get mcg working without any configuration (get mpd
 # listening on ipv6), or add dconf configuration here (I think
 # home-manager does it somehow).
-let mcg = (pkgs.callPackage ../shared/cover-grid {});
+let
+  mcg = (pkgs.callPackage ../shared/cover-grid { });
 in
 {
   # Enable sound with pipewire.

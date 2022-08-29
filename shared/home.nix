@@ -39,6 +39,19 @@ in
       fi
     '';
     ".profile".text = ''
+      ###
+      ### Misc default programs
+      ###
+      export VISUAL=vim
+      export EDITOR=vim
+
+      if [ -n "$DISPLAY" ]; then
+          export BROWSER=chromium
+      else
+          export BROWSER=elinks
+      fi
+      ##################################
+
       if [ "$(hostname)" = "dalinar" ]; then
         # Start with a fresh PATH.
         export PATH=""
