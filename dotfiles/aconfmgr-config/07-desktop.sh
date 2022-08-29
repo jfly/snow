@@ -41,7 +41,6 @@ EOF
 cat >"$(CreateFile /etc/systemd/system/autoperipherals@.service)" <<EOF
 [Unit]
 Description=Refresh autoperipherals for user %i
-After=graphical.target
 
 [Service]
 Type=simple
@@ -51,7 +50,7 @@ KillMode=none
 ExecStart=/home/%i/bin/x11-run-as %i autoperipherals
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
 EOF
 
 ### slock
@@ -137,13 +136,12 @@ cat >"$(CreateFile /etc/systemd/system/fixinputs@.path)" <<EOF
 # and http://www.ocsmag.com/2015/09/02/monitoring-file-access-for-dummies/
 [Unit]
 Description=Triggers the service that sets up external keyboard
-After=graphical.target
 
 [Path]
 PathChanged=/dev/input/
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
 EOF
 cat >"$(CreateFile /etc/systemd/system/fixinputs@.service)" <<EOF
 # Inspired by http://jasonwryan.com/blog/2014/01/20/udev/
