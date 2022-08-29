@@ -73,10 +73,6 @@ rec {
   # TODO: isolate to fixinputs
   capslockx = pkgs.callPackage ../../shared/capslockx { };
 
-  # TODO: remove one we're fully on nixos and no longer need this in our path
-  #       (it's referenced in xinitrc).
-  volnoti = pkgs.callPackage ../../shared/volnoti { };
-
   home-manager = (pkgs.callPackage (import ../../sources.nix).home-manager-modules
     {
       configuration = import ../../shared/home.nix {

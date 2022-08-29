@@ -3,9 +3,6 @@ autoperipherals
 # https://wiki.archlinux.org/index.php/HiDPI
 xrdb -merge ~/.Xresources
 
-# volnoti is a volume notification daemon
-volnoti -t 1
-
 # Enable numlock on boot (thanks James!)
 numlockx on
 

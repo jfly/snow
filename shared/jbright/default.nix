@@ -1,15 +1,13 @@
-{ pkgs ? (import ../../sources.nix).nixos-unstable { }
-, lib ? pkgs.lib
-, volnoti ? pkgs.callPackage (import ../volnoti) { }
-}:
+{ pkgs ? (import ../../sources.nix).nixos-unstable { } }:
 
-let jbright = with pkgs.python3Packages; buildPythonApplication {
-  pname = "jbright";
-  version = "1.0";
-  format = "pyproject";
+let
+  jbright = with pkgs.python3Packages; buildPythonApplication {
+    pname = "jbright";
+    version = "1.0";
+    format = "pyproject";
 
-  src = ./.;
-};
+    src = ./.;
+  };
 in
 pkgs.symlinkJoin {
   name = "jbright";
@@ -17,6 +15,6 @@ pkgs.symlinkJoin {
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/jbright \
-      --prefix PATH : ${lib.makeBinPath [ pkgs.brightnessctl ]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.brightnessctl ]}
   '';
 }

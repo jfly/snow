@@ -8,7 +8,6 @@ let
   polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
-  volnoti = pkgs.callPackage ../shared/volnoti { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
 in
 {
@@ -72,14 +71,6 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${polybar}/bin/polybar --config=${polybarConfig}";
-      };
-    };
-    "volnoti" = {
-      enable = true;
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        ExecStart = "${volnoti}/bin/volnoti --no-daemon --timeout 1";
       };
     };
     "pasystray" = {

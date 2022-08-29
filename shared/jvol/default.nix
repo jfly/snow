@@ -1,15 +1,13 @@
-{ pkgs ? (import ../../sources.nix).nixos-unstable { }
-, lib ? pkgs.lib
-, volnoti ? pkgs.callPackage (import ../volnoti) { }
-}:
+{ pkgs ? (import ../../sources.nix).nixos-unstable { } }:
 
-let jvol = with pkgs.python3Packages; buildPythonApplication {
-  pname = "jvol";
-  version = "1.0";
-  format = "pyproject";
+let
+  jvol = with pkgs.python3Packages; buildPythonApplication {
+    pname = "jvol";
+    version = "1.0";
+    format = "pyproject";
 
-  src = ./.;
-};
+    src = ./.;
+  };
 in
 pkgs.symlinkJoin {
   name = "jvol";
@@ -17,6 +15,6 @@ pkgs.symlinkJoin {
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/jvol \
-      --prefix PATH : ${lib.makeBinPath [ pkgs.pamixer ]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.pamixer ]}
   '';
 }

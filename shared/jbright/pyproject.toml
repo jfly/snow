@@ -12,6 +12,3 @@ jbright = "jbright.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-
-[tool.setuptools.package-data]
-"*" = ["*.svg"]

@@ -69,3 +69,11 @@
     foreground = "#ffffff"
     frame_color = "#ff0000"
     timeout = 0
+
+### Scripting
+
+# Make the handling of transient notifications more strict by making them not
+# be placed in history.
+[transient_history_ignore]
+    match_transient = yes
+    history_ignore = yes
