@@ -12,7 +12,9 @@ doit() {
     git submodule update --init
 
     ## Install and configure most things.
-    ./aconfmgr apply --yes
+    if [ -z "$SKIP_ACONFMGR" ]; then
+        ./aconfmgr apply --yes
+    fi
 
     ## Install some more things
     nix-env -irf my-nix '.*'
