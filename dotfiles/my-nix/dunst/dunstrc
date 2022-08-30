@@ -15,6 +15,9 @@
     separator_color = frame
     sort = true
     idle_threshold = 120
+    # The default scale is 0, which tries to autodetect. Leave this as 1, we'll
+    # handle it ourselves.
+    scale = 1
 
     ### Text ###
     font = Monospace 14

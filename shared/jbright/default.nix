@@ -15,6 +15,9 @@ pkgs.symlinkJoin {
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/jbright \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.brightnessctl ]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [
+        pkgs.brightnessctl
+        pkgs.libnotify
+      ]}
   '';
 }

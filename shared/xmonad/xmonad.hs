@@ -140,17 +140,17 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video")
     , ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot")
 
-    , ((controlMask .|. altMask, xK_Left), spawn "xrandr -o right && setbg")
-    , ((controlMask .|. altMask, xK_Right), spawn "xrandr -o left && setbg")
-    , ((controlMask .|. altMask, xK_Down), spawn "xrandr -o normal && setbg")
-    , ((controlMask .|. altMask, xK_Up), spawn "xrandr -o inverted && setbg")
+    , ((controlMask .|. altMask, xK_Left), spawn "xrandr -o right && @setbg@/bin/setbg")
+    , ((controlMask .|. altMask, xK_Right), spawn "xrandr -o left && @setbg@/bin/setbg")
+    , ((controlMask .|. altMask, xK_Down), spawn "xrandr -o normal && @setbg@/bin/setbg")
+    , ((controlMask .|. altMask, xK_Up), spawn "xrandr -o inverted && @setbg@/bin/setbg")
 
     -- Dunst shortcuts
     , ((controlMask, xK_space), spawn "dunstctl close")
     , ((controlMask, xK_grave), spawn "dunstctl history-pop")
     , ((controlMask .|. shiftMask, xK_period), spawn "dunstctl context")
 
-    , ((modMask, xK_a), spawn "autoperipherals")
+    , ((modMask, xK_a), spawn "systemctl restart --user autoperipherals")
     ] ++
     -- mod-[1..9] %! Switch to workspace N
     -- mod-shift-[1..9] %! Move client to workspace N

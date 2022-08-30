@@ -130,33 +130,6 @@ EOF
 # Enable udevmon
 CreateLink /etc/systemd/system/multi-user.target.wants/udevmon.service /usr/lib/systemd/system/udevmon.service
 
-### Run fixinputs whenever devices are added
-cat >"$(CreateFile /etc/systemd/system/fixinputs@.path)" <<EOF
-# Inspired by http://jasonwryan.com/blog/2014/01/20/udev/
-# and http://www.ocsmag.com/2015/09/02/monitoring-file-access-for-dummies/
-[Unit]
-Description=Triggers the service that sets up external keyboard
-
-[Path]
-PathChanged=/dev/input/
-
-[Install]
-WantedBy=graphical.target
-EOF
-cat >"$(CreateFile /etc/systemd/system/fixinputs@.service)" <<EOF
-# Inspired by http://jasonwryan.com/blog/2014/01/20/udev/
-# and http://www.ocsmag.com/2015/09/02/monitoring-file-access-for-dummies/
-[Unit]
-Description=Configure external keyboard for user %i
-
-[Service]
-Type=oneshot
-
-ExecStart=/home/%i/bin/x11-run-as %i fixinputs
-EOF
-CreateLink /etc/systemd/system/fixinputs@jeremy.path /etc/systemd/system/fixinputs@.path
-CreateLink /etc/systemd/system/multi-user.target.wants/fixinputs@jeremy.path /etc/systemd/system/fixinputs@jeremy.path
-
 ### Video card drivers
 # Install the appropriate video card driver: https://wiki.archlinux.org/index.php/xorg#Driver_installation
 # driconf is supposed to help with video tearing (see http://www.apolitech.com/2017/04/20how-to-solve-video-tearing-on-intel.html)

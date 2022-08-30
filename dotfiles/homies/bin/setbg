@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-feh --randomize --bg-fill $HOME/Dropbox/pics/Wallpaper/*

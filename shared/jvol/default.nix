@@ -15,6 +15,9 @@ pkgs.symlinkJoin {
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/jvol \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.pamixer ]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [
+        pkgs.pamixer
+        pkgs.libnotify
+      ]}
   '';
 }

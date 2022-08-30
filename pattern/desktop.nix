@@ -9,6 +9,13 @@ let
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
+  autoperipherals = pkgs.callPackage ../shared/autoperipherals { };
+  restart-user-service = pkgs.writeShellScript "restart-user-service" ''
+    user=$1
+    uid=$(id -u $user)
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
+    ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart autoperipherals
+  '';
 in
 {
   services.xserver = {
@@ -28,6 +35,7 @@ in
         '';
       }];
     };
+    # Set up a pretty fast keyrepeat.
     autoRepeatDelay = 300;
     autoRepeatInterval = 30;
   };
@@ -63,7 +71,6 @@ in
   ];
 
   systemd.user.services = {
-    # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
     "xsettingsd" = {
       enable = true;
       wantedBy = [ "graphical-session.target" ];
@@ -117,6 +124,23 @@ in
       };
     };
   };
+
+  # Run autoperipherals on boot + whenever hardware changes
+  systemd.user.services = {
+    "autoperipherals" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${autoperipherals}/bin/autoperipherals";
+      };
+    };
+  };
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", ACTION=="change", RUN+="${restart-user-service} ${config.snow.user.name} autoperipherals"
+  '';
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
@@ -214,7 +238,6 @@ in
     })
     qutebrowser
     gnome.eog
-    feh
     (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
     mpv
     yt-dlp
@@ -238,9 +261,5 @@ in
     xdotool
     dmenu
     xcwd
-
-    # TODO: consolidate with autoperipherals
-    libnotify
-    bc
   ];
 }

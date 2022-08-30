@@ -1,17 +1,11 @@
 #!/usr/bin/env bash
 
-# Check if xorg is running. If not, there's nothing to do! Exit cleanly.
-if ! xset q &>/dev/null; then
-    echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-    exit 0
-fi
+set -euo pipefail
 
 function main() {
     HDMI1_STATUS=$(</sys/class/drm/card0/card0-HDMI-A-1/status)
     DP1_STATUS=$(</sys/class/drm/card0/card0-DP-1/status)
     DP2_STATUS=$(</sys/class/drm/card0/card0-DP-2/status)
-    DP4_STATUS=$(</sys/class/drm/card0/card0-DP-4/status)
-    DP5_STATUS=$(</sys/class/drm/card0/card0-DP-5/status)
 
     if [ "$HDMI1_STATUS" == "connected" ]; then
         LAYOUT_NAME=hdmi
@@ -23,7 +17,7 @@ function main() {
         DPI=96
 
         xrandr --output DP1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
-    elif [ "$DP2_STATUS" == "connected" ] || [ "$DP4_STATUS" == "connected" ] || [ "$DP5_STATUS" == "connected" ]; then
+    elif [ "$DP2_STATUS" == "connected" ]; then
         LAYOUT_NAME=dp4
         DPI=96
 
@@ -61,10 +55,6 @@ function main() {
     # notify-send blocks until something receives the message. When booting,
     # we have not started dunst yet, so we need to run notify-send in the background.
     notify-send "Detected environment $LAYOUT_NAME" &
-
-    # Note, we intentionally run fixinputs last, because xmodmap blocks if you're holding any keys down.
-    # See: https://forums.fedoraforum.org/showthread.php?296298-xmodmap-please-release-the-following-keys-within-2-seconds
-    fixinputs
 }
 
 # There's no way it's good to be running this command simultaneously.
