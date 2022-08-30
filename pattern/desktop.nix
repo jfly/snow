@@ -64,7 +64,14 @@ in
 
   systemd.user.services = {
     # TODO: run autoperipherals on boot + whenever hardware changes, load ~/.Xresources
-    # TODO: add xsettingsd
+    "xsettingsd" = {
+      enable = true;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.xsettingsd}/bin/xsettingsd";
+      };
+    };
     "polybar" = {
       enable = true;
       wantedBy = [ "graphical-session.target" ];

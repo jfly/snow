@@ -15,22 +15,29 @@ function main() {
 
     if [ "$HDMI1_STATUS" == "connected" ]; then
         LAYOUT_NAME=hdmi
-        XFT_DPI=$((1024 * 96))
+        DPI=96
 
         xrandr --output HDMI1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off --output eDP1 --off --output DP2 --off
     elif [ "$DP1_STATUS" == "connected" ]; then
         LAYOUT_NAME=dp1
-        XFT_DPI=$((1024 * 96))
+        DPI=96
 
         xrandr --output DP1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
     elif [ "$DP2_STATUS" == "connected" ] || [ "$DP4_STATUS" == "connected" ] || [ "$DP5_STATUS" == "connected" ]; then
         LAYOUT_NAME=dp4
-        XFT_DPI=$((1024 * 96))
+        DPI=96
 
         xrandr --output DP1-2 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
     else
         LAYOUT_NAME=mobile
-        XFT_DPI=$((1024 * 133))
+        if [ "$(hostname)" = "dallben" ]; then
+            DPI=133
+        elif [ "$(hostname)" = "pattern" ]; then
+            DPI=96
+        else
+            echo "Unrecognized host: $(hostname)"
+            exit 1
+        fi
 
         xrandr --output HDMI1 --off --output VIRTUAL1 --off --output DP1 --off --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP2 --off
     fi
@@ -40,7 +47,7 @@ function main() {
     # Change DPI and notify everyone via XSETTINGS.
     # See https://utcc.utoronto.ca/~cks/space/blog/linux/XSettingsNotes?showcomments
     # and https://github.com/GNOME/gtk/blob/1a1373779f87ce928a45a9371512d207445f615f/gdk/x11/xsettings-client.c#L399
-    echo "Xft/DPI $XFT_DPI" >~/.xsettingsd
+    echo "Xft/DPI $((1024 * DPI))" >~/.xsettingsd
     killall -HUP xsettingsd
     # Notify alacritty about the font size change, because alacritty doesn't understand the
     # XSETTINGS protocol yet =( See
@@ -48,7 +55,7 @@ function main() {
     # looks decent on a 96 DPI monitor, and 11 looks pretty decent on a 133 DPI
     # monitor.
     local font_size
-    font_size=$(echo "rate=(11 - 8) / (133.0 - 96.0 ); 8 + ($XFT_DPI / 1024.0 - 96) * rate" | bc -l)
+    font_size=$(echo "rate=(11 - 8) / (133.0 - 96.0 ); 8 + ($DPI - 96) * rate" | bc -l)
     with-alacritty set global font.size "$font_size"
 
     # notify-send blocks until something receives the message. When booting,
