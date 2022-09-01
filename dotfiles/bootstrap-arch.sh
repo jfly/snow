@@ -12,7 +12,7 @@ doit() {
     git submodule update --init
 
     ## Install and configure most things.
-    if [ -z "$SKIP_ACONFMGR" ]; then
+    if [ -z "${SKIP_ACONFMGR:-}" ]; then
         ./aconfmgr apply --yes
     fi
 
