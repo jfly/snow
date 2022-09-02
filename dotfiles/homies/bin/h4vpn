@@ -2,7 +2,7 @@
 
 function nm_con_toggle() {
     __con_id="$1"
-    if nmcli connection show --active | grep "$1" > /dev/null; then
+    if nmcli connection show --active | grep "$1" >/dev/null; then
         echo "Disabling $__con_id"
         nmcli con down id "$__con_id"
     else
@@ -11,4 +11,4 @@ function nm_con_toggle() {
     fi
 }
 
-nm_con_toggle "jeremy-fleischman-macbook.config"
+nm_con_toggle "jeremy-fleischman-system76-linux.config"
