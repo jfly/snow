@@ -115,8 +115,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     -- Toggle last workspace
     , ((modMask, xK_Tab), toggleWS)
 
-    -- Run demenu2 with custom font
-    , ((modMask, xK_p), spawn "dmenu_run -fn 'Monospace:size=11:bold:antialias=true'")
+    -- Run demenu2
+    , ((modMask, xK_p), spawn "dmenu_run")
 
     , ((0, xF86XK_AudioMute), spawn "@jvol@/bin/jvol toggle sink")
     , ((0, xF86XK_AudioRaiseVolume), spawn "@jvol@/bin/jvol set sink 5%+")

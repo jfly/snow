@@ -296,7 +296,17 @@ in
     # TODO: consolidate with xmonad
     alacritty
     xdotool
-    dmenu
+    (pkgs.symlinkJoin {
+      name = "dmenu";
+      paths = [ dmenu ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        for prog in dmenu dmenu_run; do
+          wrapProgram $out/bin/$prog \
+            --add-flags "-fn Monospace-15"
+        done
+      '';
+    })
     xcwd
   ];
 }
