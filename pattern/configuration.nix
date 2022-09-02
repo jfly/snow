@@ -17,6 +17,12 @@ in
     system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
       "parsec"
+      # Urg, stupid closed nvidia drivers...
+      # As of 2022-09-02, Nouveau doesn't have much support for the RTX 3060
+      # (codename NV170): https://nouveau.freedesktop.org/FeatureMatrix.html
+      # Hopefully that will change soon!
+      "nvidia-x11"
+      "nvidia-settings"
     ];
   };
 

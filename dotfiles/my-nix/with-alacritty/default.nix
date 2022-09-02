@@ -22,7 +22,12 @@ let
   #  > You could work around this by spawning a new config for each Alacritty
   #  > instance. Copying from the default location. That would certainly work
   #  > and isn't too much work, though it is a bit hacky.
+  # TODO: replace this with new IPC mechanism: https://github.com/alacritty/alacritty/commit/4ddb608563d985060d69594d1004550a680ae3bd
   alacritty-direct = pkgs.writeShellScriptBin "alacritty" ''
+    # Don't let alacritty guess the DPI of the screen: it only affects new
+    # terminals. Instead, let our `autoperipherals` script handle everything.
+    # See https://github.com/alacritty/alacritty/issues/5449 for details.
+    export WINIT_X11_SCALE_FACTOR=1.0
     exec ${with-alacritty}/bin/with-alacritty alacritty "$@"
   '';
 in

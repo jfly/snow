@@ -3,25 +3,13 @@
 set -euo pipefail
 
 function main() {
-    HDMI1_STATUS=$(</sys/class/drm/card0/card0-HDMI-A-1/status)
-    DP1_STATUS=$(</sys/class/drm/card0/card0-DP-1/status)
-    DP2_STATUS=$(</sys/class/drm/card0/card0-DP-2/status)
+    DP_2_2_STATUS=$(xrandr | grep -o 'DP-2.2 connected')
 
-    if [ "$HDMI1_STATUS" == "connected" ]; then
-        LAYOUT_NAME=hdmi
+    if [ -n "$DP_2_2_STATUS" ]; then
+        LAYOUT_NAME=snowdesk
         DPI=96
 
-        xrandr --output HDMI1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off --output eDP1 --off --output DP2 --off
-    elif [ "$DP1_STATUS" == "connected" ]; then
-        LAYOUT_NAME=dp1
-        DPI=96
-
-        xrandr --output DP1 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
-    elif [ "$DP2_STATUS" == "connected" ]; then
-        LAYOUT_NAME=dp4
-        DPI=96
-
-        xrandr --output DP1-2 --preferred --pos 0x0 --rotate normal --output VIRTUAL1 --off --output HDMI1 --off --output eDP1 --off --output DP2 --off
+        xrandr --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-2.2 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output eDP-1-1 --off --output HDMI-1-1 --off --output DP-1-1 --off --output DP-1-2 --off --output DP-1-3 --off
     else
         LAYOUT_NAME=mobile
         if [ "$(hostname)" = "dallben" ]; then
@@ -33,7 +21,7 @@ function main() {
             exit 1
         fi
 
-        xrandr --output HDMI1 --off --output VIRTUAL1 --off --output DP1 --off --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP2 --off
+        xrandr --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-2.2 --off --output eDP-1-1 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off --output DP-1-2 --off --output DP-1-3 --off
     fi
 
     setbg
@@ -45,11 +33,11 @@ function main() {
     killall -HUP xsettingsd
     # Notify alacritty about the font size change, because alacritty doesn't understand the
     # XSETTINGS protocol yet =( See
-    # https://github.com/alacritty/alacritty/issues/2886 for details. size 8
-    # looks decent on a 96 DPI monitor, and 11 looks pretty decent on a 133 DPI
-    # monitor.
+    # https://github.com/alacritty/alacritty/issues/2886 for details.
+    GOOD_96_DPI_FONT_SIZE=12
+    GOOD_133_DPI_FONT_SIZE=14
     local font_size
-    font_size=$(echo "rate=(11 - 8) / (133.0 - 96.0 ); 8 + ($DPI - 96) * rate" | bc -l)
+    font_size=$(echo "rate=($GOOD_133_DPI_FONT_SIZE - $GOOD_96_DPI_FONT_SIZE) / (133.0 - 96.0); $GOOD_96_DPI_FONT_SIZE + ($DPI - 96) * rate" | bc -l)
     with-alacritty set global font.size "$font_size"
 
     # notify-send blocks until something receives the message. When booting,
@@ -62,4 +50,4 @@ if pgrep autoperipherals | grep -v $$; then
     echo "I see an autoperipherals command already running, let's not step on its toes."
     exit 1
 fi
-main
+main || (notify-send "Error while running autoperipherals" &)
