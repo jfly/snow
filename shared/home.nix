@@ -24,6 +24,8 @@ in
       bin = ../dotfiles/homies/bin;
       ".config/git" = ../dotfiles/homies/config/git;
       ".gitignore_global" = ../dotfiles/homies/gitignore_global;
+      ".ssh/config" = ../dotfiles/homies/ssh/config;
+      ".ssh/config.d" = ../dotfiles/homies/ssh/config.d;
 
       # Create and set a custom GTK theme.
       ".themes" = ../dotfiles/homies/themes;

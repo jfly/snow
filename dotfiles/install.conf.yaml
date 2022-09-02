@@ -35,8 +35,6 @@
     ~/.jupyter/nbconfig: homies/jupyter/nbconfig
     ~/.mplayer: homies/mplayer
     ~/.p10k.zsh: homies/p10k.zsh
-    ~/.ssh/config: homies/ssh/config
-    ~/.ssh/config.d: homies/ssh/config.d
     ~/.tmux.conf: homies/tmux.conf
     ~/.xinitrc: homies/xinitrc
     ~/.Xresources: homies/Xresources
