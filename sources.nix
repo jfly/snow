@@ -5,12 +5,13 @@ rec {
     # Hash obtained using `nix-prefetch-url --unpack <url>`
     sha256 = "1fnq5dsiz4mln37f0mw9sibmx7ap5ff6smkzryyzwqwd5xq3hhjq";
   });
-  nixos-unstable = import (builtins.fetchTarball {
-    name = "nixos-unstable";
-    url = "https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz";
-    # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "0zch1dhd4mc84jx7cl0qarxjwkyf90qsxkpbwa2nlzgdjb459zyk";
-  });
+  nixos-unstable = import /home/jeremy/src/github.com/NixOS/nixpkgs;
+  #<<< nixos-unstable = import (builtins.fetchTarball {
+  #<<<   name = "nixos-unstable";
+  #<<<   url = "https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz";
+  #<<<   # Hash obtained using `nix-prefetch-url --unpack <url>`
+  #<<<   sha256 = "0zch1dhd4mc84jx7cl0qarxjwkyf90qsxkpbwa2nlzgdjb459zyk";
+  #<<< });
   nixos-generators = import (builtins.fetchTarball {
     name = "nixos-generators";
     url = "https://github.com/nix-community/nixos-generators/archive/296067b9c7a172d294831dec89d86847f30a7cfc.tar.gz";

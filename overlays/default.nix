@@ -36,6 +36,21 @@
             if builtins.pathExists (file encrypted) then builtins.readFile (file encrypted) else builtins.trace missingMsg missingMsg
           );
         };
+        xorg = super.xorg // {
+          xorgserver = super.xorg.xorgserver.overrideAttrs (oldAttrs: rec {
+            separateDebugInfo = true;
+            version = "21.1.3"; #<<< TODO: explain sigpipe on 21.1.4 >>>
+            patches = [
+              # <<< TODO: explain >>>
+              ./dont-create-logdir-during-build.patch
+            ];
+            buildInputs = oldAttrs.buildInputs ++ [ super.xorg.libxcvt ];
+            src = super.fetchurl {
+              url = "mirror://xorg/individual/xserver/xorg-server-21.1.3.tar.xz";
+              sha256 = "sha256-Ydaq1ba0ehFrlgvX8Muk7n5tqV1rsLEnveddfRrN6+U=";
+            };
+          }); #<<<
+        };
       }
   )
 ]

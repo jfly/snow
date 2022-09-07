@@ -17,6 +17,11 @@ let
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
     ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart "$service"
   '';
+  myXserver = lib.mkForce (pkgs.writeShellScript "my-x" ''
+    #<<< export LD_BIND_NOW=1
+    export LD_DEBUG=all
+    exec ${pkgs.xorg.xorgserver.out}/bin/X "$@"
+  ''); #<<<
 in
 {
   services.xserver = {
@@ -26,6 +31,7 @@ in
       defaultSession = "none+xmonad";
       autoLogin.enable = true;
       autoLogin.user = config.snow.user.name;
+      xserverBin = myXserver;
     };
     windowManager = {
       session = [{
@@ -80,6 +86,7 @@ in
   # Unfortunately, nixos does not do the right then when you specify multiple
   # videoDrivers. See https://github.com/NixOS/nixpkgs/issues/108018 for
   # details. So, we just empty out the config and write it ourselves.
+  environment.enableDebugInfo = true; #<<< >>>
   services.xserver.config = lib.mkForce "";
   environment.etc."X11/xorg.conf.d/40-gazelle16-nvidia.conf".text = ''
     Section "OutputClass"
@@ -87,7 +94,7 @@ in
         MatchDriver "nvidia-drm"
         Driver "nvidia"
         Option "AllowEmptyInitialConfiguration"
-        Option "PrimaryGPU" "Yes"
+        Option "PrimaryGPU" "No"
     EndSection
   '';
   # Configure our primary gpu (the NVIDIA card) to be able to use the Intel
@@ -95,9 +102,20 @@ in
   # primary GPU" scenario described here:
   # https://wiki.archlinux.org/title/PRIME
   services.xserver.displayManager.setupCommands = ''
-    ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
+    ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource NVIDIA-G0 modesetting
     ${autoperipherals}/bin/autoperipherals
   '';
+  #<<< hardware.nvidia.package = pkgs.callPackage
+  #<<<   (import /home/jeremy/src/github.com/NixOS/nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix {
+  #<<<     version = "515.48.07";
+  #<<<     sha256_64bit = "sha256-BJLdxbXmWqAMvHYujWaAIFyNCOEDtxMQh6FRJq7klej=";
+  #<<<     openSha256 = "sha256-GCCDnaDsbXTmbCYZBCM3fpHmOSWti/DkBJwYrRGAMPi=";
+  #<<<     settingsSha256 = "sha256-kBELMJCIWD9peZba14wfCoxsi3UXO3ehFYcVh4nvzVi=";
+  #<<<     persistencedSha256 = "sha256-P8oT7g944HvNk2Ot/0T0sJM7dZs+e0d+KwbwRrmsuDz=";
+  #<<<
+  #<<<     #<<< brokenOpen = kernelModVersion == "5.4" && kernel.isHardened;
+  #<<<   })
+  #<<<   { };
 
   programs.nm-applet.enable = true;
 
@@ -259,6 +277,7 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    glibc #<<<
     (pkgs.symlinkJoin {
       name = "chromium";
       paths = [ chromium ];
