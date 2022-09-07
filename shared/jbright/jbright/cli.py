@@ -39,19 +39,32 @@ def do_show(args):
     notify_show(device.percentage_brightness)
 
 
-def progress_dots(percentage: int, total_dots=10):
-    full_count = percentage // 10
-    half_full_count = 1 if percentage % 10 >= 5 else 0
-    empty_count = total_dots - half_full_count - full_count
-    progress = ("●" * full_count) + ("◐" * half_full_count) + ("○" * empty_count)
-    thin_space = "\u2009"
-    return thin_space.join(progress)
+def clamp(val, min_val, max_val):
+    assert max_val >= min_val
+    if val > max_val:
+        return max_val
+    elif val < min_val:
+        return min_val
+    else:
+        return val
+
+
+def progress(percentage: int, total_dots=10):
+    chars = ["○", "◐", "●"]
+
+    n_dots_full = (total_dots * percentage) / 100
+
+    def char(i):
+        full_ratio = clamp(n_dots_full - i, 0, 1)
+        return chars[int(full_ratio * (len(chars) - 1))]
+
+    return "".join(char(i) for i in range(total_dots))
 
 
 def notify_show(percent: float):
     pretty_brightness = str(int(percent)) + "%"
     subject = f"Display brightness: {pretty_brightness}"
-    body = progress_dots(int(percent))
+    body = progress(int(percent))
 
     brightness_id = sum(ord(ch) for ch in "jbright")
     subprocess.check_output(
