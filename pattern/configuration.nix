@@ -40,6 +40,7 @@ in
       ./home-manager.nix
       ./shell
       ./desktop.nix
+      ./android.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
