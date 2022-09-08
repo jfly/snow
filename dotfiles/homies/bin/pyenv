@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# I just need a really bogus pyenv to trick our dev setup scripts into thinking
+# that python 3.8.10 is globally installed.
+# Basically just trying to get this command to pass:
+#
+#  [ -d "$(pyenv root)/versions/3.8.10" ]
+
+FAKE_PYENV=/tmp/fake-pyenv
+mkdir -p $FAKE_PYENV/versions/3.8.10
+echo "$FAKE_PYENV"

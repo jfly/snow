@@ -57,7 +57,7 @@ fi
 ### Set up asdf-vm + direnv
 ###
 export H4_SHIMLESS_DEVELOPMENT=1
-if [ "$HOSTNAME" = "dalinar" ]; then
+if [ -f $HOME/.h4.zshrc ]; then
     source $HOME/.h4.zshrc
 fi
 
