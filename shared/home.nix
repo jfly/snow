@@ -30,6 +30,13 @@ in
       # Create and set a custom GTK theme.
       ".themes" = ../dotfiles/homies/themes;
       ".config/gtk-3.0" = ../dotfiles/homies/config/gtk-3.0;
+
+      # Set up direnv.
+      # TODO: figure out how to get this confg living closer to the
+      # installation of direnv itself.
+      ".config/direnv/direnvrc" = ../dotfiles/homies/config/direnv/direnvrc;
+      ".config/direnv/direnv.toml" = ../dotfiles/homies/config/direnv/direnv.toml;
+      ".config/direnv/lib" = ../dotfiles/homies/config/direnv/lib;
     }) // {
     ".zshrc".text = ''
       if [ "$(hostname)" = "dalinar" ]; then

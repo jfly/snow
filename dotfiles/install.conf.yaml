@@ -27,9 +27,6 @@
     ~/.config/mpd/mpd.conf: homies/config/mpd/mpd.conf
     ~/.config/polybar: homies/config/polybar
     ~/.config/systemd: homies/config/systemd
-    ~/.config/direnv/direnvrc: homies/config/direnv/direnvrc
-    ~/.config/direnv/direnv.toml: homies/config/direnv/direnv.toml
-    ~/.config/direnv/lib: homies/config/direnv/lib
     ~/.config/wireplumber: homies/config/wireplumber
     ~/.docker/config.json: homies/docker/config.json
     ~/.jupyter/nbconfig: homies/jupyter/nbconfig

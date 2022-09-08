@@ -22,5 +22,6 @@
     pkgs.fzf
     git
     psmisc
+    direnv
   ];
 }
