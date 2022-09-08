@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
+
 sudo bash -c "rmmod iwlmvm; rmmod iwlwifi; sleep 1; modprobe iwlwifi"
 
 # cd to script directory
 # http://stackoverflow.com/a/3355423/1739415
 cd "$(dirname "$0")"
-echo `whoami` ran fixwifi on `date` >> fixwifi.runs
+echo "$(whoami) ran fixwifi on $(date)" >>fixwifi.runs
