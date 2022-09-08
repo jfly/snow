@@ -19,6 +19,10 @@
 [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
+function prompt_shlvl_prompt_chars() {
+  repeat $SHLVL { prompt_prompt_char }
+}
+
 () {
   emulate -L zsh -o extended_glob
 
@@ -40,7 +44,7 @@
     background_jobs
     # =========================[ Line #2 ]=========================
     newline                 # \n
-    prompt_char             # prompt symbol
+    shlvl_prompt_chars      # prompt symbol(s) based on how deeply nested our shell is
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
