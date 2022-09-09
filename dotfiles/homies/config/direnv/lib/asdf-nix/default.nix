@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, mach-nix }:
 
 let
   lib = pkgs.lib;
@@ -8,7 +8,7 @@ let
     java = pkgs.callPackage ./java.nix { };
     maven = pkgs.callPackage ./maven.nix { };
     thrift = pkgs.callPackage ./thrift { };
-    poetry = pkgs.callPackage ./poetry.nix { };
+    poetry = pkgs.callPackage ./poetry.nix { inherit mach-nix; };
     nodejs = pkgs.callPackage ./nodejs.nix { };
     yarn = pkgs.callPackage ./yarn.nix { };
   };
@@ -23,18 +23,18 @@ let
     }
   );
   asdfLineToPkg = (asdfLine: asdfToPkg (parseAsdfLine asdfLine));
-  asdfLines = (file:
-    let lines = lib.splitString "\n" (builtins.readFile file);
+  asdfLines = (tool-versions:
+    let lines = lib.splitString "\n" tool-versions;
     in builtins.filter (line: lib.stringLength line > 0 && builtins.head (lib.stringToCharacters line) != "#") lines
   );
   fakeAsdf = pkgs.writeShellScriptBin "asdf" ''
     echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix"
   '';
   asdf = {
-    pkgs = file: builtins.map asdfLineToPkg (asdfLines file);
-    shell = file: (
+    pkgs = tool-versions: builtins.map asdfLineToPkg (asdfLines tool-versions);
+    shell = tool-versions: (
       pkgs.mkShell {
-        nativeBuildInputs = [ fakeAsdf ] ++ (asdf.pkgs file);
+        nativeBuildInputs = [ fakeAsdf ] ++ (asdf.pkgs tool-versions);
       }
     );
   };
