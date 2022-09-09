@@ -27,11 +27,14 @@ let
     let lines = lib.splitString "\n" (builtins.readFile file);
     in builtins.filter (line: lib.stringLength line > 0 && builtins.head (lib.stringToCharacters line) != "#") lines
   );
+  fakeAsdf = pkgs.writeShellScriptBin "asdf" ''
+    echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix"
+  '';
   asdf = {
     pkgs = file: builtins.map asdfLineToPkg (asdfLines file);
     shell = file: (
       pkgs.mkShell {
-        nativeBuildInputs = asdf.pkgs file;
+        nativeBuildInputs = [ fakeAsdf ] ++ (asdf.pkgs file);
       }
     );
   };
