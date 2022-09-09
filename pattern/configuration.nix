@@ -41,6 +41,7 @@ in
       ./shell
       ./desktop.nix
       ./android.nix
+      ./docker.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
