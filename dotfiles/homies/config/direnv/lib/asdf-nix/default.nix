@@ -31,12 +31,7 @@ let
     echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix"
   '';
   asdf = {
-    pkgs = tool-versions: builtins.map asdfLineToPkg (asdfLines tool-versions);
-    shell = tool-versions: (
-      pkgs.mkShell {
-        nativeBuildInputs = [ fakeAsdf ] ++ (asdf.pkgs tool-versions);
-      }
-    );
+    pkgs = { tool-versions }: [ fakeAsdf ] ++ (builtins.map asdfLineToPkg (asdfLines tool-versions));
   };
 in
 asdf

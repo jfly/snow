@@ -15,7 +15,7 @@ use_asdf() {
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    asdf-nix.url = "github:jfly/snow?dir=dotfiles/homies/config/direnv/lib/asdf-nix";
+    asdf-nix-flake.url = "github:jfly/snow?dir=dotfiles/homies/config/direnv/lib/asdf-nix";
   };
 
   outputs = { self, nixpkgs, flake-utils, asdf-nix-flake }:
@@ -27,9 +27,11 @@ use_asdf() {
         in
         {
           devShells.default = pkgs.mkShell {
-            buildInputs = (asdf-nix.pkgs ''
+            buildInputs = (asdf-nix.pkgs {
+                tool-versions = ''
 $(cat ./.tool-versions)
-'');
+'';
+            });
           };
         }
       );
