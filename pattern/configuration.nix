@@ -41,7 +41,7 @@ in
       ./shell
       ./desktop.nix
       ./android.nix
-      ./docker.nix
+      ./development.nix
     ];
 
   # Flakes!
