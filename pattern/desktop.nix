@@ -199,16 +199,6 @@ in
     '';
   };
 
-  # Set up ssh agent
-  programs.ssh = {
-    startAgent = true;
-    enableAskPassword = true;
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
-  };
-  environment.variables.SSH_ASKPASS_REQUIRE = "prefer";
-
   # Lock the screen on suspend. Trick copied from
   # https://wiki.archlinux.org/title/Slock#Lock_on_suspend.
   programs.slock.enable = true;

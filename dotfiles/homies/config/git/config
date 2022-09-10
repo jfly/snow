@@ -13,7 +13,7 @@
 	name = Jeremy Fleischman
 	email = jeremyfleischman@gmail.com
 [commit]
-	#<<< TODO: re-enable >>> gpgsign = true
+	gpgsign = true
 	verbose = true
 [push]
 	default = simple
