@@ -11,12 +11,6 @@ rec {
     # Hash obtained using `nix-prefetch-url --unpack <url>`
     sha256 = "0zch1dhd4mc84jx7cl0qarxjwkyf90qsxkpbwa2nlzgdjb459zyk";
   });
-  nixos-generators = import (builtins.fetchTarball {
-    name = "nixos-generators";
-    url = "https://github.com/nix-community/nixos-generators/archive/296067b9c7a172d294831dec89d86847f30a7cfc.tar.gz";
-    # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "0ngq2jdwcc197bf48hrnwn1w494j4nyznr80lvsfi4pkayr87zyr";
-  });
   parsec-gaming = import (builtins.fetchTarball {
     name = "parsec-gaming-nix";
     url = "https://github.com/jfly/parsec-gaming-nix/archive/61dfa8d291109cd755573e9011edd249f90ddf8c.tar.gz";

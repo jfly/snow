@@ -1,14 +1,6 @@
-let
-  pkgs = (import ./sources.nix).nixos-unstable {
-    overlays = import ./overlays;
-  };
-  mach-nix = import
-    (builtins.fetchGit {
-      url = "https://github.com/DavHau/mach-nix/";
-      ref = "refs/tags/3.5.0";
-    })
-    { };
+{ pkgs, mach-nix }:
 
+let
   unwrap = app: pkgs.symlinkJoin {
     name = app.name;
     paths = [ app ];
@@ -51,7 +43,7 @@ pkgs.mkShell {
       }
     )
     pkgs.kubectl
-    (import ./sources.nix).nixos-generators
+    pkgs.nixos-generators
     pkgs.nixpkgs-fmt
     pkgs.just
     # pulumi-bin wraps pulumi with a shell script that sets LD_LIBRARY_PATH,
@@ -69,7 +61,7 @@ pkgs.mkShell {
   ];
 
   # Set various secret environment variables.
-  AWS_ACCESS_KEY_ID = pkgs.deage.optionalString "AWS_ACCESS_KEY_ID" ''
+  AWS_ACCESS_KEY_ID_FILE = pkgs.deage.repoPath ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByc0RjL1VESElmbnVDQ0Jk
     VVBITXgrSlk0MTFuTlVQTGtqeXUyMytIblVjClZIb1ZDbHlBZjJDcnQyQW9GZzNW
@@ -78,7 +70,7 @@ pkgs.mkShell {
     g/S7HsJm5j46iTYN
     -----END AGE ENCRYPTED FILE-----
   '';
-  AWS_SECRET_ACCESS_KEY = pkgs.deage.optionalString "AWS_SECRET_ACCESS_KEY" ''
+  AWS_SECRET_ACCESS_KEY_FILE = pkgs.deage.repoPath ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2SGtaRlN5Q0IrQXFnQXR2
     MytRSXFkcGd6MXh3M05xdldEY3Z0WTNNZGdjCjltUWc2S3RMWWRId0g0eUVUUHhz
@@ -87,7 +79,7 @@ pkgs.mkShell {
     yeQL3c9LBDac5ZjwmxWse7JyLStg0Sk3XrG0rQ==
     -----END AGE ENCRYPTED FILE-----
   '';
-  PULUMI_CONFIG_PASSPHRASE = pkgs.deage.optionalString "PULUMI_CONFIG_PASSPHRASE" ''
+  PULUMI_CONFIG_PASSPHRASE_FILE = pkgs.deage.repoPath ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6RU0wSVR1cWJMUFRkSUxG
     enRmWnpZL2V5c2JFb3FaOTFqTGRlbVVYMUE4CnQzdmlpa2U3QjJxQ2RtQUpRMVBh
@@ -98,5 +90,8 @@ pkgs.mkShell {
   '';
   shellHook = ''
     export KUBECONFIG=$PWD/k8s/kube/config.secret
+    export AWS_ACCESS_KEY_ID=$(cat "$AWS_ACCESS_KEY_ID_FILE")
+    export AWS_SECRET_ACCESS_KEY=$(cat "$AWS_SECRET_ACCESS_KEY_FILE")
+    export PULUMI_CONFIG_PASSPHRASE=$(cat "$PULUMI_CONFIG_PASSPHRASE_FILE")
   '';
 }
