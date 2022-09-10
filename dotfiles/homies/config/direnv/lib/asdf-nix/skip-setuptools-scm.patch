@@ -1,0 +1,27 @@
+Quick hack to avoid a dependency on setuptools-scm
+
+This works because the tar.gz "source" distribution that we're patching
+actually already has the /src/virtualenv/version.py file in it. If we wanted to
+build from true (aka: git) source, we'd have to create that file, or get rid of this hack.
+
+I believe the right way to do this is with setuptools-scm's
+`SETUPTOOLS_SCM_PRETEND_VERSION` hook, which you can see used throughout
+nixpkgs. However, I wasn't sure how to get access to that package with pip2nix,
+so I'm doing this quick 'n dirty thing instead.
+
+diff --git a/setup.py b/setup.py
+index cddd1d3..1b5dbe4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -3,10 +3,4 @@
+ if int(__version__.split(".")[0]) < 41:
+     raise RuntimeError("setuptools >= 41 required to build")
+
+-setup(
+-    use_scm_version={
+-        "write_to": "src/virtualenv/version.py",
+-        "write_to_template": 'from __future__ import  unicode_literals\n\n__version__ = "{version}"\n',
+-    },
+-    setup_requires=["setuptools_scm >= 2"],
+-)
++setup()
