@@ -11,6 +11,7 @@ let
     poetry = pkgs.callPackage ./poetry.nix { inherit mach-nix; };
     nodejs = pkgs.callPackage ./nodejs.nix { };
     yarn = pkgs.callPackage ./yarn.nix { };
+    mysql = pkgs.callPackage ./mysql.nix { };
   };
 
   asdfToPkg = { plugin, version }: (asdfPlugins.${plugin} version);
