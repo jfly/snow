@@ -20,5 +20,4 @@
   };
   # Intel graphics
   services.xserver.videoDrivers = [ "modesetting" ];
-  services.xserver.useGlamor = true;
 }

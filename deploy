@@ -45,9 +45,9 @@ function deploy_nix() {
     local target="$1"
     shift
     if [ "$target" = "$(hostname)" ]; then
-        colmena apply-local --sudo "$@"
+        colmena apply-local --config hive.nix --sudo "$@"
     else
-        colmena apply --on "$target" "$@"
+        colmena apply --config hive.nix --on "$target" "$@"
     fi
 }
 

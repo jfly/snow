@@ -24,7 +24,7 @@
         python3Packages = python3.pkgs;
 
         deage = rec {
-          file = encrypted: ./.. + (repoPath encrypted);
+          file = encrypted: ./.. + ("/" + (repoPath encrypted));
           repoPath = encrypted: (
             let hashed = builtins.hashString "sha256" (super.lib.strings.removeSuffix "\n" encrypted);
             in "./.sensitive-decrypted-secrets/${hashed}.secret"
@@ -34,7 +34,7 @@
             let
               missingMsg = "Could not find decrypted ${description}. Try running `tools/deage && direnv reload`";
             in
-            if builtins.pathExists (builtins.trace (file encrypted) (file encrypted)) then builtins.readFile (file encrypted) else builtins.trace missingMsg missingMsg
+            if builtins.pathExists (file encrypted) then builtins.readFile (file encrypted) else builtins.trace missingMsg missingMsg
           );
         };
       }
