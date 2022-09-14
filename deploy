@@ -35,10 +35,7 @@ function deploy_k8s() {
         kubectl apply -f "$f"
     done
 
-    (
-        cd k8s-pulumi
-        pulumi up --yes
-    )
+    pulumi up --cwd k8s-pulumi --stack dev --yes
 }
 
 function deploy_nix() {

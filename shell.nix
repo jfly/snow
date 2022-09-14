@@ -90,8 +90,15 @@ pkgs.mkShell {
   # Set various secret environment variables.
   shellHook = ''
     export KUBECONFIG=$PWD/k8s/kube/config.secret
+
+    # Set up credentials to talk to minio (a self-hosted file server that
+    # implements the s3 api).
     export AWS_ACCESS_KEY_ID=$(cat "${awsAccessKeyIdFile}")
     export AWS_SECRET_ACCESS_KEY=$(cat "${awsSecretAccessKeyFile}")
+    # This region doesn't mean anything to minio, but some AWS sdks expect you
+    # to have a region set.
+    export AWS_REGION=us-west-2
+
     export PULUMI_CONFIG_PASSPHRASE=$(cat "${pulumiConfigPassphraseFile}")
   '';
 }
