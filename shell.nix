@@ -17,6 +17,33 @@ let
       done
     '';
   };
+  awsAccessKeyIdFile = pkgs.deage.repoPath ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByc0RjL1VESElmbnVDQ0Jk
+    VVBITXgrSlk0MTFuTlVQTGtqeXUyMytIblVjClZIb1ZDbHlBZjJDcnQyQW9GZzNW
+    NENERWJUOU4wZTJ1eFFkNE14WmFBcWcKLS0tIHYxNFBCUFlnc3BaY1d2eldMR2hz
+    TmZicEdlVUVpYm9odzZSUkN0ZGJnRlkKAPIKfC6SSsQNQLqWWqVN+MucUVN1l1D6
+    g/S7HsJm5j46iTYN
+    -----END AGE ENCRYPTED FILE-----
+  '';
+  awsSecretAccessKeyFile = pkgs.deage.repoPath ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2SGtaRlN5Q0IrQXFnQXR2
+    MytRSXFkcGd6MXh3M05xdldEY3Z0WTNNZGdjCjltUWc2S3RMWWRId0g0eUVUUHhz
+    Umk2empWSXF3dTVMcmgyeE5pbVc2dWsKLS0tIFpwNFFnN1FHbFBJVHpDckk1S1d0
+    Sm00MWpvbVJlWk4vVkIrb09MQmxhQkkKeeZwFEYdQFVyok+F/FEpGjK2I6hXOTxy
+    yeQL3c9LBDac5ZjwmxWse7JyLStg0Sk3XrG0rQ==
+    -----END AGE ENCRYPTED FILE-----
+  '';
+  pulumiConfigPassphraseFile = pkgs.deage.repoPath ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6RU0wSVR1cWJMUFRkSUxG
+    enRmWnpZL2V5c2JFb3FaOTFqTGRlbVVYMUE4CnQzdmlpa2U3QjJxQ2RtQUpRMVBh
+    WWk0YjZPYlNMYW85b1VNOHdlMVAzVEUKLS0tIGJCaThVR3RvT0pVRnNCR21NbmpP
+    RVJnMjg3b3VGL2NxWG1ZN2syaUdBNGMKS7ChE4gYpW90dInSGzPYBZOZsLMi0l+o
+    U/ZyGUi0NXR+3mzKtN9j/mgPmrGzmfvhkGFVWA==
+    -----END AGE ENCRYPTED FILE-----
+  '';
 in
 
 pkgs.mkShell {
@@ -61,37 +88,10 @@ pkgs.mkShell {
   ];
 
   # Set various secret environment variables.
-  AWS_ACCESS_KEY_ID_FILE = pkgs.deage.repoPath ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByc0RjL1VESElmbnVDQ0Jk
-    VVBITXgrSlk0MTFuTlVQTGtqeXUyMytIblVjClZIb1ZDbHlBZjJDcnQyQW9GZzNW
-    NENERWJUOU4wZTJ1eFFkNE14WmFBcWcKLS0tIHYxNFBCUFlnc3BaY1d2eldMR2hz
-    TmZicEdlVUVpYm9odzZSUkN0ZGJnRlkKAPIKfC6SSsQNQLqWWqVN+MucUVN1l1D6
-    g/S7HsJm5j46iTYN
-    -----END AGE ENCRYPTED FILE-----
-  '';
-  AWS_SECRET_ACCESS_KEY_FILE = pkgs.deage.repoPath ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2SGtaRlN5Q0IrQXFnQXR2
-    MytRSXFkcGd6MXh3M05xdldEY3Z0WTNNZGdjCjltUWc2S3RMWWRId0g0eUVUUHhz
-    Umk2empWSXF3dTVMcmgyeE5pbVc2dWsKLS0tIFpwNFFnN1FHbFBJVHpDckk1S1d0
-    Sm00MWpvbVJlWk4vVkIrb09MQmxhQkkKeeZwFEYdQFVyok+F/FEpGjK2I6hXOTxy
-    yeQL3c9LBDac5ZjwmxWse7JyLStg0Sk3XrG0rQ==
-    -----END AGE ENCRYPTED FILE-----
-  '';
-  PULUMI_CONFIG_PASSPHRASE_FILE = pkgs.deage.repoPath ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6RU0wSVR1cWJMUFRkSUxG
-    enRmWnpZL2V5c2JFb3FaOTFqTGRlbVVYMUE4CnQzdmlpa2U3QjJxQ2RtQUpRMVBh
-    WWk0YjZPYlNMYW85b1VNOHdlMVAzVEUKLS0tIGJCaThVR3RvT0pVRnNCR21NbmpP
-    RVJnMjg3b3VGL2NxWG1ZN2syaUdBNGMKS7ChE4gYpW90dInSGzPYBZOZsLMi0l+o
-    U/ZyGUi0NXR+3mzKtN9j/mgPmrGzmfvhkGFVWA==
-    -----END AGE ENCRYPTED FILE-----
-  '';
   shellHook = ''
     export KUBECONFIG=$PWD/k8s/kube/config.secret
-    export AWS_ACCESS_KEY_ID=$(cat "$AWS_ACCESS_KEY_ID_FILE")
-    export AWS_SECRET_ACCESS_KEY=$(cat "$AWS_SECRET_ACCESS_KEY_FILE")
-    export PULUMI_CONFIG_PASSPHRASE=$(cat "$PULUMI_CONFIG_PASSPHRASE_FILE")
+    export AWS_ACCESS_KEY_ID=$(cat "${awsAccessKeyIdFile}")
+    export AWS_SECRET_ACCESS_KEY=$(cat "${awsSecretAccessKeyFile}")
+    export PULUMI_CONFIG_PASSPHRASE=$(cat "${pulumiConfigPassphraseFile}")
   '';
 }
