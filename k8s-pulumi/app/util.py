@@ -11,6 +11,7 @@ def declare_app(
     env: Dict[str, str] = {},
     volumes: List[kubernetes.core.v1.VolumeArgs] = [],
     volume_mounts: List[kubernetes.core.v1.VolumeMountArgs] = [],
+    extra_ports: List[kubernetes.core.v1.ServicePortArgs] = [],
 ):
     if env is None:
         env = {}
@@ -28,7 +29,8 @@ def declare_app(
                     port=80,
                     protocol="TCP",
                     target_port=port,
-                )
+                ),
+                *extra_ports,
             ],
             selector={
                 "app": name,

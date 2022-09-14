@@ -10,7 +10,7 @@ RUN pip3 install pirate-get
 COPY config/pirate-get /root/.config/pirate-get
 
 # Create a media group with a specific id.
-# This is similar to the PGID/PUID stuff that the linuxserver folk do:
+# This is similar to the PGID/PUID stuff that the linuxserver folks do:
 # https://github.com/linuxserver/docker-baseimage-alpine/blob/880fac8727d29232d50c17e52ce4dc3da5ec32b0/root/etc/cont-init.d/10-adduser#L6-L7
 # TODO: DRY this number up with all the other places it shows up in our infra.
 RUN groupadd -g 1002 media
