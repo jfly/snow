@@ -1,13 +1,10 @@
-{ pkgs , lib }:
+{ pkgs, lib }:
 
 pkgs.python3.pkgs.buildPythonApplication rec {
   pname = "CoverGrid";
-  version = "3.0.1";
+  version = "3.1";
 
-  # Disable tests: this project doesn't have any, and test collection is
-  # broken because some of the .py files aren't importable unless you've
-  # actually installed the package (with its resource files).
-  doCheck = false;
+  format = "other";
 
   # Broken with gobject-introspection setup hook
   # https://github.com/NixOS/nixpkgs/issues/56943
@@ -17,22 +14,25 @@ pkgs.python3.pkgs.buildPythonApplication rec {
     owner = "coderkun";
     repo = "mcg";
     rev = "v${version}";
-    sha256 = "sha256-RfxYqF4YIpQ/fejN+5B8seK4u0heJ8THeQ9jlZjVW8I=";
+    sha256 = "sha256-J8xZBhHTY+hxv8V1swk8hc8tQA8wtfTykT581Pcb7SA=";
   };
 
   patches = [
-    # Fix build ordering issues
+    # Be more robust when dealing with a corrupted cache
     (pkgs.fetchpatch {
-      url = "https://gitlab.com/coderkun/mcg/-/merge_requests/2.patch";
-      sha256 = "sha256-go4dKCvMBtbHUQWHIrYlI1YR977DA68ccQZDIRMwLRY=";
+      url = "https://gitlab.com/coderkun/mcg/-/merge_requests/3.patch";
+      sha256 = "sha256-v4MMipg8nNny4WOkUdgvPlWx9aF/ttmHjfgzBscqdvQ=";
     })
   ];
 
   nativeBuildInputs = with pkgs; [
+    desktop-file-utils # for update-desktop-database
     glib # for glib-compile-resources
     gobject-introspection
     gtk3
     wrapGAppsHook
+    meson
+    ninja
   ];
 
   propagatedBuildInputs = with pkgs.python3.pkgs; [
