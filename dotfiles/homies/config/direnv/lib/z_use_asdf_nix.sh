@@ -36,6 +36,16 @@ use_asdf() {
 $(cat ./.tool-versions)
 '';
             });
+
+            # Python wheels expect to be able to find shared libs in /usr/lib,
+            # but NixOS is special and those files don't exist. See
+            # https://www.breakds.org/post/build-python-package/#the-package-is-built-successfully-but-it-panics-about-not-finding-libstdcso6-when-being-imported
+            # for details and a neat solution using autoPatchelfHook. However,
+            # if we're using regular old venvs and pip, we don't have an
+            # opportunity to patch wheels. Maybe there's something clever we
+            # could do by providing a wrapper on top of pip? For now it's
+            # working well enough to just set LD_LIBRARY_PATH.
+            LD_LIBRARY_PATH = pkgs.stdenv.cc.cc.lib + /lib;
           };
         }
       );
