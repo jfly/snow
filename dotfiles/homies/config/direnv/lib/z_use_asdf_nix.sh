@@ -42,5 +42,6 @@ $(cat ./.tool-versions)
 }
 EOF
     fi
+    echo "Loading flake from $asdf_nix_dir"
     use_flake "$asdf_nix_dir"
 }

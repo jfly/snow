@@ -5,7 +5,7 @@ let
     "14.18.2" = "sha256-Poqc4Q+LzTYo623QSffwPIS6khm+b5dD4iIRVLnMaAs=";
   };
 in
-version: pkgs.nodejs.overrideAttrs (oldAttrs: {
+version: pkgs.nodejs-14_x.overrideAttrs (oldAttrs: {
   inherit version;
   src = pkgs.fetchurl {
     url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
