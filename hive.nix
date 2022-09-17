@@ -7,7 +7,7 @@
     # https://github.com/zhaofengli/colmena/issues/54 tracks that feature
     # request for Colmena.
     nodeNixpkgs = rec {
-      clark = (import ./sources.nix).nixos-21_11 {
+      clark = (import ./sources.nix).nixos-unstable {
         overlays = import ./overlays;
       };
       dallben = (import ./sources.nix).nixos-unstable {
