@@ -19,10 +19,23 @@
   programs.gnupg.agent.enable = true;
 
   environment.systemPackages = with pkgs; [
+    ### Network
+    curl
+    wget
+    whois
+    netcat
+    traceroute
+    dnsutils # Provides nslookup
+    sipcalc # an advanced console based ip subnet calculator
+
     ### Honor
     # server-config
-    vagrant
+    (vagrant.override {
+      # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
+      withLibvirt = false;
+    })
     gnupg
     openssl
+    amazon-ecr-credential-helper
   ];
 }
