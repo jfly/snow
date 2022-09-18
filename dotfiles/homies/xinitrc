@@ -6,6 +6,8 @@ xrdb -merge ~/.Xresources
 # Enable numlock on boot (thanks James!)
 numlockx on
 
+export BROWSER=chromium
+
 ###
 ### MPD
 ### Using socket based authentication is nice as it lets us do things like `mpc insert file:///...`
