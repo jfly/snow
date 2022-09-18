@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+import argparse
+import subprocess
+from pathlib import Path
+
+def is_git_dir(p: Path):
+    return p.joinpath(".git").is_dir()
+
+def has_uncommitted_changes(repo: Path):
+    dirty = [
+        d for d in subprocess.check_output(["git", "status", "--porcelain=v1"], cwd=str(repo), text=True).split("\n") if d
+    ]
+    return len(dirty) > 0
+
+def has_unpushed_changes(repo: Path):
+    dirty = [
+        d for d in subprocess.check_output(["git", "log", "--branches", "--not", "--remotes"], cwd=str(repo), text=True).split("\n") if d
+    ]
+    return len(dirty) > 0
+
+def has_stashed_changes(repo: Path):
+    dirty = [
+        d for d in subprocess.check_output(["git", "stash", "list"], cwd=str(repo), text=True).split("\n") if d
+    ]
+    return len(dirty) > 0
+
+def analyze_repo(p: Path):
+    if has_uncommitted_changes(p):
+        print(f"{p.resolve()}: repo has uncommitted changes")
+    elif has_unpushed_changes(p):
+        print(f"{p.resolve()}: repo has unpushed changes")
+    elif has_stashed_changes(p):
+        print(f"{p.resolve()}: repo has stashed changes")
+
+def search(p: Path):
+    for child in p.iterdir():
+        if is_git_dir(child):
+            analyze_repo(child)
+        elif child.is_dir():
+            search(child)
+        else:
+            print(f"{child.resolve()}: untracked file")
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dir", type=Path)
+    args = parser.parse_args()
+    search(Path(args.dir))
+
+if __name__ == "__main__":
+    main()
