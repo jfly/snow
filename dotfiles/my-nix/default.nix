@@ -17,7 +17,15 @@ rec {
   ### Ebooks
   # calibre needs to be wrapped with nixGL to run on non-NixOS distributions.
   # See https://github.com/NixOS/nixpkgs/issues/132045 for details.
-  calibre = wrapNixGL pkgs.calibre;
+  calibre = wrapNixGL (pkgs.symlinkJoin {
+    name = "calibre";
+    paths = [ pkgs.calibre ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/calibre \
+        --add-flags "--with-library=~/sync/calibre"
+    '';
+  });
   knock = import ./knock;
 
   ### Text editors

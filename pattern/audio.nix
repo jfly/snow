@@ -22,7 +22,7 @@ in
   # Enable MPD
   services.mpd = {
     enable = true;
-    musicDirectory = "/mnt/media/music";
+    musicDirectory = "/home/${config.snow.user.name}/sync/music";
     extraConfig = ''
       audio_output {
           type "pipewire"

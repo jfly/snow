@@ -42,6 +42,7 @@ in
       ./desktop.nix
       ./android.nix
       ./development.nix
+      ./syncthing.nix
     ];
 
   # Flakes!
