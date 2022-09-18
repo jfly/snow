@@ -69,6 +69,10 @@ in
           ignorePerms = false; # By default, Syncthing doesn't sync file permissions, but there are some scripts in here.
           path = "${syncDir}/scratch";
         };
+        "wallpaper" = {
+          devices = [ "snow" ];
+          path = "${syncDir}/wallpaper";
+        };
       };
     };
   };
