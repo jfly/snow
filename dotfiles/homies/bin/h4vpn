@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+function find_connection_matching() {
+    connection=$(nmcli -g name,type con show | grep "$1.*:vpn" | grep -o "^[^:]*")
+    echo "$connection"
+}
+
 function nm_con_toggle() {
     __con_id="$1"
     if nmcli connection show --active | grep "$1" >/dev/null; then
@@ -11,4 +18,15 @@ function nm_con_toggle() {
     fi
 }
 
-nm_con_toggle "jeremy-fleischman-system76-linux.config"
+# Add vpn connection if it doesn't exist yet.
+nm-vpn-add ~/sync/linux-secrets/h4-vpn/jeremy-fleischman-system76-linux.config.ovpn ~/sync/linux-secrets/h4-vpn/passphrase.txt
+
+search_name="jeremy-fleischman-system76-linux.config"
+
+connection=$(find_connection_matching "$search_name")
+if [ -z "$connection" ]; then
+    echo "ERROR: could not find a vpn connection matching $search_name" >/dev/stderr
+    exit 1
+fi
+
+nm_con_toggle "$connection"

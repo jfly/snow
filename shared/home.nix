@@ -9,11 +9,12 @@ let
       else
         builtins.throw "Could not find ${target}";
   };
+  homeDir = "/home/${username}";
 in
 {
   home.stateVersion = "22.05";
   home.username = username;
-  home.homeDirectory = "/home/${username}";
+  home.homeDirectory = homeDir;
 
   home.file = (lib.mapAttrs'
     (name: target:
@@ -37,6 +38,14 @@ in
       ".config/direnv/direnvrc" = ../dotfiles/homies/config/direnv/direnvrc;
       ".config/direnv/direnv.toml" = ../dotfiles/homies/config/direnv/direnv.toml;
       ".config/direnv/lib" = ../dotfiles/homies/config/direnv/lib;
+
+      # Secrets
+      ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";
+      ".ssh/id_rsa.pub" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa.pub";
+      ".ssh/known_hosts" = "${homeDir}/sync/linux-secrets/.ssh/known_hosts";
+      ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";
+      ".android/adbkey" = "${homeDir}/sync/linux-secrets/.android/adbkey";
+      ".android/adbkey.pub" = "${homeDir}/sync/linux-secrets/.android/adbkey.pub";
     }) // {
     ".zshrc".text = ''
       if [ "$(hostname)" = "dalinar" ]; then

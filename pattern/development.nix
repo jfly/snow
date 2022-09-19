@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 
+let nm-vpn-add = pkgs.callPackage ../shared/nm-vpn-add { };
+in
 {
   # Enable docker for the main user.
   virtualisation.docker.enable = true;
@@ -20,6 +22,7 @@
 
   environment.systemPackages = with pkgs; [
     ### Network
+    nm-vpn-add
     curl
     wget
     whois

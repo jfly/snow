@@ -73,6 +73,11 @@ in
           devices = [ "snow" ];
           path = "${syncDir}/wallpaper";
         };
+        "linux-secrets" = {
+          devices = [ "snow" ];
+          ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
+          path = "${syncDir}/linux-secrets";
+        };
       };
     };
   };
