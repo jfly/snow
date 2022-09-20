@@ -37,7 +37,7 @@ in
   # Hopefully we could instead just run mpd as a user service? See
   # https://github.com/NixOS/nixpkgs/issues/41772#issuecomment-1225893858
   # for a glimmer of hope.
-  services.mpd.user = config.deployment.targetUser;
+  services.mpd.user = config.snow.user.name;
   systemd.services.mpd.environment = {
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609
     XDG_RUNTIME_DIR = "/run/user/${builtins.toString config.snow.user.uid}";
