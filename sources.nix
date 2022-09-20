@@ -7,15 +7,15 @@ rec {
   });
   nixos-unstable = import (builtins.fetchTarball {
     name = "nixos-unstable";
-    url = "https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs/archive/f677051b8dc0b5e2a9348941c99eea8c4b0ff28f.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "0zch1dhd4mc84jx7cl0qarxjwkyf90qsxkpbwa2nlzgdjb459zyk";
+    sha256 = "18zycb8zxnz20g683fgbvckckr7rmq7c1gf96c06fp8pmaak0akx";
   });
   parsec-gaming = import (builtins.fetchTarball {
     name = "parsec-gaming-nix";
-    url = "https://github.com/jfly/parsec-gaming-nix/archive/61dfa8d291109cd755573e9011edd249f90ddf8c.tar.gz";
+    url = "https://github.com/jfly/parsec-gaming-nix/archive/fc5e2e2898bf6802925b05e2d376944beaab2474.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "1ibpfybwj3z7gnyk6gk1wsyqz5nv432x1a4rxzqkcc2mjssl7yj4";
+    sha256 = "1338ga70pmmld020zc407qqgk9f5dnpmr9nmbcrlz8rrwls5zv00";
   });
   nixgl = import (builtins.fetchTarball {
     name = "nixGL";
