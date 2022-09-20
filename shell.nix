@@ -50,6 +50,27 @@ pkgs.mkShell {
   nativeBuildInputs = [
     pkgs.colmena
     pkgs.age
+    pkgs.nixpkgs-fmt
+    pkgs.just
+
+    # For building portable usb installations.
+    pkgs.parted
+    pkgs.cloud-utils
+
+    # k8s stuff
+    pkgs.kubectl
+    # pulumi-bin wraps pulumi with a shell script that sets LD_LIBRARY_PATH,
+    # which causes issues when pulumi tries to invoke subprocesses.
+    # For example:
+    #  $ LD_LIBRARY_PATH=/nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib python --version
+    #  /nix/store/x24kxyqwqg2ln8kh9ky342kdcmhbng3h-python3-3.9.9/bin/python: /nix/store/jcb7fny2k03pfbdqk1hcnh12bxgax6vf-glibc-2.33-108/lib/libc.so.6: version `GLIBC_2.34' not found (required by /nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib/libgcc_s.so.1)
+    #
+    # This environment variable was added a while ago in
+    # https://github.com/NixOS/nixpkgs/pull/81879, but things seem to work now
+    # without it. :shrug:
+    # TODO: file an issue upstream with nixpkgs
+    (unwrap pkgs.pulumi-bin)
+    pkgs.crd2pulumi
     (
       mach-nix.mkPython {
         # contents of a requirements.txt (use builtins.readFile ./requirements.txt alternatively)
@@ -69,22 +90,6 @@ pkgs.mkShell {
         ];
       }
     )
-    pkgs.kubectl
-    pkgs.nixos-generators
-    pkgs.nixpkgs-fmt
-    pkgs.just
-    # pulumi-bin wraps pulumi with a shell script that sets LD_LIBRARY_PATH,
-    # which causes issues when pulumi tries to invoke subprocesses.
-    # For example:
-    #  $ LD_LIBRARY_PATH=/nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib python --version
-    #  /nix/store/x24kxyqwqg2ln8kh9ky342kdcmhbng3h-python3-3.9.9/bin/python: /nix/store/jcb7fny2k03pfbdqk1hcnh12bxgax6vf-glibc-2.33-108/lib/libc.so.6: version `GLIBC_2.34' not found (required by /nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib/libgcc_s.so.1)
-    #
-    # This environment variable was added a while ago in
-    # https://github.com/NixOS/nixpkgs/pull/81879, but things seem to work now
-    # without it. :shrug:
-    # TODO: file an issue upstream with nixpkgs
-    (unwrap pkgs.pulumi-bin)
-    pkgs.crd2pulumi
   ];
 
   # Set various secret environment variables.

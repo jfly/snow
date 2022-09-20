@@ -7,8 +7,6 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.eno0.useDHCP = true;
-  networking.interfaces.wlp0s20f3.useDHCP = true;
   # Disable the firewall. I'm not used to having one, and we're behind a NAT anyways...
   networking.firewall.enable = false;
 

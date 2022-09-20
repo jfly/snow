@@ -1,6 +1,39 @@
 {
   meta = {
-    nixpkgs = (import ./sources.nix).nixos-unstable { };
+    nixpkgs = (import ./sources.nix).nixos-unstable {
+      overlays = [
+        (
+          self: super:
+            let lib = super.lib;
+            in
+            {
+              # This overlay lets us convert a given colmena node into
+              # something that could get loaded on a usb drive and become a
+              # "portable" environment.
+              # See the call to `colmena eval` in `tools/build-portable-usb.sh`
+              # to see how this is used.
+              toLiveUsb = { node, encryptedRootDevice, decryptedRootDevice, bootDevice }: node.extendModules {
+                modules = [
+                  {
+                    boot = {
+                      loader = {
+                        efi.canTouchEfiVariables = lib.mkForce true;
+                        grub.efiInstallAsRemovable = true;
+                      };
+                    };
+
+                    fileSystems."/" = {
+                      device = lib.mkForce decryptedRootDevice;
+                    };
+                    boot.initrd.luks.devices."cryptroot".device = lib.mkForce encryptedRootDevice;
+                    fileSystems."/boot".device = lib.mkForce bootDevice;
+                  }
+                ];
+              };
+            }
+        )
+      ];
+    };
 
     # Colmena doesn't require it, but put every single host in here. I'd prefer
     # to *not* have a fallback value defined for nixpkgs at all.

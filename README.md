@@ -11,3 +11,11 @@ To deploy all machines:
 To deploy one machine:
 
     ./deploy 'dallben'
+
+# live usb
+
+To build a live usb:
+
+    $ tools/build-portable-usb.sh 'pattern'
+
+And follow the instructions it prints about how to copy this to a usb drive.
