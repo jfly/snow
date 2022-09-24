@@ -31,19 +31,19 @@ in
   security.sudo.wheelNeedsPassword = false;
   deployment.allowLocalDeployment = true;
 
-  imports =
-    [
-      ./hardware-configuration.nix # Include the results of the hardware scan.
-      ./network.nix
-      ./users.nix
-      ./audio.nix
-      ./home-manager.nix
-      ./shell
-      ./desktop.nix
-      ./android.nix
-      ./development.nix
-      ./syncthing.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix # Include the results of the hardware scan.
+    ./network.nix
+    ./users.nix
+    ./audio.nix
+    ./gpu.nix
+    ./home-manager.nix
+    ./shell
+    ./desktop.nix
+    ./android.nix
+    ./development.nix
+    ./syncthing.nix
+  ];
 
   # Flakes!
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
