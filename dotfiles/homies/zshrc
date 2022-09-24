@@ -59,6 +59,9 @@ fi
 export H4_SHIMLESS_DEVELOPMENT=1
 if [ -f $HOME/.h4.zshrc ]; then
     source $HOME/.h4.zshrc
+else
+    # Enable direnv
+    eval "$(direnv hook zsh)"
 fi
 
 ## Python stuff
