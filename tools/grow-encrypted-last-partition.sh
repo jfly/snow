@@ -37,6 +37,7 @@ fi
 CRYPT_DEVICE=cryptroot-resizing
 echo -n "$PASSPHRASE" | sudo cryptsetup -q luksOpen --key-file=- "${DEVICE}2" "$CRYPT_DEVICE"
 echo -n "$PASSPHRASE" | sudo cryptsetup -q resize --key-file=- "$CRYPT_DEVICE"
+sudo e2fsck -f /dev/mapper/cryptroot-resizing
 sudo resize2fs /dev/mapper/cryptroot-resizing
 
 echo "Successfully resized ${DEVICE}!"

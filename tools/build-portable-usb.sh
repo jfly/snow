@@ -100,14 +100,10 @@ nixInstall "$node"
 echo "Successfully built $diskImage for: $node"
 echo ""
 echo "To put this on a usb drive, insert your drive, *carefully* look at lsblk"
-echo "to find the correct device, and run dd:"
+echo "to find the correct device, and run:"
 echo ""
-echo "    sudo dd bs=4M if=$diskImage of=<DEVICE HERE> status=progress conv=fsync"
-
-# Figure out if there's some way of getting nix's `boot.growPartition` and
-# `filesystems."/".autoResize` settings to work with encrypted volumes. They
-# work great with un-encrypted volumes.
+echo "    sudo tools/dd-and-grow.sh $diskImage <DEVICE>"
 echo ""
-echo "Finally, resize the root partition to occupy all the available space:"
-echo ""
-echo "    sudo tools/grow-encrypted-last-partition.sh <DEVICE HERE>"
+echo "Where <DEVICE> is something like /dev/sda."
+echo "This will copy $diskImage to <DEVICE>, thereby creating multiple "
+echo "partitions. It will then grow the last partition to fill the available space."

@@ -10,6 +10,12 @@ in
       enable = true;
       user = config.snow.user.name;
       dataDir = syncDir;
+      extraFlags = [
+        # Prevent creation of ~/Sync directory on first startup. We don't use
+        # it for anything, and it's confusing to have living next to the ~/sync
+        # directory.
+        "--no-default-folder"
+      ];
       configDir = "${home}/.config/syncthing";
       overrideDevices = true;
       overrideFolders = true;
