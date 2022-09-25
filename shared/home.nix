@@ -98,4 +98,14 @@ in
     '';
   };
 
+  dconf.settings = {
+    # Note: mcg defaults to connecting to localhost:6600 over ipv6,
+    # which doesn't work. Changing the hostname to 127.0.0.1 works
+    # around the issue.
+    # TODO: figure out how to get this configuration closer to
+    # pattern/audio.nix, where mpc and mcg are installed.
+    "xyz/suruatoel/mcg" = {
+      host = "127.0.0.1";
+    };
+  };
 }
