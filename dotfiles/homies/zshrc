@@ -149,11 +149,6 @@ fi
 ###
 ### Nix
 ###
-# From https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs
-#  > Channels are a way of distributing Nix software, but they are being phased
-#  > out. Even though they are still used by default, it is recommended to avoid
-#  > channels and <nixpkgs> by always setting NIX_PATH= to be empty.
-export NIX_PATH=""
 # From https://nixos.wiki/wiki/Locales:
 #   > You may need to set the environmental variable LOCALE_ARCHIVE to point to
 #   > your system's locale-achive.

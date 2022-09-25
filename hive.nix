@@ -73,6 +73,10 @@
     };
 
     users.groups.media = { gid = 1002; };
+
+    # Ensure that commands like `nix repl` and `nix-shell` have access to the
+    # same nixpkgs we use to install everything else.
+    nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
   };
 
   "clark" = import clark/configuration.nix;
