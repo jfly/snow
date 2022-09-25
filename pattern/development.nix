@@ -22,6 +22,9 @@ in
   programs.ssh = {
     startAgent = true;
     enableAskPassword = true;
+    # Switch from the old school looking default askpass program to gnome
+    # seahorse's much prettier one.
+    askPassword = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
     extraConfig = ''
       AddKeysToAgent yes
     '';
