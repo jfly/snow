@@ -13,9 +13,9 @@ rec {
   });
   parsec-gaming = import (builtins.fetchTarball {
     name = "parsec-gaming-nix";
-    url = "https://github.com/jfly/parsec-gaming-nix/archive/fc5e2e2898bf6802925b05e2d376944beaab2474.tar.gz";
+    url = "https://github.com/jfly/parsec-gaming-nix/archive/af687d7b9a5412a69c8e1b9ba9f4355047c80d91.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "1338ga70pmmld020zc407qqgk9f5dnpmr9nmbcrlz8rrwls5zv00";
+    sha256 = "0fg20ghlnmycj0w52ccshblbnmhjb5xxa72jwa8xk9apf2z4wi47";
   });
   nixgl = import (builtins.fetchTarball {
     name = "nixGL";
