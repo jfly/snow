@@ -487,11 +487,23 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 
 """"""" easier notetaking
 let g:markdown_folding = 1  " https://bitcrowd.dev/folding-sections-of-markdown-in-vim
-function! NewNoteHeader()
+function! NoteHeader()
     execute "normal! o# " . strftime('%F %R %z') . ": "
     startinsert!
 endfunction
 
+function! NoteList()
+    let g:netrw_sort_by = 'time'
+    let g:netrw_sort_direction = 'reversed'
+    let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
+
+    execute "Explore ~/sync/scratch/jfly/notes"
+endfunction
+
+" Note New: start a new note
 noremap <leader>nn :e ~/sync/scratch/jfly/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
-autocmd FileType markdown noremap <leader>nh :call NewNoteHeader()<CR>
+" Note List: open a list of notes
+noremap <leader>nl :call NoteList()<CR>
+" Note Header: create a new header
+autocmd FileType markdown noremap <leader>nh :call NoteHeader()<CR>
 """""""
