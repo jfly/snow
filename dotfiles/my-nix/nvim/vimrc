@@ -492,6 +492,6 @@ function! NewNoteHeader()
     startinsert!
 endfunction
 
-noremap <leader>nn :e ~/.dotfiles/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
+noremap <leader>nn :e ~/sync/scratch/jfly/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
 autocmd FileType markdown noremap <leader>nh :call NewNoteHeader()<CR>
 """""""
