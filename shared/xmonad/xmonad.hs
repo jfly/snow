@@ -163,6 +163,11 @@ isNotInfixOf a b = not (a `isInfixOf` b)
 main = do
     dirs <- getDirectories
     let conf = docks $ ewmh desktopConfig {
+        -- Trigger the xmonad.target target. This really shouldn't be
+        -- necessary, but we're using it as a workaround for
+        -- https://github.com/xmonad/xmonad/issues/422. See pattern/audio.nix
+        -- for details.
+        startupHook = spawn "systemctl --user start xmonad.target",
         manageHook = manageDocks <+> manageSpawn <+> windowPlacement <+> manageHook desktopConfig,
         handleEventHook = handleEventHook def <+> Hacks.windowedFullscreenFixEventHook <+> swallowEventHook (className =? "Alacritty" <&&> fmap ( "xmonad-no-swallow" `isNotInfixOf`) title) (return True),
         layoutHook = myLayout,

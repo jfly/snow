@@ -36,11 +36,26 @@ in
     XDG_RUNTIME_DIR = "/run/user/${builtins.toString config.snow.user.uid}";
   };
 
+  systemd.user.targets = {
+    # This xmonad target just exists as a workaround for
+    # https://github.com/xmonad/xmonad/issues/422.
+    # See shared/xmonad/xmonad.hs for where this target gets triggered.
+    "xmonad" = {
+      enable = true;
+      partOf = [ "graphical-session.target" ];
+    };
+  };
   systemd.user.services = {
     "mcg" = {
       enable = true;
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+
+      # We can't use graphical-session because of
+      # https://github.com/xmonad/xmonad/issues/422.
+      # wantedBy = [ "graphical-session.target" ];
+      # partOf = [ "graphical-session.target" ];
+      wantedBy = [ "xmonad.target" ];
+      partOf = [ "xmonad.target" ];
+
       serviceConfig = {
         ExecStart = "${mcg}/bin/mcg";
       };
