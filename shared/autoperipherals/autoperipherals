@@ -15,7 +15,7 @@ function main() {
         if [ "$(hostname)" = "dallben" ]; then
             DPI=133
         elif [ "$(hostname)" = "pattern" ]; then
-            DPI=96
+            DPI=133
         else
             echo "Unrecognized host: $(hostname)"
             exit 1
