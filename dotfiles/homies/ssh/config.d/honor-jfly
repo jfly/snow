@@ -6,6 +6,8 @@ Host bastion.honordev.com bastion
     ControlMaster auto
     ControlPath ~/.ssh/%r@%h:%p
     ServerAliveInterval 60
+    # Urg, we're still on ubuntu 18.04 and it doesn't understand "alacritty"
+    SetEnv TERM=xterm-256color
     User jeremy
 
 Host h4g2g
