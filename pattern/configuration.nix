@@ -43,6 +43,7 @@ in
     ./android.nix
     ./development.nix
     ./syncthing.nix
+    ./printers.nix
   ];
 
   # Flakes!
