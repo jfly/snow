@@ -66,6 +66,9 @@ in
     })
     gnupg
     openssl
+    # dev setup scripts
     amazon-ecr-credential-helper
+    # external-web
+    nginx
   ];
 }
