@@ -37,4 +37,6 @@ Host h4mac
 
 Host h4-*
     ProxyCommand h4-bastion-proxy %h %p %n
+    # Urg, we're still on ubuntu 18.04 and it doesn't understand "alacritty"
+    SetEnv TERM=xterm-256color
     User jeremy

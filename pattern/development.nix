@@ -14,6 +14,11 @@ let
   };
 in
 {
+  # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
+  # isn't exactly reproducible, but I'll live with it.
+  # Trick copied from
+  # https://discourse.nixos.org/t/a-fast-way-for-modifying-etc-hosts-using-networking-extrahosts/4190
+  environment.etc.hosts.mode = "0644";
   # Enable docker for the main user.
   virtualisation.docker.enable = true;
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];

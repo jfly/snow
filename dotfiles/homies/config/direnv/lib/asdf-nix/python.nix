@@ -1,5 +1,16 @@
 { pkgs }:
 let
+  mkPy27 = { sourceVersion, sha256 }: (
+    let
+      py27NoVenv = (pkgs.python27.override {
+        self = py27NoVenv;
+        inherit sourceVersion sha256;
+        packageOverrides = pkgs.callPackage ./py2-virtualenv-packages.nix { };
+      });
+    in
+    py27NoVenv.withPackages (ps: with ps; [ pip virtualenv ])
+  );
+
   versions = {
     "3.8.10" = pkgs.python38.override {
       sourceVersion = {
@@ -19,7 +30,7 @@ let
       };
       sha256 = "sha256-Xi9fVU4/j38ClvfnPYYAxOmsuu5rJVW4Mgbt9RU4cNo=";
     };
-    "2.7.17" = (pkgs.python27.override {
+    "2.7.17" = mkPy27 {
       sourceVersion = {
         major = "2";
         minor = "7";
@@ -27,8 +38,16 @@ let
         suffix = "";
       };
       sha256 = "sha256-TUPwM829Cqe3AjyBsOmG/RHmU7UkjayRRNUI8RgSukE=";
-      packageOverrides = pkgs.callPackage ./py2-virtualenv-packages.nix { };
-    }).withPackages (ps: with ps; [ pip virtualenv ]);
+    };
+    "2.7.18" = mkPy27 {
+      sourceVersion = {
+        major = "2";
+        minor = "7";
+        patch = "18";
+        suffix = "";
+      };
+      sha256 = "sha256-tiwOeTdVHQzAK4/Vyw9UT5QFuvyaVNOAjtRZSBLt70M=";
+    };
   };
 in
 version: versions.${version}

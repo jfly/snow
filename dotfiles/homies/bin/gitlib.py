@@ -7,7 +7,7 @@ __all__ = ['parse_remote']
 def parse_remote(remote: str):
     regexps = [
         re.compile(r"^git@(?P<service>[^/]+):(?P<org>.+)/(?P<repo>[^/]+).git$"),
-        re.compile(r"^https://(?P<service>[^/]+)/(?P<org>[^/]+)/(?P<repo>[^/]+?)(?:.git)?$"),
+        re.compile(r"^https://(?P<service>[^/]+)/(?P<org>[^/]+)/(?P<repo>[^/]+)(?:.git)?.*$"),
         re.compile(r"^ssh://(?P<service>clark)/state/git/(?P<repo>[^/]+?)(?:.git)?$"),
     ]
 
