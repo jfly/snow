@@ -88,7 +88,7 @@ def deage_file(aged_filename: str):
 def main():
     sanity_check_private_key()
 
-    for root, _, files in os.walk(DECRYPTED_SECRETS_DIR):
+    for root, _, files in os.walk("."):
         for file in files:
             if file.endswith(".secret"):
                 os.unlink(os.path.join(root, file))
