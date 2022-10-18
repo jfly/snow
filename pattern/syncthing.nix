@@ -84,6 +84,11 @@ in
           ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
           path = "${syncDir}/linux-secrets";
         };
+        "manman" = {
+          id = "amnsl-rxpc2";
+          devices = [ "snow" ];
+          path = "${syncDir}/manman";
+        };
       };
     };
   };
