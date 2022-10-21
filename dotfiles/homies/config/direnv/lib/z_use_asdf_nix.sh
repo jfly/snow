@@ -39,15 +39,24 @@ $(cat ./.tool-versions)
 '';
             });
 
-            # Python wheels expect to be able to find shared libs in /usr/lib,
-            # but NixOS is special and those files don't exist. See
-            # https://www.breakds.org/post/build-python-package/#the-package-is-built-successfully-but-it-panics-about-not-finding-libstdcso6-when-being-imported
-            # for details and a neat solution using autoPatchelfHook. However,
-            # if we're using regular old venvs and pip, we don't have an
-            # opportunity to patch wheels. Maybe there's something clever we
-            # could do by providing a wrapper on top of pip? For now it's
-            # working well enough to just set LD_LIBRARY_PATH.
-            LD_LIBRARY_PATH = pkgs.stdenv.cc.cc.lib + /lib;
+            # This doesn't work: setting LD_LIBRARY_PATH like this breaks
+            # things when we're trying to run multiple applications compiled
+            # with different versions of glibc. I think the right fix is to
+            # actually patchelf all the .so files we pip installed to be
+            # statically linked to the appropriate libraries. see
+            # ~/sync/scratch/jfly/notes/2022-09-26-python-patching-nixos.md
+            # for a proof of concept of how to do this. i think we could make
+            # this a lot smoother, and even do some clever patch to pip to make
+            # this "just work"
+            # # Python wheels expect to be able to find shared libs in /usr/lib,
+            # # but NixOS is special and those files don't exist. See
+            # # https://www.breakds.org/post/build-python-package/#the-package-is-built-successfully-but-it-panics-about-not-finding-libstdcso6-when-being-imported
+            # # for details and a neat solution using autoPatchelfHook. However,
+            # # if we're using regular old venvs and pip, we don't have an
+            # # opportunity to patch wheels. Maybe there's something clever we
+            # # could do by providing a wrapper on top of pip? For now it's
+            # # working well enough to just set LD_LIBRARY_PATH.
+            # LD_LIBRARY_PATH = pkgs.stdenv.cc.cc.lib + /lib;
           };
         }
       );
