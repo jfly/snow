@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix"
