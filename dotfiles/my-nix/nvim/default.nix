@@ -103,18 +103,7 @@ pkgs.neovim.override {
         nvim-lspconfig
         cmp-nvim-lsp
         cmp-buffer
-        (nvim-cmp.overrideAttrs (oldAttrs: {
-          # Overriding the src to pull in a fix for
-          # https://github.com/hrsh7th/nvim-cmp/issues/1149
-          # and
-          # https://github.com/hrsh7th/nvim-cmp/issues/1147
-          src = pkgs.fetchFromGitHub {
-            owner = "hrsh7th";
-            repo = "nvim-cmp";
-            rev = "058100d81316239f3874064064f0f0c5d43c2103";
-            sha256 = "sha256-EzjqblEgeu3K7TajXpR/WE4Ns3OxfevkDGco7KJxPfA=";
-          };
-        }))
+        nvim-cmp
         null-ls-nvim
       ];
     };

@@ -329,7 +329,7 @@ lua << EOF
     end
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     -- null-ls is good for wrapping misc tools (such as shellcheck) up into
     -- something LSP compatible.
@@ -345,7 +345,7 @@ lua << EOF
 
       -- auto format on save
       on_attach = function(client)
-        if client.resolved_capabilities.document_formatting then
+        if client.server_capabilities.documentHighlightProvider then
           vim.cmd([[
             augroup LspFormatting
               autocmd! * <buffer>

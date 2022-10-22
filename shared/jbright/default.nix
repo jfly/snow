@@ -6,6 +6,7 @@ let
     version = "1.0";
     format = "pyproject";
 
+    nativeBuildInputs = [ setuptools ];
     src = ./.;
   };
 in

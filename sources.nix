@@ -7,9 +7,9 @@ rec {
   });
   nixos-unstable = import (builtins.fetchTarball {
     name = "nixos-unstable";
-    url = "https://github.com/NixOS/nixpkgs/archive/f677051b8dc0b5e2a9348941c99eea8c4b0ff28f.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs/archive/301aada7a64812853f2e2634a530ef5d34505048.tar.gz";
     # Hash obtained using `nix-prefetch-url --unpack <url>`
-    sha256 = "18zycb8zxnz20g683fgbvckckr7rmq7c1gf96c06fp8pmaak0akx";
+    sha256 = "07y10kplajgysb6491hmksq4gqsiyibia83m3blcxicwyld455km";
   });
   parsec-gaming = import (builtins.fetchTarball {
     name = "parsec-gaming-nix";
@@ -26,9 +26,9 @@ rec {
   home-manager-unstable-tarball = builtins.fetchTarball
     {
       name = "home-manager-unstable";
-      url = "https://github.com/nix-community/home-manager/archive/8675cfa549e1240c9d2abb1c878bc427eefcf926.tar.gz";
+      url = "https://github.com/nix-community/home-manager/archive/69d19b9839638fc487b370e0600a03577a559081.tar.gz";
       # Hash obtained using `nix-prefetch-url --unpack <url>`
-      sha256 = "0lw47ddid8x7cfg1c26h8v52x9nl667p0ha78rgvyxd6j6si8126";
+      sha256 = "0cqwv3wl1hn3pc3v5scpi041ak8d66r42dj06jhb1cxlsibv4rin";
     };
   home-manager-modules = import (home-manager-unstable-tarball + "/modules");
   home-manager-nixos = import (home-manager-unstable-tarball + "/nixos");

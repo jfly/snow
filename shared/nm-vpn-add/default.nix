@@ -1,9 +1,10 @@
 { pkgs ? import <nixpkgs> { } }:
 
-pkgs.python3Packages.buildPythonApplication {
+with pkgs.python3Packages; buildPythonApplication {
   pname = "nm-vpn-add";
   version = "1.0";
   format = "pyproject";
 
+  nativeBuildInputs = [ setuptools ];
   src = ./.;
 }
