@@ -27,10 +27,10 @@ in
 
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
+    ./hardware-configuration-custom.nix
     ./network.nix
     ./users.nix
     ./audio.nix
-    ./gpu.nix
     ./home-manager.nix
     ./shell
     ./desktop.nix
