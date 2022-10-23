@@ -24,7 +24,7 @@
   # and https://wiki.archlinux.org/title/intel_graphics#Screen_flickering
   boot.kernelParams = [ "i915.enable_psr=0" ];
 
-  ### Trackpoing
+  ### Trackpoint
   environment.etc."X11/xorg.conf.d/20-trackpoint.conf".text = ''
     Section "InputClass"
       Identifier "Trackpoint Acceleration"
@@ -34,4 +34,7 @@
       Option "AccelSpeed" "-0.5"
     EndSection
   '';
+
+  ### Keep every other misc thing up to date
+  services.fwupd.enable = true;
 }

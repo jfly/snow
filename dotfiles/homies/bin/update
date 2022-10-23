@@ -1,7 +1,28 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-pacaur -Syuu
-asdf update
-asdf plugin update --all
+update_nixos() {
+    (
+        cd ~/src/github.com/jfly/snow
+        echo "TODO: actually update nixos. Switch to flakes, niv, or hand roll something that makes this easy to do."
+    )
+}
+
+fw_check() {
+    # For now, I'm too nervous to actually apply these updates automatically. I
+    # don't know how likely they are to break things, and I don't know if
+    # they're reversable. For now, just notify people if there are any updates.
+    fwupdmgr refresh --force >/dev/null
+    fwupdate_count=$(fwupdmgr get-updates --json | jq '.Devices | length')
+    if [ "$fwupdate_count" -gt 0 ]; then
+        echo ""
+        echo "###"
+        echo "### Found $fwupdate_count firware updates ###"
+        echo "###"
+        echo "Run 'fwupdmgr get-updates' to see available updates, and 'fwupdmgr update' when you're ready to do the updates."
+    fi
+}
+
+update_nixos
+fw_check
