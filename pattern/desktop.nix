@@ -32,6 +32,9 @@ in
       session = [{
         name = "xmonad";
         start = ''
+          # Xmonad doesn't set a cursor.
+          ${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr
+
           systemd-cat -t xmonad -- ${xmonad}/bin/xmonad &
           waitPID=$!
         '';

@@ -21,6 +21,12 @@ in
     source ${../../dotfiles/homies/commonrc/aliases}
   '';
 
+  programs.tmux = {
+    clock24 = true;
+    # Resize the window to the size of the smallest session for which it is the current window.
+    aggressiveResize = true;
+  };
+
   environment.systemPackages = with pkgs; [
     q
     pkgs.fzf

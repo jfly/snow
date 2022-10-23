@@ -33,11 +33,16 @@ in
       ".config/gtk-3.0" = ../dotfiles/homies/config/gtk-3.0;
 
       # Set up direnv.
-      # TODO: figure out how to get this confg living closer to the
+      # TODO: figure out how to get this config living closer to the
       # installation of direnv itself.
       ".config/direnv/direnvrc" = ../dotfiles/homies/config/direnv/direnvrc;
       ".config/direnv/direnv.toml" = ../dotfiles/homies/config/direnv/direnv.toml;
       ".config/direnv/lib" = ../dotfiles/homies/config/direnv/lib;
+
+      # Configure Docker.
+      # TODO: figure out how to get this config living closer to the
+      # installation of docker itself.
+      ".docker/config.json" = ../dotfiles/homies/docker/config.json;
 
       # Secrets
       ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";
