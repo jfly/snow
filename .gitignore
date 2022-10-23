@@ -1,3 +1,4 @@
 .sensitive-decrypted-secrets
 **/*.secret
 /.direnv
+result

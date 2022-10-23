@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p chntpw
+# shellcheck shell=bash
 
 set -e
 
@@ -10,6 +12,6 @@ umount /mnt
 
 echo "I'm opening up a copy of the Windows registry for you"
 echo "If you're looking for bluetooth keys, I suggest running the following command:"
-echo " > cd ControlSet001\\Service\\BTHPORT\\Parameters\\Keys"
+echo ' > cd ControlSet001\Service\BTHPORT\Parameters\Keys'
 echo ""
 chntpw -e /tmp/SYSTEM

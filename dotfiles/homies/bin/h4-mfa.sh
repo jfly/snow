@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p gnome.zenity
+# shellcheck shell=bash
 
 set -e
 

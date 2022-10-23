@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  q = pkgs.callPackage ../../shared/q { };
+in
 {
   programs.zsh.enable = true;
   users.users.${config.snow.user.name}.shell = pkgs.zsh;
@@ -19,11 +22,18 @@
   '';
 
   environment.systemPackages = with pkgs; [
+    q
     pkgs.fzf
-    git
-    psmisc
     direnv
 
-    acpi
+    ### Explore filesystem
+    file
+    tree
+
+    ### Misc utils
+    psmisc # provides pstree
+    acpi # check laptop battery
+    pwgen
+    htop
   ];
 }

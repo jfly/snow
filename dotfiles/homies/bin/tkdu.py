@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (p: with p; [ tkinter ])"
 
 # Copied from https://github.com/zeehio/tkdu/blob/master/tkdu.py
 #    This is tkdu.py, an interactive program to display disk usage
@@ -23,16 +24,17 @@ import os
 import stat
 import time
 import gzip
+from typing import Optional
 
 import tkinter
 from tkinter.filedialog import LoadFileDialog
 from tkinter.filedialog import askdirectory
 
 # Limit the number of printed error messages from parsing `du -ak` output
-ERRORS_FOUND_THRESHOLD = 10 # type: Optional[int]
+ERRORS_FOUND_THRESHOLD: Optional[int] = 10
 # Limit the graphical representation of directories/files nested more than
 # LEVELS_DEEP_THRESHOLD to reduce tkdu memory usage.
-LEVELS_DEEP_THRESHOLD = None # type: Optional[int]
+LEVELS_DEEP_THRESHOLD: Optional[int] = None
 
 
 MIN_PSZ = 1000
@@ -47,15 +49,15 @@ BORDER = 2
 FONT_HEIGHT = 12
 FONT_HEIGHT2 = 20
 
-dircolors = ['#ff7070', '#70ff70', '#7070ff']
-leafcolors = ['#bf5454', '#54bf54', '#5454bf']
+dircolors = ["#ff7070", "#70ff70", "#7070ff"]
+leafcolors = ["#bf5454", "#54bf54", "#5454bf"]
 
 
 def allocate(path, files, canvas, x, y, w, h, first, depth):
     tk_call = canvas.tk.call
     if w < MIN_W or h < MIN_H:
         return
-    psz = w*h
+    psz = w * h
     if psz < MIN_PSZ:
         return
     if path and path[-1] == "/":
@@ -71,7 +73,7 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
     ff = getkids(files, path)
     if not ff:
         return
-    if ff[0][1] == '/':
+    if ff[0][1] == "/":
         del ff[0]
     ff = ff[first:]
     for item in ff:
@@ -82,60 +84,60 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
         return
 
     i = 0
-    ratio = psz*1./totsz
+    ratio = psz * 1.0 / totsz
 
-    while i < len(ff) and w > 2*BORDER and h > 2*BORDER:
+    while i < len(ff) and w > 2 * BORDER and h > 2 * BORDER:
         if w > h:
             orient = VERTICAL
-            usew = w - h*2./3
+            usew = w - h * 2.0 / 3
             if usew < 50:
                 usew = 50
             if usew > 200:
                 usew = 200
-            first_height = ff[i][0]/usew*ratio
-            while first_height < .65 * usew:
+            first_height = ff[i][0] / usew * ratio
+            while first_height < 0.65 * usew:
                 usew = usew / 1.5
-                first_height = ff[i][0]/usew*ratio
+                first_height = ff[i][0] / usew * ratio
             want = usew * h / ratio
-            maxcnt = h/30
+            maxcnt = h / 30
         else:
             orient = HORIZONTAL
-            useh = h - w*2./3
+            useh = h - w * 2.0 / 3
             if useh < 50:
                 useh = 50
             if useh > 100:
                 useh = 100
-            first_width = ff[i][0]/useh*ratio
-            while first_width < .65 * useh:
+            first_width = ff[i][0] / useh * ratio
+            while first_width < 0.65 * useh:
                 useh = useh / 1.5
-                first_width = ff[i][0]/useh*ratio
+                first_width = ff[i][0] / useh * ratio
             want = useh * w / ratio
-            maxcnt = w/30
+            maxcnt = w / 30
 
-        j = i+1
+        j = i + 1
         use = ff[i][0]
         while j < len(ff) and use < want:  # and j < i + maxcnt:
             use = use + ff[j][0]
-            j = j+1
+            j = j + 1
 
         if orient is VERTICAL:
             usew = use * ratio / h
-            if usew <= 2*BORDER:
+            if usew <= 2 * BORDER:
                 break
             y0 = y
             for item in ff[i:j]:
-                dy = item[0]/usew*ratio
+                dy = item[0] / usew * ratio
                 item[2] = (x, y0, usew, dy)
                 y0 = y0 + dy
             x = x + usew
             w = w - usew
         else:
             useh = use * ratio / w
-            if useh <= 2*BORDER:
+            if useh <= 2 * BORDER:
                 break
             x0 = x
             for item in ff[i:j]:
-                dx = item[0]/useh*ratio
+                dx = item[0] / useh * ratio
                 item[2] = (x0, y, dx, useh)
                 x0 = x0 + dx
             y = y + useh
@@ -150,58 +152,112 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
         if item[2] is None:
             continue
         x, y, w, h = pos = item[2]
-        if w > 3*BORDER and h > 3*BORDER:
-            tk_call(canvas._w,
-                    "create", "rectangle",
-                    x+BORDER+2, y+BORDER+2, x+w-BORDER+1, y+h-BORDER+1,
-                    "-fill", "#3f3f3f",
-                    "-outline", "#3f3f3f")
+        if w > 3 * BORDER and h > 3 * BORDER:
+            tk_call(
+                canvas._w,
+                "create",
+                "rectangle",
+                x + BORDER + 2,
+                y + BORDER + 2,
+                x + w - BORDER + 1,
+                y + h - BORDER + 1,
+                "-fill",
+                "#3f3f3f",
+                "-outline",
+                "#3f3f3f",
+            )
 
-        i = tk_call(canvas._w,
-                    "create", "rectangle",
-                    x+BORDER, y+BORDER, x+w-BORDER, y+h-BORDER,
-                    "-fill", color)
+        i = tk_call(
+            canvas._w,
+            "create",
+            "rectangle",
+            x + BORDER,
+            y + BORDER,
+            x + w - BORDER,
+            y + h - BORDER,
+            "-fill",
+            color,
+        )
         canvas.map[int(i)] = name
 
-        if h > FONT_HEIGHT+2*BORDER:
-            w1 = w - 2*BORDER
+        if h > FONT_HEIGHT + 2 * BORDER:
+            w1 = w - 2 * BORDER
             stem = name[basename_idx:]
             ssz = size(sz)
             text = "%s %s" % (name[basename_idx:], ssz)
             tw = int(tk_call("font", "measure", FONT_FACE, text))
             if tw > w1:
-                if h > FONT_HEIGHT2 + 2*BORDER:
+                if h > FONT_HEIGHT2 + 2 * BORDER:
                     tw = max(
                         int(tk_call("font", "measure", FONT_FACE, stem)),
-                        int(tk_call("font", "measure", FONT_FACE, ssz)))
+                        int(tk_call("font", "measure", FONT_FACE, ssz)),
+                    )
                     if tw < w1:
                         text = "%s\n%s" % (stem, ssz)
-                        i = tk_call(canvas._w, "create", "text",
-                                    x+BORDER+2, y+BORDER,
-                                    "-text", text,
-                                    "-font", FONT_FACE, "-anchor", "nw")
+                        i = tk_call(
+                            canvas._w,
+                            "create",
+                            "text",
+                            x + BORDER + 2,
+                            y + BORDER,
+                            "-text",
+                            text,
+                            "-font",
+                            FONT_FACE,
+                            "-anchor",
+                            "nw",
+                        )
                         canvas.map[int(i)] = name
                         y = y + FONT_HEIGHT2
                         h = h - FONT_HEIGHT2
-                        if w*h > MIN_PSZ and haskids and depth != 1:
-                            queue(canvas, allocate, name, files, canvas,
-                                  x+2*BORDER, y+2*BORDER,
-                                  w-4*BORDER, h-4*BORDER, 0, depth-1)
+                        if w * h > MIN_PSZ and haskids and depth != 1:
+                            queue(
+                                canvas,
+                                allocate,
+                                name,
+                                files,
+                                canvas,
+                                x + 2 * BORDER,
+                                y + 2 * BORDER,
+                                w - 4 * BORDER,
+                                h - 4 * BORDER,
+                                0,
+                                depth - 1,
+                            )
                         continue
                 text = stem
                 tw = int(tk_call("font", "measure", FONT_FACE, text))
             if tw < w1:
-                i = tk_call(canvas._w, "create", "text",
-                            x+BORDER+2, y+BORDER,
-                            "-text", text,
-                            "-font", FONT_FACE, "-anchor", "nw")
+                i = tk_call(
+                    canvas._w,
+                    "create",
+                    "text",
+                    x + BORDER + 2,
+                    y + BORDER,
+                    "-text",
+                    text,
+                    "-font",
+                    FONT_FACE,
+                    "-anchor",
+                    "nw",
+                )
                 canvas.map[int(i)] = name
                 y = y + FONT_HEIGHT
                 h = h - FONT_HEIGHT
-        if w*h > MIN_PSZ and haskids and depth != 1:
-            queue(canvas, allocate, name, files, canvas,
-                  x+2*BORDER, y+2*BORDER,
-                  w-4*BORDER, h-4*BORDER, 0, depth-1)
+        if w * h > MIN_PSZ and haskids and depth != 1:
+            queue(
+                canvas,
+                allocate,
+                name,
+                files,
+                canvas,
+                x + 2 * BORDER,
+                y + 2 * BORDER,
+                w - 4 * BORDER,
+                h - 4 * BORDER,
+                0,
+                depth - 1,
+            )
 
 
 def queue(c, *args):
@@ -213,7 +269,7 @@ def queue(c, *args):
 
 def run_queue(c):
     queue = c.queue
-    end = time.time() + .5
+    end = time.time() + 0.5
     while 1:
         if not queue:
             c.aid = None
@@ -268,21 +324,21 @@ def ascend(e):
 
 
 def size(n):
-    if n > 1024*1024*1024:
-        return "%.1fGB" % (n/1024./1024/1024)
-    elif n > 1024*1024:
-        return "%.1fMB" % (n/1024./1024)
+    if n > 1024 * 1024 * 1024:
+        return "%.1fGB" % (n / 1024.0 / 1024 / 1024)
+    elif n > 1024 * 1024:
+        return "%.1fMB" % (n / 1024.0 / 1024)
     elif n > 1024:
-        return "%.1fKB" % (n/1024.)
+        return "%.1fKB" % (n / 1024.0)
     return "%d" % n
 
 
 def scroll(e, dir):
     c = e.widget
-    offset = c.first + 5*dir
+    offset = c.first + 5 * dir
     l = len(getkids(c.files, c.cur))
     if offset + 5 > l:
-        offset = l-5
+        offset = l - 5
     if offset < 0:
         offset = 0
     if offset != c.first:
@@ -306,7 +362,7 @@ def make_tip(e, s):
     c = e.widget
     c.tipa = None
     c.tipl.configure(text=s)
-    c.tip.wm_geometry("+%d+%d" % (e.x_root+5, e.y_root+5))
+    c.tip.wm_geometry("+%d+%d" % (e.x_root + 5, e.y_root + 5))
     c.tip.wm_deiconify()
 
 
@@ -425,7 +481,7 @@ def main(f=sys.stdin):
         except ValueError:
             errors_found += 1
             if ERRORS_FOUND_THRESHOLD is None or errors_found < ERRORS_FOUND_THRESHOLD:
-                print("Skip line " + str(linenum+1) + ". Content: " + line[:-1])
+                print("Skip line " + str(linenum + 1) + ". Content: " + line[:-1])
             elif errors_found == ERRORS_FOUND_THRESHOLD:
                 print("Further skip line errors are silenced")
             continue
@@ -433,19 +489,28 @@ def main(f=sys.stdin):
         # Skip representation of nested directories beyond LEVELS_DEEP_THRESHOLD
         if LEVELS_DEEP_THRESHOLD is not None and levels_deep > LEVELS_DEEP_THRESHOLD:
             continue
-        try: # For normal lines of du output
-            sz = int(sz)*1024
+        try:  # For normal lines of du output
+            sz = int(sz) * 1024
             putname(files, name, sz)
-        except ValueError: # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
-            pass # do nothing (if met with permission error)!
-            #print "Something went wrong {!s}".format(line)   # the problem value
+        except ValueError:  # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
+            pass  # do nothing (if met with permission error)!
+            # print "Something went wrong {!s}".format(line)   # the problem value
 
     doit(name, files)
 
 
-def du(dir, files, fs=0, ST_MODE=stat.ST_MODE, ST_SIZE=stat.ST_SIZE,
-       S_IFMT=0o170000, S_IFDIR=0o040000, lstat=os.lstat,
-       putname_base=putname_base, fmt="%%s%s%%s" % os.sep):
+def du(
+    dir,
+    files,
+    fs=0,
+    ST_MODE=stat.ST_MODE,
+    ST_SIZE=stat.ST_SIZE,
+    S_IFMT=0o170000,
+    S_IFDIR=0o040000,
+    lstat=os.lstat,
+    putname_base=putname_base,
+    fmt="%%s%s%%s" % os.sep,
+):
     tsz = 0
 
     try:
@@ -513,7 +578,7 @@ class DirDialog(LoadFileDialog):
             self.dirs.insert(END, name)
         head, tail = os.path.split(self.get_selection())
         if tail == os.curdir:
-            tail = ''
+            tail = ""
         self.set_selection(tail)
 
 
@@ -531,21 +596,31 @@ def main_builtin_du(args):
             return
     files = {}
 
-    if p == '-h' or p == '--help' or p == '-?':
+    if p == "-h" or p == "--help" or p == "-?":
         base = os.path.basename(args[0])
-        print('Usage:')
-        print(' ', base, '<file.gz>     interpret file as gzipped du -ak output and visualize it')
-        print(' ', base, '<file>        interpret file as du -ak output and visualize it')
-        print(' ', base, '<folder>      analyze disk usage in that folder')
-        print(' ', base, '-             interpret stdin input as du -ak output and visualize it')
-        print(' ', base, '              ask for folder to analyze')
+        print("Usage:")
+        print(
+            " ",
+            base,
+            "<file.gz>     interpret file as gzipped du -ak output and visualize it",
+        )
+        print(
+            " ", base, "<file>        interpret file as du -ak output and visualize it"
+        )
+        print(" ", base, "<folder>      analyze disk usage in that folder")
+        print(
+            " ",
+            base,
+            "-             interpret stdin input as du -ak output and visualize it",
+        )
+        print(" ", base, "              ask for folder to analyze")
         print()
-        print('Controls:')
-        print('  * Press `q` to quit')
-        print('  * LMB: zoom in to item')
-        print('  * RMB: zoom out one level')
-        print('  * Press `1`..`9`: Show that many nested levels')
-        print('  * Press `0`: Show man nested levels')
+        print("Controls:")
+        print("  * Press `q` to quit")
+        print("  * LMB: zoom in to item")
+        print("  * RMB: zoom out one level")
+        print("  * Press `1`..`9`: Show that many nested levels")
+        print("  * Press `0`: Show man nested levels")
         return
 
     if p == "-":
@@ -553,16 +628,18 @@ def main_builtin_du(args):
     else:
         p = abspath(p)
         if os.path.isfile(p):
-            if p.endswith('.gz'):
-                main(gzip.open(p, 'rt', encoding="utf-8", errors='replace'))
+            if p.endswith(".gz"):
+                main(gzip.open(p, "rt", encoding="utf-8", errors="replace"))
             else:
-                main(open(p, 'rt', encoding="utf-8", errors='replace'))
+                main(open(p, "rt", encoding="utf-8", errors="replace"))
         else:
             putname(files, p, du(p, files))
             doit(p, files)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
+
     main_builtin_du(sys.argv)
 
 # vim:sts=4:sw=4:

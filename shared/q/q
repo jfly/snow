@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-WAV_FOLDER=$(dirname "$0")/wav
-
 if "$@"; then
     play -q "$WAV_FOLDER/ootinee.wav" &
 else

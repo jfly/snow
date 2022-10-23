@@ -6,10 +6,6 @@ alias ssh="light_dark_ssh"
 
 alias k="kubectl"
 
-# Awesome debug script from https://unix.stackexchange.com/a/231310
-# Very useful for finding short lived processes.
-alias allprocs='sudo sysdig -p"*%evt.time %proc.pid %proc.ppid %evt.dir %proc.exeline"     "( evt.dir=< and evt.type=execve ) or evt.type=procexit"'
-
 # Home network stuff
 alias strider_dns_clear="ssh -l admin strider killall -s HUP dnsmasq"
 

@@ -59,7 +59,16 @@ in
       ];
     };
 
+  # QEMU emulation used for compiling for other architectures.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+  # Needed by ~/bin/allprocs
+  programs.sysdig.enable = true;
+
   environment.systemPackages = with pkgs; [
+    ### Version control
+    git
+
     ### Network
     nm-vpn-add
     curl
@@ -67,8 +76,17 @@ in
     whois
     netcat
     traceroute
-    dnsutils # Provides nslookup
+    dnsutils # provides nslookup
     sipcalc # an advanced console based ip subnet calculator
+    lsof
+    wireshark
+    tcpdump
+
+    ### Python
+    socat # Multipurpose relay (useful with remote-pdb!)
+
+    ### Misc
+    gdb
 
     ### Honor
     # server-config

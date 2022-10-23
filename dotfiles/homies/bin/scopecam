@@ -1,3 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p guvcview
+# shellcheck shell=bash
 
-exec guvcview --device $(realpath /dev/v4l/by-id/usb-HES-9734-191212_Integrated_Webcam_HD-video-index0)
+exec guvcview --device "$(realpath /dev/v4l/by-id/usb-HES-9734-191212_Integrated_Webcam_HD-video-index0)"

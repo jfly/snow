@@ -216,6 +216,8 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    ### Browsers
+    qutebrowser
     (pkgs.symlinkJoin {
       name = "chromium";
       paths = [ chromium ];
@@ -229,12 +231,27 @@ in
           --set GOOGLE_DEFAULT_CLIENT_SECRET OTJgUOQcT7lO7GsGZq2G4IlT
       '';
     })
-    qutebrowser
+
+    ### Image viewers
     gnome.eog
-    (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
+
+    ### Movie players
     mpv
     yt-dlp
+    subdl
+
+    ### Media editing (images, audio, video)
+    gimp
+    inkscape
+    avidemux
+    audacity
+
+    ### PDF
     evince
+
+    ### Remote desktop
+    (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
+    freerdp
 
     ### Compression/archives
     unzip
@@ -246,9 +263,7 @@ in
     libva-utils
     glxinfo
     pciutils
-
-    ### Debugging fonts
-    gucharmap
+    gucharmap # view fonts
 
     # TODO: consolidate with xmonad
     alacritty

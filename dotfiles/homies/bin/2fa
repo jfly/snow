@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p sshfs
+#!nix-shell -i bash -p python3
 # shellcheck shell=bash
 
 set -euo pipefail
