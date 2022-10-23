@@ -38,6 +38,7 @@ in
     ./development.nix
     ./syncthing.nix
     ./printers.nix
+    ./fuse.nix
   ];
 
   # Flakes!

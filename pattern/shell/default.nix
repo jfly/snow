@@ -23,5 +23,7 @@
     git
     psmisc
     direnv
+
+    acpi
   ];
 }

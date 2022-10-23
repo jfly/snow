@@ -1,7 +1,8 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p python3 bash
-#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f3d0897be466aa09a37f6bf59e62c360c3f9a6cc.tar.gz
+#!nix-shell -i bash -p sshfs
 # shellcheck shell=bash
+
+set -euo pipefail
 
 OPTIONS=$(2fa-cli)
 SELECTED=$(picker-popup "$OPTIONS")
