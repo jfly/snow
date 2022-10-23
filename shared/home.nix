@@ -1,5 +1,5 @@
 { username, ... }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   link = target: {
@@ -15,6 +15,16 @@ in
   home.stateVersion = "22.05";
   home.username = username;
   home.homeDirectory = homeDir;
+
+  # TODO: move to desktop.nix somehow.
+  home.pointerCursor = {
+    x11.enable = true;
+    gtk.enable = true;
+
+    package = pkgs.phinger-cursors;
+    name = "phinger-cursors";
+    size = 45;
+  };
 
   home.file = (lib.mapAttrs'
     (name: target:
