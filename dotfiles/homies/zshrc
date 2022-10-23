@@ -67,7 +67,6 @@ fi
 ## Python stuff
 # Make sure we never `pip install` things outside of a virtualenv.
 export PIP_REQUIRE_VIRTUALENV=true
-export ASDF_PYTHON_PATCHES_DIRECTORY="$HOME/.dotfiles/asdf-python-patches"
 ##################################
 
 ###
