@@ -21,8 +21,8 @@ in
     x11.enable = true;
     gtk.enable = true;
 
-    package = pkgs.phinger-cursors;
-    name = "phinger-cursors";
+    package = pkgs.quintom-cursor-theme;
+    name = "Quintom_Ink";
     size = 45;
   };
 
