@@ -17,6 +17,7 @@ let
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
     ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart "$service"
   '';
+  noto-fonts-emoji-monochrome = pkgs.callPackage ../shared/noto-fonts-emoji-monochrome { };
 in
 {
   services.xserver = {
@@ -184,9 +185,11 @@ in
         (nerdfonts.override {
           fonts = [
             "UbuntuMono" # my preferred monospace font
-            "Noto" # has emojis
           ];
         })
+        noto-fonts-emoji-monochrome
+        # I can't read any of this, but it sure looks nicer than boxes :p
+        noto-fonts-cjk-serif
       ];
       fontconfig = {
         defaultFonts = {

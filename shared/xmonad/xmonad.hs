@@ -28,7 +28,7 @@ myLayout = avoidStruts $ smartBorders $ toggleLayouts Full tall ||| toggleLayout
 
 myBorderWidth = 2
 
-musicWs = "🎵"
+musicWs = "🎶"
 videoWs = "📹"
 backspaceWs = "⌫"
 myWorkspaces = ["`", "wrk", "be", "fe", "test", videoWs, "6", "7", "8", "9", "0", "-", "=", backspaceWs, musicWs]
