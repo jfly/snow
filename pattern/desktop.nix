@@ -10,6 +10,7 @@ let
   dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
   autoperipherals = pkgs.callPackage ../shared/autoperipherals { };
+  # TODO: conslidate with pattern/laptop.nix
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
     service=$2

@@ -39,6 +39,7 @@ in
     ./syncthing.nix
     ./printers.nix
     ./fuse.nix
+    ./laptop.nix
   ];
 
   # Flakes!
