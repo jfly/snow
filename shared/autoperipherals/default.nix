@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs ? import <nixpkgs> { } }:
 
 let
   with-alacritty = pkgs.callPackage ../../shared/my-nix/with-alacritty { };
