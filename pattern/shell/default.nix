@@ -2,6 +2,7 @@
 
 let
   q = pkgs.callPackage ../../shared/q { };
+  jgit = pkgs.callPackage ../../shared/jgit { };
 in
 {
   programs.zsh.enable = true;
@@ -29,6 +30,7 @@ in
 
   environment.systemPackages = with pkgs; [
     q
+    jgit
     pkgs.fzf
     direnv
 

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jgit"
+dependencies = []
+dynamic = ["version"]
+
+[project.scripts]
+jgit = "jgit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

@@ -243,6 +243,6 @@ function gnpr {
 alias cdk='./cdk'
 
 co() {
-    dir=$(command co "$@")
+    dir=$(jgit co "$@")
     cd "$dir"
 }
