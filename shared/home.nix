@@ -30,7 +30,6 @@ in
     (name: target:
       lib.nameValuePair name (link target))
     {
-      ".dotfiles" = ../dotfiles;
       sd = ./homies/sd;
       bin = ./homies/bin;
       ".config/git" = ./homies/config/git;

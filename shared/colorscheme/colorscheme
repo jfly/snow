@@ -38,10 +38,17 @@ function _get_location() {
 
 function _get_json_colorscheme() {
     local colorscheme=$1
-    local file
-    file=$(ls ~/.dotfiles/colorschemes/**/"$colorscheme.yml" 2>/dev/null)
+
+    IFS=":"
+    for d in $COLORSCHEME_PATH; do
+        local file
+        file=$(ls "$d"/**/"$colorscheme.yml" 2>/dev/null)
+        if [ -n "$file" ]; then
+            break
+        fi
+    done
     if [ -z "$file" ]; then
-        echo "Could not find colorscheme: $colorscheme" >/dev/stderr
+        echo "Could not find colorscheme: $colorscheme in \$COLORSCHEME_PATH" >/dev/stderr
         exit 1
     fi
 
@@ -89,9 +96,12 @@ EOF
 }
 
 function _list() {
-    for f in ~/.dotfiles/colorschemes/**/*.yml; do
-        f="$(basename "$f")"
-        echo "${f%.yml}"
+    IFS=":"
+    for d in $COLORSCHEME_PATH; do
+        for f in "$d"/**/*.yml; do
+            f="$(basename "$f")"
+            echo "${f%.yml}"
+        done
     done
 }
 function _ls() {

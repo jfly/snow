@@ -128,8 +128,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
 
     , ((0, xF86XK_MonBrightnessDown), spawn "@jbright@/bin/jbright set 5%-")
     , ((0, xF86XK_MonBrightnessUp), spawn "@jbright@/bin/jbright set 5%+")
-    , ((shiftMask, xK_F4), spawn "colorscheme clear current")
-    , ((shiftMask, xK_F5), spawn "colorscheme cycle current dark light")
+    , ((shiftMask, xK_F4), spawn "@colorscheme@/bin/colorscheme clear current")
+    , ((shiftMask, xK_F5), spawn "@colorscheme@/bin/colorscheme cycle current dark light")
     -- Create our own play/pause and prev/next buttons.
     , ((modMask, xK_s), spawn "xdotool key --clearmodifiers XF86AudioPlay")
     , ((modMask, xK_d), spawn "xdotool key --clearmodifiers XF86AudioNext")

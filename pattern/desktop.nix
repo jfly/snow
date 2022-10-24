@@ -271,6 +271,7 @@ in
 
     # TODO: consolidate with xmonad
     alacritty
+    (pkgs.callPackage ../shared/colorscheme { })
     xdotool
     (pkgs.symlinkJoin {
       name = "dmenu";

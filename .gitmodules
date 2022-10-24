@@ -1,3 +1,0 @@
-[submodule "colorschemes/base16"]
-	path = dotfiles/colorschemes/base16
-	url = https://github.com/aarowill/base16-alacritty.git
