@@ -61,11 +61,11 @@ in
     (pkgs.callPackage ../shared/sd { })
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in
-    # dotfiles/my-nix.
+    # shared/my-nix.
     builtins.attrValues (
       lib.attrsets.filterAttrs
         (k: v: k != "override" && k != "overrideDerivation")
-        (callPackage ../dotfiles/my-nix { wrapNixGL = nopNixGL; })
+        (callPackage ../shared/my-nix { wrapNixGL = nopNixGL; })
     )
   );
 

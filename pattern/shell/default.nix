@@ -10,7 +10,7 @@ in
   programs.zsh.interactiveShellInit = ''
     # Load p10k prompt
     source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-    source ${../../dotfiles/homies/p10k.zsh}
+    source ${../../shared/homies/p10k.zsh}
 
     # Load ohmyzsh
     plugins=(git)
@@ -18,8 +18,8 @@ in
     plugins+=(fzf)
     source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
 
-    source ${../../dotfiles/homies/zshrc}
-    source ${../../dotfiles/homies/commonrc/aliases}
+    source ${../../shared/homies/zshrc}
+    source ${../../shared/homies/commonrc/aliases}
   '';
 
   programs.tmux = {

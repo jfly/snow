@@ -86,7 +86,6 @@ alias h4salt="ssh bastion ssh saltmaster sudo journalctl --follow --lines=10000 
 
 # --xetex avoids huge file sizes when trimming pdfs.
 # See: http://alexsleat.co.uk/2011/01/25/using-pdfcrop-to-remove-white-margins-ubuntu/
-# sudo pacman -S texlive-core
 alias pdfcrop="pdfcrop --xetex"
 
 function open {

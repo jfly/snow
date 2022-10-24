@@ -1,7 +1,7 @@
 { pkgs }:
 
 let
-  with-alacritty = pkgs.callPackage ../../dotfiles/my-nix/with-alacritty { };
+  with-alacritty = pkgs.callPackage ../../shared/my-nix/with-alacritty { };
   capslockx = pkgs.callPackage ../capslockx { };
   setbg = pkgs.callPackage ../setbg { };
 in

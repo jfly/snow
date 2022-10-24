@@ -1,13 +1,13 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  alacritty = (pkgs.callPackage ../dotfiles/my-nix/with-alacritty { });
+  alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
   polybar = pkgs.polybar.override {
     mpdSupport = true;
   };
-  polybarConfig = ../dotfiles/homies/config/polybar/config.ini;
+  polybarConfig = ../shared/polybar/config.ini;
   space2meta = pkgs.callPackage ./space2meta.nix { };
-  dunst = pkgs.callPackage ../dotfiles/my-nix/dunst { };
+  dunst = pkgs.callPackage ../shared/my-nix/dunst { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
   autoperipherals = pkgs.callPackage ../shared/autoperipherals { };
   # TODO: conslidate with pattern/laptop.nix

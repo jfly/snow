@@ -31,28 +31,28 @@ in
       lib.nameValuePair name (link target))
     {
       ".dotfiles" = ../dotfiles;
-      sd = ../dotfiles/homies/sd;
-      bin = ../dotfiles/homies/bin;
-      ".config/git" = ../dotfiles/homies/config/git;
-      ".gitignore_global" = ../dotfiles/homies/gitignore_global;
-      ".ssh/config" = ../dotfiles/homies/ssh/config;
-      ".ssh/config.d" = ../dotfiles/homies/ssh/config.d;
+      sd = ./homies/sd;
+      bin = ./homies/bin;
+      ".config/git" = ./homies/config/git;
+      ".gitignore_global" = ./homies/gitignore_global;
+      ".ssh/config" = ./homies/ssh/config;
+      ".ssh/config.d" = ./homies/ssh/config.d;
 
       # Create and set a custom GTK theme.
-      ".themes" = ../dotfiles/homies/themes;
-      ".config/gtk-3.0" = ../dotfiles/homies/config/gtk-3.0;
+      ".themes" = ./homies/themes;
+      ".config/gtk-3.0" = ./homies/config/gtk-3.0;
 
       # Set up direnv.
       # TODO: figure out how to get this config living closer to the
       # installation of direnv itself.
-      ".config/direnv/direnvrc" = ../dotfiles/homies/config/direnv/direnvrc;
-      ".config/direnv/direnv.toml" = ../dotfiles/homies/config/direnv/direnv.toml;
-      ".config/direnv/lib" = ../dotfiles/homies/config/direnv/lib;
+      ".config/direnv/direnvrc" = ./homies/config/direnv/direnvrc;
+      ".config/direnv/direnv.toml" = ./homies/config/direnv/direnv.toml;
+      ".config/direnv/lib" = ./homies/config/direnv/lib;
 
       # Configure Docker.
       # TODO: figure out how to get this config living closer to the
       # installation of docker itself.
-      ".docker/config.json" = ../dotfiles/homies/docker/config.json;
+      ".docker/config.json" = ./homies/docker/config.json;
 
       # Secrets
       ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";
@@ -64,7 +64,7 @@ in
     }) // {
     ".zshrc".text = ''
       if [ "$(hostname)" = "dalinar" ]; then
-        source ${../dotfiles/homies/zshrc}
+        source ${./homies/zshrc}
       else
         true
         # zsh really wants this file to exist. If it doesn't, it'll give
