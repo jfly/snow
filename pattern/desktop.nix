@@ -268,6 +268,7 @@ in
     glxinfo
     pciutils
     gucharmap # view fonts
+    usbutils # provides `lsusb`
 
     # TODO: consolidate with xmonad
     alacritty
