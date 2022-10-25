@@ -12,6 +12,35 @@ let
       max-cache-ttl ${toString (12 * 3600)}
     '';
   };
+  docker-conf = pkgs.writeTextDir "config.json"
+    (builtins.toJSON {
+      "credHelpers" = {
+        "900965112463.dkr.ecr.us-west-2.amazonaws.com" = "ecr-login";
+      };
+      "auths" = {
+        "containers.clark.snowdon.jflei.com" = {
+          "auth" = pkgs.deage.string ''
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUNCWjkrU1VqVndNMDhF
+            SjN0emN4UHZnaWJ1MUNXOC9hUytheE8xTDJFCk1OOHpidm0zbGd5d3BFaVZKSU51
+            NXRuRlJRNFRYRUxNR2g1Y3ZMTEpJaWsKLS0tIHBGTWRUQjh6bGc4WWJDbThOM1FJ
+            ZUFYeWc0a1pXUXliLy9IN3E4czFmWWsKa5YmXKdvYuW9Dm/z9KE+SCvjXZYzq+Up
+            naqZkJUsz/p4wjD/jvBYADdyFf76HD7yPXU18ulbwq9gTU3SaK2PzQ==
+            -----END AGE ENCRYPTED FILE-----
+          '';
+        };
+      };
+      "detachKeys" = "ctrl-^,q";
+    });
+  docker-with-conf = pkgs.symlinkJoin {
+    name = "docker";
+    paths = [ pkgs.docker ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/docker \
+        --add-flags "--config=${docker-conf}"
+    '';
+  };
 in
 {
   # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
@@ -20,7 +49,10 @@ in
   # https://discourse.nixos.org/t/a-fast-way-for-modifying-etc-hosts-using-networking-extrahosts/4190
   environment.etc.hosts.mode = "0644";
   # Enable docker for the main user.
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    package = docker-with-conf;
+  };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
 
   # Set up a local DNS server

@@ -48,11 +48,6 @@ in
       ".config/direnv/direnv.toml" = ./homies/config/direnv/direnv.toml;
       ".config/direnv/lib" = ./homies/config/direnv/lib;
 
-      # Configure Docker.
-      # TODO: figure out how to get this config living closer to the
-      # installation of docker itself.
-      ".docker/config.json" = ./homies/docker/config.json;
-
       # Secrets
       ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";
       ".ssh/id_rsa.pub" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa.pub";

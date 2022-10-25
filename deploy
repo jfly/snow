@@ -42,6 +42,13 @@ function deploy_nix() {
     local target="$1"
     shift
     if [ "$target" = "$(hostname)" ]; then
+        # TODO: understand what process is replacing the ~/.ssh/known_hosts
+        # symlink with a real file. Probably some ssh invocation?
+        # Here's what sometimes happens when home manager is deploying:
+        #
+        # [ERROR]   stderr) Oct 24 20:05:41 pattern hm-activate-jeremy[51259]: Existing file '/home/jeremy/.ssh/known_hosts' is in the way of '/nix/store/y1fry1gbsncd61klspsk85v954mv8flv-home-manager-files/.ssh/known_hosts'
+        rm -f "$HOME/.ssh/known_hosts"
+
         colmena apply-local --config hive.nix --sudo "$@"
     else
         colmena apply --config hive.nix --on "$target" "$@"

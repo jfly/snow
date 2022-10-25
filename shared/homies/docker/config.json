@@ -1,6 +1,0 @@
-{
-  "credHelpers": {
-    "900965112463.dkr.ecr.us-west-2.amazonaws.com": "ecr-login"
-  },
-  "detachKeys": "ctrl-^,q"
-}
