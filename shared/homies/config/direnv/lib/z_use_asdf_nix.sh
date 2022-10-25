@@ -55,6 +55,12 @@ $(cat ./.tool-versions)
             # # could do by providing a wrapper on top of pip? For now it's
             # # working well enough to just set LD_LIBRARY_PATH.
             # LD_LIBRARY_PATH = pkgs.stdenv.cc.cc.lib + /lib;
+
+            # Hack alert: accumulation-tree doesn't provide a prebuilt wheel,
+            # and it needs <crypt.h>, which is provided by libxcrypt.
+            # There probably is a more canonical way of getting this stuff
+            # available to gcc, but this is good enough for now.
+            CPATH = pkgs.libxcrypt + /include;
           };
         }
       );
