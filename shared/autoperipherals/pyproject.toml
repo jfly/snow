@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autoperipherals"
+dependencies = ["pyxdg"]
+dynamic = ["version"]
+
+[project.scripts]
+autoperipherals = "autoperipherals.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

@@ -5,17 +5,31 @@ let
   capslockx = pkgs.callPackage ../capslockx { };
   setbg = pkgs.callPackage ../setbg { };
 in
-pkgs.writeShellApplication {
-  name = "autoperipherals";
-  text = builtins.readFile ./autoperipherals;
-  runtimeInputs = with pkgs; [
-    nettools # provides the `hostname` command
+
+with pkgs.python3Packages; buildPythonApplication rec {
+  pname = "autoperipherals";
+  version = "1.0";
+  format = "pyproject";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+  addToPath = with pkgs; [
     xorg.xrandr
-    procps # provides `pgrep`
     killall
-    bc
     libnotify
     with-alacritty
     setbg
   ];
+  propagatedBuildInputs = [
+    pyxdg
+  ] ++ addToPath;
+  src = ./.;
+
+  preFixup = ''
+    makeWrapperArgs+=("--prefix")
+    makeWrapperArgs+=("PATH")
+    makeWrapperArgs+=(":")
+    makeWrapperArgs+=("${pkgs.lib.makeBinPath addToPath}")
+  '';
 }
