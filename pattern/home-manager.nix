@@ -8,7 +8,7 @@
   config = {
     home-manager.useGlobalPkgs = true;
     home-manager.users.${config.snow.user.name} = (import ../shared/home.nix {
-      username = config.snow.user.name;
+      inherit config;
     });
 
     environment.systemPackages = with pkgs; [

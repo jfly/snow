@@ -77,12 +77,4 @@ rec {
 
   ### bin scripts
   paste-list = (pkgs.callPackage ./paste-list { }).paste-list;
-
-  home-manager = (pkgs.callPackage (import ../../sources.nix).home-manager-modules
-    {
-      configuration = import ../../shared/home.nix {
-        username = "jeremy";
-      };
-      check = false;
-    }).activationPackage;
 }
