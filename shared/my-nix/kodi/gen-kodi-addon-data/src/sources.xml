@@ -36,7 +36,7 @@
         <default pathversion="1"></default>
         <source>
             <name>music</name>
-            <path pathversion="1">/mnt/media/beets</path>
+            <path pathversion="1">/home/jeremy/sync/music</path>
             <allowsharing>true</allowsharing>
         </source>
     </music>
