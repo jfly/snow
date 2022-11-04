@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p efibootmgr
+# shellcheck shell=bash
 
 sudo efibootmgr --bootnext 0000 && reboot
