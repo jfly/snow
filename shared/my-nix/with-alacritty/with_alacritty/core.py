@@ -130,12 +130,10 @@ def _is_alacritty_proccess(pid: int):
 def _get_process_command(pid: int):
     return (
         subprocess.run(
-            f"ps -p {pid} -o command",
-            capture_output=True,
-            shell=True,
+            ["ps", "-p", str(pid), "-o", "command"], capture_output=True, text=True
         )
-        .stdout.decode()
-        .split("\n")[-2]
+        .stdout.strip()
+        .split("\n")[-1]
         .strip()
     )
 

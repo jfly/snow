@@ -80,9 +80,15 @@ def autoperipherals():
     displays = xrandr.connected_displays
     display_by_name = {d.name: d for d in displays}
 
-    external_display = display_by_name.get("DP-3-2")
-    if external_display:
+    if external_display := display_by_name.get("DP-3-2"):
         layout_name = "snowdesk"
+        dpi = 96
+
+        for display in displays:
+            display.is_active = False
+        external_display.is_active = True
+    elif external_display := display_by_name.get("HDMI-1"):
+        layout_name = "snowprojector"
         dpi = 96
 
         for display in displays:
