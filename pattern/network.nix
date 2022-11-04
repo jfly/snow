@@ -61,6 +61,22 @@ in
       '';
     };
   };
+  environment.etc."NetworkManager/system-connections/Cal 5g.nmconnection" = {
+    mode = "0400"; # readonly (user)
+    text = buildNmConnection {
+      ssid = "Cal 5g";
+      uuid = "c65efd03-2c3c-4e6e-87c5-a6e1530da250";
+      psk = pkgs.deage.string ''
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0ZGJFMWQ0UTVQVXQzMkkw
+        WHdkWkFQWFNnd2FoRE9TelBIZFd6RVVhUXpNCkpRempBZnpFVitFTW11NXExVFJ2
+        YzZuSncxck9UTERlbVVJN0ZGVVlXdTgKLS0tIG1LcUVDaFI1eWZuY2VqUXhNVGpW
+        cG9JVDJ2QkV3WUxCTVBmYTMzOXdJM1EKMs/oU178jQORt0LJYjPQLOasIENDir7U
+        Pu+RwSU+P9kGX738A8CYMX+Ru4mOvw==
+        -----END AGE ENCRYPTED FILE-----
+      '';
+    };
+  };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
