@@ -11,6 +11,7 @@ def declare_app(
     env: Dict[str, str] = {},
     volumes: List[kubernetes.core.v1.VolumeArgs] = [],
     volume_mounts: List[kubernetes.core.v1.VolumeMountArgs] = [],
+    sso_protected: bool = True,
 ):
     if env is None:
         env = {}
@@ -74,13 +75,19 @@ def declare_app(
         ),
     )
 
+    extra_annotations = {}
+    if sso_protected:
+        extra_annotations[
+            "traefik.ingress.kubernetes.io/router.middlewares"
+        ] = "default-snowauth@kubernetescrd"
+
     kubernetes.networking.v1.Ingress(
         name,
         metadata=kubernetes.meta.v1.ObjectMetaArgs(
             annotations={
                 "cert-manager.io/cluster-issuer": "letsencrypt-prod",
                 "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
-                "traefik.ingress.kubernetes.io/router.middlewares": "default-snowauth@kubernetescrd",
+                **extra_annotations,
             },
             name=name,
             namespace=namespace,

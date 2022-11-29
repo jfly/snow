@@ -41,20 +41,31 @@ in
     role = "server";
     extraFlags = "--private-registry ${k3s_registries_conf}";
   };
+
+  boot = {
+    kernel.sysctl = {
+      # The system seems to run out of watches and instances with k3s running.
+      # Increase the limit to something much larger than the default.
+      "fs.inotify.max_user_watches" = "1048576";
+      "fs.inotify.max_user_instances" = "8192";
+    };
+  };
   system.activationScripts = {
     # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
     # It gets source IPs to show up correctly when going through proxies, but
     # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
     # we'll find out when that day comes.
-    k3s_config = ''
-              echo "apiVersion: helm.cattle.io/v1
+    k3sConfig = ''
+      echo "apiVersion: helm.cattle.io/v1
       kind: HelmChartConfig
       metadata:
         name: traefik
         namespace: kube-system
       spec:
         valuesContent: |-
-          externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/traefik.z.yaml
+          service:
+            spec:
+              externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/z-traefik-get-real-ip.yaml
     '';
   };
   environment.systemPackages = [ pkgs.k3s ];

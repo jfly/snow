@@ -16,7 +16,7 @@ spec:
               metadata:
                 labels:
                   # Opt this pod *out* of the VPN gateway. The temporary
-                  # `cm-acme-http-solver-*` pod that gets created gets stuff in
+                  # `cm-acme-http-solver-*` pod that gets created gets stuck in
                   # the "CreateContainerConfigError" state when being applied
                   # to Ingress's in our "vpn" namespace. I *think* that's
                   # because the gateway admission controller modifies this pod
