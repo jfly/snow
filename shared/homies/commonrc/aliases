@@ -245,3 +245,8 @@ co() {
     dir=$(jgit co "$@")
     cd "$dir"
 }
+
+newpy() {
+    dir=$(command newpy "$@")
+    cd "$dir"
+}

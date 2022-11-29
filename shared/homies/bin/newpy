@@ -16,7 +16,7 @@ done
 
 mkdir "$dir"
 cd "$dir"
-asdf local python 3.10.2
+echo "python 3.10.2" >.tool-versions
 echo "use asdf
 layout python" >".envrc"
 direnv allow

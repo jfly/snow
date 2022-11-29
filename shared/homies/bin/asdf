@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix"
+if [ -z "${USE_REAL_ASDF:-}" ]; then
+    echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix" >/dev/stderr
+else
+    # shellcheck source=/dev/null
+    . <(nix print-dev-env nixpkgs#python310)
+    export PYTHON_CONFIGURE_OPTS=${configureFlags:?}
+    "$HOME/.asdf/bin/asdf" "$@"
+fi
