@@ -32,6 +32,11 @@ def main():
     )
     subparser.add_argument("remote")
     subparser.add_argument(
+        "--force-https",
+        action="store_true",
+        help="force use of https url, rather than converting it to a git ssh url. useful when cloning a from a random gitlab instance that you haven't created an account with yet",
+    )
+    subparser.add_argument(
         "--dry-run",
         action="store_true",
         help="do nothing, just print what would happen",
@@ -67,6 +72,7 @@ def main():
 def do_co(args):
     co(
         remote=args.remote,
+        force_https=args.force_https,
         dry_run=args.dry_run,
     )
 

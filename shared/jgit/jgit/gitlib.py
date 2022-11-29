@@ -25,7 +25,7 @@ REMOTE_REGEXPS = compile_all(
 
 
 class Cloneable:
-    def __init__(self, remote: str):
+    def __init__(self, remote: str, force_https=False):
         match = self._find_match(remote)
         groups = match.groupdict()
         protocol = groups.pop("protocol")
@@ -35,7 +35,7 @@ class Cloneable:
 
         self._remote = (
             f"git@{groups['domain']}:{groups['path']}.git"
-            if protocol == "https://"
+            if protocol == "https://" and not force_https
             else remote
         )
 
