@@ -53,23 +53,23 @@ in
     (name: target:
       lib.nameValuePair name (link target))
     {
-      sd = ./homies/sd;
-      bin = ./homies/bin;
-      ".config/git" = ./homies/config/git;
-      ".gitignore_global" = ./homies/gitignore_global;
-      ".ssh/config" = ./homies/ssh/config;
-      ".ssh/config.d" = ./homies/ssh/config.d;
+      sd = pkgs.snow.absoluteRepoPath "/shared/homies/sd";
+      bin = pkgs.snow.absoluteRepoPath "/shared/homies/bin";
+      ".config/git" = pkgs.snow.absoluteRepoPath "/shared/homies/config/git";
+      ".gitignore_global" = pkgs.snow.absoluteRepoPath "/shared/homies/gitignore_global";
+      ".ssh/config" = pkgs.snow.absoluteRepoPath "/shared/homies/ssh/config";
+      ".ssh/config.d" = pkgs.snow.absoluteRepoPath "/shared/homies/ssh/config.d";
 
       # Create and set a custom GTK theme.
-      ".themes" = ./homies/themes;
-      ".config/gtk-3.0" = ./homies/config/gtk-3.0;
+      ".themes" = pkgs.snow.absoluteRepoPath "/shared/homies/themes";
+      ".config/gtk-3.0" = pkgs.snow.absoluteRepoPath "/shared/homies/config/gtk-3.0";
 
       # Set up direnv.
       # TODO: figure out how to get this config living closer to the
       # installation of direnv itself.
-      ".config/direnv/direnvrc" = ./homies/config/direnv/direnvrc;
-      ".config/direnv/direnv.toml" = ./homies/config/direnv/direnv.toml;
-      ".config/direnv/lib" = ./homies/config/direnv/lib;
+      ".config/direnv/direnvrc" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/direnvrc";
+      ".config/direnv/direnv.toml" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/direnv.toml";
+      ".config/direnv/lib" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/lib";
 
       # Secrets
       ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";

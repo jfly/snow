@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, parsec-gaming, lib, ... }:
 
 let
-  parsec = pkgs.callPackage (import ../../sources.nix).parsec-gaming { };
+  parsec = pkgs.callPackage parsec-gaming { };
   my_parsec = pkgs.writeShellScriptBin "parsecd" ''
     # This script wraps the real parsecd so it can exit 0 if stopped by stop_parsec.sh.
 

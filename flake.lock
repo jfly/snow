@@ -55,6 +55,27 @@
         "type": "github"
       }
     },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1670280307,
+        "narHash": "sha256-3x+0whP1nCz5adQMIsBA3L9fI/ABOpRUJdbw0AmxBnU=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "2af0d07678fc15612345e0dd55337550dcf6465f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "mach-nix": {
       "inputs": {
         "flake-utils": [
@@ -103,6 +124,38 @@
         "type": "github"
       }
     },
+    "nixos-21_11": {
+      "locked": {
+        "lastModified": 1647122473,
+        "narHash": "sha256-WEI4cC+NY/69z39WbZwrV51eV9SJV+DOsLSSH3Ur2Lo=",
+        "owner": "jfly",
+        "repo": "nixpkgs",
+        "rev": "69699c886f9594b86d8afc48d897fb6378784ecb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "ref": "jfly-kodi",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixos-unstable": {
+      "locked": {
+        "lastModified": 1670242877,
+        "narHash": "sha256-jBLh7dRHnbfvPPA9znOC6oQfKrCPJ0El8Zoe0BqnCjQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6e51c97f1c849efdfd4f3b78a4870e6aa2da4198",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1669542132,
@@ -148,6 +201,27 @@
         "type": "indirect"
       }
     },
+    "parsec-gaming": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1664140106,
+        "narHash": "sha256-h0ROvnBXpdmR4lIc1XtZEla76IKaMVE4kMxXS+ED4jk=",
+        "owner": "jfly",
+        "repo": "parsec-gaming-nix",
+        "rev": "af687d7b9a5412a69c8e1b9ba9f4355047c80d91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "ref": "jfly/fix-hashes",
+        "repo": "parsec-gaming-nix",
+        "type": "github"
+      }
+    },
     "pypi-deps-db": {
       "flake": false,
       "locked": {
@@ -168,8 +242,12 @@
       "inputs": {
         "colmena": "colmena",
         "flake-utils": "flake-utils",
+        "home-manager": "home-manager",
         "mach-nix": "mach-nix",
-        "nixpkgs": "nixpkgs_3"
+        "nixos-21_11": "nixos-21_11",
+        "nixos-unstable": "nixos-unstable",
+        "nixpkgs": "nixpkgs_3",
+        "parsec-gaming": "parsec-gaming"
       }
     },
     "stable": {
@@ -185,6 +263,21 @@
         "owner": "NixOS",
         "ref": "nixos-22.11",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
         "type": "github"
       }
     }

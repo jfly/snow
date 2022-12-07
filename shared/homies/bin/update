@@ -5,7 +5,7 @@ set -euo pipefail
 update_nixos() {
     (
         cd ~/src/github.com/jfly/snow
-        echo "TODO: actually update nixos. Switch to flakes, niv, or hand roll something that makes this easy to do."
+        direnv exec . bash -c "nix flake update && ./deploy '$HOSTNAME'"
     )
 }
 

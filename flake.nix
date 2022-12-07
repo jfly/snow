@@ -12,28 +12,47 @@
     # so `deage.file`'s impurity works when doing an apply-local.
     colmena.url = "github:zhaofengli/colmena";
     colmena.inputs.flake-utils.follows = "flake-utils";
+
+    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-21_11.url = "github:jfly/nixpkgs/jfly-kodi";
+
+    parsec-gaming.url = "github:jfly/parsec-gaming-nix/jfly/fix-hashes";
+    parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
+
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, mach-nix, colmena }:
+  outputs =
+    { self
+    , nixpkgs
+    , flake-utils
+    , mach-nix
+    , colmena
+    , nixos-unstable
+    , nixos-21_11
+    , parsec-gaming
+    , home-manager
+    }:
     flake-utils.lib.eachDefaultSystem
       (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = import ./overlays;
-          };
-        in
-        {
-          devShells.default = pkgs.callPackage ./shell.nix {
-            mach-nix = mach-nix.lib."${system}";
-            colmena = colmena.defaultPackage."${system}";
-          };
-        }
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = import ./overlays;
+        };
+      in
+      {
+        devShells.default = pkgs.callPackage ./shell.nix {
+          mach-nix = mach-nix.lib."${system}";
+          colmena = colmena.defaultPackage."${system}";
+        };
+      }
       ) // {
 
       colmena = {
         meta = {
-          nixpkgs = (import ./sources.nix).nixos-unstable {
+          nixpkgs = import nixos-unstable {
             overlays = [
               (
                 self: super:
@@ -73,19 +92,19 @@
           # https://github.com/zhaofengli/colmena/issues/54 tracks that feature
           # request for Colmena.
           nodeNixpkgs = rec {
-            clark = (import ./sources.nix).nixos-unstable {
+            clark = import nixos-unstable {
               overlays = import ./overlays;
             };
-            dallben = (import ./sources.nix).nixos-unstable {
+            dallben = import nixos-unstable {
               overlays = import ./overlays;
             };
-            fflewddur = (import ./sources.nix).nixos-21_11 {
+            fflewddur = import nixos-21_11 {
               overlays = import ./overlays;
             };
-            fflam = (import ./sources.nix).nixos-21_11 {
+            fflam = import nixos-21_11 {
               overlays = import ./overlays;
             };
-            pattern = (import ./sources.nix).nixos-unstable {
+            pattern = import nixos-unstable {
               overlays = import ./overlays;
             };
           };
@@ -113,10 +132,10 @@
         };
 
         "clark" = import clark/configuration.nix;
-        "dallben" = import dallben/configuration.nix;
+        "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
         "fflam" = import fflam/configuration.nix;
-        "pattern" = import pattern/configuration.nix;
+        "pattern" = import pattern/configuration.nix { inherit parsec-gaming home-manager; };
       };
     };
 }

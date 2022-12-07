@@ -1,6 +1,4 @@
-{ pkgs ? (import ../../sources.nix).nixos-unstable { }
-, wrapNixGL ? pkgs.callPackage ./wrap-nixgl.nix { }
-}:
+{ pkgs ? import <nixpkgs> { } }:
 
 rec {
   ### Media
@@ -15,9 +13,7 @@ rec {
   ashuffle = pkgs.ashuffle;
 
   ### Ebooks
-  # calibre needs to be wrapped with nixGL to run on non-NixOS distributions.
-  # See https://github.com/NixOS/nixpkgs/issues/132045 for details.
-  calibre = wrapNixGL (pkgs.symlinkJoin {
+  calibre = pkgs.symlinkJoin {
     name = "calibre";
     paths = [ pkgs.calibre ];
     buildInputs = [ pkgs.makeWrapper ];
@@ -25,7 +21,7 @@ rec {
       wrapProgram $out/bin/calibre \
         --add-flags "--with-library=~/sync/calibre"
     '';
-  });
+  };
   knock = import ./knock;
   audible-cli = pkgs.audible-cli;
   snowcrypt = pkgs.callPackage ./snowcrypt.nix { };
@@ -53,9 +49,8 @@ rec {
   dunst = pkgs.callPackage ./dunst { };
   xmonad = pkgs.callPackage ../../shared/xmonad { };
   polybar = pkgs.callPackage ./polybar.nix { };
-  # kodi needs to be wrapped with nixGL to run on non-NixOS distributions.
-  kodi = wrapNixGL (pkgs.callPackage ./kodi { });
-  with-alacritty = wrapNixGL (pkgs.callPackage ./with-alacritty { });
+  kodi = pkgs.callPackage ./kodi { };
+  with-alacritty = pkgs.callPackage ./with-alacritty { };
   # I'm not sure if these really ought to be globally installed or not.
   # xmonad is pointing at them directly, but maybe it's nice to be able
   # to easily call them from the command line?

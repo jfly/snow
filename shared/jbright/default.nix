@@ -1,4 +1,4 @@
-{ pkgs ? (import ../../sources.nix).nixos-unstable { } }:
+{ pkgs ? import <nixpkgs> { } }:
 
 let
   jbright = with pkgs.python3Packages; buildPythonApplication {

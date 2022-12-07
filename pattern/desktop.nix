@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, parsec-gaming, modulesPath, ... }:
 
 let
   alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
@@ -254,7 +254,7 @@ in
     evince
 
     ### Remote desktop
-    (pkgs.callPackage (import ../sources.nix).parsec-gaming { })
+    (pkgs.callPackage parsec-gaming { })
     freerdp
 
     ### Compression/archives

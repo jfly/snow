@@ -23,10 +23,14 @@
         };
         python3Packages = python3.pkgs;
 
+        # Note: accessing PWD like this is impure, but it's the only way to do some weird things like:
+        #  - access decrypted, untracked secrets on the filesystem
+        #  - use home-manager to set up symlinks to folders in this repo
+        snow = {
+          absoluteRepoPath = repoPath: (builtins.getEnv "PWD") + ("/" + (super.lib.strings.removePrefix "/" repoPath));
+        };
         deage = rec {
-          # Note: accessing PWD like this is impure, but it's the only way to
-          # access the decrypted, untracked secrets on the filesystem.
-          file = encrypted: (builtins.getEnv "PWD") + ("/" + (repoPath encrypted));
+          file = encrypted: snow.absoluteRepoPath (repoPath encrypted);
           repoPath = encrypted: (
             let hashed = builtins.hashString "sha256" (super.lib.strings.removeSuffix "\n" encrypted);
             in "./.sensitive-decrypted-secrets/${hashed}.secret"

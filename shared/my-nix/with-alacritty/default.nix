@@ -1,4 +1,4 @@
-{ pkgs ? ((import ../sources.nix).nixpkgs { })
+{ pkgs ? import <nixpkgs> { }
 , unpywrap ? (pkgs.callPackage ../unpywrap.nix { })
 , alacritty ? pkgs.alacritty
 ,

@@ -1,6 +1,8 @@
+{ parsec-gaming }:
 { config, lib, pkgs, ... }:
 
 rec {
+  _module.args.parsec-gaming = parsec-gaming;
   nixpkgs = {
     system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [

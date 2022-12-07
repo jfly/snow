@@ -1,12 +1,9 @@
+{ parsec-gaming, home-manager }:
 { config, pkgs, lib, ... }:
 
-let
-  # We're runnning a real NixOS environment here: we don't need to wrap
-  # our GUI programs with NixGl, yay!
-  nopNixGL = wrap-me: wrap-me;
-in
-
 {
+  _module.args.parsec-gaming = parsec-gaming;
+
   snow.user = {
     name = "jeremy";
     uid = 1000;
@@ -31,6 +28,7 @@ in
     ./network.nix
     ./users.nix
     ./audio.nix
+    home-manager.nixosModules.home-manager
     ./home-manager.nix
     ./shell
     ./desktop.nix
@@ -65,7 +63,7 @@ in
     builtins.attrValues (
       lib.attrsets.filterAttrs
         (k: v: k != "override" && k != "overrideDerivation")
-        (callPackage ../shared/my-nix { wrapNixGL = nopNixGL; })
+        (callPackage ../shared/my-nix { })
     )
   );
 
