@@ -35,6 +35,8 @@ in
         # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
         "noforget"
         "inodecalc=path-hash"
+        # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
+        "func.getattr=newest"
       ];
     };
   };
