@@ -27,6 +27,11 @@ def test_github():
         clone_from="git@github.com:jfly/snow.git",
         clone_to="~/src/github.com/jfly/snow",
     )
+    assert_parse(
+        remote="https://github.com/thewca/worldcubeassociation.org",
+        clone_from="git@github.com:thewca/worldcubeassociation.org.git",
+        clone_to="~/src/github.com/thewca/worldcubeassociation.org",
+    )
 
     # Try some urls straight from browsing github repos
     assert_parse(
@@ -43,6 +48,11 @@ def test_github():
         remote="https://github.com/jfly/snow/pulls",
         clone_from="git@github.com:jfly/snow.git",
         clone_to="~/src/github.com/jfly/snow",
+    )
+    assert_parse(
+        remote="https://github.com/thewca/worldcubeassociation.org/pull/7458",
+        clone_from="git@github.com:thewca/worldcubeassociation.org.git",
+        clone_to="~/src/github.com/thewca/worldcubeassociation.org",
     )
 
 

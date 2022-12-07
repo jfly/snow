@@ -14,13 +14,13 @@ def compile_all(*res: str):
 REMOTE_REGEXPS = compile_all(
     ## First, domain specific rules
     # clark
-    r"^(?P<protocol>ssh://)    (?P<domain>clark)             /state/git/  (?P<path>.+?)          (?:.git)?$",
+    r"^(?P<protocol>ssh://)    (?P<domain>clark)             /state/git/  (?P<path>.+?)$",
     # github
-    r"^(?P<protocol>https://)  (?P<domain>github.com)        /            (?P<path>[^/]+/[^/.]+) .*$",
+    r"^(?P<protocol>https://)  (?P<domain>github.com)        /            (?P<path>[^/]+/[^/]+)  (/.*)?$",
     ## And now, generic rules
-    r"^(?P<protocol>ssh://)    (?:[^@]+@)?(?P<domain>[^/]+)  /            (?P<path>.+?)          (?:.git)?$",
-    r"^(?P<protocol>git@)      (?P<domain>[^/]+)             :            (?P<path>.+?)          .git$",
-    r"^(?P<protocol>https://)  (?P<domain>[^/]+)             /            (?P<path>.+?)          (?:.git)?$",
+    r"^(?P<protocol>ssh://)    (?:[^@]+@)?(?P<domain>[^/]+)  /            (?P<path>.+?)$",
+    r"^(?P<protocol>git@)      (?P<domain>[^/]+)             :            (?P<path>.+?)$",
+    r"^(?P<protocol>https://)  (?P<domain>[^/]+)             /            (?P<path>.+?)$",
 )
 
 
@@ -29,6 +29,7 @@ class Cloneable:
         match = self._find_match(remote)
         groups = match.groupdict()
         protocol = groups.pop("protocol")
+        groups["path"] = groups["path"].removesuffix(".git")
         self._pieces = [
             piece for group in groups.values() for piece in group.split("/")
         ]
