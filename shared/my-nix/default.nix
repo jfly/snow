@@ -27,6 +27,8 @@ rec {
     '';
   });
   knock = import ./knock;
+  audible-cli = pkgs.audible-cli;
+  snowcrypt = pkgs.callPackage ./snowcrypt.nix { };
 
   ### Text editors
   neovim = pkgs.callPackage ./nvim { };
