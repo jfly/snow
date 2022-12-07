@@ -7,6 +7,10 @@ AddKeysToAgent yes
 Host ocf
     HostName ssh.ocf.berkeley.edu
     User jfly
+
+Host jflysopixel
+    HostName Pixel-4a
+    Port 8022
 ###
 
 ### Home stuff
