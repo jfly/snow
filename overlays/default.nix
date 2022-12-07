@@ -24,7 +24,9 @@
         python3Packages = python3.pkgs;
 
         deage = rec {
-          file = encrypted: ./.. + ("/" + (repoPath encrypted));
+          # Note: accessing PWD like this is impure, but it's the only way to
+          # access the decrypted, untracked secrets on the filesystem.
+          file = encrypted: (builtins.getEnv "PWD") + ("/" + (repoPath encrypted));
           repoPath = encrypted: (
             let hashed = builtins.hashString "sha256" (super.lib.strings.removeSuffix "\n" encrypted);
             in "./.sensitive-decrypted-secrets/${hashed}.secret"

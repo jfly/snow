@@ -49,9 +49,9 @@ function deploy_nix() {
         # [ERROR]   stderr) Oct 24 20:05:41 pattern hm-activate-jeremy[51259]: Existing file '/home/jeremy/.ssh/known_hosts' is in the way of '/nix/store/y1fry1gbsncd61klspsk85v954mv8flv-home-manager-files/.ssh/known_hosts'
         rm -f "$HOME/.ssh/known_hosts"
 
-        colmena apply-local --config hive.nix --sudo "$@"
+        colmena apply-local --impure --sudo "$@"
     else
-        colmena apply --config hive.nix --on "$target" "$@"
+        colmena apply --impure --on "$target" "$@"
     fi
 }
 

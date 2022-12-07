@@ -72,7 +72,7 @@ nixInstall() {
     encryptedRootDeviceUuid=$(sudo blkid -o value -s UUID "${LOOP_DEVICE}p2")
     local decryptedRootDeviceUuid
     decryptedRootDeviceUuid=$(sudo blkid -o value -s UUID "$CRYPT_DEVICE")
-    drv=$(colmena eval --config hive.nix --instantiate -E "
+    drv=$(colmena eval --instantiate -E "
         { nodes, pkgs, ... }:
 
         (pkgs.toLiveUsb {
