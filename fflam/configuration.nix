@@ -28,7 +28,6 @@
     version = 4;
   };
   boot.loader.grub.enable = false;
-  boot.loader.generic-extlinux-compatible.enable = true;
 
   # Required for the Wireless firmware
   hardware.enableRedistributableFirmware = true;

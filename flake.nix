@@ -98,10 +98,10 @@
             dallben = import nixos-unstable {
               overlays = import ./overlays;
             };
-            fflewddur = import nixos-21_11 {
+            fflewddur = import nixos-unstable {
               overlays = import ./overlays;
             };
-            fflam = import nixos-21_11 {
+            fflam = import nixos-unstable {
               overlays = import ./overlays;
             };
             pattern = import nixos-unstable {
