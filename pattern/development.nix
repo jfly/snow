@@ -25,10 +25,12 @@ in
 
   # Set up a local DNS server
   networking.resolvconf.useLocalResolver = true;
-  services.dnsmasq.enable = true;
-  services.dnsmasq.extraConfig = ''
-    address=/local.honor/127.0.0.1
-  '';
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      address = "/local.honor/127.0.0.1";
+    };
+  };
 
   # Set up ssh agent
   programs.ssh = {

@@ -47,7 +47,9 @@ function deploy_nix() {
         # Here's what sometimes happens when home manager is deploying:
         #
         # [ERROR]   stderr) Oct 24 20:05:41 pattern hm-activate-jeremy[51259]: Existing file '/home/jeremy/.ssh/known_hosts' is in the way of '/nix/store/y1fry1gbsncd61klspsk85v954mv8flv-home-manager-files/.ssh/known_hosts'
-        rm -f "$HOME/.ssh/known_hosts"
+        if [ -f "$HOME/.ssh/known_hosts" ] && [ ! -L "$HOME/.ssh/known_hosts" ]; then
+            mv "$HOME/.ssh/known_hosts" ~/sync/linux-secrets/.ssh/known_hosts
+        fi
 
         colmena apply-local --impure --sudo "$@"
     else

@@ -30,17 +30,25 @@
           absoluteRepoPath = repoPath: (builtins.getEnv "PWD") + ("/" + (super.lib.strings.removePrefix "/" repoPath));
         };
         deage = rec {
-          file = encrypted: snow.absoluteRepoPath (repoPath encrypted);
+          absoluteRepoPath = encrypted: snow.absoluteRepoPath (repoPath encrypted);
+          storeFile = { name, encrypted }: (
+            let absPath = deage.absoluteRepoPath encrypted;
+            in
+            super.writeTextFile {
+              inherit name;
+              text = builtins.readFile absPath;
+            }
+          );
           repoPath = encrypted: (
             let hashed = builtins.hashString "sha256" (super.lib.strings.removeSuffix "\n" encrypted);
             in "./.sensitive-decrypted-secrets/${hashed}.secret"
           );
-          string = encrypted: builtins.readFile (file encrypted);
+          string = encrypted: builtins.readFile (absoluteRepoPath encrypted);
           optionalString = description: encrypted: (
             let
               missingMsg = "Could not find decrypted ${description}. Try running `tools/deage && direnv reload`";
             in
-            if builtins.pathExists (file encrypted) then builtins.readFile (file encrypted) else builtins.trace missingMsg missingMsg
+            if builtins.pathExists (absoluteRepoPath encrypted) then builtins.readFile (absoluteRepoPath encrypted) else builtins.trace missingMsg missingMsg
           );
         };
       }
