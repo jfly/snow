@@ -105,6 +105,7 @@ pkgs.neovim.override {
         cmp-buffer
         nvim-cmp
         null-ls-nvim
+        vim-ledger
       ];
     };
     customRC = builtins.readFile ./vimrc;

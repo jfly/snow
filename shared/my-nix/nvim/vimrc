@@ -261,7 +261,12 @@ let g:ale_fixers = {
 \   'python': ['black', 'isort'],
 \   'rust': ['rustfmt'],
 \   'nix': ['nixpkgs-fmt'],
+\   'ledger': ['LedgerFixer'],
 \}
+
+function! LedgerFixer(conn_id, response)
+    call ledger#align_commodity_buffer()
+endfunction
 " Automatically run ALEFix on save.
 let g:ale_fix_on_save = 1
 " Easily toggle autoformatting (ta). Yes, this steps into the <leader>t... shortcut

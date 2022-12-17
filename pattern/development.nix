@@ -28,7 +28,9 @@ in
   services.dnsmasq = {
     enable = true;
     settings = {
-      address = "/local.honor/127.0.0.1";
+      address = [
+        "/local.honor/127.0.0.1"
+      ];
     };
   };
 
