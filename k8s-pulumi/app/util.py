@@ -1,4 +1,5 @@
 from typing import Dict
+from typing import Optional
 from typing import List
 import pulumi_kubernetes as kubernetes
 
@@ -9,8 +10,10 @@ def declare_app(
     image: str,
     port: int = 80,
     env: Dict[str, str] = {},
+    args: List[str] = [],
     volumes: List[kubernetes.core.v1.VolumeArgs] = [],
     volume_mounts: List[kubernetes.core.v1.VolumeMountArgs] = [],
+    working_dir: Optional[str] = None,
     sso_protected: bool = True,
 ):
     if env is None:
@@ -67,6 +70,8 @@ def declare_app(
                             image=image,
                             image_pull_policy="Always",
                             volume_mounts=volume_mounts,
+                            args=args,
+                            working_dir=working_dir,
                         )
                     ],
                     volumes=volumes,
