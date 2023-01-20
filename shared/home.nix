@@ -49,6 +49,13 @@ in
     size = 45;
   };
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "chromium-browser.desktop" ];
+    };
+  };
+
   home.file = (lib.mapAttrs'
     (name: target:
       lib.nameValuePair name (link target))

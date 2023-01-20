@@ -13,20 +13,39 @@
     colmena.url = "github:zhaofengli/colmena";
     colmena.inputs.flake-utils.follows = "flake-utils";
 
-    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # TODO unpin nixos-unstable. We're pinned to an older version for the following reasons:
+    #  - vagrant won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=211323
+    #  - kodi won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=210941
+    #  - mycli won't build. not yet fixed, tracked here: https://github.com/NixOS/nixpkgs/issues/211415
+    nixos-unstable.url = "github:NixOS/nixpkgs/0f5996b524c91677891a432cc99c7567c7c402b1";
+    # nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable?rev=0f5996b524c91677891a432cc99c7567c7c402b1";
     nixos-21_11.url = "github:jfly/nixpkgs/jfly-kodi";
 
     parsec-gaming.url = "github:jfly/parsec-gaming-nix/jfly/fix-hashes";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
 
+    # TODO: unpin home-manager one we've on the latest nixos-unstable again.
+    # Until we get there, the home-manager manual won't build: https://github.com/nix-community/home-manager/issues/3344
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # This used to be accessible at BentonEdmondson/knock, but that repo has
+    # disappeared. After some crawling through archive.org, I found an up to
+    # date fork, and forked it myself. I've also emailed the maintainer, but haven't heard back from him.
+    # More places to look for information:
+    #  - https://superuser.com/a/1664172/1765828
+    #  - https://aur.archlinux.org/packages/knock-bin
+    # If this repo is unmaintained, consider maintaining it yourself or maybe
+    # switching to [Libgourou](https://indefero.soutade.fr/p/libgourou/)
+    knock.url = "github:jfly/knock";
+    knock.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     { self
     , nixpkgs
     , flake-utils
+    , knock
     , mach-nix
     , colmena
     , nixos-unstable
@@ -34,21 +53,23 @@
     , parsec-gaming
     , home-manager
     }:
-    flake-utils.lib.eachDefaultSystem
-      (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = import ./overlays;
-        };
-      in
-      {
-        devShells.default = pkgs.callPackage ./shell.nix {
-          mach-nix = mach-nix.lib."${system}";
-          colmena = colmena.defaultPackage."${system}";
-        };
-      }
-      ) // {
+    (
+      flake-utils.lib.eachDefaultSystem
+        (system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = import ./overlays;
+          };
+        in
+        {
+          devShells.default = pkgs.callPackage ./shell.nix {
+            mach-nix = mach-nix.lib."${system}";
+            colmena = colmena.defaultPackage."${system}";
+          };
+        }
+        )
+    ) // {
 
       colmena = {
         meta = {
@@ -135,7 +156,10 @@
         "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
         "fflam" = import fflam/configuration.nix;
-        "pattern" = import pattern/configuration.nix { inherit parsec-gaming home-manager; };
+        "pattern" = import pattern/configuration.nix {
+          inherit parsec-gaming home-manager;
+          knock-flake = knock;
+        };
       };
     };
 }

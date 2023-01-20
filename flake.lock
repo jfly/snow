@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "base64-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1468170709,
+        "narHash": "sha256-dt6i1j0rqH7lA+2XXp9KTEhj2GvYueyGrHh9VXBEsbw=",
+        "ref": "master",
+        "rev": "7d5a89229a525452e37504976a73c35fbaf2fe4d",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://gist.github.com/f0fd86b6c73063283afe550bc5d77594.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gist.github.com/f0fd86b6c73063283afe550bc5d77594.git"
+      }
+    },
     "colmena": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -55,6 +71,37 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "gourou-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1654435760,
+        "narHash": "sha256-X94UbSwAp3rtioC8FCgJcOlVNZ5rvaAeIIVlKocFwus=",
+        "ref": "master",
+        "rev": "4f288f4e241e3cc711a10fdcf4078fd4ddfab7c2",
+        "revCount": 81,
+        "type": "git",
+        "url": "git://soutade.fr/libgourou.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "git://soutade.fr/libgourou.git"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -63,16 +110,41 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1671209729,
-        "narHash": "sha256-zxn1eA/rMi2DOx43V7q87bGaDzvL7CMVY/Ti7lJ92DQ=",
+        "lastModified": 1674082145,
+        "narHash": "sha256-4IpEt5Jc6VrNcpIcrKMCZAyeJMLXaaHk+yOV9HusO/A=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7d55a72d4c1df694e87a41a7e6c9a7b6e9a40ca3",
+        "rev": "7026e1a934abfa02623c9870378dbcdac3cd7f80",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "knock": {
+      "inputs": {
+        "base64-src": "base64-src",
+        "flake-utils": "flake-utils_2",
+        "gourou-src": "gourou-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pugixml-src": "pugixml-src",
+        "updfparser-src": "updfparser-src"
+      },
+      "locked": {
+        "lastModified": 1662251416,
+        "narHash": "sha256-jMhrC8VOOLXuIAURRxikZZLlUwPsPQM22DJm0Bsf47o=",
+        "owner": "jfly",
+        "repo": "knock",
+        "rev": "488fcabd69ca6f9e306a3ca30ccef600209115b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "repo": "knock",
         "type": "github"
       }
     },
@@ -85,11 +157,11 @@
         "pypi-deps-db": "pypi-deps-db"
       },
       "locked": {
-        "lastModified": 1667918925,
-        "narHash": "sha256-jCZ4iI4UCOC+T5SEgoCbUzqaeMo5WT3DcFwqwvn2fEs=",
+        "lastModified": 1672487114,
+        "narHash": "sha256-YIcQtXNQSofFSRDO8Y/uCtXAMguc8HqpY83TstgkH+k=",
         "owner": "DavHau",
         "repo": "mach-nix",
-        "rev": "913e6c16f986746ba5507878ef7ff992804d1fa8",
+        "rev": "68a85753555ed67ff53f0d0320e5ac3c725c7400",
         "type": "github"
       },
       "original": {
@@ -151,8 +223,8 @@
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
         "repo": "nixpkgs",
+        "rev": "0f5996b524c91677891a432cc99c7567c7c402b1",
         "type": "github"
       }
     },
@@ -189,11 +261,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1671190014,
-        "narHash": "sha256-NW385LW4Nj53Hbv3LXr458s4NL2/wcARC8rzK7vSWkw=",
+        "lastModified": 1673947312,
+        "narHash": "sha256-xx/2nRwRy3bXrtry6TtydKpJpqHahjuDB5sFkQ/XNDE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fbcb61bd7eb19914cbd88789c3586a63ff46b72b",
+        "rev": "2d38b664b4400335086a713a0036aafaa002c003",
         "type": "github"
       },
       "original": {
@@ -208,17 +280,34 @@
         ]
       },
       "locked": {
-        "lastModified": 1664140106,
-        "narHash": "sha256-h0ROvnBXpdmR4lIc1XtZEla76IKaMVE4kMxXS+ED4jk=",
+        "lastModified": 1674202790,
+        "narHash": "sha256-RbK612e92vxiMVB5s+WKLe0XejvTskFbkEfThgxZ/h0=",
         "owner": "jfly",
         "repo": "parsec-gaming-nix",
-        "rev": "af687d7b9a5412a69c8e1b9ba9f4355047c80d91",
+        "rev": "f29e0646fc7022dd054b51177dde600133d80517",
         "type": "github"
       },
       "original": {
         "owner": "jfly",
         "ref": "jfly/fix-hashes",
         "repo": "parsec-gaming-nix",
+        "type": "github"
+      }
+    },
+    "pugixml-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644379750,
+        "narHash": "sha256-FLemG9T17n6l7vgb01OmO22BK59jv5uozVHeUnILEEQ=",
+        "owner": "zeux",
+        "repo": "pugixml",
+        "rev": "314baf6605143f1e837209008f490e8559529e1c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zeux",
+        "ref": "latest",
+        "repo": "pugixml",
         "type": "github"
       }
     },
@@ -243,6 +332,7 @@
         "colmena": "colmena",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "knock": "knock",
         "mach-nix": "mach-nix",
         "nixos-21_11": "nixos-21_11",
         "nixos-unstable": "nixos-unstable",
@@ -264,6 +354,22 @@
         "ref": "nixos-22.11",
         "repo": "nixpkgs",
         "type": "github"
+      }
+    },
+    "updfparser-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647424063,
+        "narHash": "sha256-9dvibKiUbbI4CrmuAaJzlpntT0XdLvdGeC2/WzjlA5U=",
+        "ref": "master",
+        "rev": "9d56c1d0b1ce81aae4c8db9d99a8b5d1f7967bcf",
+        "revCount": 25,
+        "type": "git",
+        "url": "git://soutade.fr/updfparser.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "git://soutade.fr/updfparser.git"
       }
     },
     "utils": {

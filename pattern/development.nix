@@ -100,6 +100,7 @@ in
     })
     gnupg
     openssl
+    aws-sam-cli
     # dev setup scripts
     amazon-ecr-credential-helper
     # external-web

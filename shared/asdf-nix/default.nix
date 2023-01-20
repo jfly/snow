@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { }, mach-nix }:
+{ pkgs ? import <nixpkgs> { } }:
 
 let
   lib = pkgs.lib;
@@ -8,7 +8,7 @@ let
     java = pkgs.callPackage ./java.nix { };
     maven = pkgs.callPackage ./maven.nix { };
     thrift = pkgs.callPackage ./thrift { };
-    poetry = pkgs.callPackage ./poetry.nix { inherit mach-nix; };
+    poetry = pkgs.callPackage ./poetry.nix { };
     nodejs = pkgs.callPackage ./nodejs.nix { };
     yarn = pkgs.callPackage ./yarn.nix { };
     mysql = pkgs.callPackage ./mysql.nix { };

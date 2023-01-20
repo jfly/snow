@@ -1,6 +1,8 @@
-{ parsec-gaming, home-manager }:
+{ parsec-gaming, home-manager, knock-flake }:
 { config, pkgs, lib, ... }:
 
+let knock = knock-flake.packages.${builtins.currentSystem}.knock;
+in
 {
   _module.args.parsec-gaming = parsec-gaming;
 
@@ -57,6 +59,7 @@
   environment.systemPackages = with pkgs; [
     ripgrep
     (pkgs.callPackage ../shared/sd { })
+    knock
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in
     # shared/my-nix.

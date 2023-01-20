@@ -23,7 +23,8 @@ spec:
           path: /dev/ttyACM0
       containers:
         - name: home-assistant
-          image: homeassistant/home-assistant:stable
+          image: containers.clark.snowdon.jflei.com/home-assistant:latest
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           env:
