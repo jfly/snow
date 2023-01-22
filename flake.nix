@@ -26,7 +26,7 @@
 
     # TODO: unpin home-manager one we've on the latest nixos-unstable again.
     # Until we get there, the home-manager manual won't build: https://github.com/nix-community/home-manager/issues/3344
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/7d55a72d4c1df694e87a41a7e6c9a7b6e9a40ca3";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # This used to be accessible at BentonEdmondson/knock, but that repo has
