@@ -1,10 +1,10 @@
 import pulumi_kubernetes as kubernetes
-from .util import declare_app
+from .snowauth import Snowauth
 
 
 class Radarr:
-    def __init__(self):
-        declare_app(
+    def __init__(self, snowauth: Snowauth):
+        snowauth.declare_app(
             name="radarr",
             namespace="vpn",
             image="cr.hotio.dev/hotio/radarr",

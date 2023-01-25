@@ -1,15 +1,17 @@
 import pulumi_kubernetes as kubernetes
-from .util import declare_app
+from .util import http_ingress
+from .util import http_service
+from .util import http_deployment
+from pulumi_crds import traefik
+from .snowauth import Snowauth
 
 
 class Budget:
-    def __init__(self):
-        image = "containers.clark.snowdon.jflei.com/snow-budget:latest"
-        declare_app(
+    def __init__(self, snowauth: Snowauth):
+        hledger_base_url = "https://budget.clark.snowdon.jflei.com/ledger"
+        hledger_web_deployment = self._snow_budget_deployment(
             name="ledger",
             namespace="default",
-            image=image,
-            port=5000,
             args=[
                 "hledger-web",
                 "--serve",
@@ -18,58 +20,34 @@ class Budget:
                 "@budget/budget.args",
                 "--host=0.0.0.0",
                 "--port=5000",
-                "--base-url=https://ledger.clark.snowdon.jflei.com",
-            ],
-            working_dir="/manmanmon",
-            env={
-                "LEDGER_FILE": "/manmanmon/all-years.journal",
-            },
-            volume_mounts=[
-                kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/manmanmon",
-                    name="manmanmon",
-                ),
-            ],
-            volumes=[
-                kubernetes.core.v1.VolumeArgs(
-                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/state/git/manmanmon",
-                        type="",
-                    ),
-                    name="manmanmon",
-                ),
+                f"--base-url={hledger_base_url}",
             ],
         )
-        declare_app(
+        hledger_web_service = http_service(hledger_web_deployment, port=5000)
+        http_ingress(
+            hledger_web_service,
+            traefik_middlewares=[snowauth.snowauth_middleware],
+            base_url=hledger_base_url,
+            # hledger-web (actually yesod) is a bit weird when you give it a
+            # base-url with a path: it'll generate links correctly, but it
+            # expects a proxy in front that'll remove the prefix before the
+            # request arrives. See
+            # https://github.com/simonmichael/hledger/issues/1562 and
+            # https://github.com/yesodweb/yesod/issues/1792 for more details.
+            strip_path=True,
+        )
+
+        budget_deployment = self._snow_budget_deployment(
             name="budget",
             namespace="default",
-            image=image,
-            port=5000,
             args=[
                 "manman-run-site",
                 "--hostname=0.0.0.0",
                 "--port=5000",
             ],
-            working_dir="/manmanmon",
-            env={
-                "LEDGER_FILE": "/manmanmon/all-years.journal",
-            },
-            volume_mounts=[
-                kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/manmanmon",
-                    name="manmanmon",
-                ),
-            ],
-            volumes=[
-                kubernetes.core.v1.VolumeArgs(
-                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/state/git/manmanmon",
-                        type="",
-                    ),
-                    name="manmanmon",
-                ),
-            ],
         )
+        budget_service = http_service(budget_deployment, port=5000)
+        http_ingress(budget_service, traefik_middlewares=[snowauth.snowauth_middleware])
 
         kubernetes.batch.v1.CronJob(
             "snow-budget-daily-import",
@@ -144,6 +122,34 @@ class Budget:
             ),
         )
 
+    def _snow_budget_deployment(self, name: str, namespace: str, args: list[str]):
+        image = "containers.clark.snowdon.jflei.com/snow-budget:latest"
+        return http_deployment(
+            name=name,
+            namespace=namespace,
+            args=args,
+            image=image,
+            env={
+                "LEDGER_FILE": "/manmanmon/all-years.journal",
+            },
+            working_dir="/manmanmon",
+            volume_mounts=[
+                kubernetes.core.v1.VolumeMountArgs(
+                    mount_path="/manmanmon",
+                    name="manmanmon",
+                ),
+            ],
+            volumes=[
+                kubernetes.core.v1.VolumeArgs(
+                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
+                        path="/state/git/manmanmon",
+                        type="",
+                    ),
+                    name="manmanmon",
+                ),
+            ],
+        )
 
-def to_k8s_env_var_args(environ):
+
+def to_k8s_env_var_args(environ) -> list[kubernetes.core.v1.EnvVarArgs]:
     return [kubernetes.core.v1.EnvVarArgs(name=k, value=v) for k, v in environ.items()]

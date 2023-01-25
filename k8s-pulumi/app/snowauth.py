@@ -1,12 +1,15 @@
 import pulumi_kubernetes as kubernetes
+from typing import Optional
 from pulumi_crds import traefik
-from .util import declare_app
+from .util import http_deployment
+from .util import http_service
+from .util import http_ingress
 from .deage import deage
 
 
-class SnowAuth:
+class Snowauth:
     def __init__(self):
-        traefik.v1alpha1.Middleware(
+        self.snowauth_middleware = traefik.v1alpha1.Middleware(
             "snowauth",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 name="snowauth",
@@ -20,7 +23,7 @@ class SnowAuth:
             ),
         )
 
-        declare_app(
+        self.declare_app(
             name="snowauth",
             namespace="default",
             image="thomseddon/traefik-forward-auth:2",
@@ -58,3 +61,33 @@ class SnowAuth:
                 "LOGOUT_REDIRECT": "https://clark.snowdon.jflei.com",
             },
         )
+
+    def declare_app(
+        self,
+        name: str,
+        namespace: str,
+        image: str,
+        port: int = 80,
+        env: dict[str, str] = {},
+        args: list[str] = [],
+        volumes: list[kubernetes.core.v1.VolumeArgs] = [],
+        volume_mounts: list[kubernetes.core.v1.VolumeMountArgs] = [],
+        working_dir: Optional[str] = None,
+        sso_protected: bool = True,
+    ):
+        deployment = http_deployment(
+            name=name,
+            namespace=namespace,
+            image=image,
+            env=env,
+            args=args,
+            volumes=volumes,
+            volume_mounts=volume_mounts,
+            working_dir=working_dir,
+        )
+        service = http_service(deployment, port=port)
+
+        middlewares = []
+        if sso_protected:
+            middlewares.append(self.snowauth_middleware)
+        http_ingress(service, traefik_middlewares=middlewares)

@@ -1,9 +1,9 @@
-from .util import declare_app
+from .snowauth import Snowauth
 
 
 class Whoami:
-    def __init__(self):
-        declare_app(
+    def __init__(self, snowauth: Snowauth):
+        snowauth.declare_app(
             name="whoami",
             namespace="default",
             image="containous/whoami:latest",

@@ -1,9 +1,9 @@
 import pulumi_kubernetes as kubernetes
-from .util import declare_app
+from .snowauth import Snowauth
 
 
 class Syncthing:
-    def __init__(self):
+    def __init__(self, snowauth: Snowauth):
         # Note: I had to manually edit this application's config to set
         # `insecureSkipHostcheck` to true:
         # https://docs.syncthing.net/users/config.html#config-option-gui.insecureskiphostcheck
@@ -13,7 +13,7 @@ class Syncthing:
         #   <address>tcp://clark.snowdon.jflei.com:22000</address>
         #
         # I also set the syncthing device's name to "snow".
-        declare_app(
+        snowauth.declare_app(
             name="syncthing",
             namespace="default",
             image="lscr.io/linuxserver/syncthing",

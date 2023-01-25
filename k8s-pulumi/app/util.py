@@ -1,46 +1,34 @@
-from typing import Dict
 from typing import Optional
-from typing import List
+from typing import cast
 import pulumi_kubernetes as kubernetes
+from pulumi_crds import traefik
+from pulumi import Output
+from urllib.parse import urlparse
 
 
-def declare_app(
+def http_deployment(
     name: str,
     namespace: str,
     image: str,
-    port: int = 80,
-    env: Dict[str, str] = {},
-    args: List[str] = [],
-    volumes: List[kubernetes.core.v1.VolumeArgs] = [],
-    volume_mounts: List[kubernetes.core.v1.VolumeMountArgs] = [],
+    env: Optional[dict[str, str]] = None,
+    args: Optional[list[str]] = None,
+    volumes: Optional[list[kubernetes.core.v1.VolumeArgs]] = None,
+    volume_mounts: Optional[list[kubernetes.core.v1.VolumeMountArgs]] = None,
     working_dir: Optional[str] = None,
-    sso_protected: bool = True,
-):
+) -> kubernetes.apps.v1.Deployment:
     if env is None:
         env = {}
 
-    kubernetes.core.v1.Service(
-        name,
-        metadata=kubernetes.meta.v1.ObjectMetaArgs(
-            name=name,
-            namespace=namespace,
-        ),
-        spec=kubernetes.core.v1.ServiceSpecArgs(
-            ports=[
-                kubernetes.core.v1.ServicePortArgs(
-                    name="http",
-                    port=80,
-                    protocol="TCP",
-                    target_port=port,
-                ),
-            ],
-            selector={
-                "app": name,
-            },
-        ),
-    )
+    if args is None:
+        args = []
 
-    kubernetes.apps.v1.Deployment(
+    if volumes is None:
+        volumes = []
+
+    if volume_mounts is None:
+        volume_mounts = []
+
+    return kubernetes.apps.v1.Deployment(
         name,
         metadata=kubernetes.meta.v1.ObjectMetaArgs(
             name=name,
@@ -80,13 +68,118 @@ def declare_app(
         ),
     )
 
+
+def http_service(
+    deployment: kubernetes.apps.v1.Deployment,
+    port: int,
+) -> kubernetes.core.v1.Service:
+    deployment_metadata = cast(kubernetes.meta.v1.ObjectMetaArgs, deployment.metadata)
+    return kubernetes.core.v1.Service(
+        deployment._name,
+        metadata=kubernetes.meta.v1.ObjectMetaArgs(
+            name=deployment_metadata.name,
+            namespace=deployment_metadata.namespace,
+        ),
+        spec=kubernetes.core.v1.ServiceSpecArgs(
+            ports=[
+                kubernetes.core.v1.ServicePortArgs(
+                    name="http",
+                    port=80,
+                    protocol="TCP",
+                    target_port=port,
+                ),
+            ],
+            selector=cast(
+                kubernetes.meta.v1.LabelSelectorArgs,
+                cast(kubernetes.apps.v1.DeploymentSpecArgs, deployment.spec).selector,
+            ).match_labels,
+        ),
+    )
+
+
+def format_traefik_middlewares(middlewares: list[traefik.v1alpha1.Middleware]):
+    traefik_middlewares = []
+
+    for middleware in middlewares:
+        middleware_metadata = cast(
+            kubernetes.meta.v1.ObjectMetaArgs, middleware.metadata
+        )
+        traefik_middlewares.append(
+            Output.concat(
+                middleware_metadata.namespace,
+                "-",
+                middleware_metadata.name,
+                "@kubernetescrd",
+            )
+        )
+
+    return Output.all(*traefik_middlewares).apply(lambda mws: ",".join(mws))
+
+
+def http_ingress(
+    service: kubernetes.core.v1.Service,
+    traefik_middlewares: Optional[list[traefik.v1alpha1.Middleware]] = None,
+    base_url: Optional[str] = None,
+    strip_path: bool = False,
+):
+    """
+    Expose the given service, with optional Traefik middlewares.
+
+    If base_url is specified, then that hostname will be used, otherwise a
+    hostname will be generated from the given service's name.
+
+    If strip_path is specified, then base_url must also be specified and have a
+    non-empty path (such as http://example.com/some-path). With strip_path
+    enabled, the path (in this case, /some-path) will be removed before the
+    request gets forwarded to the underlying service. This is useful to nest
+    some services under a subpath. For example, hledger-web's url generation
+    logic can be changed, but not it's url parsing logic. In other words, you
+    can tell it "hey, whenever you generate a link prefix it with this path",
+    but you can't tell it to actually respond to urls, you actually need a
+    proxy in front of it to manipulate the path. I personally find this to be a
+    sort of odd, half-baked behavior, but it seems to be intentional, :shrug:. See
+    https://github.com/simonmichael/hledger/issues/1562 and
+    https://github.com/yesodweb/yesod/issues/1792 for more details.
+    """
+    name = service._name
+    service_metadata = cast(kubernetes.meta.v1.ObjectMetaArgs, service.metadata)
+
+    if base_url is None:
+        host = f"{name}.clark.snowdon.jflei.com"
+        path = "/"
+    else:
+        parsed = urlparse(base_url)
+        host = parsed.hostname
+        path = parsed.path
+
+    if traefik_middlewares is None:
+        traefik_middlewares = []
+
+    if strip_path:
+        assert path != "/", "Must specify a path if strip_path is enabled"
+        middleware_name = f"strip-{name}-{path.replace('/', '')}"
+        traefik_middlewares.append(
+            traefik.v1alpha1.Middleware(
+                middleware_name,
+                metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                    name=middleware_name,
+                    namespace=service_metadata.namespace,
+                ),
+                spec=traefik.v1alpha1.MiddlewareSpecArgs(
+                    strip_prefix=traefik.v1alpha1.MiddlewareSpecStripPrefixArgs(
+                        prefixes=[path],
+                    ),
+                ),
+            )
+        )
+
     extra_annotations = {}
-    if sso_protected:
+    if len(traefik_middlewares) > 0:
         extra_annotations[
             "traefik.ingress.kubernetes.io/router.middlewares"
-        ] = "default-snowauth@kubernetescrd"
+        ] = format_traefik_middlewares(traefik_middlewares)
 
-    kubernetes.networking.v1.Ingress(
+    return kubernetes.networking.v1.Ingress(
         name,
         metadata=kubernetes.meta.v1.ObjectMetaArgs(
             annotations={
@@ -94,13 +187,13 @@ def declare_app(
                 "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
                 **extra_annotations,
             },
-            name=name,
-            namespace=namespace,
+            name=service_metadata.name,
+            namespace=service_metadata.namespace,
         ),
         spec=kubernetes.networking.v1.IngressSpecArgs(
             rules=[
                 kubernetes.networking.v1.IngressRuleArgs(
-                    host=f"{name}.clark.snowdon.jflei.com",
+                    host=host,
                     http=kubernetes.networking.v1.HTTPIngressRuleValueArgs(
                         paths=[
                             kubernetes.networking.v1.HTTPIngressPathArgs(
@@ -112,7 +205,7 @@ def declare_app(
                                         ),
                                     ),
                                 ),
-                                path="/",
+                                path=path,
                                 path_type="Prefix",
                             )
                         ],
@@ -121,7 +214,7 @@ def declare_app(
             ],
             tls=[
                 kubernetes.networking.v1.IngressTLSArgs(
-                    hosts=[f"{name}.clark.snowdon.jflei.com"],
+                    hosts=[host],
                     secret_name=f"{name}-tls",
                 )
             ],
