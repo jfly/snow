@@ -8,7 +8,7 @@ alias k="kubectl"
 
 # Workaround to get a bash with readline support. See
 # https://github.com/NixOS/nixpkgs/issues/59209
-alias bash="nix run nixpkgs#bashInteractive"
+alias bash="nix run nixpkgs#bashInteractive --"
 
 # Home network stuff
 alias strider_dns_clear="ssh -l admin strider killall -s HUP dnsmasq"

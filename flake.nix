@@ -21,7 +21,7 @@
     # nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable?rev=0f5996b524c91677891a432cc99c7567c7c402b1";
     nixos-21_11.url = "github:jfly/nixpkgs/jfly-kodi";
 
-    parsec-gaming.url = "github:jfly/parsec-gaming-nix/jfly/fix-hashes";
+    parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
 
     # TODO: unpin home-manager one we've on the latest nixos-unstable again.

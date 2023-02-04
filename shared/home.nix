@@ -53,6 +53,7 @@ in
     enable = true;
     defaultApplications = {
       "text/html" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/mailto" = [ "chromium-browser.desktop" ];
     };
   };
 

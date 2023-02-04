@@ -1,38 +1,74 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p python3
 
-# Usage:
-# sw
-#  - start a stopwatch from 0, save start time
-# sw [-r|--resume]
-#  - start a stopwatch from the last saved start time (or current time if no last saved start time exists)
-#  - "-r" stands for --resume
+import contextlib
+import argparse
+import time
 
-function finish {
-    tput cnorm # Restore cursor
-    exit 0
-}
 
-trap finish EXIT
+def main():
+    parser = argparse.ArgumentParser(
+        description="Run a stopwatch starting a 0, unless [countdown] is specified, then we'll count down."
+    )
+    parser.add_argument(
+        "countdown", type=int, help="Optional countdown in seconds", nargs="?"
+    )
 
-DATE_FORMAT="+%H:%M:%S.%N"
+    args = parser.parse_args()
+    if args.countdown:
+        count(down_from_seconds=args.countdown)
+    else:
+        count()
 
-tput civis # hide cursor
 
-# If -r is passed, use saved start time from ~/.sw
-if [[ $1 == "-r" || $1 == "--resume" ]]; then
-    if [[ ! -f $HOME/.sw ]]; then
-        date +%s >"$HOME/.sw"
-    fi
-    START_TIME=$(cat "$HOME/.sw")
-else
-    START_TIME=$(date +%s)
-    echo -n "$START_TIME" >"$HOME/.sw"
-fi
+def count(down_from_seconds: int | None = None):
+    with disable_cursor():
+        try:
+            _count(down_from_seconds=down_from_seconds)
+        except KeyboardInterrupt:
+            # Don't vomit to the screen when the user does a ctrl-c
+            pass
 
-DATE_INPUT=("--date" "now-${START_TIME}sec")
 
-while true; do
-    STOPWATCH=$(TZ=UTC date "${DATE_INPUT[@]}" "$DATE_FORMAT" | sed 's/.\{7\}$//')
-    printf "\r%s" "$STOPWATCH"
-    sleep 0.03
-done
+def _count(down_from_seconds: int | None = None):
+    start = time.time()
+    while True:
+        elapsed = time.time() - start
+        if down_from_seconds is None:
+            display_seconds = elapsed
+        else:
+            display_seconds = down_from_seconds - elapsed
+            if elapsed >= down_from_seconds:
+                # Ensure we give folks the satisfaction of seeing a 0 at the end.
+                print(f"\r{pretty(seconds=0)}", end="")
+                break
+
+        print(f"\r{pretty(seconds=display_seconds)}", end="")
+        time.sleep(0.01)
+
+
+@contextlib.contextmanager
+def disable_cursor():
+    # Escape sequences copied from https://stackoverflow.com/a/70550803/1739415
+    try:
+        # Disable the cursor
+        print("\033[?25l", end="")
+
+        yield
+    finally:
+        # Ensure that no matter what, we re-enable the cursor.
+        print("\033[?25h", end="")
+
+
+def pretty(seconds: float):
+    hours = int(seconds // 3600)
+    seconds = seconds % 3600
+
+    minutes = int(seconds // 60)
+    seconds = seconds % 60
+
+    return f"{hours:02d}:{minutes:02d}:{seconds:05.2f}"
+
+
+if __name__ == "__main__":
+    main()
