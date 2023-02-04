@@ -30,17 +30,7 @@ rec {
   # TODO: don't install these globally, instead just make them available
   # to neovim.
   pyright = pkgs.pyright;
-  typescript-language-server = pkgs.nodePackages.typescript-language-server.override {
-    # Overriden to version 2.1.0 because 2.2.0 suffers from a bug:
-    # https://github.com/typescript-language-server/typescript-language-server/issues/658
-    # https://github.com/NixOS/nixpkgs/issues/210051
-    # TODO: upgrade to 3.0.2 once it's in nixpkgs.
-    version = "2.1.0";
-    src = pkgs.fetchurl {
-      url = "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-2.1.0.tgz";
-      sha512 = "4l/pEcIauf48Mbojqhis+HLH42HpFtNbrYgXbvaDi4Szkk3iKKZa1ydoj2qk1y6+Bp1Rq18EdubitxGhwj/flA==";
-    };
-  };
+  typescript-language-server = pkgs.nodePackages.typescript-language-server;
   vscode = pkgs.vscodium;
   xclip = pkgs.xclip;
 

@@ -17,9 +17,7 @@
     #  - vagrant won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=211323
     #  - kodi won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=210941
     #  - mycli won't build. not yet fixed, tracked here: https://github.com/NixOS/nixpkgs/issues/211415
-    nixos-unstable.url = "github:NixOS/nixpkgs/0f5996b524c91677891a432cc99c7567c7c402b1";
-    # nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable?rev=0f5996b524c91677891a432cc99c7567c7c402b1";
-    nixos-21_11.url = "github:jfly/nixpkgs/jfly-kodi";
+    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +47,6 @@
     , mach-nix
     , colmena
     , nixos-unstable
-    , nixos-21_11
     , parsec-gaming
     , home-manager
     }:

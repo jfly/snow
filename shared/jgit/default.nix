@@ -7,6 +7,6 @@ with pkgs.python3Packages; buildPythonApplication {
 
   src = ./.;
   nativeBuildInputs = [ setuptools ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "pytest";
 }

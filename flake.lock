@@ -26,11 +26,11 @@
         "stable": "stable"
       },
       "locked": {
-        "lastModified": 1675019967,
-        "narHash": "sha256-AD9udouBmfWxmsM1j6eNCu+HEB9E41+fA3XRIb765LU=",
+        "lastModified": 1675400331,
+        "narHash": "sha256-ja0DhWBARzcimqMBhQ+DP7NQoJSlNasqvlj5GiHRYY0=",
         "owner": "zhaofengli",
         "repo": "colmena",
-        "rev": "7602e548a78932bd28a7e2f621b3d62b4124e993",
+        "rev": "31d8240504e91c3ea5c758d92f02f94af3fae6c3",
         "type": "github"
       },
       "original": {
@@ -170,35 +170,19 @@
         "type": "github"
       }
     },
-    "nixos-21_11": {
-      "locked": {
-        "lastModified": 1647122473,
-        "narHash": "sha256-WEI4cC+NY/69z39WbZwrV51eV9SJV+DOsLSSH3Ur2Lo=",
-        "owner": "jfly",
-        "repo": "nixpkgs",
-        "rev": "69699c886f9594b86d8afc48d897fb6378784ecb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jfly",
-        "ref": "jfly-kodi",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixos-unstable": {
       "locked": {
-        "lastModified": 1671108576,
-        "narHash": "sha256-6ggOL6KoaELNA1562tnPjtAnQ9SwsKRTgeuaXvPzCwI=",
+        "lastModified": 1675362331,
+        "narHash": "sha256-VmcnKPj5gJLxWK7Bxlhg2LoQvhKRss7Ax+uoFjd3qKY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0f5996b524c91677891a432cc99c7567c7c402b1",
+        "rev": "a100acd7bbf105915b0004427802286c37738fef",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "rev": "0f5996b524c91677891a432cc99c7567c7c402b1",
         "type": "github"
       }
     },
@@ -235,11 +219,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1675153841,
-        "narHash": "sha256-EWvU3DLq+4dbJiukfhS7r6sWZyJikgXn6kNl7eHljW8=",
+        "lastModified": 1675431879,
+        "narHash": "sha256-kF/24JC5syftRJE64GMK14/vdLRbuEzZjV1cqxBfCeU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ea692c2ad1afd6384e171eabef4f0887d2b882d3",
+        "rev": "959190ecf6e5b8c7c30721f3235de84d568359ee",
         "type": "github"
       },
       "original": {
@@ -307,7 +291,6 @@
         "home-manager": "home-manager",
         "knock": "knock",
         "mach-nix": "mach-nix",
-        "nixos-21_11": "nixos-21_11",
         "nixos-unstable": "nixos-unstable",
         "nixpkgs": "nixpkgs_3",
         "parsec-gaming": "parsec-gaming"
