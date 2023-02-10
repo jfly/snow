@@ -11,7 +11,7 @@ def main():
         description="Run a stopwatch starting a 0, unless [countdown] is specified, then we'll count down."
     )
     parser.add_argument(
-        "countdown", type=int, help="Optional countdown in seconds", nargs="?"
+        "countdown", type=str_to_seconds, help="Optional countdown in seconds or HH:MM:SS format", nargs="?"
     )
 
     args = parser.parse_args()
@@ -20,6 +20,25 @@ def main():
     else:
         count()
 
+def str_to_seconds(s: str) -> int:
+    pieces = s.split(":")
+    if len(pieces) > 3:
+        raise argparse.ArgumentTypeError("Too many :")
+    elif len(pieces) == 3:
+        hours, minutes, seconds = pieces
+    elif len(pieces) == 2:
+        hours = ""
+        minutes, seconds = pieces
+    elif len(pieces) == 1:
+        hours = minutes = ""
+        (seconds,) = pieces
+    else:
+        assert False
+
+    hours = hours or "0"
+    minutes = minutes or "0"
+    seconds = seconds or "0"
+    return int(hours)*3600 + int(minutes)*60 + int(seconds)
 
 def count(down_from_seconds: int | None = None):
     with disable_cursor():
