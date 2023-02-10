@@ -16,4 +16,10 @@ version: (pkgs.poetry2nix.mkPoetryApplication {
     sha256 = shaByVersion.${version};
     fetchSubmodules = true;
   };
+
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
 })
