@@ -4,27 +4,26 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
+    pypi-deps-db.url = "github:DavHau/pypi-deps-db";
     mach-nix.url = "github:DavHau/mach-nix";
     mach-nix.inputs.flake-utils.follows = "flake-utils";
+    # Can't use the latest nixpkgs because of https://github.com/DavHau/mach-nix/issues/524
+    # mach-nix.inputs.nixpkgs.follows = "nixpkgs";
+    mach-nix.inputs.pypi-deps-db.follows = "pypi-deps-db";
 
     # Note: colmena comes with nixpkgs, but we need a version with
     # https://github.com/zhaofengli/colmena/commit/ca12be27edf5639fa3c9c98d6b4ab6d1f22e3315
     # so `deage.file`'s impurity works when doing an apply-local.
     colmena.url = "github:zhaofengli/colmena";
     colmena.inputs.flake-utils.follows = "flake-utils";
+    colmena.inputs.nixpkgs.follows = "nixpkgs";
 
-    # TODO unpin nixos-unstable. We're pinned to an older version for the following reasons:
-    #  - vagrant won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=211323
-    #  - kodi won't build. fixed by: https://nixpk.gs/pr-tracker.html?pr=210941
-    #  - mycli won't build. not yet fixed, tracked here: https://github.com/NixOS/nixpkgs/issues/211415
     nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
 
-    # TODO: unpin home-manager one we've on the latest nixos-unstable again.
-    # Until we get there, the home-manager manual won't build: https://github.com/nix-community/home-manager/issues/3344
-    home-manager.url = "github:nix-community/home-manager/7d55a72d4c1df694e87a41a7e6c9a7b6e9a40ca3";
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # This used to be accessible at BentonEdmondson/knock, but that repo has
@@ -45,6 +44,7 @@
     , flake-utils
     , knock
     , mach-nix
+    , pypi-deps-db
     , colmena
     , nixos-unstable
     , parsec-gaming
