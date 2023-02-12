@@ -6,6 +6,7 @@ import subprocess
 from rich import print
 from textwrap import dedent
 
+
 def encrypt(thing: str) -> str:
     p = subprocess.run(
         ["age", "-R", "tools/age-public-key.txt", "--encrypt", "--armor"],
@@ -16,23 +17,38 @@ def encrypt(thing: str) -> str:
     )
     return p.stdout
 
-def main():
-    parser = argparse.ArgumentParser(description=dedent('''\
-        Encrypt some secret data
 
-        Examples:
-            $ echo hunter2 | ./encrypt
-    '''))
-    parser.add_argument('--strip-trailing-newline', action=argparse.BooleanOptionalAction, default=True, help="Whether or not to automatically remove trailing newlines if they exist.")
+def main():
+    parser = argparse.ArgumentParser(
+        description=dedent(
+            """\
+                Encrypt some secret data
+
+                Examples:
+                    $ echo hunter2 | ./encrypt
+            """
+        )
+    )
+    parser.add_argument(
+        "--strip-trailing-newline",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Whether or not to automatically remove trailing newlines if they exist.",
+    )
     args = parser.parse_args()
     thing = sys.stdin.read()
     if thing[-1] == "\n" and args.strip_trailing_newline:
-        print(dedent("""\
-            [red][bold]Courtesy alert[/bold]: I've detected that whatever
-            you're encrypting ends in a newline character and am removing it
-            for you. Use --no-strip-trailing-newline to disable this
-            behavior.[/red]
-        """), file=sys.stderr)
+        print(
+            dedent(
+                """\
+                    [red][bold]Courtesy alert[/bold]: I've detected that whatever
+                    you're encrypting ends in a newline character and am removing it
+                    for you. Use --no-strip-trailing-newline to disable this
+                    behavior.[/red]
+                """
+            ),
+            file=sys.stderr,
+        )
         thing = thing[:-1]
 
     print(encrypt(thing), end="")

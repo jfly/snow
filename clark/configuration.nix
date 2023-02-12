@@ -37,7 +37,7 @@ rec {
   # Enable ssh.
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
   };
 
   # Allow ssh access as root user.
@@ -52,7 +52,7 @@ rec {
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim
-    pkgs.git  # needed so we can push to repos hosted on this machine
+    pkgs.git # needed so we can push to repos hosted on this machine
     (pkgs.callPackage ./beets.nix {
       beetsConfig = {
         # TODO: i had to manually run `mkdir -p /root/.local/state/beet/` before this would work

@@ -47,7 +47,7 @@ rec {
   # Enable ssh.
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
   };
 
   # Allow ssh access as root user.

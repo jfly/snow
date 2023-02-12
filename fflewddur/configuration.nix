@@ -30,8 +30,49 @@ rec {
   # Enable ssh.
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
   };
+
+  # Generated with: tools/generate-ssh-keypair fflewddur
+  system.activationScripts = {
+    copySshKey =
+      let
+        keypair = {
+          public = pkgs.writeText "id_ed25519.pub" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRF0gjAFyts8BAxF09p2tzL6PQrGA30RVtmCuj71BNf fflewddur\n";
+          private = pkgs.deage.storeFile {
+            name = "id_ed25519";
+            encrypted = ''
+              -----BEGIN AGE ENCRYPTED FILE-----
+              YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjdTd3dkdDT2RYNWQyVktR
+              SjJlaUtVb2piVjZTV0VJVTAxeVZDeUtGR0g0CmFrb1lBbkJhTnVvZ1F4alIyUzQ3
+              NER5TzM4TlFhNHRvaFc3M0orUERjWmMKLS0tIFAyVWJNNzNyNzh4Znl6MlIvMWti
+              cG1MV1hITDVCRzdROGlOMEJxSmZDS2cK9rtTlzPCQamZTwwjH5yUfisiVbilaX3v
+              xNZJEuE60111WvqIZjOBxNzKu7zcgiPTRGOVg7kQwtK84GgZMKsVGWwrgBCae5Fn
+              RgkihlcQP0TeCABRiD6XqZp9fbTzCfc98wdNhy6u9OjZ/Ssw5ikQvMHdgoGRr79n
+              LoGr/cNuwYfcYs7EBZum0DMLiB/63DKIcnIrnU6TzTtKuk6D7GYnOBE9qDJdtt7M
+              epoKEXtGUKPJFd1HBgacfo6D3n+efHPJJwVlEUlcrMiOEgBgS9MYHLn46lCNrHvu
+              28WL3geGWZVMvy1AOjh0TTe+7ORwVrJUA2UEObJzSAarpsL+QJGAOVs4+Iz5Iso6
+              TADEJ9IsJg72SwU1HuPhn0UnuEtf3EeNl6T7nObTMnxydOtz309nrh3O2UC89zsr
+              iYy5ZK1/v9vbnVBfxd9oMztnnPGIPqKYC/ifELJfM1Bffl8dUzf52rnfomj9/IeM
+              6sEzHg7i4tDa5OIPKgiT92DM2vHDW0E5y3rP56P8fsQzganKZPdjd0U7kfrLvgKA
+              qbI8m3G5Tp9aIJN9cuJe1oCW7eTF3so=
+              -----END AGE ENCRYPTED FILE-----
+            '';
+          };
+        };
+      in
+      ''
+        cp ${keypair.private} /root/.ssh/id_ed25519
+        cp ${keypair.public} /root/.ssh/id_ed25519.pub
+        chmod 0400 /root/.ssh/id_ed25519
+      '';
+  };
+
+  programs.ssh.extraConfig = ''
+    Host kent
+        HostName kent.sc.jflei.com
+        User kent
+  '';
 
   # Allow ssh access as root user.
   users.users.root = {
