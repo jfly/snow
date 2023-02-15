@@ -70,6 +70,10 @@ def set_passphrase(connection_uuid: str, passphrase: Path):
     )
 
 
+def enable_split_tunnel(connection_uuid: str):
+    nmcli("connection", "modify", "uuid", connection_uuid, "ipv4.never-default", "true")
+
+
 def add_connection(ovpn: Path):
     success_msg = nmcli("connection", "import", "type", "openvpn", "file", str(ovpn))
     success_re = re.compile(r"Connection '.*' \((.*)\) successfully added.")
@@ -103,6 +107,7 @@ def add_with_passphrase(ovpn: Path, passphrase: Path, force: bool):
     connection_uuid = add_connection(ovpn)
     try:
         set_passphrase(connection_uuid, passphrase)
+        enable_split_tunnel(connection_uuid)
         rename_connection(connection_uuid, connection_name)
     except:
         logger.warning(
