@@ -44,4 +44,5 @@ echo "=> updating ~/.aws/credentials as profile $profile" >/dev/stderr
 aws configure set --profile "$profile" aws_access_key_id "$ACCESS_KEY"
 aws configure set --profile "$profile" aws_secret_access_key "$SECRET_KEY"
 aws configure set --profile "$profile" aws_session_token "$SESSION"
+aws configure set --profile "$profile" region us-west-2
 echo "[OK] done" >/dev/stderr

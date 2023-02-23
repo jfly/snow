@@ -40,3 +40,6 @@ Host h4-*
     # Urg, we're still on ubuntu 18.04 and it doesn't understand "alacritty"
     SetEnv TERM=xterm-256color
     User jeremy
+    # Trust our various minions on first connection. This is safe because I'm
+    # always connecting through a (manually trusted) bastion server.
+    StrictHostKeyChecking accept-new

@@ -3,6 +3,7 @@
 let
   shaByVersion = {
     "1.2.1" = "ODbI8sSBEhvbp8f2K8WCZAN09Khw80SyruWtjoTewoM=";
+    "1.2.2" = "huIjLv1T42HEmePCQNJpKnNxJKdyD9MlEtc2WRPOjRE=";
     "1.3.0" = "16ng59ykm7zkjizmwb482y0hawpjjr5mvl0ahjd790xzxcc2bbbv";
     "1.3.2" = "12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
   };
