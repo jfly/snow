@@ -2,7 +2,6 @@ import pulumi_kubernetes as kubernetes
 from .util import http_ingress
 from .util import http_service
 from .util import http_deployment
-from pulumi_crds import traefik
 from .snowauth import Snowauth
 
 
@@ -55,7 +54,7 @@ class Budget:
                 name="snow-budget-daily-import",
             ),
             spec=kubernetes.batch.v1.CronJobSpecArgs(
-                schedule="@daily",
+                schedule="5 4 * * *",
                 job_template=kubernetes.batch.v1.JobTemplateSpecArgs(
                     spec=kubernetes.batch.v1.JobSpecArgs(
                         backoff_limit=2,
