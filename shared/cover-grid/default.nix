@@ -2,7 +2,7 @@
 
 pkgs.python3.pkgs.buildPythonApplication rec {
   pname = "CoverGrid";
-  version = "3.1";
+  version = "3.2.1";
 
   format = "other";
 
@@ -14,16 +14,8 @@ pkgs.python3.pkgs.buildPythonApplication rec {
     owner = "coderkun";
     repo = "mcg";
     rev = "v${version}";
-    sha256 = "sha256-J8xZBhHTY+hxv8V1swk8hc8tQA8wtfTykT581Pcb7SA=";
+    sha256 = "sha256-awPMXGruCB/2nwfDqYlc0Uu9E6VV1AleEZAw9Xdsbt8=";
   };
-
-  patches = [
-    # Be more robust when dealing with a corrupted cache
-    (pkgs.fetchpatch {
-      url = "https://gitlab.com/coderkun/mcg/-/merge_requests/3.patch";
-      sha256 = "sha256-v4MMipg8nNny4WOkUdgvPlWx9aF/ttmHjfgzBscqdvQ=";
-    })
-  ];
 
   nativeBuildInputs = with pkgs; [
     desktop-file-utils # for update-desktop-database
@@ -37,6 +29,7 @@ pkgs.python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with pkgs.python3.pkgs; [
     pygobject3
+    dateutil
   ];
 
   # Nixpkgs 17.12.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.

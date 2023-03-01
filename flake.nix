@@ -18,9 +18,7 @@
     colmena.inputs.flake-utils.follows = "flake-utils";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
 
-    # TODO: revert back to nixpkgs once https://github.com/NixOS/nixpkgs/pull/217794 is deployed.
-    # nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-unstable.url = "github:jfly/nixpkgs/scap-driver-linux-6_2-workaround";
+    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";

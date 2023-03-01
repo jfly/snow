@@ -39,7 +39,15 @@ rec {
   github-cli = pkgs.github-cli;
 
   ### AWS
-  awscli2 = pkgs.awscli2;
+  # TODO: remove patch once https://nixpk.gs/pr-tracker.html?pr=218602 lands in nixos-unstable
+  awscli2 = pkgs.awscli2.overridePythonAttrs (old: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/aws/aws-cli/pull/7646.patch";
+        sha256 = "sha256-pwirImCSedRKDr0oVg25xdM/cyS8mROpXs8kdrZgcHE=";
+      })
+    ];
+  });
 
   ### shell
   shellcheck = pkgs.shellcheck;

@@ -126,11 +126,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1677104801,
-        "narHash": "sha256-2V5nKOYVFMYlseYdDKiEaww2xqcE0GtS1ax3SoUX99I=",
+        "lastModified": 1677621055,
+        "narHash": "sha256-n3D/pZX0cYEpWKcLJSFImo5Dpk3D1RrxKVDmI6lnaIg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "4295fdfa6b0005c32f2e1f0b732faf5810c1bc7f",
+        "rev": "ef7d316578367ed7732a21eede6c79546a36124f",
         "type": "github"
       },
       "original": {
@@ -209,16 +209,16 @@
     },
     "nixos-unstable": {
       "locked": {
-        "lastModified": 1677123782,
-        "narHash": "sha256-ZXkVp/fifTQ1u/pGm4vfoDZdbAIIVSIxkePsHX4bNU8=",
-        "owner": "jfly",
+        "lastModified": 1677407201,
+        "narHash": "sha256-3blwdI9o1BAprkvlByHvtEm5HAIRn/XPjtcfiunpY7s=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "bb724fa986f6be4663f0cf15949bbb8de5814ff1",
+        "rev": "7f5639fa3b68054ca0b062866dc62b22c3f11505",
         "type": "github"
       },
       "original": {
-        "owner": "jfly",
-        "ref": "scap-driver-linux-6_2-workaround",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -255,11 +255,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1677080879,
-        "narHash": "sha256-0SjW4/d3Rkw6C7hHZ5lxT4r6Pw9vzQb6Il6zYWwe2Bo=",
+        "lastModified": 1677560409,
+        "narHash": "sha256-PIvUIsVNozPXe1FmNe9c6B8Febl3t9+51uBKMJ1Q8o0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f5dad40450d272a1ea2413f4a67ac08760649e89",
+        "rev": "9e56d6ec92c8fb4192f1392aa5c4101ad77f2070",
         "type": "github"
       },
       "original": {
@@ -343,11 +343,11 @@
         "pypiIndex": "pypiIndex"
       },
       "locked": {
-        "lastModified": 1677100533,
-        "narHash": "sha256-GhIuq3PvZu9ITtaFeQauzvkcMdURf6bqjJjFnDGmNC4=",
+        "lastModified": 1677618719,
+        "narHash": "sha256-rU3WQJQpqpZZGOo1VDqR9EGBcgpxepFJaES9p/VtJOs=",
         "owner": "DavHau",
         "repo": "pypi-deps-db",
-        "rev": "70c7600828c80fc760a36389d4338a826e5b4c45",
+        "rev": "d41496c0f3d2059c7d6479e0fc71ee36102719bc",
         "type": "github"
       },
       "original": {
@@ -375,11 +375,11 @@
     "pypiIndex": {
       "flake": false,
       "locked": {
-        "lastModified": 1677085382,
-        "narHash": "sha256-k7CoFozwrpfZmVn2sJV6Ohg5AXM8RVNq8DIJ1RJ/F7s=",
+        "lastModified": 1677603843,
+        "narHash": "sha256-8JV2wsqwslNNxNOXJ0FFh8h3RCqlRIj1f9d2EDLiwhA=",
         "owner": "davhau",
         "repo": "nix-pypi-fetcher-2",
-        "rev": "db16045ded1dd19ad36b439adb1b5c2acd271b2f",
+        "rev": "ff8cff4ca942d71269d6532c5380110327068f15",
         "type": "github"
       },
       "original": {
