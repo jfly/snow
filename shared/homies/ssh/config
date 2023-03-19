@@ -65,8 +65,7 @@ Host ramscan
 ### San Clemente stuff
 Host kent
     HostName kent.sc.jflei.com
-    User kent
-    #ForwardAgent yes
+    User root
 
 Host sc-router
     User root

@@ -19,6 +19,7 @@
     colmena.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    #nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
     parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
@@ -100,6 +101,16 @@
                         }
                       ];
                     };
+
+                    toRpiSdCard = { node, pkgs }: node.extendModules {
+                      modules = [
+                        # Despite the name, I don't think sd-image-raspberrypi
+                        # is the right thing to use. It *appears* to be
+                        # deprecated?
+                        # "${pkgs.path}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix"
+                        "${pkgs.path}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+                      ];
+                    };
                   }
               )
             ];
@@ -120,6 +131,9 @@
               overlays = import ./overlays;
             };
             fflam = import nixos-unstable {
+              overlays = import ./overlays;
+            };
+            kent = import nixos-unstable {
               overlays = import ./overlays;
             };
             pattern = import nixos-unstable {
@@ -153,6 +167,7 @@
         "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
         "fflam" = import fflam/configuration.nix;
+        "kent" = import kent/configuration.nix;
         "pattern" = import pattern/configuration.nix {
           inherit parsec-gaming home-manager;
           knock-flake = knock;

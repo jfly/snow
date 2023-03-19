@@ -16,6 +16,12 @@ To deploy one machine:
 
 To build a live usb:
 
-    $ tools/build-portable-usb.sh 'pattern'
+    tools/build-portable-usb.sh 'pattern'
 
 And follow the instructions it prints about how to copy this to a usb drive.
+
+# sd card for raspberry pi
+
+To build a sd card for a raspberry pi:
+
+    tools/build-rpi-sdcard.sh 'kent'

@@ -72,7 +72,8 @@ nixInstall() {
     encryptedRootDeviceUuid=$(sudo blkid -o value -s UUID "${LOOP_DEVICE}p2")
     local decryptedRootDeviceUuid
     decryptedRootDeviceUuid=$(sudo blkid -o value -s UUID "$CRYPT_DEVICE")
-    drv=$(colmena eval --instantiate -E "
+    # TODO: figure out how to avoid the --impure?
+    drv=$(colmena eval --impure --instantiate -E "
         { nodes, pkgs, ... }:
 
         (pkgs.toLiveUsb {
