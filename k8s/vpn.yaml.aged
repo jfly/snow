@@ -16,18 +16,18 @@ data:
   # cat wireguard.conf | base64 -w 0 | tools/encrypt
   vpnConfigfile: |-
     -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUNFMrNzZkbm5lZURZUndD
-    QVNJOEQzZVB2S0xybjFuMzZtZlR1UjlnZ0RJClQwRXA0UHFqNUZDRjdnRnZLTEFi
-    QzVQckgrbkhpUG1EN0FyNmpHSjlwSWMKLS0tIHJ0VnB4ZmhXQm5paG8zUUVNTTdO
-    L0VhbmN5eFZwM3lGdHVtK3lFeTVxQWMKNSAdB8uUcGZaUWo8JaA0OT/eYqLdkOmE
-    EfAgyikBVGbvdk2mROcc+NHl4ZFQCiouf2JFGAw7iK44pWpQwx2ALRuXxW7IK7s3
-    GdzSb6thb8cg3FqnCzkNEfSLKhjwUKyGsbSyHfFbWyzyTJ3qtA3GOnpXrj3bmFv1
-    cBX+C8YVTasG9S7QPfCkLQHldoEeqp/NnQGx9oqVVx3u4NbD9HZogZ6likU0WLPw
-    3sPnHyJXtXDEHgkJjcBDhktpZvXluV4Wt4/Ii5w7KUnpzlPmg4AUhRo9Vg547W2q
-    xHxjwbptSHG2cYjlBUqKQIiNIGFCHv5XY2olSER4v6PF7vmUdpk10uFpfALgupJz
-    Edy2nQUMu71jRxujnezrudWcm5prwr7KjQFiTW3kTsLUsdyFVydQHsdnlcnqZdyY
-    GmnRCPxrtc7eykUAUKdZ7GXpgBFM6lrYWkSZErGKHXm0Mn133aCfKR6twT1lLf0u
-    1sd1q/q2fKgzFKRU7S0W7u8Ck2cPSLg9B5D/b10hIXo=
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGeUttQzVnYmtrRU1ibkJt
+    UGxlODMvRVBZU0J4TVZHbFpkQTJGcWNLdTNRCnlJQzNWU2I3MXRSbnovRXBsbXhk
+    TFROQ0szUjUwdU5zbGVnRXBUT1gvUE0KLS0tIDRBMS91eVk2RjBwNXB0eStlNnBw
+    SHhobmtPWVhJYTdlUlc4SlA3ci9UMDgKy93ihsWMw6r6m8aoQ8zg6mLHdxcHUcSu
+    6xwBHt1cCkgkC3liPmyPOK+vNE0u2h13J3El27ddVv1LYjrdFZe2UURzUGTdhAHG
+    rVl3Di2DUkTF11Zlu2qtCciOWzzlrD3ym/avY6853Vv8gzVybQlL3Te0GtxOc0oE
+    tiCynaUDV/I+owuz4w2xPfjHPgbX1QwOYvhhczo5yKA8M6G1zJbHb6T74eq/+d81
+    lVX7L0RhKuEdRw85sgAkRDWt7SpERmCQDvX5Uf5mi9QdLBSf3hyUfuSKzT3Z778N
+    YvhvdbasfdzJSS6acKr0ZyCpX5L5B+l6+BUilWSrJO9A0xTqWieZFxkAWm/hcTwF
+    zjYrai/cvkWRuiiJwY9neNE4I79xrfdtI0ZhAj/r6sOThKwa+W8vnCvhIv2OAEAg
+    r/cUDaDeDTBgViOr2TBKMwBEiXuRnrJWkrH1+jxSX/sMUwCFFbz5VC7oP1EryUHe
+    cWgAGqXWse0wnWlx9QcNyUcTQS0gi5mMnEuAeNm9OXo=
     -----END AGE ENCRYPTED FILE-----
 ---
 # Install pod-gateway helm chart: https://github.com/k8s-at-home/charts/tree/master/charts/stable/pod-gateway

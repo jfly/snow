@@ -27,7 +27,6 @@ Host aragorn
 Host clark
     HostName clark.snowdon.jflei.com
     User root
-    ForwardAgent yes
 
 Host dallben
     ProxyJump clark
