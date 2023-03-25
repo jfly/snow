@@ -18,8 +18,11 @@
     colmena.inputs.flake-utils.follows = "flake-utils";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    #nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
+    # TODO: revert back to nixos-unstable once
+    # https://github.com/NixOS/nixpkgs/pull/223025/ is merged up.
+    # nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-unstable.url = "github:jfly/nixpkgs/jfly/nixos-unstable";
+    # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
     parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";

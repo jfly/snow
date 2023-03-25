@@ -21,6 +21,15 @@ let
       };
       sha256 = "sha256-95X/h9EdSwx8M7yIUbDChkjYpFg6ohAKmMIrQya20/M=";
     };
+    "3.9.10" = pkgs.python38.override {
+      sourceVersion = {
+        major = "3";
+        minor = "9";
+        patch = "10";
+        suffix = "";
+      };
+      sha256 = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
+    };
     "3.8.10" = pkgs.python38.override {
       sourceVersion = {
         major = "3";

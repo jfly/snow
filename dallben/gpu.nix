@@ -1,9 +1,6 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  # high-resolution display
-  hardware.video.hidpi.enable = true;
-
   # Enable hardware accelerated video playback
   # (copied from https://nixos.wiki/wiki/Accelerated_Video_Playback)
   nixpkgs.config.packageOverrides = pkgs: {
