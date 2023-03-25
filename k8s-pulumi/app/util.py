@@ -150,7 +150,9 @@ def http_ingress(
     else:
         parsed = urlparse(base_url)
         host = parsed.hostname
+        assert host
         path = parsed.path
+        assert path
 
     if traefik_middlewares is None:
         traefik_middlewares = []
