@@ -1,6 +1,10 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p sshfs
+
+# Mount clark's media at ~/media/clark
+
 # shellcheck shell=bash
+
 
 set -euo pipefail
 

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Mount //RAMSCAN/ramscan at /mnt/ramscan
+
+sudo mount --mkdir -t cifs "//$(dig +short ramscan)/ramscan" /mnt/ramscan
+echo "Successfully mounted //ramscan/ramscan at /mnt/ramscan"
