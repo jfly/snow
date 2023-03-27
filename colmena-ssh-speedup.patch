@@ -1,0 +1,18 @@
+diff --git a/src/nix/hive/mod.rs b/src/nix/hive/mod.rs
+index f6c695b..c775a89 100644
+--- a/src/nix/hive/mod.rs
++++ b/src/nix/hive/mod.rs
+@@ -215,9 +215,10 @@ impl Hive {
+                     host.set_ssh_config(ssh_config.clone());
+                 }
+
+-                if self.is_flake() {
+-                    host.set_use_nix3_copy(true);
+-                }
++                // Disabled as a workaround for https://github.com/NixOS/nix/issues/6950
++                // if self.is_flake() {
++                //     host.set_use_nix3_copy(true);
++                // }
+
+                 host.upcast()
+             });

@@ -3,6 +3,7 @@ from .radarr import Radarr
 from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
+from .monitoring import Monitoring
 
 
 def build_app():
@@ -11,3 +12,4 @@ def build_app():
     Syncthing(snowauth)
     Budget(snowauth)
     Whoami(snowauth)
+    Monitoring(snowauth)

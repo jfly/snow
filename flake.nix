@@ -66,7 +66,12 @@
         {
           devShells.default = pkgs.callPackage ./shell.nix {
             mach-nix = mach-nix.lib."${system}";
-            colmena = colmena.defaultPackage."${system}";
+            colmena = colmena.defaultPackage."${system}".overrideAttrs (oldAttrs: {
+              patches = [
+                # This is a workaround for https://github.com/NixOS/nix/issues/6950
+                ./colmena-ssh-speedup.patch
+              ];
+            });
           };
         }
         )
