@@ -37,7 +37,7 @@ let
     trap finish EXIT
     cp "${keypair.private}" "$tmp"
     chmod o-r "$tmp"
-    ${pkgs.rsync}/bin/rsync -avP --delete -e "${pkgs.openssh}/bin/ssh -i $tmp" root@fflewddur:/mnt/media/ /mnt/media/
+    ${pkgs.rsync}/bin/rsync --exclude "deercam/analysis" -avP --delete -e "${pkgs.openssh}/bin/ssh -i $tmp" root@fflewddur:/mnt/media/ /mnt/media/
 
     # Finally, report a successful backup =)
     curl "https://monitoring.clark.snowdon.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="
