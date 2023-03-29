@@ -64,7 +64,7 @@ let
         patch = "18";
         suffix = "";
       };
-      sha256 = "sha256-tiwOeTdVHQzAK4/Vyw9UT5QFuvyaVNOAjtRZSBLt70M=";
+      sha256 = "sha256-NtDJrVmGgKrb2okcl42+La6t/aj4S2WuuktJ8VavH2s=";
     };
   };
 in

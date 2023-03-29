@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-if [ -z "${USE_REAL_ASDF:-}" ]; then
+if [ -z "${USE_REAL_ASDF-}" ]; then
     # This file is carefully named to come alphabetically after use_asdf.sh.
     # This provides an alternative implementation of `use_asdf` that's built on top
     # of nix rather than asdf-vm + asdf-direnv.
@@ -69,6 +69,10 @@ $(cat ./.tool-versions)
 EOF
         fi
         echo "Loading flake from $asdf_nix_dir"
-        use_flake "$asdf_nix_dir"
+
+        # Needed to get python2 working :cry:
+        export NIXPKGS_ALLOW_INSECURE=1
+        # --impure needed so we can read the NIXPKGS_ALLOW_INSECURE env var.
+        use_flake "$asdf_nix_dir" "$@" --impure
     }
 fi
