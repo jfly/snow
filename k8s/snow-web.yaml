@@ -226,6 +226,7 @@ spec:
       containers:
         - name: snow-web
           image: containers.clark.snowdon.jflei.com/snow-web:latest
+          imagePullPolicy: Always
           volumeMounts:
             - name: mnt-media
               mountPath: /mnt/media

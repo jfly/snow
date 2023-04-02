@@ -56,16 +56,20 @@ in
     # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
     # we'll find out when that day comes.
     k3sConfig = ''
-      echo "apiVersion: helm.cattle.io/v1
+      echo -n "apiVersion: helm.cattle.io/v1
       kind: HelmChartConfig
       metadata:
         name: traefik
         namespace: kube-system
       spec:
         valuesContent: |-
+          additionalArguments:
+            - '--accesslog'
+            - '--log.level=INFO'
           service:
             spec:
-              externalTrafficPolicy: Local" > /var/lib/rancher/k3s/server/manifests/z-traefik-get-real-ip.yaml
+              externalTrafficPolicy: Local
+      " > /var/lib/rancher/k3s/server/manifests/z-traefik-get-real-ip.yaml
     '';
   };
   environment.systemPackages = [ pkgs.k3s ];
