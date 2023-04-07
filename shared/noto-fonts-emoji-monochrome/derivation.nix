@@ -6,6 +6,7 @@
 # For more information, see:
 #   - https://github.com/NixOS/nixpkgs/issues/166953#issuecomment-1116263975
 #   - https://github.com/googlefonts/noto-emoji/issues/390
+# Possible fix out for review here? https://github.com/NixOS/nixpkgs/pull/211672
 
 stdenvNoCC.mkDerivation {
   pname = "noto-fonts-emoji-monochrome";
@@ -16,7 +17,7 @@ stdenvNoCC.mkDerivation {
     # Add .zip parameter so that zip unpackCmd can match it.
     extension = ".zip";
     stripRoot = false;
-    sha256 = "sha256-q7WpqAhmio2ecNGOI7eX7zFBicrsvX8bURF02Pru2rM=";
+    sha256 = "sha256-NYWUlDy5D1hP0zAIPWLJJEZWwEXLFiAN2cRm0F52u/s=";
   };
 
   installPhase = ''

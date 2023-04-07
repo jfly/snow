@@ -4,8 +4,7 @@ let
   # Want to add a new drive? See README.md for instructions.
   nas_drive_uuids = {
     "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
-    "/mnt/disk2" = "9ce5e827-9e77-4aef-9d22-3b09bc0d512b";
-    "/mnt/disk3" = "20a88b0b-3f2e-4579-8f86-a47d7b5b343a";
+    "/mnt/disk2" = "dac09fb6-d300-4892-b83b-3acef83cc757";
   };
 in
 {

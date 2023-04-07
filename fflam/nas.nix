@@ -3,8 +3,9 @@
 let
   # Want to add a new drive? See fflewddur's README.md for instructions.
   nas_drive_uuids = {
-    "/mnt/disk1" = "ead4242e-e2c5-479a-b14f-2a0101200d7f";
-    "/mnt/disk2" = "f17a98d0-6547-47f5-b9d1-08c1ca4a233a";
+    "/mnt/disk1" = "f17a98d0-6547-47f5-b9d1-08c1ca4a233a";
+    "/mnt/disk2" = "9ce5e827-9e77-4aef-9d22-3b09bc0d512b";
+    "/mnt/disk3" = "20a88b0b-3f2e-4579-8f86-a47d7b5b343a";
   };
 in
 {
