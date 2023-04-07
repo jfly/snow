@@ -7,7 +7,7 @@ class Monitoring:
         snowauth.declare_app(
             name="monitoring",
             namespace="default",
-            image="louislam/uptime-kuma:1.21.0",
+            image="louislam/uptime-kuma:1.21.2",
             port=3001,
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
