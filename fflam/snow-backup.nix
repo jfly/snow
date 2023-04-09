@@ -27,21 +27,25 @@ let
       '';
     };
   };
-  snow-backup = pkgs.writeShellScriptBin "snow-backup" ''
-    set -e
-    # Urg, hacking around nix store permissions...
-    tmp=$(mktemp)
-    function finish {
-      rm -f "$tmp"
-    }
-    trap finish EXIT
-    cp "${keypair.private}" "$tmp"
-    chmod o-r "$tmp"
-    ${pkgs.rsync}/bin/rsync --exclude "deercam/analysis" -avP --delete -e "${pkgs.openssh}/bin/ssh -i $tmp" root@fflewddur:/mnt/media/ /mnt/media/
+  snow-backup = pkgs.writeShellApplication {
+    name = "snow-backup";
+    runtimeInputs = [ pkgs.curl pkgs.rsync pkgs.openssh ];
+    text = ''
+      set -e
+      # Urg, hacking around nix store permissions...
+      tmp=$(mktemp)
+      function finish {
+        rm -f "$tmp"
+      }
+      trap finish EXIT
+      cp "${keypair.private}" "$tmp"
+      chmod o-r "$tmp"
+      rsync --exclude "deercam/analysis" -avP --delete -e "ssh -i $tmp" root@fflewddur:/mnt/media/ /mnt/media/
 
-    # Finally, report a successful backup =)
-    curl "https://monitoring.clark.snowdon.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="
-  '';
+      # Finally, report a successful backup =)
+      curl "https://monitoring.clark.snowdon.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="
+    '';
+  };
 in
 {
   programs.ssh.knownHosts = {
