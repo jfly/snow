@@ -1,7 +1,7 @@
 import pulumi_kubernetes as kubernetes
 from .util import http_ingress
 from .util import http_service
-from .util import http_deployment
+from .util import snow_deployment
 from .snowauth import Snowauth
 
 
@@ -123,7 +123,7 @@ class Budget:
 
     def _snow_budget_deployment(self, name: str, namespace: str, args: list[str]):
         image = "containers.clark.snowdon.jflei.com/snow-budget:latest"
-        return http_deployment(
+        return snow_deployment(
             name=name,
             namespace=namespace,
             args=args,

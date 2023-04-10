@@ -6,7 +6,7 @@ from pulumi import Output
 from urllib.parse import urlparse
 
 
-def http_deployment(
+def snow_deployment(
     name: str,
     namespace: str,
     image: str,

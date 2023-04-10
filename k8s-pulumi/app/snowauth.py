@@ -1,7 +1,7 @@
 import pulumi_kubernetes as kubernetes
 from typing import Optional
 from pulumi_crds import traefik
-from .util import http_deployment
+from .util import snow_deployment
 from .util import http_service
 from .util import http_ingress
 from .deage import deage
@@ -76,7 +76,7 @@ class Snowauth:
         working_dir: Optional[str] = None,
         sso_protected: bool = True,
     ):
-        deployment = http_deployment(
+        deployment = snow_deployment(
             name=name,
             namespace=namespace,
             image=image,

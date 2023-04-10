@@ -4,6 +4,7 @@ from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
 from .monitoring import Monitoring
+from .miniflux import Miniflux
 
 
 def build_app():
@@ -13,3 +14,4 @@ def build_app():
     Budget(snowauth)
     Whoami(snowauth)
     Monitoring(snowauth)
+    Miniflux(snowauth)
