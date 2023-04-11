@@ -6,7 +6,7 @@ set -euo pipefail
 DB=/tmp/data.db
 
 # This environment variable effects `adb` commands.
-export ANDROID_SERIAL=R52NA0P8H4K
+export ANDROID_SERIAL=0B181JEC208881
 
 ping=$(adb shell "echo ping" </dev/null) || true
 if [ "$ping" != "ping" ]; then

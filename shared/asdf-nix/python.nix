@@ -11,6 +11,19 @@ let
     py27NoVenv.withPackages (ps: with ps; [ pip virtualenv ])
   );
 
+  # Generated from
+  # https://lazamar.co.uk/nix-versions/?package=python3&version=3.6.14&fullName=python3-3.6.14&keyName=python36&revision=407f8825b321617a38b86a4d9be11fd76d513da2&channel=nixpkgs-unstable#instructions
+  oldNixpkgs = import
+    (builtins.fetchGit {
+      name = "nixpkgs-with-old-py3";
+      url = "https://github.com/NixOS/nixpkgs/";
+      ref = "refs/heads/nixpkgs-unstable";
+      rev = "407f8825b321617a38b86a4d9be11fd76d513da2";
+    })
+    {
+      localSystem = pkgs.system;
+    };
+
   versions = {
     "3.10.6" = pkgs.python38.override {
       sourceVersion = {
@@ -38,6 +51,15 @@ let
         suffix = "";
       };
       sha256 = "sha256-avJKZgk92EC8zPNx1ARKMCfmVc8kWRzibkgCK8eSGdk=";
+    };
+    "3.6.15" = oldNixpkgs.python36.override {
+      sourceVersion = {
+        major = "3";
+        minor = "6";
+        patch = "15";
+        suffix = "";
+      };
+      sha256 = "sha256-bijXzdbdUT3RkOSbyjly4g/PRVCQzPLvPxoidhQTXZE=";
     };
     "3.6.9" = pkgs.python37.override {
       sourceVersion = {
