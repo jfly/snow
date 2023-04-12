@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sd";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = pkgs.fetchFromGitHub {
     owner = "ianthehenry";
     repo = "sd";
     rev = "v${version}";
-    sha256 = "sha256-128lpy9DGDOft3jOmJXRuHLLiqDrT4m4NfzkNg0AtaQ=";
+    sha256 = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
   };
 
   strictDeps = true;
