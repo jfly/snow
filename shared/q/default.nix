@@ -18,6 +18,9 @@
       else
           ${pkgs.sox}/bin/play -q ${./wav}/doh.wav &|
       fi
+
+      # Preserve the exit code.
+      return $success
     }
   '';
 }

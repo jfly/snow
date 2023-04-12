@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if "$@"; then
-    play -q "$WAV_FOLDER/ootinee.wav" &
-else
-    play -q "$WAV_FOLDER/doh.wav" &
-fi
