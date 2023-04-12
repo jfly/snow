@@ -1,10 +1,13 @@
 { config, lib, pkgs, ... }:
 
 let
-  q = pkgs.callPackage ../../shared/q { };
   jgit = pkgs.callPackage ../../shared/jgit { };
 in
 {
+  imports = [
+    ../../shared/q
+  ];
+
   programs.zsh.enable = true;
   users.users.${config.snow.user.name}.shell = pkgs.zsh;
   programs.zsh.interactiveShellInit = ''
