@@ -1,10 +1,10 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p python3
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
-OPTIONS=$(2fa-cli)
+cd "$(dirname "$0")"
+
+OPTIONS=$(./2fa-cli)
 SELECTED=$(picker-popup "$OPTIONS")
 
 SELECTED_2FA=$(echo "$SELECTED" | grep -Eo "[0-9]+")

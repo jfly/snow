@@ -2,12 +2,14 @@
 
 set -euo pipefail
 
+cd "$(dirname "$0")"
+
 prompt="$1"
 second_factor=""
 
 function get_2fa() {
     mfa_id=$1
-    if two_factors=$(2fa-cli 2>&1); then
+    if two_factors=$(./2fa-cli 2>&1); then
         second_factor=$(echo "$two_factors" | grep "$mfa_id" | cut -f 1)
         if [ "$second_factor" ]; then
             echo "$second_factor"
@@ -25,7 +27,12 @@ fi
 
 if [ -z "$second_factor" ]; then
     echo -n "$@" >/dev/stderr
-    read -rs second_factor
+    # Note: we read from file descriptor 2 (stderr) because this is sometimes
+    # used in the content of `git fetch`, which hijacks stdin and stdout for
+    # its own purposes.
+    read -rs second_factor <&2
+    # Immediately add a newline to give the user a sense of progress when they hit enter.
+    echo "" >/dev/stderr
 fi
 
 echo -n "$second_factor"

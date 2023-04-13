@@ -2,6 +2,7 @@
 
 let
   nm-vpn-add = pkgs.callPackage ../shared/nm-vpn-add { };
+  mfa = pkgs.callPackage ../shared/mfa { };
   # Reconfigure gpg-agent to have a longer lived cache: up to 8 hours after
   # last used, but the cache also expires when it is 8 hours old, even if it
   # has been used recently.
@@ -38,9 +39,7 @@ in
   programs.ssh = {
     startAgent = true;
     enableAskPassword = true;
-    # Switch from the old school looking default askpass program to gnome
-    # seahorse's much prettier one.
-    askPassword = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+    askPassword = "${mfa}/bin/mfa-askpass";
     extraConfig = ''
       AddKeysToAgent yes
     '';
@@ -93,6 +92,7 @@ in
     gdb
 
     ### Honor
+    mfa
     # server-config
     (vagrant.override {
       # I'm having trouble installing the vagrant-aws plugins with this setting enabled.

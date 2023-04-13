@@ -1,8 +1,8 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gnome.zenity
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+cd "$(dirname "$0")"
 
 profile=honor-temp
 
@@ -24,10 +24,12 @@ if [ -z "$MFA" ]; then
     # actually inject bytes into the SSH TCP connection!
     echo "" >/dev/stderr
     echo "Your credentials for AWS profile $profile appear to be out of date. Refreshing..." >/dev/stderr
-    echo "Please enter a MFA code in the dialog that appears." >/dev/stderr
+    echo -n "Enter MFA code: " >/dev/stderr
     # We can't read from stdin here because it would mess up the ssh protocol (see
     # comment above about /dev/stderr).
-    MFA=$(zenity --title="Enter MFA code" --text="Enter MFA code" --entry)
+    read -rs MFA <&2
+    # Immediately add a newline to give the user a sense of progress when they hit enter.
+    echo "" >/dev/stderr
 fi
 
 if [ -z "$MFA" ]; then

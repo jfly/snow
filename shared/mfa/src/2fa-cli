@@ -1,7 +1,8 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p sqlite oath-toolkit bash
+#!/usr/bin/env bash
 
 set -euo pipefail
+
+cd "$(dirname "$0")"
 
 DB=/tmp/data.db
 
