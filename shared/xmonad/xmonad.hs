@@ -43,9 +43,6 @@ windowPlacement = composeAll ([
         className =? "Chromium" <&&> fmap (isInfixOf "Google Play Music") title --> doShift musicWs,
         appName =? "meet.google.com__zhw-huyd-oam" <&&> className =? "Chromium" --> doShift videoWs,
 
-        -- Fix for GIMP windows
-        className =? "Gimp" --> doFloat,
-
         -- Music stuff
         className =? "Mcg" --> doShift musicWs,
         title =? "CoverGrid" --> doShift musicWs,
