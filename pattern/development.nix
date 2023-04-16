@@ -90,6 +90,7 @@ in
 
     ### Misc
     gdb
+    binutils
 
     ### Honor
     mfa
