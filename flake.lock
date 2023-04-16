@@ -308,15 +308,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1679353521,
-        "narHash": "sha256-fngRGO7hlYXR1tP1a/dlkj1cYg4AXLZ79I6y0O98qQ8=",
-        "owner": "DarthPJB",
+        "lastModified": 1681540170,
+        "narHash": "sha256-ncwkDW+DgzBzHDs23GekkdV9XtTPeSapBO4ACxdZ5Qc=",
+        "owner": "jfly",
         "repo": "parsec-gaming-nix",
-        "rev": "5a0c4c722cda10e7ddfedc50a0bd3fb0b5c01c67",
+        "rev": "870bcfd3705f5f592dbf826d053c53d70e847238",
         "type": "github"
       },
       "original": {
-        "owner": "DarthPJB",
+        "owner": "jfly",
+        "ref": "jfly/fixes",
         "repo": "parsec-gaming-nix",
         "type": "github"
       }

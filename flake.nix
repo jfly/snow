@@ -22,7 +22,9 @@
     # nixos-unstable.url = "github:jfly/nixpkgs/jfly/nixos-unstable";
     # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
-    parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
+    # TODO upstream these fixes, or just wait for https://github.com/NixOS/nixpkgs/pull/222396 to get merged up?
+    # parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
+    parsec-gaming.url = "github:jfly/parsec-gaming-nix/jfly/fixes";
     parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager";
