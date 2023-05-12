@@ -11,7 +11,9 @@ in
     uid = 1000;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # As of 2022-04-28 sysdig doesn't compile with the latest kernel =(
+  # TODO: investigate and report an issue somewhere (or maybe just upgrade sysdig?)
+  #<<< boot.kernelPackages = pkgs.linuxPackages_latest;
   nixpkgs = {
     system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -47,6 +49,10 @@ in
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  # Keep only a finite number of boot configurations. This prevents /boot from
+  # filling up.
+  # https://nixos.wiki/wiki/Bootloader#Limiting_amount_of_entries_with_grub_or_systemd-boot
+  boot.loader.systemd-boot.configurationLimit = 50;
   boot.loader.efi.canTouchEfiVariables = true;
 
   swapDevices = [{ device = "/swapfile"; size = 2048; }];

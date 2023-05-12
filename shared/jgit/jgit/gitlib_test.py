@@ -32,6 +32,11 @@ def test_github():
         clone_from="git@github.com:thewca/worldcubeassociation.org.git",
         clone_to="~/src/github.com/thewca/worldcubeassociation.org",
     )
+    assert_parse(
+        remote="https://github.com/thewca/worldcubeassociation.org#setup",
+        clone_from="git@github.com:thewca/worldcubeassociation.org.git",
+        clone_to="~/src/github.com/thewca/worldcubeassociation.org",
+    )
 
     # Try some urls straight from browsing github repos
     assert_parse(

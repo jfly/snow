@@ -12,11 +12,8 @@ fi
 
 MINION_NAME="${MINION_NAME:${#MINION_PREFIX}}"
 
-# Refresh the AWS credentials if they are out of date.
-h4-mfa.sh
-
 # Now figure out the IP address of the minion we're trying to ssh to.
-PRIVATE_IP=$(aws --profile=honor-temp ec2 describe-instances --filters "Name=tag:Name,Values=$MINION_NAME" | jq -r '.Reservations[] | .Instances[] | .PrivateIpAddress')
+PRIVATE_IP=$(aws-vault exec honor -- aws ec2 describe-instances --filters "Name=tag:Name,Values=$MINION_NAME" | jq -r '.Reservations[] | .Instances[] | .PrivateIpAddress')
 if [ "$PRIVATE_IP" = "" ]; then
     echo "Could not find IP for minion: $MINION_NAME" >/dev/stderr
     exit 2

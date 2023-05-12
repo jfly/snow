@@ -172,7 +172,8 @@
         };
 
         "clark" = import clark/configuration.nix;
-        "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
+        # TODO: dallben won't build without https://github.com/NixOS/nixpkgs/pull/227041/files
+        # "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
         "fflam" = import fflam/configuration.nix;
         "kent" = import kent/configuration.nix;

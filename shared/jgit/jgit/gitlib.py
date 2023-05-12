@@ -16,7 +16,7 @@ REMOTE_REGEXPS = compile_all(
     # clark
     r"^(?P<protocol>ssh://)    (?P<domain>clark)             /state/git/  (?P<path>.+?)$",
     # github
-    r"^(?P<protocol>https://)  (?P<domain>github.com)        /            (?P<path>[^/]+/[^/]+)  (/.*)?$",
+    r"^(?P<protocol>https://)  (?P<domain>github.com)        /            (?P<path>[^/]+/[^/#]+)  (/.*)?  (\#.*)?$",
     ## And now, generic rules
     r"^(?P<protocol>ssh://)    (?:[^@]+@)?(?P<domain>[^/]+)  /            (?P<path>.+?)$",
     r"^(?P<protocol>git@)      (?P<domain>[^/]+)             :            (?P<path>.+?)$",

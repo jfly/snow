@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+declare -a autoPatchelfLibs      #<<<
+declare -a extraAutoPatchelfLibs #<<G
+
+addEnvHooks() {
+    # We don't need to do anything here, we just need this function to exist
+    # for setup-hook to run without crashing.
+    :
+}
+
+# shellcheck disable=SC2034
+# (autoPatchelfIgnoreMissingDeps is used by the setup-hook we're sourcing)
+autoPatchelfIgnoreMissingDeps=(libopenblasp-r0-9f9f5dbc.3.18.so)
+
+# shellcheck source=/dev/null
+source "$(nix build --no-link --print-out-paths nixpkgs#autoPatchelfHook)/nix-support/setup-hook"
+
+#<<< addAutoPatchelfSearchPath /nix/store/4v2bk6almk03mfnz4122dfz8vcxynvs3-gcc-11.3.0-lib/lib
+#<<< addAutoPatchelfSearchPath /nix/store/jyiybh44fcvypizjnl3yrffqr8mndhid-zlib-1.2.12/lib
+#<<< autoPatchelf -- /home/jeremy/src/github.com/joinhonor/external-api/.direnv/python-3.8.10/lib/python3.8/site-packages/numpy.libs/ /home/jeremy/src/github.com/joinhonor/external-api/.direnv/python-3.8.10/lib/python3.8/site-packages/scipy/sparse/
+# I still had to run this after =(, but we're definitely getting closer to something turnkey!
+# patchelf --set-rpath /home/jeremy/src/github.com/joinhonor/external-api/.direnv/python-3.8.10/lib/python3.8/site-packages/numpy.libs:/home/jeremy/src/github.com/joinhonor/external-api/.direnv/python-3.8.10/lib/python3.8/site-packages/scipy.libs /home/jeremy/src/github.com/joinhonor/external-api/.direnv/python-3.8.10/lib/python3.8/site-packages/scipy/sparse/linalg/_isolve/_iterative.cpython-38-x86_64-linux-gnu.so
+
+#<<< addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#stdenv.cc.cc.lib')/lib"
+addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#gcc11Stdenv.cc.cc.lib')/lib" #<<<
+addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#zlib')/lib"
+
+echo "YOOOOOOOOOO"                                              #<<<
+echo "autoPatchelfLibs: ${autoPatchelfLibs[*]}"                 #<<<
+echo "extraAutoPatchelfLibs: ${extraAutoPatchelfLibs[*]}"       #<<<
+echo "runtimeDependenciesArray: ${runtimeDependenciesArray[*]}" #<<<
+autoPatchelf -- .direnv
+#<<< autoPatchelf -- .direnv/python-3.8.10/lib/python3.8/site-packages/greenlet/

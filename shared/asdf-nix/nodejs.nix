@@ -17,6 +17,11 @@ let
       sha256 = "sha256-GudkIA38I6impoOH4+9sfrOHBe/9s4ciydORb+uLZm8=";
       patches = [ ];
     };
+    "18.15.0" = {
+      baseDrv = pkgs.nodejs-18_x;
+      sha256 = "sha256-jkTWUBj/lzKEGVwjGGRpoOpAgul+xCAOX1cG1VhNqjc=";
+      patches = [ ];
+    };
   };
 in
 version: (

@@ -68,6 +68,23 @@ in
   # Needed by ~/bin/allprocs
   programs.sysdig.enable = true;
 
+  # Configuration for aws-vault
+  # We don't actually use zenity, this is just a binary in ~/bin that aws-vault
+  # recognizes the name of. See that script for some thoughts about a less
+  # hacky approach to using a custom propmt.
+  environment.variables.AWS_VAULT_PROMPT = "zenity";
+  # TODO: Look into keyctl backend once https://github.com/99designs/aws-vault/pull/1202 is merged.
+  environment.variables.AWS_VAULT_BACKEND = "file";
+  environment.variables.AWS_VAULT_FILE_PASSPHRASE = pkgs.deage.string ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYOE5Yd1hjTisvcDRzVTJ2
+    REFjSkZoYWRJOGVxa3ZTdTV1MnQ2YWNjNzIwCmIrVWpINWFrN01reXZ6Z0NtZC94
+    Z2JUVHJtaDJIRlQ4cHRuK1FleWF1ZGsKLS0tIFZVWUZlWE9ac2JuUVl1R20xMCt0
+    ZHBFeXphVVJUT090U0l3TC9LOVVEUmMKApEd7chMuK9kB2fCOscPI16vjlwPyA7V
+    rC77LyauPwyX47G+00wJ2qCerKxSzjf1/WjCWg==
+    -----END AGE ENCRYPTED FILE-----
+  '';
+
   environment.systemPackages = with pkgs; [
     ### Version control
     git
@@ -94,11 +111,12 @@ in
 
     ### Honor
     mfa
+    aws-vault
     # server-config
-    (vagrant.override {
-      # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
-      withLibvirt = false;
-    })
+    #<<< (vagrant.override {
+    #<<<   # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
+    #<<<   withLibvirt = false;
+    #<<< })
     gnupg
     openssl
     aws-sam-cli
@@ -106,5 +124,7 @@ in
     amazon-ecr-credential-helper
     # external-web
     nginx
+    # kube-config (and others)
+    gnumake
   ];
 }
