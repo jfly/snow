@@ -32,6 +32,7 @@ function deploy_k8s() {
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
 
     for f in k8s/**/*{.yaml,.yaml.secret}; do
+        echo "Applying $f"
         kubectl apply -f "$f"
     done
 

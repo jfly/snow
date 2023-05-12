@@ -6,6 +6,8 @@ from .budget import Budget
 from .monitoring import Monitoring
 from .miniflux import Miniflux
 
+# from .jfly_laptop import JflyLaptop
+
 
 def build_app():
     snowauth = Snowauth()
@@ -15,3 +17,4 @@ def build_app():
     Whoami(snowauth)
     Monitoring(snowauth)
     Miniflux(snowauth)
+    # JflyLaptop()
