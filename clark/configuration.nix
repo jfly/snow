@@ -66,6 +66,7 @@ rec {
           "mbsync"
           "missing"
           "unimported"
+          "convert"
         ];
 
         directory = "/mnt/media/beets";
