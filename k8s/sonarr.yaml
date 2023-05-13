@@ -23,7 +23,8 @@ spec:
           path: /mnt/media
       containers:
         - name: sonarr
-          image: cr.hotio.dev/hotio/sonarr
+          image: cr.hotio.dev/hotio/sonarr:latest
+          imagePullPolicy: Always
           env:
             - name: TZ
               value: "America/Los_Angeles"

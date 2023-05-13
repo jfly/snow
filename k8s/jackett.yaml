@@ -23,7 +23,8 @@ spec:
           path: /mnt/media
       containers:
         - name: jackett
-          image: cr.hotio.dev/hotio/jackett:release-0.20.2280
+          image: cr.hotio.dev/hotio/jackett:latest
+          imagePullPolicy: Always
           env:
             - name: TZ
               value: "America/Los_Angeles"

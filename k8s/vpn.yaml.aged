@@ -40,7 +40,7 @@ metadata:
 spec:
   chart: pod-gateway
   repo: https://k8s-at-home.com/charts/
-  version: 5.2.1
+  version: 5.6.2
   targetNamespace: default
   # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/pod-gateway/values.yaml
   valuesContent: |-
@@ -59,6 +59,8 @@ spec:
       # (from https://docs.k8s-at-home.com/guides/pod-gateway/#routed-pod-fails-to-init)
       NOT_ROUTED_TO_GATEWAY_CIDRS: "10.42.0.0/16 10.43.0.0/16"
 
+    image:
+      pullPolicy: Always
     publicPorts:
     - hostname: transmission
       IP: 10 # must be an integer between 2 and VXLAN_GATEWAY_FIRST_DYNAMIC_IP (20 by default)
@@ -146,9 +148,12 @@ spec:
         cidr: 10.0.0.0/8
   egress:
   - to:
-    # Only allow egress to K8S
+    # Only allow egress to K8S and the local network (specifically to allow
+    # access to kodi, which should probably get containerized).
     - ipBlock:
         cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 192.168.0.0/8
   policyTypes:
     - Ingress
     - Egress
