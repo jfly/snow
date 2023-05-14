@@ -1,5 +1,5 @@
 import pulumi_kubernetes as kubernetes
-from .snowauth import Snowauth
+from .snowauth import Snowauth, Access
 
 
 class Monitoring:
@@ -25,7 +25,7 @@ class Monitoring:
                     name="config",
                 ),
             ],
-            # uptime kuma has its own login flow + it should also be exposed to
+            # uptime kuma has its own login flow -> it should also be exposed to
             # the outside world.
-            sso_protected=False,
+            access=Access.INTERNET_UNSECURED,
         )

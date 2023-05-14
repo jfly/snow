@@ -1,3 +1,21 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflare-api-token-secret
+  # Must be the same as the namespace where the cert-manager controller pod runs!
+  # https://github.com/cert-manager/cert-manager/issues/263
+  namespace: cert-manager
+type: Opaque
+stringData:
+  api-token: |-
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwSk04QThSK2FoS2JRdkxY
+    N0dYQ2JqTEErakszVWNyVmV1ZlRJOHZ1NUFRCkZPZFFoL1dISlpSdXpSRFA3Smg5
+    U2JPeVo0Z0pzckcycHZlMzJ2SElsT2sKLS0tIEJ4bk5xQTdpUEZwbURyWFY2bG44
+    cXJRcjlUd0UwTmJkTjlDZ0FUVGxESDQKNwGDW7Rq7Lm9zE+izZrIVBdlJ2TvOrZs
+    NHPbfaRtZCNA0yxjZCjEte+LZU6XEbiWXGiymss+xtkYg8Cq4ivnG8OX48D9GxCg
+    -----END AGE ENCRYPTED FILE-----
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -9,23 +27,11 @@ spec:
       name: prod-issuer-account-key
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
-      - http01:
-          ingress:
-            class: traefik
-            podTemplate:
-              metadata:
-                labels:
-                  # Opt this pod *out* of the VPN gateway. The temporary
-                  # `cm-acme-http-solver-*` pod that gets created gets stuck in
-                  # the "CreateContainerConfigError" state when being applied
-                  # to Ingress's in our "vpn" namespace. I *think* that's
-                  # because the gateway admission controller modifies this pod
-                  # to try to mount something at /config, but cert-manager
-                  # *also* tries to mount something at /config, and I don't
-                  # think the two get along. Rather than try to figure out how
-                  # to get the two to play together nicely, it's easier to just
-                  # opt this pod out of the VPN situation entirely.
-                  setGateway: "false"
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-api-token-secret
+              key: api-token
         selector: {}
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -67,6 +73,7 @@ spec:
   tls:
     - hosts:
       - snow.jflei.com
+      - '*.snow.jflei.com'
       secretName: snow-web-tls
   rules:
   - host: snow.jflei.com

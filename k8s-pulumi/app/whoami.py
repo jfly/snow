@@ -1,4 +1,4 @@
-from .snowauth import Snowauth
+from .snowauth import Snowauth, Access
 
 
 class Whoami:
@@ -9,5 +9,5 @@ class Whoami:
             image="containous/whoami:latest",
             port=80,
             # It's ok to expose this to the outside world. Nothing scary here!
-            sso_protected=False,
+            access=Access.INTERNET_UNSECURED,
         )

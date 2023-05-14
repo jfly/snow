@@ -3,6 +3,7 @@ from .util import http_ingress
 from .util import http_service
 from .util import snow_deployment
 from .snowauth import Snowauth
+from .snowauth import Access
 
 
 class Budget:
@@ -25,7 +26,9 @@ class Budget:
         hledger_web_service = http_service(hledger_web_deployment, port=5000)
         http_ingress(
             hledger_web_service,
-            traefik_middlewares=[snowauth.snowauth_middleware],
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO
+            ),
             base_url=hledger_base_url,
             # hledger-web (actually yesod) is a bit weird when you give it a
             # base-url with a path: it'll generate links correctly, but it
@@ -46,7 +49,12 @@ class Budget:
             ],
         )
         budget_service = http_service(budget_deployment, port=5000)
-        http_ingress(budget_service, traefik_middlewares=[snowauth.snowauth_middleware])
+        http_ingress(
+            budget_service,
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO
+            ),
+        )
 
         kubernetes.batch.v1.CronJob(
             "snow-budget-daily-import",

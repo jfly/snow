@@ -1,5 +1,5 @@
 import pulumi_kubernetes as kubernetes
-from .snowauth import Snowauth
+from .snowauth import Snowauth, Access
 
 
 class Radarr:
@@ -7,6 +7,7 @@ class Radarr:
         snowauth.declare_app(
             name="radarr",
             namespace="vpn",
+            access=Access.INTERNET_BEHIND_SSO,
             image="cr.hotio.dev/hotio/radarr",
             port=7878,
             env={

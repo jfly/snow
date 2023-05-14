@@ -135,10 +135,10 @@ def http_ingress(
     some services under a subpath. For example, hledger-web's url generation
     logic can be changed, but not it's url parsing logic. In other words, you
     can tell it "hey, whenever you generate a link prefix it with this path",
-    but you can't tell it to actually respond to urls, you actually need a
-    proxy in front of it to manipulate the path. I personally find this to be a
-    sort of odd, half-baked behavior, but it seems to be intentional, :shrug:. See
-    https://github.com/simonmichael/hledger/issues/1562 and
+    but you can't tell it to actually respond to those urls, you actually need
+    a proxy in front of it to manipulate the path. I personally find this to be
+    a sort of odd, half-baked behavior, but it seems to be intentional,
+    :shrug:. See https://github.com/simonmichael/hledger/issues/1562 and
     https://github.com/yesodweb/yesod/issues/1792 for more details.
     """
     name = service._name

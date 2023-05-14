@@ -1,5 +1,6 @@
 import pulumi_kubernetes as kubernetes
 from .snowauth import Snowauth
+from .snowauth import Access
 
 
 class Syncthing:
@@ -18,6 +19,7 @@ class Syncthing:
             namespace="default",
             image="lscr.io/linuxserver/syncthing",
             port=8384,
+            access=Access.INTERNET_BEHIND_SSO,
             env={
                 "TZ": "America/Los_Angeles",
                 "PUID": "1000",

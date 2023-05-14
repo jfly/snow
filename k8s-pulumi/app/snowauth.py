@@ -5,11 +5,19 @@ from .util import snow_deployment
 from .util import http_service
 from .util import http_ingress
 from .deage import deage
+from enum import Enum
+from enum import auto
+
+
+class Access(Enum):
+    INTERNET_UNSECURED = auto()
+    INTERNET_BEHIND_SSO = auto()
+    LAN_ONLY = auto()
 
 
 class Snowauth:
     def __init__(self):
-        self.snowauth_middleware = traefik.v1alpha1.Middleware(
+        self._snowauth_middleware = traefik.v1alpha1.Middleware(
             "snowauth",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 name="snowauth",
@@ -23,11 +31,25 @@ class Snowauth:
             ),
         )
 
+        self._lan_only_middleware = traefik.v1alpha1.Middleware(
+            "lan-only",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="lan-only",
+                namespace="default",
+            ),
+            spec=traefik.v1alpha1.MiddlewareSpecArgs(
+                ip_white_list=traefik.v1alpha1.MiddlewareSpecIpWhiteListArgs(
+                    source_range=["192.168.1.1/24"],
+                ),
+            ),
+        )
+
         self.declare_app(
             name="snowauth",
             namespace="default",
             image="thomseddon/traefik-forward-auth:2",
             port=4181,
+            access=Access.LAN_ONLY,
             env={
                 "COOKIE_DOMAIN": "snow.jflei.com",
                 "AUTH_HOST": "snowauth.snow.jflei.com",
@@ -63,18 +85,27 @@ class Snowauth:
             },
         )
 
+    def middlewares_for_access(
+        self, access: Access
+    ) -> list[traefik.v1alpha1.Middleware]:
+        return {
+            Access.INTERNET_UNSECURED: [],
+            Access.INTERNET_BEHIND_SSO: [self._snowauth_middleware],
+            Access.LAN_ONLY: [self._lan_only_middleware],
+        }[access]
+
     def declare_app(
         self,
         name: str,
         namespace: str,
         image: str,
+        access: Access,
         port: int = 80,
         env: dict[str, str] = {},
         args: list[str] = [],
         volumes: list[kubernetes.core.v1.VolumeArgs] = [],
         volume_mounts: list[kubernetes.core.v1.VolumeMountArgs] = [],
         working_dir: Optional[str] = None,
-        sso_protected: bool = True,
     ):
         deployment = snow_deployment(
             name=name,
@@ -88,7 +119,5 @@ class Snowauth:
         )
         service = http_service(deployment, port=port)
 
-        middlewares = []
-        if sso_protected:
-            middlewares.append(self.snowauth_middleware)
+        middlewares = self.middlewares_for_access(access)
         http_ingress(service, traefik_middlewares=middlewares)

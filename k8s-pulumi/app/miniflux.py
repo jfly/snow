@@ -1,5 +1,5 @@
 import pulumi_kubernetes as kubernetes
-from .snowauth import Snowauth, deage
+from .snowauth import Snowauth, deage, Access
 from .util import snow_deployment
 import dataclasses
 from typing import cast
@@ -40,6 +40,9 @@ class Miniflux:
             namespace="default",
             image="miniflux/miniflux:2.0.43",
             port=8080,
+            # miniflux has its own login flow -> it should be exposed to
+            # the outside world.
+            access=Access.INTERNET_UNSECURED,
             env={
                 "DATABASE_URL": database.to_db_url("miniflux"),
                 "RUN_MIGRATIONS": "1",
@@ -63,9 +66,6 @@ class Miniflux:
                 "OAUTH2_REDIRECT_URL": "https://miniflux.snow.jflei.com/oauth2/oidc/callback",
                 "OAUTH2_OIDC_DISCOVERY_ENDPOINT": "https://keycloak.snow.jflei.com/realms/snow",
             },
-            # miniflux has its own login flow + it should be exposed to
-            # the outside world.
-            sso_protected=False,
         )
 
     def declare_psql(
