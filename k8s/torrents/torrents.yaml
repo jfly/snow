@@ -30,7 +30,7 @@ spec:
           path: /state/transmission/torrents
       containers:
         - name: transmission
-          image: containers.clark.snowdon.jflei.com/transmission:latest
+          image: containers.snow.jflei.com/transmission:latest
           ports:
             - containerPort: 61207
           volumeMounts:
@@ -70,10 +70,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - torrents.clark.snowdon.jflei.com
+      - torrents.snow.jflei.com
       secretName: torrents-tls
   rules:
-  - host: torrents.clark.snowdon.jflei.com
+  - host: torrents.snow.jflei.com
     http:
       paths:
         - path: /

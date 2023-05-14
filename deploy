@@ -21,7 +21,7 @@ fi
 function build_containers() {
     for f in k8s/**/Dockerfile; do
         dir=$(dirname "$f")
-        fq_image_name=containers.clark.snowdon.jflei.com/$(basename "$dir"):latest
+        fq_image_name=containers.snow.jflei.com/$(basename "$dir"):latest
         docker build "$dir" -t "$fq_image_name"
         docker push "$fq_image_name"
     done

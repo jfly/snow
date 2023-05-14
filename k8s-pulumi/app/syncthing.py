@@ -10,7 +10,7 @@ class Syncthing:
         # Urg.
         #
         # I also configured the device address via the UI, the resulting value in config.xml is:
-        #   <address>tcp://clark.snowdon.jflei.com:22000</address>
+        #   <address>tcp://snow.jflei.com:22000</address>
         #
         # I also set the syncthing device's name to "snow".
         snowauth.declare_app(

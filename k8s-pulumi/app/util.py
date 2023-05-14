@@ -145,7 +145,7 @@ def http_ingress(
     service_metadata = cast(kubernetes.meta.v1.ObjectMetaArgs, service.metadata)
 
     if base_url is None:
-        host = f"{name}.clark.snowdon.jflei.com"
+        host = f"{name}.snow.jflei.com"
         path = "/"
     else:
         parsed = urlparse(base_url)

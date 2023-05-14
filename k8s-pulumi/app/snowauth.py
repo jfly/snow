@@ -29,8 +29,8 @@ class Snowauth:
             image="thomseddon/traefik-forward-auth:2",
             port=4181,
             env={
-                "COOKIE_DOMAIN": "clark.snowdon.jflei.com",
-                "AUTH_HOST": "snowauth.clark.snowdon.jflei.com",
+                "COOKIE_DOMAIN": "snow.jflei.com",
+                "AUTH_HOST": "snowauth.snow.jflei.com",
                 "SECRET": deage(
                     """
                     -----BEGIN AGE ENCRYPTED FILE-----
@@ -44,7 +44,7 @@ class Snowauth:
                     """
                 ),
                 "DEFAULT_PROVIDER": "oidc",
-                "PROVIDERS_OIDC_ISSUER_URL": "https://keycloak.clark.snowdon.jflei.com/realms/snow",
+                "PROVIDERS_OIDC_ISSUER_URL": "https://keycloak.snow.jflei.com/realms/snow",
                 "PROVIDERS_OIDC_CLIENT_ID": "snowauth",
                 "PROVIDERS_OIDC_CLIENT_SECRET": deage(
                     """
@@ -59,7 +59,7 @@ class Snowauth:
                 ),
                 "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com",
                 # TODO: figure out how to limit permissions for some users "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com",
-                "LOGOUT_REDIRECT": "https://clark.snowdon.jflei.com",
+                "LOGOUT_REDIRECT": "https://snow.jflei.com",
             },
         )
 

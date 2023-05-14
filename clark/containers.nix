@@ -12,7 +12,7 @@ let
   '';
   k3s_registries_conf = pkgs.writeText "registries.yaml" ''
     configs:
-      containers.clark.snowdon.jflei.com:
+      containers.snow.jflei.com:
         auth:
           username: k8s
           password: ${password}

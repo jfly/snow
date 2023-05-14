@@ -82,10 +82,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - containers.clark.snowdon.jflei.com
+      - containers.snow.jflei.com
       secretName: containers-tls
   rules:
-  - host: containers.clark.snowdon.jflei.com
+  - host: containers.snow.jflei.com
     http:
       paths:
         - path: /

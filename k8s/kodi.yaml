@@ -18,6 +18,6 @@ metadata:
   name: kodi
 subsets:
   - addresses:
-      - ip: 192.168.1.77  # dallben.snowdon.jflei.com
+      - ip: 192.168.1.77  # dallben
     ports:
       - port: 8080

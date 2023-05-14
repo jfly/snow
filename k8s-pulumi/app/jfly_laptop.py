@@ -26,13 +26,13 @@ class JflyLaptop:
             spec={
                 "tls": [
                     {
-                        "hosts": ["nextcloud.clark.snowdon.jflei.com"],
+                        "hosts": ["nextcloud.snow.jflei.com"],
                         "secretName": "nextcloud-tls",
                     }
                 ],
                 "rules": [
                     {
-                        "host": "nextcloud.clark.snowdon.jflei.com",
+                        "host": "nextcloud.snow.jflei.com",
                         "http": {
                             "paths": [
                                 {

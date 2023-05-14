@@ -66,10 +66,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - sonarr.clark.snowdon.jflei.com
+      - sonarr.snow.jflei.com
       secretName: sonarr-tls
   rules:
-  - host: sonarr.clark.snowdon.jflei.com
+  - host: sonarr.snow.jflei.com
     http:
       paths:
         - path: /

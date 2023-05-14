@@ -59,10 +59,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - home-assistant.clark.snowdon.jflei.com
+      - home-assistant.snow.jflei.com
       secretName: home-assistant-tls
   rules:
-  - host: home-assistant.clark.snowdon.jflei.com
+  - host: home-assistant.snow.jflei.com
     http:
       paths:
         - path: /

@@ -25,7 +25,7 @@ Host aragorn
     User root
 
 Host clark
-    HostName clark.snowdon.jflei.com
+    HostName snow.jflei.com
     User root
 
 Host dallben

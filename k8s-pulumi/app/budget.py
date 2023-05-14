@@ -7,7 +7,7 @@ from .snowauth import Snowauth
 
 class Budget:
     def __init__(self, snowauth: Snowauth):
-        hledger_base_url = "https://budget.clark.snowdon.jflei.com/ledger"
+        hledger_base_url = "https://budget.snow.jflei.com/ledger"
         hledger_web_deployment = self._snow_budget_deployment(
             name="ledger",
             namespace="default",
@@ -63,7 +63,7 @@ class Budget:
                                 containers=[
                                     kubernetes.core.v1.ContainerArgs(
                                         command=["just", "fetch-and-commit"],
-                                        image="containers.clark.snowdon.jflei.com/snow-budget-import:latest",
+                                        image="containers.snow.jflei.com/snow-budget-import:latest",
                                         name="import",
                                         working_dir="/manmanmon",
                                         volume_mounts=[
@@ -122,7 +122,7 @@ class Budget:
         )
 
     def _snow_budget_deployment(self, name: str, namespace: str, args: list[str]):
-        image = "containers.clark.snowdon.jflei.com/snow-budget:latest"
+        image = "containers.snow.jflei.com/snow-budget:latest"
         return snow_deployment(
             name=name,
             namespace=namespace,

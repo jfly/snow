@@ -62,10 +62,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - keycloak.clark.snowdon.jflei.com
+      - keycloak.snow.jflei.com
       secretName: keycloak-tls
   rules:
-  - host: keycloak.clark.snowdon.jflei.com
+  - host: keycloak.snow.jflei.com
     http:
       paths:
       - path: /
@@ -121,7 +121,7 @@ spec:
               name: keycloak-secrets
               key: keycloak-admin-password
         - name: KC_HOSTNAME
-          value: "keycloak.clark.snowdon.jflei.com"
+          value: "keycloak.snow.jflei.com"
         - name: KC_PROXY
           value: "edge"
         - name: KC_DB

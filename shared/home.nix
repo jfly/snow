@@ -11,7 +11,7 @@ let
       "900965112463.dkr.ecr.us-west-2.amazonaws.com" = "ecr-login";
     };
     "auths" = {
-      "containers.clark.snowdon.jflei.com" = {
+      "containers.snow.jflei.com" = {
         "auth" = pkgs.deage.string ''
           -----BEGIN AGE ENCRYPTED FILE-----
           YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUNCWjkrU1VqVndNMDhF

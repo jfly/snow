@@ -60,8 +60,8 @@ class Miniflux:
                 "OAUTH2_PROVIDER": "oidc",
                 "OAUTH2_CLIENT_ID": "miniflux",
                 "OAUTH2_CLIENT_SECRET": "VF2IgFpEsg9vWF2Ylm1D38XC2o3dowNj",
-                "OAUTH2_REDIRECT_URL": "https://miniflux.clark.snowdon.jflei.com/oauth2/oidc/callback",
-                "OAUTH2_OIDC_DISCOVERY_ENDPOINT": "https://keycloak.clark.snowdon.jflei.com/realms/snow",
+                "OAUTH2_REDIRECT_URL": "https://miniflux.snow.jflei.com/oauth2/oidc/callback",
+                "OAUTH2_OIDC_DISCOVERY_ENDPOINT": "https://keycloak.snow.jflei.com/realms/snow",
             },
             # miniflux has its own login flow + it should be exposed to
             # the outside world.

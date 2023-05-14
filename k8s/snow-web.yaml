@@ -66,10 +66,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - clark.snowdon.jflei.com
+      - snow.jflei.com
       secretName: snow-web-tls
   rules:
-  - host: clark.snowdon.jflei.com
+  - host: snow.jflei.com
     http: &snow-web
       paths:
         - path: /
@@ -91,10 +91,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - lloyd.clark.snowdon.jflei.com
+      - lloyd.snow.jflei.com
       secretName: lloyd-tls
   rules:
-  - host: lloyd.clark.snowdon.jflei.com
+  - host: lloyd.snow.jflei.com
     http:
       paths:
         - path: /
@@ -116,10 +116,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - media.clark.snowdon.jflei.com
+      - media.snow.jflei.com
       secretName: media-tls
   rules:
-  - host: media.clark.snowdon.jflei.com
+  - host: media.snow.jflei.com
     http:
       paths:
         - path: /
@@ -141,10 +141,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - media.clark.snowdon.jflei.com
+      - media.snow.jflei.com
       secretName: media-tls
   rules:
-  - host: media.clark.snowdon.jflei.com
+  - host: media.snow.jflei.com
     http:
       paths:
         - path: /
@@ -166,10 +166,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - kodi.clark.snowdon.jflei.com
+      - kodi.snow.jflei.com
       secretName: kodi-tls
   rules:
-  - host: kodi.clark.snowdon.jflei.com
+  - host: kodi.snow.jflei.com
     http:
       paths:
         - path: /
@@ -225,7 +225,7 @@ spec:
           path: /mnt/media
       containers:
         - name: snow-web
-          image: containers.clark.snowdon.jflei.com/snow-web:latest
+          image: containers.snow.jflei.com/snow-web:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: mnt-media

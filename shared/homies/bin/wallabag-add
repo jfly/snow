@@ -10,7 +10,7 @@ url=$1
 # shellcheck source=/dev/null
 source ~/.config/.wallabag.secrets
 
-base_url=https://wallabag.clark.snowdon.jflei.com
+base_url=https://wallabag.snow.jflei.com
 payload=$(curl -sX POST "$base_url/oauth/v2/token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \

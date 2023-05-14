@@ -43,7 +43,7 @@ let
       rsync --exclude "deercam/analysis" -avP --delete -e "ssh -i $tmp" root@fflewddur:/mnt/media/ /mnt/media/
 
       # Finally, report a successful backup =)
-      curl "https://monitoring.clark.snowdon.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="
+      curl "https://monitoring.snow.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="
     '';
   };
 in

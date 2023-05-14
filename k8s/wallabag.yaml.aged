@@ -50,7 +50,7 @@ spec:
                 evNLRn765Hk4v4va2ATcChpLOoOq4dbMtordjQ==
                 -----END AGE ENCRYPTED FILE-----
             - name: SYMFONY__ENV__DOMAIN_NAME
-              value: "https://wallabag.clark.snowdon.jflei.com"
+              value: "https://wallabag.snow.jflei.com"
 ---
 apiVersion: v1
 kind: Service
@@ -74,10 +74,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - wallabag.clark.snowdon.jflei.com
+      - wallabag.snow.jflei.com
       secretName: wallabag-tls
   rules:
-  - host: wallabag.clark.snowdon.jflei.com
+  - host: wallabag.snow.jflei.com
     http:
       paths:
         - path: /

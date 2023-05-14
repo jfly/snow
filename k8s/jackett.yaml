@@ -64,10 +64,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - jackett.clark.snowdon.jflei.com
+      - jackett.snow.jflei.com
       secretName: jackett-tls
   rules:
-  - host: jackett.clark.snowdon.jflei.com
+  - host: jackett.snow.jflei.com
     http:
       paths:
         - path: /
