@@ -56,6 +56,7 @@ pkgs.mkShell {
           rich
           pulumi>=3.0.0,<4.0.0
           pulumi-kubernetes>=3.0.0,<4.0.0
+          pulumi-cloudflare>=3.0.0,<4.0.0
           setuptools  # provides pkg_resources which is needed by pulumi-kubernetes: https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10, despite not being mentioned in its setup.py? =(
         '';
         packagesExtra = [
@@ -96,6 +97,16 @@ pkgs.mkShell {
     WWk0YjZPYlNMYW85b1VNOHdlMVAzVEUKLS0tIGJCaThVR3RvT0pVRnNCR21NbmpP
     RVJnMjg3b3VGL2NxWG1ZN2syaUdBNGMKS7ChE4gYpW90dInSGzPYBZOZsLMi0l+o
     U/ZyGUi0NXR+3mzKtN9j/mgPmrGzmfvhkGFVWA==
+    -----END AGE ENCRYPTED FILE-----
+  '';
+
+  CLOUDFLARE_API_TOKEN = pkgs.deage.optionalString "CLOUDFLARE_API_TOKEN" ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzZ3N2WHlBclZHWFI4L1NR
+    K2MzQzJMbnVtdEFhei9VNEpTSWtwSDFjVFg4Cmt2WWd2b0tKaVNHUmFwWHJ0SzRE
+    bENHS2dra3pGZUMvS045OXhvTzJmbWcKLS0tIDdLNlF2UjdzZERLVS93ck02RHB0
+    dXozSTh5d2s2UStWUjg0cHJlUWRxYVEKX/TReXYpi1At4fYpLvCmEgnE2GUgiqBF
+    mXity+YrzMYSevmN58otx7C8qiHtMbIhrX+fpgPseku5BvHUad2XloHk5m1d/26K
     -----END AGE ENCRYPTED FILE-----
   '';
 

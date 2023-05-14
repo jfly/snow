@@ -5,11 +5,14 @@ from .whoami import Whoami
 from .budget import Budget
 from .monitoring import Monitoring
 from .miniflux import Miniflux
+from .vaultwarden import Vaultwarden
+from .dns import Dns
 
 # from .jfly_laptop import JflyLaptop
 
 
 def build_app():
+    Dns()
     snowauth = Snowauth()
     Radarr(snowauth)
     Syncthing(snowauth)
@@ -17,4 +20,5 @@ def build_app():
     Whoami(snowauth)
     Monitoring(snowauth)
     Miniflux(snowauth)
+    Vaultwarden(snowauth)
     # JflyLaptop()
