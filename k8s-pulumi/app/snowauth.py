@@ -49,8 +49,9 @@ class Snowauth:
             namespace="default",
             image="thomseddon/traefik-forward-auth:2",
             port=4181,
-            access=Access.LAN_ONLY,
+            access=Access.INTERNET_BEHIND_SSO,
             env={
+                # "LOG_LEVEL": "debug",
                 "COOKIE_DOMAIN": "snow.jflei.com",
                 "AUTH_HOST": "snowauth.snow.jflei.com",
                 "SECRET": deage(
