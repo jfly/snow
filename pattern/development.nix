@@ -50,6 +50,18 @@ in
   environment.etc.hosts.mode = "0644";
   # Enable docker for the main user.
   virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings = {
+    # Override default docker DNS in order to implement a
+    # `host.docker.internal` domain.
+    # As of 2023, it appears there's no good, consistent way of speaking to the
+    # host on both macOS and Linux. Note: adding an entry to the containerized
+    # `/etc/hosts` is not good enough, as some stuff like nginx actually ignore
+    # /etc/hosts:
+    # https://github.com/NginxProxyManager/nginx-proxy-manager/issues/259. For more information:
+    # - https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal
+    # - https://sam-ngu.medium.com/connecting-to-docker-host-mysql-from-docker-container-linux-ubuntu-766e526542fdd
+    dns = [ "172.17.0.1" ];
+  };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
 
   # Set up a local DNS server
@@ -59,6 +71,9 @@ in
     settings = {
       address = [
         "/local.honor/127.0.0.1"
+        # See notes above about `virtualisation.docker.daemon.settings.dns` to
+        # understand why this is necessary.
+        "/host.docker.internal/172.17.0.1"
       ];
     };
   };
