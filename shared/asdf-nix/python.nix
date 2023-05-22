@@ -32,7 +32,7 @@ let
         patch = "10";
         suffix = "";
       };
-      sha256 = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
+      hash = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
     };
     "3.10.6" = pkgs.python38.override {
       sourceVersion = {
@@ -41,7 +41,7 @@ let
         patch = "6";
         suffix = "";
       };
-      sha256 = "sha256-95X/h9EdSwx8M7yIUbDChkjYpFg6ohAKmMIrQya20/M=";
+      hash = "sha256-95X/h9EdSwx8M7yIUbDChkjYpFg6ohAKmMIrQya20/M=";
     };
     "3.9.10" = pkgs.python38.override {
       sourceVersion = {
@@ -50,7 +50,7 @@ let
         patch = "10";
         suffix = "";
       };
-      sha256 = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
+      hash = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
     };
     "3.8.10" = pkgs.python38.override {
       sourceVersion = {
@@ -59,7 +59,7 @@ let
         patch = "10";
         suffix = "";
       };
-      sha256 = "sha256-avJKZgk92EC8zPNx1ARKMCfmVc8kWRzibkgCK8eSGdk=";
+      hash = "sha256-avJKZgk92EC8zPNx1ARKMCfmVc8kWRzibkgCK8eSGdk=";
     };
     "3.6.15" = oldNixpkgs.python36.override {
       sourceVersion = {
@@ -77,7 +77,7 @@ let
         patch = "9";
         suffix = "";
       };
-      sha256 = "sha256-Xi9fVU4/j38ClvfnPYYAxOmsuu5rJVW4Mgbt9RU4cNo=";
+      hash = "sha256-Xi9fVU4/j38ClvfnPYYAxOmsuu5rJVW4Mgbt9RU4cNo=";
     };
     "2.7.17" = mkPy27 {
       sourceVersion = {
@@ -86,7 +86,7 @@ let
         patch = "17";
         suffix = "";
       };
-      sha256 = "sha256-TUPwM829Cqe3AjyBsOmG/RHmU7UkjayRRNUI8RgSukE=";
+      hash = "sha256-TUPwM829Cqe3AjyBsOmG/RHmU7UkjayRRNUI8RgSukE=";
     };
     "2.7.18" = mkPy27 {
       sourceVersion = {
@@ -95,7 +95,7 @@ let
         patch = "18";
         suffix = "";
       };
-      sha256 = "sha256-NtDJrVmGgKrb2okcl42+La6t/aj4S2WuuktJ8VavH2s=";
+      hash = "sha256-NtDJrVmGgKrb2okcl42+La6t/aj4S2WuuktJ8VavH2s=";
     };
   };
 in

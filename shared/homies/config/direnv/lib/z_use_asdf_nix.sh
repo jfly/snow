@@ -21,6 +21,7 @@ if [ -z "${USE_REAL_ASDF-}" ]; then
     flake-utils.url = "github:numtide/flake-utils";
     # asdf-nix-flake.url = "github:jfly/snow?dir=shared/asdf-nix";
     asdf-nix-flake.url = "path:$HOME/src/github.com/jfly/snow/shared/asdf-nix";
+    asdf-nix-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, flake-utils, asdf-nix-flake }:

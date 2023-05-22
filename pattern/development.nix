@@ -13,6 +13,34 @@ let
       max-cache-ttl ${toString (12 * 3600)}
     '';
   };
+  h4-cli = pkgs.rustPlatform.buildRustPackage rec {
+    pname = "cli";
+    # TODO: find a better way of keeping this up to date. Perhaps turn upstream
+    # into a flake?
+    version = "0.0.32";
+
+    src = builtins.fetchGit {
+      url = "git@github.com:joinhonor/cli.git";
+      ref = "refs/tags/${version}";
+      rev = "5e2baba929e96c7967c97cfc0bca79a21cc5b69e";
+    };
+
+    cargoHash = "sha256-93lVnnIOVYuRk6lBdbcUnWqtk5qGaeeF5DwRgRdysvw=";
+
+    # I'm not sure if this belongs in configurePhase (or even if it belongs in this package).
+    # I originally tried adding it to installPhase, but that didn't work
+    # because I couldn't figure out how to invoke the original installPhase.
+    configurePhase = ''
+      # Copy shell completions
+      mkdir -p $out/share/zsh/site-functions
+      cp completions/_honor $out/share/zsh/site-functions/_honor
+    '';
+
+    meta = with lib; {
+      description = "A CLI to help streamline common Honor engineering tasks.";
+      homepage = "https://github.com/joinhonor/cli";
+    };
+  };
 in
 {
   # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
@@ -112,6 +140,7 @@ in
     ### Honor
     mfa
     aws-vault
+    h4-cli
     # server-config
     #<<< (vagrant.override {
     #<<<   # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
