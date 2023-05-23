@@ -32,7 +32,7 @@ done
 
 RESULT=""
 
-if [ "$TITLE" = "aws-vault" ] && [ "$TEXT" = "Enter MFA code for arn:aws:iam::900965112463:mfa/jeremy:" ]; then
+if [ "$TITLE" = "aws-vault" ] && [ "$TEXT" = "Enter MFA code for arn:aws:iam::900965112463:mfa/jeremy: " ]; then
     # Try to get the 2fa from an attached cell phone.
     if two_factors=$(2fa-cli 2>&1); then
         RESULT=$(echo "$two_factors" | grep "Amazon Web Services (jeremy@honor)" | cut -f 1)
@@ -53,14 +53,14 @@ if [ -z "$RESULT" ]; then
     echo -n "$TITLE: $TEXT" >"$tty"
     # We can't read from stdin here because it would mess up the ssh protocol (see
     # comment above about $tty).
-    read -rs MFA <"$tty"
+    read -rs RESULT <"$tty"
     # Give an immediate sense of progress when the user presses enter.
     echo "" >"$tty"
 fi
 
-echo "$MFA"
+echo "$RESULT"
 
-if [ -z "$MFA" ]; then
+if [ -z "$RESULT" ]; then
     echo "You must enter a MFA" >/dev/stderr
     exit 1
 fi
