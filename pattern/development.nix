@@ -157,10 +157,10 @@ in
     aws-vault
     h4-cli
     # server-config
-    #<<< (vagrant.override {
-    #<<<   # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
-    #<<<   withLibvirt = false;
-    #<<< })
+    (vagrant.override {
+      # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
+      withLibvirt = false;
+    })
     gnupg
     openssl
     aws-sam-cli

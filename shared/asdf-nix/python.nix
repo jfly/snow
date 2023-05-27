@@ -1,10 +1,10 @@
 { pkgs }:
 let
-  mkPy27 = { sourceVersion, sha256 }: (
+  mkPy27 = { sourceVersion, hash }: (
     let
       py27NoVenv = (pkgs.python27.override {
         self = py27NoVenv;
-        inherit sourceVersion sha256;
+        inherit sourceVersion hash;
         packageOverrides = pkgs.callPackage ./py2-virtualenv-packages.nix { };
       });
     in
