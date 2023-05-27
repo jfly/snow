@@ -26,6 +26,9 @@ pkgs.mkShell {
     pkgs.nixpkgs-fmt
     pkgs.just
 
+    # For building/pushing docker images
+    pkgs.skopeo
+
     # For building portable usb installations.
     pkgs.parted
     pkgs.cloud-utils
