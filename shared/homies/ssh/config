@@ -14,12 +14,12 @@ Host jflysopixel
 ###
 
 ### Home stuff
-# Primary router (asus)
+# Primary router
 Host strider
     HostName strider
-    User admin
+    User root
 
-# Secondary router (tp-link)
+# Secondary router ("dumb ap")
 Host aragorn
     HostName aragorn
     User root
