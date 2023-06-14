@@ -15,6 +15,11 @@ rec {
   fileSystems."/mnt/media" = {
     device = "fflewddur:/";
     fsType = "nfs";
+    options = [
+      "x-systemd.automount"
+      "noauto"
+      "x-systemd.requires=network-online.target"
+    ];
   };
 
   # This value determines the NixOS release from which the default

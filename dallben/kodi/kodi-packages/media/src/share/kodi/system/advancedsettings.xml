@@ -11,6 +11,7 @@
 
     <videodatabase>
         <type>mysql</type>
+        <!-- Note: keep this mysql configuration in sync with dallben/kodi/default.nix -->
         <host>clark</host>
         <name>MyVideos</name>
         <port>3306</port>
@@ -29,6 +30,7 @@
 
     <musicdatabase>
         <type>mysql</type>
+        <!-- Note: keep this mysql configuration in sync with dallben/kodi/default.nix -->
         <host>clark</host>
         <name>MyMusic</name>
         <port>3306</port>

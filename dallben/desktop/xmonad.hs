@@ -15,13 +15,9 @@ myLayout = smartBorders $ Full ||| tiled
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
-myStartup = do
-     spawn "kodi"
-
 
 main = xmonad $ ewmh desktopConfig
     { terminal    = "xterm"
     , modMask     = mod4Mask
     , layoutHook  = myLayout
-    , startupHook = myStartup
     }
