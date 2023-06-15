@@ -2,7 +2,7 @@
 
 let
   with-alacritty = pkgs.callPackage ../../shared/my-nix/with-alacritty { };
-  capslockx = pkgs.callPackage ../capslockx { };
+  capslockx = pkgs.callPackage ../capslockx { }; # TODO: unused?
   setbg = pkgs.callPackage ../setbg { };
 in
 
