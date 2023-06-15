@@ -1,8 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, myParsec, ... }:
 
 let
   myKodiPackages = pkgs.callPackage ./kodi-packages {
     inherit config;
+    inherit myParsec;
   };
   myKodiWithPackages = pkgs.kodi.withPackages (builtin_kodi_packages: [
     builtin_kodi_packages.a4ksubtitles

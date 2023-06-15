@@ -2,7 +2,9 @@
 { config, lib, pkgs, ... }:
 
 rec {
-  _module.args.parsec-gaming = parsec-gaming;
+  # TODO: figure out a better pattern for sharing packages across a system
+  #       definition. Perhaps using overlays?
+  _module.args.myParsec = pkgs.callPackage ./parsec/derivation.nix { inherit parsec-gaming; };
   nixpkgs = {
     system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -24,6 +26,18 @@ rec {
       ./kodi
       ./parsec
     ];
+
+  # Give gurgi ssh access so it can run stop_parsec.sh
+  # TODO: lock down permissions so that's the *only* thing it can do.
+  users.users.gurgi = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel" # Enable `sudo` for the user.
+    ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPog+FoId+C37SnL1VfwRE11pGzzvxOM0GL0HjOL1Qqf gurgi@snowdon"
+    ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

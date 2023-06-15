@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, myParsec }:
 
 pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   name = "kodi-parsec";
@@ -6,5 +6,9 @@ pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
 
   src = ./src;
 
-  installPhase = "cp -r . $out";
+  installPhase = ''
+    cp -r . $out
+    substituteInPlace $out/share/kodi/addons/script.parsec/addon.py \
+      --replace "@parsec@" "${myParsec}"
+  '';
 })
