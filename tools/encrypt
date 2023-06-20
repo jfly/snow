@@ -5,11 +5,20 @@ import argparse
 import subprocess
 from rich import print
 from textwrap import dedent
+from pathlib import Path
+
+
+def root() -> Path:
+    return Path(
+        subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], text=True
+        ).strip()
+    )
 
 
 def encrypt(thing: str) -> str:
     p = subprocess.run(
-        ["age", "-R", "tools/age-public-key.txt", "--encrypt", "--armor"],
+        ["age", "-R", root() / "tools" / "age-public-key.txt", "--encrypt", "--armor"],
         input=thing,
         check=True,
         stdout=subprocess.PIPE,

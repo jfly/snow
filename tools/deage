@@ -7,14 +7,24 @@ import subprocess
 from rich import print
 from hashlib import sha256
 from textwrap import dedent
+from pathlib import Path
 
 AGE_ARMOR_RE = re.compile(
     r"^(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
     re.DOTALL | re.MULTILINE,
 )
 
-DECRYPTED_SECRETS_DIR = ".sensitive-decrypted-secrets"
-PRIVATE_KEY_PATH = os.path.join(DECRYPTED_SECRETS_DIR, "age-private-key.txt")
+
+def root() -> Path:
+    return Path(
+        subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], text=True
+        ).strip()
+    )
+
+
+DECRYPTED_SECRETS_DIR = root() / ".sensitive-decrypted-secrets"
+PRIVATE_KEY_PATH = DECRYPTED_SECRETS_DIR / "age-private-key.txt"
 
 
 def decrypt(encrypted: str) -> str:
@@ -28,30 +38,29 @@ def decrypt(encrypted: str) -> str:
     return p.stdout
 
 
-def extract_and_decrypt_secrets(src: str):
-    with open(src, "r") as f:
-        document = f.read()
+def extract_and_decrypt_secrets(src: Path):
+    document = src.read_text()
 
     for m in AGE_ARMOR_RE.finditer(document):
         encrypted = dedent(m.group(0))
         hash_encrypted = sha256(encrypted.encode("utf8")).hexdigest()
         decrypted = decrypt(encrypted)
-        secret_file = os.path.join(DECRYPTED_SECRETS_DIR, f"{hash_encrypted}.secret")
+        secret_file = DECRYPTED_SECRETS_DIR / f"{hash_encrypted}.secret"
         with open(secret_file, "w") as f:
             f.write(decrypted)
 
-        os.chmod(secret_file, 0o640)
+        secret_file.chmod(0o640)
 
 
 def sanity_check_private_key():
     private_key_problem = None
-    if not os.path.isfile(PRIVATE_KEY_PATH):
+    if not PRIVATE_KEY_PATH.is_file():
         private_key_problem = f"Could not find {PRIVATE_KEY_PATH}"
-    elif os.path.getsize(PRIVATE_KEY_PATH) == 0:
+    elif PRIVATE_KEY_PATH.stat().st_size == 0:
         private_key_problem = f"{PRIVATE_KEY_PATH} is empty!"
 
     if private_key_problem is not None:
-        os.makedirs(os.path.dirname(PRIVATE_KEY_PATH), exist_ok=True)
+        PRIVATE_KEY_PATH.parent.mkdir(parents=True, exist_ok=True)
         print(
             dedent(
                 f"""\
@@ -67,12 +76,11 @@ def sanity_check_private_key():
         sys.exit(1)
 
 
-def deage_file(aged_filename: str):
-    assert aged_filename.endswith(".aged")
-    deaged_filename = aged_filename.removesuffix(".aged") + ".secret"
+def deage_file(aged_file: Path):
+    assert aged_file.suffix == ".aged"
 
-    with open(aged_filename, "r") as f:
-        aged_doc = f.read()
+    deaged_file = aged_file.with_suffix(".secret")
+    aged_doc = aged_file.read_text()
 
     def decrypt_match(m):
         prefix = m.group("ws_prefix")
@@ -80,9 +88,7 @@ def deage_file(aged_filename: str):
         return prefix + decrypt(encrypted)
 
     deaged_doc = AGE_ARMOR_RE.sub(decrypt_match, aged_doc)
-
-    with open(deaged_filename, "w") as f:
-        f.write(deaged_doc)
+    deaged_file.write_text(deaged_doc)
 
 
 def main():
@@ -90,15 +96,17 @@ def main():
 
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".secret"):
-                os.unlink(os.path.join(root, file))
+            path = Path(root) / file
+            if path.suffix == ".secret":
+                path.unlink()
 
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".nix") or file.endswith(".py"):
-                extract_and_decrypt_secrets(os.path.join(root, file))
+            path = Path(root) / file
+            if path.suffix in [".nix", ".py"]:
+                extract_and_decrypt_secrets(path)
             elif file.endswith(".aged"):
-                deage_file(os.path.join(root, file))
+                deage_file(path)
 
 
 if __name__ == "__main__":
