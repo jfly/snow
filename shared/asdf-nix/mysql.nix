@@ -3,6 +3,8 @@ let
   versions = {
     # This is a lie: it's not actually 8.0.28.
     "8.0.28" = pkgs.mysql80;
+    # This is a also lie: it's not actually 8.0.28.
+    "8.0.30" = pkgs.mysql80;
     # This doesn't work right now: compilation fails complaining that we have
     # too new a version of boost available :p
     # "8.0.28" = pkgs.mysql80.overrideAttrs (oldAttrs: rec {
