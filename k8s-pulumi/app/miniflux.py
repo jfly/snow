@@ -1,23 +1,11 @@
-import pulumi_kubernetes as kubernetes
 from .snowauth import Snowauth, deage, Access
-from .util import snow_deployment
-import dataclasses
-from typing import cast
-
-
-@dataclasses.dataclass
-class Database:
-    hostname: str
-    admin_username: str
-    admin_password: str
-
-    def to_db_url(self, schema: str):
-        return f"postgres://{self.admin_username}:{self.admin_password}@{self.hostname}/{schema}?sslmode=disable"
+from .util import declare_psql
 
 
 class Miniflux:
     def __init__(self, snowauth: Snowauth):
-        database = self.declare_psql(
+        database = declare_psql(
+            version="15.2",
             name="minifluxdb",
             namespace="default",
             schema="miniflux",
@@ -66,66 +54,4 @@ class Miniflux:
                 "OAUTH2_REDIRECT_URL": "https://miniflux.snow.jflei.com/oauth2/oidc/callback",
                 "OAUTH2_OIDC_DISCOVERY_ENDPOINT": "https://keycloak.snow.jflei.com/realms/snow",
             },
-        )
-
-    def declare_psql(
-        self,
-        name: str,
-        namespace: str,
-        schema: str,
-        admin_username: str,
-        admin_password: str,
-    ):
-        deployment = snow_deployment(
-            name=name,
-            namespace=namespace,
-            image="postgres:15.2",
-            env={
-                "POSTGRES_USER": admin_username,
-                "POSTGRES_PASSWORD": admin_password,
-                "POSTGRES_DB": schema,
-            },
-            volume_mounts=[
-                kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/var/lib/postgresql/data",
-                    name="db",
-                ),
-            ],
-            # TODO: look into k8s persistent volumes for this
-            volumes=[
-                kubernetes.core.v1.VolumeArgs(
-                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path=f"/state/psql/{name}",
-                        type="",
-                    ),
-                    name="db",
-                ),
-            ],
-        )
-        kubernetes.core.v1.Service(
-            name,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name=name,
-                namespace=namespace,
-            ),
-            spec=kubernetes.core.v1.ServiceSpecArgs(
-                ports=[
-                    kubernetes.core.v1.ServicePortArgs(
-                        name="psql",
-                        port=5432,
-                        protocol="TCP",
-                    ),
-                ],
-                selector=cast(
-                    kubernetes.meta.v1.LabelSelectorArgs,
-                    cast(
-                        kubernetes.apps.v1.DeploymentSpecArgs, deployment.spec
-                    ).selector,
-                ).match_labels,
-            ),
-        )
-        return Database(
-            hostname=f"{name}.default.svc.cluster.local",
-            admin_username=admin_username,
-            admin_password=admin_password,
         )

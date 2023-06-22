@@ -1,6 +1,8 @@
 from typing import Optional
+import dataclasses
 from typing import cast
 import pulumi_kubernetes as kubernetes
+from typing import cast
 from pulumi_crds import traefik
 from pulumi import Output
 from urllib.parse import urlparse
@@ -221,4 +223,80 @@ def http_ingress(
                 )
             ],
         ),
+    )
+
+
+@dataclasses.dataclass
+class Database:
+    name: str
+    namespace: str
+    admin_username: str
+    admin_password: str
+
+    def hostname(self, fqdn: bool = False):
+        return f"{self.name}.{self.namespace}.svc.cluster.local" if fqdn else self.name
+
+    def to_db_url(self, schema: str, fqdn: bool = False):
+        return f"postgres://{self.admin_username}:{self.admin_password}@{self.hostname(fqdn=fqdn)}/{schema}?sslmode=disable"
+
+
+def declare_psql(
+    name: str,
+    namespace: str,
+    schema: str,
+    admin_username: str,
+    admin_password: str,
+    version: str,
+) -> Database:
+    deployment = snow_deployment(
+        name=name,
+        namespace=namespace,
+        image=f"postgres:{version}",
+        env={
+            "POSTGRES_USER": admin_username,
+            "POSTGRES_PASSWORD": admin_password,
+            "POSTGRES_DB": schema,
+        },
+        volume_mounts=[
+            kubernetes.core.v1.VolumeMountArgs(
+                mount_path="/var/lib/postgresql/data",
+                name="db",
+            ),
+        ],
+        # TODO: look into k8s persistent volumes for this
+        volumes=[
+            kubernetes.core.v1.VolumeArgs(
+                host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
+                    path=f"/state/psql/{name}",
+                    type="",
+                ),
+                name="db",
+            ),
+        ],
+    )
+    kubernetes.core.v1.Service(
+        name,
+        metadata=kubernetes.meta.v1.ObjectMetaArgs(
+            name=name,
+            namespace=namespace,
+        ),
+        spec=kubernetes.core.v1.ServiceSpecArgs(
+            ports=[
+                kubernetes.core.v1.ServicePortArgs(
+                    name="psql",
+                    port=5432,
+                    protocol="TCP",
+                ),
+            ],
+            selector=cast(
+                kubernetes.meta.v1.LabelSelectorArgs,
+                cast(kubernetes.apps.v1.DeploymentSpecArgs, deployment.spec).selector,
+            ).match_labels,
+        ),
+    )
+    return Database(
+        name=name,
+        namespace=namespace,
+        admin_username=admin_username,
+        admin_password=admin_password,
     )
