@@ -76,9 +76,9 @@ class Invidious:
             namespace=self.namespace,
             image="quay.io/invidious/invidious:latest",
             port=3000,
-            # TODO: >>> doesn't this mean double login flow? <<<
-            # <<< access=Access.INTERNET_BEHIND_SSO,
-            access=Access.LAN_ONLY,
+            # We don't want to expose invidious to the public web. Even with
+            # registration disabled, folks can still use it to browse youtube.
+            access=Access.INTERNET_BEHIND_SSO,
             env={
                 "INVIDIOUS_CONFIG": InvidiousConfig(
                     database_url=database.to_db_url("invidious"),
