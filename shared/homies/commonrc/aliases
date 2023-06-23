@@ -24,7 +24,7 @@ function with_commit {
         git checkout -b temp "$_commit"
         function _cleanup {
             git checkout "$_og_ref"
-            git branch -d temp
+            git branch -D temp
         }
         trap _cleanup EXIT
 
