@@ -1,12 +1,13 @@
 { fetchFromGitHub
 , lib
 , pkgs
-, python3
+, python39
 , umockdev
 , writeScript
 }:
 
 let
+  python3 = python39; # TODO: revert to plain old python3 once https://github.com/NixOS/nixpkgs/issues/238990 is fixed.
   launch-sendto_silhouette = writeScript "sendto_silhouette.sh" ''
     cd $(dirname $0)
     ./sendto_silhouette.py "$@"
