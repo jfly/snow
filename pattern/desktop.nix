@@ -1,3 +1,5 @@
+# TODO: remove this once (if) https://github.com/NixOS/nixpkgs/pull/239349 gets
+#       merged.
 { config, lib, pkgs, parsec-gaming, modulesPath, ... }:
 
 let
@@ -247,7 +249,11 @@ in
 
     ### Media editing (images, audio, video)
     gimp
-    inkscape
+    (inkscape-with-extensions.override {
+      inkscapeExtensions = [
+        (pkgs.callPackage ../shared/inkscape-silhouette { })
+      ];
+    })
     avidemux
     audacity
 
