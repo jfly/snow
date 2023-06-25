@@ -117,6 +117,7 @@ function deploy_nix_router() {
     result=$(nix build "$flake" --no-link --print-out-paths --impure)
     files=("$result"/*-sysupgrade.*)
     file=${files[0]}
+    echo "Successfully built $file"
     dest_filename=/tmp/firmware_image-sysupgrade
     scp -O "$file" "$hostname":$dest_filename
     ssh "$hostname" sysupgrade -v -n $dest_filename

@@ -10,7 +10,10 @@
           overlays = import ../../overlays;
         };
 
-        profiles = openwrt-imagebuilder.lib.profiles { inherit pkgs; };
+        profiles = openwrt-imagebuilder.lib.profiles {
+          inherit pkgs;
+          release = "22.03.5";
+        };
 
         config = pkgs.stdenv.mkDerivation {
           name = "openwrt-config-files";
@@ -71,6 +74,8 @@
             "ddns-scripts-cloudflare"
             "curl"
             "ca-bundle"
+            # More utils
+            "coreutils-nohup"
           ];
 
           files = pkgs.runCommand "image-files" { } ''
