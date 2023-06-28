@@ -5,6 +5,7 @@ import hashlib
 import argparse
 import subprocess
 from typing import Dict
+from typing import Optional
 from typing import List
 from pathlib import Path
 import logging
@@ -27,9 +28,11 @@ def list_connections(conn_type: str) -> List[str]:
     return connections
 
 
-def hash_files(*files: Path) -> str:
+def hash_files(*files: Optional[Path]) -> str:
     m = hashlib.sha256()
     for file in files:
+        if file is None:
+            continue
         m.update(file.read_bytes())
     return m.hexdigest()[:7]
 
@@ -87,7 +90,7 @@ def rename_connection(connection_uuid: str, new_name: str):
     nmcli("connection", "modify", "uuid", connection_uuid, "connection.id", new_name)
 
 
-def add_with_passphrase(ovpn: Path, passphrase: Path, force: bool):
+def add_with_passphrase(ovpn: Path, passphrase: Optional[Path], force: bool):
     connection_name = f"{ovpn.stem}-{hash_files(ovpn, passphrase)}"
     if connection_name in list_connections("vpn"):
         if force:
@@ -106,7 +109,8 @@ def add_with_passphrase(ovpn: Path, passphrase: Path, force: bool):
 
     connection_uuid = add_connection(ovpn)
     try:
-        set_passphrase(connection_uuid, passphrase)
+        if passphrase is not None:
+            set_passphrase(connection_uuid, passphrase)
         enable_split_tunnel(connection_uuid)
         rename_connection(connection_uuid, connection_name)
     except:
@@ -127,7 +131,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("ovpn_file", type=Path)
-    parser.add_argument("passphrase_file", type=Path)
+    parser.add_argument("passphrase_file", type=Path, nargs="?")
     parser.add_argument("--force", action="store_true")
 
     args = parser.parse_args()
