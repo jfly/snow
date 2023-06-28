@@ -26,13 +26,14 @@ if [ "$prompt" = "(jeremy@bastion.honordev.com) Verification code: " ]; then
 fi
 
 if [ -z "$second_factor" ]; then
-    echo -n "$@" >/dev/stderr
-    # Note: we read from file descriptor 2 (stderr) because this is sometimes
-    # used in the content of `git fetch`, which hijacks stdin and stdout for
-    # its own purposes.
-    read -rs second_factor <&2
+    # Note: we write and read to/from /dev/tty instead of stdin and stdout
+    # because this is sometimes used in the content of commands that hijack
+    # stdin/stdout/stderr (for example, `git fetch` hijacks stdin and stdout,
+    # and mosh hijacks all three).
+    echo -n "$@" >/dev/tty
+    read -rs second_factor </dev/tty
     # Immediately add a newline to give the user a sense of progress when they hit enter.
-    echo "" >/dev/stderr
+    echo "" >/dev/tty
 fi
 
 echo -n "$second_factor"
