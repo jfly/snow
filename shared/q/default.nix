@@ -14,7 +14,7 @@
       fi
 
       if [ $success -eq 0 ]; then
-          ${pkgs.sox}/bin/play -q ${./wav}/ootinee.wav &|
+          ${pkgs.sox}/bin/play -q ${./wav}/owin31.wav &|
       else
           ${pkgs.sox}/bin/play -q ${./wav}/doh.wav &|
       fi
