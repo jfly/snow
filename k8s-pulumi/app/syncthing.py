@@ -69,7 +69,7 @@ class Syncthing:
                 ports=[
                     # Note: This port also needs to be exposed to the outside
                     # world via port forwarding. That's configured at
-                    # http://strider/Advanced_VirtualServer_Content.asp
+                    # openwrt/strider/files/etc/config/firewall.
                     # I wonder if there's some clever way of wiring up k3s with
                     # the router's port forwarding configuration...
                     kubernetes.core.v1.ServicePortArgs(

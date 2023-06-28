@@ -146,3 +146,12 @@ config redirect
 	option dest_ip '192.168.1.110'
 	option dest_port '22'
 
+# See k8s-pulumi/app/syncthing.py for details.
+config redirect
+	option dest 'lan'
+	option target 'DNAT'
+	option name 'syncthing'
+	option src 'wan'
+	option src_dport '22000'
+	option dest_ip '192.168.1.110'
+	option dest_port '22000'
