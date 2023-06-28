@@ -9,7 +9,20 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "thunderbolt"
+    "nvme"
+    # Some subset of these are needed to build a bootable live usb. Not sure
+    # what the best way is to get the right list, I got this from
+    # https://www.linuxquestions.org/questions/slackware-14/how-to-list-all-kernel-modules-needed-to-boot-off-an-usb-drive-on-any-computer-4175640529/.
+    # "uhci_hcd"
+    # "ohci_hcd"
+    # "ehci_hcd"
+    # "xhci_hcd"
+    # "usb_storage"
+    # "uas"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
