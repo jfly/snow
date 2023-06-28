@@ -1,5 +1,7 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (p: with p; [ tkinter ])"
+#!nix-shell -i python3 -p "python311.withPackages (p: with p; [ tkinter ])"
+# NOTE: we're using python311 instead of plain old python3 as a workaround for
+# https://github.com/NixOS/nixpkgs/issues/238990
 
 # Copied from https://github.com/zeehio/tkdu/blob/master/tkdu.py
 #    This is tkdu.py, an interactive program to display disk usage
@@ -492,7 +494,9 @@ def main(f=sys.stdin):
         try:  # For normal lines of du output
             sz = int(sz) * 1024
             putname(files, name, sz)
-        except ValueError:  # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
+        except (
+            ValueError
+        ):  # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
             pass  # do nothing (if met with permission error)!
             # print "Something went wrong {!s}".format(line)   # the problem value
 

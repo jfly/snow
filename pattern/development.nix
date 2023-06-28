@@ -3,16 +3,6 @@
 let
   nm-vpn-add = pkgs.callPackage ../shared/nm-vpn-add { };
   mfa = pkgs.callPackage ../shared/mfa { };
-  # Reconfigure gpg-agent to have a longer lived cache: up to 8 hours after
-  # last used, but the cache also expires when it is 8 hours old, even if it
-  # has been used recently.
-  gpg-agent_conf = pkgs.writeTextFile {
-    name = "gpg-agent.conf";
-    text = ''
-      default-cache-ttl ${toString (12 * 3600)}
-      max-cache-ttl ${toString (12 * 3600)}
-    '';
-  };
   h4-cli = pkgs.rustPlatform.buildRustPackage rec {
     pname = "cli";
     # TODO: find a better way of keeping this up to date. Perhaps turn upstream
@@ -91,19 +81,16 @@ in
 
   # Enable gpg agent
   programs.gnupg.agent.enable = true;
-  systemd.user.services.gpg-agent =
+  environment.etc."gnupg/gpg-agent.conf".text =
     let cfg = config.programs.gnupg;
     in
-    {
-      serviceConfig.ExecStart = [
-        ""
-        ''
-          ${cfg.package}/bin/gpg-agent --supervised \
-            --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry \
-            --options ${gpg-agent_conf}
-        ''
-      ];
-    };
+    ''
+      # Reconfigure gpg-agent to have a longer lived cache: up to 8 hours after
+      # last used, but the cache also expires when it is 8 hours old, even if it
+      # has been used recently.
+      default-cache-ttl ${toString (12 * 3600)}
+      max-cache-ttl ${toString (12 * 3600)}
+    '';
 
   # QEMU emulation used for compiling for other architectures.
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
