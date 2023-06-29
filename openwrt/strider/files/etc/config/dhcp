@@ -47,3 +47,8 @@ config host
 	option ip '192.168.1.110'
 	option mac 'C0:3F:D5:6B:51:16'
 
+# Keep this in sync with k8s/kodi.yaml
+config host
+	option name 'dallben'
+	option ip '192.168.1.163'
+	option mac '1C:69:7A:AC:4C:E6'

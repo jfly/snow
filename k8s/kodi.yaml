@@ -18,6 +18,6 @@ metadata:
   name: kodi
 subsets:
   - addresses:
-      - ip: 192.168.1.77  # dallben
+      - ip: 192.168.1.163  # dallben (keep this in sync with openwrt/strider/files/etc/config/dhcp)
     ports:
       - port: 8080
