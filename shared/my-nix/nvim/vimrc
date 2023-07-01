@@ -151,7 +151,8 @@ nnoremap <leader>ts :w<CR>:TestSuite<CR>
 nnoremap <leader>tf :w<CR>:TestFile<CR>
 nnoremap <leader>tn :w<CR>:TestNearest<CR>
 nnoremap <leader>tv :w<CR>:TestVisit<CR>
-nnoremap <leader>tl :w<CR>:call system("shtuff into " . shellescape(getcwd()) . " \x1BOA")<CR>
+nnoremap <leader>tl :w<CR>:TestLast<CR>
+nnoremap <leader>tk :w<CR>:call system("shtuff into " . shellescape(getcwd()) . " \x1BOA")<CR>
 """"""
 
 """""" ToggleTest between file and corresponding test file.
