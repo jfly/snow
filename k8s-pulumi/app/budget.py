@@ -100,6 +100,11 @@ class Budget:
                                                 "GIT_AUTHOR_EMAIL": "clark@jflei.com",
                                                 "GIT_COMMITTER_NAME": "clark",
                                                 "GIT_COMMITTER_EMAIL": "clark@jflei.com",
+                                                # Reset the git working
+                                                # directory if necessary (this
+                                                # lets us recover from previous
+                                                # failed imports).
+                                                "MANMAN_RESET_REPO_IF_NECESSARY": "1",
                                             }
                                         ),
                                     )
