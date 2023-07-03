@@ -42,23 +42,23 @@ let
     " Override the VIM definition
     call tcomment#type#Define('vim', '"${conflictMarker} %s')
   '';
-  # Downgrade to neovim 8 as a workaround for https://github.com/neovim/neovim/issues/21064
-  # Generated from
-  # https://lazamar.co.uk/nix-versions/?package=neovim&version=0.8.3&fullName=neovim-0.8.3&keyName=neovim&revision=8ad5e8132c5dcf977e308e7bf5517cc6cc0bf7d8&channel=nixpkgs-unstable#instructions
-  oldNixpkgs = import
-    (builtins.fetchGit {
-      name = "nixpkgs-with-neovim-8";
-      url = "https://github.com/NixOS/nixpkgs/";
-      ref = "refs/heads/nixpkgs-unstable";
-      rev = "8ad5e8132c5dcf977e308e7bf5517cc6cc0bf7d8";
-    })
-    {
-      localSystem = pkgs.system;
+  # Upgrade to master as a workaround for
+  # https://github.com/neovim/neovim/issues/21064 (relevant commit:
+  # https://github.com/neovim/neovim/commit/35c3275b4896a65d67caf2a4355d7516b6ddec29).
+  # This can probably go away once neovim 0.10 comes out:
+  # https://github.com/neovim/neovim/milestone/36, or maybe if we get lucky and
+  # the fix gets backported to the 0.9 train :crossed-fingers:
+  patchedNeovim = pkgs.neovim-unwrapped.overrideAttrs (oldAttrs: {
+    src = pkgs.fetchFromGitHub {
+      owner = "neovim";
+      repo = "neovim";
+      rev = "35c3275b4896a65d67caf2a4355d7516b6ddec29";
+      sha256 = "sha256-r9bpwUZ9wZSPrf8p8u6UtOiHEBRHEkjvOKn2hWZxwQ4=";
     };
-  neovim_8 = oldNixpkgs.neovim-unwrapped;
+  });
 in
 
-pkgs.wrapNeovimUnstable neovim_8 (
+pkgs.wrapNeovimUnstable patchedNeovim (
   pkgs.neovimUtils.makeNeovimConfig {
     vimAlias = true;
     viAlias = true;
