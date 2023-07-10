@@ -73,6 +73,16 @@
               ];
             });
           };
+          checks = {
+            lint = pkgs.runCommand "lint"
+              {
+                nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
+              }
+              ''
+                nixpkgs-fmt --check ${./.}
+                touch $out
+              '';
+          };
         }
         )
     ) // {
