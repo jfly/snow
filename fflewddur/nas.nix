@@ -45,4 +45,31 @@ in
   services.nfs.server.exports = ''
     /mnt/media 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=root,anonuid=1000,anongid=1000)
   '';
+
+  # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
+  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba = {
+    enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = fflewddur
+      netbios name = fflewddur
+      security = user
+      use sendfile = yes
+      # note: localhost is the ipv6 localhost ::1
+      hosts allow = 192.168.0. 127.0.0.1 localhost
+      hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
+    shares = {
+      media = {
+        path = "/mnt/media";
+        browseable = "yes";
+        "read only" = "yes";
+        "guest ok" = "yes";
+      };
+    };
+  };
 }
