@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function toggle() {
+    __profile_file="$1"
+    if openvpn3 session-stats -c "$__profile_file" >/dev/null; then
+        echo "Disabling $__profile_file"
+        openvpn3 session-manage -D -c "$__profile_file"
+    else
+        echo "Enabling $__profile_file"
+        openvpn3 session-start --config "$__profile_file"
+    fi
+}
+
+toggle ~/sync/linux-secrets/h4-vpn/ovpn-access-server.ovpn

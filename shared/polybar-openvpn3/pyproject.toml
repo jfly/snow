@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polybar-openvpn3"
+dependencies = []
+dynamic = ["version"]
+
+[project.scripts]
+polybar-openvpn3 = "polybar_openvpn3.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

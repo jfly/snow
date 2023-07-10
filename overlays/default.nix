@@ -23,6 +23,12 @@
         };
         python3Packages = python3.pkgs;
 
+        # TODO: remove when (if) https://github.com/NixOS/nixpkgs/pull/242371 gets merged up.
+        openvpn3 = super.openvpn3.overrideAttrs (oldAttrs: {
+          buildInputs = oldAttrs.buildInputs ++ [ super.systemd ];
+          configureFlags = oldAttrs.configureFlags ++ [ "DEFAULT_DNS_RESOLVER=--systemd-resolved" ];
+        });
+
         # Note: accessing PWD like this is impure, but it's the only way to do some weird things like:
         #  - access decrypted, untracked secrets on the filesystem
         #  - use home-manager to set up symlinks to folders in this repo

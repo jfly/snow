@@ -4,15 +4,19 @@
 
 let
   alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
+  polybar-openvpn3 = (pkgs.callPackage ../shared/polybar-openvpn3 { });
   polybar = pkgs.polybar.override {
     mpdSupport = true;
   };
-  polybarConfig = ../shared/polybar/config.ini;
+  polybarConfig = pkgs.substituteAll {
+    src = ../shared/polybar/config.ini;
+    polybar_openvpn3 = polybar-openvpn3;
+  };
   space2meta = pkgs.callPackage ./space2meta.nix { };
   dunst = pkgs.callPackage ../shared/my-nix/dunst { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
   autoperipherals = pkgs.callPackage ../shared/autoperipherals { };
-  # TODO: conslidate with pattern/laptop.nix
+  # TODO: consolidate with pattern/laptop.nix
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
     service=$2

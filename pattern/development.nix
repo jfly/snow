@@ -54,6 +54,17 @@ in
   };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
 
+  # We need to install openvpn3 explicitly because NetworkManager-openvpn only
+  # has support for openvpn2. See
+  # https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/issues/69.
+  programs.openvpn3.enable = true;
+  # With systemd-resolved running, openvpn3 won't stomp on /etc/resolv.conf.
+  services.resolved.enable = true;
+  # Disable systemd-resolved resolver to avoid a port conflict with dnsmasq.
+  services.resolved.extraConfig = ''
+    DNSStubListener=no
+  '';
+
   # Set up a local DNS server
   networking.resolvconf.useLocalResolver = true;
   services.dnsmasq = {
