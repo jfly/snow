@@ -6,7 +6,6 @@ rec {
   #       definition. Perhaps using overlays?
   _module.args.myParsec = pkgs.callPackage ./parsec/derivation.nix { inherit parsec-gaming; };
   nixpkgs = {
-    system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
       "parsec"
     ];

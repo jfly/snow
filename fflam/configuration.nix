@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.system = "x86_64-linux";
-
   imports =
     [
       ./hardware-configuration.nix

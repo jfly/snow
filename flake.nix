@@ -2,7 +2,13 @@
   description = "snow";
 
   inputs = {
+    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixos-unstable.url = "github:jfly/nixpkgs/jfly/nixos-unstable";
+    # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
+
+    systems.url = "github:nix-systems/x86_64-linux";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.inputs.systems.follows = "systems";
 
     pypi-deps-db.url = "github:DavHau/pypi-deps-db";
     mach-nix.url = "github:DavHau/mach-nix";
@@ -17,10 +23,6 @@
     colmena.url = "github:zhaofengli/colmena";
     colmena.inputs.flake-utils.follows = "flake-utils";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixos-unstable.url = "github:jfly/nixpkgs/jfly/nixos-unstable";
-    # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
     # TODO upstream these fixes, or just wait for https://github.com/NixOS/nixpkgs/pull/222396 to get merged up?
     # parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
@@ -86,10 +88,11 @@
         }
         )
     ) // {
-
-      colmena = {
+      colmenaHive = colmena.lib.makeHive {
         meta = {
           nixpkgs = import nixos-unstable {
+            system = "x86_64-linux";
+
             overlays = [
               (
                 self: super:
@@ -140,27 +143,32 @@
           # request for Colmena.
           nodeNixpkgs = rec {
             clark = import nixos-unstable {
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
             dallben = import nixos-unstable {
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
             fflewddur = import nixos-unstable {
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
             fflam = import nixos-unstable {
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
             kent = import nixos-unstable {
+              system = "aarch64-linux";
               overlays = import ./overlays;
             };
             pattern = import nixos-unstable {
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
           };
         };
 
-        # This configuration applies to *every* node in the hive.
         defaults = { pkgs, ... }: {
           environment.systemPackages = with pkgs; [
             vim

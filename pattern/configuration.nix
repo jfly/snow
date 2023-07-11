@@ -20,7 +20,6 @@ in
   # stuff up?
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   nixpkgs = {
-    system = "x86_64-linux";
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
       "parsec"
     ];

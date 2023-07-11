@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 rec {
-  nixpkgs.system = "x86_64-linux";
-
   imports =
     [
       ./boot.nix

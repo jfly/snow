@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.system = "aarch64-linux";
-
   boot = {
     # Note: we're not using the pkgs.linuxPackages_rpi3 kernel here, it prints
     # out warnings about writing to read-only memory.
