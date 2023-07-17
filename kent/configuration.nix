@@ -20,7 +20,7 @@
     # So, we're stuck with Linux 6.1 for now:
     kernelPackages = pkgs.linuxPackages_6_1;
 
-    tmpOnTmpfs = true;
+    tmp.useTmpfs = true;
     initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
   };
 
