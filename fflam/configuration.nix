@@ -13,11 +13,34 @@
 
   age.rooter = {
     hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILLwEMWt15EGJ0Cpqu0VjoIyIOS3/qIcPhwRs8QgqG+r";
-    generatedForHostDir = ../agenix-secrets/generated;
+    generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
   };
-  # TODO: consider getting rid of the ../agenix-secrets/ directory in favor of inlining the ascii armor text
-  age.secrets.root-password.rooterFile = ../agenix-secrets/root/root-password.age;
-  age.secrets.snow-backup-ssh-private-key.rooterFile = ../agenix-secrets/root/snow-backup-ssh-private-key.age;
+  age.secrets.root-password.rooterEncrypted = ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaU3NKZ3FScGdxN0w5MVJF
+    MmI0TGtqRE5MaC8rVkFpYWNUL0k4L09sV1E0ClQvMW1JaXgwVHM1NHdETTZoQTFl
+    Y1RPUVlxcWlqZHRoRU44V2JXbiszTDQKLS0tIGZWbmhySjVBdGxhbExhcDhtSzlh
+    WW9mSUUxOTVpV0hSalI3TVlpRitmVlUKu4A/VOmigClvg+pF5pxxNtG95ulytp3y
+    a2QEtmbB70jgywg9VeuqP0+j
+    -----END AGE ENCRYPTED FILE-----
+  '';
+  age.secrets.snow-backup-ssh-private-key.rooterEncrypted = ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqUVg2NnNBcHZCUWxBWGcy
+    c052bWlBbkRMYnMzVVErbGtwVCt4emFzeWo0CnpQVDVvejc3bHJBMEY3cXhmSFZW
+    TFBSNGFsTVNBcURvM1Q3RkdwQkpyMG8KLS0tIGhkS2RjSXFGdG96YnN3UU04b2Jp
+    V0cvU0NBS24vWlU2VWFwWDlRQUFXaVEKTBBDx9ndVJyN595Yp3kB5Cr0kF6v03Qf
+    iJm8pYzRbU8S+VSrHMVZ/gM+Tp87UifjSdLOMoZAHBvh+e/ANfFJzDb14it+7CKP
+    oRXwQtcGqvqI6oEAACqN2VWSKmptPZ8yNXn3NMpoePa1lAkdqQvm6inUpdma1LkV
+    jDt6bKO3Zdkkj9IvDYEFB40D+JvsUO32PA/84Ek9ojdQmdif2YskZYA3hgIynuA4
+    zFA1nOh0hsr/6Mj/HGiAhSqorTk0veztpEsnyFHLNEXhaSnRWl9PGknl+pnGsQT7
+    HoPe9N4iUiPOlx5sBQ5g1nqclcHNqpIo13MMbhZ+g5tdODp6eP07oLLe6rSr5y9G
+    3NofZF55PxnH5eLoyiz5t6yOvY00rGHH1VDAE0w2UKcsR90lGdYRKZLmxsHB8Q+d
+    lFq1QxVXk9ULixQQfJ1urzKS2RXlCLzzHyP62GjOw2FIYyLVA9k5VFCc2gpXZ1gO
+    DDlYNZ6MdrBNdp1IQZ+CuruZRUjPboWuHTDJVEuuZ+zOhzxX/iqXoYw/aASnkEV8
+    msY1i/Jqxay/kY8=
+    -----END AGE ENCRYPTED FILE-----
+  '';
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {

@@ -24,7 +24,7 @@ let
         (_: secret:
           {
             inherit hostName;
-            rooterFile = secret.rooterFile;
+            rooterEncrypted = secret.rooterEncrypted;
             # Destination for the re-encrypted secret, releative to the root of the current repo (flake).
             relDest = rooter-lib.relativePath {
               from = flakeRoot;
@@ -62,14 +62,18 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
 
 
   def reencrypt(
-    src: Path,
+    encrypted_data: Path,
     decrypt_privkey: Path,
     dest: Path,
     encrypt_pubkey: str,
   ):
+      # Create directory for reencrypted file if it doesn't exist yet.
+      dest.parent.mkdir(parents=True, exist_ok=True)
       decrypt_process = subprocess.Popen(
-          ["${pkgs.age}/bin/age", "--decrypt", "--identity", decrypt_privkey, src],  # noqa: E501; yes, it's a long line
+          ["${pkgs.age}/bin/age", "--decrypt", "--identity", decrypt_privkey],  # noqa: E501; yes, it's a long line
+          stdin=subprocess.PIPE,
           stdout=subprocess.PIPE,
+          text=True,
       )
       encrypt_process = subprocess.Popen(
           ["${pkgs.age}/bin/age", "--encrypt", "--armor", "--recipient", encrypt_pubkey, "--output", dest],  # noqa: E501; yes, it's a long line
@@ -78,6 +82,7 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
       # Allow p1 to receive a SIGPIPE if p2 exits.
       # https://docs.python.org/3/library/subprocess.html#replacing-shell-pipeline
       decrypt_process.stdout.close()
+      decrypt_process.communicate(encrypted_data)
       check_wait(decrypt_process)
       check_wait(encrypt_process)
 
@@ -100,7 +105,10 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
           secret_by_dest_by_dest_dir[dest_dir][rel_dest] = secret
 
       for dest_dir, secret_by_dest in secret_by_dest_by_dest_dir.items():
-          current = set(f for f in dest_dir.iterdir())
+          if dest_dir.exists():
+              current = set(f for f in dest_dir.iterdir())
+          else:
+              current = set()
           desired = set(s['relDest'] for s in secret_by_dest.values())
 
           missings = desired - current
@@ -108,15 +116,17 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
 
           for missing in missings:
               secret = secret_by_dest[missing]
-              rooter_file = secret['rooterFile']
+              rooter_encrypted = secret['rooterEncrypted']
               host_name = secret['hostName']
               host_pubkey = secret['hostPubkey']
+
+              # TODO: make the root key for decryption configurable.
               root_key = Path(".sensitive-decrypted-secrets/age-private-key.txt")
 
-              print(f"Reencrypting for {host_name!r} {rooter_file} -> {missing}")
+              print(f"Reencrypting for {host_name!r} {missing}")
               if not dry_run:
                   reencrypt(
-                      src=rooter_file,
+                      encrypted_data=rooter_encrypted,
                       decrypt_privkey=root_key,
                       dest=missing,
                       encrypt_pubkey=host_pubkey,

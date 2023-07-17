@@ -32,29 +32,26 @@ in
             description = mdDoc "The true identifier of this secret as used in `age.secrets`.";
           };
 
-          rooterFile = mkOption {
-            type = types.nullOr types.path;
+          rooterEncrypted = mkOption {
+            type = types.nullOr types.str;
             default = null;
-            example = literalExpression "./secrets/password.age";
+            example = literalExpression "-----BEGIN AGE ENCRYPTED FILE----- [...] -----END AGE ENCRYPTED FILE-----";
             description = mdDoc ''
-              The path to the encrypted .age file for this secret. The file must
-              be encrypted with one of the given `age.rekey.masterIdentities` and not with
-              a host-specific key.
+              A secret encrypted with `tools/encrypt`.
 
-              This secret will automatically be rekeyed for hosts that use it, and the resulting
-              host-specific .age file will be set as actual `file` attribute. So naturally this
-              is mutually exclusive with specifying `file` directly.
+              This secret will automatically be reencrypted for hosts that use it,
+              and the resulting host-specific .age file will be set as actual
+              `file` attribute. So naturally this is mutually exclusive with
+              specifying `file` directly.
 
-              If you want to avoid having a `secrets.nix` file and only use rekeyed secrets,
-              you should always use this option instead of `file`.
+              If you want to avoid having a `secrets.nix` file and only use
+              reencrypted secrets, you should always use this option instead of
+              `file`.
             '';
           };
         };
         config = {
-          file = mkIf (submod.config.rooterFile != null) (
-            let f = rooter-lib.generatedSecretStorePath config submod.config;
-            in assert assertMsg (pathExists f) "${f} does not exist. Run `nix run .#agenix-rooter-generate` to encrypt files for hosts."; f
-          );
+          file = mkIf (submod.config.rooterEncrypted != null) (rooter-lib.generatedSecretStorePath config submod.config);
         };
       }));
     };
