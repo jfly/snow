@@ -18,7 +18,7 @@ def root() -> Path:
 
 def encrypt(thing: str) -> str:
     p = subprocess.run(
-        ["age", "-R", root() / "tools" / "age-public-key.txt", "--encrypt", "--armor"],
+        ["age", "-R", root() / "tools" / "age-public-key.pub", "--encrypt", "--armor"],
         input=thing,
         check=True,
         stdout=subprocess.PIPE,

@@ -17,6 +17,16 @@
     # mach-nix.inputs.nixpkgs.follows = "nixpkgs";
     mach-nix.inputs.pypi-deps-db.follows = "pypi-deps-db";
 
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.inputs.home-manager.follows = "home-manager";
+    # Choose not to download darwin deps (saves some resources on Linux, see
+    # https://github.com/ryantm/agenix#install-module-via-flakes).
+    agenix.inputs.darwin.follows = "";
+
+    agenix-rooter.url = "path:./shared/agenix-rooter";
+    agenix-rooter.inputs.nixpkgs.follows = "nixpkgs";
+
     # Note: colmena comes with nixpkgs, but we need a version with
     # https://github.com/zhaofengli/colmena/commit/ca12be27edf5639fa3c9c98d6b4ab6d1f22e3315
     # so `deage.file`'s impurity works when doing an apply-local.
@@ -55,6 +65,9 @@
     , nixos-unstable
     , parsec-gaming
     , home-manager
+    , agenix
+    , agenix-rooter
+    , ...
     }:
     (
       flake-utils.lib.eachDefaultSystem
@@ -66,6 +79,12 @@
           };
         in
         {
+          apps = agenix-rooter.defineApps {
+            outputs = self;
+            inherit pkgs;
+            flakeRoot = ./.;
+          };
+
           devShells.default = pkgs.callPackage ./shell.nix {
             mach-nix = mach-nix.lib."${system}";
             colmena = colmena.defaultPackage."${system}".overrideAttrs (oldAttrs: {
@@ -87,7 +106,7 @@
           };
         }
         )
-    ) // {
+    ) // rec {
       colmenaHive = colmena.lib.makeHive {
         meta = {
           nixpkgs = import nixos-unstable {
@@ -192,12 +211,16 @@
         "clark" = import clark/configuration.nix;
         "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
-        "fflam" = import fflam/configuration.nix;
+        "fflam" = import fflam/configuration.nix {
+          inherit agenix agenix-rooter;
+        };
         "kent" = import kent/configuration.nix;
         "pattern" = import pattern/configuration.nix {
           inherit parsec-gaming home-manager;
           knock-flake = knock;
         };
       };
+
+      nixosConfigurations = colmenaHive.nodes;
     };
 }
