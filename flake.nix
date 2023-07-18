@@ -218,7 +218,6 @@
         "fflam" = import fflam/configuration.nix {
           inherit agenix agenix-rooter;
         };
-        "kent" = import kent/configuration.nix;
         "pattern" = import pattern/configuration.nix {
           inherit parsec-gaming home-manager;
           knock-flake = knock;
