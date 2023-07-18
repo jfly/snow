@@ -208,7 +208,9 @@
           nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
         };
 
-        "clark" = import clark/configuration.nix;
+        "clark" = import clark/configuration.nix {
+          inherit agenix agenix-rooter;
+        };
         "dallben" = import dallben/configuration.nix { inherit parsec-gaming; };
         "fflewddur" = import fflewddur/configuration.nix;
         "fflam" = import fflam/configuration.nix {

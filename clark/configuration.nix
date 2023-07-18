@@ -1,3 +1,4 @@
+{ agenix, agenix-rooter }:
 { config, lib, pkgs, ... }:
 
 rec {
@@ -6,9 +7,17 @@ rec {
       ./boot.nix
       ./network.nix
       ./containers.nix
+      ./backup.nix
       ./dbs.nix
       ./dns.nix
+      agenix.nixosModules.default
+      agenix-rooter.nixosModules.default
     ];
+
+  age.rooter = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFeLzY4y2R5GzsHBeuESH9ejQQlciFC7pfru3pdBMaAR";
+    generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
+  };
 
   fileSystems."/mnt/media" = {
     device = "fflewddur:/";
