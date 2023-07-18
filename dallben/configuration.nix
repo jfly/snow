@@ -1,4 +1,4 @@
-{ parsec-gaming }:
+{ agenix, agenix-rooter, parsec-gaming }:
 { config, lib, pkgs, ... }:
 
 rec {
@@ -24,7 +24,14 @@ rec {
       ./desktop
       ./kodi
       ./parsec
+      agenix.nixosModules.default
+      agenix-rooter.nixosModules.default
     ];
+
+  age.rooter = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+zwjwqpX+3HR/bgVR8O0xmTzNVaRvKhzuTJr7/wjSE";
+    generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
+  };
 
   # Give gurgi ssh access so it can run stop_parsec.sh
   # TODO: lock down permissions so that's the *only* thing it can do.

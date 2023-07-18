@@ -11,7 +11,7 @@ let
   hashForSecret = hostConfig: secret: short (mixHash [ hostConfig.age.rooter.hostPubkey secret.rooterEncrypted ]);
 in
 rec {
-  generatedSecretFilename = hostConfig: secret: "${hashForSecret hostConfig secret}-${secret.name}.age";
+  generatedSecretFilename = hostConfig: secret: "${hashForSecret hostConfig secret}-${hostConfig.networking.hostName}-${secret.name}.age";
   generatedSecretStorePath = hostConfig: secret:
     let
       # Note: it's really important to convert generatedForHostDir from a path to a

@@ -32,7 +32,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-8CRzEthK1nLbPLO6Wb064j+d4MLhNSaVA02n1GgXSyk=",
+        "narHash": "sha256-xQmI7Sxe3rUe1iU7DX7TqEDvcWkugnK+Fr44xxkrC9g=",
         "path": "./shared/agenix-rooter",
         "type": "path"
       },

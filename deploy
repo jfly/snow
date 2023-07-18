@@ -82,9 +82,7 @@ function deploy_nix() {
         # to see why we do an impure build.
         colmena apply-local --impure --sudo "$@"
     else
-        # Note: see comment above snow.absoluteRepoPath in overlays/default.nix
-        # to see why we do an impure build.
-        colmena apply --impure --on "$target" "$@"
+        colmena apply --on "$target" "$@"
     fi
 }
 

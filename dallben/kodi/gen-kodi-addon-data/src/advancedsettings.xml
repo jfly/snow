@@ -1,7 +1,7 @@
 <advancedsettings version="1.0">
     <!-- Enable remote control: https://kodi.wiki/view/Smartphone/tablet_remotes#Manually_enabling_remote_control -->
     <services>
-	<devicename>@host_name@</devicename>
+	<devicename>@hostName@</devicename>
         <esenabled>true</esenabled>
         <esallinterfaces>true</esallinterfaces>
         <webserver>true</webserver>
@@ -16,7 +16,7 @@
         <name>MyVideos</name>
         <port>3306</port>
         <user>kodi</user>
-        <pass>@mysql_pass@</pass>
+        <pass>{{ MYSQL_PASS }}</pass>
     </videodatabase>
 
     <videolibrary>
@@ -35,14 +35,14 @@
         <name>MyMusic</name>
         <port>3306</port>
         <user>kodi</user>
-        <pass>@mysql_pass@</pass>
+        <pass>{{ MYSQL_PASS }}</pass>
     </musicdatabase>
 
     <musiclibrary>
         <cleanonupdate>true</cleanonupdate> <!-- Also clean library during library update -->
     </musiclibrary>
 
-    <setting id="locale.timezone">@time_zone@</setting>
+    <setting id="locale.timezone">@timeZone@</setting>
     <setting id="locale.timezonecountry">United States</setting>
     <setting id="locale.subtitlelanguage">forced_only</setting> <!-- Default value was "original" -->
 

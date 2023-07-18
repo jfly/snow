@@ -1,4 +1,4 @@
-{ config, newScope, pkgs, myParsec }:
+{ newScope, pkgs, myParsec }:
 
 let
   self = rec {
@@ -13,9 +13,6 @@ let
 
     # Mine! No intention of upstreaming these.
     autoreceiver = callPackage ./autoreceiver { };
-    media = callPackage ./media {
-      inherit config;
-    };
     parsec = callPackage ./parsec {
       inherit myParsec;
     };
