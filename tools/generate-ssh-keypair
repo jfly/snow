@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 
+"""
+I introduced this script in a99ef3d3a2ecdae81ef74e1849ada4a0bc833724
+thinking it would be a good way to preserve the ssh key of machines rather than
+having them generated on boot.
+
+This worked, but the deage mechanism it relies upon is fundamentally impure (it
+relies upon reading uncommitted files). I've started using agenix as a pure
+alternative, but relies upon these very host identities to function, it can't
+bootstrap those.
+
+For now, to unblock pure-evaluation, I've removed all usages of this, but I
+would still like to figure out a robust mechanism for managing host identities (and
+bootstrapping new hosts). Perhaps this can be done as part of building a live
+usb when bootstrapping a new host?
+"""
+
 import os
 import json
 import argparse
