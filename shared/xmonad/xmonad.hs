@@ -8,6 +8,7 @@ import XMonad.Layout.LayoutCombinators -- use the one from LayoutCombinators ins
 import XMonad.Config.Desktop
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ThreeColumns
+import XMonad.Hooks.UrgencyHook
 import XMonad.Actions.CycleWS
 import XMonad.Actions.SpawnOn
 import XMonad.Layout.NoBorders
@@ -61,11 +62,12 @@ altMask = mod1Mask
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     [ ((modMask .|. shiftMask, xK_c     ), kill) -- %! Close the focused window
 
-    -- move focus up or down the window stack
+    -- various focus commands
     , ((modMask,               xK_j     ), windows W.focusDown) -- %! Move focus to the next window
     , ((modMask,               xK_k     ), windows W.focusUp  ) -- %! Move focus to the previous window
     , ((modMask,               xK_m     ), windows W.focusMaster  )
     , ((modMask, xK_n), windows W.focusMaster) -- %! Move focus to the master window
+    , ((modMask, xK_Return), focusUrgent) -- %! Focus an rgent window if there is one
 
     -- modifying the window order
     , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  ) -- %! Swap the focused window with the next window
@@ -157,13 +159,19 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
 
 isNotInfixOf a b = not (a `isInfixOf` b)
 
+myUrgencyHook =
+    withUrgencyHookC BorderUrgencyHook
+        { urgencyBorderColor = "#00ff00" }
+    urgencyConfig
+        { suppressWhen = XMonad.Hooks.UrgencyHook.Focused }
+
 main = do
     dirs <- getDirectories
-    let conf = docks $ ewmh desktopConfig {
+    let conf = docks $ ewmh $ withUrgencyHook NoUrgencyHook $ myUrgencyHook $ desktopConfig {
         -- Trigger the xmonad.target target. This really shouldn't be
         -- necessary, but we're using it as a workaround for
-        -- https://github.com/xmonad/xmonad/issues/422. See pattern/audio.nix
-        -- for details.
+        -- https://github.com/xmonad/xmonad/issues/422. See mcg in
+        -- pattern/audio.nix for details.
         startupHook = spawn "systemctl --user start xmonad.target",
         manageHook = manageDocks <+> manageSpawn <+> windowPlacement <+> manageHook desktopConfig,
         handleEventHook = handleEventHook def <+> Hacks.windowedFullscreenFixEventHook <+> swallowEventHook (className =? "Alacritty" <&&> fmap ( "xmonad-no-swallow" `isNotInfixOf`) title) (return True),
