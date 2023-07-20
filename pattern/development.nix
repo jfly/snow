@@ -31,6 +31,33 @@ let
       homepage = "https://github.com/joinhonor/cli";
     };
   };
+  my-aws-vault = pkgs.symlinkJoin {
+    name = "aws-vault";
+    paths = [ pkgs.aws-vault ];
+    postBuild =
+      let
+        wrapper = pkgs.writeShellScript "aws-vault-wrapper" ''
+          # We don't actually use zenity, this is just a binary in ~/bin that aws-vault
+          # recognizes the name of. See that script for some thoughts about a less
+          # hacky approach to using a custom propmt.
+          export AWS_VAULT_PROMPT="zenity"
+
+          # TODO: Look into keyctl backend once
+          # https://github.com/99designs/aws-vault/pull/1202 is merged.
+          export AWS_VAULT_BACKEND="file"
+          export AWS_VAULT_FILE_PASSPHRASE=$(cat ${config.age.secrets.aws-vault-file-passphrase.path})
+
+          exec @og@ "$@"
+        '';
+      in
+      ''
+        og=$out/bin/.aws-vault-wrapped
+        mv $out/bin/aws-vault $og
+        cp ${wrapper} $out/bin/aws-vault
+        substituteInPlace $out/bin/aws-vault \
+          --replace "@og@" $og
+      '';
+  };
 in
 {
   # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
@@ -109,22 +136,20 @@ in
   # Needed by ~/bin/allprocs
   programs.sysdig.enable = true;
 
-  # Configuration for aws-vault
-  # We don't actually use zenity, this is just a binary in ~/bin that aws-vault
-  # recognizes the name of. See that script for some thoughts about a less
-  # hacky approach to using a custom propmt.
-  environment.variables.AWS_VAULT_PROMPT = "zenity";
-  # TODO: Look into keyctl backend once https://github.com/99designs/aws-vault/pull/1202 is merged.
-  environment.variables.AWS_VAULT_BACKEND = "file";
-  environment.variables.AWS_VAULT_FILE_PASSPHRASE = pkgs.deage.string ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYOE5Yd1hjTisvcDRzVTJ2
-    REFjSkZoYWRJOGVxa3ZTdTV1MnQ2YWNjNzIwCmIrVWpINWFrN01reXZ6Z0NtZC94
-    Z2JUVHJtaDJIRlQ4cHRuK1FleWF1ZGsKLS0tIFZVWUZlWE9ac2JuUVl1R20xMCt0
-    ZHBFeXphVVJUT090U0l3TC9LOVVEUmMKApEd7chMuK9kB2fCOscPI16vjlwPyA7V
-    rC77LyauPwyX47G+00wJ2qCerKxSzjf1/WjCWg==
-    -----END AGE ENCRYPTED FILE-----
-  '';
+  # See my-aws-vault for details.
+  age.secrets.aws-vault-file-passphrase = {
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYOE5Yd1hjTisvcDRzVTJ2
+      REFjSkZoYWRJOGVxa3ZTdTV1MnQ2YWNjNzIwCmIrVWpINWFrN01reXZ6Z0NtZC94
+      Z2JUVHJtaDJIRlQ4cHRuK1FleWF1ZGsKLS0tIFZVWUZlWE9ac2JuUVl1R20xMCt0
+      ZHBFeXphVVJUT090U0l3TC9LOVVEUmMKApEd7chMuK9kB2fCOscPI16vjlwPyA7V
+      rC77LyauPwyX47G+00wJ2qCerKxSzjf1/WjCWg==
+      -----END AGE ENCRYPTED FILE-----
+    '';
+    owner = "jeremy";
+    group = "users";
+  };
 
   environment.systemPackages = with pkgs; [
     ### Version control
@@ -152,7 +177,7 @@ in
 
     ### Honor
     mfa
-    aws-vault
+    my-aws-vault
     h4-cli
     # server-config
     (vagrant.override {

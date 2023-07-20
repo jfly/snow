@@ -219,7 +219,7 @@
           inherit agenix agenix-rooter;
         };
         "pattern" = import pattern/configuration.nix {
-          inherit parsec-gaming home-manager;
+          inherit agenix agenix-rooter parsec-gaming home-manager;
           knock-flake = knock;
         };
       };

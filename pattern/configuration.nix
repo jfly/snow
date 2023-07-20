@@ -1,4 +1,4 @@
-{ parsec-gaming, home-manager, knock-flake }:
+{ agenix, agenix-rooter, parsec-gaming, home-manager, knock-flake }:
 { config, pkgs, lib, ... }:
 
 let knock = knock-flake.packages.${builtins.currentSystem}.knock;
@@ -46,7 +46,14 @@ in
     ./printers.nix
     ./fuse.nix
     ./laptop.nix
+    agenix.nixosModules.default
+    agenix-rooter.nixosModules.default
   ];
+
+  age.rooter = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
+    generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
+  };
 
   # Flakes!
   nix.settings.experimental-features = [ "nix-command" "flakes" "repl-flake" ];

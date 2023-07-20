@@ -18,7 +18,57 @@ let
   rooter-lib = pkgs.callPackage ../lib.nix { };
 in
 {
-  config = { };
+  config = {
+    system.activationScripts.agenixRooterDerivedSecrets = {
+      # Don't run until after agenix has actually generated the secrets.
+      deps = [ "agenix" ];
+      text = (
+        ''
+          rm -f /run/agenix-derived-secrets/desired-files
+        ''
+      ) + (
+        lib.concatStringsSep "\n"
+          (lib.mapAttrsToList
+            (filename: generator:
+              ''
+                # First, create a symlink to the (not-yet-existent) derived file.
+                mkdir -p /run/agenix-derived-secrets
+                hash=$(echo -n '${filename}' | md5sum | cut -f1 -d " ")
+                ln -sf '${filename}' "/run/agenix-derived-secrets/$hash"
+
+                # Add it to the list of "desired files", so we can clean up any
+                # no-longer-needed files at the end.
+                echo '${filename}' >> /run/agenix-derived-secrets/desired-files
+
+                # Now, generate that derived file.
+                mkdir -p "$(dirname '${filename}')"
+                ${generator.script} > '${filename}'
+
+                chmod ${generator.mode} '${filename}'
+                chown ${generator.user}:${generator.group} '${filename}'
+              ''
+            )
+            config.age.rooter.derivedSecrets)
+      ) + (
+        ''
+          # Finally, remove any no-longer-needed files.
+          rm -f /run/agenix-derived-secrets/actual-files
+          for f in /run/agenix-derived-secrets/*; do
+            if [ -L "$f" ]; then
+              readlink -f "$f" >> /run/agenix-derived-secrets/actual-files
+            fi
+          done
+
+          comm -23 <(sort /run/agenix-derived-secrets/actual-files) <(sort /run/agenix-derived-secrets/desired-files) | while read -r filename; do
+            echo "Cleaning up unneeded file: $filename" >/dev/stderr
+            hash=$(echo -n "$filename" | md5sum | cut -f1 -d " ")
+            rm "/run/agenix-derived-secrets/$hash"
+            rm -f "$filename"
+          done
+        ''
+      );
+    };
+  };
 
   options.age = {
     # Extend age.secrets with new options
@@ -80,6 +130,61 @@ in
           Don't manage the files in this directory by hand. Just run `nix run
           .#agenix-rooter-generate` to regenerate the files as necessary (when
           changing secrets, or a host's public key).
+        '';
+      };
+
+      derivedSecrets = mkOption {
+        default = { };
+        type = with types; attrsOf (submodule {
+          options = {
+            script = mkOption {
+              type = with types; package;
+              description = mdDoc "The script to run.";
+            };
+
+            mode = mkOption {
+              type = types.str;
+              default = "0400";
+              example = "0644";
+              description = lib.mdDoc "The permissions to apply to the generated file.";
+            };
+
+            user = mkOption {
+              default = "0";
+              type = types.str;
+              description = lib.mdDoc "User (name or id) of created file.";
+            };
+
+            group = mkOption {
+              default = "0";
+              type = types.str;
+              description = lib.mdDoc "Group (name or id) of created file.";
+            };
+          };
+        });
+        description = mdDoc ''
+          A set of scripts that read in secrets and print to stdout. Useful for
+          embedding secrets into larger configuration files without having to
+          encrypt the whole configuration file just because it has a secret
+          somewhere inside of it.
+
+          These files are managed declaratively: that is, iif you stop
+          declaring one of them, it will get deleted. However, any ancestor
+          directories we created when initially creating the file will stay
+          behind, even if removing the file means the their parent directory is
+          now empty. (we could change this behavior, it was just easier to
+          build it this way).
+        '';
+        example = literalExpression ''
+          { " /etc/NetworkManager/system-connections/myssid.nmconnection ".script =
+            '''
+            echo " [ connection ] "
+            ...
+            [wifi-security]
+            ...
+            psk=$${config.age.secrets.myssid-password.path}
+            ''';
+          }
         '';
       };
     };

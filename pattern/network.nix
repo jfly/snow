@@ -1,81 +1,88 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  buildNmConnection = connection: ''
-    [connection]
-    id=${connection.ssid}
-    uuid=${connection.uuid}
-    type=wifi
+  buildNmConnectionDerivedSecret = { ssid, uuid, psk }: {
+    mode = "0400"; # readonly (user)
+    script = pkgs.writeShellScript "gen-nm-connection" ''
+      echo "[connection]
+      id=${ssid}
+      uuid=${uuid}
+      type=wifi
 
-    [wifi]
-    mode=infrastructure
-    ssid=${connection.ssid}
+      [wifi]
+      mode=infrastructure
+      ssid=${ssid}
 
-    [wifi-security]
-    auth-alg=open
-    key-mgmt=wpa-psk
-    psk=${connection.psk}
+      [wifi-security]
+      auth-alg=open
+      key-mgmt=wpa-psk
+      psk=$(cat ${psk.path})
 
-    [ipv4]
-    method=auto
+      [ipv4]
+      method=auto
 
-    [ipv6]
-    addr-gen-mode=stable-privacy
-    method=auto
+      [ipv6]
+      addr-gen-mode=stable-privacy
+      method=auto
 
-    [proxy]
-  '';
+      [proxy]"
+    '';
+  };
 in
 {
+
   networking.hostName = "pattern";
   networking.networkmanager.enable = true;
-  environment.etc."NetworkManager/system-connections/Hen Wen.nmconnection" = {
-    mode = "0400"; # readonly (user)
-    text = buildNmConnection {
-      ssid = "Hen Wen";
-      uuid = "9ff99b03-b1db-4c00-ab90-1a0e5b1fdf83";
-      psk = pkgs.deage.string ''
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqZWN0MGw0VVVvS256b0U4
-        ZDEzOFZFUlRkSDBoWmRlSmVtYUpHb0xudGtrClh5b0FlWEpYYm16THhhZnNJRUhp
-        cFRkNnhmMUNjdHJkTGJNdFE3c2xGNWMKLS0tIGp1UEpQdlBvQkpQZEpFdGZsTm5N
-        ek1NVmFIWTRSK1VlOEtyUFdVbys0YmMK25hJ+9tlvsNFx9bv4eFKf4o6bEsEwd4z
-        cKEFol1r83HsP3z9puR5+mAyrFo=
-        -----END AGE ENCRYPTED FILE-----
-      '';
-    };
+
+  age.secrets.hen-wen-passphrase = {
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqZWN0MGw0VVVvS256b0U4
+      ZDEzOFZFUlRkSDBoWmRlSmVtYUpHb0xudGtrClh5b0FlWEpYYm16THhhZnNJRUhp
+      cFRkNnhmMUNjdHJkTGJNdFE3c2xGNWMKLS0tIGp1UEpQdlBvQkpQZEpFdGZsTm5N
+      ek1NVmFIWTRSK1VlOEtyUFdVbys0YmMK25hJ+9tlvsNFx9bv4eFKf4o6bEsEwd4z
+      cKEFol1r83HsP3z9puR5+mAyrFo=
+      -----END AGE ENCRYPTED FILE-----
+    '';
   };
-  environment.etc."NetworkManager/system-connections/jay fly phone.nmconnection" = {
-    mode = "0400"; # readonly (user)
-    text = buildNmConnection {
-      ssid = "jay fly phone";
-      uuid = "5736556a-cd3e-4588-a049-6cb3362c48e7";
-      psk = pkgs.deage.string ''
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTN0JkSVZZMC82WnU2MVNs
-        UTZQK3owM0QveEVKSXVRRUc4c3BqWUVpb0hzCmNWbnU0bmR2dFppMHVnakRPY2Rt
-        eHJiKzVDTUMvcHl6d3d2MWVxUjR3WFUKLS0tIEtBMWM2T2FsZ0FwM0hqb1RkV3l5
-        Q0cxeGlodVZmMkRaQTVzVzlGNmhTcWsKMR3Sq9py5K7SCM85oy+rKjMnvcvjLc+8
-        7zmRlPZGK2pFI9kJJ611lbSJ
-        -----END AGE ENCRYPTED FILE-----
-      '';
-    };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Hen Wen.nmconnection" = buildNmConnectionDerivedSecret {
+    ssid = "Hen Wen";
+    uuid = "9ff99b03-b1db-4c00-ab90-1a0e5b1fdf83";
+    psk = config.age.secrets.hen-wen-passphrase;
   };
-  environment.etc."NetworkManager/system-connections/Cal 5g.nmconnection" = {
-    mode = "0400"; # readonly (user)
-    text = buildNmConnection {
-      ssid = "Cal 5g";
-      uuid = "c65efd03-2c3c-4e6e-87c5-a6e1530da250";
-      psk = pkgs.deage.string ''
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0ZGJFMWQ0UTVQVXQzMkkw
-        WHdkWkFQWFNnd2FoRE9TelBIZFd6RVVhUXpNCkpRempBZnpFVitFTW11NXExVFJ2
-        YzZuSncxck9UTERlbVVJN0ZGVVlXdTgKLS0tIG1LcUVDaFI1eWZuY2VqUXhNVGpW
-        cG9JVDJ2QkV3WUxCTVBmYTMzOXdJM1EKMs/oU178jQORt0LJYjPQLOasIENDir7U
-        Pu+RwSU+P9kGX738A8CYMX+Ru4mOvw==
-        -----END AGE ENCRYPTED FILE-----
-      '';
-    };
+
+  age.secrets.jay-fly-phone-passphrase = {
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTN0JkSVZZMC82WnU2MVNs
+      UTZQK3owM0QveEVKSXVRRUc4c3BqWUVpb0hzCmNWbnU0bmR2dFppMHVnakRPY2Rt
+      eHJiKzVDTUMvcHl6d3d2MWVxUjR3WFUKLS0tIEtBMWM2T2FsZ0FwM0hqb1RkV3l5
+      Q0cxeGlodVZmMkRaQTVzVzlGNmhTcWsKMR3Sq9py5K7SCM85oy+rKjMnvcvjLc+8
+      7zmRlPZGK2pFI9kJJ611lbSJ
+      -----END AGE ENCRYPTED FILE-----
+    '';
+  };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/jay fly phone.nmconnection" = buildNmConnectionDerivedSecret {
+    ssid = "jay fly phone";
+    uuid = "5736556a-cd3e-4588-a049-6cb3362c48e7";
+    psk = config.age.secrets.jay-fly-phone-passphrase;
+  };
+
+  age.secrets.cal-5g-passphrase = {
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTN0JkSVZZMC82WnU2MVNs
+      UTZQK3owM0QveEVKSXVRRUc4c3BqWUVpb0hzCmNWbnU0bmR2dFppMHVnakRPY2Rt
+      eHJiKzVDTUMvcHl6d3d2MWVxUjR3WFUKLS0tIEtBMWM2T2FsZ0FwM0hqb1RkV3l5
+      Q0cxeGlodVZmMkRaQTVzVzlGNmhTcWsKMR3Sq9py5K7SCM85oy+rKjMnvcvjLc+8
+      7zmRlPZGK2pFI9kJJ611lbSJ
+      -----END AGE ENCRYPTED FILE-----
+    '';
+  };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Cal 5g.nmconnection" = buildNmConnectionDerivedSecret {
+    ssid = "Cal 5g";
+    uuid = "c65efd03-2c3c-4e6e-87c5-a6e1530da250";
+    psk = config.age.secrets.cal-5g-passphrase;
   };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
