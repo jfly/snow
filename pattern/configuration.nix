@@ -1,7 +1,7 @@
 { agenix, agenix-rooter, parsec-gaming, home-manager, knock-flake }:
 { config, pkgs, lib, ... }:
 
-let knock = knock-flake.packages.${builtins.currentSystem}.knock;
+let knock = knock-flake.packages.${pkgs.system}.knock;
 in
 {
   _module.args.parsec-gaming = parsec-gaming;

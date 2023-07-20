@@ -138,7 +138,7 @@ in
         type = with types; attrsOf (submodule {
           options = {
             script = mkOption {
-              type = with types; package;
+              type = with types; path;
               description = mdDoc "The script to run.";
             };
 

@@ -29,11 +29,13 @@
           configureFlags = oldAttrs.configureFlags ++ [ "DEFAULT_DNS_RESOLVER=--systemd-resolved" ];
         });
 
-        # Note: accessing PWD like this is impure, but it's the only way to do some weird things like:
-        #  - access decrypted, untracked secrets on the filesystem
-        #  - use home-manager to set up symlinks to folders in this repo
         snow = {
-          absoluteRepoPath = repoPath: (builtins.getEnv "PWD") + ("/" + (super.lib.strings.removePrefix "/" repoPath));
+          # Kind of weird to be hardcoding the path here, but I want this to
+          # work in a pure build, which means we can't (and shouldn't) look at
+          # something like PWD. For example, if we're building a system using
+          # github actions, it really doesn't matter where the repo we're
+          # building happens to be cloned.
+          absoluteRepoPath = repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (super.lib.strings.removePrefix "/" repoPath);
         };
         deage = rec {
           absoluteRepoPath = encrypted: snow.absoluteRepoPath (repoPath encrypted);

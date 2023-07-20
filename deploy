@@ -78,9 +78,7 @@ function deploy_nix() {
             mv "$HOME/.ssh/known_hosts" ~/sync/linux-secrets/.ssh/known_hosts
         fi
 
-        # Note: see comment above snow.absoluteRepoPath in overlays/default.nix
-        # to see why we do an impure build.
-        colmena apply-local --impure --sudo "$@"
+        colmena apply-local --sudo "$@"
     else
         colmena apply --on "$target" "$@"
     fi
@@ -93,12 +91,15 @@ function deploy_nix_router() {
     hostname=${target#openwrt/}
     echo "Deploying to $hostname"
 
+    # Note: we use pkgs.deage in these routers, which means we have to do
+    # impure builds. Perhaps we can figure out some clever way of doing
+    # something like agenix instead?
+    purity="--impure"
+
     flake="./$target#my-router"
     # First, check if the version currently installed/running is already up to date?
     #
-    # Note: see comment above snow.absoluteRepoPath in overlays/default.nix
-    # to see why we do an impure build.
-    desired_nix_version=$(nix eval "$flake" --impure --raw --apply 'r: r.hack-nix-version')
+    desired_nix_version=$(nix eval "$flake" $purity --raw --apply 'r: r.hack-nix-version')
     actual_nix_version=$(ssh "$hostname" cat /etc/nix-build-version)
     if [ "$desired_nix_version" = "$actual_nix_version" ]; then
         echo "It looks like $hostname is already up to date (running $actual_nix_version). Not doing anything to it!"
@@ -109,10 +110,7 @@ function deploy_nix_router() {
 
     # Basically copying
     # https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions
-    #
-    # Note: see comment above snow.absoluteRepoPath in overlays/default.nix
-    # to see why we do an impure build.
-    result=$(nix build "$flake" --no-link --print-out-paths --impure)
+    result=$(nix build "$flake" --no-link --print-out-paths $purity)
     files=("$result"/*-sysupgrade.*)
     file=${files[0]}
     echo "Successfully built $file"

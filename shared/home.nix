@@ -4,33 +4,8 @@ in
 { config, lib, pkgs, ... }:
 
 let
-  # TODO: move this docker configuration closer to where we actually install
-  # docker.
-  docker-conf = builtins.toJSON {
-    "credHelpers" = {
-      "900965112463.dkr.ecr.us-west-2.amazonaws.com" = "ecr-login";
-    };
-    "auths" = {
-      "containers.snow.jflei.com" = {
-        "auth" = pkgs.deage.string ''
-          -----BEGIN AGE ENCRYPTED FILE-----
-          YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUNCWjkrU1VqVndNMDhF
-          SjN0emN4UHZnaWJ1MUNXOC9hUytheE8xTDJFCk1OOHpidm0zbGd5d3BFaVZKSU51
-          NXRuRlJRNFRYRUxNR2g1Y3ZMTEpJaWsKLS0tIHBGTWRUQjh6bGc4WWJDbThOM1FJ
-          ZUFYeWc0a1pXUXliLy9IN3E4czFmWWsKa5YmXKdvYuW9Dm/z9KE+SCvjXZYzq+Up
-          naqZkJUsz/p4wjD/jvBYADdyFf76HD7yPXU18ulbwq9gTU3SaK2PzQ==
-          -----END AGE ENCRYPTED FILE-----
-        '';
-      };
-    };
-    "detachKeys" = "ctrl-^,q";
-  };
   link = target: {
-    source =
-      if builtins.pathExists target then
-        config.lib.file.mkOutOfStoreSymlink target
-      else
-        builtins.throw "Could not find ${target}";
+    source = config.lib.file.mkOutOfStoreSymlink target;
   };
   homeDir = "/home/${outerConfig.snow.user.name}";
 in
@@ -57,9 +32,8 @@ in
     };
   };
 
-  home.file = (lib.mapAttrs'
-    (name: target:
-      lib.nameValuePair name (link target))
+  home.file = (lib.mapAttrs
+    (name: target: (link target))
     {
       sd = pkgs.snow.absoluteRepoPath "/shared/homies/sd";
       bin = pkgs.snow.absoluteRepoPath "/shared/homies/bin";
@@ -136,10 +110,6 @@ in
     ".zprofile".text = ''
       source $HOME/.profile
     '';
-    # Configure Docker.
-    # TODO: figure out how to get this config living closer to the
-    # installation of docker itself.
-    ".docker/config.json".text = docker-conf;
   };
 
   dconf.settings = {

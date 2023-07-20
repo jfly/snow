@@ -73,9 +73,9 @@
           # discussion about this.
           # shellcheck source=/dev/null
           WALLABAG_CLIENT_ID=$(cat ${config.age.secrets.wallabag-jfly-client-id.path})
-          WALLABAG_CLIENT_SECRET=$(cat ${config.age.secrets.wallabag-jfly-client-secret})
-          WALLABAG_USERNAME=$(cat ${config.age.secrets.wallabag-jfly-username})
-          WALLABAG_PASSWORD=$(cat ${age.secrets.wallabag-jfly-password})
+          WALLABAG_CLIENT_SECRET=$(cat ${config.age.secrets.wallabag-jfly-client-secret.path})
+          WALLABAG_USERNAME=$(cat ${config.age.secrets.wallabag-jfly-username.path})
+          WALLABAG_PASSWORD=$(cat ${config.age.secrets.wallabag-jfly-password.path})
 
           base_url=https://wallabag.snow.jflei.com
           payload=$(curl -sX POST "$base_url/oauth/v2/token" \

@@ -81,6 +81,46 @@ in
   };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
 
+  age.secrets.snow-containers-auth.rooterEncrypted = ''
+    -----BEGIN AGE ENCRYPTED FILE-----
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUNCWjkrU1VqVndNMDhF
+    SjN0emN4UHZnaWJ1MUNXOC9hUytheE8xTDJFCk1OOHpidm0zbGd5d3BFaVZKSU51
+    NXRuRlJRNFRYRUxNR2g1Y3ZMTEpJaWsKLS0tIHBGTWRUQjh6bGc4WWJDbThOM1FJ
+    ZUFYeWc0a1pXUXliLy9IN3E4czFmWWsKa5YmXKdvYuW9Dm/z9KE+SCvjXZYzq+Up
+    naqZkJUsz/p4wjD/jvBYADdyFf76HD7yPXU18ulbwq9gTU3SaK2PzQ==
+    -----END AGE ENCRYPTED FILE-----
+  '';
+  # Configure Docker.
+  # TODO: figure out how to get this config living closer to the
+  # installation of docker itself.
+  age.rooter.derivedSecrets."/home/${config.snow.user.name}/.docker/config.json" = {
+    user = config.snow.user.name;
+    group = "users";
+    mode = "0400";
+    script =
+      let
+        docker-config-template = pkgs.writeText "docker-config-template" (builtins.toJSON {
+          "credHelpers" = {
+            "900965112463.dkr.ecr.us-west-2.amazonaws.com" = "ecr-login";
+          };
+          "auths" = {
+            "containers.snow.jflei.com" = {
+              "auth" = "@auth_placeholder@";
+            };
+          };
+          "detachKeys" = "ctrl-^,q";
+        });
+        gen-docker-conf = pkgs.writeShellApplication {
+          name = "gen-docker-conf";
+          runtimeInputs = with pkgs; [ gnused ];
+          text = ''
+            sed "s/@auth_placeholder@/$(cat ${config.age.secrets.snow-containers-auth.path})/" ${docker-config-template}
+          '';
+        };
+      in
+      "${gen-docker-conf}/bin/gen-docker-conf";
+  };
+
   # We need to install openvpn3 explicitly because NetworkManager-openvpn only
   # has support for openvpn2. See
   # https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/issues/69.
@@ -147,7 +187,7 @@ in
       rC77LyauPwyX47G+00wJ2qCerKxSzjf1/WjCWg==
       -----END AGE ENCRYPTED FILE-----
     '';
-    owner = "jeremy";
+    owner = config.snow.user.name;
     group = "users";
   };
 
