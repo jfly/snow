@@ -2,31 +2,21 @@
 
 set -euo pipefail
 
-function find_connection_matching() {
-    connection=$(nmcli -g name,type con show | grep "$1.*:vpn" | grep -o "^[^:]*")
-    echo "$connection"
-}
+function toggle() {
+    __profile_file="$1"
 
-function nm_con_toggle() {
-    __con_id="$1"
-    if nmcli connection show --active | grep "$1" >/dev/null; then
-        echo "Disabling $__con_id"
-        nmcli con down id "$__con_id"
+    # Poke our statusbar because it sometimes gets stuck not updating? Polybar
+    # fortunately restarts child processes as necessary, but I'd really like to
+    # know why the darn thing is getting stuck...
+    killall .polybar-openvpn3-wrapped
+
+    if openvpn3 session-stats -c "$__profile_file" >/dev/null; then
+        echo "Disabling $__profile_file"
+        openvpn3 session-manage -D -c "$__profile_file"
     else
-        echo "Enabling $__con_id"
-        nmcli con up id "$__con_id"
+        echo "Enabling $__profile_file"
+        openvpn3 session-start --config "$__profile_file"
     fi
 }
 
-# Add vpn connection if it doesn't exist yet.
-nm-vpn-add ~/sync/linux-secrets/h4-vpn/jeremy-fleischman-system76-linux.config.ovpn ~/sync/linux-secrets/h4-vpn/passphrase.txt
-
-search_name="jeremy-fleischman-system76-linux.config"
-
-connection=$(find_connection_matching "$search_name")
-if [ -z "$connection" ]; then
-    echo "ERROR: could not find a vpn connection matching $search_name" >/dev/stderr
-    exit 1
-fi
-
-nm_con_toggle "$connection"
+toggle ~/sync/linux-secrets/h4-vpn/ovpn-access-server.ovpn

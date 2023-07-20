@@ -61,6 +61,13 @@ class SessionWatcher:
         session.StatusChangeCallback(handle_session_status_change)
 
     def _remove_session(self, session: Session):
+        if session.GetPath() not in self._info_by_path:
+            logger.info(
+                "Ignoring disappearing session: %s. I've never seen this session before. This seems to happen if I'm starting up just as a session is disappearing",
+                session.GetPath(),
+            )
+            return
+
         del self._info_by_path[session.GetPath()]
         self._handle_update()
 
