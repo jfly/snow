@@ -55,6 +55,13 @@ in
     generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
   };
 
+  # Add the nix cache running on fflewddur.
+  nix.settings = {
+    substituters = [ "https://cache.snow.jflei.com" ];
+    # TODO: DRY up with fflewddur/binary-cache.nix
+    trusted-public-keys = [ "cache.snow.jflei.com:K6CK1XYbt72oXnBNggcgDwxkeLUeyGtSui2e7ibziqc=" ];
+  };
+
   # Flakes!
   nix.settings.experimental-features = [ "nix-command" "flakes" "repl-flake" ];
 

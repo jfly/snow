@@ -214,7 +214,9 @@
         "dallben" = import dallben/configuration.nix {
           inherit agenix agenix-rooter parsec-gaming;
         };
-        "fflewddur" = import fflewddur/configuration.nix;
+        "fflewddur" = import fflewddur/configuration.nix {
+          inherit agenix agenix-rooter;
+        };
         "fflam" = import fflam/configuration.nix {
           inherit agenix agenix-rooter;
         };
@@ -225,5 +227,11 @@
       };
 
       nixosConfigurations = colmenaHive.nodes;
+
+      hydraJobs =
+        let
+          inherit (nixpkgs) lib;
+        in
+        lib.mapAttrs' (name: nixosConfiguration: lib.nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel) nixosConfigurations;
     };
 }

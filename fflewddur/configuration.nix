@@ -1,3 +1,4 @@
+{ agenix, agenix-rooter }:
 { config, lib, pkgs, ... }:
 
 rec {
@@ -6,7 +7,15 @@ rec {
       ./boot.nix
       ./network.nix
       ./nas.nix
+      ./binary-cache.nix
+      agenix.nixosModules.default
+      agenix-rooter.nixosModules.default
     ];
+
+  age.rooter = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
+    generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

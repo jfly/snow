@@ -7,6 +7,7 @@ from .monitoring import Monitoring
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
+from .nix_cache import NixCache
 from .dns import Dns
 
 # from .jfly_laptop import JflyLaptop
@@ -23,4 +24,5 @@ def build_app():
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
+    NixCache(namespace="default", snowauth=snowauth)
     # JflyLaptop()
