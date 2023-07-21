@@ -4,7 +4,6 @@ nixpkgs:
 let
   inherit
     (lib)
-    assertMsg
     isPath
     literalExpression
     mdDoc

@@ -19,4 +19,9 @@
     -----END AGE ENCRYPTED FILE-----
   '';
   services.harmonia.signKeyPath = config.age.secrets.harmonia-cache-key-secret.path;
+
+  environment.systemPackages = with pkgs; [
+    # needed to build various flakes that use fetchGit
+    git
+  ];
 }
