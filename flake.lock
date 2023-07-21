@@ -24,23 +24,6 @@
         "type": "github"
       }
     },
-    "agenix-rooter": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-ze85LfzAgDXTr6CRE8iiJ6O7NCf8wtT6Av81y4EhoEQ=",
-        "path": "./shared/agenix-rooter",
-        "type": "path"
-      },
-      "original": {
-        "path": "./shared/agenix-rooter",
-        "type": "path"
-      }
-    },
     "base64-src": {
       "flake": false,
       "locked": {
@@ -437,7 +420,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "agenix-rooter": "agenix-rooter",
         "colmena": "colmena",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",

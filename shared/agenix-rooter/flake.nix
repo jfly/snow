@@ -6,9 +6,5 @@
     agenix-rekey, but you actually commit the "rekeyed" files instead of doing an
     impure build to produce a local derivation that contains them.
   '';
-  outputs = { self, nixpkgs, ... }: {
-    nixosModules.agenixRooter = import ./modules/agenix-rooter.nix nixpkgs;
-    nixosModules.default = self.nixosModules.agenixRooter;
-    defineApps = import ./apps;
-  };
+  outputs = { self, nixpkgs, ... }: import ./default.nix { inherit nixpkgs; };
 }

@@ -24,8 +24,11 @@
     # https://github.com/ryantm/agenix#install-module-via-flakes).
     agenix.inputs.darwin.follows = "";
 
-    agenix-rooter.url = "path:./shared/agenix-rooter";
-    agenix-rooter.inputs.nixpkgs.follows = "nixpkgs";
+    # TODO: extract into separate repo, or re-add once relative flake
+    # references are less painful to deal with. See
+    # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
+    # agenix-rooter.url = "path:./shared/agenix-rooter";
+    # agenix-rooter.inputs.nixpkgs.follows = "nixpkgs";
 
     # Note: colmena comes with nixpkgs, but we need a version with
     # https://github.com/zhaofengli/colmena/commit/ca12be27edf5639fa3c9c98d6b4ab6d1f22e3315
@@ -66,9 +69,11 @@
     , parsec-gaming
     , home-manager
     , agenix
-    , agenix-rooter
     , ...
     }:
+    let
+      agenix-rooter = import ./shared/agenix-rooter { inherit nixpkgs; };
+    in
     (
       flake-utils.lib.eachDefaultSystem
         (system:
