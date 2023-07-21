@@ -3,8 +3,7 @@
 set -euo pipefail
 shopt -s globstar
 
-if [ $# -eq 0 ]; then
-
+help() {
     echo "Usage: $0 [target]
 
 To deploy all machines:
@@ -14,11 +13,42 @@ To deploy all machines:
 To deploy one machine:
 
     ./deploy 'dallben'
-"
-    exit 1
-fi
+" >/dev/stderr
+}
+
+target=""
+PREVIEW=0
+for i in "$@"; do
+    case $i in
+        --preview | -p)
+            PREVIEW=1
+            ;;
+        --help | -h)
+            help
+            exit 0
+            ;;
+        --* | -*)
+            echo "Unknown option $i" >/dev/stderr
+            echo "" >/dev/stderr
+            help
+            exit 1
+            ;;
+        *)
+            if [ -n "$target" ]; then
+                echo "You must specify exactly one target" >/dev/stderr
+                echo "" >/dev/stderr
+                help
+                exit 1
+
+            fi
+            target=$i
+            ;;
+    esac
+done
 
 function build_containers() {
+    [ $PREVIEW == 1 ] && echo "--preview not supported for build_containers, sorry!" && exit 1
+
     for f in k8s/**/Dockerfile; do
         dir=$(dirname "$f")
         fq_image_name=containers.snow.jflei.com/$(basename "$dir"):latest
@@ -54,6 +84,8 @@ function build_containers() {
 }
 
 function deploy_k8s() {
+    [ $PREVIEW == 1 ] && echo "--preview not supported for deploy_k8s, sorry!" && exit 1
+
     # Install cert-manager
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
 
@@ -68,7 +100,14 @@ function deploy_k8s() {
 function deploy_nix() {
     local target="$1"
     shift
+
     if [ "$target" = "$(hostname)" ]; then
+        if [ $PREVIEW == 1 ]; then
+            echo "Building (but not deploying!) new system..."
+            new_system=$(nix build .#nixosConfigurations.pattern.config.system.build.toplevel --print-out-paths --no-link)
+            nvd diff /run/current-system "$new_system"
+            exit 0
+        fi
         # TODO: understand what process is replacing the ~/.ssh/known_hosts
         # symlink with a real file. Probably some ssh invocation?
         # Here's what sometimes happens when home manager is deploying:
@@ -78,9 +117,10 @@ function deploy_nix() {
             mv "$HOME/.ssh/known_hosts" ~/sync/linux-secrets/.ssh/known_hosts
         fi
 
-        colmena apply-local --sudo "$@"
+        colmena apply-local --sudo
     else
-        colmena apply --on "$target" "$@"
+        [ $PREVIEW == 1 ] && echo "--preview not supported for deploy_nix for remote hosts, sorry!" && exit 1
+        colmena apply --on "$target"
     fi
 }
 
@@ -120,8 +160,6 @@ function deploy_nix_router() {
 }
 
 tools/deage
-target="$1"
-shift
 
 if [ "$target" = "k8s" ]; then
     build_containers
@@ -129,5 +167,5 @@ if [ "$target" = "k8s" ]; then
 elif [[ $target == "openwrt/"* ]]; then
     deploy_nix_router "$target"
 else
-    deploy_nix "$target" "$@"
+    deploy_nix "$target"
 fi

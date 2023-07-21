@@ -25,6 +25,7 @@ pkgs.mkShell {
     pkgs.age
     pkgs.nixpkgs-fmt
     pkgs.just
+    pkgs.nvd
 
     # For building/pushing docker images
     pkgs.skopeo
