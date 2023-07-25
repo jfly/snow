@@ -12,37 +12,40 @@
   '';
 
   # Set up a kubernetes cluser with k3s
-  systemd.services.k3s.preStart = ''
-    set -euo pipefail
+  systemd.services.k3s = {
+    preStart = ''
+      set -euo pipefail
 
-    mkdir -p /etc/snow/k3s
-    echo -n "
-    configs:
-      containers.snow.jflei.com:
-        auth:
-          username: k8s
-          password: $(cat ${config.age.secrets.container-registry-password.path})
-    " > /etc/snow/k3s/registries.yaml
+      mkdir -p /etc/snow/k3s
+      echo -n "
+      configs:
+        containers.snow.jflei.com:
+          auth:
+            username: k8s
+            password: $(cat ${config.age.secrets.container-registry-password.path})
+      " > /etc/snow/k3s/registries.yaml
 
-    # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
-    # It gets source IPs to show up correctly when going through proxies, but
-    # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
-    # we'll find out when that day comes.
-    echo -n "apiVersion: helm.cattle.io/v1
-    kind: HelmChartConfig
-    metadata:
-      name: traefik
-      namespace: kube-system
-    spec:
-      valuesContent: |-
-        additionalArguments:
-          - '--accesslog'
-          - '--log.level=INFO'
-        service:
-          spec:
-            externalTrafficPolicy: Local
-    " > /var/lib/rancher/k3s/server/manifests/z-traefik-get-real-ip.yaml
-  '';
+      # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
+      # It gets source IPs to show up correctly when going through proxies, but
+      # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
+      # we'll find out when that day comes.
+      mkdir -p /var/lib/rancher/k3s/server/manifests/
+      echo -n "apiVersion: helm.cattle.io/v1
+      kind: HelmChartConfig
+      metadata:
+        name: traefik
+        namespace: kube-system
+      spec:
+        valuesContent: |-
+          additionalArguments:
+            - '--accesslog'
+            - '--log.level=INFO'
+          service:
+            spec:
+              externalTrafficPolicy: Local
+      " > /var/lib/rancher/k3s/server/manifests/z-traefik-get-real-ip.yaml
+    '';
+  };
   services.k3s = {
     enable = true;
     role = "server";
