@@ -8,23 +8,37 @@ in
     ../../shared/q
   ];
 
-  programs.zsh.enable = true;
   users.users.${config.snow.user.name}.shell = pkgs.zsh;
-  programs.zsh.interactiveShellInit = ''
-    # Load p10k prompt
-    source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-    source ${../../shared/homies/p10k.zsh}
+  programs.zsh = {
+    enable = true;
+    interactiveShellInit = ''
+      ###
+      ### Powerlevel10k
+      ###
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      if [[ -r "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh" ]]; then
+          source "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh"
+      fi
+      ##################################
 
-    # Load ohmyzsh
-    plugins=(git)
-    plugins+=(z)
-    plugins+=(fzf)
-    source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
+      ###
+      ### Load ohmyzsh
+      ###
+      plugins=(git)
+      plugins+=(z)
+      plugins+=(fzf)
+      source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
+      ##################################
 
-    source ${../../shared/homies/zshrc}
-    source ${../../shared/homies/commonrc/aliases}
-  '';
-
+      source ${../../shared/homies/zshrc}
+      source ${../../shared/homies/commonrc/aliases}
+    '';
+    promptInit = ''
+      # Load p10k prompt
+      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      source ${../../shared/homies/p10k.zsh}
+    '';
+  };
   programs.tmux = {
     clock24 = true;
     # Resize the window to the size of the smallest session for which it is the current window.

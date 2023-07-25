@@ -62,13 +62,8 @@ in
       ".android/adbkey.pub" = "${homeDir}/sync/linux-secrets/.android/adbkey.pub";
     }) // {
     ".zshrc".text = ''
-      if [ "$(hostname)" = "dalinar" ]; then
-        source ${./homies/zshrc}
-      else
-        true
-        # zsh really wants this file to exist. If it doesn't, it'll give
-        # us a friendly (but *annoying*) welcome message.
-      fi
+      # zsh really wants this file to exist. If it doesn't, it'll give
+      # us a friendly (but *annoying*) welcome message.
     '';
     ".profile".text = ''
       ###
@@ -84,27 +79,11 @@ in
       fi
       ##################################
 
-      if [ "$(hostname)" = "dalinar" ]; then
-        # Start with a fresh PATH.
-        export PATH=""
-
-        source ~/.commonrc/path.sh
-
-        ###
-        ### Workaround for that ridiculous Java bug on xmonad
-        ### https://wiki.archlinux.org/index.php/Java#Applications_not_resizing_with_WM.2C_menus_immediately_closing
-        ###
-        export _JAVA_AWT_WM_NONREPARENTING=1
-
-        # startx at login
-        [[ -z $DISPLAY && $XDG_VTNR -eq 1 && -z $TMUX ]] && exec startx
-      else
-        # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
-        # This is a workaround for
-        # https://github.com/NixOS/nixpkgs/issues/188545.
-        if [ -z "$_DID_SYSTEMD_CAT" ]; then
-          export PATH=$HOME/bin:$PATH
-        fi
+      # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
+      # This is a workaround for
+      # https://github.com/NixOS/nixpkgs/issues/188545.
+      if [ -z "$_DID_SYSTEMD_CAT" ]; then
+        export PATH=$HOME/bin:$PATH
       fi
     '';
     ".zprofile".text = ''

@@ -1,57 +1,10 @@
 export HOSTNAME=$(hostname)
 
 ###
-### Powerlevel10k
-###
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-if [ "$HOSTNAME" = "dalinar" ]; then
-    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-    source ~/.p10k.zsh
-    ZSH_THEME="powerlevel10k/powerlevel10k"
-fi
-##################################
-
-###
-### Load oh-my-zsh
-###
-if [ "$HOSTNAME" = "dalinar" ]; then
-    export ZSH=~/.oh-my-zsh
-    plugins=(git)
-    plugins+=(z)
-    plugins+=(sd)
-    source $ZSH/oh-my-zsh.sh
-fi
-##################################
-
-###
-### Load aliases
-###
-if [ "$HOSTNAME" = "dalinar" ]; then
-    source ~/.commonrc/aliases
-fi
-##################################
-
-###
 ### Configure less
 ###
 export LESS="--no-init --quit-if-one-screen --RAW-CONTROL-CHARS"
 ##################################
-
-###
-### HACK ALERT: unset some problematic environment variables inherited from
-### with-alacritty
-###
-##################################
-if [ "$HOSTNAME" = "dalinar" ]; then
-    unset LD_LIBRARY_PATH
-    unset LC_CTYPE
-    unset LIBGL_DRIVERS_PATH
-    unset LIBVA_DRIVERS_PATH
-fi
 
 ###
 ### Set up asdf-vm + direnv
@@ -73,10 +26,6 @@ export PIP_REQUIRE_VIRTUALENV=true
 ###
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-if [ "$HOSTNAME" = "dalinar" ]; then
-    source /usr/share/fzf/key-bindings.zsh
-    source /usr/share/fzf/completion.zsh
-fi
 ##################################
 
 ###
@@ -134,15 +83,6 @@ fzf-commit-widget() {
 zle     -N    fzf-commit-widget
 bindkey '\ec' fzf-commit-widget
 ##################################
-
-###
-### SSH
-###
-##################################
-if [ "$HOSTNAME" = "dalinar" ]; then
-    export SSH_ASKPASS=mfa-askpass
-    export SSH_ASKPASS_REQUIRE=force
-fi
 
 ###
 ### Nix
