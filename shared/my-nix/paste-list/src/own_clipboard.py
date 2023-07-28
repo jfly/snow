@@ -46,7 +46,6 @@ def own_clipboard(generator, sel_name="CLIPBOARD"):
         e = d.next_event()
 
         if e.type == X.SelectionRequest and e.owner == w and e.selection == sel_atom:
-
             client = e.requestor
 
             if e.property == X.NONE:

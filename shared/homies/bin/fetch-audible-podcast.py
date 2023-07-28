@@ -15,14 +15,16 @@ import audible_cli.config
 import audible_cli.models
 from pathlib import Path
 
+
 async def main():
-    parser = argparse.ArgumentParser(description='Download audible podcast')
-    parser.add_argument('podcast_asin')
-    parser.add_argument('out', type=Path)
+    parser = argparse.ArgumentParser(description="Download audible podcast")
+    parser.add_argument("podcast_asin")
+    parser.add_argument("out", type=Path)
     args = parser.parse_args()
 
     assert args.out.is_dir()
     await download(args.podcast_asin, args.out)
+
 
 async def get_podcast(client, asin):
     info = await client.get(
@@ -44,9 +46,10 @@ async def get_podcast(client, asin):
     item = audible_cli.models.LibraryItem(
         data=info,
         api_client=client,
-        response_groups=info['response_groups'],
+        response_groups=info["response_groups"],
     )
     return item
+
 
 async def download(podcast_asin: str, out: Path):
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -54,6 +57,7 @@ async def download(podcast_asin: str, out: Path):
         raw_download(podcast_asin, temp_dir)
         decrypt(temp_dir)
         await finalize(podcast_asin, temp_dir, out)
+
 
 async def finalize(podcast_asin: str, temp_dir: Path, out: Path):
     session = audible_cli.config.Session()
@@ -63,7 +67,7 @@ async def finalize(podcast_asin: str, temp_dir: Path, out: Path):
     children = await podcast.get_child_items()
     assert children is not None
 
-    release_date = dt.date.fromisoformat(podcast._data['release_date'])
+    release_date = dt.date.fromisoformat(podcast._data["release_date"])
     title = f"{podcast.full_title} ({release_date.year})"
 
     # Figure out how much padding we need to fit all episode indices.
@@ -89,7 +93,7 @@ async def finalize(podcast_asin: str, temp_dir: Path, out: Path):
         new_file = final_dir / file.with_stem(title_to_final[stem]).name
         shutil.move(file, new_file)
 
-    # Download the podcast cover image 
+    # Download the podcast cover image
     # Note: folder.{jpg,png} has special meaning to AntennaPod:
     # https://github.com/AntennaPod/AntennaPod/blob/bc3b7179112e986958bbb4773419ec94eb3aa67f/core/src/main/java/de/danoeh/antennapod/core/feed/LocalFeedUpdater.java#L52
     url = podcast.get_cover_url()
@@ -98,23 +102,29 @@ async def finalize(podcast_asin: str, temp_dir: Path, out: Path):
     print()
     print(f"Successfully downloaded to {final_dir}")
 
+
 def raw_download(podcast_asin: str, temp_dir: Path):
-    subprocess.run([
-        "audible",
-        "download",
-        "--aaxc",
-        "--resolve-podcasts",
-        "--asin",
-        podcast_asin,
-        "--cover",
-        "-y",
-        "--chapter",
-        "-o",
-        str(temp_dir),
-    ], check=True)
+    subprocess.run(
+        [
+            "audible",
+            "download",
+            "--aaxc",
+            "--resolve-podcasts",
+            "--asin",
+            podcast_asin,
+            "--cover",
+            "-y",
+            "--chapter",
+            "-o",
+            str(temp_dir),
+        ],
+        check=True,
+    )
+
 
 def decrypt(temp_dir: Path):
     for file in glob.glob("*/*.aaxc", root_dir=temp_dir):
         subprocess.run(["snowcrypt", file], check=True, cwd=temp_dir)
+
 
 asyncio.run(main())

@@ -5,12 +5,13 @@ from .util import chunkify
 
 HEX_CHARS = set("0123456789ABCDEF")
 
+
 @dataclass(frozen=True)
 class MacAddress:
     mac_address: str
 
     def __init__(self, mac_address: str):
-        object.__setattr__(self, 'mac_address', self.normalize_mac_address(mac_address))
+        object.__setattr__(self, "mac_address", self.normalize_mac_address(mac_address))
 
     @classmethod
     def normalize_mac_address(cls, mac_address):
@@ -39,6 +40,7 @@ class MacAddress:
         formatted = separator.join("".join(pair) for pair in chunkify(formatted, 2))
         return formatted
 
+
 # More or less inspired by https://gist.github.com/Mygod/f390aabf53cf1406fc71166a47236ebf#file-export-ble-infos-py-L137-L143
 @dataclass
 class LongTermKey:
@@ -46,12 +48,18 @@ class LongTermKey:
     key_length: int
     rand: int
     e_div: int
+
+
 @dataclass
 class IdentityResolvingKey:
     key: bytes
+
+
 @dataclass
 class LocalSignatureKey:
     key: bytes
+
+
 @dataclass
 class BleKey:
     long_term_key: LongTermKey

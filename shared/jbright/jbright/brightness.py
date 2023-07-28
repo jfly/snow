@@ -6,6 +6,7 @@ import csv
 
 MIN_BRIGHTNESS_PERCENTAGE = 5
 
+
 def _brightnessctl(args):
     p = subprocess.Popen(
         ["brightnessctl", "--machine-readable", *args],
@@ -18,6 +19,7 @@ def _brightnessctl(args):
     assert p.returncode == 0
     return results
 
+
 @dataclasses.dataclass
 class Device:
     name: str
@@ -27,7 +29,13 @@ class Device:
 
     @classmethod
     def from_csv_row(cls, row):
-        device_name, device_type, current_brightness, _percentage_brightness, max_brightness = row
+        (
+            device_name,
+            device_type,
+            current_brightness,
+            _percentage_brightness,
+            max_brightness,
+        ) = row
         return cls(
             name=device_name,
             type=device_type,
@@ -38,15 +46,21 @@ class Device:
     def set(self, value: str):
         if "-" in value:
             value = value.replace("-", "")
-            new_percentage_brightness = self.percentage_brightness - int(value.removesuffix("%"))
+            new_percentage_brightness = self.percentage_brightness - int(
+                value.removesuffix("%")
+            )
         elif "+" in value:
             value = value.replace("+", "")
-            new_percentage_brightness = self.percentage_brightness + int(value.removesuffix("%"))
+            new_percentage_brightness = self.percentage_brightness + int(
+                value.removesuffix("%")
+            )
         else:
             new_percentage_brightness = int(value.removesuffix("%"))
 
         if new_percentage_brightness < MIN_BRIGHTNESS_PERCENTAGE:
-            logging.warning("Refusing to lower the brightness below %s%%", MIN_BRIGHTNESS_PERCENTAGE)
+            logging.warning(
+                "Refusing to lower the brightness below %s%%", MIN_BRIGHTNESS_PERCENTAGE
+            )
             new_percentage_brightness = MIN_BRIGHTNESS_PERCENTAGE
 
         if new_percentage_brightness > 100:
@@ -54,13 +68,16 @@ class Device:
             new_percentage_brightness = 100
 
         _brightnessctl(["--device", self.name, "set", f"{new_percentage_brightness}%"])
-        self.current_brightness = int((new_percentage_brightness * self.max_brightness) / 100)
+        self.current_brightness = int(
+            (new_percentage_brightness * self.max_brightness) / 100
+        )
 
     @property
     def percentage_brightness(self) -> float:
         return (100 * self.current_brightness) / self.max_brightness
 
-class Devices():
+
+class Devices:
     _devices: Dict[str, Device]
 
     def __init__(self):
@@ -87,6 +104,7 @@ class Devices():
 
     def get(self, device_name: str):
         return self._devices[device_name]
+
 
 def get_devices():
     return Devices()

@@ -16,7 +16,13 @@ def require_root():
         print("You must run this script as root")
         sys.exit(1)
 
-def diff_devices(left_description: str, left_devices: List[BluetoothDevice], right_description: str, right_devices: List[BluetoothDevice]):
+
+def diff_devices(
+    left_description: str,
+    left_devices: List[BluetoothDevice],
+    right_description: str,
+    right_devices: List[BluetoothDevice],
+):
     """
     Prints out devices that exist in one list but not the other, and vice
     versa. Also identifies devices that are in both lists, but differ in some
@@ -51,7 +57,9 @@ def diff_devices(left_description: str, left_devices: List[BluetoothDevice], rig
         left_device = left_device_by_mac[mac]
         right_device = right_device_by_mac[mac]
         if left_device.link_key != right_device.link_key:
-            print(f"Differing link keys!: {left_description} {left_device} which is not the same as {right_description} {right_device}")
+            print(
+                f"Differing link keys!: {left_description} {left_device} which is not the same as {right_description} {right_device}"
+            )
 
     print("")
     for mac in intersection:
@@ -59,15 +67,22 @@ def diff_devices(left_description: str, left_devices: List[BluetoothDevice], rig
         left_device = left_device_by_mac[mac]
         right_device = right_device_by_mac[mac]
         if left_device.link_key == right_device.link_key:
-            print(f"Matching link keys!: {left_description} {left_device} which is the same as {right_description} {right_device}")
+            print(
+                f"Matching link keys!: {left_description} {left_device} which is the same as {right_description} {right_device}"
+            )
 
     if not found_diff:
-        print("No devices missing or differing between {left_description} and {right_description}!")
+        print(
+            "No devices missing or differing between {left_description} and {right_description}!"
+        )
+
 
 def main():
     require_root()
-    adapter = MacAddress("F8:94:C2:2F:A9:7B") # TODO: make this a command line parameter
-    path_to_windows_registry = "/mnt/Windows/System32/config/SYSTEM" # TODO: make this a command line parameter
+    adapter = MacAddress(
+        "F8:94:C2:2F:A9:7B"
+    )  # TODO: make this a command line parameter
+    path_to_windows_registry = "/mnt/Windows/System32/config/SYSTEM"  # TODO: make this a command line parameter
     linux_devices = linux.get_devices(adapter)
     windows = Windows(path_to_windows_registry)
     windows_devices = windows.get_devices(adapter)

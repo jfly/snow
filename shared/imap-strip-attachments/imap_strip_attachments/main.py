@@ -51,7 +51,6 @@ def delete_attachments(msg: email.message.Message, tolerable_part_size_bytes=10 
         or msg.get_content_maintype() == "x-music"
         or msg.get_content_maintype() == "application"
     ):
-
         if len(str(msg)) <= tolerable_part_size_bytes:
             logger.debug("Skipping small attachment: " + msg.get_content_type())
         else:

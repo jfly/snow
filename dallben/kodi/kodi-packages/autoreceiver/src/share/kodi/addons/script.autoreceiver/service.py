@@ -25,6 +25,7 @@ import xbmc
 #    starting.
 START_PAUSE_HACK_SECONDS = 2
 
+
 def main():
     player = Player()
     monitor = xbmc.Monitor()
@@ -43,19 +44,44 @@ class Player(xbmc.Player):
     def onAVStarted(self):
         self._av_started_ts = time.time()
         if self.isPlayingVideo():
-            xbmc.log("Looks like you just started playing a video. Attempting to turn on the tv and the receiver", level=xbmc.LOGINFO)
-            p = subprocess.run("@receiver@/bin/tv-on.py", check=False, capture_output=True)
-            xbmc.log(f"Here's how that went: exit={p.returncode} stdout={p.stdout} stderr={p.stderr}", level=xbmc.LOGINFO)
+            xbmc.log(
+                "Looks like you just started playing a video. Attempting to turn on the tv and the receiver",
+                level=xbmc.LOGINFO,
+            )
+            p = subprocess.run(
+                "@receiver@/bin/tv-on.py", check=False, capture_output=True
+            )
+            xbmc.log(
+                f"Here's how that went: exit={p.returncode} stdout={p.stdout} stderr={p.stderr}",
+                level=xbmc.LOGINFO,
+            )
         else:
-            xbmc.log("Looks like you just started playing audio (no video). Attempting to turn on just the receiver", level=xbmc.LOGINFO)
-            p = subprocess.run("@receiver@/bin/receiver-on.py", check=False, capture_output=True)
-            xbmc.log(f"Here's how that went: exit={p.returncode} stdout={p.stdout} stderr={p.stderr}", level=xbmc.LOGINFO)
+            xbmc.log(
+                "Looks like you just started playing audio (no video). Attempting to turn on just the receiver",
+                level=xbmc.LOGINFO,
+            )
+            p = subprocess.run(
+                "@receiver@/bin/receiver-on.py", check=False, capture_output=True
+            )
+            xbmc.log(
+                f"Here's how that went: exit={p.returncode} stdout={p.stdout} stderr={p.stderr}",
+                level=xbmc.LOGINFO,
+            )
 
     def onPlayBackPaused(self):
-        time_since_media_start = None if self._av_started_ts is None else (time.time() - self._av_started_ts)
-        if time_since_media_start is not None and time_since_media_start < START_PAUSE_HACK_SECONDS:
-            xbmc.log(f"We just started playing media {time_since_media_start:.2f} seconds ago, and we've already paused? I'm going to assume that this is because of a CEC command triggered by the AVR when we switched inputs during onAVStarted and am just going to resume the media.", level=xbmc.LOGINFO)
+        time_since_media_start = (
+            None if self._av_started_ts is None else (time.time() - self._av_started_ts)
+        )
+        if (
+            time_since_media_start is not None
+            and time_since_media_start < START_PAUSE_HACK_SECONDS
+        ):
+            xbmc.log(
+                f"We just started playing media {time_since_media_start:.2f} seconds ago, and we've already paused? I'm going to assume that this is because of a CEC command triggered by the AVR when we switched inputs during onAVStarted and am just going to resume the media.",
+                level=xbmc.LOGINFO,
+            )
             self.pause()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

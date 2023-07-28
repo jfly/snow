@@ -6,7 +6,7 @@ import subprocess
 
 def get_joinhonor_repo_name():
     url = subprocess.check_output(
-        ['git', 'remote', 'get-url', 'origin'], encoding='UTF-8'
+        ["git", "remote", "get-url", "origin"], encoding="UTF-8"
     )
     url_re = re.compile(r"^git@github.com:joinhonor/(.*).git$")
     m = url_re.match(url)
@@ -16,7 +16,7 @@ def get_joinhonor_repo_name():
 
 def get_branchname(ref):
     ref, branchname = (
-        subprocess.check_output(['git', 'name-rev', ref], encoding='UTF-8')
+        subprocess.check_output(["git", "name-rev", ref], encoding="UTF-8")
         .strip()
         .split(" ")
     )

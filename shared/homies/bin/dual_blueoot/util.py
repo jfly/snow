@@ -1,4 +1,3 @@
-
 def group_by(arr, *, unique=True, key):
     grouped = {}
     for el in arr:
@@ -14,5 +13,6 @@ def group_by(arr, *, unique=True, key):
 
     return grouped
 
+
 def chunkify(arr, size):
-    return list(zip(*[iter(arr)]*size))
+    return list(zip(*[iter(arr)] * size))
