@@ -250,7 +250,7 @@ set tabpagemax=100
 " https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
 set backupcopy=yes
 
-""""""" Enable the Prettier fixer
+""""""" Enable the ale (just fixers, not linting)
 " Disable all linters.
 let g:ale_linters_explicit=1
 
@@ -262,7 +262,6 @@ let g:ale_fixers = {
 \   'css': ['prettier'],
 \   'python': ['black', 'isort'],
 \   'rust': ['rustfmt'],
-\   'nix': ['nixpkgs-fmt'],
 \}
 
 " Automatically run ALEFix on save.
@@ -339,7 +338,18 @@ lua << EOF
 
     -- null-ls is good for wrapping misc tools (such as shellcheck) up into
     -- something LSP compatible.
+
     local null_ls = require("null-ls")
+    local generic_nix_fmt = {
+        method = null_ls.methods.FORMATTING,
+        filetypes = {}, -- Try this with *all* filetypes.
+        generator = null_ls.formatter({
+            command = "nix",
+            args = { 'fmt', '$FILENAME' },
+            to_temp_file = true,
+        }),
+    }
+    null_ls.register(generic_nix_fmt)
     local shfmt = null_ls.builtins.formatting.shfmt;
     table.insert(shfmt._opts.args, "-s");  -- add the -s parameter to shfmt
     local sources = {

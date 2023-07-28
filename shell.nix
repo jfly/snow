@@ -23,8 +23,6 @@ pkgs.mkShell {
   nativeBuildInputs = [
     colmena
     pkgs.age
-    pkgs.nixpkgs-fmt
-    pkgs.just
     pkgs.nvd
 
     # For building/pushing docker images
@@ -52,8 +50,6 @@ pkgs.mkShell {
       mach-nix.mkPython {
         # contents of a requirements.txt (use builtins.readFile ./requirements.txt alternatively)
         requirements = ''
-          black
-
           ### Various pulumi requirements
           remote-pdb  # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
           pip  # used by `pulumi about`

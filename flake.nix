@@ -55,6 +55,9 @@
     # switching to [Libgourou](https://indefero.soutade.fr/p/libgourou/)
     knock.url = "github:jfly/knock";
     knock.inputs.nixpkgs.follows = "nixpkgs";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -69,6 +72,7 @@
     , parsec-gaming
     , home-manager
     , agenix
+    , treefmt-nix
     , ...
     }:
     let
@@ -82,6 +86,7 @@
             inherit system;
             overlays = import ./overlays;
           };
+          treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         {
           apps = agenix-rooter.defineApps {
@@ -99,15 +104,10 @@
               ];
             });
           };
+
+          formatter = treefmtEval.config.build.wrapper;
           checks = {
-            lint = pkgs.runCommand "lint"
-              {
-                nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
-              }
-              ''
-                nixpkgs-fmt --check ${./.}
-                touch $out
-              '';
+            formatting = treefmtEval.config.build.check self;
           };
         }
         )

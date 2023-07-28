@@ -37,6 +37,8 @@ in
       # Load p10k prompt
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ${../../shared/homies/p10k.zsh}
+
+      #<<< eval "$(starship init zsh)"
     '';
   };
   programs.tmux = {
@@ -50,6 +52,9 @@ in
     jgit
     pkgs.fzf
     direnv
+
+    #<<< ### Prompt
+    #<<< starship
 
     ### Explore filesystem
     file
