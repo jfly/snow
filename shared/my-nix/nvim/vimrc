@@ -492,6 +492,7 @@ command! Mapsa call fzf#vim#maps('a', 0)
 
 """"""" Misc shortcuts
 nnoremap <leader>a ggVG
+nnoremap <leader>w :w<CR>
 """""""
 
 """"""" Make it easier to interface with the system clipboard.
