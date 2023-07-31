@@ -190,8 +190,8 @@ in
     {
       fontDir.enable = true;
       # Disable the default fonts, things are more predictable that way.
-      enableDefaultFonts = false;
-      fonts = with pkgs; [
+      enableDefaultPackages = false;
+      packages = with pkgs; [
         (nerdfonts.override {
           fonts = [
             "UbuntuMono" # my preferred monospace font

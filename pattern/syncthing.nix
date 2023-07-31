@@ -19,9 +19,11 @@ in
       configDir = "${home}/.config/syncthing";
       overrideDevices = true;
       overrideFolders = true;
-      devices = {
-        "snow" = {
-          id = "D3NFS4D-DHERIM7-T62ZVKD-RE6T37K-MCYWHDE-CHH56RW-E6KN4HF-TDWVXAR";
+      settings = {
+        devices = {
+          "snow" = {
+            id = "D3NFS4D-DHERIM7-T62ZVKD-RE6T37K-MCYWHDE-CHH56RW-E6KN4HF-TDWVXAR";
+          };
         };
       };
       folders = {
