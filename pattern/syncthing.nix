@@ -25,38 +25,38 @@ in
             id = "D3NFS4D-DHERIM7-T62ZVKD-RE6T37K-MCYWHDE-CHH56RW-E6KN4HF-TDWVXAR";
           };
         };
-      };
-      folders = {
-        "music" = {
-          type = "receiveonly";
-          id = "wgvgw-yqwcq";
-          path = "${syncDir}/music";
-          devices = [ "snow" ]; # Which devices to share the folder with
-        };
-        "calibre" = {
-          id = "ahnvm-wqudj";
-          devices = [ "snow" ];
-          path = "${syncDir}/calibre";
-        };
-        "scratch" = {
-          id = "etyx6-oh4ft";
-          devices = [ "snow" ];
-          ignorePerms = false; # By default, Syncthing doesn't sync file permissions, but there are some scripts in here.
-          path = "${syncDir}/scratch";
-        };
-        "wallpaper" = {
-          devices = [ "snow" ];
-          path = "${syncDir}/wallpaper";
-        };
-        "linux-secrets" = {
-          devices = [ "snow" ];
-          ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
-          path = "${syncDir}/linux-secrets";
-        };
-        "manman" = {
-          id = "amnsl-rxpc2";
-          devices = [ "snow" ];
-          path = "${syncDir}/manman";
+        folders = {
+          "music" = {
+            type = "receiveonly";
+            id = "wgvgw-yqwcq";
+            path = "${syncDir}/music";
+            devices = [ "snow" ]; # Which devices to share the folder with
+          };
+          "calibre" = {
+            id = "ahnvm-wqudj";
+            devices = [ "snow" ];
+            path = "${syncDir}/calibre";
+          };
+          "scratch" = {
+            id = "etyx6-oh4ft";
+            devices = [ "snow" ];
+            ignorePerms = false; # By default, Syncthing doesn't sync file permissions, but there are some scripts in here.
+            path = "${syncDir}/scratch";
+          };
+          "wallpaper" = {
+            devices = [ "snow" ];
+            path = "${syncDir}/wallpaper";
+          };
+          "linux-secrets" = {
+            devices = [ "snow" ];
+            ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
+            path = "${syncDir}/linux-secrets";
+          };
+          "manman" = {
+            id = "amnsl-rxpc2";
+            devices = [ "snow" ];
+            path = "${syncDir}/manman";
+          };
         };
       };
     };

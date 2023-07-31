@@ -110,16 +110,4 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.11"; # Did you read the comment?
-
-  fonts.fonts = [
-    (
-      pkgs.stdenv.mkDerivation {
-        pname = "pica-font";
-        version = "0.0.1";
-        buildCommand = ''
-          install -m444 -Dt $out/share/fonts/truetype ${./fonts/pica/Pica.ttf}
-        '';
-      }
-    )
-  ];
 }

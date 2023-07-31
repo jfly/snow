@@ -200,6 +200,15 @@ in
         noto-fonts-emoji-monochrome
         # I can't read any of this, but it sure looks nicer than boxes :p
         noto-fonts-cjk-serif
+        (
+          pkgs.stdenv.mkDerivation {
+            pname = "pica-font";
+            version = "0.0.1";
+            buildCommand = ''
+              install -m444 -Dt $out/share/fonts/truetype ${./fonts/pica/Pica.ttf}
+            '';
+          }
+        )
       ];
       fontconfig = {
         defaultFonts = {
