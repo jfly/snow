@@ -25,6 +25,15 @@ let
     };
 
   versions = {
+    "3.10.12" = pkgs.python310.override {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "12";
+        suffix = "";
+      };
+      hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
+    };
     "3.10.10" = pkgs.python38.override {
       sourceVersion = {
         major = "3";
