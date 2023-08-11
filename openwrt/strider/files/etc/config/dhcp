@@ -57,3 +57,8 @@ config host
 	option name 'receiver'
 	option ip '192.168.1.202'
 	option mac '00:A0:DE:CF:48:EF'
+
+config host
+	option name 'taran'
+	option ip '192.168.1.101'
+	option mac '50:14:79:36:E7:ED'
