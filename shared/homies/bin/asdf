@@ -3,16 +3,6 @@
 if [ -z "${USE_REAL_ASDF-}" ]; then
     echo "This is a bogus asdf to shadow the real asdf because you're using asdf-nix" >/dev/stderr
 else
-    # TODO: stop redirecting stderr to /dev/null. We're currently doing that
-    # because `nix print-dev-env` prints some funky characters to stderr, which
-    # can screw with other stuff invoking this script. To repro those
-    # characters:
-    #
-    # $ script -qc 'nix print-dev-env nixpkgs#python310 1>/dev/null' | xxd
-    # 00000000: 0d1b 5b30 6d1b 5b4b 0d1b 5b4b            ..[0m.[K..[K
-
     # shellcheck source=/dev/null
-    . <(nix print-dev-env nixpkgs#python310 2>/dev/null)
-    export PYTHON_CONFIGURE_OPTS=${configureFlags:?}
     "$HOME/.asdf/bin/asdf" "$@"
 fi
