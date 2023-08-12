@@ -1,4 +1,4 @@
-# Install minion helm chart: https://github.com/minio/minio/tree/master/helm/minio
+# Install minio helm chart: https://github.com/minio/minio/tree/master/helm/minio
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
