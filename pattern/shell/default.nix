@@ -38,7 +38,8 @@ in
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ${../../shared/homies/p10k.zsh}
 
-      #<<< eval "$(starship init zsh)"
+      # TODO: re-investigate starship sometime
+      # eval "$(starship init zsh)"
     '';
   };
   programs.tmux = {
@@ -53,8 +54,9 @@ in
     pkgs.fzf
     direnv
 
-    #<<< ### Prompt
-    #<<< starship
+    ### Prompt
+    # TODO: re-investigate starship sometime
+    # starship
 
     ### Explore filesystem
     file

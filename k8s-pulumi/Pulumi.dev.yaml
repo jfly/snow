@@ -1,0 +1,7 @@
+encryptionsalt: v1:UmHoQCgGh8g=:v1:G+70wj4UWT6/jwV/:QztsMcdseftfN9tfKppBm0EjFSALVg==
+config:
+  minio:minio_password:
+    secure: v1:aS02meK9TTjiTy7r:p4DFpiyJN+xXUnoTQvY7BBMOR+toT7hEQXf1tNEBhp1LfA3B
+  minio:minio_user: jfly
+  minio:minioServer: minio.snow.jflei.com
+  minio:minioSsl: "true"

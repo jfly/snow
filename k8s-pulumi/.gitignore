@@ -1,6 +1,1 @@
 *.pyc
-
-# Seems to contain a secret "encryptionsalt"? I can't find much of an
-# explanation about what it is and if it needs to be the same every time I run
-# pulumi.
-Pulumi.dev.yaml
