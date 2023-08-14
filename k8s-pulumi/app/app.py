@@ -9,11 +9,15 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .nix_cache import NixCache
 from .dns import Dns
+from .legacy_redirects import LegacyRedirects
 
 
 def build_app():
     Dns()
     snowauth = Snowauth()
+
+    LegacyRedirects()
+
     Radarr(snowauth)
     Syncthing(snowauth)
     Budget(snowauth)

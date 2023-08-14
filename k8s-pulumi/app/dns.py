@@ -68,6 +68,7 @@ class Dns:
         self._github_pages()
         self._sendgrid()
         self._san_clemente()
+        self._legacy_snowdon()
         self._snow()
         self._google_workspace()
 
@@ -100,6 +101,13 @@ class Dns:
         # NOTE: sc.jflei.com is a DDNS entry that should be updated by a
         # Raspberry Pi in San Clemente, but that's currently broken.
         self._jflei_com.cname("*.sc", "sc.jflei.com")
+
+    def _legacy_snowdon(self):
+        # snowdon.jflei.com
+        # NOTE: colusa.jflei.com is a DDNS entry that's managed by strider (our
+        # primary Colusa router).
+        self._jflei_com.cname("*.snowdon", "colusa.jflei.com")
+        self._jflei_com.cname("snowdon", "colusa.jflei.com")
 
     def _snow(self):
         # snow.jflei.com

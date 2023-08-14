@@ -19,6 +19,8 @@ config dnsmasq
 	list address '/aragorn.lan/192.168.1.2'
 	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf)
 	list address '/snow.jflei.com/192.168.1.110'
+	# Legacy: hardcode *.clark.snowdon.jflei.com to clark's ip address (see /etc/dnsmasq.conf)
+	list address '/clark.snowdon.jflei.com/192.168.1.110'
 
 config dhcp 'lan'
 	option interface 'lan'
