@@ -8,6 +8,8 @@ from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .nix_cache import NixCache
+from .nextcloud import Nextcloud
+from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
 
@@ -15,6 +17,7 @@ from .legacy_redirects import LegacyRedirects
 def build_app():
     Dns()
     snowauth = Snowauth()
+    snow_state = SnowState()
 
     LegacyRedirects()
 
@@ -27,6 +30,7 @@ def build_app():
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
     NixCache(namespace="default", snowauth=snowauth)
+    Nextcloud(snowauth=snowauth)
 
     ###
     ### Some stuff that's useful to turn on as necessary, but not stuff I want running 24/7

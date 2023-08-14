@@ -152,9 +152,11 @@ def http_ingress(
     else:
         parsed = urlparse(base_url)
         host = parsed.hostname
-        assert host
+        assert host is not None
         path = parsed.path
-        assert path
+        assert path is not None
+        if path == "":
+            path = "/"
 
     if traefik_middlewares is None:
         traefik_middlewares = []
@@ -232,6 +234,7 @@ class Database:
     namespace: str
     admin_username: str
     admin_password: str
+    schema: str
 
     def hostname(self, fqdn: bool = False):
         return f"{self.name}.{self.namespace}.svc.cluster.local" if fqdn else self.name
@@ -299,4 +302,5 @@ def declare_psql(
         namespace=namespace,
         admin_username=admin_username,
         admin_password=admin_password,
+        schema=schema,
     )

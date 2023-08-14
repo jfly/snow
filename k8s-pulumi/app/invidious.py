@@ -9,8 +9,9 @@ from pulumi_kubernetes.rbac.v1 import (
 )
 import yaml
 from typing import Literal, Optional
-from .snowauth import Snowauth, Access, deage
+from .snowauth import Snowauth, Access
 from .util import declare_psql
+from .deage import deage
 
 
 @dataclasses.dataclass

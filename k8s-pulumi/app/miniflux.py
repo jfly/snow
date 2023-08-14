@@ -1,4 +1,5 @@
-from .snowauth import Snowauth, deage, Access
+from .snowauth import Snowauth, Access
+from .deage import deage
 from .util import declare_psql
 
 
