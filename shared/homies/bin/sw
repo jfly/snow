@@ -4,6 +4,7 @@
 import contextlib
 import argparse
 import time
+import sys
 
 
 def main():
@@ -46,7 +47,7 @@ def count(down_from_seconds: int | None = None):
             _count(down_from_seconds=down_from_seconds)
         except KeyboardInterrupt:
             # Don't vomit to the screen when the user does a ctrl-c
-            pass
+            sys.exit(1)
 
 
 def _count(down_from_seconds: int | None = None):
