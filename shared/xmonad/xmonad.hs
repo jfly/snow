@@ -3,6 +3,7 @@ import Data.List
 import System.Exit
 import Graphics.X11.ExtraTypes.XF86
 
+import XMonad.Layout.Hidden
 import XMonad hiding ( (|||) ) -- don't use the normal ||| operator
 import XMonad.Layout.LayoutCombinators -- use the one from LayoutCombinators instead
 import XMonad.Config.Desktop
@@ -25,7 +26,7 @@ myModMask = mod4Mask
 myTerminal = "alacritty"
 tall = Tall 1 (3/100) (1/2)
 threeCol = ThreeCol 1 (3/100) (0.36) -- just enough space for 100 columns wide in vim
-myLayout = avoidStruts $ smartBorders $ toggleLayouts Full tall ||| toggleLayouts Full threeCol ||| toggleLayouts Full (Mirror tall)
+myLayout = hiddenWindows $ avoidStruts $ smartBorders $ toggleLayouts Full tall ||| toggleLayouts Full threeCol ||| toggleLayouts Full (Mirror tall)
 
 myBorderWidth = 2
 
@@ -37,12 +38,16 @@ myWorkspaceKeys = [xK_grave] ++ [xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal, xK_
 
 workspaceSenders = [ appName =? ("send to " ++ wsName) --> doShift wsName | wsName <- myWorkspaces ]
 
+hideQuery = ask >>= \w -> liftX (hideWindow w) >> doF (W.delete w)
+
 windowPlacement = composeAll ([
         -- use `xprop` to get window information:
         -- https://wiki.haskell.org/Xmonad/Frequently_asked_questions#A_handy_script_to_print_out_window_information
 
         className =? "Chromium" <&&> fmap (isInfixOf "Google Play Music") title --> doShift musicWs,
         appName =? "meet.google.com__zhw-huyd-oam" <&&> className =? "Chromium" --> doShift videoWs,
+        fmap (isInfixOf "is sharing a window.") title --> hideQuery,
+        fmap (isInfixOf "is sharing your screen.") title --> hideQuery,
 
         -- Music stuff
         className =? "Mcg" --> doShift musicWs,
@@ -68,6 +73,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((modMask,               xK_m     ), windows W.focusMaster  )
     , ((modMask, xK_n), windows W.focusMaster) -- %! Move focus to the master window
     , ((modMask, xK_Return), focusUrgent) -- %! Focus an rgent window if there is one
+
+    -- shortcuts for hiding/unhiding windows
+    , ((modMask, xK_backslash), withFocused hideWindow)
+    , ((modMask .|. shiftMask, xK_backslash), popNewestHiddenWindow)
 
     -- modifying the window order
     , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  ) -- %! Swap the focused window with the next window
