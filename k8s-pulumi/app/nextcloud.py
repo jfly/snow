@@ -140,7 +140,7 @@ class Nextcloud:
             "nextcloud",
             ChartOpts(
                 chart="nextcloud",
-                version="3.5.21",
+                version="3.5.22",
                 fetch_opts=FetchOpts(repo="https://nextcloud.github.io/helm/"),
                 values={
                     "nextcloud": {
