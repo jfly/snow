@@ -1,0 +1,50 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p python3
+
+import datetime as dt
+import argparse
+import time
+import sys
+
+def with_timestamps(prefix_format: str):
+    prev_ts = time.time()
+    for line in sys.stdin:
+        ts = time.time()
+        delta_seconds = (ts - prev_ts)
+
+        abs = dt.datetime.now().isoformat()
+        rel = f"+{delta_seconds:05.2f}"
+        prefix = prefix_format.replace("%abs", abs).replace("%rel", rel)
+
+        print(f"{prefix}{line}", end="")
+
+        prev_ts = ts
+
+def main():
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "-f", "--format",
+        default="%%abs: ",
+        help='Format to prefix lines with. Valid placeholders are %%abs and %%rel for absolute and relative timestamps, respectively. Defaults to "%%abs: "'
+    )
+    group.add_argument(
+        "-r", "--relative",
+        dest="format",
+        action="store_const",
+        const="%rel: ",
+        help='Use a relative timestamp prefix. Equivalent to --format="%%rel: "',
+    )
+    group.add_argument(
+        "-a", "--absolute",
+        dest="format",
+        action="store_const",
+        const="%abs: ",
+        help='Use a relative timestamp prefix. Equivalent to --format="%%abs: "',
+    )
+
+    args = parser.parse_args()
+    with_timestamps(prefix_format=args.format)
+
+if __name__ == "__main__":
+    main()
