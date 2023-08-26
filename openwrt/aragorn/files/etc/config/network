@@ -1,3 +1,4 @@
+
 config interface 'loopback'
 	option device 'lo'
 	option proto 'static'
@@ -25,14 +26,3 @@ config interface 'lan'
 	option gateway '192.168.1.1'
 	list dns '192.168.1.1'
 
-config interface 'wan'
-	option device 'wan'
-	option proto 'dhcp'
-	option auto '0'
-
-config interface 'wan6'
-	option device 'wan'
-	option proto 'dhcpv6'
-	option auto '0'
-	option reqaddress 'try'
-	option reqprefix 'auto'

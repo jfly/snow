@@ -17,11 +17,11 @@ To deploy one machine:
 }
 
 target=""
-PREVIEW=0
+DRY_RUN=0
 for i in "$@"; do
     case $i in
-        --preview | -p)
-            PREVIEW=1
+        --dry-run)
+            DRY_RUN=1
             ;;
         --help | -h)
             help
@@ -47,7 +47,7 @@ for i in "$@"; do
 done
 
 function build_containers() {
-    [ $PREVIEW == 1 ] && echo "--preview not supported for build_containers, sorry!" && exit 1
+    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for build_containers, sorry!" && exit 1
 
     for f in k8s/**/Dockerfile; do
         dir=$(dirname "$f")
@@ -84,7 +84,7 @@ function build_containers() {
 }
 
 function deploy_k8s() {
-    [ $PREVIEW == 1 ] && echo "--preview not supported for deploy_k8s, sorry!" && exit 1
+    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_k8s, sorry!" && exit 1
 
     # Install cert-manager
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
@@ -102,7 +102,7 @@ function deploy_nix() {
     shift
 
     if [ "$target" = "$(hostname)" ]; then
-        if [ $PREVIEW == 1 ]; then
+        if [ $DRY_RUN == 1 ]; then
             echo "Building (but not deploying!) new system..."
             new_system=$(nix build .#nixosConfigurations.pattern.config.system.build.toplevel --print-out-paths --no-link)
             nvd diff /run/current-system "$new_system"
@@ -119,7 +119,7 @@ function deploy_nix() {
 
         colmena apply-local --sudo
     else
-        [ $PREVIEW == 1 ] && echo "--preview not supported for deploy_nix for remote hosts, sorry!" && exit 1
+        [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_nix for remote hosts, sorry!" && exit 1
         colmena apply --on "$target"
     fi
 }
@@ -146,7 +146,7 @@ function deploy_nix_router() {
         exit 0
     fi
 
-    echo "It looks $hostname is running the wrong version of stuff (desired $desired_nix_version, running: $actual_nix_version)"
+    echo "It looks $hostname is out of date (desired $desired_nix_version, running: $actual_nix_version)"
 
     # Basically copying
     # https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions
@@ -154,9 +154,13 @@ function deploy_nix_router() {
     files=("$result"/*-sysupgrade.*)
     file=${files[0]}
     echo "Successfully built $file"
-    dest_filename=/tmp/firmware_image-sysupgrade
-    scp -O "$file" "$hostname":$dest_filename
-    ssh "$hostname" sysupgrade -v -n $dest_filename
+    if [ $DRY_RUN == 1 ]; then
+        echo "Not actually deploying because we're doing a dry run"
+    else
+        dest_filename=/tmp/firmware_image-sysupgrade
+        scp -O "$file" "$hostname":$dest_filename
+        ssh "$hostname" sysupgrade -v -n $dest_filename
+    fi
 }
 
 tools/deage
