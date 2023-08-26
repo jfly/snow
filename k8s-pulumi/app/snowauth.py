@@ -104,7 +104,7 @@ class Snowauth:
                     -----END AGE ENCRYPTED FILE-----
                     """
                 ),
-                "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com",
+                "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com,billsmith4804@gmail.com",
                 # TODO: figure out how to limit permissions for some users "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com",
                 "LOGOUT_REDIRECT": "https://snow.jflei.com",
             },
