@@ -53,6 +53,16 @@
           uq0FTh+oKCJ00kRgWVAYWwlCP+A=
           -----END AGE ENCRYPTED FILE-----
         '';
+        wifiIotPassword = pkgs.deage.string ''
+          -----BEGIN AGE ENCRYPTED FILE-----
+          YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBObmJ5Q1NoOFkxSnFPdlYz
+          bjAxVzZWd1VvbXBsOWtkRklzVUtPVnNIdkNzCmJSdlBXSmNGc3JRbm93VXBWaHlF
+          V1pPZEMvVmgwUXdoaVNDM2hENmVBQUEKLS0tIDNEdENXOE1SQUhpaWdMR0htVlc4
+          QUNmd2ZGWVVLQnZ5bFBEQUgvOXZlSDAK8byIeNYA/+PhYh/a9Y3kZsRpSx42wFFY
+          W59sGFTSHLPDqALbQLqu2ywq
+          -----END AGE ENCRYPTED FILE-----
+        '';
+
 
         image-no-version = profiles.identifyProfile "linksys_e8450-ubi" // {
           packages = [
@@ -102,7 +112,8 @@
               --replace "@cloudflare_api_token@" "${cloudflareApiToken}"
 
             substituteInPlace $out/etc/config/wireless \
-              --replace "@wifi_password@" "${wifiPassword}"
+              --replace "@wifi_password@" "${wifiPassword}" \
+              --replace "@wifi_iot_password@" "${wifiIotPassword}"
           '';
         };
         built-no-version = openwrt-imagebuilder.lib.build image-no-version;

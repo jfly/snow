@@ -1,16 +1,16 @@
 
 config defaults
-	option syn_flood '1'
 	option input 'REJECT'
 	option output 'ACCEPT'
 	option forward 'REJECT'
+	option synflood_protect '1'
 
 config zone
 	option name 'lan'
-	list network 'lan'
 	option input 'ACCEPT'
 	option output 'ACCEPT'
 	option forward 'ACCEPT'
+	list network 'lan'
 
 config zone
 	option name 'wan'
@@ -21,6 +21,13 @@ config zone
 	option forward 'REJECT'
 	option masq '1'
 	option mtu_fix '1'
+
+config zone 'iot'
+	option name 'iot'
+	option input 'REJECT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	list network 'iot'
 
 config forwarding
 	option src 'lan'
@@ -155,3 +162,23 @@ config redirect
 	option src_dport '22000'
 	option dest_ip '192.168.1.110'
 	option dest_port '22000'
+
+config rule 'iot_dns'
+	option name 'Allow-DNS-iot'
+	option src 'iot'
+	option dest_port '53'
+	option proto 'tcp udp'
+	option target 'ACCEPT'
+
+config rule 'iot_dhcp'
+	option name 'Allow-DHCP-iot'
+	option src 'iot'
+	option dest_port '67'
+	option proto 'udp'
+	option family 'ipv4'
+	option target 'ACCEPT'
+
+config forwarding
+	option src 'lan'
+	option dest 'iot'
+

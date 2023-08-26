@@ -31,3 +31,13 @@ config interface 'wan6'
 	option device 'wan'
 	option proto 'dhcpv6'
 
+config device 'iot_dev'
+	option type 'bridge'
+	option name 'br-iot'
+
+config interface 'iot'
+	option proto 'static'
+	option device 'br-iot'
+	option ipaddr '192.168.3.1'
+	option netmask '255.255.255.0'
+
