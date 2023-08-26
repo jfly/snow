@@ -60,11 +60,6 @@ config host
 	option ip '192.168.1.202'
 	option mac '00:A0:DE:CF:48:EF'
 
-config host
-	option name 'taran'
-	option ip '192.168.1.101'
-	option mac '50:14:79:36:E7:ED'
-
 config dhcp 'iot'
 	option interface 'iot'
 	option start '100'
@@ -72,3 +67,7 @@ config dhcp 'iot'
 	option leasetime '1h'
 	option netmask '255.255.255.0'
 
+config host
+	option name 'taran'
+	option ip '192.168.3.101'
+	option mac '50:14:79:36:E7:ED'
