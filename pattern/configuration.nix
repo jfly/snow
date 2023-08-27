@@ -1,7 +1,9 @@
 { agenix, agenix-rooter, parsec-gaming, home-manager, knock-flake }:
 { config, pkgs, lib, ... }:
 
-let knock = knock-flake.packages.${pkgs.system}.knock;
+let
+  knock = knock-flake.packages.${pkgs.system}.knock;
+  odmpy = pkgs.callPackage ../shared/odmpy { };
 in
 {
   _module.args.parsec-gaming = parsec-gaming;
@@ -88,6 +90,7 @@ in
     ripgrep
     (pkgs.callPackage ../shared/sd { })
     knock
+    odmpy
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in
     # shared/my-nix.
