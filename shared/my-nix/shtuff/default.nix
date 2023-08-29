@@ -29,6 +29,10 @@ let
       setuptools_scm
     ];
 
+    nativeCheckInputs = [
+      pip
+    ];
+
     checkPhase = ''
       # venv uses ensurepip internally to install pip, which requires
       # internet access, and fails in an isolated build environment.
