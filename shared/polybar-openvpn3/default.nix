@@ -18,6 +18,10 @@ with pkgs.python3Packages; buildPythonApplication {
           url = "https://github.com/jfly/openvpn3-linux/commit/e0a8a3c5c2ef10509f4bee844714d6b072f3b690.patch";
           sha256 = "sha256-YCtJyXcjOG1jCUQk1jtC9JqCSfSie2tMyEu+CFZ9ZRg=";
         })
+        (pkgs.fetchpatch {
+          url = "https://github.com/jfly/openvpn3-linux/commit/3663bd4cbaa7a82608bd1b65b4e24ca822e7412d.patch";
+          sha256 = "sha256-DQv7I/zQlN+bLUg/m4spPG132k74FSA0KFSGVD6OXdE=";
+        })
       ];
     }))
   ];
