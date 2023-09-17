@@ -64,6 +64,20 @@ class Snowauth:
             spec=traefik.v1alpha1.MiddlewareSpecArgs(
                 ip_white_list=traefik.v1alpha1.MiddlewareSpecIpWhiteListArgs(
                     source_range=["192.168.1.1/24"],
+                    # Reject requests with a 404 rather than the default 403.
+                    # This is arguably more secure, as we don't reveal the
+                    # existence of a page (although the fact that we have a
+                    # HTTPS cert for the domain is perhaps revealing...).
+                    # Confusingly, this is also super important for Bitwarden.
+                    # When off the home network, the mobile app
+                    # (understandably) still makes an api call when logging in,
+                    # presumably in order to sync the vault.
+                    # However, if it gets a 403, the app immediately logs out
+                    # (deletes the local encrypted vault and asks you to log in
+                    # again). However, since I'm not home, I can't even log in
+                    # again! Returning a 404 instead makes the app behave more
+                    # nicely: it'll let me use it offline.
+                    reject_status_code=404,
                 ),
             ),
         )

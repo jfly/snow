@@ -2081,6 +2081,8 @@ class MiddlewareSpecIpWhiteList(dict):
         suggest = None
         if key == "ipStrategy":
             suggest = "ip_strategy"
+        elif key == "rejectStatusCode":
+            suggest = "reject_status_code"
         elif key == "sourceRange":
             suggest = "source_range"
 
@@ -2097,14 +2099,18 @@ class MiddlewareSpecIpWhiteList(dict):
 
     def __init__(__self__, *,
                  ip_strategy: Optional['outputs.MiddlewareSpecIpWhiteListIpStrategy'] = None,
+                 reject_status_code: Optional[int] = None,
                  source_range: Optional[Sequence[str]] = None):
         """
         IPWhiteList holds the IP whitelist middleware configuration. This middleware accepts / refuses requests based on the client IP. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ipwhitelist/
         :param 'MiddlewareSpecIpWhiteListIpStrategyArgs' ip_strategy: IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ipwhitelist/#ipstrategy
+        :param int reject_status_code: RejectStatusCode defines the HTTP status code used for refused requests. If not set, the default is 403 (Forbidden).
         :param Sequence[str] source_range: SourceRange defines the set of allowed IPs (or ranges of allowed IPs by using CIDR notation).
         """
         if ip_strategy is not None:
             pulumi.set(__self__, "ip_strategy", ip_strategy)
+        if reject_status_code is not None:
+            pulumi.set(__self__, "reject_status_code", reject_status_code)
         if source_range is not None:
             pulumi.set(__self__, "source_range", source_range)
 
@@ -2115,6 +2121,14 @@ class MiddlewareSpecIpWhiteList(dict):
         IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ipwhitelist/#ipstrategy
         """
         return pulumi.get(self, "ip_strategy")
+
+    @property
+    @pulumi.getter(name="rejectStatusCode")
+    def reject_status_code(self) -> Optional[int]:
+        """
+        RejectStatusCode defines the HTTP status code used for refused requests. If not set, the default is 403 (Forbidden).
+        """
+        return pulumi.get(self, "reject_status_code")
 
     @property
     @pulumi.getter(name="sourceRange")
