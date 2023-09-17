@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+# Wrap the given programs in a shell script that sets LD_LIBRARY_PATH. This is
+# useful for to help non-nixified binaries (such as pip installed binary wheels
+# that contain .so files) find dynamic libraries on the system.
+# Often, you would run this command to wrap the python executable in a venv
+# where you want to use non-nix tools (such as pip) to install software.
+
+set -euo pipefail
+
+function wrap() {
+    local wrapme
+    wrapme="$1"
+
+    local force
+    force="$2"
+
+    # Add more libraries here as needed.
+    EXTRA_LD_LIBRARY_PATH="$(nix build --no-link --print-out-paths 'nixpkgs#gcc11Stdenv.cc.cc.lib')/lib"
+    EXTRA_LD_LIBRARY_PATH="$EXTRA_LD_LIBRARY_PATH:$(nix build --no-link --print-out-paths 'nixpkgs#zlib')/lib"
+    EXTRA_LD_LIBRARY_PATH="$EXTRA_LD_LIBRARY_PATH:$(nix build --no-link --print-out-paths 'nixpkgs#fontconfig.lib')/lib" # added for npm-installed phantomjs-prebuilt
+
+    wrapped_filename="$(dirname "$wrapme")/.$(basename "$wrapme")-wrapped"
+
+    if [ -e "$wrapped_filename" ]; then
+        echo "$wrapme appears to already be wrapped! ($wrapped_filename already exists)" >/dev/stderr
+        if [ "$force" = "0" ]; then
+            echo "Rerun with --force unwrap and rewrap." >/dev/stderr
+            exit 1
+        else
+            echo "Since '--force' was specified, I'm going to unwrap $wrapped_filename to $wrapme before wrapping." >/dev/stderr
+            mv "$wrapped_filename" "$wrapme"
+        fi
+    fi
+
+    mv "$wrapme" "$wrapped_filename"
+    cat >"$wrapme" <<-"EOF"
+#!/usr/bin/env bash
+
+BASEDIR=$(dirname "$0")
+
+export LD_LIBRARY_PATH
+LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:@EXTRA_LD_LIBRARY_PATH@"
+
+# Remove a leading ':' if there is one.
+if [[ "$LD_LIBRARY_PATH" == :* ]]; then
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH#:}"
+fi
+
+echo "*** PSA *** nix specific hack, setting LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >/dev/stderr
+
+exec "$BASEDIR/.python-wrapped" "$@"
+EOF
+    chmod +x "$wrapme"
+
+    sed -i "s!@EXTRA_LD_LIBRARY_PATH@!$EXTRA_LD_LIBRARY_PATH!" "$wrapme"
+
+    echo "Successfully wrapped $wrapme -> $wrapped_filename"
+}
+
+main() {
+    local positional_args
+    positional_args=()
+
+    local force
+    force="0"
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -f | --force)
+                force="1"
+                shift # past argument
+                ;;
+            --* | -*)
+                echo "Unknown option $1"
+                exit 1
+                ;;
+            *)
+                positional_args+=("$1") # save positional arg
+                shift                   # past argument
+                ;;
+        esac
+    done
+
+    if [ ${#positional_args[@]} -ne 1 ]; then
+        echo "You must specify one or more programs to wrap!" >/dev/stderr
+        exit 1
+    fi
+
+    for wrapme in "${positional_args[@]}"; do
+        wrap "$wrapme" "$force"
+    done
+}
+
+main "$@"
