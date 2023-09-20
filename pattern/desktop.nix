@@ -306,5 +306,8 @@ in
       '';
     })
     xcwd
+
+    ### Misc utils
+    (pkgs.callPackage ../shared/desk-speakers { })
   ];
 }

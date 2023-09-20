@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "desk-speakers"
+dependencies = []
+dynamic = ["version"]
+
+[project.scripts]
+desk-speakers = "desk_speakers.desk_speakers:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
