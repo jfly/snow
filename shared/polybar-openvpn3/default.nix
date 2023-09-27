@@ -11,16 +11,10 @@ with pkgs.python3Packages; buildPythonApplication {
   propagatedBuildInputs = pkgs.openvpn3.pythonPath ++ [
     (pkgs.openvpn3.overrideAttrs (oldAttrs: {
       patches = [
-        # TODO: remove this if/when
-        # https://sourceforge.net/p/openvpn/mailman/message/37868192/ is
-        # accepted and makes its way to nixpkgs-unstable.
+        # TODO: remove this when v21 of openvpn3 lands on nixpkgs-unstable.
         (pkgs.fetchpatch {
-          url = "https://github.com/jfly/openvpn3-linux/commit/e0a8a3c5c2ef10509f4bee844714d6b072f3b690.patch";
-          sha256 = "sha256-YCtJyXcjOG1jCUQk1jtC9JqCSfSie2tMyEu+CFZ9ZRg=";
-        })
-        (pkgs.fetchpatch {
-          url = "https://github.com/jfly/openvpn3-linux/commit/3663bd4cbaa7a82608bd1b65b4e24ca822e7412d.patch";
-          sha256 = "sha256-DQv7I/zQlN+bLUg/m4spPG132k74FSA0KFSGVD6OXdE=";
+          url = "https://github.com/OpenVPN/openvpn3-linux/commit/ba6fe37e7e28d1e633b56052383da3072f03c11e.patch";
+          sha256 = "sha256-MBXDEfeyg0VQGp9GYcpTZyLB0h6LX1qlaqZSDhOAJgQ=";
         })
       ];
     }))

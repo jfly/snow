@@ -1,7 +1,6 @@
 { pkgs, fetchFromGitHub, coreutils, lib, stdenv }:
 let
   versions = {
-    # This is a lie: it's not actually 8.0.28.
     "3.81.0" = pkgs.pulumi.override {
       # Urg, overriding src for go modules is a bit of a pain. See
       # https://github.com/NixOS/nixpkgs/issues/86349 for a discussion about

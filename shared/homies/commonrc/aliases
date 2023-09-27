@@ -243,8 +243,6 @@ function gnpr {
     o "https://github.com/${upstream}/compare/master...${origin_repo}:${current_branch}?expand=1"
 }
 
-alias cdk='./cdk'
-
 co() {
     dir=$(jgit co "$@")
     cd "$dir"
