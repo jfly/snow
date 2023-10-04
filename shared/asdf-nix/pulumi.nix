@@ -1,12 +1,12 @@
 { pkgs, fetchFromGitHub, coreutils, lib, stdenv }:
 let
   versions = {
-    "3.81.0" = pkgs.pulumi.override {
+    "3.86.0" = pkgs.pulumi.override {
       # Urg, overriding src for go modules is a bit of a pain. See
       # https://github.com/NixOS/nixpkgs/issues/86349 for a discussion about
       # this.
       buildGoModule = args: pkgs.buildGoModule (args // rec {
-        version = "3.81.0";
+        version = "3.86.0";
 
         src = fetchFromGitHub {
           owner = args.pname;
