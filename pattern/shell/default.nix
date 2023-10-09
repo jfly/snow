@@ -33,7 +33,15 @@ in
       source ${../../shared/homies/zshrc}
       source ${../../shared/homies/commonrc/aliases}
       ${my-yazi.zshrc}
+
+      eval "$(zoxide init zsh)"
     '';
+    shellAliases = {
+      l = "eza --icons -alh";
+      ll = "eza --icons -l";
+      ls = "eza --icons";
+    };
+
     promptInit = ''
       # Load p10k prompt
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
@@ -41,8 +49,6 @@ in
 
       # TODO: re-investigate starship sometime
       # eval "$(starship init zsh)"
-
-      eval "$(zoxide init zsh)"
     '';
   };
   programs.tmux = {
@@ -66,6 +72,7 @@ in
     tree
     my-yazi.drv
     zoxide
+    eza
 
     ### Misc utils
     psmisc # provides pstree
