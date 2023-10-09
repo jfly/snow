@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, stdenv, ... }:
 
 let
   jgit = pkgs.callPackage ../../shared/jgit { };
+  my-yazi = pkgs.callPackage ../../shared/my-yazi { };
 in
 {
   imports = [
@@ -25,13 +26,13 @@ in
       ### Load ohmyzsh
       ###
       plugins=(git)
-      plugins+=(z)
       plugins+=(fzf)
       source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
       ##################################
 
       source ${../../shared/homies/zshrc}
       source ${../../shared/homies/commonrc/aliases}
+      ${my-yazi.zshrc}
     '';
     promptInit = ''
       # Load p10k prompt
@@ -40,6 +41,8 @@ in
 
       # TODO: re-investigate starship sometime
       # eval "$(starship init zsh)"
+
+      eval "$(zoxide init zsh)"
     '';
   };
   programs.tmux = {
@@ -61,6 +64,8 @@ in
     ### Explore filesystem
     file
     tree
+    my-yazi.drv
+    zoxide
 
     ### Misc utils
     psmisc # provides pstree
