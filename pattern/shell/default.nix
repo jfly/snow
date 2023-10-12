@@ -79,5 +79,6 @@ in
     acpi # check laptop battery
     pwgen
     htop
+    moreutils # vidir
   ];
 }
