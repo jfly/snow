@@ -30,16 +30,9 @@
           DFA3oCgiHSO/k+lQoWMZoLsIcHWoxIRz52TfnQ==
           -----END AGE ENCRYPTED FILE-----
         '';
-        # TODO: share with other routers
-        wifiPassword = pkgs.deage.string ''
-          -----BEGIN AGE ENCRYPTED FILE-----
-          YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiMjFGNTFPYTVXcWIyeW4x
-          M0VuOURsQmZJbXE0QWY1RjNmVnp5VjBKTlRZCllsYitvWWlVY0N0U3hXN1lVTmJO
-          Z3ljMHRrYkJVWHd3cU8vSU5MSUwxV00KLS0tIEVuU1p4eFRKTkxNZkk3NzZQdmds
-          WmhzT2NoUEJiNCtTTUNmRGU4Qjh6eU0K4xTdrdazTIOpP9vmdaigLMmHfSfEEnSu
-          uq0FTh+oKCJ00kRgWVAYWwlCP+A=
-          -----END AGE ENCRYPTED FILE-----
-        '';
+
+        routers-shared = pkgs.callPackage ../shared.nix { };
+        identities = import ../../shared/identities.nix;
 
         image-no-version = profiles.identifyProfile "tplink_archer-a6-v3" // {
           packages = [ "luci" ];
@@ -73,7 +66,10 @@
             cp -fr ${config}/etc/* $out/etc/
 
             substituteInPlace $out/etc/config/wireless \
-              --replace "@wifi_password@" "${wifiPassword}"
+              --replace "@wifi_password@" "${routers-shared.wifi.home.password}"
+
+            substituteInPlace $out/etc/dropbear/authorized_keys \
+              --replace "@authorized_key@" "${identities.jfly}"
           '';
         };
         built-no-version = openwrt-imagebuilder.lib.build image-no-version;

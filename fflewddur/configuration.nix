@@ -1,7 +1,9 @@
 { agenix, agenix-rooter }:
 { config, lib, pkgs, ... }:
 
-rec {
+let identities = import ../shared/identities.nix;
+in
+{
   imports =
     [
       ./boot.nix
@@ -49,13 +51,9 @@ rec {
   # Allow ssh access as root user.
   users.users.root = {
     openssh.authorizedKeys.keys = [
-      # Jeremy's public key
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDnasT8sq608RevJt+DzyQF4ppsYzq7P0yBxxaI8EjYsC1LxzZHqZpxRmz3iHYyy3ax4wmoak4Qy/dIvIH6l8R5rCab9ZRWXWKp+EYnn2MNUGFMolo4ark1UUll1+Dzm8saNvIMC7Dr5FIlrlQoP9jKOIDFM+cVTUOqwwyFU+IedetjmT47mXVQ/QHgsdDXM5SwKdtM8YGWxrhA3n4WgwmWSYQZyoSxdiQkoatABOqSgPcmczyZ7HqwajgL81n/Jaj8D6KVfJsOm/PU4O5MO5GU4ya6CcQVMn/elBfZIIsh+5rUyNH2GxBdT7luvHwAiHs/jWoyWmH5mr+6IG6nKGmhv2kRPaEfpvHoGo/gM6j/PvW18nynlWkajPqsy5D/3+4UoSPwPNNn9T0yFauExq+AReb88/Ixez6YH2jIRmtlIV4njKL8c7qdULnTrj8SZnz3tMiWgmY86+w+LsDcWHVADINk9rlUPGZcmTD06GLXZjNkWOvC/deLgNnApWTPpwEbZWzugeOtl/busMKob7acH1/F7rRB9nMj4Dtayjvth9Lbf8UDu7Hi8147ADxJJpVwSIIEKAFDeBPGqiuVnYm66dxdvjRzLmdf5LAGh9wy88FpV9btWeNoKSQt5gy7de2zVyBjix4l17ZbYtGiKEvhHJlVg7H8AlP6m9BbA6aeYw=="
-      # Rachel's public key
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPmJtvfl3mYWXAc/NSvJhWVSAytn2nKCXxghn1kh/iQ5 rmeresman@gmail.com"
-      # fflam's public key
-      # TODO: actually share this configuration between the hosts
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxw+hsi7OFBP9tN1S/8PErm/AHWxcyJXC2k6q+96jqa fflam"
+      identities.jfly
+      identities.rachel
+      identities.fflam
     ];
     hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
   };
