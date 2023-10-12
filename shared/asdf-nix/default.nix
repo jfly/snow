@@ -6,6 +6,7 @@ let
   asdfPlugins = {
     python = pkgs.callPackage ./python.nix { };
     java = pkgs.callPackage ./java.nix { };
+    pipenv = pkgs.callPackage ./pipenv.nix { };
     maven = pkgs.callPackage ./maven.nix { };
     thrift = pkgs.callPackage ./thrift { };
     poetry = pkgs.callPackage ./poetry.nix { };
