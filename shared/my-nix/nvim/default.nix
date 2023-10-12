@@ -2,7 +2,7 @@
 
 let
   # TODO: upstream this to nixpkgs?
-  vim-dim = (pkgs.vimUtils.buildVimPluginFrom2Nix {
+  vim-dim = (pkgs.vimUtils.buildVimPlugin {
     pname = "vim-dim";
     version = "1.1.0";
     src = pkgs.fetchFromGitHub {
