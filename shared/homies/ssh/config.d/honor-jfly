@@ -10,31 +10,6 @@ Host bastion.honordev.com bastion
     SetEnv TERM=xterm-256color
     User jeremy
 
-Host h4g2g
-    Hostname g2g.honordev.com
-    User pi
-
-Host h4interview
-    Hostname bugs.honor-projects.com
-    IdentityFile ~/.ssh/aws/experimental-eng-interview.pem
-    User ubuntu
-    RemoteCommand tmux attach
-    RequestTTY yes
-
-Host h4webhook-tunnel
-    IdentityFile ~/.ssh/aws/experimental-hackday.pem
-    IdentitiesOnly yes
-    Hostname 34.219.121.184
-    User ubuntu
-    RemoteForward 4001 localhost:5050
-
-Host h4mac
-    IdentityFile ~/.ssh/aws/experimental-jeremy.pem
-    IdentitiesOnly yes
-    Hostname 10.1.25.182
-    ProxyJump bastion
-    User ec2-user
-
 Host h4-*
     ProxyCommand h4-bastion-proxy %h %p %n
     # Urg, we're still on ubuntu 18.04 and it doesn't understand "alacritty"

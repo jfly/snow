@@ -1,0 +1,40 @@
+# vi: ft=sshconfig
+
+# Primary router
+Host strider
+    HostName strider
+    User root
+
+# Secondary router ("dumb ap")
+Host aragorn
+    HostName aragorn
+    User root
+
+Host clark
+    HostName snow.jflei.com
+    User root
+
+Host dallben
+    ProxyJump clark
+    User dallben
+
+Host fflewddur
+    User root
+
+Host fflam
+    User root
+
+Host thermometer
+    HostName thermometer
+    User root
+
+Host thermostat
+    HostName thermostat
+    User root
+
+Host garage
+    HostName garage
+    User root
+
+Host ramscan
+    User alarm
