@@ -138,16 +138,19 @@ in
     programs.openvpn3.enable = true;
     # With systemd-resolved running, openvpn3 won't stomp on /etc/resolv.conf.
     services.resolved.enable = true;
-    # Disable systemd-resolved resolver to avoid a port conflict with dnsmasq.
-    services.resolved.extraConfig = ''
-      DNSStubListener=no
-    '';
 
     # Set up a local DNS server
-    networking.resolvconf.useLocalResolver = true;
     services.dnsmasq = {
       enable = true;
+      # Configure the system to actually *use* dnsmasq (in this case, this
+      # updates systemd-resolved to use 127.0.0.1 as a DNS resolver).
+      resolveLocalQueries = true;
       settings = {
+        # Only let dnsmasq bind on the loopback interface. This prevents a port
+        # conflict with systemd-resolved.
+        interface = "lo";
+        bind-interfaces = true;
+
         address = [
           "/local.honor/127.0.0.1"
           # See notes above about `virtualisation.docker.daemon.settings.dns` to

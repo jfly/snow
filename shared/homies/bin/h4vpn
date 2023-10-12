@@ -19,4 +19,12 @@ function toggle() {
     fi
 }
 
+# Note: I've manually edited this .ovpn file to ignore the pushed DNS server.
+# However, it should be possible to instead configure things so we only use
+# that DNS server for some domains. See
+# https://github.com/OpenVPN/openvpn3-linux/issues/208 for a question I filed
+# about this.
+# If we don't get an answer there, we could implement this with a custom script.
+# See script documentation here: https://github.com/OpenVPN/openvpn3-linux/blob/master/docs/man/openvpn2.1.rst#script-execution
+# The command to run will be something like: `sudo resolvectl domain tun0 '~honorcare.com'`.
 toggle ~/sync/linux-secrets/h4-vpn/ovpn-access-server.ovpn
