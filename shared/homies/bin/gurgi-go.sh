@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p wol
+#!nix-shell -i bash -p wol -p moonlight-qt
 # shellcheck shell=bash
 
-wol FC:AA:14:98:7C:54
+moonlight stream gurgi Desktop
+# wol FC:AA:14:98:7C:54
