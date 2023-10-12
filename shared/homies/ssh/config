@@ -3,6 +3,9 @@ Include config.d/*
 ServerAliveInterval 120
 AddKeysToAgent yes
 
+IdentityFile ~/sync/linux-secrets/.ssh/id_rsa
+UserKnownHostsFile ~/sync/linux-secrets/.ssh/known_hosts
+
 ### jfly stuff
 Host ocf
     HostName ssh.ocf.berkeley.edu

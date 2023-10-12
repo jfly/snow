@@ -54,9 +54,6 @@ in
       ".config/direnv/lib" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/lib";
 
       # Secrets
-      ".ssh/id_rsa" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa";
-      ".ssh/id_rsa.pub" = "${homeDir}/sync/linux-secrets/.ssh/id_rsa.pub";
-      ".ssh/known_hosts" = "${homeDir}/sync/linux-secrets/.ssh/known_hosts";
       ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";
       ".android/adbkey" = "${homeDir}/sync/linux-secrets/.android/adbkey";
       ".android/adbkey.pub" = "${homeDir}/sync/linux-secrets/.android/adbkey.pub";
