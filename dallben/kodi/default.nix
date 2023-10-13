@@ -1,14 +1,12 @@
-{ config, pkgs, myParsec, ... }:
+{ config, pkgs, ... }:
 
 let
-  myKodiPackages = pkgs.callPackage ./kodi-packages {
-    inherit myParsec;
-  };
+  myKodiPackages = pkgs.callPackage ./kodi-packages { };
   myKodi = pkgs.kodi.withPackages (builtin_kodi_packages: [
     builtin_kodi_packages.a4ksubtitles
     builtin_kodi_packages.joystick
     myKodiPackages.autoreceiver
-    myKodiPackages.parsec
+    myKodiPackages.moonlight
     myKodiPackages.tubecast
   ]);
   # This is unfortunate: it just doesn't seem to be possible to set some kodi

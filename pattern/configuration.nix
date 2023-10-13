@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter, parsec-gaming, home-manager, knock-flake }:
+{ agenix, agenix-rooter, home-manager, knock-flake }:
 { config, pkgs, lib, ... }:
 
 let
@@ -6,8 +6,6 @@ let
   odmpy = pkgs.callPackage ../shared/odmpy { };
 in
 {
-  _module.args.parsec-gaming = parsec-gaming;
-
   snow.user = {
     name = "jeremy";
     uid = 1000;
@@ -21,11 +19,6 @@ in
   # https://github.com/draios/sysdig/compare/0.31.5...dev, maybe those will fix
   # stuff up?
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  nixpkgs = {
-    config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "parsec"
-    ];
-  };
 
   deployment.targetUser = config.snow.user.name;
   nix.settings.trusted-users = [ "root" "@wheel" ];

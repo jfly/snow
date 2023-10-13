@@ -1,18 +1,9 @@
-{ agenix, agenix-rooter, parsec-gaming }:
+{ agenix, agenix-rooter }:
 { config, lib, pkgs, ... }:
 
 let identities = import ../shared/identities.nix;
 in
 {
-  # TODO: figure out a better pattern for sharing packages across a system
-  #       definition. Perhaps using overlays?
-  _module.args.myParsec = pkgs.callPackage ./parsec/derivation.nix { inherit parsec-gaming; };
-  nixpkgs = {
-    config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "parsec"
-    ];
-  };
-
   imports =
     [
       ./variables.nix
@@ -25,7 +16,6 @@ in
       ./bluetooth.nix
       ./desktop
       ./kodi
-      ./parsec
       agenix.nixosModules.default
       agenix-rooter.nixosModules.default
     ];
@@ -33,16 +23,6 @@ in
   age.rooter = {
     hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+zwjwqpX+3HR/bgVR8O0xmTzNVaRvKhzuTJr7/wjSE";
     generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
-  };
-
-  # Give gurgi ssh access so it can run stop_parsec.sh
-  # TODO: lock down permissions so that's the *only* thing it can do.
-  users.users.gurgi = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel" # Enable `sudo` for the user.
-    ];
-    openssh.authorizedKeys.keys = [ identities.gurgi ];
   };
 
   # This value determines the NixOS release from which the default

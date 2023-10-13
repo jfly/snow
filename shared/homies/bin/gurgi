@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# TODO: figure out why moonlight wastes ~6 seconds doing this DNS lookup
+gurgi=192.168.1.140
+
+# It's very annoying, but moonlight-qt and moonlight-embeded have completely
+# different command line apis. Here's an example of how to do this with
+# moonlight-embedded:
+# moonlight stream $gurgi -app Desktop -width 1920 -height 1200
+
+# This aspect ratio matches my laptop
+# Note: it's not enough to just use this resolution, you also need to update
+# the host resolution, either by hand, or with a tool like
+# https://github.com/Nonary/ResolutionAutomation/.
+# aspect_ratio=1920x1200
+
+# This is the aspect ratio we keep Gurgi at.
+aspect_ratio=1920x1080
+
+# `--absolute-mouse` makes it easier to get my mouse *out* of the stream. Not
+# sure what the downsides of it are.
+# `--capture-system-keys fullscreen` and `--display-mode windowed` work
+# together in a quite useful way: by default, xmonad on my laptop still gets
+# control of the mod key (Windows key). However, if I'm really going to be
+# spending some time in the stream, I can enable fullscreen mode
+# (ctrl+alt+shift+x), and now the stream gets all my keys.
+moonlight stream $gurgi Desktop \
+    --absolute-mouse \
+    -resolution $aspect_ratio \
+    --capture-system-keys fullscreen --display-mode windowed
+
+# wol FC:AA:14:98:7C:54

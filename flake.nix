@@ -37,11 +37,6 @@
     colmena.inputs.flake-utils.follows = "flake-utils";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
 
-    # TODO upstream these fixes, or just wait for https://github.com/NixOS/nixpkgs/pull/222396 to get merged up?
-    # parsec-gaming.url = "github:DarthPJB/parsec-gaming-nix";
-    parsec-gaming.url = "github:jfly/parsec-gaming-nix/jfly/fixes";
-    parsec-gaming.inputs.nixpkgs.follows = "nixpkgs";
-
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -69,7 +64,6 @@
     , pypi-deps-db
     , colmena
     , nixos-unstable
-    , parsec-gaming
     , home-manager
     , agenix
     , treefmt-nix
@@ -217,7 +211,7 @@
           inherit agenix agenix-rooter;
         };
         "dallben" = import dallben/configuration.nix {
-          inherit agenix agenix-rooter parsec-gaming;
+          inherit agenix agenix-rooter;
         };
         "fflewddur" = import fflewddur/configuration.nix {
           inherit agenix agenix-rooter;
@@ -226,7 +220,7 @@
           inherit agenix agenix-rooter;
         };
         "pattern" = import pattern/configuration.nix {
-          inherit agenix agenix-rooter parsec-gaming home-manager;
+          inherit agenix agenix-rooter home-manager;
           knock-flake = knock;
         };
       };

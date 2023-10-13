@@ -1,4 +1,4 @@
-{ newScope, pkgs, myParsec }:
+{ newScope, pkgs }:
 
 let
   self = rec {
@@ -13,9 +13,7 @@ let
 
     # Mine! No intention of upstreaming these.
     autoreceiver = callPackage ./autoreceiver { };
-    parsec = callPackage ./parsec {
-      inherit myParsec;
-    };
+    moonlight = callPackage ./moonlight { };
   };
 in
 self

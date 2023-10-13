@@ -2,10 +2,10 @@
 <keymap>
   <global>
     <joystick profile="game.controller.default">
-      <start>RunScript(script.parsec)</start>
+      <start>RunScript(script.moonlight)</start>
     </joystick>
     <keyboard>
-      <end>RunScript(script.parsec)</end>
+      <end>RunScript(script.moonlight)</end>
     </keyboard>
   </global>
 </keymap>

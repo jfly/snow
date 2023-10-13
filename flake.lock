@@ -326,27 +326,6 @@
         "type": "indirect"
       }
     },
-    "parsec-gaming": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1681540170,
-        "narHash": "sha256-ncwkDW+DgzBzHDs23GekkdV9XtTPeSapBO4ACxdZ5Qc=",
-        "owner": "jfly",
-        "repo": "parsec-gaming-nix",
-        "rev": "870bcfd3705f5f592dbf826d053c53d70e847238",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jfly",
-        "ref": "jfly/fixes",
-        "repo": "parsec-gaming-nix",
-        "type": "github"
-      }
-    },
     "pugixml-src": {
       "flake": false,
       "locked": {
@@ -427,7 +406,6 @@
         "mach-nix": "mach-nix",
         "nixos-unstable": "nixos-unstable",
         "nixpkgs": "nixpkgs_2",
-        "parsec-gaming": "parsec-gaming",
         "pypi-deps-db": "pypi-deps-db",
         "systems": "systems",
         "treefmt-nix": "treefmt-nix"

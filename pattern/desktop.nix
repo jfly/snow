@@ -1,6 +1,6 @@
 # TODO: remove this once (if) https://github.com/NixOS/nixpkgs/pull/239349 gets
 #       merged.
-{ config, lib, pkgs, parsec-gaming, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 let
   alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
@@ -274,7 +274,7 @@ in
     evince
 
     ### Remote desktop
-    (pkgs.callPackage parsec-gaming { })
+    moonlight-qt
     freerdp
 
     ### Compression/archives
