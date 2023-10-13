@@ -19,15 +19,12 @@ gurgi=192.168.1.140
 # This is the aspect ratio we keep Gurgi at.
 aspect_ratio=1920x1080
 
-# `--absolute-mouse` makes it easier to get my mouse *out* of the stream. Not
-# sure what the downsides of it are.
 # `--capture-system-keys fullscreen` and `--display-mode windowed` work
 # together in a quite useful way: by default, xmonad on my laptop still gets
 # control of the mod key (Windows key). However, if I'm really going to be
 # spending some time in the stream, I can enable fullscreen mode
 # (ctrl+alt+shift+x), and now the stream gets all my keys.
 moonlight stream $gurgi Desktop \
-    --absolute-mouse \
     -resolution $aspect_ratio \
     --capture-system-keys fullscreen --display-mode windowed
 
