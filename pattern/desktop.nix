@@ -236,8 +236,7 @@ in
 
   environment.systemPackages = with pkgs; [
     ### Browsers
-    # TODO: reintroduce once https://nixpk.gs/pr-tracker.html?pr=218753 makes it to nixos-unstable
-    # qutebrowser
+    qutebrowser
     (pkgs.symlinkJoin {
       name = "chromium";
       paths = [ chromium ];
