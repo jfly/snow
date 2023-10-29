@@ -57,6 +57,7 @@ in
       ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";
       ".android/adbkey" = "${homeDir}/sync/linux-secrets/.android/adbkey";
       ".android/adbkey.pub" = "${homeDir}/sync/linux-secrets/.android/adbkey.pub";
+      ".config/adept" = "${homeDir}/sync/linux-secrets/.config/adept";
     }) // {
     ".zshrc".text = ''
       # zsh really wants this file to exist. If it doesn't, it'll give

@@ -1,0 +1,49 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p libgourou
+
+# Downloads the given .acsm file and imports it into Calibre.
+
+# vi: ft=bash
+# shellcheck shell=bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: $0 [path/to/URLLink.acsm]"
+}
+
+warn() {
+    ORANGE='\033[0;33m'
+    NC='\033[0m' # No Color
+    echo -e "${ORANGE}$1${NC}" >/dev/stderr
+}
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+
+acsm_file=$1
+shift
+
+tmpdir="$(mktemp -d)"
+
+echo "Working in temp dir: $tmpdir"
+(
+    cd "$tmpdir"
+    acsmdownloader "$acsm_file"
+
+    for f in *.epub; do
+        adept_remove "$f"
+        echo "Successfully downloaded (and de-drmed): $f"
+        if pgrep calibre >/dev/null; then
+            warn "It appears that Calibre is currently running, so I can't add this to Calibre for you!"
+            warn "Either add it manually, or stop Calibre and run this command to add it:"
+            warn "calibredb add --with-library ~/sync/calibre/ \"$(realpath "$f")\""
+            exit 2
+        else
+            echo "Adding to Calibre now"
+            calibredb add --with-library ~/sync/calibre/ "$f"
+        fi
+    done
+)

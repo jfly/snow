@@ -24,22 +24,6 @@
         "type": "github"
       }
     },
-    "base64-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1468170709,
-        "narHash": "sha256-dt6i1j0rqH7lA+2XXp9KTEhj2GvYueyGrHh9VXBEsbw=",
-        "ref": "master",
-        "rev": "7d5a89229a525452e37504976a73c35fbaf2fe4d",
-        "revCount": 1,
-        "type": "git",
-        "url": "https://gist.github.com/f0fd86b6c73063283afe550bc5d77594.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gist.github.com/f0fd86b6c73063283afe550bc5d77594.git"
-      }
-    },
     "colmena": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -103,21 +87,6 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_3": {
-      "locked": {
         "lastModified": 1601282935,
         "narHash": "sha256-WQAFV6sGGQxrRs3a+/Yj9xUYvhTpukQJIcMbIi7LCJ4=",
         "owner": "numtide",
@@ -129,22 +98,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
-      }
-    },
-    "gourou-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1654435760,
-        "narHash": "sha256-X94UbSwAp3rtioC8FCgJcOlVNZ5rvaAeIIVlKocFwus=",
-        "ref": "master",
-        "rev": "4f288f4e241e3cc711a10fdcf4078fd4ddfab7c2",
-        "revCount": 81,
-        "type": "git",
-        "url": "git://soutade.fr/libgourou.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "git://soutade.fr/libgourou.git"
       }
     },
     "home-manager": {
@@ -164,31 +117,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "knock": {
-      "inputs": {
-        "base64-src": "base64-src",
-        "flake-utils": "flake-utils_2",
-        "gourou-src": "gourou-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "pugixml-src": "pugixml-src",
-        "updfparser-src": "updfparser-src"
-      },
-      "locked": {
-        "lastModified": 1662251416,
-        "narHash": "sha256-jMhrC8VOOLXuIAURRxikZZLlUwPsPQM22DJm0Bsf47o=",
-        "owner": "jfly",
-        "repo": "knock",
-        "rev": "488fcabd69ca6f9e306a3ca30ccef600209115b1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jfly",
-        "repo": "knock",
         "type": "github"
       }
     },
@@ -218,7 +146,7 @@
     },
     "mach-nix_2": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": "nixpkgs_3",
         "pypi-deps-db": "pypi-deps-db_2"
       },
@@ -326,23 +254,6 @@
         "type": "indirect"
       }
     },
-    "pugixml-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644379750,
-        "narHash": "sha256-FLemG9T17n6l7vgb01OmO22BK59jv5uozVHeUnILEEQ=",
-        "owner": "zeux",
-        "repo": "pugixml",
-        "rev": "314baf6605143f1e837209008f490e8559529e1c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zeux",
-        "ref": "latest",
-        "repo": "pugixml",
-        "type": "github"
-      }
-    },
     "pypi-deps-db": {
       "inputs": {
         "mach-nix": "mach-nix_2",
@@ -402,7 +313,6 @@
         "colmena": "colmena",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
-        "knock": "knock",
         "mach-nix": "mach-nix",
         "nixos-unstable": "nixos-unstable",
         "nixpkgs": "nixpkgs_2",
@@ -460,22 +370,6 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
-      }
-    },
-    "updfparser-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1647424063,
-        "narHash": "sha256-9dvibKiUbbI4CrmuAaJzlpntT0XdLvdGeC2/WzjlA5U=",
-        "ref": "master",
-        "rev": "9d56c1d0b1ce81aae4c8db9d99a8b5d1f7967bcf",
-        "revCount": 25,
-        "type": "git",
-        "url": "git://soutade.fr/updfparser.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "git://soutade.fr/updfparser.git"
       }
     }
   },

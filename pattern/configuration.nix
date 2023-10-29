@@ -1,8 +1,7 @@
-{ agenix, agenix-rooter, home-manager, knock-flake }:
+{ agenix, agenix-rooter, home-manager }:
 { config, pkgs, lib, ... }:
 
 let
-  knock = knock-flake.packages.${pkgs.system}.knock;
   odmpy = pkgs.callPackage ../shared/odmpy { };
 in
 {
@@ -82,7 +81,6 @@ in
   environment.systemPackages = with pkgs; [
     ripgrep
     (pkgs.callPackage ../shared/sd { })
-    knock
     odmpy
   ] ++ (
     # Some hackiness to extract the derivations from the attrset in

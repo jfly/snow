@@ -40,17 +40,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # This used to be accessible at BentonEdmondson/knock, but that repo has
-    # disappeared. After some crawling through archive.org, I found an up to
-    # date fork, and forked it myself. I've also emailed the maintainer, but haven't heard back from him.
-    # More places to look for information:
-    #  - https://superuser.com/a/1664172/1765828
-    #  - https://aur.archlinux.org/packages/knock-bin
-    # If this repo is unmaintained, consider maintaining it yourself or maybe
-    # switching to [Libgourou](https://indefero.soutade.fr/p/libgourou/)
-    knock.url = "github:jfly/knock";
-    knock.inputs.nixpkgs.follows = "nixpkgs";
-
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -59,7 +48,6 @@
     { self
     , nixpkgs
     , flake-utils
-    , knock
     , mach-nix
     , pypi-deps-db
     , colmena
@@ -221,7 +209,6 @@
         };
         "pattern" = import pattern/configuration.nix {
           inherit agenix agenix-rooter home-manager;
-          knock-flake = knock;
         };
       };
 
