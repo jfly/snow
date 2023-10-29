@@ -23,18 +23,10 @@
         };
         python3Packages = python3.pkgs;
 
-        # TODO: remove when (if) https://github.com/NixOS/nixpkgs/pull/242371 gets merged up.
-        openvpn3 = super.openvpn3.overrideAttrs (oldAttrs: {
-          buildInputs = oldAttrs.buildInputs ++ [ super.systemd ];
-          configureFlags = oldAttrs.configureFlags ++ [ "DEFAULT_DNS_RESOLVER=--systemd-resolved" ];
-        });
-
         # TODO: remove beets override once https://nixpk.gs/pr-tracker.html?pr=263650
         #       has landed in nixos-unstable
         beets = super.beets.overridePythonAttrs (old: {
-          disabledTests = [
-            "test_get_single_item_by_path"
-          ];
+          doCheck = false;
         });
 
         snow = {
