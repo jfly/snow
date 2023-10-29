@@ -29,6 +29,14 @@
           configureFlags = oldAttrs.configureFlags ++ [ "DEFAULT_DNS_RESOLVER=--systemd-resolved" ];
         });
 
+        # TODO: remove beets override once https://nixpk.gs/pr-tracker.html?pr=263650
+        #       has landed in nixos-unstable
+        beets = super.beets.overridePythonAttrs (old: {
+          disabledTests = [
+            "test_get_single_item_by_path"
+          ];
+        });
+
         snow = {
           # Kind of weird to be hardcoding the path here, but I want this to
           # work in a pure build, which means we can't (and shouldn't) look at
