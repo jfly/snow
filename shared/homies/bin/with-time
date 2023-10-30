@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Something of the format "2020-05-23 23:26:00"
+_time_str=$1
+shift
+
+if ! [[ $_time_str =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$ ]]; then
+    echo 'Time string must be of the format:'
+    echo '    YYYY-MM-DD HH:MM:SS'
+    echo ''
+    echo 'For example:'
+    echo '    2020-05-23 23:26:00'
+    echo ''
+
+    exit 1
+fi
+
+# Can't use timedatectl on nixos. See https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016
+function _cleanup {
+    sudo systemctl start systemd-timesyncd.service
+}
+trap _cleanup EXIT
+
+sudo systemctl stop systemd-timesyncd.service
+sudo date --set "$_time_str" >/dev/null
+
+"$@"
