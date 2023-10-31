@@ -146,9 +146,14 @@ in
       # updates systemd-resolved to use 127.0.0.1 as a DNS resolver).
       resolveLocalQueries = true;
       settings = {
-        # Only let dnsmasq bind on the loopback interface. This prevents a port
-        # conflict with systemd-resolved.
-        interface = "lo";
+        # Only let dnsmasq bind on specific interfaces. This keeps dnsmasq from
+        # trying to bind to a wildcard address, which conflicts with the
+        # 127.0.0.54 that sytsemd-resolved listens on.
+        # Note: if this list is annoying to keep up to date, we could instead
+        # use `bind-dynamic = true;`, which listens for all interfaces as they
+        # come and go, and also won't use a wildcard address, so it places
+        # nicely with systemd-resolved.
+        interface = [ "lo" "docker0" ];
         bind-interfaces = true;
 
         address = [
