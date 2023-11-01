@@ -266,7 +266,8 @@ in
         (pkgs.callPackage ../shared/inkscape-silhouette { })
       ];
     })
-    avidemux
+    # https://github.com/NixOS/nixpkgs/issues/239424
+    # avidemux
     audacity
 
     ### PDF
