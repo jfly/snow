@@ -1,0 +1,136 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [boto3])" -p mysql
+
+# vi: ft=python
+
+from contextlib import closing
+import socket
+import socketserver
+import time
+import argparse
+import sys
+import contextlib
+import dataclasses
+import json
+import subprocess
+import tempfile
+import textwrap
+from typing import Callable
+
+import boto3
+
+
+def doit(secret_id: str, jump_host: str|None):
+    client = boto3.client('secretsmanager')
+    response = client.get_secret_value(SecretId=secret_id)
+    secret_str = response['SecretString']
+    secret = json.loads(secret_str)
+    mysql_shell(secret, jump_host)
+
+
+@dataclasses.dataclass
+class Tunnel:
+    host: str
+    port: int
+
+
+def get_available_port() -> int:
+    # Trick from https://stackoverflow.com/a/45690594
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        return s.getsockname()[1]
+
+def is_port_bound(host: str, port: int) -> bool:
+    try:
+        with socket.create_connection((host, port), timeout=1):
+            return True
+    except OSError:
+        return False
+
+def wait_for(f: Callable[[], bool], desc: str, timeout_seconds: int = 60):
+    start = time.time()
+    print(f"Waiting for {desc}", end="")
+    while not f():
+        print(".", end="", flush=True)
+        elapsed = time.time() - start
+        if elapsed > timeout_seconds:
+            print(f"timed out after {elapsed:.0f}s!")
+            sys.exit(1)
+        time.sleep(0.1)
+
+    elapsed = time.time() - start
+    print(f"done in {elapsed:0.2f}s!")
+
+@contextlib.contextmanager
+def ssh_tunnel(host: str, port: str, jump_host: str):
+    tunnel = Tunnel(host="127.0.0.1", port=get_available_port())
+
+    dest = f"{host}:{port}"
+    print(f"Setting up tunnel to {dest} via {jump_host}...")
+    p = subprocess.Popen(
+        ["ssh", "-N", "-M", "-o", "ExitOnForwardFailure=yes",
+         f"-L {tunnel.port}:{dest}", jump_host,],
+    )
+
+    try:
+        wait_for(lambda: is_port_bound(tunnel.host, tunnel.port), f"port {tunnel.port} to be bound", timeout_seconds=5)
+        yield tunnel
+    finally:
+        print(f"cleaning up ssh tunnel (pid: {p.pid})")
+        p.terminate()
+
+
+def mysql_shell(secret: dict, jump_host: str|None):
+    username = secret['username']
+    password = secret['password']
+    engine = secret['engine']
+    host = secret['host']
+    port = secret['port']
+
+    connectors = {
+        "mysql": mysql_connector,
+    }
+    connector = connectors[engine]
+
+    if jump_host:
+        with ssh_tunnel(host=host, port=port, jump_host=jump_host) as tunnel:
+            connector(host=tunnel.host, port=tunnel.port, user=username, password=password)
+    else:
+        connector(host=host, port=port, user=username, password=password)
+
+
+def mysql_connector(host: str, port: int, user: str, password: str):
+    with tempfile.NamedTemporaryFile("w") as fp:
+        with fp.file as f:
+            f.write(
+                textwrap.dedent(
+                    f"""\
+                        [client]
+                        host={host}
+                        port={port}
+
+                        user={user}
+                        password={password}
+                        """
+                )
+            )
+        p = subprocess.Popen(["mysql", f"--defaults-file={f.name}"])
+        p.wait()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "secret", help="id of aws secret containing creds to connect to db"
+    )
+    parser.add_argument(
+        "--jump-host", "-J", help="ssh jump host to use to connect to the db"
+    )
+
+    args = parser.parse_args()
+    doit(secret_id=args.secret, jump_host=args.jump_host)
+
+
+if __name__ == "__main__":
+    main()
