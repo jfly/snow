@@ -251,6 +251,11 @@ in
       nginx
       # kube-config (and others)
       gnumake
+
+      ### shell
+      shellcheck # (used by neovim?)
+      shfmt
+      ruff-lsp # (used by neovim)
     ];
   };
 }

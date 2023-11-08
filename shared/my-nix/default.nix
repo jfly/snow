@@ -41,10 +41,6 @@ rec {
   ### AWS
   awscli2 = pkgs.awscli2;
 
-  ### shell
-  shellcheck = pkgs.shellcheck;
-  shfmt = pkgs.shfmt;
-
   ### Desktop
   dunst = pkgs.callPackage ./dunst { };
   xmonad = pkgs.callPackage ../../shared/xmonad { };

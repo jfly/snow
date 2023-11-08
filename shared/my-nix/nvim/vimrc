@@ -316,6 +316,12 @@ lua << EOF
       local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
       local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
+      -- Disable ruff hover in favor of Pyright
+      -- See https://github.com/astral-sh/ruff-lsp#setup
+      if client.name == "ruff-lsp" then
+        client.server_capabilities.hoverProvider = false
+      end
+
       -- Mappings.
       local opts = { noremap=true, silent=true }
 
@@ -405,6 +411,10 @@ lua << EOF
         },
       }
     end
+
+    nvim_lsp['ruff_lsp'].setup {
+      on_attach = on_attach,
+    }
 
     -- Filter out noisy diagnostics messages from pyright
     -- This is copied from https://github.com/neovim/nvim-lspconfig/issues/726#issuecomment-1075539112
