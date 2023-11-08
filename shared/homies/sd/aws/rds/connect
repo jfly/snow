@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [boto3])" -p mysql
 
-# vi: ft=python
+# Connect to a AWS RDS instance with the given secret.
+# Usage: $0 -J bastion aws-secret-name
 
 from contextlib import closing
 import socket
-import socketserver
 import time
 import argparse
 import sys
@@ -20,12 +20,12 @@ from typing import Callable
 import boto3
 
 
-def doit(secret_id: str, jump_host: str|None):
+def doit(secret_id: str, jump_host: str|None, override_host: str|None):
     client = boto3.client('secretsmanager')
     response = client.get_secret_value(SecretId=secret_id)
     secret_str = response['SecretString']
     secret = json.loads(secret_str)
-    mysql_shell(secret, jump_host)
+    mysql_shell(secret, jump_host, override_host)
 
 
 @dataclasses.dataclass
@@ -81,11 +81,11 @@ def ssh_tunnel(host: str, port: str, jump_host: str):
         p.terminate()
 
 
-def mysql_shell(secret: dict, jump_host: str|None):
+def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
     username = secret['username']
     password = secret['password']
     engine = secret['engine']
-    host = secret['host']
+    host = override_host or secret['host']
     port = secret['port']
 
     connectors = {
@@ -125,12 +125,17 @@ def main():
         "secret", help="id of aws secret containing creds to connect to db"
     )
     parser.add_argument(
+        "--override-host", help="override the url of the database to connect to"
+    )
+    parser.add_argument(
         "--jump-host", "-J", help="ssh jump host to use to connect to the db"
     )
 
     args = parser.parse_args()
-    doit(secret_id=args.secret, jump_host=args.jump_host)
+    doit(secret_id=args.secret, jump_host=args.jump_host, override_host=args.override_host)
 
 
 if __name__ == "__main__":
     main()
+
+# vi: ft=python
