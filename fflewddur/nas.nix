@@ -26,8 +26,6 @@ in
       fsType = "fuse.mergerfs";
       options = [
         # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
-        "allow_other"
-        "use_ino"
         "cache.files=off"
         "dropcacheonclose=true"
         "category.create=mfs"
