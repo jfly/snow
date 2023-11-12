@@ -74,7 +74,7 @@ class Nextcloud:
 
         1. Open the App dashboard: https://nextcloud.snow.jflei.com/settings/apps
         2. Install the "Social Login" (search icon at top right)
-        3. Navigate to Settings > Administration > Social login
+        3. Navigate to https://nextcloud.snow.jflei.com/settings/admin/sociallogin
         4. Check these options:
             - "Prevent creating an account if the email address exists in another account"
             - "Update user profile on every login"
@@ -106,7 +106,7 @@ class Nextcloud:
                   map every single group in Nextcloud.
             - Scroll to the bottom, click "Save"
 
-         8. In keycloak: assign the relevant nextcloud roles to anyone you wish!
+         8. In [keycloak](https://keycloak.snow.jflei.com/admin/master/console/): assign the relevant nextcloud roles to anyone you wish!
         """
 
     def _declare_db(self) -> Database:
@@ -130,8 +130,9 @@ class Nextcloud:
         )
 
     def _declare_helm_chart(self, db: Database):
-        # TODO: expose to the web once we've tested this out a bit.
-        access = self._snowauth.middlewares_for_access(Access.LAN_ONLY)
+        # Note: it's ok to expose nextcloud to the world as it has its own
+        # login system.
+        access = self._snowauth.middlewares_for_access(Access.INTERNET_UNSECURED)
 
         middlewares = format_traefik_middlewares(
             [*access, self._snowauth._strict_https_middleware]
