@@ -255,7 +255,16 @@ in
       ### shell
       shellcheck # (used by neovim?)
       shfmt
-      ruff-lsp # (used by neovim)
+      (ruff-lsp.overridePythonAttrs (old: rec {
+        # ruff-lsp automatically falls back to some version of ruff (see
+        # https://github.com/jfly/nixpkgs/blob/5e5319a2b01f4aa39dc99a7d7a1b70bacfe60f24/pkgs/development/tools/language-servers/ruff-lsp/default.nix#L57-L58).
+        # I don't want that, because I only want ruff autoformatting to occur
+        # in projects that actually use ruff. So, we override ruff-lsp's
+        # makeWrapperArgs to not include `ruff` itself.
+        makeWrapperArgs = [
+          "--unset PYTHONPATH"
+        ];
+      })) # (used by neovim)
     ];
   };
 }
