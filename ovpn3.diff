@@ -1,0 +1,84 @@
+diff --git a/src/netcfg/dns/resolver-settings.cpp b/src/netcfg/dns/resolver-settings.cpp
+index 4c1ee9c..26b784f 100644
+--- a/src/netcfg/dns/resolver-settings.cpp
++++ b/src/netcfg/dns/resolver-settings.cpp
+@@ -231,7 +231,7 @@ const std::string ResolverSettings::AddNameServers(GVariant *params)
+ }
+ 
+ 
+-void ResolverSettings::AddSearchDomains(GVariant *params)
++const std::string ResolverSettings::AddSearchDomains(GVariant *params)
+ {
+     std::string params_type(g_variant_get_type_string(params));
+     if ("(as)" != params_type)
+@@ -247,6 +247,7 @@ void ResolverSettings::AddSearchDomains(GVariant *params)
+     }
+ 
+     GVariant *srchdom = nullptr;
++    std::string ret;
+     while ((srchdom = g_variant_iter_next_value(srchlist)))
+     {
+         gsize len;
+@@ -260,10 +261,13 @@ void ResolverSettings::AddSearchDomains(GVariant *params)
+         {
+             search_domains.push_back(v);
+         }
++        ret += (!ret.empty() ? ", " : "") + v;
+ 
+         g_variant_unref(srchdom);
+     }
+     g_variant_iter_free(srchlist);
++
++    return ret;
+ }
+ } // namespace DNS
+ } // namespace NetCfg
+diff --git a/src/netcfg/dns/resolver-settings.hpp b/src/netcfg/dns/resolver-settings.hpp
+index 9fe76cc..d3910ea 100644
+--- a/src/netcfg/dns/resolver-settings.hpp
++++ b/src/netcfg/dns/resolver-settings.hpp
+@@ -302,8 +302,11 @@ class ResolverSettings
+      *
+      * @param params  GVariant object containing an (as) based string
+      *                array of elements to process
++     *
++     * @returns Returns a std::string list of added DNS search domains,
++     *          comma separated
+      */
+-    void AddSearchDomains(GVariant *params);
++    const std::string AddSearchDomains(GVariant *params);
+ #endif
+ 
+ 
+diff --git a/src/netcfg/dns/systemd-resolved.cpp b/src/netcfg/dns/systemd-resolved.cpp
+index aeb2139..86982f9 100644
+--- a/src/netcfg/dns/systemd-resolved.cpp
++++ b/src/netcfg/dns/systemd-resolved.cpp
+@@ -116,6 +116,13 @@ void SystemdResolved::Commit(NetCfgSignals *signal)
+                 upd.link->SetDNSServers(upd.resolver);
+                 signal->LogVerb2("systemd-resolved: [" + upd.link->GetPath()
+                                  + "] Committing DNS search domains");
++
++                //<<<
++                for (const auto &dom : upd.search)
++                {
++                    signal->LogVerb2("systemd-resolved: dom.search: [" + dom.search + "]");
++                }
++                //<<<
+                 upd.link->SetDomains(upd.search);
+                 upd.link->SetDefaultRoute(upd.default_routing);
+             }
+diff --git a/src/netcfg/netcfg-device.hpp b/src/netcfg/netcfg-device.hpp
+index c119128..f31ed6a 100644
+--- a/src/netcfg/netcfg-device.hpp
++++ b/src/netcfg/netcfg-device.hpp
+@@ -411,7 +411,8 @@ class NetCfgDevice : public DBusObject,
+                 }
+ 
+                 // Adds DNS search domains
+-                dnsconfig->AddSearchDomains(params);
++                std::string added = dnsconfig->AddSearchDomains(params);
++                signal.Debug(device_name, "Added DNS Search Domains: " + added);
+                 modified = true;
+             }
+ #ifdef ENABLE_OVPNDCO

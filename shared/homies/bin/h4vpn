@@ -27,4 +27,6 @@ function toggle() {
 # If we don't get an answer there, we could implement this with a custom script.
 # See script documentation here: https://github.com/OpenVPN/openvpn3-linux/blob/master/docs/man/openvpn2.1.rst#script-execution
 # The command to run will be something like: `sudo resolvectl domain tun0 '~honorcare.com'`.
+#
+# <<< OR: `sudo resolvectl default-route tun0 false` >>>
 toggle ~/sync/linux-secrets/h4-vpn/ovpn-access-server.ovpn

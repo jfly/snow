@@ -1,3 +1,14 @@
+let
+  pkgsWithOpenvpn3 = import
+    (builtins.fetchGit {
+      # Descriptive name to make the store path easier to identify
+      name = "nixpkgs-with-openvpn3-21";
+      url = "https://github.com/jfly/nixpkgs/";
+      ref = "upgrade-openvpn3";
+      rev = "5e5319a2b01f4aa39dc99a7d7a1b70bacfe60f24";
+    })
+    { system = "x86_64-linux"; };
+in
 [
   (
     self: super:
@@ -59,6 +70,17 @@
             if builtins.pathExists (absoluteRepoPath encrypted) then builtins.readFile (absoluteRepoPath encrypted) else builtins.trace missingMsg missingMsg
           );
         };
+
+        # >>> <<<<
+        #<<< openvpn3 = pkgsWithOpenvpn3.openvpn3;
+
+        openvpn3 = pkgsWithOpenvpn3.openvpn3.overrideAttrs (oldAttrs: {
+          patches = [ ../ovpn3.diff ];
+        });
+
+        #<<< openvpn3 = super.openvpn3.overrideAttrs (oldAttrs: {
+        #<<<   #<<< patches = [ ../ovpn3.diff ];
+        #<<< });
       }
   )
 ]

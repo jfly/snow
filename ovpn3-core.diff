@@ -1,0 +1,46 @@
+diff --git a/openvpn/tun/client/tunprop.hpp b/openvpn/tun/client/tunprop.hpp
+index e830d9cd..0eeb7c1b 100644
+--- a/openvpn/tun/client/tunprop.hpp
++++ b/openvpn/tun/client/tunprop.hpp
+@@ -546,9 +546,8 @@ class TunProp
+         DnsOptions dns_options(opt);
+         for (const auto &domain : dns_options.search_domains)
+         {
+-            if (!tb->tun_builder_set_adapter_domain_suffix(domain))
+-                throw tun_prop_dhcp_option_error("tun_builder_set_adapter_domain_suffix");
+-            break; // use only the first domain for now
++            if (!tb->tun_builder_add_search_domain(domain))
++                throw tun_prop_dhcp_option_error("tun_builder_add_search_domain failed");
+         }
+         for (const auto &keyval : dns_options.servers)
+         {
+@@ -565,11 +564,6 @@ class TunProp
+                     throw tun_prop_dhcp_option_error("tun_builder_add_dns_server failed");
+                 flags |= F_ADD_DNS;
+             }
+-            for (const auto &domain : server.domains)
+-            {
+-                if (!tb->tun_builder_add_search_domain(domain))
+-                    throw tun_prop_dhcp_option_error("tun_builder_add_search_domain failed");
+-            }
+         }
+ 
+         OptionList::IndexMap::const_iterator dopt = opt.map().find("dhcp-option"); // DIRECTIVE
+@@ -595,7 +589,7 @@ class TunProp
+                             throw tun_prop_dhcp_option_error("tun_builder_add_dns_server failed");
+                         flags |= F_ADD_DNS;
+                     }
+-                    else if ((type == "DOMAIN" || type == "DOMAIN-SEARCH") && dns_options.servers.empty())
++                    else if ((type == "DOMAIN" || type == "DOMAIN-SEARCH") && dns_options.search_domains.empty())
+                     {
+                         o.min_args(3);
+                         for (size_t j = 2; j < o.size(); ++j)
+@@ -609,7 +603,7 @@ class TunProp
+                             }
+                         }
+                     }
+-                    else if (type == "ADAPTER_DOMAIN_SUFFIX" && dns_options.search_domains.empty())
++                    else if (type == "ADAPTER_DOMAIN_SUFFIX")
+                     {
+                         o.exact_args(3);
+                         const std::string &adapter_domain_suffix = o.get(2, 256);
