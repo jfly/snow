@@ -16,5 +16,5 @@ class Whoami:
             namespace="default",
             image="containous/whoami:latest",
             port=80,
-            access=Access.INTERNET_BEHIND_SSO,
+            access=Access.INTERNET_BEHIND_SSO_FAMILY,
         )

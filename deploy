@@ -86,9 +86,6 @@ function build_containers() {
 function deploy_k8s() {
     [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_k8s, sorry!" && exit 1
 
-    # Install cert-manager
-    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
-
     for f in k8s/**/*{.yaml,.yaml.secret}; do
         echo "Applying $f"
         kubectl apply -f "$f"

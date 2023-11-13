@@ -79,7 +79,7 @@ class Invidious:
             port=3000,
             # We don't want to expose invidious to the public web. Even with
             # registration disabled, folks can still use it to browse youtube.
-            access=Access.INTERNET_BEHIND_SSO,
+            access=Access.INTERNET_BEHIND_SSO_RAREMY,
             env={
                 "INVIDIOUS_CONFIG": InvidiousConfig(
                     database_url=database.to_db_url("invidious"),

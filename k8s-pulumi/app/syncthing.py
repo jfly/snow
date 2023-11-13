@@ -19,7 +19,7 @@ class Syncthing:
             namespace="default",
             image="lscr.io/linuxserver/syncthing",
             port=8384,
-            access=Access.INTERNET_BEHIND_SSO,
+            access=Access.INTERNET_BEHIND_SSO_RAREMY,
             env={
                 "TZ": "America/Los_Angeles",
                 "PUID": "1000",

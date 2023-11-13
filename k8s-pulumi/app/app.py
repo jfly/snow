@@ -1,5 +1,8 @@
 from .snowauth import Snowauth
+from .jackett import Jackett
 from .radarr import Radarr
+from .sonarr import Sonarr
+from .torrents import Torrents
 from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
@@ -9,6 +12,7 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .nix_cache import NixCache
 from .nextcloud import Nextcloud
+from .snow_web import SnowWeb
 from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
@@ -17,11 +21,11 @@ from .legacy_redirects import LegacyRedirects
 def build_app():
     Dns()
     snowauth = Snowauth()
-    snow_state = SnowState()
+    SnowState()
 
     LegacyRedirects()
 
-    Radarr(snowauth)
+    SnowWeb(snowauth)
     Syncthing(snowauth)
     Budget(snowauth)
     Whoami(snowauth)
@@ -31,6 +35,11 @@ def build_app():
     Invidious(namespace="default", snowauth=snowauth)
     NixCache(namespace="default", snowauth=snowauth)
     Nextcloud(snowauth=snowauth)
+
+    Torrents(snowauth)
+    Jackett(snowauth)
+    Radarr(snowauth)
+    Sonarr(snowauth)
 
     ###
     ### Some stuff that's useful to turn on as necessary, but not stuff I want running 24/7

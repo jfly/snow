@@ -1,0 +1,79 @@
+import pulumi_kubernetes as kubernetes
+from .snowauth import Snowauth
+from .snowauth import Access
+from .util import snow_deployment
+from .util import http_service
+from .util import http_ingress
+
+
+class SnowWeb:
+    def __init__(self, snowauth: Snowauth):
+        deployment = snow_deployment(
+            name="snow-web",
+            namespace="default",
+            image="containers.snow.jflei.com/snow-web:latest",
+            volume_mounts=[
+                kubernetes.core.v1.VolumeMountArgs(
+                    mount_path="/mnt/media",
+                    name="mnt-media",
+                ),
+            ],
+            # TODO: look into k8s persistent volumes for this
+            volumes=[
+                kubernetes.core.v1.VolumeArgs(
+                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
+                        path="/mnt/media",
+                        type="",
+                    ),
+                    name="mnt-media",
+                ),
+            ],
+        )
+        service = http_service(deployment, port=80)
+
+        http_ingress(
+            service,
+            ingress_name="snow-web-root",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO_FAMILY
+            ),
+            base_url="https://snow.jflei.com",
+        )
+        http_ingress(
+            service,
+            ingress_name="snow-web-media",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO_FAMILY
+            ),
+            base_url="https://media.snow.jflei.com",
+        )
+        http_ingress(
+            service,
+            ingress_name="snow-web-lloyd",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO_RAREMY
+            ),
+            base_url="https://lloyd.snow.jflei.com",
+        )
+        http_ingress(
+            service,
+            ingress_name="snow-web-kodi",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_BEHIND_SSO_RAREMY
+            ),
+            base_url="https://kodi.snow.jflei.com",
+        )
+        http_ingress(
+            service,
+            ingress_name="snow-web-tnoodle-redirect",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                Access.INTERNET_UNSECURED
+            ),
+            base_url="https://www.tnoodle.tk",
+        )
+
+        # TODO: unrecognized subdomains (such as
+        # https://unknown.snow.jflei.com/) currently fail ssl validation (but
+        # do return a 404 if you ignore the cert error). can/should we get
+        # those passing? or would it be better to remove our wildcard dns entry
+        # in favor of more targeted dns?

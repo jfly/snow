@@ -27,7 +27,7 @@ class Budget:
         http_ingress(
             hledger_web_service,
             traefik_middlewares=snowauth.middlewares_for_access(
-                Access.INTERNET_BEHIND_SSO
+                Access.INTERNET_BEHIND_SSO_RAREMY
             ),
             base_url=hledger_base_url,
             # hledger-web (actually yesod) is a bit weird when you give it a
@@ -52,7 +52,7 @@ class Budget:
         http_ingress(
             budget_service,
             traefik_middlewares=snowauth.middlewares_for_access(
-                Access.INTERNET_BEHIND_SSO
+                Access.INTERNET_BEHIND_SSO_RAREMY
             ),
         )
 

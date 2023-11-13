@@ -2,14 +2,14 @@ import pulumi_kubernetes as kubernetes
 from .snowauth import Snowauth, Access
 
 
-class Radarr:
+class Jackett:
     def __init__(self, snowauth: Snowauth):
         snowauth.declare_app(
-            name="radarr",
+            name="jackett",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            image="cr.hotio.dev/hotio/radarr:latest",
-            port=7878,
+            image="cr.hotio.dev/hotio/jackett:latest",
+            port=9117,
             env={
                 "TZ": "America/Los_Angeles",
                 "PUID": "1000",
@@ -19,7 +19,7 @@ class Radarr:
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/config",
-                    name="radarr-config",
+                    name="jackett-config",
                 ),
                 kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/mnt/media",
@@ -30,10 +30,10 @@ class Radarr:
             volumes=[
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/state/radarr-config",
+                        path="/state/jackett-config",
                         type="",
                     ),
-                    name="radarr-config",
+                    name="jackett-config",
                 ),
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(

@@ -29,6 +29,7 @@
       # It gets source IPs to show up correctly when going through proxies, but
       # maybe doesn't do the right thing for a multi-node k3s cluster? :shrug:,
       # we'll find out when that day comes.
+      # TODO: look into MetalLB, it looks *dope*: https://metallb.universe.tf
       mkdir -p /var/lib/rancher/k3s/server/manifests/
       echo -n "apiVersion: helm.cattle.io/v1
       kind: HelmChartConfig

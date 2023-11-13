@@ -123,6 +123,7 @@ def http_ingress(
     traefik_middlewares: Optional[list[traefik.v1alpha1.Middleware]] = None,
     base_url: Optional[str] = None,
     strip_path: bool = False,
+    ingress_name: Optional[str] = None,
 ):
     """
     Expose the given service, with optional Traefik middlewares.
@@ -143,11 +144,13 @@ def http_ingress(
     :shrug:. See https://github.com/simonmichael/hledger/issues/1562 and
     https://github.com/yesodweb/yesod/issues/1792 for more details.
     """
-    name = service._name
+    service_name = service._name
     service_metadata = cast(kubernetes.meta.v1.ObjectMetaArgs, service.metadata)
+    if ingress_name is None:
+        ingress_name = service_name
 
     if base_url is None:
-        host = f"{name}.snow.jflei.com"
+        host = f"{service_name}.snow.jflei.com"
         path = "/"
     else:
         parsed = urlparse(base_url)
@@ -163,7 +166,7 @@ def http_ingress(
 
     if strip_path:
         assert path != "/", "Must specify a path if strip_path is enabled"
-        middleware_name = f"strip-{name}-{path.replace('/', '')}"
+        middleware_name = f"strip-{ingress_name}-{path.replace('/', '')}"
         traefik_middlewares.append(
             traefik.v1alpha1.Middleware(
                 middleware_name,
@@ -186,14 +189,14 @@ def http_ingress(
         ] = format_traefik_middlewares(traefik_middlewares)
 
     return kubernetes.networking.v1.Ingress(
-        name,
+        ingress_name,
         metadata=kubernetes.meta.v1.ObjectMetaArgs(
             annotations={
                 "cert-manager.io/cluster-issuer": "letsencrypt-prod",
                 "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
                 **extra_annotations,
             },
-            name=service_metadata.name,
+            name=ingress_name,
             namespace=service_metadata.namespace,
         ),
         spec=kubernetes.networking.v1.IngressSpecArgs(
@@ -205,7 +208,7 @@ def http_ingress(
                             kubernetes.networking.v1.HTTPIngressPathArgs(
                                 backend=kubernetes.networking.v1.IngressBackendArgs(
                                     service=kubernetes.networking.v1.IngressServiceBackendArgs(
-                                        name=name,
+                                        name=service_name,
                                         port=kubernetes.networking.v1.ServiceBackendPortArgs(
                                             number=80,
                                         ),
@@ -221,7 +224,7 @@ def http_ingress(
             tls=[
                 kubernetes.networking.v1.IngressTLSArgs(
                     hosts=[host],
-                    secret_name=f"{name}-tls",
+                    secret_name=f"{ingress_name}-tls",
                 )
             ],
         ),

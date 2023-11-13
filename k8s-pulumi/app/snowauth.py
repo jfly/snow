@@ -13,7 +13,8 @@ import pulumi_keycloak as keycloak
 
 class Access(Enum):
     INTERNET_UNSECURED = auto()
-    INTERNET_BEHIND_SSO = auto()
+    INTERNET_BEHIND_SSO_RAREMY = auto()
+    INTERNET_BEHIND_SSO_FAMILY = auto()
     LAN_ONLY = auto()
 
 
@@ -37,20 +38,6 @@ class Snowauth:
                     sts_seconds=15552000,
                     sts_include_subdomains=True,
                     sts_preload=True,
-                ),
-            ),
-        )
-
-        self._snowauth_middleware = traefik.v1alpha1.Middleware(
-            "snowauth",
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name="snowauth",
-                namespace="default",
-            ),
-            spec=traefik.v1alpha1.MiddlewareSpecArgs(
-                forward_auth=traefik.v1alpha1.MiddlewareSpecForwardAuthArgs(
-                    address="http://snowauth.default.svc.cluster.local",
-                    auth_response_headers=["X-Forwarded-User"],
                 ),
             ),
         )
@@ -82,12 +69,53 @@ class Snowauth:
             ),
         )
 
-        self.declare_app(
-            name="snowauth",
+        raremy = [
+            "jeremyfleischman@gmail.com",
+            "rmeresman@gmail.com",
+        ]
+        family = [
+            "mdfleischman@gmail.com",
+            "billsmith4804@gmail.com",
+        ]
+        middlewares_by_access: dict[Access, list[traefik.v1alpha1.Middleware]] = {
+            Access.INTERNET_UNSECURED: [],
+            Access.INTERNET_BEHIND_SSO_RAREMY: [
+                self._snowauth_middleware("raremy", raremy)
+            ],
+            Access.INTERNET_BEHIND_SSO_FAMILY: [
+                self._snowauth_middleware("family", raremy + family)
+            ],
+            Access.LAN_ONLY: [self._lan_only_middleware],
+        }
+        self._middlewares_by_access = middlewares_by_access
+
+    def _snowauth_middleware(
+        self, desc: str, email_whitelist: list[str]
+    ) -> traefik.v1alpha1.Middleware:
+        # TODO: rather than creating a traefik auth middleware per interesting
+        # subset of users, could we do this in keycloak? That is, have
+        # per-application permissions that get rolled up into roles in keycloak
+        # (and some check that you have the right permission for the
+        # application you're trying to access).
+        snowauth_middleware = traefik.v1alpha1.Middleware(
+            f"snowauth-{desc}",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name=f"snowauth-{desc}",
+                namespace="default",
+            ),
+            spec=traefik.v1alpha1.MiddlewareSpecArgs(
+                forward_auth=traefik.v1alpha1.MiddlewareSpecForwardAuthArgs(
+                    address=f"http://snowauth-{desc}.default.svc.cluster.local",
+                    auth_response_headers=["X-Forwarded-User"],
+                ),
+            ),
+        )
+
+        deployment = snow_deployment(
+            name=f"snowauth-{desc}",
             namespace="default",
+            # TODO: consider switching to ghcr.io/jordemort/traefik-forward-auth:latest? see https://github.com/jordemort/traefik-forward-auth
             image="thomseddon/traefik-forward-auth:2",
-            port=4181,
-            access=Access.INTERNET_BEHIND_SSO,
             env={
                 # "LOG_LEVEL": "debug",
                 "COOKIE_DOMAIN": "snow.jflei.com",
@@ -118,11 +146,14 @@ class Snowauth:
                     -----END AGE ENCRYPTED FILE-----
                     """
                 ),
-                "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com,billsmith4804@gmail.com",
-                # TODO: figure out how to limit permissions for some users "WHITELIST": "jeremyfleischman@gmail.com,rmeresman@gmail.com,mdfleischman@gmail.com",
+                "WHITELIST": ",".join(email_whitelist),
                 "LOGOUT_REDIRECT": "https://snow.jflei.com",
             },
         )
+        service = http_service(deployment, port=4181)
+        http_ingress(service)
+
+        return snowauth_middleware
 
     def _declare_keycloak_realm(self):
         snow = keycloak.Realm(
@@ -171,11 +202,7 @@ class Snowauth:
     def middlewares_for_access(
         self, access: Access
     ) -> list[traefik.v1alpha1.Middleware]:
-        return {
-            Access.INTERNET_UNSECURED: [],
-            Access.INTERNET_BEHIND_SSO: [self._snowauth_middleware],
-            Access.LAN_ONLY: [self._lan_only_middleware],
-        }[access]
+        return self._middlewares_by_access[access]
 
     def declare_app(
         self,
