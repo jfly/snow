@@ -13,9 +13,21 @@ class SnowWeb:
             namespace="default",
             image="containers.snow.jflei.com/snow-web:latest",
             volume_mounts=[
+                # Only expose the movies and shows subdirectories.
+                # This works, but we might want to consider restructuring
+                # /mnt/media to put these in a shared subdirectory instead (and
+                # use that as an opportunity to think carefully about
+                # filesystem permissions). For example, dallben doesn't need
+                # access to all the files it currently has access to.
                 kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/mnt/media",
                     name="mnt-media",
+                    sub_path="movies",
+                    mount_path="/mnt/media/movies",
+                ),
+                kubernetes.core.v1.VolumeMountArgs(
+                    name="mnt-media",
+                    sub_path="shows",
+                    mount_path="/mnt/media/shows",
                 ),
             ],
             # TODO: look into k8s persistent volumes for this
