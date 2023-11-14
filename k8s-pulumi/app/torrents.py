@@ -1,4 +1,5 @@
 import pulumi_kubernetes as kubernetes
+from pulumi_kubernetes.core.v1 import PodSecurityContextArgs
 from .snowauth import Snowauth, Access
 
 
@@ -10,6 +11,13 @@ class Torrents:
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
             image="containers.snow.jflei.com/transmission:latest",
             port=9091,
+            pod_security_context=PodSecurityContextArgs(
+                # This is similar to the PGID/PUID stuff that the linuxserver folks do:
+                # https://github.com/linuxserver/docker-baseimage-alpine/blob/880fac8727d29232d50c17e52ce4dc3da5ec32b0/root/etc/cont-init.d/10-adduser#L6-L7
+                # TODO: DRY this number up with all the other places it shows up in our infra.
+                run_as_user=0,
+                run_as_group=1002,
+            ),
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/mnt/media",

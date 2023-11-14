@@ -18,6 +18,7 @@ def snow_deployment(
     volumes: Optional[list[kubernetes.core.v1.VolumeArgs]] = None,
     volume_mounts: Optional[list[kubernetes.core.v1.VolumeMountArgs]] = None,
     working_dir: Optional[str] = None,
+    pod_security_context: Optional[kubernetes.core.v1.PodSecurityContextArgs] = None,
 ) -> kubernetes.apps.v1.Deployment:
     if env is None:
         env = {}
@@ -51,6 +52,7 @@ def snow_deployment(
                     },
                 ),
                 spec=kubernetes.core.v1.PodSpecArgs(
+                    security_context=pod_security_context,
                     containers=[
                         kubernetes.core.v1.ContainerArgs(
                             name=name,
@@ -63,7 +65,7 @@ def snow_deployment(
                             volume_mounts=volume_mounts,
                             args=args,
                             working_dir=working_dir,
-                        )
+                        ),
                     ],
                     volumes=volumes,
                 ),

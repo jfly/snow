@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-ssh clark -t -- k3s kubectl exec -it deploy/transmission transmission -nvpn -- bash
+ssh clark -t -- k3s kubectl -n vpn exec -it deploy/torrents --container torrents -- pirate-get "$@"
