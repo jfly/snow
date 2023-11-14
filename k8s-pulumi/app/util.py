@@ -1,4 +1,5 @@
 from typing import Optional
+import pulumi
 import dataclasses
 from typing import cast
 import pulumi_kubernetes as kubernetes
@@ -12,7 +13,7 @@ def snow_deployment(
     name: str,
     namespace: str,
     image: str,
-    env: Optional[dict[str, str]] = None,
+    env: Optional[dict[str, pulumi.Input[str]]] = None,
     args: Optional[list[str]] = None,
     volumes: Optional[list[kubernetes.core.v1.VolumeArgs]] = None,
     volume_mounts: Optional[list[kubernetes.core.v1.VolumeMountArgs]] = None,

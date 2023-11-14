@@ -69,6 +69,31 @@ class Snowauth:
             ),
         )
 
+        # This is a brittle mess. If you are tempted to try to make this less
+        # brittle, first see comment in _snowauth_middleware thinking about if
+        # we could accomplish this without creating multiple traefik auth
+        # middlewares.
+        valid_redirect_uris = []
+        for access in Access:
+            redirect_uri_by_access = {
+                Access.INTERNET_UNSECURED: None,
+                Access.INTERNET_BEHIND_SSO_RAREMY: "https://snowauth-raremy.snow.jflei.com/_oauth",
+                Access.INTERNET_BEHIND_SSO_FAMILY: "https://snowauth-family.snow.jflei.com/_oauth",
+                Access.LAN_ONLY: None,
+            }
+            valid_redirect_uris.append(redirect_uri_by_access[access])
+
+        self._snowauth_keycloak_client = keycloak.openid.Client(
+            "snowauth",
+            access_type="CONFIDENTIAL",
+            client_id="snowauth",
+            direct_access_grants_enabled=True,
+            realm_id="snow",
+            standard_flow_enabled=True,
+            valid_post_logout_redirect_uris=["+"],
+            valid_redirect_uris=valid_redirect_uris,
+        )
+
         raremy = [
             "jeremyfleischman@gmail.com",
             "rmeresman@gmail.com",
@@ -114,12 +139,15 @@ class Snowauth:
         deployment = snow_deployment(
             name=f"snowauth-{desc}",
             namespace="default",
-            # TODO: consider switching to ghcr.io/jordemort/traefik-forward-auth:latest? see https://github.com/jordemort/traefik-forward-auth
-            image="thomseddon/traefik-forward-auth:2",
+            # Upstream https://github.com/thomseddon/traefik-forward-auth appears to no longer be maintained.
+            # https://github.com/jordemort/traefik-forward-auth looks like it has received some good love.
+            image="ghcr.io/jordemort/traefik-forward-auth:latest@sha256:394f86bff5cc839fac1392f65dd3d4471e827bc29321a4460e7d92042e026599",
             env={
                 # "LOG_LEVEL": "debug",
                 "COOKIE_DOMAIN": "snow.jflei.com",
-                "AUTH_HOST": "snowauth.snow.jflei.com",
+                "COOKIE_NAME": f"_forward_auth_{desc}",
+                "CSRF_COOKIE_NAME": f"_forward_auth_csrf_{desc}",
+                "AUTH_HOST": f"snowauth-{desc}.snow.jflei.com",
                 "SECRET": deage(
                     """
                     -----BEGIN AGE ENCRYPTED FILE-----
@@ -134,18 +162,8 @@ class Snowauth:
                 ),
                 "DEFAULT_PROVIDER": "oidc",
                 "PROVIDERS_OIDC_ISSUER_URL": "https://keycloak.snow.jflei.com/realms/snow",
-                "PROVIDERS_OIDC_CLIENT_ID": "snowauth",
-                "PROVIDERS_OIDC_CLIENT_SECRET": deage(
-                    """
-                    -----BEGIN AGE ENCRYPTED FILE-----
-                    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBITU1jZkhTeU5zRVd6eG1y
-                    b3FKVVBFMFdHdnF2dnptZmVUZWFjMVIyb3lVCnNrQmt1bmpOTmRuTkx5bkxpMEdt
-                    RXVJbElxaGZjYnRZRFRWdWNoVkVXSjgKLS0tIG80S1NHR29MYm04V0VJUXA5OUFw
-                    UXlRUUhUazVTbUo4bkFqMURLUjdlVjQK3uVLJMRcBpSz2f6xr1eFCneTJRlLYm+c
-                    H3DT+BQ4s2vizRtcs7wghE1x0kAQJPsQVoSp3RLFnn8akyKs3ePtDA==
-                    -----END AGE ENCRYPTED FILE-----
-                    """
-                ),
+                "PROVIDERS_OIDC_CLIENT_ID": self._snowauth_keycloak_client.client_id,
+                "PROVIDERS_OIDC_CLIENT_SECRET": self._snowauth_keycloak_client.client_secret,
                 "WHITELIST": ",".join(email_whitelist),
                 "LOGOUT_REDIRECT": "https://snow.jflei.com",
             },
@@ -211,7 +229,7 @@ class Snowauth:
         image: str,
         access: Access,
         port: int = 80,
-        env: dict[str, str] = {},
+        env: dict[str, pulumi.Input[str]] = {},
         args: list[str] = [],
         volumes: list[kubernetes.core.v1.VolumeArgs] = [],
         volume_mounts: list[kubernetes.core.v1.VolumeMountArgs] = [],
