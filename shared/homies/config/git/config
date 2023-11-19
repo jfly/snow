@@ -98,3 +98,5 @@
 	prompt = false
 [difftool "difftastic"]
 	cmd = difft "$LOCAL" "$REMOTE"
+[alias]
+    difft = difftool
