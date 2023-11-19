@@ -4,13 +4,14 @@
 # Connect to a AWS RDS instance with the given secret.
 # Usage: $0 -J bastion aws-secret-name
 
-from contextlib import closing
-import socket
 import time
+import os
 import argparse
 import sys
 import contextlib
 import dataclasses
+import socket
+from pathlib import Path
 import json
 import subprocess
 import tempfile
@@ -30,29 +31,83 @@ def doit(secret_id: str, jump_host: str|None, override_host: str|None):
 
 @dataclasses.dataclass
 class Tunnel:
+    local_socket_path: Path
+
+    remote_host: str
+    remote_port: int
+
+    def as_ssh_tunnel_args(self) -> list[str]:
+        dest = f"{self.remote_host}:{self.remote_port}"
+        return [
+            "-L",
+            f"{self.local_socket_path}:{dest}",
+        ]
+
+
+    def description(self) -> str:
+        return f"tunnel to {self.remote_host}:{self.remote_port} (accessible locally at {self.local_socket_path})"
+
+@dataclasses.dataclass
+class SocketConnection:
+    socket_path: Path
+
+    def to_mysql_conf(self) -> str:
+        return textwrap.dedent(
+            f"""\
+            socket={self.socket_path}
+            """
+        )
+
+@dataclasses.dataclass
+class TcpConnection:
     host: str
     port: int
 
+    def to_mysql_conf(self) -> str:
+        return textwrap.dedent(
+            f"""\
+            host={self.host}
+            port={self.port}
+            """
+        )
 
-def get_available_port() -> int:
-    # Trick from https://stackoverflow.com/a/45690594
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        return s.getsockname()[1]
+def is_socket_bound(socket_path: Path, cleanup_if_not_bound: bool=False) -> bool:
+    """
+    Try to check (this question is inherently imperfect) if the given path is a bound
+    socket. If it's not, return False.
 
-def is_port_bound(host: str, port: int) -> bool:
-    try:
-        with socket.create_connection((host, port), timeout=1):
-            return True
-    except OSError:
+    If `cleanup_if_not_bound` is specified, then try really hard to cleanup the
+    file if it's not a socket or not bound. This is useful for recovering from
+    past processes that didn't clean up after themselves.
+    """
+    if not socket_path.exists():
         return False
+
+    if not socket_path.is_socket():
+        if cleanup_if_not_bound:
+            socket_path.unlink()
+        else:
+            assert False, f"Unexpectedly found a non-socket file at {socket_path}"
+        return False
+    else:
+        client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+        try:
+            client_socket.connect(str(socket_path))
+            return True
+        except OSError:
+            if cleanup_if_not_bound:
+                socket_path.unlink()
+            return False
+        finally:
+            client_socket.close()
+
 
 def wait_for(f: Callable[[], bool], desc: str, timeout_seconds: int = 60):
     start = time.time()
-    print(f"Waiting for {desc}", end="")
+    print(f"Waiting for {desc}", end="", file=sys.stderr)
     while not f():
-        print(".", end="", flush=True)
+        print(".", end="", flush=True, file=sys.stderr)
         elapsed = time.time() - start
         if elapsed > timeout_seconds:
             print(f"timed out after {elapsed:.0f}s!")
@@ -60,25 +115,52 @@ def wait_for(f: Callable[[], bool], desc: str, timeout_seconds: int = 60):
         time.sleep(0.1)
 
     elapsed = time.time() - start
-    print(f"done in {elapsed:0.2f}s!")
+    print(f"done in {elapsed:0.2f}s!", file=sys.stderr)
+
+def get_runtime_dir() -> Path:
+    return Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}"))
+
+def to_fs_safe_str(unsafe: str) -> str:
+    """
+    Convert the given string into something guaranteed not to do anything too
+    interesting on a filesystem.
+    """
+    def keep(c: str) -> bool:
+        return c.isalnum() or c in {" ", ".", "_"}
+    return "".join(c if keep(c) else "-" for c in unsafe )
 
 @contextlib.contextmanager
-def ssh_tunnel(host: str, port: str, jump_host: str):
-    tunnel = Tunnel(host="127.0.0.1", port=get_available_port())
+def ssh_tunnel(host: str, port: int, jump_host: str):
+    runtime_dir = get_runtime_dir()
+    socket_path = (runtime_dir / "rds-connector" / to_fs_safe_str(f"{jump_host}:{host}:{port}")).with_suffix(".sock")
+    tunnel = Tunnel(local_socket_path=socket_path, remote_host=host, remote_port=port)
 
-    dest = f"{host}:{port}"
-    print(f"Setting up tunnel to {dest} via {jump_host}...")
+    if is_socket_bound(socket_path, cleanup_if_not_bound=True):
+        print(f"Found an existing socket at: {socket_path}. I'm going to use it instead of setting up a new tunnel.", file=sys.stderr)
+        yield tunnel
+        return
+
+    print(f"Setting up {tunnel.description()}", file=sys.stderr)
+
+    socket_path.parent.mkdir(parents=True, exist_ok=True)
+
     p = subprocess.Popen(
         ["ssh", "-N", "-M", "-o", "ExitOnForwardFailure=yes",
-         f"-L {tunnel.port}:{dest}", jump_host,],
+         *tunnel.as_ssh_tunnel_args(), jump_host,],
     )
 
     try:
-        wait_for(lambda: is_port_bound(tunnel.host, tunnel.port), f"port {tunnel.port} to be bound", timeout_seconds=5)
+        wait_for(lambda: is_socket_bound(tunnel.local_socket_path), f"socket {tunnel.local_socket_path} to be bound", timeout_seconds=5)
         yield tunnel
     finally:
-        print(f"cleaning up ssh tunnel (pid: {p.pid})")
+        print(f"cleaning up ssh tunnel (pid: {p.pid})", file=sys.stderr)
         p.terminate()
+        p.wait()
+        # Make a best effort to clean up after ssh. It's ok if we don't get
+        # around to this, see the explanation of the `cleanup_if_not_bound`
+        # parameter to `is_socket_bound` to understand how we clean this up on
+        # startup.
+        tunnel.local_socket_path.unlink()
 
 
 def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
@@ -86,7 +168,7 @@ def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
     password = secret['password']
     engine = secret['engine']
     host = override_host or secret['host']
-    port = secret['port']
+    port = int(secret['port'])
 
     connectors = {
         "mysql": mysql_connector,
@@ -95,20 +177,22 @@ def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
 
     if jump_host:
         with ssh_tunnel(host=host, port=port, jump_host=jump_host) as tunnel:
-            connector(host=tunnel.host, port=tunnel.port, user=username, password=password)
+            connection = SocketConnection(socket_path=tunnel.local_socket_path)
+            connector(connection=connection, user=username, password=password)
     else:
-        connector(host=host, port=port, user=username, password=password)
+        connection = TcpConnection(host=host, port=port)
+        connector(connection, user=username, password=password)
 
 
-def mysql_connector(host: str, port: int, user: str, password: str):
+
+def mysql_connector(connection: SocketConnection|TcpConnection, user: str, password: str):
     with tempfile.NamedTemporaryFile("w") as fp:
         with fp.file as f:
             f.write(
                 textwrap.dedent(
                     f"""\
                         [client]
-                        host={host}
-                        port={port}
+                        {connection.to_mysql_conf()}
 
                         user={user}
                         password={password}
