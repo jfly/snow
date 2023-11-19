@@ -59,6 +59,19 @@
     }:
     let
       agenix-rooter = import ./shared/agenix-rooter { inherit nixpkgs; };
+
+      patchNixpkgs = { nixpkgs, genPatches }:
+        let
+          patched = nixpkgs.applyPatches
+            {
+              name = "nixos-unstable-patched";
+              src = nixpkgs.path;
+              patches = genPatches nixpkgs;
+            };
+        in
+        import patched {
+          inherit (nixpkgs) system overlays;
+        };
     in
     (
       flake-utils.lib.eachDefaultSystem
@@ -168,9 +181,46 @@
               system = "aarch64-linux";
               overlays = import ./overlays;
             };
-            pattern = import nixos-unstable {
-              system = "x86_64-linux";
-              overlays = import ./overlays;
+            pattern = patchNixpkgs {
+              nixpkgs = (import nixos-unstable {
+                system = "x86_64-linux";
+                overlays = import ./overlays;
+              });
+              genPatches = unpatched: [
+                # TODO: remove once https://github.com/NixOS/nixpkgs/pull/267878 has landed.
+                (unpatched.fetchpatch {
+                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/267878.patch";
+                  hash = "sha256-hQq8hK+AaiWhcjO7MoQvipGUGO2z/L1oQ30y6oXg7mY=";
+                })
+                # This adds the fix suggested here: https://github.com/NixOS/nixpkgs/pull/267878/files#r1398003657
+                # This should also be able to be removed once https://github.com/NixOS/nixpkgs/pull/267878 has landed.
+                (unpatched.writeText "fix-awscli-build.patch" ''
+                  diff --git a/pkgs/tools/admin/awscli2/default.nix b/pkgs/tools/admin/awscli2/default.nix
+                  index 6dea6d80d48d..c899ac54c9e4 100644
+                  --- a/pkgs/tools/admin/awscli2/default.nix
+                  +++ b/pkgs/tools/admin/awscli2/default.nix
+                  @@ -23,6 +23,7 @@ let
+                         urllib3 = prev.urllib3.overridePythonAttrs (prev: {
+                           version = "1.26.18";
+                           format = "setuptools";
+                  +        pyproject = null;
+                           src = prev.src.override {
+                             version = "1.26.18";
+                             hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
+                '')
+                # Fix for beets build error: https://github.com/NixOS/nixpkgs/issues/268516
+                # TODO: remove if/when there's a fix for this in upstream nixpkgs.
+                (unpatched.fetchpatch {
+                  url = "https://github.com/jackwilsdon/nixpkgs/commit/e13fa51765126968c65da9368f9397dd76969543.patch";
+                  hash = "sha256-sE8JBI/NgGaFyro2tQvRRi2AkVM7p6IHwCzVduyDvIM=";
+                })
+                # TODO: remove this if/when
+                # https://github.com/NixOS/nixpkgs/pull/239349 gets merged.
+                (unpatched.fetchpatch {
+                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/239349.patch";
+                  hash = "sha256-UBZ/mc0xkM4gJkHj/+3Lmo1N0xSh1hYbwCnr9KKu02A=";
+                })
+              ];
             };
           };
         };
