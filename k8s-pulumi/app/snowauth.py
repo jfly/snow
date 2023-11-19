@@ -234,7 +234,9 @@ class Snowauth:
         volumes: list[kubernetes.core.v1.VolumeArgs] = [],
         volume_mounts: list[kubernetes.core.v1.VolumeMountArgs] = [],
         working_dir: Optional[str] = None,
-        pod_security_context: Optional[kubernetes.core.v1.PodSecurityContextArgs] = None,
+        pod_security_context: Optional[
+            kubernetes.core.v1.PodSecurityContextArgs
+        ] = None,
     ):
         deployment = snow_deployment(
             name=name,
