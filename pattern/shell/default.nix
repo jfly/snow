@@ -3,6 +3,7 @@
 let
   jgit = pkgs.callPackage ../../shared/jgit { };
   my-yazi = pkgs.callPackage ../../shared/my-yazi { };
+  smag = pkgs.callPackage ../../shared/smag { };
 in
 {
   imports = [
@@ -80,5 +81,11 @@ in
     pwgen
     htop
     moreutils # vidir
+
+    ### data graphing
+    (pkgs.writeShellScriptBin "qcsv" ''
+      exec ${q-text-as-data}/bin/q "$@"
+    '')
+    smag
   ];
 }
