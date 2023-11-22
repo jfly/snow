@@ -87,6 +87,7 @@ in
         library = "/mnt/media/beets/beets.db";
         unimported = {
           ignore_extensions = "db jpg";
+          ignore_subdirectories = "";
         };
 
         # I only use this plugin in order to remove embedded album art.

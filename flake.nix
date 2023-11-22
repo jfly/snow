@@ -161,9 +161,19 @@
           # https://github.com/zhaofengli/colmena/issues/54 tracks that feature
           # request for Colmena.
           nodeNixpkgs = rec {
-            clark = import nixos-unstable {
-              system = "x86_64-linux";
-              overlays = import ./overlays;
+            clark = patchNixpkgs {
+              nixpkgs = import nixos-unstable {
+                system = "x86_64-linux";
+                overlays = import ./overlays;
+              };
+              genPatches = unpatched: [
+                # Fix for beets build error: https://github.com/NixOS/nixpkgs/issues/268516
+                # TODO: remove if/when there's a fix for this in upstream nixpkgs.
+                (unpatched.fetchpatch {
+                  url = "https://github.com/jackwilsdon/nixpkgs/commit/e13fa51765126968c65da9368f9397dd76969543.patch";
+                  hash = "sha256-sE8JBI/NgGaFyro2tQvRRi2AkVM7p6IHwCzVduyDvIM=";
+                })
+              ];
             };
             dallben = import nixos-unstable {
               system = "x86_64-linux";
