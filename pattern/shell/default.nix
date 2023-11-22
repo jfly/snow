@@ -37,11 +37,6 @@ in
 
       eval "$(zoxide init zsh)"
     '';
-    shellAliases = {
-      l = "eza --icons -alh";
-      ll = "eza --icons -l";
-      ls = "eza --icons";
-    };
 
     promptInit = ''
       # Load p10k prompt
@@ -73,7 +68,6 @@ in
     tree
     my-yazi.drv
     zoxide
-    eza
 
     ### Misc utils
     psmisc # provides pstree
