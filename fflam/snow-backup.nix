@@ -1,12 +1,10 @@
 { config, pkgs, ... }:
 
 let
+  identities = import ../shared/identities.nix;
   # Generated with: ssh-keygen -t ed25519 -f key -P "" -C fflam
+  # Don't forget to update identities.nix if you regenerate this.
   keypair = {
-    # TODO: actually share this value with fflewddur/configuration.nix
-    public = pkgs.writeText ''
-      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxw+hsi7OFBP9tN1S/8PErm/AHWxcyJXC2k6q+96jqa fflam
-    '';
     privateKeyfile = config.age.secrets.snow-backup-ssh-private-key.path;
   };
   snow-backup = pkgs.writeShellApplication {
@@ -25,9 +23,7 @@ in
 {
   programs.ssh.knownHosts = {
     "fflewddur" = {
-      # Obtained with `ssh-keyscan fflewddur`
-      # TODO: actually share this with fflewddur's config.
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
+      publicKey = identities.fflewddur;
     };
   };
 
