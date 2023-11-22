@@ -119,6 +119,7 @@ pkgs.wrapNeovimUnstable patchedNeovim (
       cmp-buffer
       nvim-cmp
       null-ls-nvim
+      rust-tools-nvim
     ];
   }
 )

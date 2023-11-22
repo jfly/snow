@@ -389,7 +389,7 @@ lua << EOF
     }
 
     -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-    local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
+    local servers = { 'pyright', 'tsserver' }
     for _, lsp in ipairs(servers) do
       nvim_lsp[lsp].setup {
         on_attach = on_attach,
@@ -403,14 +403,24 @@ lua << EOF
                     typeCheckingMode = "basic",
                 },
             },
+        },
+      }
+    end
+
+    local rt = require("rust-tools")
+
+    rt.setup({
+      server = {
+        on_attach = on_attach,
+        settings = {
             ['rust-analyzer'] = {
                 checkOnSave = {
                     command = "clippy",
                 },
             },
         },
-      }
-    end
+      },
+    })
 
     nvim_lsp['ruff_lsp'].setup {
       on_attach = on_attach,
