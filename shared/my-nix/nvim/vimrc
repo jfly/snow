@@ -503,6 +503,8 @@ lua << EOF
         { name = 'nvim_lsp' },
       },
     }
+
+    require"fidget".setup{}
 EOF
 """""""
 

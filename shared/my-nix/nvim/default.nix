@@ -120,6 +120,7 @@ pkgs.wrapNeovimUnstable patchedNeovim (
       nvim-cmp
       null-ls-nvim
       rust-tools-nvim
+      fidget-nvim
     ];
   }
 )
