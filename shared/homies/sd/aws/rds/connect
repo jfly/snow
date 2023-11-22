@@ -4,6 +4,7 @@
 # Connect to a AWS RDS instance with the given secret.
 # Usage: $0 -J bastion aws-secret-name
 
+import hashlib
 import time
 import os
 import argparse
@@ -129,10 +130,22 @@ def to_fs_safe_str(unsafe: str) -> str:
         return c.isalnum() or c in {" ", ".", "_"}
     return "".join(c if keep(c) else "-" for c in unsafe )
 
+def truncate_uniquely(s: str, max_length: int) -> str:
+    shorthash = hashlib.sha512("asdf".encode()).hexdigest()[:8]
+    if len(s) < max_length:
+        return s
+    else:
+        suffix = shorthash + "-"
+        return s[0:max_length - len(suffix)] + suffix
+
 @contextlib.contextmanager
 def ssh_tunnel(host: str, port: int, jump_host: str):
     runtime_dir = get_runtime_dir()
-    socket_path = (runtime_dir / "rds-connector" / to_fs_safe_str(f"{jump_host}:{host}:{port}")).with_suffix(".sock")
+    # SSH seems to have a max file length on sockets. I know it's somewhere
+    # between 62 and 82, I haven't dug further. 64 seems like a nice power of
+    # 2.
+    ssh_max_sock_filename_length = 64
+    socket_path = (runtime_dir / "rds-connector" / truncate_uniquely(to_fs_safe_str(f"{jump_host}:{host}:{port}"), max_length=ssh_max_sock_filename_length)).with_suffix(".sock")
     tunnel = Tunnel(local_socket_path=socket_path, remote_host=host, remote_port=port)
 
     if is_socket_bound(socket_path, cleanup_if_not_bound=True):
