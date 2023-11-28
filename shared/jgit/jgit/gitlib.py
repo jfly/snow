@@ -25,7 +25,7 @@ REMOTE_REGEXPS = compile_all(
 
 
 class Cloneable:
-    def __init__(self, remote: str, force_https=False):
+    def __init__(self, remote: str):
         match = self._find_match(remote)
         groups = match.groupdict()
         protocol = groups.pop("protocol")
@@ -34,11 +34,14 @@ class Cloneable:
             piece for group in groups.values() for piece in group.split("/")
         ]
 
-        self._remote = (
-            f"git@{groups['domain']}:{groups['path']}.git"
-            if protocol == "https://" and not force_https
-            else remote
-        )
+        have_account = groups["domain"] in [
+            "github.com",
+            "gitlab.freedesktop.org",
+        ]
+        if protocol == "https://" and have_account:
+            remote = f"git@{groups['domain']}:{groups['path']}.git"
+
+        self._remote = remote
 
     def _find_match(self, remote: str):
         for regexp in REMOTE_REGEXPS:

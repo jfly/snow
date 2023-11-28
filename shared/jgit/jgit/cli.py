@@ -72,7 +72,6 @@ def main():
 def do_co(args):
     co(
         remote=args.remote,
-        force_https=args.force_https,
         dry_run=args.dry_run,
     )
 

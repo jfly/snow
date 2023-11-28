@@ -4,20 +4,20 @@ import subprocess
 from .gitlib import Cloneable
 
 
-def co(remote: str, force_https: bool, dry_run: bool):
+def co(remote: str, dry_run: bool):
     if dry_run:
         print("Beginning a dry run.", file=sys.stderr)
         print()
 
-    clone(remote, force_https=force_https, dry_run=dry_run)
+    clone(remote, dry_run=dry_run)
 
     if dry_run:
         print()
         print("Note: That was a dry run, nothing actually happened!", file=sys.stderr)
 
 
-def clone(remote: str, force_https: bool, dry_run: bool):
-    cloneable = Cloneable(remote, force_https)
+def clone(remote: str, dry_run: bool):
+    cloneable = Cloneable(remote)
     destination = cloneable.destination
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
