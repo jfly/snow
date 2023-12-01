@@ -510,7 +510,12 @@ lua << EOF
       },
     }
 
-    require"fidget".setup{}
+    require("fidget").setup {}
+
+    local telescope = require("telescope")
+    local builtin = require('telescope.builtin')
+    telescope.setup {}
+    vim.keymap.set('n', '<leader>fs', builtin.lsp_workspace_symbols, {})
 EOF
 """""""
 

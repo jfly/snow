@@ -65,6 +65,7 @@ pkgs.wrapNeovimUnstable patchedNeovim (
     customRC = builtins.readFile ./vimrc;
     plugins = with pkgs.vimPlugins; [
       fzf-vim
+      telescope-nvim
       MatchTagAlways
       matchit-zip
       # Tweak tcomment so comments for (nearly) all languages get the
