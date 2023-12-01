@@ -166,14 +166,7 @@
                 system = "x86_64-linux";
                 overlays = import ./overlays;
               };
-              genPatches = unpatched: [
-                # Fix for beets build error.
-                # TODO: remove when https://nixpk.gs/pr-tracker.html?pr=268598 lands in nixos-unstable
-                (unpatched.fetchpatch {
-                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/268598.patch";
-                  hash = "sha256-57aBKah9wbd75Ie3nTROjLStQGnN5yWaHigyCnu901g=";
-                })
-              ];
+              genPatches = unpatched: [];
             };
             dallben = import nixos-unstable {
               system = "x86_64-linux";
@@ -197,22 +190,12 @@
                 overlays = import ./overlays;
               });
               genPatches = unpatched: [
-                # TODO: remove once https://nixpk.gs/pr-tracker.html?pr=268590 lands in nixos-unstable
-                (unpatched.fetchpatch {
-                  url = "https://github.com/NixOS/nixpkgs/commit/c31544b31046e9831800b583acb31ad9e9677411.patch";
-                  hash = "sha256-eYBHUrbPZ2H3tKuh53QdJPQitzCwvViQCTwubfpoNYk=";
-                })
-                # Fix for beets build error.
-                # TODO: remove when https://nixpk.gs/pr-tracker.html?pr=268598 lands in nixos-unstable
-                (unpatched.fetchpatch {
-                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/268598.patch";
-                  hash = "sha256-57aBKah9wbd75Ie3nTROjLStQGnN5yWaHigyCnu901g=";
-                })
+                # inkscape/silhouette: init at 1.28
                 # TODO: remove this if/when
                 # https://github.com/NixOS/nixpkgs/pull/239349 gets merged.
                 (unpatched.fetchpatch {
                   url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/239349.patch";
-                  hash = "sha256-UBZ/mc0xkM4gJkHj/+3Lmo1N0xSh1hYbwCnr9KKu02A=";
+                  hash = "sha256-aw4GZH6CsREYlOWb4MYwoUIK9UT0soaAnE93YRlVlIw=";
                 })
               ];
             };
