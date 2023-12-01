@@ -121,6 +121,7 @@ pkgs.wrapNeovimUnstable patchedNeovim (
       null-ls-nvim
       rust-tools-nvim
       fidget-nvim
+      trouble-nvim
     ];
   }
 )

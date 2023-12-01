@@ -297,6 +297,9 @@ execute "autocmd FileType python nnoremap <leader>l oif __import__('os').environ
 map ]s :lua vim.diagnostic.goto_next()<cr>
 map [s :lua vim.diagnostic.goto_prev()<cr>
 
+" https://github.com/folke/trouble.nvim#commands
+nnoremap <leader>q <cmd>TroubleToggle workspace_diagnostics<cr>
+
 " Configuration modified from
 " https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion and
 " https://github.com/hrsh7th/nvim-cmp/#recommended-configuration
@@ -309,6 +312,10 @@ lua << EOF
     end
 
     local nvim_lsp = require('lspconfig')
+
+    require("trouble").setup {
+      icons = false,
+    }
 
     -- Use an on_attach function to only map the following keys
     -- after the language server attaches to the current buffer
@@ -334,7 +341,6 @@ lua << EOF
       buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
       buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-      buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
       buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
       buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
       buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
