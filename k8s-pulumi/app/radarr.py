@@ -8,7 +8,7 @@ class Radarr:
             name="radarr",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            image="cr.hotio.dev/hotio/radarr:latest",
+            image="ghcr.io/hotio/radarr:release-5.1.3.8246",
             port=7878,
             env={
                 "TZ": "America/Los_Angeles",
