@@ -7,15 +7,15 @@ let
     pname = "cli";
     # TODO: find a better way of keeping this up to date. Perhaps turn upstream
     # into a flake?
-    version = "0.0.32";
+    version = "0.0.63";
 
     src = builtins.fetchGit {
       url = "git@github.com:joinhonor/cli.git";
       ref = "refs/tags/${version}";
-      rev = "5e2baba929e96c7967c97cfc0bca79a21cc5b69e";
+      rev = "26ffe057b7ab8d34c344ffdafe9e29b03d9227ba";
     };
 
-    cargoHash = "sha256-93lVnnIOVYuRk6lBdbcUnWqtk5qGaeeF5DwRgRdysvw=";
+    cargoHash = "sha256-MqkvGo1GaQOei5/DW/vIfHzkqp0PtJ8JVjhV0mc1+xY=";
 
     # I'm not sure if this belongs in configurePhase (or even if it belongs in this package).
     # I originally tried adding it to installPhase, but that didn't work
@@ -24,6 +24,17 @@ let
       # Copy shell completions
       mkdir -p $out/share/zsh/site-functions
       cp completions/_honor $out/share/zsh/site-functions/_honor
+    '';
+
+    buildInputs = with pkgs; [ makeWrapper ];
+
+    # Add in various programs that the cli expects to be able to find/install
+    # itself.
+    postFixup = ''
+      wrapProgram $out/bin/honor \
+        --prefix PATH : ${lib.makeBinPath (with pkgs; [
+          mysql
+        ])}
     '';
 
     meta = with lib; {
