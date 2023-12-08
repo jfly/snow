@@ -342,6 +342,7 @@ lua << EOF
 
       buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
       buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      buf_set_keymap('x', '<leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
       buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
       buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
     end
@@ -422,6 +423,9 @@ lua << EOF
             ['rust-analyzer'] = {
                 checkOnSave = {
                     command = "clippy",
+                },
+                inlayHints = {
+                    maxLength = 99,
                 },
             },
         },
