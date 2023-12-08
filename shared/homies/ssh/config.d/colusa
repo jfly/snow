@@ -27,6 +27,8 @@ Host fflam
 Host thermometer
     HostName thermometer
     User root
+    # Urg
+    SetEnv TERM=xterm-256color
 
 Host thermostat
     HostName thermostat
