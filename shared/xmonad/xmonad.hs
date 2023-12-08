@@ -108,7 +108,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((modMask .|. shiftMask, xK_semicolon), spawn $ "cd $(xcwd); exec " ++ myTerminal)
 
     -- Toggle layout.
-    , ((modMask, xK_space), sendMessage ToggleLayout) -- Note: this doesn't work great with space as meta
     , ((modMask, xK_g), sendMessage ToggleLayout) -- Added as an alternative when using space as meta
 
     -- Go to next layout.

@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+# treat warnings as errors
+filterwarnings = ["error"]
+# configure pytest-xdist to run in parallel by default
+addopts = [
+    "--numprocesses=auto",
+]
