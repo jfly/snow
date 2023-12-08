@@ -17,6 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "Show Me A Graph - Command Line Graphing";
     homepage = "https://github.com/aantn/smag";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

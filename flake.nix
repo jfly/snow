@@ -166,7 +166,7 @@
                 system = "x86_64-linux";
                 overlays = import ./overlays;
               };
-              genPatches = unpatched: [];
+              genPatches = unpatched: [ ];
             };
             dallben = import nixos-unstable {
               system = "x86_64-linux";
