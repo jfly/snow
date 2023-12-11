@@ -24,6 +24,7 @@ CODE_BY_DESC: dict[str, int] = {
     "LS": ecodes.KEY_LEFTSHIFT,  # type: ignore
     "ESC": ecodes.KEY_ESC,  # type: ignore
     "⎄": ecodes.KEY_PAUSE,  # type: ignore
+    "mouse": ecodes.BTN_LEFT,  # type: ignore
     **{ch: getattr(ecodes, f"KEY_{ch}") for ch in string.ascii_uppercase},
 }
 DESC_BY_CODE = {code: desc for desc, code in CODE_BY_DESC.items()}

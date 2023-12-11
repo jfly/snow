@@ -110,6 +110,9 @@ void handle_key_event(struct state *state, const struct input_event *event) {
     }
   }
 
+  bool is_mouse_click = event->code == BTN_LEFT || event->code == BTN_MIDDLE ||
+                        event->code == BTN_RIGHT;
+
   if (event->code == KEY_SPACE && event->value == INPUT_VAL_PRESS) {
     if (state->state == START) {
       bool recently_released_space =
@@ -170,15 +173,8 @@ void handle_key_event(struct state *state, const struct input_event *event) {
     case START:
     case SPACE_IS_META:
     case SPACE_IS_REALLY_SPACE:
-      break;
     case SPACE_IS_SPACE:
-      WRITE_EVENTS(&meta_down,
-                   state->is_key_buffered ? &state->buffered_key_event : NULL,
-                   event, // emit that original key release event
-                   &space_up);
-      state->is_key_buffered = false;
-      state->state = SPACE_IS_META;
-      return;
+      break;
     case SPACE_HELD:
       WRITE_EVENTS(&meta_down, &noop_up,
                    state->is_key_buffered ? &state->buffered_key_event : NULL,
@@ -196,20 +192,28 @@ void handle_key_event(struct state *state, const struct input_event *event) {
       break;
     case SPACE_IS_SPACE:
     case SPACE_HELD:
-      if (state->is_key_buffered) {
-        // Oh boy, we already had one key buffered. This is too much to keep
-        // track off. Let's just chord and stop buffering keys.
-        WRITE_EVENTS(&meta_down, &state->buffered_key_event, event);
-        state->is_key_buffered = false;
-
+      if (is_mouse_click) {
+        WRITE_EVENTS(&meta_down, &noop_up,
+                     state->is_key_buffered ? &state->buffered_key_event : NULL,
+                     event);
         state->state = SPACE_IS_META;
         return;
       } else {
-        // Hold onto this key press event for now. We'll decide later if
-        // should get chorded with meta, or just emitted normally.
-        state->buffered_key_event = *event;
-        state->is_key_buffered = true;
-        return;
+        if (state->is_key_buffered) {
+          // Oh boy, we already had one key buffered. This is too much to keep
+          // track off. Let's just chord and stop buffering keys.
+          WRITE_EVENTS(&meta_down, &state->buffered_key_event, event);
+          state->is_key_buffered = false;
+
+          state->state = SPACE_IS_META;
+          return;
+        } else {
+          // Hold onto this key press event for now. We'll decide later if
+          // should get chorded with meta, or just emitted normally.
+          state->buffered_key_event = *event;
+          state->is_key_buffered = true;
+          return;
+        }
       }
     }
   }

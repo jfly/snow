@@ -67,6 +67,32 @@ class TestSpace2MetaFancy(ToolBaseTest):
             """
         )
 
+    def test_mouse_click_chords_on_key_down(self):
+        """
+        Unlike key presses, we want mouse clicks to chord on key down, rather
+        than key release.
+        """
+        self.expect(
+            """
+            time:           0ms 50ms           100ms 150ms
+            keyboard:       ␣↓  mouse↓         mouse↑   ␣↑
+            computer sees:  ⎄↓  LM↓ ⎄↑ mouse↓  mouse↑   LM↑
+            """
+        )
+
+    def test_mouse_click_with_buffered_key_chords_on_key_down(self):
+        """
+        This is similar to `test_mouse_click_chords_on_key_down`, except with a
+        buffered key this time.
+        """
+        self.expect(
+            """
+            time:           0ms 50ms  100ms              150ms    200ms   250ms
+            keyboard:       ␣↓  A↓    mouse↓             mouse↑   ␣↑      A↑
+            computer sees:  ⎄↓        LM↓ ⎄↑ A↓ mouse↓   mouse↑   LM↑     A↑
+            """
+        )
+
     def test_multi_chord(self):
         self.expect(
             """
@@ -115,20 +141,5 @@ class TestSpace2MetaFancy(ToolBaseTest):
             time:           0ms 50ms 100ms 150ms         150ms 200ms
             keyboard:       LS↓ ␣↓   G↓    G↑            LS↑   ␣↑
             computer sees:  LS↓ ⎄↓         LM↓ ⎄↑ G↓ G↑  LS↑   LM↑
-            """
-        )
-
-    def test_real_typing(self):
-        """
-        Here's a real recording of me typing "are you" as fast as I can, with
-        all the interleaved messiness. Basically, I seem to rely upon key down
-        resulting in the character getting typed, and it might take a few
-        characters before I actually release keys.
-        """
-        self.expect(
-            """
-            time:           0ms 50ms 100ms 150ms 200ms 250ms 300ms 350ms 400ms 450ms 500ms 550ms 600ms 650ms
-            keyboard:       A↓  R↓   E↓    A↑    ␣↓    R↑    Y↓    ␣↑    E↑    O↓    Y↑    U↓    O↑    U↑
-            computer sees:  A↓  R↓   E↓    A↑    ␣↓    R↑    Y↓    ␣↑    E↑    O↓    Y↑    U↓    O↑    U↑
             """
         )
