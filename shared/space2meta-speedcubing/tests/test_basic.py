@@ -16,27 +16,36 @@ class TestSpace2MetaFancy(ToolBaseTest):
     def test_tap_space(self):
         self.expect(
             """
-            time:           0ms 50ms 199ms
+            time:           0ms 50ms 200ms
             keyboard:       ␣↓  ␣⟳   ␣↑
             computer sees:  ⎄↓       ␣↓ ⎄↑ ␣↑
             """
         )
 
-    def test_hold_space(self):
+    def test_fast_double_tap_space_sends_space_repeat(self):
         self.expect(
             """
-            time:           0ms     200ms    250ms
-            keyboard:       ␣↓      ␣⟳       ␣↑
-            computer sees:  ⎄↓      ␣↓ ⎄↑    ␣↑
+                                       This is <= 200ms
+                  Keyrepeat ignored       |           Keyrepeat honored!
+                                |         V             |
+                                V      |---------|      V
+            time:           0ms 250ms  300ms     500ms  550ms  500ms
+            keyboard:       ␣↓  ␣⟳     ␣↑        ␣↓     ␣⟳     ␣↑
+            computer sees:  ⎄↓         ␣↓ ⎄↑ ␣↑  ␣↓     ␣⟳     ␣↑
             """
         )
 
-    def test_hold_space_multi(self):
+    def test_slow_double_tap_space_does_not_repeat(self):
         self.expect(
             """
-            time:           0ms     200ms    250ms  300ms  500ms  550ms
-            keyboard:       ␣↓      ␣⟳       ␣↑     ␣↓     ␣⟳     ␣↑
-            computer sees:  ⎄↓      ␣↓ ⎄↑    ␣↑     ⎄↓     ␣↓ ⎄↑  ␣↑
+                                  This is more than 200ms
+                                    |
+                                    V
+                                 |---------|
+            time:           0ms  100ms     301ms  350ms  400ms
+            keyboard:       ␣↓   ␣↑        ␣↓     ␣⟳     ␣↑
+            computer sees:  ⎄↓   ␣↓ ⎄↑ ␣↑  ⎄↓            ␣↓ ⎄↑ ␣↑
+
             """
         )
 
@@ -55,39 +64,6 @@ class TestSpace2MetaFancy(ToolBaseTest):
             time:           0ms  50ms 100ms         150ms
             keyboard:       ␣↓   A↓   A↑            ␣↑
             computer sees:  ⎄↓        LM↓ ⎄↑ A↓ A↑  LM↑
-            """
-        )
-
-    def test_slow_no_chord_on_key_down(self):
-        self.expect(
-            """
-            time:           0ms  200ms  250ms  400ms  350ms
-            keyboard:       ␣↓   ␣⟳     A↓     ␣↑     A↑
-            computer sees:  ⎄↓   ␣↓ ⎄↑         A↓ ␣↑  A↑
-                                                  ^
-                                                  |
-                                    Note that we intentionally wait to release
-                                    the space until *after* sending the
-                                    buffered keypress. This allows us to switch
-                                    from holding space to holding another key
-                                    without starting a Rubik's cube timer.
-            """
-        )
-
-    def test_slow_chord_on_key_up(self):
-        self.expect(
-            """
-            time:           0ms  200ms  250ms  350ms         400ms
-            keyboard:       ␣↓   ␣⟳     A↓     A↑            ␣↑
-            computer sees:  ⎄↓   ␣↓ ⎄↑         LM↓ A↓ A↑ ␣↑  LM↑
-                                                         ^
-                                                         |
-                                    Note that we intentionally wait to release
-                                    the space until *after* the meta chord.
-                                    This lets us navigate away from a Rubik's
-                                    cube timer without starting it (the window
-                                    loses focus and then doesn't receive the
-                                    space key release event)
             """
         )
 
@@ -125,6 +101,20 @@ class TestSpace2MetaFancy(ToolBaseTest):
             time:           0ms 50ms 100ms 150ms 200ms 250ms
             keyboard:       S↓  ␣↓   T↓    S↑    ␣↑    T↑
             computer sees:  S↓  ␣↓   T↓    S↑    ␣↑    T↑
+            """
+        )
+
+    def test_can_chord_if_shift_is_down(self):
+        """
+        I sometimes type commands like MOD + SHIFT + G with SHIFT + SPACE + G.
+        We should treat SHIFT specially so it being held doesn't prevent SPACE
+        from getting treated as MOD.
+        """
+        self.expect(
+            """
+            time:           0ms 50ms 100ms 150ms         150ms 200ms
+            keyboard:       LS↓ ␣↓   G↓    G↑            LS↑   ␣↑
+            computer sees:  LS↓ ⎄↓         LM↓ ⎄↑ G↓ G↑  LS↑   LM↑
             """
         )
 

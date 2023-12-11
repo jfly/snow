@@ -21,6 +21,7 @@ SYN_EVENT = InputEvent(
 CODE_BY_DESC: dict[str, int] = {
     "␣": ecodes.KEY_SPACE,  # type: ignore
     "LM": ecodes.KEY_LEFTMETA,  # type: ignore
+    "LS": ecodes.KEY_LEFTSHIFT,  # type: ignore
     "ESC": ecodes.KEY_ESC,  # type: ignore
     "⎄": ecodes.KEY_PAUSE,  # type: ignore
     **{ch: getattr(ecodes, f"KEY_{ch}") for ch in string.ascii_uppercase},
