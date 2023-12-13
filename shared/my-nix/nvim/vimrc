@@ -29,6 +29,7 @@ set mouse=
 " Instead, we use the `dim` colorscheme, which is designed to leave all the
 " careful color choosing up to our terminal emulator itself. See
 " https://jeffkreeftmeijer.com/vim-16-color/ for details.
+set notermguicolors  " This is supposed to default to false, but it sometimes gets set to true, so I'm opted to explicitly set it to false here.
 set background=light
 colorscheme dim
 

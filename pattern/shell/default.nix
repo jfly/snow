@@ -80,6 +80,7 @@ in
     (pkgs.writeShellScriptBin "qcsv" ''
       exec ${q-text-as-data}/bin/q "$@"
     '')
-    smag
+    # Disabled until https://github.com/aantn/smag/issues/7 is fixed.
+    # smag
   ];
 }

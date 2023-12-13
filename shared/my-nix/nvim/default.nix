@@ -1,15 +1,17 @@
 { pkgs }:
 
 let
-  # TODO: upstream this to nixpkgs?
   vim-dim = (pkgs.vimUtils.buildVimPlugin {
     pname = "vim-dim";
-    version = "1.1.0";
+    version = "1.1.1.pre";
     src = pkgs.fetchFromGitHub {
-      owner = "jeffkreeftmeijer";
+      # This fork of jeffkreeftmeijer/vim-dim contains fixes that work
+      # with neovim's updated default colorscheme.
+      # See https://github.com/neovim/neovim/issues/26378 for details.
+      owner = "jfly";
       repo = "vim-dim";
-      rev = "b1332575624e5a212ca702a89f1c78acd88beb22";
-      sha256 = "lyTZUgqUEEJRrzGo1FD8/t8KBioPrtB3MmGvPeEVI/g=";
+      rev = "nvim-tweaks";
+      sha256 = "sha256-u5NuIY6eBYycmk1BkJGE2DvU0cU18DfxLGc9ybOiO3s=";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
   }).overrideAttrs (oldAttrs: {
@@ -42,23 +44,9 @@ let
     " Override the VIM definition
     call tcomment#type#Define('vim', '"${conflictMarker} %s')
   '';
-  # Upgrade to master as a workaround for
-  # https://github.com/neovim/neovim/issues/21064 (relevant commit:
-  # https://github.com/neovim/neovim/commit/35c3275b4896a65d67caf2a4355d7516b6ddec29).
-  # This can probably go away once neovim 0.10 comes out:
-  # https://github.com/neovim/neovim/milestone/36, or maybe if we get lucky and
-  # the fix gets backported to the 0.9 train :crossed-fingers:
-  patchedNeovim = pkgs.neovim-unwrapped.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitHub {
-      owner = "neovim";
-      repo = "neovim";
-      rev = "35c3275b4896a65d67caf2a4355d7516b6ddec29";
-      sha256 = "sha256-r9bpwUZ9wZSPrf8p8u6UtOiHEBRHEkjvOKn2hWZxwQ4=";
-    };
-  });
 in
 
-pkgs.wrapNeovimUnstable patchedNeovim (
+pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
   pkgs.neovimUtils.makeNeovimConfig {
     vimAlias = true;
     viAlias = true;

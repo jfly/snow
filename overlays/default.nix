@@ -23,12 +23,6 @@
         };
         python3Packages = python3.pkgs;
 
-        # TODO: remove beets override once https://nixpk.gs/pr-tracker.html?pr=263650
-        #       has landed in nixos-unstable
-        beets = super.beets.overridePythonAttrs (old: {
-          doCheck = false;
-        });
-
         snow = {
           # Kind of weird to be hardcoding the path here, but I want this to
           # work in a pure build, which means we can't (and shouldn't) look at

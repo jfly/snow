@@ -5,7 +5,7 @@
   # services.printing.logLevel = "debug";
   # From https://nixos.wiki/wiki/Printing#Client_.28Linux.29
   services.avahi.enable = true;
-  services.avahi.nssmdns = true;
+  services.avahi.nssmdns4 = true;
 
   hardware.printers.ensurePrinters = [
     {

@@ -221,6 +221,19 @@ in
     environment.systemPackages = with pkgs; [
       ### Version control
       git
+      # `gh` manages credentials internally, but it also honors the
+      # `GITHUB_TOKEN` env var if one is present. However, this interferes with
+      # development in repos where I *do* have a `GITHUB_TOKEN` env var set.
+      # Since I seem to rely upon `gh`s internal authentication anyways, we can
+      # just completely ignore external `GITHUB_TOKEN` environment variables.
+      (pkgs.symlinkJoin {
+        name = pkgs.gh.name;
+        paths = [ pkgs.gh ];
+        buildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/gh --unset GITHUB_TOKEN
+        '';
+      })
 
       ### Network
       nm-vpn-add

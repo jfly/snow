@@ -3,7 +3,10 @@
 rec {
   ### Media
   #### Beets
-  beets = pkgs.beets;
+  # TODO: re-enable regular beets once https://github.com/NixOS/nixpkgs/issues/273907 is fixed
+  # beets = pkgs.beets;
+  beets = pkgs.beets.override { pluginOverrides = { replaygain.enable = false; }; };
+
   abcde = pkgs.abcde;
   mp3val = pkgs.mp3val;
   # TODO: follow up after a while and see if we need these (plugins?) somehow.
