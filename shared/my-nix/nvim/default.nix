@@ -11,7 +11,7 @@ let
       owner = "jfly";
       repo = "vim-dim";
       rev = "nvim-tweaks";
-      sha256 = "sha256-u5NuIY6eBYycmk1BkJGE2DvU0cU18DfxLGc9ybOiO3s=";
+      sha256 = "sha256-xulPcIyJV4Z7csy1/bPq8v96SkNHH5dj+6xxJwv19eE=";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
   }).overrideAttrs (oldAttrs: {

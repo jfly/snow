@@ -314,6 +314,24 @@ lua << EOF
 
     local nvim_lsp = require('lspconfig')
 
+    -- Add a border around varous floating windows.
+    -- https://vi.stackexchange.com/a/39075
+    local _border = "rounded"
+    vim.diagnostic.config { float = { border = _border } }
+    require('lspconfig.ui.windows').default_options = {
+      border = _border
+    }
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+      vim.lsp.handlers.hover, {
+        border = _border
+      }
+    )
+    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+      vim.lsp.handlers.signature_help, {
+        border = _border
+      }
+    )
+
     require("trouble").setup {
       icons = false,
     }
@@ -341,11 +359,11 @@ lua << EOF
 
       buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
-      buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+      buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
       buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
       buf_set_keymap('x', '<leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-      buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-      buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+      buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+      buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     end
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
