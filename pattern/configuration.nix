@@ -19,9 +19,12 @@ in
   # stuff up?
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Enable colmena deployments by non-root user.
   deployment.targetUser = config.snow.user.name;
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
+
+  # Allow colmena to deploy this locally.
   deployment.allowLocalDeployment = true;
 
   imports = [

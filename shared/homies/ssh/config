@@ -26,8 +26,10 @@ Host jflysopixel
 
 ### San Clemente stuff
 Host kent
-    HostName kent.sc.jflei.com
-    User root
+    # TODO: switch back to sc domain once it's back in san clemente
+    # HostName kent.sc.jflei.com
+    HostName kent
+    User kent
 
 Host sc-router
     User root

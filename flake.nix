@@ -207,9 +207,10 @@
             vim
             wget
             curl
-            mosh
             tmux
           ];
+
+          programs.mosh.enable = true;
 
           environment.variables = {
             EDITOR = "vim";
@@ -236,6 +237,9 @@
         };
         "pattern" = import pattern/configuration.nix {
           inherit agenix agenix-rooter home-manager;
+        };
+        "kent" = import kent/configuration.nix {
+          inherit agenix agenix-rooter;
         };
       };
 
