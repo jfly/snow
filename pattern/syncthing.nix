@@ -35,7 +35,7 @@ in
           "calibre" = {
             id = "ahnvm-wqudj";
             devices = [ "snow" ];
-            path = "${syncDir}/calibre";
+            path = "${syncDir}/jeremy/books/calibre";
           };
           "scratch" = {
             id = "etyx6-oh4ft";

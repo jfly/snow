@@ -83,8 +83,8 @@ in
           "convert"
         ];
 
-        directory = "/mnt/media/beets";
-        library = "/mnt/media/beets/beets.db";
+        directory = "/mnt/media/music";
+        library = "/mnt/media/music/beets.db";
         unimported = {
           ignore_extensions = "db jpg";
           ignore_subdirectories = "";
