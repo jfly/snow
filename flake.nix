@@ -42,6 +42,8 @@
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs =
@@ -55,6 +57,7 @@
     , home-manager
     , agenix
     , treefmt-nix
+    , nixos-hardware
     , ...
     }:
     let
@@ -239,7 +242,7 @@
           inherit agenix agenix-rooter home-manager;
         };
         "kent" = import kent/configuration.nix {
-          inherit agenix agenix-rooter;
+          inherit agenix agenix-rooter nixos-hardware;
         };
       };
 

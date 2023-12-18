@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter }:
+{ agenix, agenix-rooter, nixos-hardware }:
 { config, lib, pkgs, ... }:
 
 {
@@ -11,6 +11,7 @@
     ./printer.nix
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
+    nixos-hardware.nixosModules.raspberry-pi-4
   ];
 
   age.rooter = {
