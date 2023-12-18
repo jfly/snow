@@ -97,6 +97,6 @@
 [difftool]
 	prompt = false
 [difftool "difftastic"]
-	cmd = difft "$LOCAL" "$REMOTE"
+	cmd = difft --color=always "$LOCAL" "$REMOTE"
 [alias]
-    difft = difftool
+	difft = difftool
