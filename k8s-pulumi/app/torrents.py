@@ -8,7 +8,7 @@ class Torrents:
         snowauth.declare_app(
             name="torrents",
             namespace="vpn",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
+            access=Access.INTERNET_BEHIND_SSO_FAMILY,
             image="containers.snow.jflei.com/transmission:latest",
             port=9091,
             pod_security_context=PodSecurityContextArgs(

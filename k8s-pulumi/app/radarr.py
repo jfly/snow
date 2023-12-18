@@ -7,7 +7,7 @@ class Radarr:
         snowauth.declare_app(
             name="radarr",
             namespace="vpn",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
+            access=Access.INTERNET_BEHIND_SSO_FAMILY,
             image="ghcr.io/hotio/radarr:release-5.1.3.8246",
             port=7878,
             env={
