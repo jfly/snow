@@ -13,7 +13,7 @@ class SnowWeb:
             namespace="default",
             image="containers.snow.jflei.com/snow-web:latest",
             volume_mounts=[
-                # Only expose the movies and shows subdirectories.
+                # Only expose the movies, shows, and torrents subdirectories.
                 # This works, but we might want to consider restructuring
                 # /mnt/media to put these in a shared subdirectory instead (and
                 # use that as an opportunity to think carefully about
@@ -28,6 +28,11 @@ class SnowWeb:
                     name="mnt-media",
                     sub_path="shows",
                     mount_path="/mnt/media/shows",
+                ),
+                kubernetes.core.v1.VolumeMountArgs(
+                    name="mnt-media",
+                    sub_path="torrents",
+                    mount_path="/mnt/media/torrents",
                 ),
             ],
             # TODO: look into k8s persistent volumes for this
