@@ -15,9 +15,10 @@ let
     ;
 
   rooter-lib = pkgs.callPackage ../lib.nix { };
+  cfg = config.age;
 in
 {
-  config = {
+  config = mkIf (cfg.secrets != { }) {
     system.activationScripts.agenixRooterDerivedSecrets = {
       # Don't run until after agenix has actually generated the secrets.
       deps = [ "agenix" ];
@@ -47,7 +48,7 @@ in
                 chown ${generator.user}:${generator.group} '${filename}'
               ''
             )
-            config.age.rooter.derivedSecrets)
+            cfg.rooter.derivedSecrets)
       ) + (
         ''
           # Finally, remove any no-longer-needed files.
@@ -181,7 +182,7 @@ in
             ...
             [wifi-security]
             ...
-            psk=$${config.age.secrets.myssid-password.path}
+            psk=$${cfg.secrets.myssid-password.path}
             ''';
           }
         '';
