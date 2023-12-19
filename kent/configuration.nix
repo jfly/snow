@@ -6,9 +6,9 @@
 
   imports = [
     ./boot.nix
-    ./network.nix
     ./users.nix
     ./printer.nix
+    ./dyndns.nix
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
     nixos-hardware.nixosModules.raspberry-pi-4
