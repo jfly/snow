@@ -44,6 +44,9 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
+    pr-tracker.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -58,6 +61,7 @@
     , agenix
     , treefmt-nix
     , nixos-hardware
+    , pr-tracker
     , ...
     }:
     let
@@ -227,7 +231,7 @@
         };
 
         "clark" = import clark/configuration.nix {
-          inherit agenix agenix-rooter;
+          inherit agenix agenix-rooter pr-tracker;
         };
         "dallben" = import dallben/configuration.nix {
           inherit agenix agenix-rooter;

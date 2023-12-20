@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter }:
+{ agenix, agenix-rooter, pr-tracker }:
 { config, lib, pkgs, ... }:
 
 let identities = import ../shared/identities.nix;
@@ -12,6 +12,7 @@ in
       ./backup.nix
       ./dbs.nix
       ./dns.nix
+      (import ./pr-tracker.nix { inherit pr-tracker; })
       agenix.nixosModules.default
       agenix-rooter.nixosModules.default
     ];

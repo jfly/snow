@@ -1,38 +1,51 @@
 import pulumi_kubernetes as k8s
 
 
-class JflyLaptop:
-    """
-    Create a service without a selector and explicitly add an endpoint to get
-    traffic to my laptop.
-    (This is sometimes useful for rapid prototyping something that needs a real
-    certificate or needs to be exposed to the outside world.)
-    For more information about how this works, see:
-     - https://kubernetes.io/docs/concepts/services-networking/service/#services-without-selectors
-     - https://kristhecodingunicorn.com/post/k8s_proxy_svc/
-    """
-
+class MiscK8sHttpsProxies:
     def __init__(self):
+        # Feel free to enable/tweak as necessary.
+        # self._add_proxy(
+        #     "jflysolaptop",
+        #     destination_ip="192.168.1.182",  # pattern (jfly laptop)
+        #     destination_port=8080,
+        # )
+
+        self._add_proxy(
+            "pr-tracker",
+            destination_ip="192.168.1.110",  # clark
+            destination_port=7000,  # see clark/pr-tracker.nix
+        )
+
+    def _add_proxy(self, name: str, destination_ip: str, destination_port: int):
+        """
+        Create a service without a selector and explicitly add an endpoint to get
+        traffic to the destination.
+        (This is sometimes useful for rapid prototyping something that needs a real
+        certificate or needs to be exposed to the outside world.)
+        For more information about how this works, see:
+         - https://kubernetes.io/docs/concepts/services-networking/service/#services-without-selectors
+         - https://kristhecodingunicorn.com/post/k8s_proxy_svc/
+        """
         # Ingress resource
         k8s.networking.v1.Ingress(
-            "nextcloud",
+            name,
             metadata={
                 "annotations": {
                     "cert-manager.io/cluster-issuer": "letsencrypt-prod",
                     "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
                 },
-                "name": "nextcloud",
+                "name": name,
             },
             spec={
                 "tls": [
                     {
-                        "hosts": ["nextcloud.snow.jflei.com"],
-                        "secretName": "nextcloud-tls",
+                        "hosts": [f"{name}.snow.jflei.com"],
+                        "secretName": f"{name}-tls",
                     }
                 ],
                 "rules": [
                     {
-                        "host": "nextcloud.snow.jflei.com",
+                        "host": f"{name}.snow.jflei.com",
                         "http": {
                             "paths": [
                                 {
@@ -40,7 +53,7 @@ class JflyLaptop:
                                     "pathType": "Prefix",
                                     "backend": {
                                         "service": {
-                                            "name": "pattern-laptop",
+                                            "name": name,
                                             "port": {
                                                 "number": 80,
                                             },
@@ -56,9 +69,9 @@ class JflyLaptop:
 
         # Service resource
         k8s.core.v1.Service(
-            "pattern-laptop",
+            name,
             metadata={
-                "name": "pattern-laptop",
+                "name": name,
             },
             spec={
                 "ports": [
@@ -78,9 +91,9 @@ class JflyLaptop:
         # apiVersion: discovery.k8s.io/v1
         # kind: EndpointSlice
         # metadata:
-        #   name: pattern-laptop-1
+        #   name: {name}
         #   labels:
-        #     kubernetes.io/service-name: pattern-laptop
+        #     kubernetes.io/service-name: {name}
         # addressType: IPv4
         # ports:
         #   - name: ''
@@ -89,22 +102,22 @@ class JflyLaptop:
         #     port: 11000
         # endpoints:
         #   - addresses:
-        #       - "192.168.1.9"  # pattern (jfly laptop)
+        #       - {destination_ip}
         k8s.core.v1.Endpoints(
-            "pattern-laptop",
+            name,
             metadata={
-                "name": "pattern-laptop",
+                "name": name,
             },
             subsets=[
                 {
                     "addresses": [
                         {
-                            "ip": "192.168.1.9",  # pattern (jfly laptop)
+                            "ip": destination_ip,
                         }
                     ],
                     "ports": [
                         {
-                            "port": 11000,
+                            "port": destination_port,
                         }
                     ],
                 }

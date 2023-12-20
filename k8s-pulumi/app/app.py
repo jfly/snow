@@ -16,6 +16,7 @@ from .snow_web import SnowWeb
 from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
+from .misc_k8s_https_proxies import MiscK8sHttpsProxies
 
 
 def build_app():
@@ -35,6 +36,9 @@ def build_app():
     Invidious(namespace="default", snowauth=snowauth)
     NixCache(namespace="default", snowauth=snowauth)
     Nextcloud(snowauth=snowauth)
+    # Useful if you really need to run a service somewhere outside of the
+    # cluster (perhaps on your laptop) with a valid https cert.
+    MiscK8sHttpsProxies()
 
     Torrents(snowauth)
     Jackett(snowauth)
@@ -48,7 +52,3 @@ def build_app():
     # An example of using a helm chart and dealing with ingress. Also, using
     # Pulumi to declare an s3 bucket.
     # from .baserow import Baserow; Baserow(namespace="default", snowauth=snowauth)
-
-    # Useful if you really need to run a service locally with a valid https
-    # cert.
-    # from .jfly_laptop import JflyLaptop; JflyLaptop()
