@@ -22,12 +22,12 @@ from typing import Callable
 import boto3
 
 
-def doit(secret_id: str, jump_host: str|None, override_host: str|None):
+def doit(secret_id: str, jump_host: str|None, override_host: str|None, schema: str|None, quick: bool):
     client = boto3.client('secretsmanager')
     response = client.get_secret_value(SecretId=secret_id)
     secret_str = response['SecretString']
     secret = json.loads(secret_str)
-    mysql_shell(secret, jump_host, override_host)
+    mysql_shell(secret, jump_host, override_host, schema=schema, quick=quick)
 
 
 @dataclasses.dataclass
@@ -176,7 +176,7 @@ def ssh_tunnel(host: str, port: int, jump_host: str):
         tunnel.local_socket_path.unlink()
 
 
-def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
+def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None, schema: str|None, quick: bool):
     username = secret['username']
     password = secret['password']
     engine = secret['engine']
@@ -191,14 +191,14 @@ def mysql_shell(secret: dict, jump_host: str|None, override_host: str|None):
     if jump_host:
         with ssh_tunnel(host=host, port=port, jump_host=jump_host) as tunnel:
             connection = SocketConnection(socket_path=tunnel.local_socket_path)
-            connector(connection=connection, user=username, password=password)
+            connector(connection=connection, user=username, password=password, schema=schema, quick=quick)
     else:
         connection = TcpConnection(host=host, port=port)
-        connector(connection, user=username, password=password)
+        connector(connection, user=username, password=password, schema=schema, quick=quick)
 
 
 
-def mysql_connector(connection: SocketConnection|TcpConnection, user: str, password: str):
+def mysql_connector(connection: SocketConnection|TcpConnection, user: str, password: str, schema: str|None, quick: bool):
     with tempfile.NamedTemporaryFile("w") as fp:
         with fp.file as f:
             f.write(
@@ -212,7 +212,14 @@ def mysql_connector(connection: SocketConnection|TcpConnection, user: str, passw
                         """
                 )
             )
-        p = subprocess.Popen(["mysql", f"--defaults-file={f.name}"])
+
+        args=["mysql", f"--defaults-file={f.name}"]
+        if schema is not None:
+            args.append(schema)
+        if quick:
+            args.append("--disable-auto-rehash")
+
+        p = subprocess.Popen(args)
         p.wait()
 
 
@@ -227,9 +234,16 @@ def main():
     parser.add_argument(
         "--jump-host", "-J", help="ssh jump host to use to connect to the db"
     )
+    parser.add_argument(
+        "--schema", "-s", help='schema to connect to (confusingly also called a "database")'
+    )
+    parser.add_argument(
+        "--quick", help='pass --disable-auto-rehash (-A) to mysql to speed up initial connection', action='store_true'
+    )
+
 
     args = parser.parse_args()
-    doit(secret_id=args.secret, jump_host=args.jump_host, override_host=args.override_host)
+    doit(secret_id=args.secret, jump_host=args.jump_host, override_host=args.override_host, schema=args.schema, quick=args.quick)
 
 
 if __name__ == "__main__":
