@@ -38,7 +38,7 @@ def build_app():
     Nextcloud(snowauth=snowauth)
     # Useful if you really need to run a service somewhere outside of the
     # cluster (perhaps on your laptop) with a valid https cert.
-    MiscK8sHttpsProxies()
+    MiscK8sHttpsProxies(snowauth=snowauth)
 
     Torrents(snowauth)
     Jackett(snowauth)

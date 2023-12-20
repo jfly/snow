@@ -66,22 +66,6 @@ class SnowWeb:
         )
         http_ingress(
             service,
-            ingress_name="snow-web-lloyd",
-            traefik_middlewares=snowauth.middlewares_for_access(
-                Access.INTERNET_BEHIND_SSO_RAREMY
-            ),
-            base_url="https://lloyd.snow.jflei.com",
-        )
-        http_ingress(
-            service,
-            ingress_name="snow-web-kodi",
-            traefik_middlewares=snowauth.middlewares_for_access(
-                Access.INTERNET_BEHIND_SSO_RAREMY
-            ),
-            base_url="https://kodi.snow.jflei.com",
-        )
-        http_ingress(
-            service,
             ingress_name="snow-web-tnoodle-redirect",
             traefik_middlewares=snowauth.middlewares_for_access(
                 Access.INTERNET_UNSECURED
