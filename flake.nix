@@ -204,6 +204,11 @@
                   url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/239349.patch";
                   hash = "sha256-aw4GZH6CsREYlOWb4MYwoUIK9UT0soaAnE93YRlVlIw=";
                 })
+                # Builds on top of the previous pr by upgrading to silhouette unstable.
+                (unpatched.fetchpatch {
+                  url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
+                  hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
+                })
               ];
             };
           };
