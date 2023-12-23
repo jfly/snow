@@ -18,7 +18,7 @@
 
   services.cfdyndns = {
     enable = true;
-    records = [ "sc.snow.jflei.com" ];
+    records = [ "sc.jflei.com" ];
 
     email = "jeremyfleischman@gmail.com";
     apiTokenFile = config.age.secrets.sc-dyndns-api-token.path;
