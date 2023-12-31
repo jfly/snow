@@ -202,7 +202,7 @@
                 # https://github.com/NixOS/nixpkgs/pull/239349 gets merged.
                 (unpatched.fetchpatch {
                   url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/239349.patch";
-                  hash = "sha256-aw4GZH6CsREYlOWb4MYwoUIK9UT0soaAnE93YRlVlIw=";
+                  hash = "sha256-tNVrTXvf3sF6+cwd7ugloxpQtnIZPnPNL3dRTSIVRSM=";
                 })
                 # Builds on top of the previous pr by upgrading to silhouette unstable.
                 (unpatched.fetchpatch {
