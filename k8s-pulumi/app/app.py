@@ -2,6 +2,7 @@ from .snowauth import Snowauth
 from .jackett import Jackett
 from .radarr import Radarr
 from .sonarr import Sonarr
+from .bazarr import Bazarr
 from .torrents import Torrents
 from .syncthing import Syncthing
 from .whoami import Whoami
@@ -44,6 +45,7 @@ def build_app():
     Jackett(snowauth)
     Radarr(snowauth)
     Sonarr(snowauth)
+    Bazarr(snowauth)
 
     ###
     ### Some stuff that's useful to turn on as necessary, but not stuff I want running 24/7
