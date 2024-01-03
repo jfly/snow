@@ -34,10 +34,6 @@ in
   system.stateVersion = "21.11"; # Did you read the comment?
 
   variables.kodiUsername = "dallben";
-  networking.hostName = config.variables.kodiUsername;
-  # Disable the firewall. Kodi needs to expose various ports to function, and
-  # we're behind a NAT anyways...
-  networking.firewall.enable = false;
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";

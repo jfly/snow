@@ -85,9 +85,7 @@ in
     psk = config.age.secrets.cal-5g-passphrase;
   };
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
+  # Let NetworkManager handle everything.
   networking.useDHCP = false;
   # Disable the firewall. I'm not used to having one, and we're behind a NAT anyways...
   networking.firewall.enable = false;
