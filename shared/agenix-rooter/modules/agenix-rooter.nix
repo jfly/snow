@@ -168,7 +168,7 @@ in
           encrypt the whole configuration file just because it has a secret
           somewhere inside of it.
 
-          These files are managed declaratively: that is, iif you stop
+          These files are managed declaratively: that is, if you stop
           declaring one of them, it will get deleted. However, any ancestor
           directories we created when initially creating the file will stay
           behind, even if removing the file means the their parent directory is

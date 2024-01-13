@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   home = "/home/${config.snow.user.name}";
@@ -18,7 +18,13 @@ in
       ];
       configDir = "${home}/.config/syncthing";
       overrideDevices = true;
-      overrideFolders = true;
+
+      # We can't enable `overrideFolders` as it removes the encrypted folders
+      # we add below (see `syncthing-add-encrypted-folders` below). We could fix this,
+      # but it's probably not worth the effort (we should just get support for
+      # encrypted folders merged upstream instead).
+      overrideFolders = false;
+
       settings = {
         devices = {
           "snow" = {
@@ -47,11 +53,6 @@ in
             devices = [ "snow" ];
             path = "${syncDir}/wallpaper";
           };
-          "linux-secrets" = {
-            devices = [ "snow" ];
-            ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
-            path = "${syncDir}/linux-secrets";
-          };
           "manman" = {
             id = "amnsl-rxpc2";
             devices = [ "snow" ];
@@ -61,4 +62,84 @@ in
       };
     };
   };
+
+  age.secrets.syncthing-linux-secrets = {
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaWUhYQ28wOEdMcVNPaC9Y
+      TTFCTmR3bjhNUHgwa05HaXljbVVnS3VNVTI4CjMrV2tZbENWekZlK2FjSDVjOVBz
+      MGM4OWZxb3h5b2ZsOEVuQWF1WnlVREEKLS0tIEpFREpYSk5sQ0FoMXhIZWVtMDIv
+      V3ZqNGVNUGhwOEdEQnhtZDhiNmFJbEkKAsTd1rVUPuvf+WuLtVwz76EiqDc0DQcE
+      z3FlFXEJCoPdI5VrzCi2CcIf7hDZ2h66bHfMMA==
+      -----END AGE ENCRYPTED FILE-----
+    '';
+    mode = "400";
+    owner = config.services.syncthing.user;
+    group = "root";
+  };
+
+  # The NixOS syncthing module doesn't have support for encrypted folders yet.
+  # I hacked this systemd unit together by copying swaths of code from nixpkgs
+  # (nixos/modules/services/networking/syncthing.nix). It works (-ish, see note above about `overrideFolders`), but hopefully
+  # we can get rid of it someday. It looks like there's a chance that upstream
+  # will support this someday, see
+  # https://github.com/NixOS/nixpkgs/issues/121286 and
+  # https://github.com/NixOS/nixpkgs/pull/205653.
+  systemd.services.syncthing-add-encrypted-folders =
+    let
+      cfg = config.services.syncthing;
+      curlAddressArgs = path: "${cfg.guiAddress}${path}";
+      baseAddress = curlAddressArgs "/rest/config/folders";
+      folderCfg = {
+        id = "linux-secrets";
+        label = "linux-secrets";
+        ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
+        path = "${syncDir}/linux-secrets";
+        devices = [
+          ({
+            deviceId = cfg.settings.devices."snow".id;
+            encryptionPassword = "@LINUX_SECRETS_PASSPHRASE@";
+          })
+        ];
+      };
+    in
+    {
+      description = "Syncthing configuration encryption updater";
+      requisite = [ "syncthing.service" ];
+      after = [ "syncthing.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        User = cfg.user;
+        RemainAfterExit = true;
+        RuntimeDirectory = "syncthing-init";
+        Type = "oneshot";
+        ExecStart = pkgs.writers.writeBash "merge-syncthing-config" (
+          ''
+            set -efu
+
+            # be careful not to leak secrets in the filesystem or in process listings
+            umask 0077
+
+            curl() {
+                # get the api key by parsing the config.xml
+                while
+                    ! ${pkgs.libxml2}/bin/xmllint \
+                        --xpath 'string(configuration/gui/apikey)' \
+                        ${cfg.configDir}/config.xml \
+                        >"$RUNTIME_DIRECTORY/api_key"
+                do sleep 1; done
+                (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+                ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+                    --retry 1000 --retry-delay 1 --retry-all-errors \
+                    "$@"
+            }
+
+            payload=${lib.escapeShellArg (builtins.toJSON folderCfg)}
+            payload=''${payload/@LINUX_SECRETS_PASSPHRASE@/$(cat ${config.age.secrets.syncthing-linux-secrets.path})}
+            curl -d "$payload" -X POST ${baseAddress}
+          ''
+        );
+      };
+    };
 }
