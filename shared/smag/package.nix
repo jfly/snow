@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "smag";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "aantn";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AR9+kKSKwah4am7pQjiwjda2cYFcRSzMVGuYzpI+G04=";
+    hash = "sha256-PdrK4kblXju23suMe3nYFT1KEbyQu4fwP/XTb2kV1fs=";
   };
 
-  cargoHash = "sha256-G0baatyGgKYB1Y8Ja2BSNzwGCpzL+SjDxCAWqQ7J/yw=";
+  cargoHash = "sha256-SX6tOodmB0usM0laOt8mjIINPYbzHI4gyUhsR21Oqrw=";
 
   meta = with lib; {
     description = "Show Me A Graph - Command Line Graphing";
