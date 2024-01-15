@@ -7,7 +7,7 @@
 let
   with-alacritty = pkgs.symlinkJoin {
     name = "with-alacritty";
-    paths = [ (unpywrap (pkgs.callPackage ./derivation.nix { })) ];
+    paths = [ (unpywrap (pkgs.python3.pkgs.callPackage ./derivation.nix { })) ];
     buildInputs = [ pkgs.makeWrapper ];
     # Set up a pointer to the real alacritty so we don't end up with an
     # infinite loop because of the alacritty-direct wrapper we're creating

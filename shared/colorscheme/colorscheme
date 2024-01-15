@@ -52,9 +52,7 @@ function _get_json_colorscheme() {
         exit 1
     fi
 
-    # We are legitimately trying to pass a dollarsign character to yq here.
-    # shellcheck disable=SC2016
-    yq --arg cs "$colorscheme" '.colors + {name: $cs}' "$file"
+    yq '.colors' "$file"
 }
 
 # Validate command line arguments
@@ -129,17 +127,19 @@ function _get() {
 
     local location=$1
 
-    with-alacritty get "$(_get_location "$location")" | jq --raw-output '.colors.name'
+    with-alacritty get "$(_get_location "$location")" | jq --raw-output '.colors'
 }
 
 function _index_of_in() {
-    local findme=$1
+    local find_colorscheme_json=$1
     shift
 
     local found_index=-1
     local i=0
-    for colorscheme in "$@"; do
-        if [ "$colorscheme" = "$findme" ]; then
+    for colorscheme_name in "$@"; do
+        colorscheme_json="$(_get_json_colorscheme "$colorscheme_name")"
+
+        if [ "$colorscheme_json" = "$find_colorscheme_json" ]; then
             found_index=$i
         fi
         i=$((i + 1))

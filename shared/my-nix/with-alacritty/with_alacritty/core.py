@@ -9,8 +9,9 @@ from typing import Union
 from typing import Any
 import subprocess
 import logging
+import tomli_w
+import tomllib
 import psutil
-import json
 import sys
 import os
 import re
@@ -52,8 +53,8 @@ def _get_global_conf_path() -> Path:
     default_conf_path = _data_dir().joinpath("global.conf")
 
     if not default_conf_path.exists():
-        with default_conf_path.open("w") as f:
-            json.dump({}, f)
+        with default_conf_path.open("wb") as f:
+            tomli_w.dump({}, f)
 
     return default_conf_path
 
@@ -167,13 +168,17 @@ class _Scope:
         logger.debug("_Scope: %s -> %s", which, self._path)
 
     def read(self) -> dict[str, Any]:
-        with self._path.open("r") as f:
-            return json.load(f)
+        with self._path.open("rb") as f:
+            try:
+                return tomllib.load(f)
+            except tomllib.TOMLDecodeError:
+                logger.exception("Error parsing %s as toml", f)
+                raise
 
     def write(self, value):
         # Write the updated settings to the conf file.
-        with self._open("w") as f:
-            json.dump(value, f)
+        with self._open("wb") as f:
+            tomli_w.dump(value, f)
 
         # Now regenerate all the affected configs.
         for pid in self.get_affected_pids():
@@ -196,8 +201,8 @@ def _generate_merged_config(pid: int):
     def load_conf(path, ok_if_missing=False):
         if not path.exists() and ok_if_missing:
             return {}
-        with path.open("r") as f:
-            return json.load(f)
+        with path.open("rb") as f:
+            return tomllib.load(f)
 
     configs = [
         load_conf(_get_default_conf_path(), ok_if_missing=True),
@@ -211,8 +216,8 @@ def _generate_merged_config(pid: int):
     ] = True  # this whole thing relies upon this setting being enabled.
 
     merged_conf_path = _get_merged_conf_path(pid)
-    with merged_conf_path.open("w") as f:
-        json.dump(merged, f)
+    with merged_conf_path.open("wb") as f:
+        tomli_w.dump(dict(merged), f)
 
     return merged_conf_path
 
@@ -278,8 +283,8 @@ def start_new_terminal(args: list[str]):
 
     # Start with an empty config file
     conf_path = _get_terminal_conf_path(pid)
-    with conf_path.open("w") as f:
-        json.dump({}, f)
+    with conf_path.open("wb") as f:
+        tomli_w.dump({}, f)
 
     merged_path = _generate_merged_config(pid)
 

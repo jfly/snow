@@ -1,5 +1,12 @@
-{ lib, python3Packages }:
-with python3Packages; buildPythonApplication {
+{ black
+, buildPythonApplication
+, mergedeep
+, psutil
+, pytestCheckHook
+, pyxdg
+, tomli-w
+}:
+buildPythonApplication {
   pname = "with-alacritty";
   version = "1.0";
 
@@ -10,11 +17,11 @@ with python3Packages; buildPythonApplication {
     mergedeep
     psutil
     pyxdg
+    tomli-w
   ];
 
   nativeBuildInputs = [
     black
-    pytest
   ];
 
   src = ./.;

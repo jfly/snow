@@ -13,7 +13,7 @@ rec {
   # AddPackage python-pyacoustid # Bindings for Chromaprint acoustic fingerprinting and the Acoustid API
   # AddPackage python-eyed3 # A Python module and program for processing information about mp3 files
   #### MPD
-  ashuffle = pkgs.ashuffle;
+  #<<< ashuffle = pkgs.ashuffle;
 
   ### Ebooks
   calibre = pkgs.symlinkJoin {

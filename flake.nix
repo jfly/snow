@@ -197,14 +197,7 @@
                 overlays = import ./overlays;
               });
               genPatches = unpatched: [
-                # inkscape/silhouette: init at 1.28
-                # TODO: remove this if/when
-                # https://github.com/NixOS/nixpkgs/pull/239349 gets merged.
-                (unpatched.fetchpatch {
-                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/239349.patch";
-                  hash = "sha256-tNVrTXvf3sF6+cwd7ugloxpQtnIZPnPNL3dRTSIVRSM=";
-                })
-                # Builds on top of the previous pr by upgrading to silhouette unstable.
+                # Upgrade to inkscape/silhouette unstable.
                 (unpatched.fetchpatch {
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
