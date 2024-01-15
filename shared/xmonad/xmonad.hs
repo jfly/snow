@@ -170,7 +170,7 @@ isNotInfixOf a b = not (a `isInfixOf` b)
 myUrgencyHook =
     withUrgencyHookC BorderUrgencyHook
         { urgencyBorderColor = "#00ff00" }
-    urgencyConfig
+    def
         { suppressWhen = XMonad.Hooks.UrgencyHook.Focused }
 
 main = do
