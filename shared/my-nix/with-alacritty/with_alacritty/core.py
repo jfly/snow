@@ -54,7 +54,18 @@ def _get_global_conf_path() -> Path:
 
     if not default_conf_path.exists():
         with default_conf_path.open("wb") as f:
-            tomli_w.dump({}, f)
+            tomli_w.dump(
+                {
+                    # Workaround for https://github.com/alacritty/alacritty/issues/7623
+                    "keyboard": {
+                        "bindings": [
+                            {"key": "Pause", "action": "None"},
+                            {"key": "Pause", "mods": "Shift", "action": "None"},
+                        ],
+                    }
+                },
+                f,
+            )
 
     return default_conf_path
 
