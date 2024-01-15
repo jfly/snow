@@ -202,6 +202,11 @@
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
+                # Upgrade ashuffle as a fix for https://github.com/NixOS/nixpkgs/issues/281205
+                (unpatched.fetchpatch {
+                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/230842.patch";
+                  hash = "sha256-nZSl7v26kQ2+8mH2YOToXCKw+QPRUkOrOfftykqj98s=";
+                })
               ];
             };
           };
