@@ -1,5 +1,3 @@
-# TODO: remove this once (if) https://github.com/NixOS/nixpkgs/pull/239349 gets
-#       merged.
 { config, lib, pkgs, modulesPath, ... }:
 
 let

@@ -40,10 +40,22 @@ let
       localSystem = pkgs.system;
     }).poetry;
 
+  poetry171 = (import
+    (builtins.fetchGit {
+      name = "nixpkgs-with-poetry-1.7.1";
+      url = "https://github.com/NixOS/nixpkgs/";
+      ref = "refs/heads/master";
+      rev = "4e1582c0136f371f68c23074acf8ae22ddb14a0a";
+    })
+    {
+      localSystem = pkgs.system;
+    }).poetry;
+
   derivationByVersion = {
     "1.5.0" = poetry150;
     "1.5.1" = poetry151;
     "1.6.1" = poetry161;
+    "1.7.1" = poetry171;
   };
 in
 version: if builtins.hasAttr version derivationByVersion then derivationByVersion.${version} else
