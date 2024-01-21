@@ -17,11 +17,7 @@ let
 in
 symlinkJoin {
   name = "beets";
-  paths = [
-    # TODO: re-enable regular beets once https://github.com/NixOS/nixpkgs/issues/273907 is fixed
-    # beets
-    (beets.override { pluginOverrides = { replaygain.enable = false; }; })
-  ];
+  paths = [ beets ];
 
   buildInputs = [ makeWrapper ];
   postBuild = ''

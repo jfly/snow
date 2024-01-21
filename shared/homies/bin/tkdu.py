@@ -1,7 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python311.withPackages (p: with p; [ tkinter ])"
-# NOTE: we're using python311 instead of plain old python3 as a workaround for
-# https://github.com/NixOS/nixpkgs/issues/238990
+#!nix-shell -i python3 -p "python3.withPackages (p: with p; [ tkinter ])"
 
 # Copied from https://github.com/zeehio/tkdu/blob/master/tkdu.py
 #    This is tkdu.py, an interactive program to display disk usage

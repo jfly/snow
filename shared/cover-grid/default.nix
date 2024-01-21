@@ -6,10 +6,6 @@ pkgs.python3.pkgs.buildPythonApplication rec {
 
   format = "other";
 
-  # Broken with gobject-introspection setup hook
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   src = pkgs.fetchFromGitLab {
     owner = "coderkun";
     repo = "mcg";

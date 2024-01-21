@@ -295,8 +295,7 @@ in
     ### Media editing (images, audio, video)
     gimp
     (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
-    # https://github.com/NixOS/nixpkgs/issues/239424
-    # avidemux
+    avidemux
     audacity
 
     ### PDF

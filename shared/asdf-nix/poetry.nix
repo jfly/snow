@@ -7,7 +7,6 @@ let
     "1.3.0" = "16ng59ykm7zkjizmwb482y0hawpjjr5mvl0ahjd790xzxcc2bbbv";
     "1.3.2" = "12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
   };
-  # TODO: revisit this once https://github.com/NixOS/nixpkgs/pull/233393 is merged up
   poetry150 = (import
     (builtins.fetchGit {
       name = "nixpkgs-with-poetry-1.5.0";
