@@ -15,7 +15,6 @@ Host clark
     User root
 
 Host dallben
-    ProxyJump clark
     User dallben
 
 Host fflewddur
