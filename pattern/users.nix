@@ -26,6 +26,7 @@ in
         "wheel"
         "networkmanager"
         "media"
+        "dialout" # access /dev/ttyUSB* (such as for Arduino development)
       ];
       openssh.authorizedKeys.keys = [
         identities.jfly
