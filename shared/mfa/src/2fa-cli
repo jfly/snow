@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 DB=/tmp/data.db
 
 # This environment variable effects `adb` commands.
-export ANDROID_SERIAL=0B181JEC208881
+export ANDROID_SERIAL=jflysopixel3
 
 ping=$(adb shell "echo ping" </dev/null) || true
 if [ "$ping" != "ping" ]; then
