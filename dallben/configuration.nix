@@ -38,7 +38,7 @@ in
   # i18n stuff
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
 
   # Enable ssh.
   services.openssh = {
