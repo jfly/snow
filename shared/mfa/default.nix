@@ -19,7 +19,7 @@ let
   };
   mfa-askpass = pkgs.writeShellApplication {
     name = "mfa-askpass";
-    runtimeInputs = [ ];
+    runtimeInputs = [ twofa-cli ];
     text = builtins.readFile ./src/mfa-askpass;
   };
 in

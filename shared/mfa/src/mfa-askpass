@@ -9,7 +9,7 @@ second_factor=""
 
 function get_2fa() {
     mfa_id=$1
-    if two_factors=$(./2fa-cli 2>&1); then
+    if two_factors=$(2fa-cli 2>&1); then
         second_factor=$(echo "$two_factors" | grep "$mfa_id" | cut -f 1)
         if [ "$second_factor" ]; then
             echo "$second_factor"
