@@ -13,7 +13,7 @@ let
     nodejs = pkgs.callPackage ./nodejs.nix { };
     yarn = pkgs.callPackage ./yarn.nix { };
     mysql = pkgs.callPackage ./mysql.nix { };
-    pulumi = pkgs.callPackage ./pulumi.nix { };
+    pulumi = pkgs.callPackage ./pulumi { };
   };
 
   asdfToPkg = { plugin, version }: (asdfPlugins.${plugin} version);
