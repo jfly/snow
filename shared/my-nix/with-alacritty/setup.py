@@ -10,6 +10,7 @@ setup(
         "mergedeep",
         "psutil",
         "pyxdg",
+        "tomli-w",
     ],
     entry_points={
         "console_scripts": ["with-alacritty=with_alacritty.cli:main"],
