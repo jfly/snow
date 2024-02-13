@@ -1,0 +1,253 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p python3
+
+# vi: ft=python
+
+import re
+import sys
+import enum
+import shlex
+import logging
+import argparse
+import textwrap
+import subprocess
+import datetime as dt
+from typing import NoReturn
+
+logger = logging.getLogger(__name__)
+
+
+class SimpleColorFormatter(logging.Formatter):
+    """Copied and tweaked from https://stackoverflow.com/a/56944256/1739415"""
+
+    grey = "\x1b[38;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    fmt = "%(message)s"
+
+    FORMATS = {
+        logging.DEBUG: grey + fmt + reset,
+        logging.INFO: grey + fmt + reset,
+        logging.WARNING: yellow + fmt + reset,
+        logging.ERROR: red + fmt + reset,
+        logging.CRITICAL: bold_red + fmt + reset,
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
+
+
+class BisectExitCode(enum.Enum):
+    GOOD = 0
+    BAD = 1
+    SKIP = 125
+    ABORT = 255
+
+
+def assert_never(x: NoReturn) -> NoReturn:
+    assert False, "Unhandled type: {}".format(type(x).__name__)
+
+
+def exit(
+    message: str,
+    completion_info: subprocess.CompletedProcess | subprocess.TimeoutExpired,
+    code: BisectExitCode,
+) -> NoReturn:
+    level = {
+        BisectExitCode.GOOD: logging.INFO,
+        BisectExitCode.BAD: logging.WARNING,
+        BisectExitCode.SKIP: logging.WARNING,
+        BisectExitCode.ABORT: logging.ERROR,
+    }[code]
+    if isinstance(completion_info, subprocess.TimeoutExpired):
+        logger.log(
+            level,
+            "Command %s timed out after %ss",
+            shlex.join(completion_info.cmd),
+            completion_info.timeout,
+        )
+    elif isinstance(completion_info, subprocess.CompletedProcess):
+        logger.log(
+            level,
+            "Command %s exited %s",
+            shlex.join(completion_info.args),
+            completion_info.returncode,
+        )
+    else:
+        assert_never(completion_info)
+
+    if code != BisectExitCode.GOOD:
+        assert completion_info.stdout is not None
+        logger.info("### process output ###\n%s", completion_info.stdout.decode())
+
+    logger.log(level, message)
+    sys.exit(code.value)
+
+
+def run(
+    command: list[str],
+    bad_texts: list[re.Pattern],
+    skip_texts: list[re.Pattern],
+    skip_after: dt.timedelta | None,
+):
+    timeout = None if skip_after is None else skip_after.total_seconds()
+    logger.info("Running %s with %ss timeout", repr(shlex.join(command)), timeout)
+    try:
+        completion_info = subprocess.run(
+            command,
+            # Send both stderr and stdout to the same place, accessible at `.stdout`
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as e:
+        completion_info = e
+
+    matching_bads = [r for r in bad_texts if r.match(completion_info.stdout)]
+    matching_skips = [r for r in skip_texts if r.match(completion_info.stdout)]
+
+    if len(matching_bads) > 0 and len(matching_skips) > 0:
+        exit(
+            f"Found output matching both bad patterns {matching_bads!r} and skip patterns {matching_skips!r}. Consider refining your patterns. Aborting the bisect.",
+            completion_info,
+            BisectExitCode.ABORT,
+        )
+
+    if len(matching_bads) > 0:
+        exit(
+            f"Found output matching bad patterns {matching_bads!r}. Marking this commit BAD.",
+            completion_info,
+            BisectExitCode.BAD,
+        )
+
+    if len(matching_skips) > 0:
+        exit(
+            f"Found output matching skip patterns {matching_bads!r}. Skipping this commit.",
+            completion_info,
+            BisectExitCode.SKIP,
+        )
+
+    if isinstance(completion_info, subprocess.TimeoutExpired):
+        assert skip_after is not None
+        exit(
+            f"The command ran for longer than {skip_after}. Skipping this commit.",
+            completion_info,
+            BisectExitCode.SKIP,
+        )
+    elif isinstance(completion_info, subprocess.CompletedProcess):
+        if completion_info.returncode != 0:
+            exit(
+                f"The command exited with nonzero exit code {completion_info.returncode}. Consider refining your patterns. Aborting the bisect.",
+                completion_info,
+                BisectExitCode.BAD,
+            )
+        else:
+            exit(
+                "The command succeeded!",
+                completion_info,
+                BisectExitCode.GOOD,
+            )
+    else:
+        assert_never(completion_info)
+
+
+def duration(s: str) -> dt.timedelta:
+    total_seconds = 0
+
+    duration_re = re.compile(r"([0-9]*\.?[0-9]*)([A-Za-z])")
+    pos = 0
+    while m := duration_re.search(s, pos):
+        pos = m.end()
+        val_str = m.group(1)
+        unit = m.group(2).lower()
+
+        try:
+            val = float(val_str)
+        except ValueError as e:
+            raise ValueError(
+                "Value {val_str!r} is not a valid float in given duration string {s!r}"
+            ) from e
+
+        unit_to_seconds = {
+            "h": 60 * 60,
+            "m": 60,
+            "s": 1,
+        }
+        if unit not in unit_to_seconds:
+            raise ValueError(f"Unrecognized unit {unit!r} in duration string {s!r}")
+        total_seconds += unit_to_seconds[unit] * val
+
+    if pos != len(s):
+        raise ValueError(
+            f"Unparseable stuff {s[pos:]!r} at the end of the given duration string {s!r}"
+        )
+
+    return dt.timedelta(seconds=total_seconds)
+
+
+def main():
+    handler = logging.StreamHandler()
+    handler.setFormatter(SimpleColorFormatter())
+    logging.basicConfig(level=logging.INFO, handlers=[handler])
+
+    description = textwrap.dedent(
+        """\
+        Helper script for `git bisect run`. There a few scenarios:
+
+            1. When the given command prints any of the given `--bad-text` to stdout or stderr:
+               This script exits 1 as an indicator to `git bisect` that the commit is "bad".
+            2. When the given command prints any of the given `--skip-text` to stdout or stderr:
+               This script exits 125 as an indicator to `git bisect` to skip this commit.
+            3. When the given command exits 0:
+               This script exits 0 as an indicator to `git bisect` that the commit is "good".
+            4. When the given command exits nonzero:
+               This script exits 255 as an indicator to stop the bisect process.
+               Justification: something went wrong but the given `--bad-text` was not printed, and
+               a human needs to take a look and possibly add more `--bad-text` or `--skip-text` parameters.
+            5. When the given command runs for greater than `--skip-after` DURATION:
+               This script exits 125 as an indicator to `git bisect` to skip this commit.
+               Useful when bisecting through nixpkgs and you'd rather not wait forever for a commit to build.
+
+        DURATION
+            Currently the only supported format is "Ns" where "s" is seconds. For example "30s". Feel free to add more duration types if you need them.
+
+        Example:
+
+            git bisect run %(prog)s --skip-after 30s nix build .#python3.pkgs.stem
+        """
+    )
+    parser = argparse.ArgumentParser(
+        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+
+    parser.add_argument(
+        "--bad-text",
+        nargs="*",
+        default=[],
+        help="A regex that if matched, will cause git bisect to treat the current commit as bad.",
+    )
+    parser.add_argument(
+        "--skip-text",
+        nargs="*",
+        default=[],
+        help="A regex that if matched, will cause git bisect to skip the current commit.",
+    )
+    parser.add_argument("--skip-after", type=duration)
+    parser.add_argument("command", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+
+    run(
+        command=args.command,
+        bad_texts=[re.compile(t) for t in args.bad_text],
+        skip_texts=[re.compile(t) for t in args.skip_text],
+        skip_after=args.skip_after,
+    )
+
+
+if __name__ == "__main__":
+    main()
