@@ -20,7 +20,7 @@ rec {
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/calibre \
-        --add-flags "--with-library=~/sync/calibre"
+        --add-flags "--with-library=~/sync/jeremy/books/calibre"
     '';
   };
   audible-cli = pkgs.audible-cli;
