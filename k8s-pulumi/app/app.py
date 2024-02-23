@@ -14,6 +14,7 @@ from .invidious import Invidious
 from .nix_cache import NixCache
 from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
+from .home_assistant import HomeAssistant
 from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
@@ -28,6 +29,7 @@ def build_app():
     LegacyRedirects()
 
     SnowWeb(snowauth)
+    HomeAssistant(namespace="default", snowauth=snowauth)
     Syncthing(snowauth)
     Budget(snowauth)
     Whoami(snowauth)

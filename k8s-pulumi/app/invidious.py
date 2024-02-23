@@ -97,14 +97,14 @@ class Invidious:
                     banner=None,
                     hmac_key=deage(
                         """
-                        -----BEGIN AGE ENCRYPTED FILE-----
-                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzU1A5YjRXdUdpNkZqcVRO
-                        Qk5XcnpibHhWTVZxRFNBUWduR0FwMXpGWjNNCnIzVjgwWUl0aWo1TTM1dlE2K3BM
-                        T2xaWEdaTkMycVF3YWExUTZmK3VTTTgKLS0tIEVVcFhuQUhqY1YxbkVVVEVxQktH
-                        NHUwNllRcmRKa3lyS1gvUE0xNysxcUUKWL10MpMAaamypm9d+kGxznKoeMsZenzK
-                        DmO7cKs0LANSwHMWV7xlFqPfZhoAv8oPltMr5w==
-                        -----END AGE ENCRYPTED FILE-----
-                    """
+                            -----BEGIN AGE ENCRYPTED FILE-----
+                            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzU1A5YjRXdUdpNkZqcVRO
+                            Qk5XcnpibHhWTVZxRFNBUWduR0FwMXpGWjNNCnIzVjgwWUl0aWo1TTM1dlE2K3BM
+                            T2xaWEdaTkMycVF3YWExUTZmK3VTTTgKLS0tIEVVcFhuQUhqY1YxbkVVVEVxQktH
+                            NHUwNllRcmRKa3lyS1gvUE0xNysxcUUKWL10MpMAaamypm9d+kGxznKoeMsZenzK
+                            DmO7cKs0LANSwHMWV7xlFqPfZhoAv8oPltMr5w==
+                            -----END AGE ENCRYPTED FILE-----
+                        """
                     ),
                     default_home="Subscriptions",
                     related_videos=False,
