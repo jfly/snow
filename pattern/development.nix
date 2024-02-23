@@ -48,11 +48,6 @@ let
     postBuild =
       let
         wrapper = pkgs.writeShellScript "aws-vault-wrapper" ''
-          # We don't actually use zenity, this is just a binary in ~/bin that aws-vault
-          # recognizes the name of. See that script for some thoughts about a less
-          # hacky approach to using a custom propmt.
-          export AWS_VAULT_PROMPT="zenity"
-
           # TODO: Look into keyctl backend once
           # https://github.com/99designs/aws-vault/pull/1202 is merged.
           export AWS_VAULT_BACKEND="file"
@@ -66,7 +61,7 @@ let
         mv $out/bin/aws-vault $og
         cp ${wrapper} $out/bin/aws-vault
         substituteInPlace $out/bin/aws-vault \
-          --replace "@og@" $og
+          --replace-fail "@og@" $og
       '';
   };
 in
