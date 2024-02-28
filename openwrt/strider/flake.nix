@@ -45,8 +45,10 @@
 
         routers-shared = pkgs.callPackage ../shared.nix { };
         identities = import ../../shared/identities.nix;
+        homeAssistantPassword = routers-shared.users.homeAssistant.password;
 
-        image-no-version = profiles.identifyProfile "linksys_e8450-ubi" // {
+        ogProfile = profiles.identifyProfile "linksys_e8450-ubi";
+        image-no-version = (nixpkgs.lib.traceVal ogProfile) // {
           packages = [
             "luci"
             # Useful debugging utils.
@@ -68,6 +70,11 @@
             "ca-bundle"
             # More utils
             "coreutils-nohup"
+            # Used by Home Assistant
+            "luci-mod-rpc"
+            # Used in uci-defaults script to add new users. Perhaps there's a
+            # better way of doing this that doesn't bloat the image?
+            "shadow-useradd"
           ];
 
           files = pkgs.runCommand "image-files" { } ''
@@ -84,6 +91,13 @@
             passwd root <<EOP
             ${rootPassword}
             ${rootPassword}
+            EOP
+
+            # Add a new user for Home Assistant to fetch presence information.
+            useradd -r -s /bin/false home-assistant
+            passwd home-assistant <<EOP
+            ${homeAssistantPassword}
+            ${homeAssistantPassword}
             EOP
 
             EOF

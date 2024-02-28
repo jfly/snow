@@ -33,9 +33,17 @@
 
         routers-shared = pkgs.callPackage ../shared.nix { };
         identities = import ../../shared/identities.nix;
+        homeAssistantPassword = routers-shared.users.homeAssistant.password;
 
         image-no-version = profiles.identifyProfile "tplink_archer-a6-v3" // {
-          packages = [ "luci" ];
+          packages = [
+            "luci"
+            # Used by Home Assistant
+            "luci-mod-rpc"
+            # Used in uci-defaults script to add new users. Perhaps there's a
+            # better way of doing this that doesn't bloat the image?
+            "shadow-useradd"
+          ];
 
           # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
           # "To save resources on the wireless AP router, disable some now unneeded services"
@@ -59,6 +67,13 @@
             passwd root <<EOP
             ${rootPassword}
             ${rootPassword}
+            EOP
+
+            # Add a new user for Home Assistant to fetch presence information.
+            useradd -r -s /bin/false home-assistant
+            passwd home-assistant <<EOP
+            ${homeAssistantPassword}
+            ${homeAssistantPassword}
             EOP
 
             EOF
