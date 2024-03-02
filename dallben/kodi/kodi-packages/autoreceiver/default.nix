@@ -10,7 +10,7 @@ pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   src = ./src;
 
   prePatch = ''
-    substituteInPlace share/kodi/addons/script.autoreceiver/service.py --replace "@receiver@" "${receiver}"
+    substituteInPlace share/kodi/addons/script.autoreceiver/service.py --replace-fail "@receiver@" "${receiver}"
   '';
 
   installPhase = "cp -r . $out";

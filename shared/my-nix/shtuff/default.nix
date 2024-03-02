@@ -13,11 +13,11 @@ let
   '';
   shtuff = with python3.pkgs; buildPythonApplication rec {
     pname = "shtuff";
-    version = "0.3.2";
+    version = "0.3.5";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-hp4Ue3WzvOol/+ZU9vYhpMUY68TTl8ZMVbtcH8JjcGM=";
+      sha256 = "sha256-zflvdPl2WaYVb+A4J1A6NAmeIWF0LJwhWvmFNfYcsU0=";
     };
 
     propagatedBuildInputs = [
@@ -48,7 +48,7 @@ let
     postPatch = ''
       # shtuff uses `ps` internally. Point that to a direct path to ps.
       substituteInPlace shtuff.py \
-        --replace "ps -p" "${ps}/bin/ps -p"
+        --replace-fail "ps -p" "${ps}/bin/ps -p"
     '';
 
     meta = with lib; {

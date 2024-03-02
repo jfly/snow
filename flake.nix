@@ -203,9 +203,9 @@
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
                 (unpatched.fetchpatch {
-                  name = "fix python-stem build (needed by qutebrowser)";
-                  url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/288213.patch";
-                  hash = "sha256-IpBZ3ce9klTabJHNmJ+NrX6AwK/skWisAoWslFXAduE=";
+                  name = "python3.pkgs.inkex: Fix build with lxml 5";
+                  url = "https://github.com/NixOS/nixpkgs/pull/292770.patch";
+                  hash = "sha256-roM6lYDPmWmPple98hSwGqcB3dVHBcpVWrL+XkaFKvM=";
                 })
               ];
             };

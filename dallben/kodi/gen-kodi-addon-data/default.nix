@@ -7,14 +7,14 @@ pkgs.stdenv.mkDerivation {
     cp -r . $out
 
     substituteInPlace $out/gen-kodi-addon-data.sh \
-      --replace "@rsync@" ${pkgs.rsync}/bin/rsync \
-      --replace "@ytApiKey@" "\$(cat ${ytApiKeyFile})" \
-      --replace "@ytClientId@" "\$(cat ${ytClientIdFile})" \
-      --replace "@ytClientSecret@" "\$(cat ${ytClientSecretFile})" \
-      --replace "@mysqlPass@" "\$(cat ${mysqlPasswordFile})"
+      --replace-fail "@rsync@" ${pkgs.rsync}/bin/rsync \
+      --replace-fail "@ytApiKey@" "\$(cat ${ytApiKeyFile})" \
+      --replace-fail "@ytClientId@" "\$(cat ${ytClientIdFile})" \
+      --replace-fail "@ytClientSecret@" "\$(cat ${ytClientSecretFile})" \
+      --replace-fail "@mysqlPass@" "\$(cat ${mysqlPasswordFile})"
 
     substituteInPlace $out/advancedsettings.xml \
-      --replace "@hostName@" "${hostName}" \
-      --replace "@timeZone@" "${timeZone}"
+      --replace-fail "@hostName@" "${hostName}" \
+      --replace-fail "@timeZone@" "${timeZone}"
   '';
 }

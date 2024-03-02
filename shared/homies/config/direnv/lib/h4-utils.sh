@@ -89,3 +89,47 @@ layout_python() {
     export VIRTUAL_ENV
     PATH_add "$VIRTUAL_ENV/bin"
 }
+
+# Import the `wrap_program` helper from direnv-unstdlib.
+source_url "https://raw.githubusercontent.com/jfly/direnv-unstdlib/v1.0.1/make-wrapper.sh" "sha256-sz5VdoGrFjiemk0MLAF85nlDo2wleJ/0LiSJ0LXIdDc="
+
+wrap_with_codeartifact_login() {
+    local command=$1
+    local tool_specific_args=$2
+
+    # shellcheck disable=SC2016 # we are intentionally using single quotes so we can gerate bash code (:scream:)
+    wrap_program "$(which "$command")" --run '
+# Wrapper for '"$command"' that first authenticates with AWS CodeArtifact.
+# See https://joinhonor.atlassian.net/browse/FOUND-4904 for details.
+
+if [ -n "${H4_AUTHENTICATING_WITH_CODEARTIFACT:-}" ]; then
+    # Calling `aws codeartifact login` can result in a call to something like
+    # `npm config set`, but we may be wrapping npm itself, which would result
+    # in an infinite recursion. So, we first set the
+    # `H4_AUTHENTICATING_WITH_CODEARTIFACT` environment variable as an
+    # indicator of if we are currently authenticating with AWS. If we are, just
+    # invoke the original unwrapped tool.
+    echo "Skipping AWS CodeArtifact authentication as we appear to already be authenticating." >/dev/stderr
+else
+    echo "Refreshing AWS CodeArtifact authentication." >/dev/stderr
+    export H4_AUTHENTICATING_WITH_CODEARTIFACT=1
+
+    # Note: we direct *all* output from this command to stderr. We are very
+    # careful to not print anything to stdout in this wrapper because we do not
+    # want to break anyone doing any clever parsing of output from these tools
+    # (such as parsing `npm --version`).
+    #
+	# Note: ecr-local is (now) poorly named as we use it for both pulling docker
+	# images *and* pulling packages: https://joinhonor.atlassian.net/browse/FOUND-4826
+    (
+        # We cd into the home directory as a workaround for
+        # https://github.com/aws/aws-cli/issues/8555. This is safe: we do not
+        # want this to be a project specific thing, we just want to update the
+        # `~/.npmrc` file.
+        cd ~
+        AWS_PROFILE=ecr-local aws codeartifact login --domain honorcare --repository honorcare-prod --domain-owner 900965112463 --region us-west-2 '"$tool_specific_args"' 1>&2
+    )
+    unset H4_AUTHENTICATING_WITH_CODEARTIFACT
+fi
+'
+}

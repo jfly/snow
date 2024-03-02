@@ -8,6 +8,6 @@ buildPythonApplication {
   src = ./.;
   postPatch = ''
     substituteInPlace capslockx.py \
-      --replace libX11.so.6 ${libX11}/lib/libX11.so.6
+      --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6
   '';
 }

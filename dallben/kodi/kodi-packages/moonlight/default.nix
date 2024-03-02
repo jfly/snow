@@ -9,6 +9,6 @@ pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   installPhase = ''
     cp -r . $out
     substituteInPlace $out/share/kodi/addons/script.moonlight/addon.py \
-      --replace "@moonlight@" "${pkgs.moonlight-qt}"
+      --replace-fail "@moonlight@" "${pkgs.moonlight-qt}"
   '';
 })
