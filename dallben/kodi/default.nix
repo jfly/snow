@@ -106,7 +106,7 @@ in
     device = "fflewddur:/";
     fsType = "nfs";
     options = [
-      "ro"  # readonly
+      "ro" # readonly
       "x-systemd.automount"
       "noauto"
       "x-systemd.requires=network-online.target"

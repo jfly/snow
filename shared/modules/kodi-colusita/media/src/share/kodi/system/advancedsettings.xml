@@ -1,7 +1,7 @@
 <advancedsettings version="1.0">
     <!-- Enable remote control: https://kodi.wiki/view/Smartphone/tablet_remotes#Manually_enabling_remote_control -->
     <services>
-	<devicename>dalinar</devicename>
+        <devicename>@devicename@</devicename>
         <esenabled>true</esenabled>
         <esallinterfaces>true</esallinterfaces>
         <webserver>true</webserver>

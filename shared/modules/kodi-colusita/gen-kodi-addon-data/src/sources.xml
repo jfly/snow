@@ -23,23 +23,15 @@
         <default pathversion="1"></default>
         <source>
             <name>shows</name>
-            <path pathversion="1">/home/jeremy/media/shows</path>
+            <path pathversion="1">/mnt/colusita/shows</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>movies</name>
-            <path pathversion="1">/home/jeremy/media/movies</path>
+            <path pathversion="1">/mnt/colusita/movies</path>
             <allowsharing>true</allowsharing>
         </source>
     </video>
-    <music>
-        <default pathversion="1"></default>
-        <source>
-            <name>music</name>
-            <path pathversion="1">/home/jeremy/sync/music</path>
-            <allowsharing>true</allowsharing>
-        </source>
-    </music>
     <pictures>
         <default pathversion="1"></default>
     </pictures>

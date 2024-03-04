@@ -11,6 +11,7 @@ from .monitoring import Monitoring
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
+from .mosquitto import Mosquitto
 from .nix_cache import NixCache
 from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
@@ -29,6 +30,7 @@ def build_app():
     LegacyRedirects()
 
     SnowWeb(snowauth)
+    Mosquitto(namespace="default")
     HomeAssistant(namespace="default", snowauth=snowauth)
     Syncthing(snowauth)
     Budget(snowauth)

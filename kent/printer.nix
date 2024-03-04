@@ -2,30 +2,46 @@
 {
   # Set up printer
   services.printing = {
+    stateless = true;
     enable = true;
     defaultShared = true;
     browsing = true;
+    openFirewall = true;
 
-    # TODO: enable printer
-    # # brlaser doesn't explicitly mention the Brother HL-2240, but according to
-    # # https://github.com/pdewacht/brlaser/issues/136, *any* entry marked
-    # # 'brlaser' works? :shrug:
-    # drivers = [ pkgs.brlaser ];
+    listenAddresses = [ "*:631" ];
+    allowFrom = [ "all" ];
+
+    # brlaser doesn't explicitly mention the Brother HL-2240, but according to
+    # https://github.com/pdewacht/brlaser/issues/136, *any* entry marked
+    # 'brlaser' works? :shrug:
+    drivers = [
+      # Hack to default to Letter rather than A4. This might be the same issue
+      # reported here: https://github.com/NixOS/nixpkgs/issues/53027.
+      (pkgs.symlinkJoin {
+        name = "brlaser-letter-hack";
+        paths = [ pkgs.brlaser ];
+        postBuild = ''
+          cp --remove-destination $(readlink $out/share/cups/drv/brlaser.drv) $out/share/cups/drv/brlaser.drv
+          substituteInPlace $out/share/cups/drv/brlaser.drv \
+            --replace-fail "*MediaSize A4" "MediaSize A4" \
+            --replace-fail "MediaSize Letter" "*MediaSize Letter"
+        '';
+      })
+    ];
   };
 
-  # TODO: enable printer
-  # hardware.printers.ensurePrinters = [
-  #   {
-  #     name = "brother";
-  #     location = "man cave";
-  #     description = "brother hl-2240";
-  #     deviceUri = "usb://Brother/HL-2240%20series?serial=J1N651698";
-  #     # brlaser doesn't explicitly mention the Brother HL-2240, but according to
-  #     # https://github.com/pdewacht/brlaser/issues/136, *any* entry marked
-  #     # 'brlaser' works? :shrug:
-  #     model = "drv:///brlaser.drv/br2220.ppd";
-  #   }
-  # ];
+  hardware.printers.ensurePrinters = [
+    {
+      name = "brother";
+      location = "man cave";
+      description = "brother hl-2240";
+      deviceUri = "usb://Brother/HL-2240%20series?serial=J1N651698";
+      # brlaser doesn't explicitly mention the Brother HL-2240, but according to
+      # https://github.com/pdewacht/brlaser/issues/136, *any* entry marked
+      # 'brlaser' works? :shrug:
+      model = "drv:///brlaser.drv/br2220.ppd";
+    }
+  ];
 
   services.avahi = {
     enable = true;

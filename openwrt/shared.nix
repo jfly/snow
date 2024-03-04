@@ -24,17 +24,4 @@
       '';
     };
   };
-  users = {
-    homeAssistant = {
-      password = pkgs.deage.string ''
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOc0RGcGZXZFBCTmdvMnov
-        LzBXN0NXUlJ0eVVOcDc2Rnl3OE55U0g2d1ZVCklpVmxMV0FnRXIrajVydTBSajM2
-        S3A0UWVtSEdqN3QyOTAwS2FiOTZYNVEKLS0tIGxHMWgyd1ZNRXZpeTJiTVBlTlds
-        WmF2NlJJYjEzbmV4bHMrTmhqOWNPd1kKdDnx8IHTFXeo8OTece+fFXZJNfX3yYGA
-        INTexKyXiEePCyLOvL+K+YUfBFTxqjtAxXTQQg==
-        -----END AGE ENCRYPTED FILE-----
-      '';
-    };
-  };
 }

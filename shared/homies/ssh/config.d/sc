@@ -1,0 +1,17 @@
+### San Clemente stuff
+
+Host kent
+    # TODO: switch back to sc domain once it's back in san clemente
+    # HostName kent.sc.jflei.com
+    HostName kent.lan
+    User kent
+
+Host sc-router
+    User root
+    HostName router.sc.jflei.com
+    # Urg, can we install a modern version of OpenWrt on this thing?
+    # https://openwrt.org/toh/buffalo/wzr-600dhp?s[]=wzr&s[]=hp&s[]=ag300h#installation.using.the.oem.web.interface
+    KexAlgorithms diffie-hellman-group14-sha1
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    IdentityFile /home/jeremy/sync/linux-secrets/.ssh/deprecated_id_rsa

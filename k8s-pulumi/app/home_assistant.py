@@ -8,7 +8,7 @@ class HomeAssistant:
     def __init__(self, namespace: str, snowauth: Snowauth):
         self.namespace = namespace
 
-        database = declare_psql(
+        declare_psql(
             version="14.3",
             name="home-assistant-db",
             namespace=self.namespace,
@@ -30,7 +30,7 @@ class HomeAssistant:
         snowauth.declare_app(
             name="home-assistant",
             namespace=self.namespace,
-            image="homeassistant/home-assistant:2023.3.1",
+            image="homeassistant/home-assistant:2024.2.2",
             port=8123,
             # Home Assistant has its own authentication mechanism, so it's ok
             # to expose to the world.
@@ -38,6 +38,11 @@ class HomeAssistant:
             env={
                 "TZ": "America/Los_Angeles",
             },
+            container_security_context=kubernetes.core.v1.SecurityContextArgs(
+                # I haven't found a better way to give permission to use the character device.
+                # See https://www.reddit.com/r/kubernetes/comments/13j791x/zigbee2mqtt_container_with_usb_device_but_not/
+                privileged=True,
+            ),
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/config",

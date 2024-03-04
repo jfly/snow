@@ -237,6 +237,9 @@ class Snowauth:
         pod_security_context: Optional[
             kubernetes.core.v1.PodSecurityContextArgs
         ] = None,
+        container_security_context: Optional[
+            kubernetes.core.v1.SecurityContextArgs
+        ] = None,
     ):
         deployment = snow_deployment(
             name=name,
@@ -248,6 +251,7 @@ class Snowauth:
             volume_mounts=volume_mounts,
             working_dir=working_dir,
             pod_security_context=pod_security_context,
+            container_security_context=container_security_context,
         )
         service = http_service(deployment, port=port)
 

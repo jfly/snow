@@ -24,19 +24,6 @@ Host jflysopixel
     Port 8022
 ###
 
-### San Clemente stuff
-Host kent
-    # TODO: switch back to sc domain once it's back in san clemente
-    # HostName kent.sc.jflei.com
-    HostName kent
-    User kent
-
-Host sc-router
-    User root
-    HostName router.sc.jflei.com
-    KexAlgorithms diffie-hellman-group14-sha1
-###
-
 ### cottage
 Host cottage-router
     User root

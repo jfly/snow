@@ -33,17 +33,9 @@
 
         routers-shared = pkgs.callPackage ../shared.nix { };
         identities = import ../../shared/identities.nix;
-        homeAssistantPassword = routers-shared.users.homeAssistant.password;
 
         image-no-version = profiles.identifyProfile "tplink_archer-a6-v3" // {
-          packages = [
-            "luci"
-            # Used by Home Assistant
-            "luci-mod-rpc"
-            # Used in uci-defaults script to add new users. Perhaps there's a
-            # better way of doing this that doesn't bloat the image?
-            "shadow-useradd"
-          ];
+          packages = [ "luci" ];
 
           # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
           # "To save resources on the wireless AP router, disable some now unneeded services"
@@ -69,22 +61,15 @@
             ${rootPassword}
             EOP
 
-            # Add a new user for Home Assistant to fetch presence information.
-            useradd -r -s /bin/false home-assistant
-            passwd home-assistant <<EOP
-            ${homeAssistantPassword}
-            ${homeAssistantPassword}
-            EOP
-
             EOF
 
             cp -fr ${config}/etc/* $out/etc/
 
             substituteInPlace $out/etc/config/wireless \
-              --replace "@wifi_password@" "${routers-shared.wifi.home.password}"
+              --replace-fail "@wifi_password@" "${routers-shared.wifi.home.password}"
 
             substituteInPlace $out/etc/dropbear/authorized_keys \
-              --replace "@authorized_key@" "${identities.jfly}"
+              --replace-fail "@authorized_key@" "${identities.jfly}"
           '';
         };
         built-no-version = openwrt-imagebuilder.lib.build image-no-version;

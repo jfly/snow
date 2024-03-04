@@ -24,6 +24,10 @@ let
   noto-fonts-emoji-monochrome = pkgs.callPackage ../shared/noto-fonts-emoji-monochrome { };
 in
 {
+  imports = [
+    ./kodi.nix
+  ];
+
   services.xserver = {
     enable = true;
     autorun = true;

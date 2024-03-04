@@ -63,6 +63,15 @@ in
     ];
     hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
   };
+  users.users.media-ro = {
+    isNormalUser = true;
+    createHome = false;
+
+    openssh.authorizedKeys.keys = [
+      identities.pattern-kodi
+      identities.kent-kodi
+    ];
+  };
 
   # Some useful packages to have globally installed.
   environment.systemPackages = [
