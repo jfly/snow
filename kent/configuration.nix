@@ -15,7 +15,7 @@
     ./desktop
     ./kodi.nix
 
-    #<<< ./nas.nix
+    ./nas.nix
     #<<< ./snow-backup.nix
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
