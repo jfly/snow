@@ -85,6 +85,23 @@ bindkey '\ec' fzf-commit-widget
 ##################################
 
 ###
+### Set up alt-p to pick a x11 window's pid
+###
+pick_xpid() {
+    xprop _NET_WM_PID | sed 's/_NET_WM_PID(CARDINAL) = //'
+}
+fzf-xpid-widget() {
+  LBUFFER="${LBUFFER}$(pick_xpid)"
+  local ret=$?
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  return $ret
+}
+zle     -N    fzf-xpid-widget
+bindkey '\ep' fzf-xpid-widget
+##################################
+
+###
 ### Nix
 ###
 # From https://nixos.wiki/wiki/Locales:
