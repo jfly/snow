@@ -1,8 +1,5 @@
 { ... }:
 {
-  # From https://nixos.wiki/wiki/NixOS_on_ARM/Raspberry_Pi_4#With_GPU
-  hardware.raspberry-pi."4".fkms-3d.enable = true;
-
   services.xserver = {
     enable = true;
 

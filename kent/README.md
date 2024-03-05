@@ -1,6 +1,7 @@
-A Raspberry Pi 4B in San Clemente.
+A secondary NAS/HTPC running on a ThinkCentre M92p in San Clemente.
 
-## Bootstrapping
+## Manual setup tasks (not yet automated)
 
-Simply: `tools/build-rpi-sdcard.sh kent` and follow the instructions to copy
-the resulting image onto a sdcard.
+- kodi
+    - set the content type on the media sources explicitly
+    - Settings > System > Audio > Audio output device -> change to "HDMI"

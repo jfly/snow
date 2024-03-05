@@ -183,12 +183,8 @@
               system = "x86_64-linux";
               overlays = import ./overlays;
             };
-            fflam = import nixos-unstable {
-              system = "x86_64-linux";
-              overlays = import ./overlays;
-            };
             kent = import nixos-unstable {
-              system = "aarch64-linux";
+              system = "x86_64-linux";
               overlays = import ./overlays;
             };
             pattern = patchNixpkgs {
@@ -242,14 +238,11 @@
         "fflewddur" = import fflewddur/configuration.nix {
           inherit agenix agenix-rooter;
         };
-        "fflam" = import fflam/configuration.nix {
-          inherit agenix agenix-rooter;
-        };
         "pattern" = import pattern/configuration.nix {
           inherit agenix agenix-rooter home-manager;
         };
         "kent" = import kent/configuration.nix {
-          inherit agenix agenix-rooter nixos-hardware;
+          inherit agenix agenix-rooter;
         };
       };
 
