@@ -24,6 +24,8 @@ let
       systemdUnitName = "mnt-disk${toString index}.mount";
     })
     nasDriveUuids;
+  diskWheres = map ({ where, ... }: where) diskMountInfos;
+  diskMountNames = map ({ systemdUnitName, ... }: systemdUnitName) diskMountInfos;
 in
 {
   environment.systemPackages = with pkgs; [
@@ -31,38 +33,48 @@ in
     mergerfs-tools
   ];
 
-  systemd.mounts =
-    let
-      diskWheres = map ({ where, ... }: where) diskMountInfos;
-      diskMountNames = map ({ systemdUnitName, ... }: systemdUnitName) diskMountInfos;
-    in
-    (
-      map
-        ({ what, where, ... }: {
-          inherit what where;
-          type = "ext4";
-          options = concatStringsSep "," [ "rw" "user" ];
-        })
-        diskMountInfos
-    ) ++ [
-      {
-        what = concatStringsSep ":" diskWheres;
-        where = "/mnt/nexus";
-        type = "fuse.mergerfs";
-        bindsTo = diskMountNames;
-        after = diskMountNames;
-        options = concatStringsSep "," [
-          # From https://github.com/trapexit/mergerfs#basic-setup "You need mmap"
-          # (sqlite needs mmap, home-assistant uses sqlite)
-          "cache.files=partial"
-          "dropcacheonclose=true"
-          "category.create=mfs"
-          # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
-          "noforget"
-          "inodecalc=path-hash"
-          # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
-          "func.getattr=newest"
-        ];
-      }
-    ];
+  systemd.mounts = (
+    map
+      ({ what, where, ... }: {
+        inherit what where;
+        type = "ext4";
+        options = concatStringsSep "," [ "rw" "user" ];
+      })
+      diskMountInfos
+  ) ++ [
+    {
+      what = concatStringsSep ":" diskWheres;
+      where = "/mnt/nexus";
+      type = "fuse.mergerfs";
+      bindsTo = diskMountNames;
+      after = diskMountNames;
+      options = concatStringsSep "," [
+        # From https://github.com/trapexit/mergerfs#basic-setup "You need mmap"
+        # (sqlite needs mmap, home-assistant uses sqlite)
+        "cache.files=partial"
+        "dropcacheonclose=true"
+        "category.create=mfs"
+        # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
+        "noforget"
+        "inodecalc=path-hash"
+        # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
+        "func.getattr=newest"
+      ];
+    }
+  ];
+
+  systemd.automounts = (
+    map
+      ({ where, ... }: {
+        inherit where;
+        wantedBy = [ "multi-user.target" ];
+
+      })
+      diskMountInfos
+  ) ++ [
+    {
+      where = "/mnt/nexus";
+      wantedBy = [ "multi-user.target" ];
+    }
+  ];
 }
