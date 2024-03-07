@@ -77,4 +77,41 @@ in
       wantedBy = [ "multi-user.target" ];
     }
   ];
+
+  # A user specifically for anonymous samba access.
+  users = {
+    groups.sc = { };
+    users.sc = {
+      isSystemUser = true;
+      group = "sc";
+    };
+  };
+
+  # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
+  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba = {
+    enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = kent
+      netbios name = kent
+      security = user
+      use sendfile = yes
+      # note: localhost is the ipv6 localhost ::1
+      hosts allow = 192.168.0. 127.0.0.1 localhost
+      hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
+    shares = {
+      sc = {
+        path = "/mnt/nexus/sc";
+        browseable = "yes";
+        "guest ok" = "yes";
+        "force user" = "sc";
+        "writeable" = "yes";
+      };
+    };
+  };
 }

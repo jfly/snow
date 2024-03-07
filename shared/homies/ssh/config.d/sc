@@ -1,9 +1,7 @@
 ### San Clemente stuff
 
 Host kent
-    # TODO: switch back to sc domain once it's back in san clemente
-    # HostName kent.sc.jflei.com
-    HostName kent.lan
+    HostName kent.sc.jflei.com
     User kent
 
 Host sc-router

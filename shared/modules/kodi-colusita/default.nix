@@ -8,6 +8,9 @@ let
     mkOption
     types
     ;
+  inherit (builtins)
+    concatStringsSep
+    ;
 
   cfg = config.services.kodi-colusita;
 
@@ -48,7 +51,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ myKodi ];
+    environment.systemPackages = [ myKodi ] ++ (with pkgs;
+      [ sshfs ]);
 
     programs.ssh.knownHosts = {
       "clark.snow.jflei.com" = {
@@ -56,18 +60,31 @@ in
       };
     };
 
-    fileSystems."/mnt/colusita" = {
-      device = "media-ro@clark.snow.jflei.com:/mnt/media";
-      fsType = "sshfs";
-      options = [
-        "ro"
-        "x-systemd.automount"
-        "noauto"
-        "x-systemd.requires=network-online.target"
-        "allow_other"
-        "IdentityFile=${cfg.sshIdentityPath}"
-      ];
-    };
+    systemd.mounts = [
+      {
+        where = "/mnt/colusita";
+        what = "media-ro@clark.snow.jflei.com:/mnt/media";
+        type = "fuse.sshfs";
+        startLimitBurst = 0; # keep retrying indefinitely (https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#StartLimitIntervalSec=interval)
+        requires = [ "network-online.target" ];
+        options = concatStringsSep "," [
+          "ro"
+          "noauto"
+          "allow_other"
+          "IdentityFile=${cfg.sshIdentityPath}"
+          # Reconnect automatically if the connection drops.
+          "reconnect"
+          "ServerAliveInterval=15"
+          "ServerAliveCountMax=3"
+        ];
+      }
+    ];
+    systemd.automounts = [
+      {
+        where = "/mnt/colusita";
+        wantedBy = [ "multi-user.target" ];
+      }
+    ];
 
     systemd.user.services = {
       "kodi" = {
