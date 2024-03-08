@@ -1,5 +1,10 @@
 # vi: ft=sshconfig
 
+Host honor-fe-interview
+    User ubuntu
+    Hostname bugs.honor-projects.com
+    IdentityFile ~/.ssh/aws/honor/eng-interview.pem
+
 Host bastion.honordev.com bastion
     Hostname bastion.honordev.com
     ForwardAgent yes
