@@ -198,11 +198,6 @@
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
-                (unpatched.fetchpatch {
-                  name = "python3.pkgs.inkex: Fix build with lxml 5";
-                  url = "https://github.com/NixOS/nixpkgs/pull/292770.patch";
-                  hash = "sha256-roM6lYDPmWmPple98hSwGqcB3dVHBcpVWrL+XkaFKvM=";
-                })
               ];
             };
           };

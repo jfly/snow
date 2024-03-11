@@ -19,6 +19,14 @@ in
   # stuff up?
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
+
+  nixpkgs = {
+    config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      # Bummer: https://www.hashicorp.com/blog/hashicorp-adopts-business-source-license
+      "vagrant"
+    ];
+  };
+
   # Enable colmena deployments by non-root user.
   deployment.targetUser = config.snow.user.name;
   nix.settings.trusted-users = [ "root" "@wheel" ];
