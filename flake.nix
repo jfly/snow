@@ -198,6 +198,11 @@
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
+                (unpatched.fetchpatch {
+                  name = "openvpn3: 20 -> 21";
+                  url = "https://github.com/NixOS/nixpkgs/pull/295058.patch";
+                  hash = "sha256-P7HMaybI8AdK/41JzucSUq7i3rg1Q+jOvt0ScmilNWo=";
+                })
               ];
             };
           };

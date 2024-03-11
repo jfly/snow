@@ -10,15 +10,7 @@ in
     uid = 1000;
   };
 
-  # As of 2023-05-26 sysdig doesn't compile with the latest kernel =(
-  # https://docs.sysdig.com/en/docs/release-notes/sysdig-agent-release-notes/#added-support-for-kernel-version-63
-  # mentions the kernel module getting an update to support Linux 6.3, but I
-  # can't find any evidence of that over on https://github.com/draios/sysdig
-  # TODO: wait and see what happens? There are a few unreleased commits over on
-  # https://github.com/draios/sysdig/compare/0.31.5...dev, maybe those will fix
-  # stuff up?
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nixpkgs = {
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
