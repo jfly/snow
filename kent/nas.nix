@@ -88,9 +88,13 @@ in
   };
 
   # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba-wsdd = {
+    enable = true; # make shares visible for windows 10 clients
+    openFirewall = true;
+  };
   services.samba = {
     enable = true;
+    openFirewall = true;
     securityType = "user";
     extraConfig = ''
       workgroup = WORKGROUP
@@ -111,6 +115,16 @@ in
         "guest ok" = "yes";
         "force user" = "sc";
         "writeable" = "yes";
+      };
+      media = {
+        path = "/mnt/nexus/media";
+        browseable = "yes";
+        "guest ok" = "yes";
+        # Every user ("other") has read-only access to media, so the "sc" user
+        # is a good choice (they aren't a member of the "media" group which
+        # does have write access).
+        "force user" = "sc";
+        "read only" = "yes";
       };
     };
   };
