@@ -9,17 +9,43 @@ from .provider import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
+    import pulumi_crds.acme as __acme
+    acme = __acme
+    import pulumi_crds.certmanager as __certmanager
+    certmanager = __certmanager
     import pulumi_crds.meta as __meta
     meta = __meta
     import pulumi_crds.traefik as __traefik
     traefik = __traefik
 else:
+    acme = _utilities.lazy_import('pulumi_crds.acme')
+    certmanager = _utilities.lazy_import('pulumi_crds.certmanager')
     meta = _utilities.lazy_import('pulumi_crds.meta')
     traefik = _utilities.lazy_import('pulumi_crds.traefik')
 
 _utilities.register(
     resource_modules="""
 [
+ {
+  "pkg": "crds",
+  "mod": "acme.cert-manager.io/v1",
+  "fqn": "pulumi_crds.acme.v1",
+  "classes": {
+   "kubernetes:acme.cert-manager.io/v1:Challenge": "Challenge",
+   "kubernetes:acme.cert-manager.io/v1:Order": "Order"
+  }
+ },
+ {
+  "pkg": "crds",
+  "mod": "cert-manager.io/v1",
+  "fqn": "pulumi_crds.certmanager.v1",
+  "classes": {
+   "kubernetes:cert-manager.io/v1:Certificate": "Certificate",
+   "kubernetes:cert-manager.io/v1:CertificateRequest": "CertificateRequest",
+   "kubernetes:cert-manager.io/v1:ClusterIssuer": "ClusterIssuer",
+   "kubernetes:cert-manager.io/v1:Issuer": "Issuer"
+  }
+ },
  {
   "pkg": "crds",
   "mod": "traefik.containo.us/v1alpha1",

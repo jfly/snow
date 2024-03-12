@@ -34,10 +34,10 @@ __all__ = [
     'MiddlewareSpecInFlightReqSourceCriterionIpStrategy',
     'MiddlewareSpecIpWhiteList',
     'MiddlewareSpecIpWhiteListIpStrategy',
-    'MiddlewareSpecPassTLSClientCert',
-    'MiddlewareSpecPassTLSClientCertInfo',
-    'MiddlewareSpecPassTLSClientCertInfoIssuer',
-    'MiddlewareSpecPassTLSClientCertInfoSubject',
+    'MiddlewareSpecPassTlsclientCert',
+    'MiddlewareSpecPassTlsclientCertInfo',
+    'MiddlewareSpecPassTlsclientCertInfoIssuer',
+    'MiddlewareSpecPassTlsclientCertInfoSubject',
     'MiddlewareSpecRateLimit',
     'MiddlewareSpecRateLimitSourceCriterion',
     'MiddlewareSpecRateLimitSourceCriterionIpStrategy',
@@ -116,7 +116,7 @@ class MiddlewareSpec(dict):
                  headers: Optional['outputs.MiddlewareSpecHeaders'] = None,
                  in_flight_req: Optional['outputs.MiddlewareSpecInFlightReq'] = None,
                  ip_white_list: Optional['outputs.MiddlewareSpecIpWhiteList'] = None,
-                 pass_tls_client_cert: Optional['outputs.MiddlewareSpecPassTLSClientCert'] = None,
+                 pass_tls_client_cert: Optional['outputs.MiddlewareSpecPassTlsclientCert'] = None,
                  plugin: Optional[Mapping[str, Mapping[str, Any]]] = None,
                  rate_limit: Optional['outputs.MiddlewareSpecRateLimit'] = None,
                  redirect_regex: Optional['outputs.MiddlewareSpecRedirectRegex'] = None,
@@ -141,7 +141,7 @@ class MiddlewareSpec(dict):
         :param 'MiddlewareSpecHeadersArgs' headers: Headers holds the headers middleware configuration. This middleware manages the requests and responses headers. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/headers/#customrequestheaders
         :param 'MiddlewareSpecInFlightReqArgs' in_flight_req: InFlightReq holds the in-flight request middleware configuration. This middleware limits the number of requests being processed and served concurrently. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/inflightreq/
         :param 'MiddlewareSpecIpWhiteListArgs' ip_white_list: IPWhiteList holds the IP whitelist middleware configuration. This middleware accepts / refuses requests based on the client IP. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ipwhitelist/
-        :param 'MiddlewareSpecPassTLSClientCertArgs' pass_tls_client_cert: PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
+        :param 'MiddlewareSpecPassTlsclientCertArgs' pass_tls_client_cert: PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
         :param Mapping[str, Mapping[str, Any]] plugin: Plugin defines the middleware plugin configuration. More info: https://doc.traefik.io/traefik/plugins/
         :param 'MiddlewareSpecRateLimitArgs' rate_limit: RateLimit holds the rate limit configuration. This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ratelimit/
         :param 'MiddlewareSpecRedirectRegexArgs' redirect_regex: RedirectRegex holds the redirect regex middleware configuration. This middleware redirects a request using regex matching and replacement. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/redirectregex/#regex
@@ -305,7 +305,7 @@ class MiddlewareSpec(dict):
 
     @property
     @pulumi.getter(name="passTLSClientCert")
-    def pass_tls_client_cert(self) -> Optional['outputs.MiddlewareSpecPassTLSClientCert']:
+    def pass_tls_client_cert(self) -> Optional['outputs.MiddlewareSpecPassTlsclientCert']:
         """
         PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
         """
@@ -2192,16 +2192,16 @@ class MiddlewareSpecIpWhiteListIpStrategy(dict):
 
 
 @pulumi.output_type
-class MiddlewareSpecPassTLSClientCert(dict):
+class MiddlewareSpecPassTlsclientCert(dict):
     """
     PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
     """
     def __init__(__self__, *,
-                 info: Optional['outputs.MiddlewareSpecPassTLSClientCertInfo'] = None,
+                 info: Optional['outputs.MiddlewareSpecPassTlsclientCertInfo'] = None,
                  pem: Optional[bool] = None):
         """
         PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
-        :param 'MiddlewareSpecPassTLSClientCertInfoArgs' info: Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param 'MiddlewareSpecPassTlsclientCertInfoArgs' info: Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
         :param bool pem: PEM sets the X-Forwarded-Tls-Client-Cert header with the certificate.
         """
         if info is not None:
@@ -2211,7 +2211,7 @@ class MiddlewareSpecPassTLSClientCert(dict):
 
     @property
     @pulumi.getter
-    def info(self) -> Optional['outputs.MiddlewareSpecPassTLSClientCertInfo']:
+    def info(self) -> Optional['outputs.MiddlewareSpecPassTlsclientCertInfo']:
         """
         Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
@@ -2227,7 +2227,7 @@ class MiddlewareSpecPassTLSClientCert(dict):
 
 
 @pulumi.output_type
-class MiddlewareSpecPassTLSClientCertInfo(dict):
+class MiddlewareSpecPassTlsclientCertInfo(dict):
     """
     Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
     """
@@ -2242,31 +2242,31 @@ class MiddlewareSpecPassTLSClientCertInfo(dict):
             suggest = "serial_number"
 
         if suggest:
-            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTLSClientCertInfo. Access the value via the '{suggest}' property getter instead.")
+            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTlsclientCertInfo. Access the value via the '{suggest}' property getter instead.")
 
     def __getitem__(self, key: str) -> Any:
-        MiddlewareSpecPassTLSClientCertInfo.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfo.__key_warning(key)
         return super().__getitem__(key)
 
     def get(self, key: str, default = None) -> Any:
-        MiddlewareSpecPassTLSClientCertInfo.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfo.__key_warning(key)
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 issuer: Optional['outputs.MiddlewareSpecPassTLSClientCertInfoIssuer'] = None,
+                 issuer: Optional['outputs.MiddlewareSpecPassTlsclientCertInfoIssuer'] = None,
                  not_after: Optional[bool] = None,
                  not_before: Optional[bool] = None,
                  sans: Optional[bool] = None,
                  serial_number: Optional[bool] = None,
-                 subject: Optional['outputs.MiddlewareSpecPassTLSClientCertInfoSubject'] = None):
+                 subject: Optional['outputs.MiddlewareSpecPassTlsclientCertInfoSubject'] = None):
         """
         Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
-        :param 'MiddlewareSpecPassTLSClientCertInfoIssuerArgs' issuer: Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param 'MiddlewareSpecPassTlsclientCertInfoIssuerArgs' issuer: Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         :param bool not_after: NotAfter defines whether to add the Not After information from the Validity part.
         :param bool not_before: NotBefore defines whether to add the Not Before information from the Validity part.
         :param bool sans: Sans defines whether to add the Subject Alternative Name information from the Subject Alternative Name part.
         :param bool serial_number: SerialNumber defines whether to add the client serialNumber information.
-        :param 'MiddlewareSpecPassTLSClientCertInfoSubjectArgs' subject: Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param 'MiddlewareSpecPassTlsclientCertInfoSubjectArgs' subject: Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
         if issuer is not None:
             pulumi.set(__self__, "issuer", issuer)
@@ -2283,7 +2283,7 @@ class MiddlewareSpecPassTLSClientCertInfo(dict):
 
     @property
     @pulumi.getter
-    def issuer(self) -> Optional['outputs.MiddlewareSpecPassTLSClientCertInfoIssuer']:
+    def issuer(self) -> Optional['outputs.MiddlewareSpecPassTlsclientCertInfoIssuer']:
         """
         Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
@@ -2323,7 +2323,7 @@ class MiddlewareSpecPassTLSClientCertInfo(dict):
 
     @property
     @pulumi.getter
-    def subject(self) -> Optional['outputs.MiddlewareSpecPassTLSClientCertInfoSubject']:
+    def subject(self) -> Optional['outputs.MiddlewareSpecPassTlsclientCertInfoSubject']:
         """
         Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
@@ -2331,7 +2331,7 @@ class MiddlewareSpecPassTLSClientCertInfo(dict):
 
 
 @pulumi.output_type
-class MiddlewareSpecPassTLSClientCertInfoIssuer(dict):
+class MiddlewareSpecPassTlsclientCertInfoIssuer(dict):
     """
     Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
     """
@@ -2346,14 +2346,14 @@ class MiddlewareSpecPassTLSClientCertInfoIssuer(dict):
             suggest = "serial_number"
 
         if suggest:
-            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTLSClientCertInfoIssuer. Access the value via the '{suggest}' property getter instead.")
+            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTlsclientCertInfoIssuer. Access the value via the '{suggest}' property getter instead.")
 
     def __getitem__(self, key: str) -> Any:
-        MiddlewareSpecPassTLSClientCertInfoIssuer.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfoIssuer.__key_warning(key)
         return super().__getitem__(key)
 
     def get(self, key: str, default = None) -> Any:
-        MiddlewareSpecPassTLSClientCertInfoIssuer.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfoIssuer.__key_warning(key)
         return super().get(key, default)
 
     def __init__(__self__, *,
@@ -2447,7 +2447,7 @@ class MiddlewareSpecPassTLSClientCertInfoIssuer(dict):
 
 
 @pulumi.output_type
-class MiddlewareSpecPassTLSClientCertInfoSubject(dict):
+class MiddlewareSpecPassTlsclientCertInfoSubject(dict):
     """
     Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
     """
@@ -2464,14 +2464,14 @@ class MiddlewareSpecPassTLSClientCertInfoSubject(dict):
             suggest = "serial_number"
 
         if suggest:
-            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTLSClientCertInfoSubject. Access the value via the '{suggest}' property getter instead.")
+            pulumi.log.warn(f"Key '{key}' not found in MiddlewareSpecPassTlsclientCertInfoSubject. Access the value via the '{suggest}' property getter instead.")
 
     def __getitem__(self, key: str) -> Any:
-        MiddlewareSpecPassTLSClientCertInfoSubject.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfoSubject.__key_warning(key)
         return super().__getitem__(key)
 
     def get(self, key: str, default = None) -> Any:
-        MiddlewareSpecPassTLSClientCertInfoSubject.__key_warning(key)
+        MiddlewareSpecPassTlsclientCertInfoSubject.__key_warning(key)
         return super().get(key, default)
 
     def __init__(__self__, *,

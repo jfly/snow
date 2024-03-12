@@ -9,32 +9,34 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from ... import _utilities
 from . import outputs
-# Note (jfly): this is a workaround for https://github.com/pulumi/crd2pulumi/issues/26
-# from ... import meta as _meta
-from pulumi_kubernetes import meta as _meta
+from ... import meta as _meta
 from ._inputs import *
 
-__all__ = ['MiddlewareArgs', 'Middleware']
+__all__ = ['CertificateArgs', 'Certificate']
 
 @pulumi.input_type
-class MiddlewareArgs:
+class CertificateArgs:
     def __init__(__self__, *,
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input['_meta.v1.ObjectMetaArgs']] = None,
-                 spec: Optional[pulumi.Input['MiddlewareSpecArgs']] = None):
+                 spec: Optional[pulumi.Input['CertificateSpecArgs']] = None,
+                 status: Optional[pulumi.Input['CertificateStatusArgs']] = None):
         """
-        The set of arguments for constructing a Middleware resource.
-        :param pulumi.Input['MiddlewareSpecArgs'] spec: MiddlewareSpec defines the desired state of a Middleware.
+        The set of arguments for constructing a Certificate resource.
+        :param pulumi.Input['CertificateSpecArgs'] spec: Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+        :param pulumi.Input['CertificateStatusArgs'] status: Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
         """
         if api_version is not None:
-            pulumi.set(__self__, "api_version", 'traefik.containo.us/v1alpha1')
+            pulumi.set(__self__, "api_version", 'cert-manager.io/v1')
         if kind is not None:
-            pulumi.set(__self__, "kind", 'Middleware')
+            pulumi.set(__self__, "kind", 'Certificate')
         if metadata is not None:
             pulumi.set(__self__, "metadata", metadata)
         if spec is not None:
             pulumi.set(__self__, "spec", spec)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -65,18 +67,30 @@ class MiddlewareArgs:
 
     @property
     @pulumi.getter
-    def spec(self) -> Optional[pulumi.Input['MiddlewareSpecArgs']]:
+    def spec(self) -> Optional[pulumi.Input['CertificateSpecArgs']]:
         """
-        MiddlewareSpec defines the desired state of a Middleware.
+        Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
         """
         return pulumi.get(self, "spec")
 
     @spec.setter
-    def spec(self, value: Optional[pulumi.Input['MiddlewareSpecArgs']]):
+    def spec(self, value: Optional[pulumi.Input['CertificateSpecArgs']]):
         pulumi.set(self, "spec", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input['CertificateStatusArgs']]:
+        """
+        Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+        """
+        return pulumi.get(self, "status")
 
-class Middleware(pulumi.CustomResource):
+    @status.setter
+    def status(self, value: Optional[pulumi.Input['CertificateStatusArgs']]):
+        pulumi.set(self, "status", value)
+
+
+class Certificate(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
@@ -84,31 +98,35 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['CertificateSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['CertificateStatusArgs']]] = None,
                  __props__=None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        A Certificate resource should be created to ensure an up to date and signed X.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
+         The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`).
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']] spec: MiddlewareSpec defines the desired state of a Middleware.
+        :param pulumi.Input[pulumi.InputType['CertificateSpecArgs']] spec: Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+        :param pulumi.Input[pulumi.InputType['CertificateStatusArgs']] status: Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: Optional[MiddlewareArgs] = None,
+                 args: Optional[CertificateArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        A Certificate resource should be created to ensure an up to date and signed X.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
+         The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`).
 
         :param str resource_name: The name of the resource.
-        :param MiddlewareArgs args: The arguments to use to populate this resource's properties.
+        :param CertificateArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
         ...
     def __init__(__self__, resource_name: str, *args, **kwargs):
-        resource_args, opts = _utilities.get_resource_args_opts(MiddlewareArgs, pulumi.ResourceOptions, *args, **kwargs)
+        resource_args, opts = _utilities.get_resource_args_opts(CertificateArgs, pulumi.ResourceOptions, *args, **kwargs)
         if resource_args is not None:
             __self__._internal_init(resource_name, opts, **resource_args.__dict__)
         else:
@@ -120,7 +138,8 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['CertificateSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['CertificateStatusArgs']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -128,14 +147,15 @@ class Middleware(pulumi.CustomResource):
         if opts.id is None:
             if __props__ is not None:
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
-            __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+            __props__ = CertificateArgs.__new__(CertificateArgs)
 
-            __props__.__dict__["api_version"] = 'traefik.containo.us/v1alpha1'
-            __props__.__dict__["kind"] = 'Middleware'
+            __props__.__dict__["api_version"] = 'cert-manager.io/v1'
+            __props__.__dict__["kind"] = 'Certificate'
             __props__.__dict__["metadata"] = metadata
             __props__.__dict__["spec"] = spec
-        super(Middleware, __self__).__init__(
-            'kubernetes:traefik.containo.us/v1alpha1:Middleware',
+            __props__.__dict__["status"] = status
+        super(Certificate, __self__).__init__(
+            'kubernetes:cert-manager.io/v1:Certificate',
             resource_name,
             __props__,
             opts)
@@ -143,9 +163,9 @@ class Middleware(pulumi.CustomResource):
     @staticmethod
     def get(resource_name: str,
             id: pulumi.Input[str],
-            opts: Optional[pulumi.ResourceOptions] = None) -> 'Middleware':
+            opts: Optional[pulumi.ResourceOptions] = None) -> 'Certificate':
         """
-        Get an existing Middleware resource's state with the given name, id, and optional extra
+        Get an existing Certificate resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
 
         :param str resource_name: The unique name of the resulting resource.
@@ -154,13 +174,14 @@ class Middleware(pulumi.CustomResource):
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
-        __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+        __props__ = CertificateArgs.__new__(CertificateArgs)
 
         __props__.__dict__["api_version"] = None
         __props__.__dict__["kind"] = None
         __props__.__dict__["metadata"] = None
         __props__.__dict__["spec"] = None
-        return Middleware(resource_name, opts=opts, __props__=__props__)
+        __props__.__dict__["status"] = None
+        return Certificate(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -174,14 +195,22 @@ class Middleware(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def metadata(self) -> pulumi.Output['_meta.v1.outputs.ObjectMeta']:
+    def metadata(self) -> pulumi.Output[Optional['_meta.v1.outputs.ObjectMeta']]:
         return pulumi.get(self, "metadata")
 
     @property
     @pulumi.getter
-    def spec(self) -> pulumi.Output['outputs.MiddlewareSpec']:
+    def spec(self) -> pulumi.Output[Optional['outputs.CertificateSpec']]:
         """
-        MiddlewareSpec defines the desired state of a Middleware.
+        Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
         """
         return pulumi.get(self, "spec")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[Optional['outputs.CertificateStatus']]:
+        """
+        Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+        """
+        return pulumi.get(self, "status")
 

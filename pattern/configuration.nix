@@ -43,6 +43,7 @@ in
     ./printers.nix
     ./fuse.nix
     ./laptop.nix
+    ./garage-status.nix
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
   ];

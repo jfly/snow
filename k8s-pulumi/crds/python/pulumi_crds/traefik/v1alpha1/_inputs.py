@@ -32,10 +32,10 @@ __all__ = [
     'MiddlewareSpecInFlightReqArgs',
     'MiddlewareSpecIpWhiteListIpStrategyArgs',
     'MiddlewareSpecIpWhiteListArgs',
-    'MiddlewareSpecPassTLSClientCertInfoIssuerArgs',
-    'MiddlewareSpecPassTLSClientCertInfoSubjectArgs',
-    'MiddlewareSpecPassTLSClientCertInfoArgs',
-    'MiddlewareSpecPassTLSClientCertArgs',
+    'MiddlewareSpecPassTlsclientCertInfoIssuerArgs',
+    'MiddlewareSpecPassTlsclientCertInfoSubjectArgs',
+    'MiddlewareSpecPassTlsclientCertInfoArgs',
+    'MiddlewareSpecPassTlsclientCertArgs',
     'MiddlewareSpecRateLimitSourceCriterionIpStrategyArgs',
     'MiddlewareSpecRateLimitSourceCriterionArgs',
     'MiddlewareSpecRateLimitArgs',
@@ -1788,7 +1788,7 @@ class MiddlewareSpecIpWhiteListArgs:
 
 
 @pulumi.input_type
-class MiddlewareSpecPassTLSClientCertInfoIssuerArgs:
+class MiddlewareSpecPassTlsclientCertInfoIssuerArgs:
     def __init__(__self__, *,
                  common_name: Optional[pulumi.Input[bool]] = None,
                  country: Optional[pulumi.Input[bool]] = None,
@@ -1908,7 +1908,7 @@ class MiddlewareSpecPassTLSClientCertInfoIssuerArgs:
 
 
 @pulumi.input_type
-class MiddlewareSpecPassTLSClientCertInfoSubjectArgs:
+class MiddlewareSpecPassTlsclientCertInfoSubjectArgs:
     def __init__(__self__, *,
                  common_name: Optional[pulumi.Input[bool]] = None,
                  country: Optional[pulumi.Input[bool]] = None,
@@ -2044,22 +2044,22 @@ class MiddlewareSpecPassTLSClientCertInfoSubjectArgs:
 
 
 @pulumi.input_type
-class MiddlewareSpecPassTLSClientCertInfoArgs:
+class MiddlewareSpecPassTlsclientCertInfoArgs:
     def __init__(__self__, *,
-                 issuer: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoIssuerArgs']] = None,
+                 issuer: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoIssuerArgs']] = None,
                  not_after: Optional[pulumi.Input[bool]] = None,
                  not_before: Optional[pulumi.Input[bool]] = None,
                  sans: Optional[pulumi.Input[bool]] = None,
                  serial_number: Optional[pulumi.Input[bool]] = None,
-                 subject: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoSubjectArgs']] = None):
+                 subject: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoSubjectArgs']] = None):
         """
         Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
-        :param pulumi.Input['MiddlewareSpecPassTLSClientCertInfoIssuerArgs'] issuer: Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param pulumi.Input['MiddlewareSpecPassTlsclientCertInfoIssuerArgs'] issuer: Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         :param pulumi.Input[bool] not_after: NotAfter defines whether to add the Not After information from the Validity part.
         :param pulumi.Input[bool] not_before: NotBefore defines whether to add the Not Before information from the Validity part.
         :param pulumi.Input[bool] sans: Sans defines whether to add the Subject Alternative Name information from the Subject Alternative Name part.
         :param pulumi.Input[bool] serial_number: SerialNumber defines whether to add the client serialNumber information.
-        :param pulumi.Input['MiddlewareSpecPassTLSClientCertInfoSubjectArgs'] subject: Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param pulumi.Input['MiddlewareSpecPassTlsclientCertInfoSubjectArgs'] subject: Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
         if issuer is not None:
             pulumi.set(__self__, "issuer", issuer)
@@ -2076,14 +2076,14 @@ class MiddlewareSpecPassTLSClientCertInfoArgs:
 
     @property
     @pulumi.getter
-    def issuer(self) -> Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoIssuerArgs']]:
+    def issuer(self) -> Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoIssuerArgs']]:
         """
         Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
         return pulumi.get(self, "issuer")
 
     @issuer.setter
-    def issuer(self, value: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoIssuerArgs']]):
+    def issuer(self, value: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoIssuerArgs']]):
         pulumi.set(self, "issuer", value)
 
     @property
@@ -2136,25 +2136,25 @@ class MiddlewareSpecPassTLSClientCertInfoArgs:
 
     @property
     @pulumi.getter
-    def subject(self) -> Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoSubjectArgs']]:
+    def subject(self) -> Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoSubjectArgs']]:
         """
         Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
         return pulumi.get(self, "subject")
 
     @subject.setter
-    def subject(self, value: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoSubjectArgs']]):
+    def subject(self, value: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoSubjectArgs']]):
         pulumi.set(self, "subject", value)
 
 
 @pulumi.input_type
-class MiddlewareSpecPassTLSClientCertArgs:
+class MiddlewareSpecPassTlsclientCertArgs:
     def __init__(__self__, *,
-                 info: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoArgs']] = None,
+                 info: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoArgs']] = None,
                  pem: Optional[pulumi.Input[bool]] = None):
         """
         PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
-        :param pulumi.Input['MiddlewareSpecPassTLSClientCertInfoArgs'] info: Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
+        :param pulumi.Input['MiddlewareSpecPassTlsclientCertInfoArgs'] info: Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
         :param pulumi.Input[bool] pem: PEM sets the X-Forwarded-Tls-Client-Cert header with the certificate.
         """
         if info is not None:
@@ -2164,14 +2164,14 @@ class MiddlewareSpecPassTLSClientCertArgs:
 
     @property
     @pulumi.getter
-    def info(self) -> Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoArgs']]:
+    def info(self) -> Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoArgs']]:
         """
         Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
         """
         return pulumi.get(self, "info")
 
     @info.setter
-    def info(self, value: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertInfoArgs']]):
+    def info(self, value: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertInfoArgs']]):
         pulumi.set(self, "info", value)
 
     @property
@@ -2651,7 +2651,7 @@ class MiddlewareSpecArgs:
                  headers: Optional[pulumi.Input['MiddlewareSpecHeadersArgs']] = None,
                  in_flight_req: Optional[pulumi.Input['MiddlewareSpecInFlightReqArgs']] = None,
                  ip_white_list: Optional[pulumi.Input['MiddlewareSpecIpWhiteListArgs']] = None,
-                 pass_tls_client_cert: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertArgs']] = None,
+                 pass_tls_client_cert: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertArgs']] = None,
                  plugin: Optional[pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, Any]]]]] = None,
                  rate_limit: Optional[pulumi.Input['MiddlewareSpecRateLimitArgs']] = None,
                  redirect_regex: Optional[pulumi.Input['MiddlewareSpecRedirectRegexArgs']] = None,
@@ -2676,7 +2676,7 @@ class MiddlewareSpecArgs:
         :param pulumi.Input['MiddlewareSpecHeadersArgs'] headers: Headers holds the headers middleware configuration. This middleware manages the requests and responses headers. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/headers/#customrequestheaders
         :param pulumi.Input['MiddlewareSpecInFlightReqArgs'] in_flight_req: InFlightReq holds the in-flight request middleware configuration. This middleware limits the number of requests being processed and served concurrently. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/inflightreq/
         :param pulumi.Input['MiddlewareSpecIpWhiteListArgs'] ip_white_list: IPWhiteList holds the IP whitelist middleware configuration. This middleware accepts / refuses requests based on the client IP. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ipwhitelist/
-        :param pulumi.Input['MiddlewareSpecPassTLSClientCertArgs'] pass_tls_client_cert: PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
+        :param pulumi.Input['MiddlewareSpecPassTlsclientCertArgs'] pass_tls_client_cert: PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
         :param pulumi.Input[Mapping[str, pulumi.Input[Mapping[str, Any]]]] plugin: Plugin defines the middleware plugin configuration. More info: https://doc.traefik.io/traefik/plugins/
         :param pulumi.Input['MiddlewareSpecRateLimitArgs'] rate_limit: RateLimit holds the rate limit configuration. This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/ratelimit/
         :param pulumi.Input['MiddlewareSpecRedirectRegexArgs'] redirect_regex: RedirectRegex holds the redirect regex middleware configuration. This middleware redirects a request using regex matching and replacement. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/redirectregex/#regex
@@ -2892,14 +2892,14 @@ class MiddlewareSpecArgs:
 
     @property
     @pulumi.getter(name="passTLSClientCert")
-    def pass_tls_client_cert(self) -> Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertArgs']]:
+    def pass_tls_client_cert(self) -> Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertArgs']]:
         """
         PassTLSClientCert holds the pass TLS client cert middleware configuration. This middleware adds the selected data from the passed client TLS certificate to a header. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/passtlsclientcert/
         """
         return pulumi.get(self, "pass_tls_client_cert")
 
     @pass_tls_client_cert.setter
-    def pass_tls_client_cert(self, value: Optional[pulumi.Input['MiddlewareSpecPassTLSClientCertArgs']]):
+    def pass_tls_client_cert(self, value: Optional[pulumi.Input['MiddlewareSpecPassTlsclientCertArgs']]):
         pulumi.set(self, "pass_tls_client_cert", value)
 
     @property

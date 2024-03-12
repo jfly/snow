@@ -9,32 +9,32 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from ... import _utilities
 from . import outputs
-# Note (jfly): this is a workaround for https://github.com/pulumi/crd2pulumi/issues/26
-# from ... import meta as _meta
-from pulumi_kubernetes import meta as _meta
+from ... import meta as _meta
 from ._inputs import *
 
-__all__ = ['MiddlewareArgs', 'Middleware']
+__all__ = ['ChallengeArgs', 'Challenge']
 
 @pulumi.input_type
-class MiddlewareArgs:
+class ChallengeArgs:
     def __init__(__self__, *,
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input['_meta.v1.ObjectMetaArgs']] = None,
-                 spec: Optional[pulumi.Input['MiddlewareSpecArgs']] = None):
+                 spec: Optional[pulumi.Input['ChallengeSpecArgs']] = None,
+                 status: Optional[pulumi.Input['ChallengeStatusArgs']] = None):
         """
-        The set of arguments for constructing a Middleware resource.
-        :param pulumi.Input['MiddlewareSpecArgs'] spec: MiddlewareSpec defines the desired state of a Middleware.
+        The set of arguments for constructing a Challenge resource.
         """
         if api_version is not None:
-            pulumi.set(__self__, "api_version", 'traefik.containo.us/v1alpha1')
+            pulumi.set(__self__, "api_version", 'acme.cert-manager.io/v1')
         if kind is not None:
-            pulumi.set(__self__, "kind", 'Middleware')
+            pulumi.set(__self__, "kind", 'Challenge')
         if metadata is not None:
             pulumi.set(__self__, "metadata", metadata)
         if spec is not None:
             pulumi.set(__self__, "spec", spec)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -65,18 +65,24 @@ class MiddlewareArgs:
 
     @property
     @pulumi.getter
-    def spec(self) -> Optional[pulumi.Input['MiddlewareSpecArgs']]:
-        """
-        MiddlewareSpec defines the desired state of a Middleware.
-        """
+    def spec(self) -> Optional[pulumi.Input['ChallengeSpecArgs']]:
         return pulumi.get(self, "spec")
 
     @spec.setter
-    def spec(self, value: Optional[pulumi.Input['MiddlewareSpecArgs']]):
+    def spec(self, value: Optional[pulumi.Input['ChallengeSpecArgs']]):
         pulumi.set(self, "spec", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input['ChallengeStatusArgs']]:
+        return pulumi.get(self, "status")
 
-class Middleware(pulumi.CustomResource):
+    @status.setter
+    def status(self, value: Optional[pulumi.Input['ChallengeStatusArgs']]):
+        pulumi.set(self, "status", value)
+
+
+class Challenge(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
@@ -84,31 +90,31 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['ChallengeSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['ChallengeStatusArgs']]] = None,
                  __props__=None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        Challenge is a type to represent a Challenge request with an ACME server
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']] spec: MiddlewareSpec defines the desired state of a Middleware.
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: Optional[MiddlewareArgs] = None,
+                 args: Optional[ChallengeArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        Challenge is a type to represent a Challenge request with an ACME server
 
         :param str resource_name: The name of the resource.
-        :param MiddlewareArgs args: The arguments to use to populate this resource's properties.
+        :param ChallengeArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
         ...
     def __init__(__self__, resource_name: str, *args, **kwargs):
-        resource_args, opts = _utilities.get_resource_args_opts(MiddlewareArgs, pulumi.ResourceOptions, *args, **kwargs)
+        resource_args, opts = _utilities.get_resource_args_opts(ChallengeArgs, pulumi.ResourceOptions, *args, **kwargs)
         if resource_args is not None:
             __self__._internal_init(resource_name, opts, **resource_args.__dict__)
         else:
@@ -120,7 +126,8 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['ChallengeSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['ChallengeStatusArgs']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -128,14 +135,15 @@ class Middleware(pulumi.CustomResource):
         if opts.id is None:
             if __props__ is not None:
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
-            __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+            __props__ = ChallengeArgs.__new__(ChallengeArgs)
 
-            __props__.__dict__["api_version"] = 'traefik.containo.us/v1alpha1'
-            __props__.__dict__["kind"] = 'Middleware'
+            __props__.__dict__["api_version"] = 'acme.cert-manager.io/v1'
+            __props__.__dict__["kind"] = 'Challenge'
             __props__.__dict__["metadata"] = metadata
             __props__.__dict__["spec"] = spec
-        super(Middleware, __self__).__init__(
-            'kubernetes:traefik.containo.us/v1alpha1:Middleware',
+            __props__.__dict__["status"] = status
+        super(Challenge, __self__).__init__(
+            'kubernetes:acme.cert-manager.io/v1:Challenge',
             resource_name,
             __props__,
             opts)
@@ -143,9 +151,9 @@ class Middleware(pulumi.CustomResource):
     @staticmethod
     def get(resource_name: str,
             id: pulumi.Input[str],
-            opts: Optional[pulumi.ResourceOptions] = None) -> 'Middleware':
+            opts: Optional[pulumi.ResourceOptions] = None) -> 'Challenge':
         """
-        Get an existing Middleware resource's state with the given name, id, and optional extra
+        Get an existing Challenge resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
 
         :param str resource_name: The unique name of the resulting resource.
@@ -154,13 +162,14 @@ class Middleware(pulumi.CustomResource):
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
-        __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+        __props__ = ChallengeArgs.__new__(ChallengeArgs)
 
         __props__.__dict__["api_version"] = None
         __props__.__dict__["kind"] = None
         __props__.__dict__["metadata"] = None
         __props__.__dict__["spec"] = None
-        return Middleware(resource_name, opts=opts, __props__=__props__)
+        __props__.__dict__["status"] = None
+        return Challenge(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -179,9 +188,11 @@ class Middleware(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def spec(self) -> pulumi.Output['outputs.MiddlewareSpec']:
-        """
-        MiddlewareSpec defines the desired state of a Middleware.
-        """
+    def spec(self) -> pulumi.Output['outputs.ChallengeSpec']:
         return pulumi.get(self, "spec")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[Optional['outputs.ChallengeStatus']]:
+        return pulumi.get(self, "status")
 

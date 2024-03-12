@@ -31,10 +31,10 @@ def main():
     parser = argparse.ArgumentParser(
         description=dedent(
             """\
-                Encrypt some secret data
+            Encrypt some secret data
 
-                Examples:
-                    $ echo hunter2 | ./encrypt
+            Example:
+                $ echo hunter2 | ./encrypt
             """
         )
     )

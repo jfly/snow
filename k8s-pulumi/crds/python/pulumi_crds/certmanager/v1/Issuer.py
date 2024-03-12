@@ -9,32 +9,34 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from ... import _utilities
 from . import outputs
-# Note (jfly): this is a workaround for https://github.com/pulumi/crd2pulumi/issues/26
-# from ... import meta as _meta
-from pulumi_kubernetes import meta as _meta
+from ... import meta as _meta
 from ._inputs import *
 
-__all__ = ['MiddlewareArgs', 'Middleware']
+__all__ = ['IssuerArgs', 'Issuer']
 
 @pulumi.input_type
-class MiddlewareArgs:
+class IssuerArgs:
     def __init__(__self__, *,
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input['_meta.v1.ObjectMetaArgs']] = None,
-                 spec: Optional[pulumi.Input['MiddlewareSpecArgs']] = None):
+                 spec: Optional[pulumi.Input['IssuerSpecArgs']] = None,
+                 status: Optional[pulumi.Input['IssuerStatusArgs']] = None):
         """
-        The set of arguments for constructing a Middleware resource.
-        :param pulumi.Input['MiddlewareSpecArgs'] spec: MiddlewareSpec defines the desired state of a Middleware.
+        The set of arguments for constructing a Issuer resource.
+        :param pulumi.Input['IssuerSpecArgs'] spec: Desired state of the Issuer resource.
+        :param pulumi.Input['IssuerStatusArgs'] status: Status of the Issuer. This is set and managed automatically.
         """
         if api_version is not None:
-            pulumi.set(__self__, "api_version", 'traefik.containo.us/v1alpha1')
+            pulumi.set(__self__, "api_version", 'cert-manager.io/v1')
         if kind is not None:
-            pulumi.set(__self__, "kind", 'Middleware')
+            pulumi.set(__self__, "kind", 'Issuer')
         if metadata is not None:
             pulumi.set(__self__, "metadata", metadata)
         if spec is not None:
             pulumi.set(__self__, "spec", spec)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -65,18 +67,30 @@ class MiddlewareArgs:
 
     @property
     @pulumi.getter
-    def spec(self) -> Optional[pulumi.Input['MiddlewareSpecArgs']]:
+    def spec(self) -> Optional[pulumi.Input['IssuerSpecArgs']]:
         """
-        MiddlewareSpec defines the desired state of a Middleware.
+        Desired state of the Issuer resource.
         """
         return pulumi.get(self, "spec")
 
     @spec.setter
-    def spec(self, value: Optional[pulumi.Input['MiddlewareSpecArgs']]):
+    def spec(self, value: Optional[pulumi.Input['IssuerSpecArgs']]):
         pulumi.set(self, "spec", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input['IssuerStatusArgs']]:
+        """
+        Status of the Issuer. This is set and managed automatically.
+        """
+        return pulumi.get(self, "status")
 
-class Middleware(pulumi.CustomResource):
+    @status.setter
+    def status(self, value: Optional[pulumi.Input['IssuerStatusArgs']]):
+        pulumi.set(self, "status", value)
+
+
+class Issuer(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
@@ -84,31 +98,33 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['IssuerSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['IssuerStatusArgs']]] = None,
                  __props__=None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace.
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']] spec: MiddlewareSpec defines the desired state of a Middleware.
+        :param pulumi.Input[pulumi.InputType['IssuerSpecArgs']] spec: Desired state of the Issuer resource.
+        :param pulumi.Input[pulumi.InputType['IssuerStatusArgs']] status: Status of the Issuer. This is set and managed automatically.
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: Optional[MiddlewareArgs] = None,
+                 args: Optional[IssuerArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Middleware is the CRD implementation of a Traefik Middleware. More info: https://doc.traefik.io/traefik/v2.9/middlewares/http/overview/
+        An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace.
 
         :param str resource_name: The name of the resource.
-        :param MiddlewareArgs args: The arguments to use to populate this resource's properties.
+        :param IssuerArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
         ...
     def __init__(__self__, resource_name: str, *args, **kwargs):
-        resource_args, opts = _utilities.get_resource_args_opts(MiddlewareArgs, pulumi.ResourceOptions, *args, **kwargs)
+        resource_args, opts = _utilities.get_resource_args_opts(IssuerArgs, pulumi.ResourceOptions, *args, **kwargs)
         if resource_args is not None:
             __self__._internal_init(resource_name, opts, **resource_args.__dict__)
         else:
@@ -120,7 +136,8 @@ class Middleware(pulumi.CustomResource):
                  api_version: Optional[pulumi.Input[str]] = None,
                  kind: Optional[pulumi.Input[str]] = None,
                  metadata: Optional[pulumi.Input[pulumi.InputType['_meta.v1.ObjectMetaArgs']]] = None,
-                 spec: Optional[pulumi.Input[pulumi.InputType['MiddlewareSpecArgs']]] = None,
+                 spec: Optional[pulumi.Input[pulumi.InputType['IssuerSpecArgs']]] = None,
+                 status: Optional[pulumi.Input[pulumi.InputType['IssuerStatusArgs']]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -128,14 +145,15 @@ class Middleware(pulumi.CustomResource):
         if opts.id is None:
             if __props__ is not None:
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
-            __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+            __props__ = IssuerArgs.__new__(IssuerArgs)
 
-            __props__.__dict__["api_version"] = 'traefik.containo.us/v1alpha1'
-            __props__.__dict__["kind"] = 'Middleware'
+            __props__.__dict__["api_version"] = 'cert-manager.io/v1'
+            __props__.__dict__["kind"] = 'Issuer'
             __props__.__dict__["metadata"] = metadata
             __props__.__dict__["spec"] = spec
-        super(Middleware, __self__).__init__(
-            'kubernetes:traefik.containo.us/v1alpha1:Middleware',
+            __props__.__dict__["status"] = status
+        super(Issuer, __self__).__init__(
+            'kubernetes:cert-manager.io/v1:Issuer',
             resource_name,
             __props__,
             opts)
@@ -143,9 +161,9 @@ class Middleware(pulumi.CustomResource):
     @staticmethod
     def get(resource_name: str,
             id: pulumi.Input[str],
-            opts: Optional[pulumi.ResourceOptions] = None) -> 'Middleware':
+            opts: Optional[pulumi.ResourceOptions] = None) -> 'Issuer':
         """
-        Get an existing Middleware resource's state with the given name, id, and optional extra
+        Get an existing Issuer resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
 
         :param str resource_name: The unique name of the resulting resource.
@@ -154,13 +172,14 @@ class Middleware(pulumi.CustomResource):
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
-        __props__ = MiddlewareArgs.__new__(MiddlewareArgs)
+        __props__ = IssuerArgs.__new__(IssuerArgs)
 
         __props__.__dict__["api_version"] = None
         __props__.__dict__["kind"] = None
         __props__.__dict__["metadata"] = None
         __props__.__dict__["spec"] = None
-        return Middleware(resource_name, opts=opts, __props__=__props__)
+        __props__.__dict__["status"] = None
+        return Issuer(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="apiVersion")
@@ -174,14 +193,22 @@ class Middleware(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def metadata(self) -> pulumi.Output['_meta.v1.outputs.ObjectMeta']:
+    def metadata(self) -> pulumi.Output[Optional['_meta.v1.outputs.ObjectMeta']]:
         return pulumi.get(self, "metadata")
 
     @property
     @pulumi.getter
-    def spec(self) -> pulumi.Output['outputs.MiddlewareSpec']:
+    def spec(self) -> pulumi.Output['outputs.IssuerSpec']:
         """
-        MiddlewareSpec defines the desired state of a Middleware.
+        Desired state of the Issuer resource.
         """
         return pulumi.get(self, "spec")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[Optional['outputs.IssuerStatus']]:
+        """
+        Status of the Issuer. This is set and managed automatically.
+        """
+        return pulumi.get(self, "status")
 

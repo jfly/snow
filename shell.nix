@@ -32,6 +32,9 @@ pkgs.mkShell {
     pkgs.parted
     pkgs.cloud-utils
 
+    # Used by tools/generate-mosquitto-user
+    pkgs.mosquitto
+
     # k8s stuff
     pkgs.kubectl
     # pulumi-bin wraps pulumi with a shell script that sets LD_LIBRARY_PATH,
