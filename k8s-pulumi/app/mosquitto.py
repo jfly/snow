@@ -70,6 +70,19 @@ class Mosquitto:
                 -----END AGE ENCRYPTED FILE-----
                 """
             ),
+            "home-assistant": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSTWx5aThtZERwTVEyaUZL
+                ZU1heGVPT1YrNGZzNTNyc0EvMWM3ZWgvNVdFCmNDWlA4NmErV1RWQWdJQ1BiV0or
+                OGdkU2NhWWU3RXpsWjFZektwb0QzSzAKLS0tIDNOMDhCdVZZcytMWGNsa0laVldl
+                UVFrdVYvZExOTkxNZi9PWk41L3N6dzQKC6rz10ypryyM7ZBN9gsfC4DSu2WaR3O9
+                xUiK/o4Bl9h4zt41DeviJdxZgoPjTV3faoDINeUUSWcdwFHKxkKiAYQbNmm10G5K
+                DfauH8Qy24RdZiorEqS+DL1KpveIdDigzFQ3zajFLr+2ELb7y+3P1FPw8ULD45wG
+                KbCc32h0LkL+1n0ixDqXM8x2+beo6B/U
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
         }
         passwords_secret = Secret(
             "mosquitto-passwords",
