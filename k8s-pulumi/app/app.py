@@ -30,8 +30,8 @@ def build_app():
     LegacyRedirects()
 
     SnowWeb(snowauth)
-    Mosquitto(namespace="default")
-    HomeAssistant(namespace="default", snowauth=snowauth)
+    mosquitto = Mosquitto(namespace="default")
+    HomeAssistant(namespace="default", snowauth=snowauth, mosquitto=mosquitto)
     Syncthing(snowauth)
     Budget(snowauth)
     Whoami(snowauth)

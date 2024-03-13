@@ -1,3 +1,5 @@
+from .resources.mqtt import MqttRetainedMessageProvider
+from .resources.mqtt import PasswordAuth
 import pulumi_kubernetes as kubernetes
 from typing import cast
 from pulumi_kubernetes.core.v1 import (
@@ -32,6 +34,9 @@ class Mosquitto:
             ),
         )
 
+        # Some mqtt clients don't support mqtts :(
+        # See https://github.com/awilliams/wifi-presence/issues/21 for one example.
+        mqtt_port = 1883
         mqtts_port = 8883
         conf = dedent(
             f"""
@@ -42,6 +47,11 @@ class Mosquitto:
             listener {mqtts_port}
             keyfile  /mosquitto/cert/tls.key
             certfile /mosquitto/cert/tls.crt
+            allow_anonymous false
+            protocol mqtt
+            password_file /mosquitto/passwords/passwords
+
+            listener {mqtt_port}
             allow_anonymous false
             protocol mqtt
             password_file /mosquitto/passwords/passwords
@@ -56,7 +66,32 @@ class Mosquitto:
             },
         )
 
-        passwords = {
+        pulumi_username = "pulumi"
+        pulumi_password = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBScWc0MWs3UzU0NlpvYmJq
+            TnA3ZUo3WVlzU1VuNGwrYTFVVkdKNndzaEVBCm1YbFZaYm45U28yV1lsVy9PR0dw
+            bkljZVBDSHdqSjZwWmNWR1VLT01oc0EKLS0tIHpBRGxyUHJoaXp3eGltT0lHamgr
+            WnEwWTEvdW9GanlCNDBoNFJvQis3M2cKGYSqFxtL2ZPS8tNOE8en276fVPMZh2Nn
+            BpKP+TBBhfISgBQiyhkPEM2BO6g2bqJyrN5yxw==
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+        pulumi_hashed_password = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2YmFJaVJ0ZzFCaTdQWS9Z
+            ODFnSGFHTHh5OExrbHpzb1hnbXd2aFNGU3djCmhNaGNMdXE5OE1SWld2TnlqWmxV
+            N0RLNEtsNFdWQTVuNy9wZUxSVmtVYXMKLS0tIGFIS2pRZUFhTXAzVXlza09YR2dM
+            aUlVZlV3eHpZUW5DSmRlTDJYRjJUVzgK/txylOKH+1d5QuiFIZU+ndhcPp3kuckP
+            l1Ad79TOqeqvIDPHtGxwXsgPfMAsOOuUq7xxQPIhkU1jaoFe1exA/tEFG/5Go6On
+            k0qZc1p1WOP4DeBYAStUNuEm02c2bOTovEsDirVRt0F51FaPTHlPyYAKzDX0S9+m
+            ZAu4GpuPStgU64UKn6q2ZgtYM1gfh5CI
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+        hashed_passwords = {
             "jfly": deage(
                 """
                 -----BEGIN AGE ENCRYPTED FILE-----
@@ -83,6 +118,33 @@ class Mosquitto:
                 -----END AGE ENCRYPTED FILE-----
                 """
             ),
+            "strider": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlRzlBYkszdTEzVU9DbkNL
+                UG5pYS9vYUtOTVd0RDhvUFRLSXpUaWZsajIwClhsN2s5ZTB6QTR6Y2JnZ3Axem1I
+                dVFIcE5kSEJlKzVkZ1U0NGtRQWFDdVkKLS0tIENQV0FWbXpBL0tGRnpDdlJNbXF3
+                dEhGK2kxL3RnUkxPUTk2WmdlSHpNalEKml0PGsgAvTCoO9O41PyWwz0a3kUVJvCC
+                e4w9WXwbDOVtNqORoDEeqAIJNXNCKe/8AmHIKXqcHClWpwGq3qScvebxihqq9NcJ
+                0V6ltaP/lOKbP1rnGFXVVpSSHN9JiKrO6anp/4xav6dUQHn3Z0RkYwF95weLwrMd
+                HL8ujuXg5dNQy8k040lp+GdmVboFY4x2
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "aragorn": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwN25RN0dPOWNJT1ZVNnpj
+                ZCtENHdIMHZkQm51TVFCcVlwMFpreUcvdVdVClVxTjI3L3d2VEVxdkRtNEFXbXJr
+                cGFOREJ4Vm1EZmthaFk3TWpPTlFjLzQKLS0tIEdaWEt5a205S1J1MTNTYjZLVlpQ
+                a2dMRFpyZ1l5MFM3dlVlU3Fzc2w1RlkKVot31vpoBanDnSlY+UeQgGDeSlBT+MX6
+                3tON/nBa4lt5dNAmQL7F64r7qT8OQcSZVPdyD9WsoJQkEExaBOmhtRzHUsGRf883
+                A7DrhksL+VnX5utrg130ZtvirBwiRvT1MLTtveWVmNuMgAFOTJcCiIn15mSRHFTr
+                YcIwOx3Vgb0wuWjf97Q4NOGqy8lkdFld
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            pulumi_username: pulumi_hashed_password,
         }
         passwords_secret = Secret(
             "mosquitto-passwords",
@@ -91,7 +153,7 @@ class Mosquitto:
             string_data={
                 "passwords": "\n".join(
                     f"{username}:{hashed_pw}"
-                    for username, hashed_pw in sorted(passwords.items())
+                    for username, hashed_pw in sorted(hashed_passwords.items())
                 ),
             },
         )
@@ -167,11 +229,28 @@ class Mosquitto:
                 ).match_labels,
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
-                        name="mqtt",
+                        name="mqtts",
                         port=mqtts_port,
                         protocol="TCP",
                         target_port=mqtts_port,
                     ),
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="mqtt",
+                        port=mqtt_port,
+                        protocol="TCP",
+                        target_port=mqtt_port,
+                    ),
                 ],
             ),
+        )
+
+        self.retained_message_provider = MqttRetainedMessageProvider(
+            hostname="mqtt.snow.jflei.com",
+            password_auth=PasswordAuth(
+                username=pulumi_username,
+                password=pulumi_password,
+            ),
+            # The deployment needs to finish before there's an actual mosquitto
+            # instance to talk to.
+            depends_on=[deployment],
         )

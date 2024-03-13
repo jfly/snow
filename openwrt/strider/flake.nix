@@ -15,7 +15,7 @@
 
         profiles = openwrt-imagebuilder.lib.profiles {
           inherit pkgs;
-          release = "22.03.5";
+          release = "23.05.2";
         };
 
         config = pkgs.stdenv.mkDerivation {
@@ -43,6 +43,15 @@
           UElRc2tOL0Zlc1VRRVpmOXZwMU1HSzgKLS0tIHNVMVhKU3EzN0x5NlVkN0J2b1NL
           M2tkb3BiVUJ0SmRwZ3JtS1c0WmNDeVkKd6aIxcBae2D9laj8XgGYow6dUmb2GJQk
           iIrz94V8b59mPw9d8plEQdCBN4L3auY9H2EJQ8ltPMiF4o5Pl2cWT/G5RlRjda+d
+          -----END AGE ENCRYPTED FILE-----
+        '';
+        mqttPassword = pkgs.deage.string ''
+          -----BEGIN AGE ENCRYPTED FILE-----
+          YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiVHc1UXJmMkJpeVdlTWFX
+          TzB3TnFHZHBwaG1hbGhqb2k1VUpWYyt4bFQwCnJodmsvQ3VsOWFtWUZsbnBJM2pO
+          SzBRTDM3VVpnSnF4dE5KZ29uVm9wd3MKLS0tIHRxQlhTOSt4citFbm9RalFFdndz
+          OHZDdVhFdnU3eUZESjNabVcraDhlbEEKAW54k9Ne4JZ76adEBmvrcKrxdVcMQe+q
+          pbReTtYwFdORWth/mhrKJG1xffW2jNzORDbfow==
           -----END AGE ENCRYPTED FILE-----
         '';
 
@@ -85,9 +94,10 @@
             # version. This is necessary for awilliams/wifi-presence. See
             # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
             # for details.
-            "-wpad-basic-wolfssl"
-            "wpad-wolfssl"
+            "-wpad-basic-mbedtls"
+            "wpad-mbedtls"
           ];
+          hackExtraPackages = [ "wifi-presence" ];
 
           files = pkgs.runCommand "image-files" { } ''
             mkdir -p $out/etc/uci-defaults
@@ -116,11 +126,12 @@
               --replace-fail "@wifi_password@" "${routers-shared.wifi.home.password}" \
               --replace-fail "@wifi_iot_password@" "${routers-shared.wifi.iot.password}"
 
+            substituteInPlace $out/etc/config/wifi-presence \
+              --replace-fail "@mqtt_password@" "${mqttPassword}"
+
             substituteInPlace $out/etc/dropbear/authorized_keys \
               --replace-fail "@authorized_key@" "${identities.jfly}"
           '';
-
-          hackExtraPackages = [ "wifi-presence" ];
         })).overrideAttrs
           (finalAttrs: prevAttrs: {
             configurePhase = ''
