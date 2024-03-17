@@ -4,6 +4,7 @@ from .radarr import Radarr
 from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
+from .speedtest import Speedtest
 from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
@@ -44,6 +45,7 @@ def build_app():
     # Useful if you really need to run a service somewhere outside of the
     # cluster (perhaps on your laptop) with a valid https cert.
     MiscK8sHttpsProxies(snowauth=snowauth)
+    Speedtest(namespace="default", snowauth=snowauth)
 
     Torrents(snowauth)
     Jackett(snowauth)
