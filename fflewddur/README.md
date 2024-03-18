@@ -58,4 +58,4 @@ Connect the new drive. Find it in `lsblk`. The rest of this example will be for 
     mkfs.ext4 "${DRIVE}1"
 
 Get the UUID of the partition you just created (I use `lsblk -f /dev/sda1`).
-Add it to `nas_drive_uuids` in `nas.nix`.
+Add it to `nasDriveUuids` in `nas.nix`.

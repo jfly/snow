@@ -32,6 +32,10 @@ class Syncthing:
                     name="syncthing-config",
                 ),
                 kubernetes.core.v1.VolumeMountArgs(
+                    mount_path="/data",
+                    name="syncthing-data",
+                ),
+                kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/mnt/media",
                     name="mnt-media",
                 ),
@@ -44,6 +48,13 @@ class Syncthing:
                         type="",
                     ),
                     name="syncthing-config",
+                ),
+                kubernetes.core.v1.VolumeArgs(
+                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
+                        path="/state/syncthing-data",
+                        type="",
+                    ),
+                    name="syncthing-data",
                 ),
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(

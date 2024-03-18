@@ -2,7 +2,7 @@
 
 let
   # Want to add a new drive? See README.md for instructions.
-  nas_drive_uuids = {
+  nasDriveUuids = {
     "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
     "/mnt/disk2" = "dac09fb6-d300-4892-b83b-3acef83cc757";
   };
@@ -14,15 +14,14 @@ in
   ];
 
   fileSystems = (builtins.mapAttrs
-    (mnt_path: uuid: {
+    (_mntPath: uuid: {
       device = "/dev/disk/by-uuid/${uuid}";
       fsType = "ext4";
-      options =
-        [ "rw" "user" "auto" ];
+      options = [ "rw" "user" "auto" ];
     })
-    nas_drive_uuids) // {
-    "/mnt/media" = {
-      device = builtins.concatStringsSep ":" (builtins.attrNames nas_drive_uuids);
+    nasDriveUuids) // {
+    "/mnt/bay" = {
+      device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
       fsType = "fuse.mergerfs";
       options = [
         # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
@@ -35,6 +34,12 @@ in
         # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
         "func.getattr=newest"
       ];
+    };
+    # Set up a bind mount so /mnt/bay/media is accessible at /mnt/media.
+    # Why? Partly historical, but this also provides a nice abstraction.
+    "/mnt/media" = {
+      device = "/mnt/bay/media";
+      options = [ "bind" ];
     };
   };
 
@@ -69,5 +74,25 @@ in
         "guest ok" = "yes";
       };
     };
+  };
+
+  # Enable the Restic REST server.
+  services.restic.server = {
+    enable = true;
+    listenAddress = ":8000";
+    dataDir = "/mnt/bay/restic";
+    # We're not (currently) requiring authentication to speak to the rest
+    # server. This allows us to avoid futzing with HTTPS and certificates.
+    # However, it does mean that anyone on the network can talk to this server
+    # (we don't expose port 8000 to the internet), so to remove the risk of
+    # folks deleting backups, we run the server in "append only" mode.
+    # From https://github.com/restic/rest-server?tab=readme-ov-file#why-use-rest-server:
+    #   > the REST backend has better performance, especially so if you can skip
+    #   > additional crypto overhead by using plain HTTP transport
+    appendOnly = true;
+    extraFlags = [
+      # See comment above `appendOnly` for why this is safe.
+      "--no-auth"
+    ];
   };
 }
