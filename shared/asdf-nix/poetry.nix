@@ -66,7 +66,7 @@ let
       name = "nixpkgs-with-poetry-1.8.2";
       url = "https://github.com/NixOS/nixpkgs/";
       ref = "refs/heads/master";
-      rev = "b0f45b48373a0c9cdfaea5c20892d1009502a134";
+      rev = "38d8d0e7ea26033834f8e1138bdeaaa952c6f77b";
     })
     {
       localSystem = pkgs.system;
