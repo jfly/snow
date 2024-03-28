@@ -86,6 +86,10 @@ layout_python() {
         fi
     fi
 
+    # Create a .venv symlink at the root. This helps some editors (specifically
+    # PyCharm) automatically discover the virtual environment.
+    __ensure_symlink "$VIRTUAL_ENV" "$PWD/.venv"
+
     export VIRTUAL_ENV
     PATH_add "$VIRTUAL_ENV/bin"
 }
