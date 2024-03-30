@@ -17,6 +17,20 @@ in
     pr-tracker.nixosModules.fetcher
   ];
 
+  # https://github.com/settings/tokens/1473000486
+  age.secrets.pr-tracker-github-token = {
+    owner = user;
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1UmxaaXpJMkpvT1Z2ajJQ
+      a0FxMXZ1enl1TjBpWUpuRlFqM0hZZU1PY2swCkNMTE9MWXpoVm1jdVFLeUFHcE1K
+      aEE0TXVsblRjaXlwN3p1alVwUEZBWU0KLS0tIEdSaE9vaHRSV0Y5d1NuY0YzaDhR
+      dGNYZGlVeENNZHAvV01wd1o5QldxQ1UKSNuk1pVzjpqxQFV4qRYSPy8Lti6c8YER
+      iDw5RABF1j34ucPAwRu91wbXxvftEGxURwa7un6Rr6Y8on8noTQR8OF7MsgL48Tf
+      -----END AGE ENCRYPTED FILE-----
+    '';
+  };
+
   services.postgresql.enable = true;
   services.postgresql.ensureDatabases = [ user ];
   services.postgresql.ensureUsers = [
@@ -27,22 +41,22 @@ in
   ];
 
   systemd.services.pr-tracker-api.environment.ROCKET_ADDRESS = "0.0.0.0";
-  services.pr-tracker-api.enable = true;
-  services.pr-tracker-api.port = port;
-  services.pr-tracker-api.user = user;
-  services.pr-tracker-api.group = "pr-tracker";
-  services.pr-tracker-api.dbUrlParams = dbUrlParams;
-  services.pr-tracker-api.localDb = true;
+  services.pr-tracker.api.enable = true;
+  services.pr-tracker.api.port = port;
+  services.pr-tracker.api.user = user;
+  services.pr-tracker.api.group = "pr-tracker";
+  services.pr-tracker.api.dbUrlParams = dbUrlParams;
+  services.pr-tracker.api.localDb = true;
 
-  services.pr-tracker-fetcher.enable = true;
-  services.pr-tracker-fetcher.user = user;
-  services.pr-tracker-fetcher.group = "pr-tracker";
+  services.pr-tracker.fetcher.enable = true;
+  services.pr-tracker.fetcher.user = user;
+  services.pr-tracker.fetcher.group = "pr-tracker";
   systemd.services.pr-tracker-fetcher.environment.RUST_LOG = "info";
-  services.pr-tracker-fetcher.branchPatterns = [ "*" ];
-  services.pr-tracker-fetcher.dbUrlParams = dbUrlParams;
-  services.pr-tracker-fetcher.localDb = true;
-  services.pr-tracker-fetcher.githubApiTokenFile = "/run/pr-tracker-secrets/github.token"; # TODO: encrypt + version control this
-  services.pr-tracker-fetcher.repo.owner = "NixOS";
-  services.pr-tracker-fetcher.repo.name = "nixpkgs";
-  services.pr-tracker-fetcher.onCalendar = "daily";
+  services.pr-tracker.fetcher.branchPatterns = [ "*" ];
+  services.pr-tracker.fetcher.dbUrlParams = dbUrlParams;
+  services.pr-tracker.fetcher.localDb = true;
+  services.pr-tracker.fetcher.githubApiTokenFile = config.age.secrets.pr-tracker-github-token.path;
+  services.pr-tracker.fetcher.repo.owner = "NixOS";
+  services.pr-tracker.fetcher.repo.name = "nixpkgs";
+  services.pr-tracker.fetcher.onCalendar = "daily";
 }
