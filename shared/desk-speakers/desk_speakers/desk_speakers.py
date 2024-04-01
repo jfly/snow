@@ -2,6 +2,7 @@ from contextlib import contextmanager
 import pulsectl
 import dbus
 
+# Names from `nix-shell -p pulseaudio --run 'pactl list sinks | grep "Name:\|Description:"'`
 DESK_SPEAKERS = "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_3__sink"
 GAMING_HEADSET = (
     "alsa_output.usb-Kingston_HyperX_Cloud_Flight_S_000000000001-00.analog-stereo"

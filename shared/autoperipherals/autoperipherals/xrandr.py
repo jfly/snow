@@ -1,6 +1,10 @@
 import re
+import shlex
+import logging
 import subprocess
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -8,6 +12,9 @@ class Display:
     name: str  # something like 'DP-3-2'
     is_connected: bool
     is_active: bool
+
+    left_of: "Display | None" = None
+    right_of: "Display | None" = None
 
 
 DISPLAY_RE = re.compile(r"^(\S+) (connected|disconnected) (.+)$")
@@ -68,7 +75,12 @@ class XRandr:
                     "--preferred" if display.is_active else "--off",
                 ]
             )
+            if display.left_of is not None:
+                args.extend(["--left-of", display.left_of.name])
+            if display.right_of is not None:
+                args.extend(["--right-of", display.right_of.name])
 
+        logger.info("About to invoke xrandr: %s", shlex.join(args))
         subprocess.check_output(args)
 
     @property

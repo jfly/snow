@@ -3,7 +3,8 @@
 
 let
   pgPort = config.services.postgresql.port;
-  port = 7000;
+  internalApiPort = 7001;
+  externalApiPort = 7000;
   user = "pr-tracker";
   dbUrlParams = {
     inherit user;
@@ -40,9 +41,22 @@ in
     }
   ];
 
-  systemd.services.pr-tracker-api.environment.ROCKET_ADDRESS = "0.0.0.0";
+  # pr-tracker-api doesn't support changing the bind address to anything other
+  # than 127.0.0.1. See
+  # https://github.com/molybdenumsoftware/pr-tracker/issues/170
+  # We work around this by exposing it via nginx.
+  services.nginx = {
+    enable = true;
+    defaultHTTPListenPort = externalApiPort;
+    virtualHosts."pr-tracker.snow.jflei.com" = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString internalApiPort}";
+      };
+    };
+  };
+
   services.pr-tracker.api.enable = true;
-  services.pr-tracker.api.port = port;
+  services.pr-tracker.api.port = internalApiPort;
   services.pr-tracker.api.user = user;
   services.pr-tracker.api.group = "pr-tracker";
   services.pr-tracker.api.dbUrlParams = dbUrlParams;

@@ -5,8 +5,11 @@ import subprocess
 import contextlib
 from pathlib import Path
 import xdg.BaseDirectory
+import logging
 
 from .xrandr import XRandr
+
+logger = logging.getLogger(__name__)
 
 
 def data_dir(file: str) -> Path:
@@ -80,13 +83,13 @@ def autoperipherals():
     displays = xrandr.connected_displays
     display_by_name = {d.name: d for d in displays}
 
-    if external_display := display_by_name.get("DP-3-2"):
+    if primary_external := display_by_name.get("DP-3-1"):
         layout_name = "snowdesk"
         dpi = 96
 
         for display in displays:
             display.is_active = False
-        external_display.is_active = True
+        primary_external.is_active = True
     elif external_display := display_by_name.get("HDMI-1"):
         layout_name = "snowprojector"
         dpi = 96
@@ -123,14 +126,18 @@ def autoperipherals():
 
 
 def main():
+    logging.basicConfig(level=logging.INFO)
+
     try:
         with enforce_highlander_rule():
             autoperipherals()
     except ThereCanBeOnlyOne as e:
-        print(
-            f"Could not obtain lock on {e.path}.\n"
-            "Is another autoperipherals script currently running?",
-            file=sys.stderr,
+        logger.error(
+            (
+                "Could not obtain lock on %s.\n"
+                "Is another autoperipherals script currently running?"
+            ),
+            e.path,
         )
 
 

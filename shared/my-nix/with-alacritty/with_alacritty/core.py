@@ -142,7 +142,9 @@ def _is_alacritty_proccess(pid: int):
 def _get_process_command(pid: int):
     return (
         subprocess.run(
-            ["ps", "-p", str(pid), "-o", "command"], capture_output=True, text=True
+            ["@PS_COMMAND@", "-p", str(pid), "-o", "command"],
+            capture_output=True,
+            text=True,
         )
         .stdout.strip()
         .split("\n")[-1]
@@ -222,9 +224,9 @@ def _generate_merged_config(pid: int):
     ]
 
     merged = reduce(merge, configs, {})
-    merged[
-        "live_config_reload"
-    ] = True  # this whole thing relies upon this setting being enabled.
+    merged["live_config_reload"] = (
+        True  # this whole thing relies upon this setting being enabled.
+    )
 
     merged_conf_path = _get_merged_conf_path(pid)
     with merged_conf_path.open("wb") as f:

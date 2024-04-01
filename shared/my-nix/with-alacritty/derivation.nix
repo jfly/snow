@@ -1,6 +1,7 @@
 { black
 , buildPythonApplication
 , mergedeep
+, procps
 , psutil
 , pytestCheckHook
 , pyxdg
@@ -23,6 +24,11 @@ buildPythonApplication {
   nativeBuildInputs = [
     black
   ];
+
+  postPatch = ''
+    substituteInPlace with_alacritty/core.py \
+      --replace-fail @PS_COMMAND@ ${procps}/bin/ps
+  '';
 
   src = ./.;
 }
