@@ -51,6 +51,7 @@ in
     agenix-rooter.nixosModules.default
   ];
 
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   age.rooter = {
     hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
     generatedForHostDir = ../agenix-rooter-reencrypted-secrets;
