@@ -1,41 +1,61 @@
-import re
 import shlex
 import logging
 import subprocess
 from dataclasses import dataclass
+import os
+import pyedid
+from typing import Any
+from Xlib import display
+from Xlib.ext.randr import PROPERTY_RANDR_EDID
+from Xlib.ext import randr
+import enum
 
 logger = logging.getLogger(__name__)
+
+
+class Connection(enum.Enum):
+    CONNECTED = randr.Connected
+    DISCONNECTED = randr.Disconnected
+    UNKNOWN_CONNECTION = randr.UnknownConnection
 
 
 @dataclass
 class Display:
     name: str  # something like 'DP-3-2'
+    edid: pyedid.Edid | None
     is_connected: bool
     is_active: bool
 
+    # This is kind of weird: we don't currently support reading these values,
+    # we only support setting them. Ideally we'd make the right queries to Xlib
+    # to figure out these values.
+    is_primary: bool = False
     left_of: "Display | None" = None
     right_of: "Display | None" = None
 
 
-DISPLAY_RE = re.compile(r"^(\S+) (connected|disconnected) (.+)$")
+def get_edid(d: display.Display, output: Any) -> pyedid.Edid:
+    """
+    (copied from https://github.com/evocount/display-management/blob/v0.0.2/displaymanagement/output.py#L219)
 
+    Returns the EDID of the monitor represented by the display
 
-@dataclass
-class RawDisplayInfo:
-    name: str  # something like 'DP-3-2'
-    connected: str  # connected|disconnected
-    info: str  # something like ' primary 2560x1440+2240+0 (normal left inverted right x axis y axis) 597mm x 336mm'
-    modes: list[str]  # things like '   2560x1440     59.95*+'
+    Returns
+    EDIDDescriptor
+        The EDID info of the monitor associated with this output
 
-    def cook(self) -> Display:
-        return Display(
-            name=self.name,
-            is_connected={
-                "connected": True,
-                "disconnected": False,
-            }[self.connected],
-            is_active=any("*" in mode for mode in self.modes),
-        )
+    Throws
+    ResourceError
+        If the output does not have an EDID property exposed
+    """
+    EDID_ATOM = d.intern_atom(PROPERTY_RANDR_EDID)
+    EDID_TYPE = 19
+    EDID_LENGTH = 128
+    edid_info = d.xrandr_get_output_property(
+        output, EDID_ATOM, EDID_TYPE, 0, EDID_LENGTH
+    )
+
+    return pyedid.parse_edid(bytes(edid_info._data["value"]))
 
 
 class XRandr:
@@ -45,24 +65,29 @@ class XRandr:
         self.refresh()
 
     def refresh(self):
-        output = subprocess.check_output(["xrandr"], text=True)
+        displays: list[Display] = []
 
-        raw_displays: list[RawDisplayInfo] = []
-        for line in output.splitlines():
-            if line.startswith("Screen"):
-                continue
-            elif match := DISPLAY_RE.match(line):
-                raw_display = RawDisplayInfo(
-                    name=match.group(1),
-                    connected=match.group(2),
-                    info=match.group(3),
-                    modes=[],
+        d = display.Display(os.environ["DISPLAY"])
+        info = d.screen()
+        window = info.root
+
+        resources = randr.get_screen_resources(window)
+        for output in resources.outputs:
+            params = d.xrandr_get_output_info(output, resources.config_timestamp)
+            connection = Connection(params.connection)
+            is_active = bool(params.crtc)
+            is_connected = connection == Connection.CONNECTED
+            edid = get_edid(d, output) if is_connected else None
+
+            displays.append(
+                Display(
+                    name=params.name,
+                    edid=edid,
+                    is_connected=is_connected,
+                    is_active=is_active,
                 )
-                raw_displays.append(raw_display)
-            else:
-                raw_displays[-1].modes.append(line)
+            )
 
-        displays = [raw_display.cook() for raw_display in raw_displays]
         self._display_by_name = {display.name: display for display in displays}
 
     def apply(self):
@@ -75,6 +100,8 @@ class XRandr:
                     "--preferred" if display.is_active else "--off",
                 ]
             )
+            if display.is_primary:
+                args.extend(["--primary"])
             if display.left_of is not None:
                 args.extend(["--left-of", display.left_of.name])
             if display.right_of is not None:

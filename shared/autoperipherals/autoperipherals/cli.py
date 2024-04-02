@@ -1,4 +1,3 @@
-import sys
 import errno
 import fcntl
 import subprocess
@@ -82,14 +81,22 @@ def autoperipherals():
 
     displays = xrandr.connected_displays
     display_by_name = {d.name: d for d in displays}
+    display_by_edid_name = {
+        f"{d.edid.name} {d.edid.serial}": d for d in displays if d.edid is not None
+    }
 
-    if primary_external := display_by_name.get("DP-3-1"):
+    if primary_external := display_by_edid_name.get("DELL U2715H H7YCC8AA0DSS"):
         layout_name = "snowdesk"
         dpi = 96
 
         for display in displays:
             display.is_active = False
         primary_external.is_active = True
+        primary_external.is_primary = True
+
+        if secondary_external := display_by_edid_name.get("DELL U2717D 67YGV79MB7TS"):
+            secondary_external.is_active = True
+            secondary_external.right_of = primary_external
     elif external_display := display_by_name.get("HDMI-1"):
         layout_name = "snowprojector"
         dpi = 96

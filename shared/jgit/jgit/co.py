@@ -34,4 +34,7 @@ def clone(remote: str, dry_run: bool):
             cwd=destination.parent,
             stdout=subprocess.DEVNULL,
         )
+    else:
+        print(f"I would be cloning {cloneable.remote} right now.", file=sys.stderr)
+
     print(destination)
