@@ -10,10 +10,7 @@ in
     uid = 1000;
   };
 
-  # Cannot build sysdig with the latest kernel. See
-  # https://github.com/draios/sysdig/issues/2077 for details.
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_7;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nixpkgs = {
     config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
