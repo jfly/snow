@@ -94,8 +94,77 @@ layout_python() {
     PATH_add "$VIRTUAL_ENV/bin"
 }
 
-# Import the `wrap_program` helper from direnv-unstdlib.
-source_url "https://raw.githubusercontent.com/jfly/direnv-unstdlib/v1.0.1/make-wrapper.sh" "sha256-sz5VdoGrFjiemk0MLAF85nlDo2wleJ/0LiSJ0LXIdDc="
+make_temp_file() {
+    local temp_file
+    if command -v mktemp &>/dev/null; then
+        temp_file=$(mktemp)
+    else
+        # Some Linux systems may only ship `tempfile`
+        temp_file=$(tempfile)
+    fi
+    echo "$temp_file"
+}
+
+# Wrap the given executable file and add it to the PATH.
+# Usage: wrap_program EXECUTABLE ARGS
+#
+# See `make_wrapper` for supported ARGS.
+wrap_program() {
+	local wrap_me=$1
+	shift # skip past first argument
+
+    # Its possible that multiple processes may run when setting up a direnv. To address this race condition, we
+    # initially write our wrapper script to a temporary file, then copy it to the final location.
+	local basename
+	basename=$(basename "$wrap_me")
+	temp_wrapper=$(make_temp_file)
+	wrapper=$(direnv_layout_dir)/wrappers/$basename-wrapper/$basename
+	wrapper_dir=$(dirname "$wrapper")
+
+	mkdir -p "$wrapper_dir"
+	make_wrapper "$wrap_me" "$temp_wrapper" "$@"
+
+    mv "$temp_wrapper" "$wrapper"
+	PATH_add "$wrapper_dir"
+}
+
+# Wrap the given executable file.
+# Usage: make_wrapper EXECUTABLE OUT_PATH ARGS
+#
+# This only supports a small subset of the features in [the original]. Feel free to duplicate functionality over as needed.
+#
+# [the original]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
+#
+# ARGS:
+# --run       COMMAND : run COMMAND before EXECUTABLE
+make_wrapper() {
+	local wrap_me=$1
+	local wrapper=$2
+
+	if ! [[ -f $wrap_me && -x $wrap_me ]]; then
+		log_error "wrap_program: Cannot wrap '$wrap_me' as it is not an executable file"
+		exit 1
+	fi
+
+	echo "#!/usr/bin/env bash" >"$wrapper"
+	echo "set -e" >>"$wrapper"
+
+	params=("$@")
+	for ((n = 2; n < ${#params[*]}; n += 1)); do
+		p="${params[$n]}"
+
+		if [[ $p == "--run" ]]; then
+			command="${params[$((n + 1))]}"
+			n=$((n + 1))
+			echo "$command" >>"$wrapper"
+		else
+			die "make_wrapper doesn't understand the arg $p"
+		fi
+	done
+
+	echo exec "'$wrap_me'" '"$@"' >>"$wrapper"
+	chmod +x "$wrapper"
+}
 
 wrap_with_codeartifact_login() {
     local command=$1

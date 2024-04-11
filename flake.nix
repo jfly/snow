@@ -198,11 +198,6 @@
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
-                (unpatched.fetchpatch {
-                  name = "sysdig fix for linux 6.8";
-                  url = "https://github.com/NixOS/nixpkgs/pull/300630.patch";
-                  hash = "sha256-/VeenGLJI2KXwejWRl11pJeTCd6KLUx4qEclbuo4FX8=";
-                })
               ];
             };
           };

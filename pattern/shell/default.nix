@@ -27,7 +27,6 @@ in
       ### Load ohmyzsh
       ###
       plugins=(git)
-      plugins+=(fzf)
       source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
       ##################################
 
@@ -53,10 +52,11 @@ in
     aggressiveResize = true;
   };
 
+  programs.fzf.enable = true;
+
   environment.systemPackages = with pkgs; [
     q
     jgit
-    pkgs.fzf
     direnv
 
     ### Prompt
