@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd_and_direnv() {
+    # Trick from
+    # https://github.com/direnv/direnv/issues/262#issuecomment-286870058 to cd
+    # into a directory *and* load the relevant direnv environment.
+    cd "$1"
+    eval "$(direnv export bash)"
+}
+
+cd_and_direnv ~/src/clark/manmanmon
+
+git checkout main
+git pull
+GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null GIT_AUTHOR_NAME=clark GIT_AUTHOR_EMAIL=clark@jflei.com GIT_COMMITTER_NAME=clark GIT_COMMITTER_EMAIL=clark@jflei.com just fetch-and-commit
