@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter, home-manager }:
+{ agenix, agenix-rooter, home-manager, on-air }:
 { config, pkgs, lib, ... }:
 
 let
@@ -43,7 +43,7 @@ in
     ./printers.nix
     ./fuse.nix
     ./laptop.nix
-    ./garage-status.nix
+    (import ./garage-status.nix { inherit on-air; })
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
   ];

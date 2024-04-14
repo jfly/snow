@@ -1,5 +1,9 @@
+{ on-air }:
 { config, lib, pkgs, ... }:
 
+let
+  on-air-pkg = on-air.packages.${config.nixpkgs.hostPlatform.system}.default;
+in
 {
   age.secrets.mosquitto-password = {
     owner = "jeremy";
@@ -14,15 +18,23 @@
     '';
   };
 
-  environment.systemPackages = with pkgs; [
-    (
-      pkgs.writeShellApplication {
-        name = "mosquitto-jfly";
-        # TODO: automate publishing status of attached webcam
-        text = ''
-          cat ${config.age.secrets.mosquitto-password.path}
-        '';
-      }
-    )
-  ];
+  systemd.user.services.on-air = {
+    enable = true;
+    description = "on-air";
+
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+
+    script = ''
+      ${on-air-pkg}/bin/on-air mqtt \
+        --broker mqtts://mqtt.snow.jflei.com \
+        --username jfly \
+        --password-file ${config.age.secrets.mosquitto-password.path} \
+        --device-name ${config.networking.hostName}
+    '';
+    serviceConfig = {
+      Type = "simple";
+      Restart = "always";
+    };
+  };
 }

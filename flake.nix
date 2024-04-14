@@ -47,6 +47,11 @@
 
     pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
     pr-tracker.inputs.nixpkgs.follows = "nixpkgs";
+
+    on-air = {
+      url = "github:jfly/on-air";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -62,6 +67,7 @@
     , treefmt-nix
     , nixos-hardware
     , pr-tracker
+    , on-air
     , ...
     }:
     let
@@ -234,7 +240,7 @@
           inherit agenix agenix-rooter;
         };
         "pattern" = import pattern/configuration.nix {
-          inherit agenix agenix-rooter home-manager;
+          inherit agenix agenix-rooter home-manager on-air;
         };
         "kent" = import kent/configuration.nix {
           inherit agenix agenix-rooter;
