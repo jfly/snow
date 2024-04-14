@@ -86,7 +86,7 @@ def autoperipherals():
     }
 
     if primary_external := display_by_edid_name.get("DELL U2715H H7YCC8AA0DSS"):
-        layout_name = "snowdesk"
+        location_name = "garageman"
         dpi = 96
 
         for display in displays:
@@ -94,24 +94,33 @@ def autoperipherals():
         primary_external.is_active = True
         primary_external.is_primary = True
 
-        if secondary_external := display_by_edid_name.get("DELL U2717D 67YGV79MB7TS"):
+        if secondary_external := display_by_edid_name.get("DELL P2417H KH0NG8BU2HML"):
             secondary_external.is_active = True
             secondary_external.right_of = primary_external
+            secondary_external.rotation = "left"
     elif external_display := display_by_name.get("HDMI-1"):
-        layout_name = "snowprojector"
+        location_name = "projector"
         dpi = 96
 
         for display in displays:
             display.is_active = False
         external_display.is_active = True
     else:
-        layout_name = "mobile"
+        location_name = "mobile"
         dpi = 133
 
         internal_display = display_by_name["eDP-1"]
         for display in displays:
             display.is_active = False
         internal_display.is_active = True
+
+    notify_send(f"Detected location {location_name}")
+
+    # Enable the corresponding systemd target, so special services can run when we're in a specific location.
+    # These systemd targets are defined in pattern/desktop.nix.
+    subprocess.run(
+        ["systemctl", "start", "--user", f"location-{location_name}.target"], check=True
+    )
 
     xrandr.apply()
 
@@ -128,8 +137,6 @@ def autoperipherals():
     subprocess.run(["setbg"], check=False)
 
     set_dpi(dpi)
-
-    notify_send(f"Detected environment {layout_name}")
 
 
 def main():

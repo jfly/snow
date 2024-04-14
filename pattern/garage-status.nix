@@ -22,8 +22,8 @@ in
     enable = true;
     description = "on-air";
 
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
+    wantedBy = [ "location-garageman.target" ];
+    partOf = [ "location-garageman.target" ];
 
     script = ''
       ${on-air-pkg}/bin/on-air mqtt \

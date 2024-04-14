@@ -1,6 +1,12 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
+  inherit (lib)
+    genAttrs;
+
+  inherit (builtins)
+    filter;
+
   alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
   polybar-openvpn3 = (pkgs.callPackage ../shared/polybar-openvpn3 { });
   polybar = pkgs.polybar.override {
@@ -144,6 +150,20 @@ in
   services.udev.extraRules = ''
     SUBSYSTEM=="drm", ACTION=="change", RUN+="${restart-user-service} ${config.snow.user.name} autoperipherals"
   '';
+  # These targets are activated by autoperipherals itself. Other units may
+  # depend on them (for example, imagine a service that you only want running
+  # when you're at your desk).
+  systemd.user.targets =
+    let
+      locations = [ "garageman" "projector" "mobile" ];
+      targetNames = map (name: "location-${name}") locations;
+    in
+    genAttrs targetNames (target:
+      let otherTargets = filter (name: name != target) targetNames;
+      in
+      {
+        conflicts = map (name: "${name}.target") otherTargets;
+      });
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
