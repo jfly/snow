@@ -28,14 +28,14 @@ in
     ./kodi.nix
   ];
 
+  services.displayManager = {
+    defaultSession = "none+xmonad";
+    autoLogin.enable = true;
+    autoLogin.user = config.snow.user.name;
+  };
   services.xserver = {
     enable = true;
     autorun = true;
-    displayManager = {
-      defaultSession = "none+xmonad";
-      autoLogin.enable = true;
-      autoLogin.user = config.snow.user.name;
-    };
     windowManager = {
       session = [{
         name = "xmonad";

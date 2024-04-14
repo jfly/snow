@@ -2,7 +2,7 @@
 { config, ... }:
 
 let
-  pgPort = config.services.postgresql.port;
+  pgPort = config.services.postgresql.settings.port;
   internalApiPort = 7001;
   externalApiPort = 7000;
   user = "pr-tracker";

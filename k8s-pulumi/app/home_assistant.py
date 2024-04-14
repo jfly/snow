@@ -33,7 +33,7 @@ class HomeAssistant:
         snowauth.declare_app(
             name="home-assistant",
             namespace=self.namespace,
-            image="homeassistant/home-assistant:2024.2.2",
+            image="homeassistant/home-assistant:2024.4.3",
             port=8123,
             # Home Assistant has its own authentication mechanism, so it's ok
             # to expose to the world.

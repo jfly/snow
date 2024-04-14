@@ -79,7 +79,7 @@ in
   # Enable the Restic REST server.
   services.restic.server = {
     enable = true;
-    listenAddress = ":8000";
+    listenAddress = "8000";
     dataDir = "/mnt/bay/restic";
     # We're not (currently) requiring authentication to speak to the rest
     # server. This allows us to avoid futzing with HTTPS and certificates.
