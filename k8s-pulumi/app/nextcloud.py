@@ -1,4 +1,3 @@
-from pathlib import Path
 import pulumi_keycloak as keycloak
 from textwrap import dedent
 from pulumi_kubernetes.helm.v3 import Chart, ChartOpts, FetchOpts
@@ -141,7 +140,7 @@ class Nextcloud:
             "nextcloud",
             ChartOpts(
                 chart="nextcloud",
-                version="3.5.22",
+                version="4.6.6",
                 fetch_opts=FetchOpts(repo="https://nextcloud.github.io/helm/"),
                 values={
                     "nextcloud": {
@@ -172,6 +171,7 @@ class Nextcloud:
                                   'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
                                   // https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#default-phone-region
                                   'default_phone_region' => 'US',
+                                  'maintenance_window_start' => 11,  // 11am UTC = 3 or 4 am Pacific
                                 );
                                 """
                             ),
@@ -216,29 +216,6 @@ class Nextcloud:
                     },
                     "cronjob": {
                         "enabled": True,
-                    },
-                    # Switch from apache to nginx: https://github.com/nextcloud/helm/tree/main/charts/nextcloud#using-nginx
-                    # For some reason, the default (apache) isn't set up to
-                    # support the `/.well-known` endpoints (documented here:
-                    # https://docs.nextcloud.com/server/latest/admin_manual/issues/general_troubleshooting.html#service-discovery-label).
-                    # The nginx/fpm) flavor *does* have support for these
-                    # .well-known endpoints, but the default configuration
-                    # doesn't handle being behind a https-terminating proxy
-                    # well: they redirect using http, which breaks the ajax
-                    # checks the frontend does.
-                    # TODO: file an issue upstream asking about all this and
-                    # seeing if they'd be open to a PR improving things.
-                    "nginx": {
-                        "enabled": True,
-                        "config": {
-                            "default": False,
-                            "custom": (
-                                Path(__file__).parent / "nextcloud.nginx.conf"
-                            ).read_text(),
-                        },
-                    },
-                    "image": {
-                        "flavor": "fpm",
                     },
                     "redis": {
                         "enabled": True,
