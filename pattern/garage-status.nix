@@ -30,7 +30,8 @@ in
         --broker mqtts://mqtt.snow.jflei.com \
         --username jfly \
         --password-file ${config.age.secrets.mosquitto-password.path} \
-        --device-name ${config.networking.hostName}
+        --device-name ${config.networking.hostName} \
+        --poll-seconds 1
     '';
     serviceConfig = {
       Type = "simple";
