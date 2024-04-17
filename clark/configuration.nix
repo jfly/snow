@@ -61,7 +61,7 @@ in
     openssh.authorizedKeys.keys = [
       identities.jfly
     ];
-    hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
+    hashedPassword = "$y$j9T$93csyGgKMJEP44ZTrFAAj0$qQ/4/ha0rORCNY/V3OTllm45sSUDqJSW3cRaSIoENb2";
   };
   users.users.media-ro = {
     isNormalUser = true;
