@@ -119,22 +119,34 @@ def autoperipherals():
     # Enable the corresponding systemd target, so special services can run when we're in a specific location.
     # These systemd targets are defined in pattern/desktop.nix.
     subprocess.run(
-        ["systemctl", "start", "--user", f"location-{location_name}.target"], check=True
+        ["systemctl", "start", "--user", f"location-{location_name}.target"],
+        # The call to `systemctl start` seems to fail on boot with the following message:
+        #   > Failed to connect to bus: No medium found
+        # This is likely related to the setbg bug described below, which we should fix.
+        #
+        # Furthermore if anything in
+        # 'services.xserver.displayManager.setupCommands' fails, it prevents x11
+        # from starting up entirely. So, we should only crash if things are really
+        # broken.
+        check=False,
     )
 
     xrandr.apply()
 
-    # setbg can fail for a couple of reasons:
-    #  - autoperipherals gets called as root when booting (we can and should
-    #    fix this), and root doesn't have a collection of wallpaper
-    #  - on a freshly provisioned machine, ~/sync/wallpaper doesn't exist until
-    #    after we've set up syncthing.
-    #
-    # Furthermore if anything in
-    # 'services.xserver.displayManager.setupCommands' fails, it prevents x11
-    # from starting up entirely. So, we should only crash if things are really
-    # broken.
-    subprocess.run(["setbg"], check=False)
+    subprocess.run(
+        ["setbg"],
+        # setbg can fail for a couple of reasons:
+        #  - autoperipherals gets called as root when booting (we can and should
+        #    fix this), and root doesn't have a collection of wallpaper
+        #  - on a freshly provisioned machine, ~/sync/wallpaper doesn't exist until
+        #    after we've set up syncthing.
+        #
+        # Furthermore if anything in
+        # 'services.xserver.displayManager.setupCommands' fails, it prevents x11
+        # from starting up entirely. So, we should only crash if things are really
+        # broken.
+        check=False,
+    )
 
     set_dpi(dpi)
 

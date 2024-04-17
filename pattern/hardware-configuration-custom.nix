@@ -37,4 +37,13 @@
 
   ### Keep every other misc thing up to date
   services.fwupd.enable = true;
+
+  ### Fix ethernet on CalDigit TS4 dock
+  # This dock exposes the ethernet device via PCI tunneling, which requires us to trust the attached Thunderbolt device.
+  # This udev rule comes from
+  # https://docs.kernel.org/admin-guide/thunderbolt.html#dma-protection-utilizing-iommu,
+  # but read the whole page to understand the nuances here, and why this is safe to do.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="thunderbolt", ATTRS{iommu_dma_protection}=="1", ATTR{authorized}=="0", ATTR{authorized}="1"
+  '';
 }

@@ -52,7 +52,10 @@ in
     aggressiveResize = true;
   };
 
-  programs.fzf.enable = true;
+  programs.fzf = {
+    fuzzyCompletion = true;
+    keybindings = true;
+  };
 
   environment.systemPackages = with pkgs; [
     q
