@@ -82,6 +82,7 @@ fzf-commit-widget() {
 }
 zle     -N    fzf-commit-widget
 bindkey '\ec' fzf-commit-widget
+FZF_ALT_C_COMMAND="" # don't allow fzf to rebind alt+c, we're already using it!
 ##################################
 
 ###
