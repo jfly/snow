@@ -479,11 +479,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1713056645,
-        "narHash": "sha256-JDGqa2WcJrQ97mHUlr0ig9uRzSltkSuSThV7HAvEl+w=",
+        "lastModified": 1713535954,
+        "narHash": "sha256-wSpCKMSOytkRnWXClklMI9ulUDQ9E1wuzvKtEahSpOE=",
         "owner": "molybdenumsoftware",
         "repo": "pr-tracker",
-        "rev": "52457ce5a74b7ee006f3f4f3ba8a257a74af0d66",
+        "rev": "d40ba55b2d7dabb6e2ee6eac0c7a219c97fbfb03",
         "type": "github"
       },
       "original": {

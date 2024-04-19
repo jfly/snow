@@ -2,15 +2,8 @@
 { config, ... }:
 
 let
-  pgPort = config.services.postgresql.settings.port;
   internalApiPort = 7001;
   externalApiPort = 7000;
-  user = "pr-tracker";
-  dbUrlParams = {
-    inherit user;
-    host = "/run/postgresql";
-    port = builtins.toString pgPort;
-  };
 in
 {
   imports = [
@@ -20,7 +13,7 @@ in
 
   # https://github.com/settings/tokens/1473000486
   age.secrets.pr-tracker-github-token = {
-    owner = user;
+    owner = config.services.pr-tracker.fetcher.user;
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1UmxaaXpJMkpvT1Z2ajJQ
@@ -31,15 +24,6 @@ in
       -----END AGE ENCRYPTED FILE-----
     '';
   };
-
-  services.postgresql.enable = true;
-  services.postgresql.ensureDatabases = [ user ];
-  services.postgresql.ensureUsers = [
-    {
-      name = user;
-      ensureDBOwnership = true;
-    }
-  ];
 
   # pr-tracker-api doesn't support changing the bind address to anything other
   # than 127.0.0.1. See
@@ -55,20 +39,14 @@ in
     };
   };
 
+  services.pr-tracker.db.createLocally = true;
+
   services.pr-tracker.api.enable = true;
   services.pr-tracker.api.port = internalApiPort;
-  services.pr-tracker.api.user = user;
-  services.pr-tracker.api.group = "pr-tracker";
-  services.pr-tracker.api.dbUrlParams = dbUrlParams;
-  services.pr-tracker.api.localDb = true;
 
   services.pr-tracker.fetcher.enable = true;
-  services.pr-tracker.fetcher.user = user;
-  services.pr-tracker.fetcher.group = "pr-tracker";
   systemd.services.pr-tracker-fetcher.environment.RUST_LOG = "info";
   services.pr-tracker.fetcher.branchPatterns = [ "*" ];
-  services.pr-tracker.fetcher.dbUrlParams = dbUrlParams;
-  services.pr-tracker.fetcher.localDb = true;
   services.pr-tracker.fetcher.githubApiTokenFile = config.age.secrets.pr-tracker-github-token.path;
   services.pr-tracker.fetcher.repo.owner = "NixOS";
   services.pr-tracker.fetcher.repo.name = "nixpkgs";
