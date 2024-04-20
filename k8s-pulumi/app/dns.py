@@ -1,5 +1,6 @@
 import pulumi
 import pulumi_cloudflare as cloudflare
+from .deage import deage
 
 
 # See https://serverfault.com/questions/7478/recommended-dns-ttl for a discussion of this.
@@ -71,6 +72,23 @@ class Dns:
         self._legacy_snowdon()
         self._snow()
         self._google_workspace()
+
+        self._secret_projects()
+
+    def _secret_projects(self):
+        # hush now
+        secret_project = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNejhBK0hydFplRUtBaEFl
+            akloN2puT3BCRU91dlBSaCtBamdzaytxUURvClJ6cjNYUXBNTkM2N1NXUlJZVFJ4
+            RXRFSHF0Z25DdzlGMXVnSDVRTXdGSE0KLS0tIHJpbUNXQnlrUXdJd3FRYVRPZ2Jo
+            YUdnbzNibWpUbkhUSko4Mk5oYUdUbzQKtrMSCZydHJJL96zTVufVp94xXu2eS2EV
+            VNnwBd1UyDweXbQ2s4FW
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+        self._jflei_com.cname(secret_project, "cname.vercel-dns.com.")
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
