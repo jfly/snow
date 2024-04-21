@@ -46,7 +46,7 @@ in
 
   services.pr-tracker.fetcher.enable = true;
   systemd.services.pr-tracker-fetcher.environment.RUST_LOG = "info";
-  services.pr-tracker.fetcher.branchPatterns = [ "*" ];
+  services.pr-tracker.fetcher.branchPatterns = [ "master" "nixos-*" "release-*" ];
   services.pr-tracker.fetcher.githubApiTokenFile = config.age.secrets.pr-tracker-github-token.path;
   services.pr-tracker.fetcher.repo.owner = "NixOS";
   services.pr-tracker.fetcher.repo.name = "nixpkgs";
