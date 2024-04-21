@@ -181,4 +181,3 @@ config rule 'iot_dhcp'
 config forwarding
 	option src 'lan'
 	option dest 'iot'
-

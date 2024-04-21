@@ -101,7 +101,8 @@
             cp -fr ${config}/etc/* $out/etc/
 
             substituteInPlace $out/etc/config/wireless \
-              --replace-fail "@wifi_password@" "${routers-shared.wifi.home.password}"
+              --replace-fail "@wifi_password@" "${routers-shared.wifi.home.password}" \
+              --replace-fail "@wifi_iot_password@" "${routers-shared.wifi.iot.password}"
 
             substituteInPlace $out/etc/config/wifi-presence \
               --replace-fail "@mqtt_password@" "${mqttPassword}"

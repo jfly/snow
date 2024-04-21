@@ -18,10 +18,14 @@ To deploy one machine:
 
 target=""
 DRY_RUN=0
+FORCE=0
 for i in "$@"; do
     case $i in
         --dry-run)
             DRY_RUN=1
+            ;;
+        --force)
+            FORCE=1
             ;;
         --help | -h)
             help
@@ -122,7 +126,18 @@ function deploy_nix_router() {
     # First, check if the version currently installed/running is already up to date?
     #
     desired_nix_version=$(nix eval "$flake" $purity --raw --apply 'r: r.hack-nix-version')
-    actual_nix_version=$(ssh "$hostname" cat /etc/nix-build-version)
+    if actual_nix_version=$(ssh "$hostname" cat /etc/nix-build-version); then
+        :
+    else
+        if [ $FORCE == 1 ]; then
+            echo "Could not determine current version of $hostname. --force was specified, so I'm going to keep moving forward and see what happens."
+            actual_nix_version="???"
+        else
+            echo "Could not determine current version of $hostname. Try again with --force to ignore."
+            exit 1
+        fi
+    fi
+
     if [ "$desired_nix_version" = "$actual_nix_version" ]; then
         echo "It looks like $hostname is already up to date (running $actual_nix_version). Not doing anything to it!"
         exit 0
@@ -137,7 +152,7 @@ function deploy_nix_router() {
     file=${files[0]}
     echo "Successfully built $file"
     if [ $DRY_RUN == 1 ]; then
-        echo "Not actually deploying because we're doing a dry run"
+        echo "Not actually deploying $file because we're doing a dry run"
     else
         dest_filename=/tmp/firmware_image-sysupgrade
         scp -O "$file" "$hostname":$dest_filename

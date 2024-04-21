@@ -30,7 +30,6 @@ config dhcp 'lan'
 	option dhcpv4 'server'
 	option dhcpv6 'server'
 	option ra 'server'
-	option ra_slaac '1'
 	list ra_flags 'managed-config'
 	list ra_flags 'other-config'
 
@@ -71,3 +70,4 @@ config host
 	option name 'taran'
 	option ip '192.168.3.101'
 	option mac '50:14:79:36:E7:ED'
+

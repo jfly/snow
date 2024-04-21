@@ -20,15 +20,7 @@ config dnsmasq
 
 config dhcp 'lan'
 	option interface 'lan'
-	option start '100'
-	option limit '150'
-	option leasetime '12h'
-	option dhcpv4 'server'
-	list ra_flags 'managed-config'
-	list ra_flags 'other-config'
 	option ignore '1'
-	option dhcpv6 'disabled'
-	option ra 'disabled'
 
 config dhcp 'wan'
 	option interface 'wan'
@@ -39,4 +31,8 @@ config odhcpd 'odhcpd'
 	option leasefile '/tmp/hosts/odhcpd'
 	option leasetrigger '/usr/sbin/odhcpd-update'
 	option loglevel '4'
+
+config dhcp 'iot'
+	option interface 'iot'
+	option ignore '1'
 
