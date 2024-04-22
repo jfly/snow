@@ -204,6 +204,11 @@
                   url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
                   hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
                 })
+                (unpatched.fetchpatch {
+                  name = "fix for mechanize build (needed by calibre)";
+                  url = "https://github.com/NixOS/nixpkgs/commit/818cad4ae1ca65568e1979a2cab97bcec71641d4.patch";
+                  hash = "sha256-GLHK+LX9FcI9zK/eV/r11zANcnSuCYVxD75VOngE/3k=";
+                })
               ];
             };
           };

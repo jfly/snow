@@ -21,10 +21,11 @@ source "$(nix build --no-link --print-out-paths nixpkgs#autoPatchelfHook)/nix-su
 addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#gcc11Stdenv.cc.cc.lib')/lib"
 addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#zlib')/lib"
 addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#fontconfig.lib')/lib" # added for npm-installed phantomjs-prebuilt
+# addAutoPatchelfSearchPath "$(nix build --no-link --print-out-paths 'nixpkgs#openssl.out')/lib"
 
 echo "Debugging info from sd nix patch:"
 echo "autoPatchelfLibs: ${autoPatchelfLibs[*]}"
 echo "extraAutoPatchelfLibs: ${extraAutoPatchelfLibs[*]}"
 echo "runtimeDependenciesArray: ${runtimeDependenciesArray[*]}"
 
-autoPatchelf -- .
+autoPatchelf -- "${1:-.}"

@@ -2,9 +2,9 @@ import shlex
 import logging
 import subprocess
 from dataclasses import dataclass
-import os
 import pyedid
 from typing import Any
+from typing import Literal
 from Xlib import display
 from Xlib.ext.randr import PROPERTY_RANDR_EDID
 from Xlib.ext import randr
@@ -32,6 +32,7 @@ class Display:
     is_primary: bool = False
     left_of: "Display | None" = None
     right_of: "Display | None" = None
+    rotation: Literal["normal", "left", "right", "inverted"] = "normal"
 
 
 def get_edid(d: display.Display, output: Any) -> pyedid.Edid:
@@ -67,7 +68,7 @@ class XRandr:
     def refresh(self):
         displays: list[Display] = []
 
-        d = display.Display(os.environ["DISPLAY"])
+        d = display.Display()
         info = d.screen()
         window = info.root
 
@@ -75,8 +76,8 @@ class XRandr:
         for output in resources.outputs:
             params = d.xrandr_get_output_info(output, resources.config_timestamp)
             connection = Connection(params.connection)
-            is_active = bool(params.crtc)
             is_connected = connection == Connection.CONNECTED
+            is_active = is_connected and bool(params.crtc)
             edid = get_edid(d, output) if is_connected else None
 
             displays.append(
@@ -98,6 +99,8 @@ class XRandr:
                     "--output",
                     display.name,
                     "--preferred" if display.is_active else "--off",
+                    "--rotate",
+                    display.rotation,
                 ]
             )
             if display.is_primary:
