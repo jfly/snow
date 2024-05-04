@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# decrease the resolution of my primary monitor for screensharing
+xrandr --output DP-3 --mode 1920x1080 --output DP-4 --right-of DP-3
