@@ -1,6 +1,8 @@
+{ shtuff }:
 { config, lib, pkgs, stdenv, ... }:
 
 let
+  shtuff-pkg = shtuff.packages.${config.nixpkgs.hostPlatform.system}.default;
   jgit = pkgs.callPackage ../../shared/jgit { };
   my-yazi = pkgs.callPackage ../../shared/my-yazi { };
   smag = pkgs.callPackage ../../shared/smag { };
@@ -78,6 +80,7 @@ in
     pwgen
     htop
     moreutils # vidir
+    shtuff-pkg
 
     ### data graphing
     (pkgs.writeShellScriptBin "qcsv" ''

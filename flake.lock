@@ -558,6 +558,7 @@
         "on-air": "on-air",
         "pr-tracker": "pr-tracker",
         "pypi-deps-db": "pypi-deps-db",
+        "shtuff": "shtuff",
         "systems": "systems_3",
         "treefmt-nix": "treefmt-nix_3"
       }
@@ -592,6 +593,26 @@
       "original": {
         "owner": "andreymatin",
         "repo": "scss-reset",
+        "type": "github"
+      }
+    },
+    "shtuff": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1714817360,
+        "narHash": "sha256-xbEQCFDUdEPttRaGnyavDQUk7tvzaK4AJ7PBo9q2MB8=",
+        "owner": "jfly",
+        "repo": "shtuff",
+        "rev": "29ef74b0be0c4d128be7fe07bd3c5bac3d0ffb24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "repo": "shtuff",
         "type": "github"
       }
     },

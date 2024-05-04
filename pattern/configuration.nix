@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter, home-manager, on-air }:
+{ agenix, agenix-rooter, home-manager, on-air, shtuff }:
 { config, pkgs, lib, ... }:
 
 let
@@ -35,7 +35,7 @@ in
     ./audio.nix
     home-manager.nixosModules.home-manager
     ./home-manager.nix
-    ./shell
+    (import ./shell { inherit shtuff; })
     ./desktop.nix
     ./android.nix
     ./development.nix

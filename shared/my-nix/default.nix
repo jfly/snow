@@ -57,7 +57,6 @@ rec {
   xxd = pkgs.xxd;
   rsync = pkgs.rsync;
   mycli = pkgs.callPackage ./mycli { };
-  shtuff = pkgs.callPackage ./shtuff { };
   yq = pkgs.yq;
   miller = pkgs.miller;
 
