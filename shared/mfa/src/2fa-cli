@@ -4,13 +4,16 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-DB=$HOME/sync/linux-secrets/android-otp.db.bak
+DB=$HOME/sync/linux-secrets/otp/free-otp-plus.db
 
 if [ ! -e "$DB" ]; then
-    DB=/tmp/data.db
+    DB_PREFIX=/tmp/data
+    DB=${DB_PREFIX}.db
+    DB_WAL=${DB_PREFIX}.db-wal
+    DB_SHM=${DB_PREFIX}.db-shm
 
     # This environment variable effects `adb` commands.
-    export ANDROID_SERIAL=jflysopixel3
+    export ANDROID_SERIAL=8BEY0YG0A
 
     ping=$(adb shell "echo ping" </dev/null) || true
     if [ "$ping" != "ping" ]; then
@@ -26,11 +29,21 @@ if [ ! -e "$DB" ]; then
     fi
 
     adb shell "su -c 'cat /data/data/org.liberty.android.freeotpplus/databases/otp-token-db'" >"$DB" 2>/dev/null </dev/null
+    adb shell "su -c 'cat /data/data/org.liberty.android.freeotpplus/databases/otp-token-db-wal'" >"$DB_WAL" 2>/dev/null </dev/null
+    adb shell "su -c 'cat /data/data/org.liberty.android.freeotpplus/databases/otp-token-db-shm'" >"$DB_SHM" 2>/dev/null </dev/null
 
-    function cleanup {
+    function shred_it {
         # Securely delete database file.
         # Copied from https://www.cyberciti.biz/tips/linux-how-to-delete-file-securely.html.
-        shred -n 200 -z -u "$DB"
+        shred -n 200 --zero --remove "$1"
+    }
+    function cleanup {
+        shred_it "$DB"
+        # The .db-shm and .db-wal files may have been removed by sqlite when it
+        # opened the database. That's ok, don't try to shred them (it'll just
+        # give us an error).
+        [ -e "$DB_SHM" ] && shred_it "$DB_SHM"
+        [ -e "$DB_WAL" ] && shred_it "$DB_WAL"
     }
     trap cleanup EXIT
 fi
