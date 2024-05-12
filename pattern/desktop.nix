@@ -65,7 +65,7 @@ in
   programs.dconf.enable = true;
 
   # Enable touchpad.
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   hardware.opengl.enable = true;
 
