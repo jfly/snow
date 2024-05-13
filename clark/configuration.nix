@@ -87,6 +87,7 @@ in
           "duplicates"
           "embedart"
           "fetchart"
+          "fetchartist"
           "mbsync"
           "missing"
           "unimported"
@@ -108,6 +109,11 @@ in
         fetchart = {
           auto = "yes";
           sources = "filesystem coverart itunes amazon albumart";
+        };
+
+        fetchartist = {
+          # This is for compatibility with Navidrome: https://github.com/navidrome/navidrome/issues/394
+          filename = "artist";
         };
 
         badfiles = {

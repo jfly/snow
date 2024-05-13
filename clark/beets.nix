@@ -1,4 +1,6 @@
 { beets
+, pkgs
+, python3
 , formats
 , makeWrapper
 , runCommand
@@ -17,7 +19,13 @@ let
 in
 symlinkJoin {
   name = "beets";
-  paths = [ beets ];
+  paths = [
+    (beets.override {
+      pluginOverrides = {
+        fetchartist = { enable = true; propagatedBuildInputs = [ (pkgs.callPackage ./beets-fetchartist.nix { }) ]; };
+      };
+    })
+  ];
 
   buildInputs = [ makeWrapper ];
   postBuild = ''
