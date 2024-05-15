@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter, home-manager, on-air, shtuff }:
+{ agenix, agenix-rooter, home-manager, on-air, shtuff, with-alacritty }:
 { config, pkgs, lib, ... }:
 
 let
@@ -36,7 +36,7 @@ in
     home-manager.nixosModules.home-manager
     ./home-manager.nix
     (import ./shell { inherit shtuff; })
-    ./desktop.nix
+    (import ./desktop.nix { inherit with-alacritty; })
     ./android.nix
     ./development.nix
     ./syncthing.nix

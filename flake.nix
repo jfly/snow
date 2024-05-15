@@ -51,6 +51,9 @@
     shtuff.url = "github:jfly/shtuff";
     shtuff.inputs.nixpkgs.follows = "nixpkgs";
 
+    with-alacritty.url = "github:FatBoyXPC/with-alacritty";
+    with-alacritty.inputs.nixpkgs.follows = "nixpkgs";
+
     on-air = {
       url = "github:jfly/on-air";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +74,7 @@
     , nixos-hardware
     , pr-tracker
     , shtuff
+    , with-alacritty
     , on-air
     , ...
     }:
@@ -244,7 +248,7 @@
           inherit agenix agenix-rooter;
         };
         "pattern" = import pattern/configuration.nix {
-          inherit agenix agenix-rooter home-manager on-air shtuff;
+          inherit agenix agenix-rooter home-manager on-air shtuff with-alacritty;
         };
         "kent" = import kent/configuration.nix {
           inherit agenix agenix-rooter;

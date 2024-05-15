@@ -46,7 +46,6 @@ rec {
   dunst = pkgs.callPackage ./dunst { };
   xmonad = pkgs.callPackage ../../shared/xmonad { };
   polybar = pkgs.callPackage ./polybar.nix { };
-  with-alacritty = pkgs.callPackage ./with-alacritty { };
   # I'm not sure if these really ought to be globally installed or not.
   # xmonad is pointing at them directly, but maybe it's nice to be able
   # to easily call them from the command line?

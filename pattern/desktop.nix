@@ -1,3 +1,4 @@
+{ with-alacritty }:
 { config, lib, pkgs, modulesPath, ... }:
 
 let
@@ -7,8 +8,8 @@ let
   inherit (builtins)
     filter;
 
-  alacritty = (pkgs.callPackage ../shared/my-nix/with-alacritty { });
-  polybar-openvpn3 = (pkgs.callPackage ../shared/polybar-openvpn3 { });
+  with-alacritty-pkg = (with-alacritty.packages.${config.nixpkgs.hostPlatform.system}.default);
+  polybar-openvpn3 = pkgs.callPackage ../shared/polybar-openvpn3 { };
   polybar = pkgs.polybar.override {
     mpdSupport = true;
   };
@@ -18,7 +19,7 @@ let
   };
   dunst = pkgs.callPackage ../shared/my-nix/dunst { };
   xmonad = pkgs.callPackage ../shared/xmonad { };
-  autoperipherals = pkgs.callPackage ../shared/autoperipherals { };
+  autoperipherals = pkgs.callPackage ../shared/autoperipherals { with-alacritty = with-alacritty-pkg; };
   # TODO: consolidate with pattern/laptop.nix
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
@@ -355,7 +356,7 @@ in
     usbutils # provides `lsusb`
 
     # TODO: consolidate with xmonad
-    alacritty
+    with-alacritty-pkg
     (pkgs.callPackage ../shared/colorscheme { })
     xdotool
     (pkgs.symlinkJoin {

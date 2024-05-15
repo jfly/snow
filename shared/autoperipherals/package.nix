@@ -1,7 +1,6 @@
-{ pkgs, callPackage, buildPythonApplication, setuptools, pyxdg, xlib }:
+{ pkgs, callPackage, buildPythonApplication, setuptools, pyxdg, xlib, with-alacritty }:
 
 let
-  with-alacritty = pkgs.callPackage ../../shared/my-nix/with-alacritty { };
   setbg = pkgs.callPackage ../setbg { };
   addToPath = with pkgs; [
     xorg.xrandr

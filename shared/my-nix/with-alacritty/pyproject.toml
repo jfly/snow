@@ -1,3 +1,0 @@
-[tool.pyright]
-
-reportUnusedVariable = "error"

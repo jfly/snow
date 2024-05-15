@@ -560,7 +560,8 @@
         "pypi-deps-db": "pypi-deps-db",
         "shtuff": "shtuff",
         "systems": "systems_3",
-        "treefmt-nix": "treefmt-nix_3"
+        "treefmt-nix": "treefmt-nix_3",
+        "with-alacritty": "with-alacritty"
       }
     },
     "rust-analyzer-src": {
@@ -736,6 +737,26 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "with-alacritty": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1715755369,
+        "narHash": "sha256-1XQNEyLI3SEXLYB8cTl6fpjszmJI80bjTiSsghUoW00=",
+        "owner": "FatBoyXPC",
+        "repo": "with-alacritty",
+        "rev": "c6afd0f71e3d056ff5a8ec4217422f6f14405690",
+        "type": "github"
+      },
+      "original": {
+        "owner": "FatBoyXPC",
+        "repo": "with-alacritty",
         "type": "github"
       }
     }
