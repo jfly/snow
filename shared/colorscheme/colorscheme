@@ -42,7 +42,7 @@ function _get_json_colorscheme() {
     IFS=":"
     for d in $COLORSCHEME_PATH; do
         local file
-        file=$(ls "$d"/**/"$colorscheme.yml" 2>/dev/null)
+        file=$(ls "$d"/**/"$colorscheme".{yaml,toml} 2>/dev/null)
         if [ -n "$file" ]; then
             break
         fi
@@ -52,7 +52,7 @@ function _get_json_colorscheme() {
         exit 1
     fi
 
-    yq '.colors' "$file"
+    yq --output-format json '.colors' "$file"
 }
 
 # Validate command line arguments
@@ -96,9 +96,9 @@ EOF
 function _list() {
     IFS=":"
     for d in $COLORSCHEME_PATH; do
-        for f in "$d"/**/*.yml; do
+        for f in "$d"/**/*.{yaml,toml}; do
             f="$(basename "$f")"
-            echo "${f%.yml}"
+            echo "${f%.yaml%.toml}"
         done
     done
 }
