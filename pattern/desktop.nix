@@ -28,7 +28,6 @@ let
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
     ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart "$service"
   '';
-  noto-fonts-emoji-monochrome = pkgs.callPackage ../shared/noto-fonts-emoji-monochrome { };
 in
 {
   imports = [
@@ -257,7 +256,7 @@ in
             "UbuntuMono" # my preferred monospace font
           ];
         })
-        noto-fonts-emoji-monochrome
+        noto-fonts-monochrome-emoji
         # I can't read any of this, but it sure looks nicer than boxes :p
         noto-fonts-cjk-serif
         (

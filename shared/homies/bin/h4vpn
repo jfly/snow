@@ -8,7 +8,7 @@ function toggle() {
     # Poke our statusbar because it sometimes gets stuck not updating? Polybar
     # fortunately restarts child processes as necessary, but I'd really like to
     # know why the darn thing is getting stuck...
-    killall .polybar-openvpn3-wrapped
+    killall ..polybar-openvpn3-wrapped-wrapped
 
     if openvpn3 session-stats -c "$__profile_file" >/dev/null; then
         echo "Disabling $__profile_file"
