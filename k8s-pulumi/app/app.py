@@ -14,6 +14,7 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .mosquitto import Mosquitto
 from .nix_cache import NixCache
+from .music import Music
 from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
 from .home_assistant import HomeAssistant
@@ -33,7 +34,7 @@ def build_app():
     SnowWeb(snowauth)
     mosquitto = Mosquitto(namespace="default")
     HomeAssistant(namespace="default", snowauth=snowauth, mosquitto=mosquitto)
-    Syncthing(snowauth)
+
     Budget(snowauth)
     Whoami(snowauth)
     Monitoring(snowauth)
@@ -46,6 +47,10 @@ def build_app():
     # cluster (perhaps on your laptop) with a valid https cert.
     MiscK8sHttpsProxies(snowauth=snowauth)
     Speedtest(namespace="default", snowauth=snowauth)
+
+    # sync, etc
+    Syncthing(snowauth)
+    Music(snowauth)
 
     Torrents(snowauth)
     Jackett(snowauth)
