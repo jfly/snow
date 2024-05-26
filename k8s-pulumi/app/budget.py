@@ -15,7 +15,7 @@ class Budget:
             args=[
                 "hledger-web",
                 "--serve",
-                "--capabilities",
+                "--allow",
                 "view",
                 "@budget/budget.args",
                 "--host=0.0.0.0",
