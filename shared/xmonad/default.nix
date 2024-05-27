@@ -13,6 +13,7 @@ let
   xmonadHs = pkgs.substituteAll {
     src = ./xmonad.hs;
     inherit (pkgs) libnotify;
+    inherit (pkgs.snow) autoperipherals;
     inherit jscrot jvol jbright setbg colorscheme;
   };
   configured = pkgs.writers.writeHaskellBin "xmonad"

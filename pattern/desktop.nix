@@ -133,7 +133,7 @@ in
 
   # Run autoperipherals on boot + whenever hardware changes
   services.xserver.displayManager.setupCommands = ''
-    ${autoperipherals}/bin/autoperipherals
+    ${autoperipherals}/bin/autoperipherals sync
   '';
   systemd.user.services = {
     "autoperipherals" = {
@@ -143,7 +143,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${autoperipherals}/bin/autoperipherals";
+        ExecStart = "${autoperipherals}/bin/autoperipherals sync";
       };
     };
   };
@@ -355,6 +355,7 @@ in
     usbutils # provides `lsusb`
 
     # TODO: consolidate with xmonad
+    autoperipherals
     with-alacritty-pkg
     (pkgs.callPackage ../shared/colorscheme { })
     xdotool

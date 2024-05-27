@@ -1,3 +1,5 @@
+{ with-alacritty }:
+
 [
   (
     self: super:
@@ -30,6 +32,9 @@
           # github actions, it really doesn't matter where the repo we're
           # building happens to be cloned.
           absoluteRepoPath = repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (super.lib.strings.removePrefix "/" repoPath);
+          autoperipherals = self.callPackage ../shared/autoperipherals {
+            inherit with-alacritty;
+          };
         };
         deage = rec {
           absoluteRepoPath = encrypted: snow.absoluteRepoPath (repoPath encrypted);

@@ -1,4 +1,4 @@
-{ pkgs, callPackage, buildPythonApplication, setuptools, pyxdg, xlib, with-alacritty }:
+{ pkgs, callPackage, buildPythonApplication, setuptools, pydantic, click, pyxdg, xlib, with-alacritty }:
 
 let
   setbg = pkgs.callPackage ../setbg { };
@@ -20,6 +20,8 @@ buildPythonApplication {
     setuptools
   ];
   propagatedBuildInputs = [
+    click
+    pydantic
     pyedid
     pyxdg
     xlib

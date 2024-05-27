@@ -147,10 +147,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video")
     , ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot")
 
-    , ((controlMask .|. altMask, xK_Left), spawn "xrandr -o right && @setbg@/bin/setbg")
-    , ((controlMask .|. altMask, xK_Right), spawn "xrandr -o left && @setbg@/bin/setbg")
-    , ((controlMask .|. altMask, xK_Down), spawn "xrandr -o normal && @setbg@/bin/setbg")
-    , ((controlMask .|. altMask, xK_Up), spawn "xrandr -o inverted && @setbg@/bin/setbg")
+    , ((controlMask .|. altMask, xK_Left), spawn "@autoperipherals@/bin/autoperipherals rotate current right")
+    , ((controlMask .|. altMask, xK_Right), spawn "@autoperipherals@/bin/autoperipherals rotate current left")
+    , ((controlMask .|. altMask, xK_Down), spawn "@autoperipherals@/bin/autoperipherals rotate current normal")
+    , ((controlMask .|. altMask, xK_Up), spawn "@autoperipherals@/bin/autoperipherals rotate current inverted")
 
     -- Dunst shortcuts
     , ((controlMask, xK_space), spawn "dunstctl close")

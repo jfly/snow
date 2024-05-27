@@ -100,7 +100,7 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = import ./overlays;
+            overlays = import ./overlays { inherit with-alacritty; };
           };
           treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
@@ -185,26 +185,26 @@
             clark = patchNixpkgs {
               nixpkgs = import nixos-unstable {
                 system = "x86_64-linux";
-                overlays = import ./overlays;
+                overlays = import ./overlays { inherit with-alacritty; };
               };
               genPatches = unpatched: [ ];
             };
             dallben = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays;
+              overlays = import ./overlays { inherit with-alacritty; };
             };
             fflewddur = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays;
+              overlays = import ./overlays { inherit with-alacritty; };
             };
             kent = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays;
+              overlays = import ./overlays { inherit with-alacritty; };
             };
             pattern = patchNixpkgs {
               nixpkgs = (import nixos-unstable {
                 system = "x86_64-linux";
-                overlays = import ./overlays;
+                overlays = import ./overlays { inherit with-alacritty; };
               });
               genPatches = unpatched: [
                 (unpatched.fetchpatch {
