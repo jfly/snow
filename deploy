@@ -114,50 +114,16 @@ function deploy_nix_router() {
     local target="$1"
     shift
 
+    extra_args=()
+    if [ "$DRY_RUN" == 1 ]; then
+        extra_args+=("--dry-run")
+    fi
+    if [ "$FORCE" == 1 ]; then
+        extra_args+=("--force")
+    fi
+
     hostname=${target#openwrt/}
-    echo "Deploying to $hostname"
-
-    # Note: we use pkgs.deage in these routers, which means we have to do
-    # impure builds. Perhaps we can figure out some clever way of doing
-    # something like agenix instead?
-    purity="--impure"
-
-    flake="./$target#my-router"
-    # First, check if the version currently installed/running is already up to date?
-    #
-    desired_nix_version=$(nix eval "$flake" $purity --raw --apply 'r: r.hack-nix-version')
-    if actual_nix_version=$(ssh "$hostname" cat /etc/nix-build-version); then
-        :
-    else
-        if [ $FORCE == 1 ]; then
-            echo "Could not determine current version of $hostname. --force was specified, so I'm going to keep moving forward and see what happens."
-            actual_nix_version="???"
-        else
-            echo "Could not determine current version of $hostname. Try again with --force to ignore."
-            exit 1
-        fi
-    fi
-
-    if [ "$desired_nix_version" = "$actual_nix_version" ]; then
-        echo "It looks like $hostname is already up to date (running $actual_nix_version). Not doing anything to it!"
-        exit 0
-    fi
-
-    echo "It looks $hostname is out of date (desired $desired_nix_version, running: $actual_nix_version)"
-
-    # Basically copying
-    # https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions
-    result=$(nix build "$flake" --no-link --print-out-paths $purity)
-    files=("$result"/*-sysupgrade.*)
-    file=${files[0]}
-    echo "Successfully built $file"
-    if [ $DRY_RUN == 1 ]; then
-        echo "Not actually deploying $file because we're doing a dry run"
-    else
-        dest_filename=/tmp/firmware_image-sysupgrade
-        scp -O "$file" "$hostname":$dest_filename
-        ssh "$hostname" sysupgrade -v -n $dest_filename
-    fi
+    (cd openwrt && nix run '.#deploy' -- "$hostname" "${extra_args[@]}")
 }
 
 tools/deage

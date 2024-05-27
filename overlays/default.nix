@@ -1,6 +1,6 @@
-{ on-air-flake
-, shtuff-flake
-, with-alacritty-flake
+{ on-air-flake ? null
+, shtuff-flake ? null
+, with-alacritty-flake ? null
 ,
 }:
 
@@ -28,7 +28,6 @@
           on-air = on-air-flake.packages.${self.hostPlatform.system}.default;
           shtuff = shtuff-flake.packages.${self.hostPlatform.system}.default;
           with-alacritty = with-alacritty-flake.packages.${self.hostPlatform.system}.default;
-
         };
       in
       rec {

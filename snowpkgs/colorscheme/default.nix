@@ -1,4 +1,4 @@
-{ fetchFromGitHub, writeShellApplication, symlinkJoin, makeWrapper, yq-go, lib }:
+{ fetchFromGitHub, writeShellApplication, symlinkJoin, makeWrapper, yq-go, jq, lib }:
 
 let
   base16-alacritty = fetchFromGitHub {
