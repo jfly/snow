@@ -26,6 +26,7 @@ symlinkJoin {
       --set COLORSCHEME_PATH ${./colorschemes}:${base16-alacritty} \
       --prefix PATH : ${lib.makeBinPath [
         yq-go
+        jq
       ]}
   '';
 }
