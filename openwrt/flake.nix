@@ -1,4 +1,3 @@
-# TODO: explore https://www.liminix.org/ as an alternative to all this
 {
   inputs = {
     # Implements a very hacky workaround for
@@ -35,6 +34,20 @@
           profileName = "linksys_e8450-ubi";
           dumbap = false;
           config-files = ./strider/files;
+          config-template-values-by-file = {
+            "/etc/config/ddns" = {
+              "@cloudflare_api_token@" = pkgs.deage.string ''
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSArQjNRYWxLdyszY0dBRmNL
+                RmJiY3R1NTk1TVcvWDlvVVAwM1luNzZvN2cwCnFrNjRwMDBONFlGTmZ4aXBLV0Rj
+                UElRc2tOL0Zlc1VRRVpmOXZwMU1HSzgKLS0tIHNVMVhKU3EzN0x5NlVkN0J2b1NL
+                M2tkb3BiVUJ0SmRwZ3JtS1c0WmNDeVkKd6aIxcBae2D9laj8XgGYow6dUmb2GJQk
+                iIrz94V8b59mPw9d8plEQdCBN4L3auY9H2EJQ8ltPMiF4o5Pl2cWT/G5RlRjda+d
+                -----END AGE ENCRYPTED FILE-----
+              '';
+            };
+          };
+
           rootPassword = pkgs.deage.string ''
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBEcGE3M0VUZHBXRVRNSG5P

@@ -1,11 +1,21 @@
 { pkgs, lib, openwrt-imagebuilder }:
 
-{ hostname, profileName, config-files, rootPassword, mqttPassword, dumbap }:
+{ hostname
+, profileName
+, config-files
+, config-template-values-by-file ? { }
+, rootPassword
+, mqttPassword
+, dumbap
+,
+}:
 
 let
-  inherit (pkgs.lib)
-    splitString
+  inherit (lib)
+    attrsToList
+    concatStringsSep
     optionals
+    splitString
     ;
 
   release = "23.05.2";
@@ -18,13 +28,38 @@ let
 
   packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
 
+  # Substitutions for our final config. Yes, this leaks secrets to the store :cry:.
+  # We could potentially clean this up if we were willing to generate UCI ourselves.
+  # See
+  # https://openwrt.org/docs/guide-user/base-system/uci#uci_dataobject_model,
+  # and some prior art here:
+  # https://discourse.nixos.org/t/example-on-how-to-configure-openwrt-with-nixos-modules/18942
+  # However, I think it would be more interesting to explore explore
+  # https://www.liminix.org/ as an alternative to all of this.
+  final-template-values-by-file = {
+    "/etc/config/wireless" = {
+      "@wifi_password@" = wifi.home.password;
+      "@wifi_iot_password@" = wifi.iot.password;
+    };
+    "/etc/config/wifi-presence" = {
+      "@mqtt_password@" = mqttPassword;
+    };
+    "/etc/dropbear/authorized_keys" = {
+      "@authorized_key@" = identities.jfly;
+    };
+  } // config-template-values-by-file;
+
   config = pkgs.stdenv.mkDerivation {
     name = "openwrt-config-files";
     src = config-files;
-    installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
-    '';
+    installPhase =
+      let
+        toSubtitutions = subtitutionMap: map (param: "--replace-fail '${param.name}' '${param.value}'") (attrsToList subtitutionMap);
+      in
+      concatStringsSep "\n" ([
+        "mkdir -p $out"
+        "cp -r * $out/"
+      ] ++ map (param: "substituteInPlace $out/${param.name} ${concatStringsSep " " (toSubtitutions param.value)}") (attrsToList final-template-values-by-file));
   };
 
   wifi = {
@@ -52,25 +87,7 @@ let
     };
   };
 
-  cloudflareApiToken = pkgs.deage.string ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSArQjNRYWxLdyszY0dBRmNL
-    RmJiY3R1NTk1TVcvWDlvVVAwM1luNzZvN2cwCnFrNjRwMDBONFlGTmZ4aXBLV0Rj
-    UElRc2tOL0Zlc1VRRVpmOXZwMU1HSzgKLS0tIHNVMVhKU3EzN0x5NlVkN0J2b1NL
-    M2tkb3BiVUJ0SmRwZ3JtS1c0WmNDeVkKd6aIxcBae2D9laj8XgGYow6dUmb2GJQk
-    iIrz94V8b59mPw9d8plEQdCBN4L3auY9H2EJQ8ltPMiF4o5Pl2cWT/G5RlRjda+d
-    -----END AGE ENCRYPTED FILE-----
-  '';
-
   identities = import ../shared/identities.nix;
-
-  #<<<
-  maybeUpdateDdns = if dumbap then "" else ''
-
-    substituteInPlace $out/etc/config/ddns \
-      --replace-fail "@cloudflare_api_token@" "${cloudflareApiToken}"
-  '';
-  #<<<
 
   # Urg, right now installing custom packages is a *pain*. See
   # https://github.com/astro/nix-openwrt-imagebuilder/issues/38 for a
@@ -160,16 +177,6 @@ let
       EOF
 
       cp -fr ${config}/etc/* $out/etc/
-      ${maybeUpdateDdns}
-      substituteInPlace $out/etc/config/wireless \
-        --replace-fail "@wifi_password@" "${wifi.home.password}" \
-        --replace-fail "@wifi_iot_password@" "${wifi.iot.password}"
-
-      substituteInPlace $out/etc/config/wifi-presence \
-        --replace-fail "@mqtt_password@" "${mqttPassword}"
-
-      substituteInPlace $out/etc/dropbear/authorized_keys \
-        --replace-fail "@authorized_key@" "${identities.jfly}"
     '';
   })).overrideAttrs
     (finalAttrs: prevAttrs: {
