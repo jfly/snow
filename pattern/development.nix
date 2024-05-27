@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  nm-vpn-add = pkgs.callPackage ../shared/nm-vpn-add { };
-  mfa = pkgs.callPackage ../shared/mfa { };
+  inherit (pkgs.snow)
+    nm-vpn-add
+    mfa
+    ;
   h4-cli = pkgs.rustPlatform.buildRustPackage rec {
     pname = "cli";
     # TODO: find a better way of keeping this up to date. Perhaps turn upstream
@@ -249,8 +251,14 @@ in
       ### Misc
       gdb
       binutils
+      strace
+      xxd
+      rsync
+      snow.mycli
+      miller
 
       ### Honor
+      awscli2
       mfa
       my-aws-vault
       (lib.mkIf config.snow.enable-h4 h4-cli)
@@ -269,7 +277,12 @@ in
       # kube-config (and others)
       gnumake
 
-      ### shell
+      ### editor
+      snow.neovim
+      # TODO: don't install these globally, instead just make them available
+      # to neovim.
+      pyright
+      nodePackages.typescript-language-server
       shellcheck # (used by neovim?)
       shfmt
       (ruff-lsp.overridePythonAttrs (old: rec {

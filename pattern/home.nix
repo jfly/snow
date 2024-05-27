@@ -14,7 +14,7 @@ in
   home.username = outerConfig.snow.user.name;
   home.homeDirectory = homeDir;
 
-  # TODO: move to desktop.nix somehow.
+  # TODO: move to pattern/desktop/ somehow.
   home.pointerCursor = {
     x11.enable = true;
     gtk.enable = true;
@@ -35,23 +35,23 @@ in
   home.file = (lib.mapAttrs
     (name: target: (link target))
     {
-      sd = pkgs.snow.absoluteRepoPath "/shared/homies/sd";
-      bin = pkgs.snow.absoluteRepoPath "/shared/homies/bin";
-      ".config/git" = pkgs.snow.absoluteRepoPath "/shared/homies/config/git";
-      ".gitignore_global" = pkgs.snow.absoluteRepoPath "/shared/homies/gitignore_global";
-      ".ssh/config" = pkgs.snow.absoluteRepoPath "/shared/homies/ssh/config";
-      ".ssh/config.d" = pkgs.snow.absoluteRepoPath "/shared/homies/ssh/config.d";
+      sd = pkgs.snow.absoluteRepoPath "/pattern/homies/sd";
+      bin = pkgs.snow.absoluteRepoPath "/pattern/homies/bin";
+      ".config/git" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/git";
+      ".gitignore_global" = pkgs.snow.absoluteRepoPath "/pattern/homies/gitignore_global";
+      ".ssh/config" = pkgs.snow.absoluteRepoPath "/pattern/homies/ssh/config";
+      ".ssh/config.d" = pkgs.snow.absoluteRepoPath "/pattern/homies/ssh/config.d";
 
       # Create and set a custom GTK theme.
-      ".themes" = pkgs.snow.absoluteRepoPath "/shared/homies/themes";
-      ".config/gtk-3.0" = pkgs.snow.absoluteRepoPath "/shared/homies/config/gtk-3.0";
+      ".themes" = pkgs.snow.absoluteRepoPath "/pattern/homies/themes";
+      ".config/gtk-3.0" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/gtk-3.0";
 
       # Set up direnv.
       # TODO: figure out how to get this config living closer to the
       # installation of direnv itself.
-      ".config/direnv/direnvrc" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/direnvrc";
-      ".config/direnv/direnv.toml" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/direnv.toml";
-      ".config/direnv/lib" = pkgs.snow.absoluteRepoPath "/shared/homies/config/direnv/lib";
+      ".config/direnv/direnvrc" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/direnvrc";
+      ".config/direnv/direnv.toml" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/direnv.toml";
+      ".config/direnv/lib" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/lib";
 
       # Secrets
       ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";

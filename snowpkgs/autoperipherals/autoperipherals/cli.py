@@ -50,7 +50,7 @@ def autoperipherals():
     notify_send(f"Detected location {location_name}")
 
     # Enable the corresponding systemd target, so special services can run when we're in a specific location.
-    # These systemd targets are defined in pattern/desktop.nix.
+    # These systemd targets are defined in pattern/desktop/.
     subprocess.run(
         ["systemctl", "start", "--user", f"location-{location_name}.target"],
         # The call to `systemctl start` seems to fail on boot with the following message:

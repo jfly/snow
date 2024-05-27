@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  # TODO: consolidate with pattern/desktop.nix
+  # TODO: consolidate with pattern/desktop/.
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
     service=$2

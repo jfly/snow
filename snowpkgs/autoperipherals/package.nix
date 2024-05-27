@@ -1,14 +1,14 @@
-{ pkgs, callPackage, buildPythonApplication, setuptools, pydantic, click, pyxdg, xlib, with-alacritty }:
+{ pkgs, callPackage, buildPythonApplication, setuptools, pydantic, click, pyxdg, xlib }:
 
 let
-  setbg = pkgs.callPackage ../setbg { };
   addToPath = with pkgs; [
     xorg.xrandr
     killall
     libnotify
+  ] ++ (with pkgs.snow; [
     with-alacritty
     setbg
-  ];
+  ]);
   pyedid = callPackage ./pyedid.nix { };
 in
 buildPythonApplication {

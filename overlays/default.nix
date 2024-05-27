@@ -1,11 +1,39 @@
-{ with-alacritty }:
+{ on-air-flake
+, shtuff-flake
+, with-alacritty-flake
+,
+}:
 
 [
   (
     self: super:
-      let fetchFromGitHub = self.fetchFromGitHub;
+      let
+        inherit (self)
+          fetchFromGitHub
+          ;
+        inherit (self.lib)
+          makeScope
+          removePrefix
+          removeSuffix
+          ;
+
+        snow = (self.callPackage ../snowpkgs { }) // {
+          # Kind of weird to be hardcoding the path here, but I want this to
+          # work in a pure build, which means we can't (and shouldn't) look at
+          # something like PWD. For example, if we're building a system using
+          # github actions, it really doesn't matter where the repo we're
+          # building happens to be cloned.
+          absoluteRepoPath = repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (removePrefix "/" repoPath);
+
+          on-air = on-air-flake.packages.${self.hostPlatform.system}.default;
+          shtuff = shtuff-flake.packages.${self.hostPlatform.system}.default;
+          with-alacritty = with-alacritty-flake.packages.${self.hostPlatform.system}.default;
+
+        };
       in
       rec {
+        inherit snow;
+
         # Patch python rxv package. We can remove this once
         # https://github.com/wuub/rxv/pull/90 is merged up, released, and nixpkgs
         # has been updated to use it.
@@ -25,17 +53,6 @@
         };
         python3Packages = python3.pkgs;
 
-        snow = {
-          # Kind of weird to be hardcoding the path here, but I want this to
-          # work in a pure build, which means we can't (and shouldn't) look at
-          # something like PWD. For example, if we're building a system using
-          # github actions, it really doesn't matter where the repo we're
-          # building happens to be cloned.
-          absoluteRepoPath = repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (super.lib.strings.removePrefix "/" repoPath);
-          autoperipherals = self.callPackage ../shared/autoperipherals {
-            inherit with-alacritty;
-          };
-        };
         deage = rec {
           absoluteRepoPath = encrypted: snow.absoluteRepoPath (repoPath encrypted);
           storeFile = { name, encrypted }: (
@@ -47,7 +64,7 @@
             }
           );
           repoPath = encrypted: (
-            let hashed = builtins.hashString "sha256" (super.lib.strings.removeSuffix "\n" encrypted);
+            let hashed = builtins.hashString "sha256" (removeSuffix "\n" encrypted);
             in "./.sensitive-decrypted-secrets/${hashed}.secret"
           );
           string = encrypted: builtins.readFile (absoluteRepoPath encrypted);

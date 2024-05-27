@@ -93,14 +93,19 @@
         import patched {
           inherit (nixpkgs) system overlays;
         };
+
+      overlays = import ./overlays {
+        on-air-flake = on-air;
+        shtuff-flake = shtuff;
+        with-alacritty-flake = with-alacritty;
+      };
     in
     (
       flake-utils.lib.eachDefaultSystem
         (system:
         let
           pkgs = import nixpkgs {
-            inherit system;
-            overlays = import ./overlays { inherit with-alacritty; };
+            inherit system overlays;
           };
           treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
@@ -185,26 +190,26 @@
             clark = patchNixpkgs {
               nixpkgs = import nixos-unstable {
                 system = "x86_64-linux";
-                overlays = import ./overlays { inherit with-alacritty; };
+                inherit overlays;
               };
               genPatches = unpatched: [ ];
             };
             dallben = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays { inherit with-alacritty; };
+              inherit overlays;
             };
             fflewddur = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays { inherit with-alacritty; };
+              inherit overlays;
             };
             kent = import nixos-unstable {
               system = "x86_64-linux";
-              overlays = import ./overlays { inherit with-alacritty; };
+              inherit overlays;
             };
             pattern = patchNixpkgs {
               nixpkgs = (import nixos-unstable {
                 system = "x86_64-linux";
-                overlays = import ./overlays { inherit with-alacritty; };
+                inherit overlays;
               });
               genPatches = unpatched: [
                 (unpatched.fetchpatch {
@@ -248,7 +253,7 @@
           inherit agenix agenix-rooter;
         };
         "pattern" = import pattern/configuration.nix {
-          inherit agenix agenix-rooter home-manager on-air shtuff with-alacritty;
+          inherit agenix agenix-rooter home-manager;
         };
         "kent" = import kent/configuration.nix {
           inherit agenix agenix-rooter;

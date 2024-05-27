@@ -1,15 +1,16 @@
-{ shtuff }:
 { config, lib, pkgs, stdenv, ... }:
 
 let
-  shtuff-pkg = shtuff.packages.${config.nixpkgs.hostPlatform.system}.default;
-  jgit = pkgs.callPackage ../../shared/jgit { };
-  my-yazi = pkgs.callPackage ../../shared/my-yazi { };
-  smag = pkgs.callPackage ../../shared/smag { };
+  inherit (pkgs.snow)
+    shtuff
+    jgit
+    my-yazi
+    smag
+    ;
 in
 {
   imports = [
-    ../../shared/q
+    ../../shared/modules/q
   ];
 
   users.users.${config.snow.user.name}.shell = pkgs.zsh;
@@ -32,8 +33,8 @@ in
       source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
       ##################################
 
-      source ${../../shared/homies/zshrc}
-      source ${../../shared/homies/commonrc/aliases}
+      source ${./zshrc}
+      source ${./aliases}
       ${my-yazi.zshrc}
 
       eval "$(zoxide init zsh)"
@@ -42,10 +43,7 @@ in
     promptInit = ''
       # Load p10k prompt
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ${../../shared/homies/p10k.zsh}
-
-      # TODO: re-investigate starship sometime
-      # eval "$(starship init zsh)"
+      source ${./p10k.zsh}
     '';
   };
   programs.tmux = {
@@ -60,27 +58,26 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    q
-    jgit
-    direnv
-
-    ### Prompt
-    # TODO: re-investigate starship sometime
-    # starship
+    ### sd (script directory)
+    snow.sd
 
     ### Explore filesystem
     file
     tree
     my-yazi.drv
     zoxide
+    ripgrep
 
     ### Misc utils
+    q
+    jgit
+    direnv
     psmisc # provides pstree
     acpi # check laptop battery
     pwgen
     htop
     moreutils # vidir
-    shtuff-pkg
+    shtuff
 
     ### data graphing
     (pkgs.writeShellScriptBin "qcsv" ''

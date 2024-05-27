@@ -1,8 +1,7 @@
-{ on-air }:
 { config, lib, pkgs, ... }:
 
 let
-  on-air-pkg = on-air.packages.${config.nixpkgs.hostPlatform.system}.default;
+  inherit (pkgs.snow) on-air;
 in
 {
   age.secrets.mosquitto-password = {
@@ -26,7 +25,7 @@ in
     partOf = [ "location-garageman.target" ];
 
     script = ''
-      ${on-air-pkg}/bin/on-air mqtt \
+      ${on-air}/bin/on-air mqtt \
         --broker mqtts://mqtt.snow.jflei.com \
         --username jfly \
         --password-file ${config.age.secrets.mosquitto-password.path} \

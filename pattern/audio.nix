@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  mcg = (pkgs.callPackage ../shared/cover-grid { });
+  mcg = pkgs.snow.cover-grid;
 in
 {
   # Enable sound with pipewire.
@@ -62,8 +62,16 @@ in
     };
   };
 
-  environment.systemPackages = [
-    pkgs.mpc-cli
+  environment.systemPackages = with pkgs; [
+    mpc-cli
     mcg
+    beets
+    abcde
+    mp3val
+    # TODO: follow up after a while and see if we need these (plugins?) somehow.
+    # AddPackage python-pyacoustid # Bindings for Chromaprint acoustic fingerprinting and the Acoustid API
+    # AddPackage python-eyed3 # A Python module and program for processing information about mp3 files
+    #### MPD
+    ashuffle
   ];
 }

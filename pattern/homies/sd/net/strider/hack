@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Workaround for when our main router gets wedged (symptoms as described here:
 # https://github.com/openwrt/openwrt/issues/9717)
 ssh strider 'nohup sh -c "ip link set br-lan down; ip link set br-lan up"'
+echo "hack complete"

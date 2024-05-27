@@ -1,4 +1,4 @@
-{ agenix, agenix-rooter, home-manager, on-air, shtuff, with-alacritty }:
+{ agenix, agenix-rooter, home-manager }:
 { config, pkgs, lib, ... }:
 
 let
@@ -35,15 +35,15 @@ in
     ./audio.nix
     home-manager.nixosModules.home-manager
     ./home-manager.nix
-    (import ./shell { inherit shtuff; })
-    (import ./desktop.nix { inherit with-alacritty; })
+    ./shell
+    ./desktop
     ./android.nix
     ./development.nix
     ./syncthing.nix
     ./printers.nix
     ./fuse.nix
     ./laptop.nix
-    (import ./garage-status.nix { inherit on-air; })
+    ./garage-status.nix
     agenix.nixosModules.default
     agenix-rooter.nixosModules.default
   ];
@@ -82,20 +82,6 @@ in
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
-
-  environment.systemPackages = with pkgs; [
-    ripgrep
-    (pkgs.callPackage ../shared/sd { })
-    odmpy
-  ] ++ (
-    # Some hackiness to extract the derivations from the attrset in
-    # shared/my-nix.
-    builtins.attrValues (
-      lib.attrsets.filterAttrs
-        (k: v: k != "override" && k != "overrideDerivation")
-        (callPackage ../shared/my-nix { })
-    )
-  );
 
   services.logind.lidSwitch = "ignore";
   services.logind.extraConfig = ''

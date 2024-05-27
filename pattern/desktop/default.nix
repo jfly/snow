@@ -1,25 +1,45 @@
-{ with-alacritty }:
 { config, lib, pkgs, modulesPath, ... }:
 
 let
   inherit (lib)
-    genAttrs;
+    genAttrs
+    ;
 
   inherit (builtins)
-    filter;
+    filter
+    ;
 
-  with-alacritty-pkg = (with-alacritty.packages.${config.nixpkgs.hostPlatform.system}.default);
-  polybar-openvpn3 = pkgs.callPackage ../shared/polybar-openvpn3 { };
+  inherit (pkgs.snow)
+    autoperipherals
+    colorscheme
+    desk-speakers
+    dunst
+    jbright
+    jvol
+    polybar-openvpn3
+    with-alacritty
+    xmonad
+    ;
+
+  dmenu = pkgs.symlinkJoin {
+    name = "dmenu";
+    paths = [ pkgs.dmenu ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      for prog in dmenu dmenu_run; do
+        wrapProgram $out/bin/$prog \
+          --add-flags "-fn Monospace-15"
+      done
+    '';
+  };
+
   polybar = pkgs.polybar.override {
     mpdSupport = true;
   };
   polybarConfig = pkgs.substituteAll {
-    src = ../shared/polybar/config.ini;
+    src = ./polybar-config.ini;
     polybar_openvpn3 = polybar-openvpn3;
   };
-  dunst = pkgs.callPackage ../shared/my-nix/dunst { };
-  xmonad = pkgs.callPackage ../shared/xmonad { };
-  autoperipherals = pkgs.callPackage ../shared/autoperipherals { with-alacritty = with-alacritty-pkg; };
   # TODO: consolidate with pattern/laptop.nix
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
@@ -182,9 +202,9 @@ in
       intercept = "${pkgs.interception-tools}/bin/intercept";
       uinput = "${pkgs.interception-tools}/bin/uinput";
       caps2esc = "${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc";
+      space2meta = "${pkgs.snow.space2meta}/bin/space2meta";
       # TODO: figure out key drop issues
-      # space2meta = "${pkgs.callPackage ../shared/space2meta-speedcubing { }}/bin/space2meta-speedcubing";
-      space2meta = "${pkgs.callPackage ../shared/space2meta.nix { }}/bin/space2meta";
+      # space2meta-speedcubing = "${pkgs.snow.space2meta-speedcubing}/bin/space2meta";
     in
     {
       enable = true;
@@ -259,25 +279,8 @@ in
         noto-fonts-monochrome-emoji
         # I can't read any of this, but it sure looks nicer than boxes :p
         noto-fonts-cjk-serif
-        (
-          pkgs.stdenv.mkDerivation {
-            pname = "pica-font";
-            version = "0.0.1";
-            buildCommand = ''
-              install -m444 -Dt $out/share/fonts/truetype ${./fonts/pica/Pica.ttf}
-            '';
-          }
-        )
-        (
-          # https://www.dafont.com/dk-majolica.font
-          pkgs.stdenv.mkDerivation {
-            pname = "majolica-font";
-            version = "0.0.1";
-            buildCommand = ''
-              install -m444 -Dt $out/share/fonts/truetype ${./fonts/DK-Majolica.otf}
-            '';
-          }
-        )
+        pkgs.snow.fonts.pica
+        pkgs.snow.fonts.dk-majolica
       ];
       fontconfig = {
         defaultFonts = {
@@ -334,6 +337,20 @@ in
     avidemux
     audacity
 
+    ### Ebooks/audiobooks
+    (pkgs.symlinkJoin {
+      name = "calibre";
+      paths = [ pkgs.calibre ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/calibre \
+          --add-flags "--with-library=~/sync/jeremy/books/calibre"
+      '';
+    })
+    audible-cli
+    snow.snowcrypt
+    snow.odmpy
+
     ### PDF
     evince
 
@@ -354,25 +371,18 @@ in
     gucharmap # view fonts
     usbutils # provides `lsusb`
 
-    # TODO: consolidate with xmonad
+    ### Misc desktop utils
     autoperipherals
-    with-alacritty-pkg
-    (pkgs.callPackage ../shared/colorscheme { })
-    xdotool
-    (pkgs.symlinkJoin {
-      name = "dmenu";
-      paths = [ dmenu ];
-      buildInputs = [ makeWrapper ];
-      postBuild = ''
-        for prog in dmenu dmenu_run; do
-          wrapProgram $out/bin/$prog \
-            --add-flags "-fn Monospace-15"
-        done
-      '';
-    })
+    colorscheme
+    desk-speakers
+    dunst
+    jbright
+    jvol
+    with-alacritty
+    xclip
     xcwd
-
-    ### Misc utils
-    (pkgs.callPackage ../shared/desk-speakers { })
+    xdotool
+    xmonad
+    dmenu
   ];
 }

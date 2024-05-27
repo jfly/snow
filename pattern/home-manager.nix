@@ -2,7 +2,7 @@
 
 {
   home-manager.useGlobalPkgs = true;
-  home-manager.users.${config.snow.user.name} = (import ../shared/home.nix {
+  home-manager.users.${config.snow.user.name} = (import ./home.nix {
     inherit config;
   });
 
@@ -61,7 +61,6 @@
   environment.systemPackages = with pkgs; [
     delta # TODO: consolidate with git configuration
     difftastic # TODO: consolidate with git configuration
-    jq # TODO: ~/bin/colorscheme needs this
     (
       pkgs.writeShellApplication {
         name = "wallabag-add";

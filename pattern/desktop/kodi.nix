@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../shared/modules/kodi-colusita
+    ../../shared/modules/kodi-colusita
   ];
 
   services.kodi-colusita = {
