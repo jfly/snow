@@ -256,6 +256,7 @@ in
       rsync
       snow.mycli
       miller
+      jq
 
       ### Honor
       awscli2

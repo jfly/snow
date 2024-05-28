@@ -5,7 +5,7 @@
 , config-files
 , config-template-values-by-file ? { }
 , rootPassword
-, mqttPassword
+, mqtt
 , dumbap
 ,
 }:
@@ -37,12 +37,16 @@ let
   # However, I think it would be more interesting to explore explore
   # https://www.liminix.org/ as an alternative to all of this.
   final-template-values-by-file = {
+    "/etc/config/system" = {
+      "@hostname@" = hostname;
+    };
     "/etc/config/wireless" = {
       "@wifi_password@" = wifi.home.password;
       "@wifi_iot_password@" = wifi.iot.password;
     };
     "/etc/config/wifi-presence" = {
-      "@mqtt_password@" = mqttPassword;
+      "@mqtt_password@" = mqtt.password;
+      "@mqtt_username@" = mqtt.username;
     };
     "/etc/dropbear/authorized_keys" = {
       "@authorized_key@" = identities.jfly;

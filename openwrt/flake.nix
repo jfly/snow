@@ -57,15 +57,18 @@
             Psb9arR4U0ZvIPLccGd9TGPNF+q72tnD77kaCg==
             -----END AGE ENCRYPTED FILE-----
           '';
-          mqttPassword = pkgs.deage.string ''
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiVHc1UXJmMkJpeVdlTWFX
-            TzB3TnFHZHBwaG1hbGhqb2k1VUpWYyt4bFQwCnJodmsvQ3VsOWFtWUZsbnBJM2pO
-            SzBRTDM3VVpnSnF4dE5KZ29uVm9wd3MKLS0tIHRxQlhTOSt4citFbm9RalFFdndz
-            OHZDdVhFdnU3eUZESjNabVcraDhlbEEKAW54k9Ne4JZ76adEBmvrcKrxdVcMQe+q
-            pbReTtYwFdORWth/mhrKJG1xffW2jNzORDbfow==
-            -----END AGE ENCRYPTED FILE-----
-          '';
+          mqtt = {
+            username = "strider";
+            password = pkgs.deage.string ''
+              -----BEGIN AGE ENCRYPTED FILE-----
+              YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiVHc1UXJmMkJpeVdlTWFX
+              TzB3TnFHZHBwaG1hbGhqb2k1VUpWYyt4bFQwCnJodmsvQ3VsOWFtWUZsbnBJM2pO
+              SzBRTDM3VVpnSnF4dE5KZ29uVm9wd3MKLS0tIHRxQlhTOSt4citFbm9RalFFdndz
+              OHZDdVhFdnU3eUZESjNabVcraDhlbEEKAW54k9Ne4JZ76adEBmvrcKrxdVcMQe+q
+              pbReTtYwFdORWth/mhrKJG1xffW2jNzORDbfow==
+              -----END AGE ENCRYPTED FILE-----
+            '';
+          };
         };
         aragorn = snow-router {
           hostname = "aragorn";
@@ -81,15 +84,18 @@
             DFA3oCgiHSO/k+lQoWMZoLsIcHWoxIRz52TfnQ==
             -----END AGE ENCRYPTED FILE-----
           '';
-          mqttPassword = pkgs.deage.string ''
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmeFBZeUo1cVFJeVUvK1hL
-            cGkvT0psbUxnUDlDelFTSmhpOXY4TUtxKzFjCmZycm5BWS9ZYXA2aUFwYyt1bi96
-            cTNDRFFDaEsrK2FPQ1RvOWpvVVhSbUUKLS0tIHFrWGpDN1BTZFNmaVJiOUVKZU1i
-            TC9ULzdsbCsyL3hDbGVqdjAwUGlQNUkKGzVGPVjUblP8AeZI1uPhMHwZMk5yNxnI
-            W3vQFZe+gBiYFpe6bKA+v8kJh7+t/xeraKvBRQ==
-            -----END AGE ENCRYPTED FILE-----
-          '';
+          mqtt = {
+            username = "aragorn";
+            password = pkgs.deage.string ''
+              -----BEGIN AGE ENCRYPTED FILE-----
+              YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmeFBZeUo1cVFJeVUvK1hL
+              cGkvT0psbUxnUDlDelFTSmhpOXY4TUtxKzFjCmZycm5BWS9ZYXA2aUFwYyt1bi96
+              cTNDRFFDaEsrK2FPQ1RvOWpvVVhSbUUKLS0tIHFrWGpDN1BTZFNmaVJiOUVKZU1i
+              TC9ULzdsbCsyL3hDbGVqdjAwUGlQNUkKGzVGPVjUblP8AeZI1uPhMHwZMk5yNxnI
+              W3vQFZe+gBiYFpe6bKA+v8kJh7+t/xeraKvBRQ==
+              -----END AGE ENCRYPTED FILE-----
+            '';
+          };
         };
       };
     };
