@@ -2,24 +2,14 @@
 
 let
   nodejsBuilderByVersion = {
-    "14.18.2" = {
-      baseDrv = pkgs.nodejs-14_x;
-      sha256 = "sha256-Poqc4Q+LzTYo623QSffwPIS6khm+b5dD4iIRVLnMaAs=";
-      patches = [ ];
-    };
-    "16.9.0" = {
-      baseDrv = pkgs.nodejs-16_x.override {
-        # Node 16.9.0 is particular about the version of Python you use to build it:
-        # > Node.js configure: Found Python 3.10.6...
-        # > Please use python3.9 or python3.8 or python3.7 or python3.6.
-        python3 = pkgs.python39;
-      };
-      sha256 = "sha256-GudkIA38I6impoOH4+9sfrOHBe/9s4ciydORb+uLZm8=";
-      patches = [ ];
-    };
     "18.15.0" = {
-      baseDrv = pkgs.nodejs-18_x;
+      baseDrv = pkgs.nodejs_18;
       sha256 = "sha256-jkTWUBj/lzKEGVwjGGRpoOpAgul+xCAOX1cG1VhNqjc=";
+      patches = [ ];
+    };
+    "20.14.0" = {
+      baseDrv = pkgs.nodejs_20;
+      sha256 = "sha256-CGVQKPDYQ26IFj+RhgRNY10/Nqhe5Sjza9BbbF5Gwbs=";
       patches = [ ];
     };
   };

@@ -4,6 +4,7 @@ let
   shaByVersion = {
     "1.22.15" = "sha256-Zgeralws4dk74QPq/SZAjG7um+/gG20b6EbGzUv5ifc=";
     "1.22.17" = "sha256-cvsgEPlh4B/jEsLQboO2xMslhSAkuWFAoMucJLanf+o=";
+    "1.22.22" = "sha256-kFa+kmnBerTB7fY/IvfAFy/4LWvrl9lrRHMOUdOZ+Wg=";
   };
 in
 version: (pkgs.yarn.override {
