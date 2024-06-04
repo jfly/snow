@@ -16,7 +16,7 @@ pkgs.stdenv.mkDerivation {
     libtool
     automake
     autoconf
-    pkgconfig
+    pkg-config
     boost
     openssl
   ];
