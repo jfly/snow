@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+rel=$(realpath --relative-to "$root" .)
+
+# For some reason, ignore rules like "./.envrc" don't seem to work, but
+# "/.envrc" does. :shrug:
+if [ "$rel" = "." ]; then
+    rel=""
+fi
+
 for item in "$@"; do
-    echo "$item" >>.git/info/exclude
+    echo "${rel}/$item" >>"$root/.git/info/exclude"
 done

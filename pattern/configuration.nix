@@ -27,6 +27,8 @@ in
   # Allow colmena to deploy this locally.
   deployment.allowLocalDeployment = true;
 
+  programs.nix-ld.enable = true;
+
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
     ./hardware-configuration-custom.nix

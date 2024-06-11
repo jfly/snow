@@ -79,6 +79,11 @@ in
   };
 
   config = {
+    # esp32/watchy tinkering
+    services.udev.packages = with pkgs; [
+      platformio-core.udev
+    ];
+
     # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
     # isn't exactly reproducible, but I'll live with it.
     # Trick copied from
@@ -91,7 +96,7 @@ in
       # `host.docker.internal` domain.
       # As of 2023, it appears there's no good, consistent way of speaking to the
       # host on both macOS and Linux. Note: adding an entry to the containerized
-      # `/etc/hosts` is not good enough, as some stuff like nginx actually ignore
+      # `/etc/hosts` is not good enough, as some stuff like nginx actually ignores
       # /etc/hosts:
       # https://github.com/NginxProxyManager/nginx-proxy-manager/issues/259. For more information:
       # - https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal
