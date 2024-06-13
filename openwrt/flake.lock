@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1716715802,
-        "narHash": "sha256-usk0vE7VlxPX8jOavrtpOqphdfqEQpf9lgedlY/r66c=",
+        "lastModified": 1718149104,
+        "narHash": "sha256-Ds1QpobBX2yoUDx9ZruqVGJ/uQPgcXoYuobBguyKEh8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e2dd4e18cc1c7314e24154331bae07df76eb582f",
+        "rev": "e913ae340076bbb73d9f4d3d065c2bca7caafb16",
         "type": "github"
       },
       "original": {
@@ -35,16 +35,16 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1716821730,
-        "narHash": "sha256-Lmw5GZykUxcV6pPe5G9olG0WFutooYlK5AGiPT2mPws=",
+        "lastModified": 1718260215,
+        "narHash": "sha256-NRHnxTyyIctpxvgPRFEIc7DLfQTtb7Jn5VfFk/tFDDU=",
         "owner": "jfly",
         "repo": "nix-openwrt-imagebuilder",
-        "rev": "8c3617332386d80b0cbf2c0acb1eb6453759fe21",
+        "rev": "24fd13a5e44aa178c60bd64f50e8e3c1d04d59b3",
         "type": "github"
       },
       "original": {
         "owner": "jfly",
-        "ref": "custom-packages",
+        "ref": "update-hashes",
         "repo": "nix-openwrt-imagebuilder",
         "type": "github"
       }

@@ -10,6 +10,11 @@ Host aragorn
     HostName aragorn
     User root
 
+# Garage door router ("dumb ap")
+Host elfstone
+    HostName elfstone
+    User root
+
 Host clark
     HostName snow.jflei.com
     User root

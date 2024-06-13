@@ -18,13 +18,13 @@ let
     splitString
     ;
 
-  release = "23.05.2";
+  release = "23.05.3";
   profiles = openwrt-imagebuilder.lib.profiles {
     inherit pkgs release;
   };
   profile = profiles.identifyProfile profileName;
 
-  hashes = import "${openwrt-imagebuilder}/hashes/23.05.2.nix";
+  hashes = import "${openwrt-imagebuilder}/hashes/${release}.nix";
 
   packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
 
@@ -116,7 +116,7 @@ let
   wifi-presence = wifi-presence-by-arch.${packagesArch};
   built-no-version = (openwrt-imagebuilder.lib.build (profile // {
     packages =
-      if dumbap then [
+      [
         "luci"
         # Remove the stripped down version of hostapd in favor of the full
         # version. This is necessary for awilliams/wifi-presence. See
@@ -124,35 +124,37 @@ let
         # for details.
         "-wpad-basic-mbedtls"
         "wpad-mbedtls"
-      ] else [
-        "luci"
-        # Useful debugging utils.
-        "lsblk"
-        "gdisk"
-        "usbutils"
-        # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
-        "block-mount"
-        "e2fsprogs"
-        "kmod-fs-ext4"
-        "kmod-usb-storage"
-        "kmod-usb2"
-        "kmod-usb3"
-        # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
-        "ddns-scripts"
-        "luci-app-ddns"
-        "ddns-scripts-cloudflare"
-        "curl"
-        "ca-bundle"
-        # More utils
-        "coreutils-nohup"
-        # Remove the stripped down version of hostapd in favor of the full
-        # version. This is necessary for awilliams/wifi-presence. See
-        # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
-        # for details.
-        "-wpad-basic-mbedtls"
-        "wpad-mbedtls"
-      ];
-    hackExtraPackages = [ "wifi-presence" ];
+        "wifi-presence"
+      ] ++ (
+        if dumbap then [ ] else [
+          "luci"
+          # Useful debugging utils.
+          "lsblk"
+          "gdisk"
+          "usbutils"
+          # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
+          "block-mount"
+          "e2fsprogs"
+          "kmod-fs-ext4"
+          "kmod-usb-storage"
+          "kmod-usb2"
+          "kmod-usb3"
+          # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
+          "ddns-scripts"
+          "luci-app-ddns"
+          "ddns-scripts-cloudflare"
+          "curl"
+          "ca-bundle"
+          # More utils
+          "coreutils-nohup"
+          # Remove the stripped down version of hostapd in favor of the full
+          # version. This is necessary for awilliams/wifi-presence. See
+          # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
+          # for details.
+          "-wpad-basic-mbedtls"
+          "wpad-mbedtls"
+        ]
+      );
 
     # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
     # "To save resources on the wireless AP router, disable some now unneeded services"
@@ -182,14 +184,7 @@ let
 
       cp -fr ${config}/etc/* $out/etc/
     '';
-  })).overrideAttrs
-    (finalAttrs: prevAttrs: {
-      configurePhase = ''
-        ${prevAttrs.configurePhase}
-
-        ln -s ${wifi-presence.file} packages/${wifi-presence.filename}
-      '';
-    });
+  }));
 
   last = l: builtins.elemAt l (builtins.length l - 1);
   nix-build-version = builtins.head (splitString "-" (last (splitString "/" built-no-version.outPath)));

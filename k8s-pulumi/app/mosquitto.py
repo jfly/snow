@@ -91,6 +91,10 @@ class Mosquitto:
             -----END AGE ENCRYPTED FILE-----
             """
         )
+
+        # To generate an encrypted, hashed password:
+        #
+        #   pw_file=$(mktemp) && mosquitto_passwd -b "$pw_file" "USERNAME" [PASSWORD] && grep -Po "(?<=USERNAME:).*" "$pw_file" | tools/encrypt
         hashed_passwords = {
             "jfly": deage(
                 """
@@ -141,6 +145,19 @@ class Mosquitto:
                 3tON/nBa4lt5dNAmQL7F64r7qT8OQcSZVPdyD9WsoJQkEExaBOmhtRzHUsGRf883
                 A7DrhksL+VnX5utrg130ZtvirBwiRvT1MLTtveWVmNuMgAFOTJcCiIn15mSRHFTr
                 YcIwOx3Vgb0wuWjf97Q4NOGqy8lkdFld
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "elfstone": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsTXJhTFRCT0dldWYvdFBu
+                anJjNEhvUmVjTVZOeVBuVjVRR0twY3ZaZ1NrCk8zSUxLTzNDdnU4R2N6ZFdKNkd1
+                citlTTJHTVkzb29DRUJJRXVqdHBvT00KLS0tIGNlVHNkUlUwMDFPVGZ2cFFyM0hN
+                ZUxsQW4rRWdOQ2JpUllYUDJrS1gwY3MKfrwTiGFVvq5YR3NqwOH8yHf2TGYGIVxw
+                4jIoBW+SbTYWEgptmSqBKBlIEN5VIZVZgk1AE/BTSu2UlhISVqgfibbXtsobLW0n
+                N3zTLwlsUgwMixu6vgQPz8H/LBwf89QOEBDKCDEg7sA4+xFk/eo9wBv04xsWcCZ7
+                ztgtczsinA2nNbvVSrhoyO47h9fL8dZF
                 -----END AGE ENCRYPTED FILE-----
                 """
             ),
