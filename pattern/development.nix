@@ -223,6 +223,7 @@ in
     environment.systemPackages = with pkgs; [
       ### Version control
       git
+      git-filter-repo
       # `gh` manages credentials internally, but it also honors the
       # `GITHUB_TOKEN` env var if one is present. However, this interferes with
       # development in repos where I *do* have a `GITHUB_TOKEN` env var set.
