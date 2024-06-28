@@ -87,7 +87,7 @@ in
   # Enable touchpad.
   services.libinput.enable = true;
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   programs.nm-applet.enable = true;
 
