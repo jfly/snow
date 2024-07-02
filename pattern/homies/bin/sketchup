@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-# To install:
+# To install (from https://appdb.winehq.org/objectManager.php?sClass=version&iId=34500):
 #
-# $ wget https://media.snow.jflei.com/unfree/sketchupmake-2017-2-2555-90782-en-x64.exe
-# $ nix-shell -p wineWowPackages.stable -p wineWowPackages.mono
-# $ wine ~/Downloads/sketchupmake-2017-2-2555-90782-en-x64.exe  # if you get errors about a 64 vs 32 bit installation of wine, nuke ~/.wine and re-run `winecfg`
+# $ scp fflewddur:/mnt/bay/archive/software/sketchupmake-2017-2-2555-90782-en-x64.exe /tmp
+#   # (or from https://archive.org/download/sketchupmake-2017-2-2555-90782-en-x64)
+# $ nix-shell -p wineWowPackages.full winetricks
+# $ winetricks vcrun2013 vcrun2015 corefonts win7
+# $ winetricks settings fontsmooth=rgb
+# $ wine /tmp/sketchupmake-2017-2-2555-90782-en-x64.exe  # if you get errors about a 64 vs 32 bit installation of wine, nuke ~/.wine and re-run `winecfg`
 
-exec wine '/home/jeremy/.wine/drive_c/Program Files/SketchUp/SketchUp 2017/SketchUp.exe'
+exec nix-shell -p wineWowPackages.full --run "wine '/home/jeremy/.wine/drive_c/Program Files/SketchUp/SketchUp 2017/SketchUp.exe'"
