@@ -324,7 +324,7 @@ in
     })
 
     ### Image viewers
-    gnome.eog
+    eog
 
     ### Movie players
     mpv

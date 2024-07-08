@@ -94,38 +94,28 @@ layout_python() {
     PATH_add "$VIRTUAL_ENV/bin"
 }
 
-make_temp_file() {
-    local temp_file
-    if command -v mktemp &>/dev/null; then
-        temp_file=$(mktemp)
-    else
-        # Some Linux systems may only ship `tempfile`
-        temp_file=$(tempfile)
-    fi
-    echo "$temp_file"
-}
-
 # Wrap the given executable file and add it to the PATH.
 # Usage: wrap_program EXECUTABLE ARGS
 #
 # See `make_wrapper` for supported ARGS.
 wrap_program() {
-	local wrap_me=$1
-	shift # skip past first argument
+    local wrap_me=$1
+    shift # skip past first argument
 
     # Its possible that multiple processes may run when setting up a direnv. To address this race condition, we
-    # initially write our wrapper script to a temporary file, then copy it to the final location.
-	local basename
-	basename=$(basename "$wrap_me")
-	temp_wrapper=$(make_temp_file)
-	wrapper=$(direnv_layout_dir)/wrappers/$basename-wrapper/$basename
-	wrapper_dir=$(dirname "$wrapper")
+    # initially write our wrapper script to a temporary file, then move it to the final location.
+    local basename
+    basename=$(basename "$wrap_me")
+    temp_wrapper=$(mktemp)
+    wrapper=$(direnv_layout_dir)/wrappers/$basename-wrapper/$basename
+    wrapper_dir=$(dirname "$wrapper")
 
-	mkdir -p "$wrapper_dir"
-	make_wrapper "$wrap_me" "$temp_wrapper" "$@"
+    make_wrapper "$wrap_me" "$temp_wrapper" "$@"
 
+    mkdir -p "$wrapper_dir"
     mv "$temp_wrapper" "$wrapper"
-	PATH_add "$wrapper_dir"
+
+    PATH_add "$wrapper_dir"
 }
 
 # Wrap the given executable file.
@@ -138,32 +128,32 @@ wrap_program() {
 # ARGS:
 # --run       COMMAND : run COMMAND before EXECUTABLE
 make_wrapper() {
-	local wrap_me=$1
-	local wrapper=$2
+    local wrap_me=$1
+    local wrapper=$2
 
-	if ! [[ -f $wrap_me && -x $wrap_me ]]; then
-		log_error "wrap_program: Cannot wrap '$wrap_me' as it is not an executable file"
-		exit 1
-	fi
+    if ! [[ -f $wrap_me && -x $wrap_me ]]; then
+        log_error "wrap_program: Cannot wrap '$wrap_me' as it is not an executable file"
+        exit 1
+    fi
 
-	echo "#!/usr/bin/env bash" >"$wrapper"
-	echo "set -e" >>"$wrapper"
+    echo "#!/usr/bin/env bash" >"$wrapper"
+    echo "set -e" >>"$wrapper"
 
-	params=("$@")
-	for ((n = 2; n < ${#params[*]}; n += 1)); do
-		p="${params[$n]}"
+    params=("$@")
+    for ((n = 2; n < ${#params[*]}; n += 1)); do
+        p="${params[$n]}"
 
-		if [[ $p == "--run" ]]; then
-			command="${params[$((n + 1))]}"
-			n=$((n + 1))
-			echo "$command" >>"$wrapper"
-		else
-			die "make_wrapper doesn't understand the arg $p"
-		fi
-	done
+        if [[ $p == "--run" ]]; then
+            command="${params[$((n + 1))]}"
+            n=$((n + 1))
+            echo "$command" >>"$wrapper"
+        else
+            die "make_wrapper doesn't understand the arg $p"
+        fi
+    done
 
-	echo exec "'$wrap_me'" '"$@"' >>"$wrapper"
-	chmod +x "$wrapper"
+    echo exec "'$wrap_me'" '"$@"' >>"$wrapper"
+    chmod +x "$wrapper"
 }
 
 wrap_with_codeartifact_login() {
@@ -204,5 +194,25 @@ else
     )
     unset H4_AUTHENTICATING_WITH_CODEARTIFACT
 fi
+'
+}
+
+h4_authenticate_python() {
+    local command=$1
+    # shellcheck disable=SC2016 # we are intentionally using single quotes so we can generate bash code (:scream:)
+    wrap_program "$(which "$command")" --run '
+    # Wrapper for '"$command"' that first authenticates with AWS CodeArtifact.
+    # See https://joinhonor.atlassian.net/browse/FOUND-4904 for details.
+    # Delegates getting an AWS CodeArtifact authorization token to the Honor Cli. Use that token to authenticate
+    # poetry and pip with Honors CodeArtifact honorcare-prod repository
+   codeartifact_auth_token=$(honor login codeartifact token)
+
+   # Configure AWS CodeArtifact authentication for pip
+   export PIP_INDEX_URL="https://aws:${codeartifact_auth_token}@honorcare-900965112463.d.codeartifact.us-west-2.amazonaws.com/pypi/honorcare-prod/simple/"
+
+   # Configure Poetry to authenticate to CodeArtifact honorcare-prod repository
+   # https://python-poetry.org/docs/repositories/
+   export POETRY_HTTP_BASIC_HONORCARE_PROD_USERNAME='aws'
+   export POETRY_HTTP_BASIC_HONORCARE_PROD_PASSWORD=$codeartifact_auth_token
 '
 }

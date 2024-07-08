@@ -9,15 +9,15 @@ let
     pname = "cli";
     # TODO: find a better way of keeping this up to date. Perhaps turn upstream
     # into a flake?
-    version = "0.0.82";
+    version = "0.0.86";
 
     src = builtins.fetchGit {
       url = "git@github.com:joinhonor/cli.git";
       ref = "refs/tags/${version}";
-      rev = "8d0eae6b0151f59250e0cc3b8ef9884d6366889f";
+      rev = "3dd7ba8b633046037c37b6183a2f82c7e07cfe28";
     };
 
-    cargoHash = "sha256-3/s+FZ63qruwmf7jA9lyYrNqfQqI4FZ+/h/rqws+8GE=";
+    cargoHash = "sha256-Bc3XRrz2KKXJcJfvN3g00jx1HUfT7XsrPtfWcq2j888=";
 
     # I'm not sure if this belongs in configurePhase (or even if it belongs in this package).
     # I originally tried adding it to installPhase, but that didn't work

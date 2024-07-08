@@ -13,7 +13,7 @@ let
     runtimeInputs = with pkgs; [
       sqlite
       oath-toolkit
-      gnome.zenity
+      zenity
     ];
     text = builtins.readFile ./src/2fa-cli;
   };
