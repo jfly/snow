@@ -14,6 +14,8 @@ let
     yarn = pkgs.callPackage ./yarn.nix { };
     mysql = pkgs.callPackage ./mysql.nix { };
     pulumi = pkgs.callPackage ./pulumi { };
+    shellcheck = pkgs.callPackage ./shellcheck.nix { };
+    shfmt = pkgs.callPackage ./shfmt.nix { };
   };
 
   asdfToPkg = { plugin, version }: (asdfPlugins.${plugin} version);

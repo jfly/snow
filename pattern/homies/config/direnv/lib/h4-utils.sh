@@ -201,18 +201,18 @@ h4_authenticate_python() {
     local command=$1
     # shellcheck disable=SC2016 # we are intentionally using single quotes so we can generate bash code (:scream:)
     wrap_program "$(which "$command")" --run '
-    # Wrapper for '"$command"' that first authenticates with AWS CodeArtifact.
-    # See https://joinhonor.atlassian.net/browse/FOUND-4904 for details.
-    # Delegates getting an AWS CodeArtifact authorization token to the Honor Cli. Use that token to authenticate
-    # poetry and pip with Honors CodeArtifact honorcare-prod repository
-   codeartifact_auth_token=$(honor login codeartifact token)
+# Wrapper for '"$command"' that first authenticates with AWS CodeArtifact.
+# See https://joinhonor.atlassian.net/browse/FOUND-4904 for details.
+# Delegates getting an AWS CodeArtifact authorization token to the Honor Cli. Use that token to authenticate
+# poetry and pip with Honors CodeArtifact honorcare-prod repository
+codeartifact_auth_token=$(honor login codeartifact token)
 
-   # Configure AWS CodeArtifact authentication for pip
-   export PIP_INDEX_URL="https://aws:${codeartifact_auth_token}@honorcare-900965112463.d.codeartifact.us-west-2.amazonaws.com/pypi/honorcare-prod/simple/"
+# Configure AWS CodeArtifact authentication for pip
+export PIP_INDEX_URL="https://aws:${codeartifact_auth_token}@honorcare-900965112463.d.codeartifact.us-west-2.amazonaws.com/pypi/honorcare-prod/simple/"
 
-   # Configure Poetry to authenticate to CodeArtifact honorcare-prod repository
-   # https://python-poetry.org/docs/repositories/
-   export POETRY_HTTP_BASIC_HONORCARE_PROD_USERNAME='aws'
-   export POETRY_HTTP_BASIC_HONORCARE_PROD_PASSWORD=$codeartifact_auth_token
+# Configure Poetry to authenticate to CodeArtifact honorcare-prod repository
+# https://python-poetry.org/docs/repositories/
+export POETRY_HTTP_BASIC_HONORCARE_PROD_USERNAME=aws
+export POETRY_HTTP_BASIC_HONORCARE_PROD_PASSWORD=$codeartifact_auth_token
 '
 }
