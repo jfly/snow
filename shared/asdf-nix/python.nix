@@ -70,7 +70,7 @@ let
       };
       hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
     };
-    "3.10.10" = pkgs.python38.override {
+    "3.10.10" = pkgs.python310.override {
       sourceVersion = {
         major = "3";
         minor = "10";
@@ -79,7 +79,7 @@ let
       };
       hash = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
     };
-    "3.10.6" = pkgs.python38.override {
+    "3.10.6" = pkgs.python310.override {
       sourceVersion = {
         major = "3";
         minor = "10";
@@ -88,7 +88,7 @@ let
       };
       hash = "sha256-95X/h9EdSwx8M7yIUbDChkjYpFg6ohAKmMIrQya20/M=";
     };
-    "3.9.10" = pkgs.python38.override {
+    "3.9.10" = pkgs.python310.override {
       sourceVersion = {
         major = "3";
         minor = "9";
