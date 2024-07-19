@@ -333,7 +333,8 @@ in
 
     ### Media editing (images, audio, video)
     gimp
-    (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
+    #<<< (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
+    inkscape-with-extensions #<<<
     avidemux
     audacity
 

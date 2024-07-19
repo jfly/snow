@@ -203,7 +203,7 @@ in
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
     # Needed by ~/bin/allprocs
-    programs.sysdig.enable = true;
+    #<<< programs.sysdig.enable = true;
 
     # See my-aws-vault for details.
     age.secrets.aws-vault-file-passphrase = {
@@ -276,7 +276,7 @@ in
       })
       gnupg
       openssl
-      aws-sam-cli
+      #<<< aws-sam-cli
       # dev setup scripts
       amazon-ecr-credential-helper
       # external-web

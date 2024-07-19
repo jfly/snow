@@ -189,9 +189,9 @@ def http_ingress(
 
     extra_annotations = {}
     if len(traefik_middlewares) > 0:
-        extra_annotations[
-            "traefik.ingress.kubernetes.io/router.middlewares"
-        ] = format_traefik_middlewares(traefik_middlewares)
+        extra_annotations["traefik.ingress.kubernetes.io/router.middlewares"] = (
+            format_traefik_middlewares(traefik_middlewares)
+        )
 
     return kubernetes.networking.v1.Ingress(
         ingress_name,

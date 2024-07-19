@@ -1,12 +1,6 @@
 { pkgs }:
 
 let
-  shaByVersion = {
-    "1.2.1" = "ODbI8sSBEhvbp8f2K8WCZAN09Khw80SyruWtjoTewoM=";
-    "1.2.2" = "huIjLv1T42HEmePCQNJpKnNxJKdyD9MlEtc2WRPOjRE=";
-    "1.3.0" = "16ng59ykm7zkjizmwb482y0hawpjjr5mvl0ahjd790xzxcc2bbbv";
-    "1.3.2" = "12EiEGI9Vkb6EUY/W2KWeLigxWra1Be4ozvi8njBpEU=";
-  };
   poetry150 = (import
     (builtins.fetchGit {
       name = "nixpkgs-with-poetry-1.5.0";
@@ -72,6 +66,17 @@ let
       localSystem = pkgs.system;
     }).poetry;
 
+  poetry183 = (import
+    (builtins.fetchGit {
+      name = "nixpkgs-with-poetry-1.8.8";
+      url = "https://github.com/NixOS/nixpkgs/";
+      ref = "refs/heads/nixpkgs-unstable";
+      rev = "05bbf675397d5366259409139039af8077d695ce";
+    })
+    {
+      localSystem = pkgs.system;
+    }).poetry;
+
   derivationByVersion = {
     "1.5.0" = poetry150;
     "1.5.1" = poetry151;
@@ -79,22 +84,7 @@ let
     "1.6.1" = poetry161;
     "1.7.1" = poetry171;
     "1.8.2" = poetry182;
+    "1.8.3" = poetry183;
   };
 in
-version: if builtins.hasAttr version derivationByVersion then derivationByVersion.${version} else
-(pkgs.poetry2nix.mkPoetryApplication {
-  python = pkgs.python3;
-  projectDir = pkgs.fetchFromGitHub {
-    owner = "python-poetry";
-    repo = "poetry";
-    rev = version;
-    sha256 = shaByVersion.${version};
-    fetchSubmodules = true;
-  };
-
-  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-  # when used in nix-shell.
-  postFixup = ''
-    rm $out/nix-support/propagated-build-inputs
-  '';
-})
+version: derivationByVersion.${version}

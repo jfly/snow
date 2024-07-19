@@ -41,11 +41,13 @@ class Coordinates:
 class Display:
     name: str  # something like 'DP-3-2'
     raw_edid: bytes | None
+
     @property
-    def edid_hex(self) -> str|None:
+    def edid_hex(self) -> str | None:
         if self.raw_edid is None:
             return None
         return base64.b64encode(self.raw_edid).decode()
+
     edid: pyedid.Edid | None
     is_connected: bool
     is_active: bool

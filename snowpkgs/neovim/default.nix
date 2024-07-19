@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, fetchpatch }:
 
 let
   vim-dim = (pkgs.vimUtils.buildVimPlugin {
@@ -54,7 +54,15 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
     plugins = with pkgs.vimPlugins; [
       fzf-vim
       telescope-nvim
-      MatchTagAlways
+      (MatchTagAlways.overrideAttrs (oldAttrs: {
+        patches = [
+          # Avoid a really obnoxious warning on Python 3.12: https://github.com/Valloric/MatchTagAlways/issues/51
+          (fetchpatch {
+            url = "https://patch-diff.githubusercontent.com/raw/Valloric/MatchTagAlways/pull/52.patch";
+            sha256 = "sha256-xnS8orNLcTckp57SHulEgRBY9cf5p845ERz9P3Htn54=";
+          })
+        ];
+      }))
       matchit-zip
       # Tweak tcomment so comments for (nearly) all languages get the
       # conflict marker characters I'm so used to having.
