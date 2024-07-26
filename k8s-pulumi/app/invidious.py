@@ -10,7 +10,7 @@ from pulumi_kubernetes.rbac.v1 import (
 import yaml
 from typing import Literal, Optional
 from .snowauth import Snowauth, Access
-from .util import declare_psql
+from .util import declare_psql, snow_deployment, http_service, http_ingress
 from .deage import deage
 
 
@@ -72,14 +72,15 @@ class Invidious:
             ),
         )
 
-        snowauth.declare_app(
-            name="yt",
-            namespace=self.namespace,
-            image="quay.io/invidious/invidious:latest",
-            port=3000,
-            # We don't want to expose invidious to the public web. Even with
-            # registration disabled, folks can still use it to browse youtube.
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
+        name = "yt"
+        namespace = self.namespace
+        image = "quay.io/invidious/invidious:latest"
+        port = 3000
+
+        deployment = snow_deployment(
+            name=name,
+            namespace=namespace,
+            image=image,
             env={
                 "INVIDIOUS_CONFIG": InvidiousConfig(
                     database_url=database.to_db_url("invidious"),
@@ -114,6 +115,27 @@ class Invidious:
                     extend_desc=True,
                 ).to_yaml(),
             },
+        )
+        service = http_service(deployment, port=port)
+
+        http_ingress(
+            service,
+            traefik_middlewares=snowauth.middlewares_for_access(
+                # We don't want to expose invidious to the public web. Even with
+                # registration disabled, folks can still use it to browse youtube.
+                access=Access.INTERNET_BEHIND_SSO_RAREMY,
+            ),
+        )
+
+        http_ingress(
+            service,
+            base_url="https://yt-lan.snow.jflei.com",
+            ingress_name="yt-lan",
+            traefik_middlewares=snowauth.middlewares_for_access(
+                # We don't want to expose invidious to the public web. Even with
+                # registration disabled, folks can still use it to browse youtube.
+                access=Access.LAN_ONLY,
+            ),
         )
 
         # According to https://docs.invidious.io/installation/#post-install-configuration,
