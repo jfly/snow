@@ -29,14 +29,29 @@ config dhcp 'lan'
 	option limit '150'
 	option leasetime '12h'
 	option dhcpv4 'server'
-	option dhcpv6 'server'
-	option ra 'server'
 	list ra_flags 'managed-config'
 	list ra_flags 'other-config'
+	# It appears that right now at&t is restricting us to a /64 ipv6
+	# allocation. It sounds like there's some workaround to get more subnets,
+	# but I also hope this will just go away someday when AT&T is no longer a
+	# piece of the picture.
+	# See message from davygrvy about at&t fiber: https://forums.sonic.net/viewtopic.php?t=17498&start=10
+	# and a dedicated thread about this: https://forums.sonic.net/viewtopic.php?t=14897
+	#
+	# Until we have a proper /56, we can use "relay" mode.
+	# https://forum.openwrt.org/t/ipv6-configuration-relay-single-64-prefix/53461/7
+	option dhcpv6 relay
+	option ra relay
+	option ndp relay
 
 config dhcp 'wan'
 	option interface 'wan'
 	option ignore '1'
+	# See above for why we're using "relay" mode.
+	option dhcpv6 relay
+	option ra relay
+	option ndp relay
+	option master 1
 
 config odhcpd 'odhcpd'
 	option maindhcp '0'
@@ -71,4 +86,3 @@ config host
 	option name 'taran'
 	option ip '192.168.3.101'
 	option mac '50:14:79:36:E7:ED'
-
