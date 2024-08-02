@@ -97,15 +97,18 @@ let
       };
       hash = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
     };
-    "3.8.10" = pkgs.python38.override {
-      sourceVersion = {
-        major = "3";
-        minor = "8";
-        patch = "10";
-        suffix = "";
-      };
-      hash = "sha256-avJKZgk92EC8zPNx1ARKMCfmVc8kWRzibkgCK8eSGdk=";
-    };
+    "3.8.10" = (import
+      (builtins.fetchGit {
+        # Descriptive name to make the store path easier to identify
+        name = "my-old-revision";
+        url = "https://github.com/NixOS/nixpkgs/";
+        ref = "refs/heads/nixpkgs-unstable";
+        rev = "05ae01fcea6c7d270cc15374b0a806b09f548a9a";
+      })
+      {
+        localSystem = pkgs.system;
+
+      }).python38;
     "3.6.15" = oldNixpkgs.python36.override {
       sourceVersion = {
         major = "3";
