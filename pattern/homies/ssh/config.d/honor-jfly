@@ -1,5 +1,10 @@
 # vi: ft=sshconfig
 
+Host honor-experimental-bastion
+    User ubuntu
+    Hostname 34.219.246.218
+    IdentityFile ~/.ssh/aws/honor/experimental-eks.pem
+
 Host honor-fe-interview
     User ubuntu
     Hostname bugs.honor-projects.com

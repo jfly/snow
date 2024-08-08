@@ -25,6 +25,16 @@ let
     };
 
   versions = {
+    "3.12.3" = (import
+      (builtins.fetchGit {
+        name = "nixpkgs-with-py-3.12.3";
+        url = "https://github.com/NixOS/nixpkgs/";
+        ref = "refs/heads/nixpkgs-unstable";
+        rev = "0c19708cf035f50d28eb4b2b8e7a79d4dc52f6bb";
+      })
+      {
+        localSystem = pkgs.system;
+      }).python312;
     "3.11.9" = pkgs.python311.override {
       sourceVersion = {
         major = "3";
