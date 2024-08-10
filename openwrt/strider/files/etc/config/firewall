@@ -181,3 +181,19 @@ config rule 'iot_dhcp'
 config forwarding
 	option src 'lan'
 	option dest 'iot'
+
+config rule
+	option name 'Allow-MQTT-iot'
+	option src 'iot'
+	option dest 'lan'
+	list dest_ip '192.168.1.110'
+	option dest_port '1883'
+	option target 'ACCEPT'
+
+config rule
+	option name 'Allow-MQTTS-iot'
+	option src 'iot'
+	option dest 'lan'
+	list dest_ip '192.168.1.110'
+	option dest_port '8883'
+	option target 'ACCEPT'

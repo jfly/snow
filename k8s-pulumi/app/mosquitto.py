@@ -161,6 +161,19 @@ class Mosquitto:
                 -----END AGE ENCRYPTED FILE-----
                 """
             ),
+            "pelydryn-dining-north": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUaEcxeFlZMHI4akxFRVJL
+                TGhiT0x6akVWcDZuRkszSk9WZ1dEQVlqTVdBCjFlSEpBYnFnZUpWd3VyWnhDRWtk
+                WG5NaFJHZGhvUlVacldISDBmM1FmS28KLS0tIFBsSWJTdms2R29mbG1sYmEzcmFr
+                S1puT3gwdU1oOVNjaEhXZy82TGxaZWMKswZ3IHbQALBMTX4YE5cIlnmKQeNY5cWa
+                djXY+v4V6LouEoQYqmPRhk/ubP78M2hETvyQ9QOieYGw4SDZVX6Ym9RBJEBlLv8S
+                7fpEGJs3zusvPFpy2TXJr5nGMO4QDeCDvOLfX7MVL8zCJ6Rld7yG7+xbyKeBgmYQ
+                pjvAu7NCsfPMdPrcnDZuiOfFV+Ye8oVb
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
             pulumi_username: pulumi_hashed_password,
         }
         passwords_secret = Secret(
