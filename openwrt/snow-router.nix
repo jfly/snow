@@ -18,7 +18,7 @@ let
     splitString
     ;
 
-  release = "23.05.3";
+  release = "23.05.4";
   profiles = openwrt-imagebuilder.lib.profiles {
     inherit pkgs release;
   };

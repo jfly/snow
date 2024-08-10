@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-scp -O -r root@aragorn:/etc/config files/etc/
+scp -O -r root@elfstone:/etc/config files/etc/

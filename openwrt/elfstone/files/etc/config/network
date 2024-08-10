@@ -39,6 +39,7 @@ config bridge-vlan
 config bridge-vlan
 	option device 'br-lan'
 	option vlan '33'
+	list ports 'lan4:t'
 	list ports 'wan:t'
 
 config interface 'iot'
