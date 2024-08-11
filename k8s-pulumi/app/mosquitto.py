@@ -94,7 +94,7 @@ class Mosquitto:
 
         # To generate an encrypted, hashed password:
         #
-        #   pw_file=$(mktemp) && mosquitto_passwd -b "$pw_file" "USERNAME" [PASSWORD] && grep -Po "(?<=USERNAME:).*" "$pw_file" | tools/encrypt
+        #   pw=$(pwgen -s 20 1) && pw_file=$(mktemp) && mosquitto_passwd -b "$pw_file" "USERNAME" "$pw" && grep -Po "(?<=USERNAME:).*" "$pw_file" | tools/encrypt && echo && echo "Password: $pw"
         hashed_passwords = {
             "jfly": deage(
                 """
@@ -171,6 +171,162 @@ class Mosquitto:
                 djXY+v4V6LouEoQYqmPRhk/ubP78M2hETvyQ9QOieYGw4SDZVX6Ym9RBJEBlLv8S
                 7fpEGJs3zusvPFpy2TXJr5nGMO4QDeCDvOLfX7MVL8zCJ6Rld7yG7+xbyKeBgmYQ
                 pjvAu7NCsfPMdPrcnDZuiOfFV+Ye8oVb
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-dining-south": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBrWWpwbVA1aU9jbkY4WVYw
+                ajhYK2pIdDFjVVFCK2c2b2xLd3loR3dWazFZClhsWTRxNXgrTi9wUkRCT0R2Zncx
+                cmtEMmhaWGR6NnFFTUZQdHlHOGh2WFUKLS0tIEcyZU9mVGJrQkw5eCt4Qk5VSktk
+                QVB2YmkzaFVRbmlPZzgxd2ZOMTlsakEKkmnMybAR4L0gLetyJDta2TAMal/YYXt8
+                IFJuJk7MVmK3+enKUaHJ1Sc1rH/OvDhQy4dpyIaobEKhc/DsXE99fvT2B93vuVF+
+                JTeg36hXYPXesExzUYge8V1NS1uMdx0EuaEk1//tQ/lg/sA/LwTMsj3QNSRc0AVg
+                tRoHDXBzGLj6UAVag63XP2bLlIqKXxXR
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-northeast-bedroom": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnS01jYTNkNmZzYXZ6ZFJx
+                ZzRMRHl2TXMxYmJ2NDJqR0VYMEh1c2JoQ2hZClJoaGkySzh3Z0lxZFpCN202bURa
+                UTB0cTBXZXhMTEcwbzFSM1B6UUhwMkUKLS0tIEN4aWZENG5aRmhUS3NRZVNHRm9a
+                dFp0eThpMFlIWUNVWXJEdU1VVTlqRGcKWgGQS7d2S54Yd2VVQEsDT46uZjputIrO
+                rBd5KCym/ABFazYZ9hfNgiL3NBTnHskeyffMO1lfN2aOSTd+HZ4inbYPRA5VhsEH
+                P0aEkQsPitU8+DNKReIkaRHNdzC/gGeg2nOguV98amjKvXNv9RhPeHf+34cavHBH
+                hafxC5p8JBGS1+94c0X9NRSO2CZYMzbiZA==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-northwest-bedroom": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtNmhqNTUya3NsTnFPV084
+                aUY2bno0ZmVkelRPMW43QXBlVG1wZXpsSDE0ClBZL3RDQ1M4VWJOZnE2ajZsN1Ja
+                c0M5U2piRWNZNlA3TlQwOVR3dzZhanMKLS0tIG1LcVNwMXNkZDdEUkJ3Sk1EVUwx
+                VlI3RWhVN1BsM0dkV2libk14WEU1VVEKuM49g5JpYyQ44YMjyv0pe8/0Ft9YHoGM
+                eL/fJ+xcEQXSR89wPjWBCDWvtsIt4T0ZAUHfSO9101nLT3TSJKbnd1hHSIvKVnWq
+                6vLeyxLrOKo5YAyYh6eAXmjbzL1PdkL6CIF3EFhyB7qFquNsBRzqBYZh7r6bUEjD
+                6vBF/DIvitiQ70I4bDrsv9ZKax3AY6S5CQ==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-north-bathroom": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0Ui9JellPK0l5eTVsZHh1
+                eXhPNUhiblVjWlc5ekU2L0QvRGd2RGdyeTE0CkxzQUpqcWhHQmlIZVNOMlUxN3B2
+                N3Q0dmFRdjlaUVFFUjg2d292YjZOYncKLS0tIEk2L2o2R3g2bXgwSDNNbTJPTHBB
+                TjVZYWpGRGZ6eEdncE5qRHFuVUtEcW8K2VL29SlGsve6fE2AqbISlx3m4C0Ood65
+                K7XRg9fJ5+08F9xdrJA3VSj2oCImRmrQWozGoBZh02IqXWGDeNKxMqIWUXjrOsn9
+                4bKDZGo6OmPXoWOEgDXQvZ4dQ+C4qlfgK24xwPgTuvQ05muY22i39RqVoIXtFOt/
+                3FfloAWRmJfJp8DtGkpPcCuGl65xgKuurg==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-kitchen-north": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNYUVTOVRwSS9JaTg0MDdp
+                TC9WZTRWOG9zcnZJSXE4bjNHT2JCcEs2d2dBCmk5NkdhWEpsZTB3OUFyUWFweFh3
+                ZzJRaXlXeTMwMTliRU5zZVVxOUUweU0KLS0tIFpCdDFiMzVxa2s5U0w1YkpaUGJs
+                Z285VU5tQXFWN0VjaHdCMHNXRFJZamcKklDsYupt/5Kty3plbJq+hhlIYQTG6Skk
+                1RWgGK4tz14lo8LYqwy00owAgruyCxObe/mgStyaMjtMztZGQxp22nr9T/F4haAZ
+                bu2p7QVIpkPleZhT0z6A3mLOdCS80QK6Le4Fiq9b7rRk1wqBGsnH8+JB8kf+qLk2
+                d8xyHOYY42Tv48rJ3u4lkYTAWWIAIyXbjg==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-kitchen-south": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGbG9KM1gxVjBFS0ozbm9P
+                aldZWWR3bUF1amthdlJWRnlmdVNseEZudWdNClFLNGZod09UMjhlanQvTHdBODUr
+                OFEzU2lJQkoyUlR1bDlCOVRJa1JDWm8KLS0tIHNZN0h3M1c2bmc4bU1hcElwRHJT
+                RU5xeGEwSXBBanJrZWlwd0g3RWV2UWsKacO7nsZulaX+SyfDSeRlUdiqysYlBjl8
+                X+WI1utTT+tib0WASUe6N/YbS7shIlS1Y/ekMUFVr3uMnpMf3mqkLV3i0LGk0aUa
+                FiWQmIyHamsttQQ89f62RUaMKvrv6OJT3bCqPdAjW+16ZcwQApmIxi3+csE/fd7L
+                qPR567H1i9dSoCr+MMN/magrjtfAE6z61g==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-living-room-east": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvZW44aWFubzk3aXR0SVVN
+                c2dlQWlTOTVTMDlzUWVrdWF6Zk5XaGNISjFRClNEaDNoZHZBcStma0pLVUJFaU8y
+                UkRINHdjTXZUSTFIMjQ5TFlwUTFFeTQKLS0tIC9tSCsxeFp0cm4yLzhFN0dJYlEr
+                aGhzTVdCMlZhVkFxbUVJWmEyUGdaMm8KPKvhuUHJu3G2vhecl+Xkw+g0nE4ozqw4
+                zmZ9KVuJw369SAI9qBdvFAcPlVVRngmJ0Gt+yg8mYEI/9lBiPz6iBDMD4EDSk95h
+                vQ6Hookb42BNS6F3WMOhYRRR99poX7dy2O5jS2GhmjBUPdDLaFJu6fAA8+dQcSQB
+                9d9ytLdsQOPZ4gpULu7dYvpwOxoRnJ5IOw==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-living-room-south": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSRUhkNzNBSGRtUmcwUjdy
+                Mm9PbG5QSldWU3FYMWl4c2N5RFVXTGRvSDI0CjNacjZMbVZxY1hkNWQ5RkdGcEQz
+                NnJFUW0xK1ZnSFBsN3RGZTl6QnlucTgKLS0tIGNKaGlDU1FOOXVXYW1ETjBYZkpS
+                SWNMeC8rb0R4RkM4bWZLVmZBQy9uZ1EKABjW8iiSQk9nbibrrt7+AdDa4ObkJtWm
+                s0UVXdLLfL1wqM/Umt6aqu07gc7cFEIeCtxgWtB0zvTNKZk0airO49LO5YR1PsPO
+                Fxz0ipaoy9AlPbH9dyRfmbnHeFjdaI0GNyCI0Os20YVshL9iKHoRMgrBZRk5MV7L
+                uZnqk0PMPgih2QESBEXlQmyVqObqiR0FJQ==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-fireplace": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTdS92ZWQ1cW1Ta1l1bDJs
+                c3dUY29Ycy85UXowc24vQmF1S3MyY0J4LzNZCmVxWXhyc2Z1R0VwTE9YaFRtbmp5
+                eWNWc0h2OFhiMm9RcE1RM082SFBxZkUKLS0tIFFieU9mWjZlRUdORzNmMFNieE9o
+                V2xMMWVVMUlXU0UwajNlVm90cDhLMjAKKtr/NEuPYIhhKeF4yoFoN0zZfP/cb1+q
+                UO61GMgEDjW73Fg6SkrtQcQbhxD/tghey1AJMuMBU9EDvOknRMVz3V2GJJ9egS/b
+                4OPw/pnjAI4WKKjC8RuQPD8qeLUnbBYJNoUd0PMZwqtm58kurhkJFUnNwNpoWuAO
+                addN+NSTzFwgfQnHpKvQsU9JgV8vT6lu5Q==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-south-bedroom-north": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNQXA3bTJYajN3ejFwSk83
+                RUdqNCtLUDAwczM4dWN5YkNTeXpmYXdTYXdZCnlBSVEvZi82UnhrMFpRMkxrcHN2
+                M1lMTlF3aFllQzN6Uk9CQVVkc0dFcFkKLS0tIFBFYURackZ2aW1hNzFYUmh6bVRs
+                aC8rbWdDdFBDNXRxYndINUZmQVJrSmsKMFyGbODl8TUb+58K9njLUgLBQ5Iqrn12
+                2VS0l1rYIhxCuCQTb6S3WXHeNn5/++w070f7nGah/D30fkeBntCIFJm3dd0bEYW1
+                DxrjmG1eKf+4YZ7OVWTsoL2rZPyebwpoGbtyShjXKkOt8y54pnxctZQu1sFl6DCt
+                uDgJ0jHIH5E0PCPbKzS0bLYrA1YJAazZJw==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-south-bedroom-south": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzT3dJWS95Sk5lNldXejFV
+                RHlTVzMvMzZLa3U0cjlQTi9ROU5yOTFmMjBBClRQVlVCdDFkVmczdW4zMmNUYnIy
+                SkovRG80UnhXR1V4NWhmQmh1aVQvMlkKLS0tIFhLQkhDSHlNUGVjbURmWGpVQ2Y5
+                Q1BsYUNmdHJaQ3lWRmxuMnRMTFlDTGsKi3FE4yykxgRIIEOo21ag9G9691Cq/MqW
+                cTlJ1zgoU6oZkubeUGo5TqOo0Kg285G7TAbCdWHPVKFJHB1m881s1PaWnkj6s4vK
+                ELgpejwZl0n+h8eKsFCQ586SO8cS9JToRh4T9GLj0I+RXfoULdygt39MQL+up/44
+                bQiNn7gyibz+BLCbVIZIHNY/jXiuI87y3A==
+                -----END AGE ENCRYPTED FILE-----
+                """
+            ),
+            "pelydryn-south-bathroom": deage(
+                """
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBxMUpIaGpnNzZFN09aRk9U
+                YnFhVzlFSm5BaFcvaHRxbUVjTno4R0xWbUZ3ClpnYzFYVVUyelFmNlVRbzVVNTJm
+                R0xlZlNQQVF4cWQxUEdzSGluUkdWdG8KLS0tIGoxcWhZYXhLZFNYYmFZZEkxQU5V
+                T3hZb3BBTjhIUCt0cEEzeEdKMWNtSjQKOFdG0DLBZ8kNF7IQR+EdELrG2X3iUmvD
+                vfMrvTOlFHq8pe7b+0YXGlgSMrMF9TNNfB95Ow3qwKw4sMU2lZMmyJyDAeDCaIjO
+                Ym+a7cBWCFYy1e53KeTFVs2K82m1cxNapARmMwIZeEqZN0u4jFY9Ya90cMLhJLd2
+                iTaTb9+9IaaqQ3JeFXjqtc6FivUkAEcjvA==
                 -----END AGE ENCRYPTED FILE-----
                 """
             ),

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+nix-shell -p mqttui --run "mqttui -b mqtts://mqtt.snow.jflei.com --username jfly --password $(</run/agenix/mosquitto-password)"
