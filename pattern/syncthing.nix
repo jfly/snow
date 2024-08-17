@@ -1,8 +1,15 @@
 { config, pkgs, lib, ... }:
 
 let
+  inherit (pkgs)
+    symlinkJoin
+    makeWrapper
+    stc-cli
+  ;
+
   home = "/home/${config.snow.user.name}";
   syncDir = "${home}/sync";
+  configDir = "${home}/.config/syncthing";
 in
 {
   services = {
@@ -16,7 +23,7 @@ in
         # directory.
         "--no-default-folder"
       ];
-      configDir = "${home}/.config/syncthing";
+      inherit configDir;
       overrideDevices = true;
 
       # We can't enable `overrideFolders` as it removes the encrypted folders
@@ -142,4 +149,17 @@ in
         );
       };
     };
+
+  environment.systemPackages = [
+    # Add a wrapped version of `stc` that knows where our syncthing homedir is.
+    (symlinkJoin {
+      name = stc-cli.name;
+      paths = [ stc-cli ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/stc \
+            --add-flags "--homedir=${configDir}"
+      '';
+    })
+  ];
 }
