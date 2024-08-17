@@ -2,79 +2,12 @@
 
 let
   inherit (pkgs.snow)
-    nm-vpn-add
     mfa
     ;
-  h4-cli = pkgs.rustPlatform.buildRustPackage rec {
-    pname = "cli";
-    # TODO: find a better way of keeping this up to date. Perhaps turn upstream
-    # into a flake?
-    version = "0.0.94";
-
-    src = builtins.fetchGit {
-      url = "git@github.com:joinhonor/cli.git";
-      ref = "refs/tags/${version}";
-      rev = "bc175954e877cfa804d409e8c1e4bcf8928700be";
-    };
-
-    cargoHash = "sha256-MCbA89t1HBDNRX6EYTUxaHJcfJS8/3P722/dtlYMi1o=";
-
-    # I'm not sure if this belongs in configurePhase (or even if it belongs in this package).
-    # I originally tried adding it to installPhase, but that didn't work
-    # because I couldn't figure out how to invoke the original installPhase.
-    configurePhase = ''
-      # Copy shell completions
-      mkdir -p $out/share/zsh/site-functions
-      cp completions/_honor $out/share/zsh/site-functions/_honor
-    '';
-
-    buildInputs = with pkgs; [ makeWrapper ];
-
-    # Add in various programs that the cli expects to be able to find/install
-    # itself.
-    postFixup = ''
-      wrapProgram $out/bin/honor \
-        --prefix PATH : ${lib.makeBinPath (with pkgs; [
-          mysql
-        ])}
-    '';
-
-    meta = with lib; {
-      description = "A CLI to help streamline common Honor engineering tasks.";
-      homepage = "https://github.com/joinhonor/cli";
-    };
-  };
-  my-aws-vault = pkgs.symlinkJoin {
-    name = "aws-vault";
-    paths = [ pkgs.aws-vault ];
-    postBuild =
-      let
-        wrapper = pkgs.writeShellScript "aws-vault-wrapper" ''
-          # TODO: Look into keyctl backend once
-          # https://github.com/99designs/aws-vault/pull/1202 is merged.
-          export AWS_VAULT_BACKEND="file"
-          export AWS_VAULT_FILE_PASSPHRASE=$(cat ${config.age.secrets.aws-vault-file-passphrase.path})
-
-          exec @og@ "$@"
-        '';
-      in
-      ''
-        og=$out/bin/.aws-vault-wrapped
-        mv $out/bin/aws-vault $og
-        cp ${wrapper} $out/bin/aws-vault
-        substituteInPlace $out/bin/aws-vault \
-          --replace-fail "@og@" $og
-      '';
-  };
 in
 {
   options = {
     snow = {
-      enable-h4 = lib.mkOption {
-        type = lib.types.bool;
-        description = lib.mdDoc "Whether or not to enable h4 features (which requires private git credentials)";
-        default = true;
-      };
     };
   };
 
@@ -124,9 +57,6 @@ in
       script =
         let
           docker-config-template = pkgs.writeText "docker-config-template" (builtins.toJSON {
-            "credHelpers" = {
-              "900965112463.dkr.ecr.us-west-2.amazonaws.com" = "ecr-login";
-            };
             "auths" = {
               "containers.snow.jflei.com" = {
                 "auth" = "@auth_placeholder@";
@@ -145,11 +75,8 @@ in
         "${gen-docker-conf}/bin/gen-docker-conf";
     };
 
-    # We need to install openvpn3 explicitly because NetworkManager-openvpn only
-    # has support for openvpn2. See
-    # https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/issues/69.
-    programs.openvpn3.enable = true;
-    # With systemd-resolved running, openvpn3 won't stomp on /etc/resolv.conf.
+    # I probably don't need this anymore. It was useful back when I used
+    # openvpn3, to keep it from stomping on /etc/resolv.conf.
     services.resolved.enable = true;
 
     # Set up a local DNS server
@@ -168,7 +95,6 @@ in
         bind-dynamic = true;
 
         address = [
-          "/local.honor/127.0.0.1"
           # See notes above about `virtualisation.docker.daemon.settings.dns` to
           # understand why this is necessary.
           "/host.docker.internal/172.17.0.1"
@@ -179,8 +105,6 @@ in
     # Set up ssh agent
     programs.ssh = {
       startAgent = true;
-      enableAskPassword = true;
-      askPassword = "${mfa}/bin/mfa-askpass";
       extraConfig = ''
         AddKeysToAgent yes
       '';
@@ -205,21 +129,6 @@ in
     # Needed by ~/bin/allprocs
     #<<< programs.sysdig.enable = true;
 
-    # See my-aws-vault for details.
-    age.secrets.aws-vault-file-passphrase = {
-      rooterEncrypted = ''
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYOE5Yd1hjTisvcDRzVTJ2
-        REFjSkZoYWRJOGVxa3ZTdTV1MnQ2YWNjNzIwCmIrVWpINWFrN01reXZ6Z0NtZC94
-        Z2JUVHJtaDJIRlQ4cHRuK1FleWF1ZGsKLS0tIFZVWUZlWE9ac2JuUVl1R20xMCt0
-        ZHBFeXphVVJUT090U0l3TC9LOVVEUmMKApEd7chMuK9kB2fCOscPI16vjlwPyA7V
-        rC77LyauPwyX47G+00wJ2qCerKxSzjf1/WjCWg==
-        -----END AGE ENCRYPTED FILE-----
-      '';
-      owner = config.snow.user.name;
-      group = "users";
-    };
-
     environment.systemPackages = with pkgs; [
       ### Version control
       git
@@ -239,7 +148,6 @@ in
       })
 
       ### Network
-      nm-vpn-add
       curl
       wget
       whois
@@ -263,26 +171,7 @@ in
       snow.mycli
       miller
       jq
-
-      ### Honor
-      awscli2
       mfa
-      my-aws-vault
-      (lib.mkIf config.snow.enable-h4 h4-cli)
-      # server-config
-      (vagrant.override {
-        # I'm having trouble installing the vagrant-aws plugins with this setting enabled.
-        withLibvirt = false;
-      })
-      gnupg
-      openssl
-      #<<< aws-sam-cli
-      # dev setup scripts
-      amazon-ecr-credential-helper
-      # external-web
-      nginx
-      # kube-config (and others)
-      gnumake
 
       ### editor
       snow.neovim

@@ -102,11 +102,6 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
       traces-vim
       vim-rsi # readline shortcuts in useful places
       vim-mergetool
-      (pkgs.vimUtils.buildVimPlugin {
-        pname = "honorjs-test-runner";
-        version = "0.0.1";
-        src = ./plugin;
-      })
 
       # Linting/autofixing/LSP, etc
       editorconfig-vim

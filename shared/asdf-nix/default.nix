@@ -8,7 +8,6 @@ let
     java = pkgs.callPackage ./java.nix { };
     pipenv = pkgs.callPackage ./pipenv.nix { };
     maven = pkgs.callPackage ./maven.nix { };
-    thrift = pkgs.callPackage ./thrift { };
     poetry = pkgs.callPackage ./poetry.nix { };
     nodejs = pkgs.callPackage ./nodejs.nix { };
     yarn = pkgs.callPackage ./yarn.nix { };

@@ -1,6 +1,13 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3
 
+# Search through the given directory (defaults to ~/src) for
+# Git workspaces with uncommitted/unpushed changes.
+# Useful if you're going to nuke your home directory and want
+# to make sure you're not in the middle of anything.
+
+# vim: ft=python
+
 import argparse
 import subprocess
 from pathlib import Path
@@ -45,9 +52,9 @@ def search(p: Path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("dir", type=Path)
+    parser.add_argument("dir", type=Path, default="~/src", nargs="?")
     args = parser.parse_args()
-    search(Path(args.dir))
+    search(Path(args.dir).expanduser())
 
 if __name__ == "__main__":
     main()

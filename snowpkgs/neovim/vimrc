@@ -103,49 +103,6 @@ endfunction
 
 let g:test#custom_strategies = {'fat_runner': function('ShtuffStrategy')}
 let g:test#strategy = "fat_runner"
-
-" vim-test transformation to run nose tests via `make singletest`.
-" If a command looks like "nosetests ...", transform it to
-" "make singletest NOSEARGS='...'"
-function! HonorTransform(cmd) abort
-    " Check if we're in a repo that has a singletest target. If it does not,
-    " who knows what's going on. Give vim-test's unmodified command a chance.
-    let output = system("grep singletest: Makefile*")
-    if v:shell_error != 0
-        return a:cmd
-    endif
-
-    if a:cmd =~ '.py:'
-        " We're probably running a single single test, and therefore we set
-        " the amount of parallelism to 1, so pdb and other stuff works well.
-        " There might be a better way of detecting if we're inside of
-        " `TestFile`...
-        let l:parallelism="PARALLELISM=1"
-    else
-        let l:parallelism=""
-    endif
-    if a:cmd =~ '^nosetests '
-        let l:cmd_sans_nosetests = "-s ".substitute(a:cmd, '^nosetests ', '', '')
-        let l:new_cmd = 'make singletest '.l:parallelism.' NOSEARGS='.shellescape(l:cmd_sans_nosetests)
-    elseif a:cmd =~ '^pipenv run pytest '
-        let l:cmd_sans_nosetests = "-s ".substitute(a:cmd, '^pipenv run pytest ', '', '')
-        let l:new_cmd = 'make singletest '.l:parallelism.' PYTESTARGS='.shellescape(l:cmd_sans_nosetests)
-    else
-        let l:new_cmd = a:cmd
-    endif
-    return l:new_cmd
-endfunction
-
-if executable('nosetests')
-    let test#python#runner = 'nose'
-else
-    let test#python#runner = 'pytest'
-endif
-
-let g:test#custom_transformations = {'honor': function('HonorTransform')}
-let g:test#transformation = 'honor'
-
-let test#custom_runners = {'HonorJs': ['HonorRunner']}
 """"""
 
 nnoremap <leader>ts :w<CR>:TestSuite<CR>

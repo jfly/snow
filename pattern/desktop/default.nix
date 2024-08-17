@@ -16,7 +16,6 @@ let
     dunst
     jbright
     jvol
-    polybar-openvpn3
     with-alacritty
     xmonad
     ;
@@ -38,7 +37,6 @@ let
   };
   polybarConfig = pkgs.substituteAll {
     src = ./polybar-config.ini;
-    polybar_openvpn3 = polybar-openvpn3;
   };
   # TODO: consolidate with pattern/laptop.nix
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''

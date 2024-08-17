@@ -267,27 +267,7 @@
           inherit (nixpkgs) lib;
         in
         lib.mapAttrs'
-          (name: nixosConfiguration:
-            lib.nameValuePair
-              "nixos-${name}"
-              (
-                let
-                  finalSystem = (if name == "pattern" then
-                    nixosConfiguration.extendModules
-                      {
-                        modules = [
-                          ({ config, pkgs, lib, ... }: {
-                            # Disable building the honor cli in CI: it requires
-                            # access to a private repo that I only have access
-                            # to from my laptop.
-                            snow.enable-h4 = false;
-                          })
-                        ];
-                      } else nixosConfiguration);
-                in
-                finalSystem.config.system.build.toplevel
-              )
-          )
+          (name: nixosConfiguration: lib.nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
           nixosConfigurations;
     };
 }

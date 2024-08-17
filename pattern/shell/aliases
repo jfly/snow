@@ -8,23 +8,6 @@ alias o=xdg-open
 # https://github.com/NixOS/nixpkgs/issues/59209
 alias bash="nix run nixpkgs#bashInteractive --"
 
-# Honor specific stuff
-function mcli {
-    __database=${1:=$DEFAULT_MYSQL_DATABASE}
-    shift
-    mycli --user "$MYSQL_USER" --host "$MYSQL_HOST" --port "$MYSQL_PORT" "$__database" "$@"
-}
-function truncate_all_tables {
-    query_string="SET FOREIGN_KEY_CHECKS = 0;"
-    for table in $(echo 'show tables' | mcli sonasandboxdb | tail +2); do
-        query_string="$query_string TRUNCATE TABLE \`$table\`; "
-    done
-    query_string="$query_string SET FOREIGN_KEY_CHECKS = 1;"
-
-    echo "$query_string"
-}
-alias h4salt="ssh bastion ssh saltmaster sudo journalctl --follow --lines=10000 | grep pull-and-run"
-
 # docker stuff
 function de {
     CONTAINER=$1

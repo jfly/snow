@@ -3,6 +3,6 @@ strict_env = true
 
 [whitelist]
 prefix = [
-    "~/src/github.com/joinhonor",
     "~/src/github.com/jfly",
+    "~/sync/scratch",
 ]
