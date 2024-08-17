@@ -92,9 +92,11 @@ class Mosquitto:
             """
         )
 
-        # To generate an encrypted, hashed password:
+        # To generate a new mosquitto user + password:
         #
-        #   pw=$(pwgen -s 20 1) && pw_file=$(mktemp) && mosquitto_passwd -b "$pw_file" "USERNAME" "$pw" && grep -Po "(?<=USERNAME:).*" "$pw_file" | tools/encrypt && echo && echo "Password: $pw"
+        #   python -m tools.gen_mosquitto_user cool-new-user
+        #
+        # And follow the instructions.
         hashed_passwords = {
             "jfly": deage(
                 """

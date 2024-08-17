@@ -2,3 +2,4 @@
 **/*.secret
 /.direnv
 result
+__pycache__
