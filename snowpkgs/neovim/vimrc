@@ -496,6 +496,9 @@ lua << EOF
     local builtin = require('telescope.builtin')
     telescope.setup {}
     vim.keymap.set('n', '<leader>fs', builtin.lsp_workspace_symbols, {})
+
+    -- nvim-autopairs
+    require("nvim-autopairs").setup {}
 EOF
 """""""
 

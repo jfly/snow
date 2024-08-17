@@ -103,6 +103,9 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
       vim-rsi # readline shortcuts in useful places
       vim-mergetool
 
+      # For James
+      nvim-autopairs
+
       # Linting/autofixing/LSP, etc
       editorconfig-vim
       ale
