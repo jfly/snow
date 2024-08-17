@@ -5,7 +5,6 @@ let
     shtuff
     jgit
     my-yazi
-    smag
     ;
 in
 {
