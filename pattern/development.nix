@@ -105,6 +105,8 @@ in
     # Set up ssh agent
     programs.ssh = {
       startAgent = true;
+      enableAskPassword = true;
+      askPassword = "${mfa}/bin/mfa-askpass";
       extraConfig = ''
         AddKeysToAgent yes
       '';
