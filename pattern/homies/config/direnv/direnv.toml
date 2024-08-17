@@ -1,8 +1,0 @@
-[global]
-strict_env = true
-
-[whitelist]
-prefix = [
-    "~/src/github.com/jfly",
-    "~/sync/scratch",
-]

@@ -56,6 +56,21 @@ in
     keybindings = true;
   };
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+  environment.etc."direnv/direnv.toml".text = ''
+    [global]
+    strict_env = true
+
+    [whitelist]
+    prefix = [
+        "~/src/github.com/jfly",
+        "~/sync/scratch",
+    ]
+  '';
+
   environment.systemPackages = with pkgs; [
     ### sd (script directory)
     snow.sd
@@ -70,7 +85,6 @@ in
     ### Misc utils
     q
     jgit
-    direnv
     psmisc # provides pstree
     acpi # check laptop battery
     pwgen

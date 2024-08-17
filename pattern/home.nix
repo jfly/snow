@@ -46,13 +46,6 @@ in
       ".themes" = pkgs.snow.absoluteRepoPath "/pattern/homies/themes";
       ".config/gtk-3.0" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/gtk-3.0";
 
-      # Set up direnv.
-      # TODO: figure out how to get this config living closer to the
-      # installation of direnv itself.
-      ".config/direnv/direnvrc" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/direnvrc";
-      ".config/direnv/direnv.toml" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/direnv.toml";
-      ".config/direnv/lib" = pkgs.snow.absoluteRepoPath "/pattern/homies/config/direnv/lib";
-
       # Secrets
       ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";
       ".android/adbkey" = "${homeDir}/sync/linux-secrets/.android/adbkey";

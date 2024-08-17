@@ -6,12 +6,6 @@ export HOSTNAME=$(hostname)
 export LESS="--no-init --quit-if-one-screen --RAW-CONTROL-CHARS"
 ##################################
 
-###
-### Set up direnv
-###
-# Enable direnv
-eval "$(direnv hook zsh)"
-
 ## Python stuff
 # Make sure we never `pip install` things outside of a virtualenv.
 export PIP_REQUIRE_VIRTUALENV=true
