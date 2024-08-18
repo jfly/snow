@@ -7,8 +7,7 @@ let
 in
 {
   options = {
-    snow = {
-    };
+    snow = { };
   };
 
   config = {

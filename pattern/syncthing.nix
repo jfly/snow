@@ -5,7 +5,7 @@ let
     symlinkJoin
     makeWrapper
     stc-cli
-  ;
+    ;
 
   home = "/home/${config.snow.user.name}";
   syncDir = "${home}/sync";
