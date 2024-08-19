@@ -33,9 +33,11 @@ def generate(names: list[str]):
         hashed_pw = hash_pw_for_mosquitto(pw)
         encrypted = encrypt(hashed_pw)
 
+        conflict_marker_start = ">" * 3
+        conflict_marker_end = "<"*3
         py = f'''\
             "{name}": deage(
-                # >>> Unencrypted password (DELETE ME!!!): {pw} <<<
+                # {conflict_marker_start} Unencrypted password (DELETE ME!!!): {pw} {conflict_marker_end}
                 """
 {indent(encrypted.strip(), " "*16)}
                 """
