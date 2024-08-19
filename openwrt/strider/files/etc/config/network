@@ -26,10 +26,20 @@ config interface 'lan'
 config interface 'wan'
 	option device 'wan'
 	option proto 'dhcp'
+	# https://developers.cloudflare.com/1.1.1.1/ip-addresses/
+	# TODO: figure out encrypted dns (https://openwrt.org/docs/guide-user/services/dns/doh_dnsmasq_https-dns-proxy)
+	option peerdns '0'
+	list dns '1.1.1.1'
+	list dns '1.0.0.1'
 
 config interface 'wan6'
 	option device 'wan'
 	option proto 'dhcpv6'
+	# https://developers.cloudflare.com/1.1.1.1/ip-addresses/
+	# TODO: figure out encrypted dns (https://openwrt.org/docs/guide-user/services/dns/doh_dnsmasq_https-dns-proxy)
+	option peerdns '0'
+	list dns '2606:4700:4700::1111'
+	list dns '2606:4700:4700::1001'
 
 config interface 'iot'
 	option proto 'static'

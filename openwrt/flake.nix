@@ -1,8 +1,8 @@
 {
   inputs = {
     # TODO: switch back to upstream once the hashes are fixed
-    openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
-    # openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
+    # openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
+    openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
   };
   outputs = { self, nixpkgs, openwrt-imagebuilder }:
     let
