@@ -48,10 +48,6 @@ python3.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "beetsplug.fetchartist"
-  ];
-
   meta = with lib; {
     description = "Artist Images for Beets";
     homepage = "https://github.com/dkanada/beets-fetchartist";

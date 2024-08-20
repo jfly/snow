@@ -103,10 +103,11 @@ function deploy_nix() {
             exit 0
         fi
 
-        colmena apply-local --sudo
+        nixos-rebuild switch --use-remote-sudo --flake ".#$target"
     else
         [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_nix for remote hosts, sorry!" && exit 1
-        colmena apply --on "$target"
+        # Note: --impure is a workaround for https://github.com/zhaofengli/colmena/issues/202
+        colmena apply --on "$target" --impure
     fi
 }
 

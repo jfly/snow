@@ -128,7 +128,7 @@ in
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
     # Needed by ~/bin/allprocs
-    #<<< programs.sysdig.enable = true;
+    programs.sysdig.enable = true;
 
     environment.systemPackages = with pkgs; [
       ### Version control
