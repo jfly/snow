@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+
+# Some useful docs:
+# https://nixos.wiki/wiki/Nixpkgs/Create_and_debug_packages#Using_nix-shell_for_package_development
+
+set -euo pipefail
+
+# NOTE: Copied from direnv stdlib!
+# Usage: find_up <filename>
+#
+# Outputs the path of <filename> when searched from the current directory up to
+# /. Returns 1 if the file has not been found.
+#
+# Example:
+#
+#    cd /usr/local/my
+#    mkdir -p project/foo
+#    touch bar
+#    cd project/foo
+#    find_up bar
+#    # output: /usr/local/my/bar
+#
+find_up() {
+  (
+    while true; do
+      if [[ -f $1 ]]; then
+        echo "$PWD/$1"
+        return 0
+      fi
+      if [[ $PWD == / ]] || [[ $PWD == // ]]; then
+        return 1
+      fi
+      cd ..
+    done
+  )
+}
+
+TOOL_NAME=$(basename "$0")
+NIX_HACK_DEV_ENV_FILENAME=".nix-hack-dev-env"
+
+if dev_env=$(find_up "$NIX_HACK_DEV_ENV_FILENAME"); then
+    # TODO: figure out why NIX_LOG_FD must be set
+    export NIX_LOG_FD="2"
+    # shellcheck source=/dev/null
+    source "$dev_env"
+fi
+
+cmd_runPhases() {
+	if [ $# -lt 1 ]; then
+        echo "Usage: $TOOL_NAME [phase1] [phase2] [...]" >/dev/stderr
+
+        echo "" >/dev/stderr
+		echo "Where [phaseN] is a phase from the list below:" >/dev/stderr
+		typeset -f genericBuild | grep 'phases=' | tr ' ' '\n' | grep Phase$ >/dev/stderr
+
+		exit 1
+	fi
+
+    # Unfortunately, nix builds don't always work with bash "strict mode"
+    # enabled, so we need to turn it off before we run the chosen phases.
+    set +euo pipefail
+    for phase in "$@"; do
+        runPhase "$phase" &>/dev/stderr
+    done
+    set -euo pipefail
+
+    echo "$PWD"
+}
+
+cmd_runPhase() {
+    cmd_runPhases "$@"
+}
+
+cmd_hack() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: $TOOL_NAME hack [attr_path]" >/dev/stderr
+
+        echo "" >/dev/stderr
+        echo "Where [attr_path] is a package in <nixpkgs>." >/dev/stderr
+
+        exit 1
+    fi
+
+    local attr_path=$1
+
+    local nixpkgs=~/src/github.com/NixOS/nixpkgs
+
+    local name
+    name=$(nix eval --raw --file "$nixpkgs" "$attr_path.name")
+
+    local hack_dir=~/tmp/nix-hack/$name
+    mkdir -p "$hack_dir"
+
+    echo "Generating nix-hack dev env..." >/dev/stderr
+    nix print-dev-env --file "$nixpkgs" "$attr_path" > "$hack_dir/$NIX_HACK_DEV_ENV_FILENAME"
+
+    echo "echo 'Welcome to a nix-hack directory!'" > "$hack_dir/.envrc"
+    echo "echo 'To see a list of build phases to run: $TOOL_NAME runPhase'" >> "$hack_dir/.envrc"
+    direnv allow "$hack_dir"
+
+    echo "$hack_dir"
+}
+
+main() {
+    if [ $# -lt 1 ]; then
+        echo "Usage: $TOOL_NAME [subcommand]" >/dev/stderr
+
+        echo "" >/dev/stderr
+        echo "Available subcommands:" >/dev/stderr
+        echo "  hack" >/dev/stderr
+
+        echo "" >/dev/stderr
+        echo "These subcommands are only valid when in a hack directory produced by '$TOOL_NAME hack':" >/dev/stderr
+        echo "  runPhase" >/dev/stderr
+
+        exit 1
+    fi
+
+    local subcommand=$1
+    shift
+
+    "cmd_${subcommand}" "$@"
+}
+
+main "$@"

@@ -74,12 +74,26 @@ function gnb {
     fi
 }
 co() {
-    dir=$(jgit co "$@")
-    cd "$dir"
+    if dir=$(jgit co "$@"); then
+        cd "$dir"
+    else
+        return $?
+    fi
+}
+
+nix-hack() {
+    if dir=$(command nix-hack "$@"); then
+        cd "$dir"
+    else
+        return $?
+    fi
 }
 
 # quick hacks
 newpy() {
-    dir=$(command newpy "$@")
-    cd "$dir"
+    if dir=$(command newpy "$@"); then
+        cd "$dir"
+    else
+        return $?
+    fi
 }
