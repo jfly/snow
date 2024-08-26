@@ -41,36 +41,20 @@ class HomeAssistant:
             env={
                 "TZ": "America/Los_Angeles",
             },
-            container_security_context=kubernetes.core.v1.SecurityContextArgs(
-                # I haven't found a better way to give permission to use the character device.
-                # See https://www.reddit.com/r/kubernetes/comments/13j791x/zigbee2mqtt_container_with_usb_device_but_not/
-                privileged=True,
-            ),
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
                     mount_path="/config",
                     name="ha-config",
                 ),
-                kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/dev/ttyACM0",
-                    name="ttyacm",
-                ),
             ],
-            # TODO: look into k8s persistent volumes for this
             volumes=[
+                # TODO: look into k8s persistent volumes for this
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
                         path="/state/ha-config",
                         type="",
                     ),
                     name="ha-config",
-                ),
-                kubernetes.core.v1.VolumeArgs(
-                    host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/dev/ttyACM0",
-                        type="CharDevice",
-                    ),
-                    name="ttyacm",
                 ),
             ],
         )

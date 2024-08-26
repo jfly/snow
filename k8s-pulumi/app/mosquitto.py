@@ -14,6 +14,10 @@ from .util import snow_deployment
 from .deage import deage
 from pulumi_crds import certmanager
 
+# Some mqtt clients don't support mqtts :(
+# See https://github.com/awilliams/wifi-presence/issues/21 for one example.
+MQTT_PORT = 1883
+MQTTS_PORT = 8883
 
 class Mosquitto:
     def __init__(self, namespace: str):
@@ -34,24 +38,20 @@ class Mosquitto:
             ),
         )
 
-        # Some mqtt clients don't support mqtts :(
-        # See https://github.com/awilliams/wifi-presence/issues/21 for one example.
-        mqtt_port = 1883
-        mqtts_port = 8883
         conf = dedent(
             f"""
             persistence true
             persistence_location /mosquitto/data/
             per_listener_settings true
 
-            listener {mqtts_port}
+            listener {MQTTS_PORT}
             keyfile  /mosquitto/cert/tls.key
             certfile /mosquitto/cert/tls.crt
             allow_anonymous false
             protocol mqtt
             password_file /mosquitto/passwords/passwords
 
-            listener {mqtt_port}
+            listener {MQTT_PORT}
             allow_anonymous false
             protocol mqtt
             password_file /mosquitto/passwords/passwords
@@ -88,6 +88,32 @@ class Mosquitto:
             l1Ad79TOqeqvIDPHtGxwXsgPfMAsOOuUq7xxQPIhkU1jaoFe1exA/tEFG/5Go6On
             k0qZc1p1WOP4DeBYAStUNuEm02c2bOTovEsDirVRt0F51FaPTHlPyYAKzDX0S9+m
             ZAu4GpuPStgU64UKn6q2ZgtYM1gfh5CI
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+
+        self.zigbee2mqtt_username = "zigbee2mqtt"
+        self.zigbee2mqtt_password = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaQ1NqQjJzbk15OWF1dUx4
+            c0ozYXNTeU1qcWlMTk1NR1UwL3AycVM0eTJrCldybytDaXRXQjVMN2RpZ1ZWeVl5
+            OUZ3bncwVldwalYzUVRmV1QzK2E0RGcKLS0tIGFIY3NCQkVSQm9BZnk1UG4ycE9U
+            d2EvZFN0TjlCa05rSVBtd1g3NFp6NmcKsL93AclzmnZYxLE39fdH7RUx6AEwbeT0
+            3gaPZsEtQPDE29V0id1Di7FZkmkf6TSyNqxS1A==
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+        zigbee2mqtt_hashed_password = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnVDQ0WUVJR21WSXhzd29I
+            QzN4TTFxTzlFOFBlOHY5TW5DZHVieThseXowCmRQQnhYZ1NCc0RrVmRJaTl4Skx4
+            M3VXOWhsdG42cEppQU9BVThYU3FsY0EKLS0tIFZGUkVxUkxVTHR4MFR0bUszOVBx
+            L0twcStna042Z0hvMktYb3F4d2NIMTQK8hmIKxCv06Okp13FOKREIQVdJxQFvjiA
+            MSMjg2Xzqza1rWu1YoIWH57bXQKmTpe6U77tFUVeuDiDqt2GUUJvEIgA+S+jSlLs
+            YWBopm1G9pfWbZxS+IcGMiEgvbA8H/y86my/ycnY1hRE/uhlAKObd7eM3udPd0E0
+            bHHdc8OQV2zmhBVDvEMzzxxMJfQL6n0VDQ==
             -----END AGE ENCRYPTED FILE-----
             """
         )
@@ -333,6 +359,7 @@ class Mosquitto:
                 """
             ),
             pulumi_username: pulumi_hashed_password,
+            self.zigbee2mqtt_username: zigbee2mqtt_hashed_password,
         }
         passwords_secret = Secret(
             "mosquitto-passwords",
@@ -418,15 +445,15 @@ class Mosquitto:
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
                         name="mqtts",
-                        port=mqtts_port,
+                        port=MQTTS_PORT,
                         protocol="TCP",
-                        target_port=mqtts_port,
+                        target_port=MQTTS_PORT,
                     ),
                     kubernetes.core.v1.ServicePortArgs(
                         name="mqtt",
-                        port=mqtt_port,
+                        port=MQTT_PORT,
                         protocol="TCP",
-                        target_port=mqtt_port,
+                        target_port=MQTT_PORT,
                     ),
                 ],
             ),
@@ -442,3 +469,17 @@ class Mosquitto:
             # instance to talk to.
             depends_on=[deployment],
         )
+
+    @property
+    def hostname(self) -> str:
+        return "mqtt.snow.jflei.com"
+
+    def url(self, mqtts: bool = True) -> str:
+        if mqtts:
+            scheme = "mqtts"
+            port = MQTTS_PORT
+        else:
+            scheme = "mqtt"
+            port = MQTT_PORT
+
+        return f"{scheme}://{self.hostname}:{port}"

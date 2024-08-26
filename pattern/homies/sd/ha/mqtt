@@ -1,5 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash
+#! nix-shell -p bash mqttui
+
+# shellcheck shell=bash
+# vi: ft=bash
 
 set -euo pipefail
 
-nix-shell -p mqttui --run "mqttui -b mqtts://mqtt.snow.jflei.com --username jfly --password $(</run/agenix/mosquitto-password)"
+exec mqttui --broker mqtts://mqtt.snow.jflei.com --username jfly --password "$(</run/agenix/mosquitto-password)" "$@"

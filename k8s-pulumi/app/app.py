@@ -13,6 +13,7 @@ from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .mosquitto import Mosquitto
+from .zigbee2mqtt import Zigbee2Mqtt
 from .nix_cache import NixCache
 from .music import Music
 from .nextcloud import Nextcloud
@@ -33,6 +34,7 @@ def build_app():
 
     SnowWeb(snowauth)
     mosquitto = Mosquitto(namespace="default")
+    Zigbee2Mqtt(namespace="default", mosquitto=mosquitto, snowauth=snowauth)
     HomeAssistant(namespace="default", snowauth=snowauth, mosquitto=mosquitto)
 
     Budget(snowauth)
