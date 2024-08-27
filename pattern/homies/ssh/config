@@ -12,10 +12,6 @@ UserKnownHostsFile ~/sync/linux-secrets/.ssh/known_hosts
 Host ocf
     HostName ssh.ocf.berkeley.edu
     User jfly
-
-Host sonic
-    User jfly
-    HostName sh.sonic.net
 ###
 
 ### my phone
