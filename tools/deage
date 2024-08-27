@@ -29,7 +29,7 @@ PRIVATE_KEY_PATH = DECRYPTED_SECRETS_DIR / "age-private-key.txt"
 
 def decrypt(encrypted: str) -> str:
     p = subprocess.run(
-        ["age", "-i", PRIVATE_KEY_PATH, "--decrypt"],
+        ["age", "--identity", PRIVATE_KEY_PATH, "--decrypt"],
         input=encrypted,
         check=True,
         stdout=subprocess.PIPE,
@@ -68,7 +68,7 @@ def sanity_check_private_key():
 
                 Have you successfully decrypted the age private key?
 
-                    age --decrypt -i ~/.ssh/id_rsa tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
+                    age --decrypt --identity ~/sync/linux-secrets/.ssh/id_ed25519 tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
                 """
             ),
             file=sys.stderr,
