@@ -7,7 +7,7 @@ class Monitoring:
         snowauth.declare_app(
             name="monitoring",
             namespace="default",
-            image="louislam/uptime-kuma:1.21.3",
+            image="louislam/uptime-kuma:1.23.13",
             port=3001,
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
@@ -15,8 +15,8 @@ class Monitoring:
                     name="config",
                 ),
             ],
-            # TODO: look into k8s persistent volumes for this
             volumes=[
+                # TODO: look into k8s persistent volumes for this
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
                         path="/state/uptime-kuma-config",

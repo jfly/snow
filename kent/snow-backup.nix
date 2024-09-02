@@ -13,7 +13,7 @@ let
     text = ''
       set -e
 
-      rsync --exclude "deercam/analysis" -avP --delete -e "ssh -i ${keypair.privateKeyfile}" root@fflewddur:/mnt/media/ /mnt/media/
+      rsync --exclude "deercam/analysis" -avP --delete --rsh "ssh -i ${keypair.privateKeyfile}" root@fflewddur:/mnt/media/ /mnt/media/
 
       # Finally, report a successful backup =)
       curl "https://monitoring.snow.jflei.com/api/push/gLRwjziFaf?status=up&msg=OK&ping="

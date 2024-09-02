@@ -41,3 +41,6 @@ Host garage
 
 Host ramscan
     User alarm
+
+Host ospi
+    User ospi
