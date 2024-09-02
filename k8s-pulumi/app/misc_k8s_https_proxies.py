@@ -39,6 +39,13 @@ class MiscK8sHttpsProxies:
             destination_port=8080,
         )
 
+        self._add_proxy(
+            "ospi",
+            access=Access.INTERNET_BEHIND_SSO_RAREMY,
+            destination_ip="192.168.1.197",  # ospi.lan (keep this in sync with openwrt/strider/files/etc/config/dhcp)
+            destination_port=8080,
+        )
+
     def _add_proxy(
         self,
         name: str,

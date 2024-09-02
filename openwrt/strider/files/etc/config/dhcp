@@ -49,11 +49,17 @@ config host
 	option ip '192.168.1.110'
 	option mac 'C0:3F:D5:6B:51:16'
 
-# Keep this in sync with k8s/kodi.yaml
+# Keep this in sync with k8s-pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'dallben'
 	option ip '192.168.1.163'
 	option mac '1C:69:7A:AC:4C:E6'
+
+# Keep this in sync with k8s-pulumi/app/misc_k8s_https_proxies.py
+config host
+	option name 'ospi'
+	option ip '192.168.1.197'
+	option mac 'B8:27:EB:00:60:83'
 
 config host
 	option name 'receiver'
