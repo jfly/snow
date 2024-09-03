@@ -72,8 +72,13 @@ else
 fi
 
 if [ "$desired_nix_version" = "$actual_nix_version" ]; then
-    echo "It looks like $hostname is already up to date (running $actual_nix_version). Not doing anything to it!"
-    exit 0
+    echo "It looks like $hostname is already up to date (running $actual_nix_version)."
+    if [ $force == 1 ]; then
+        echo "Continuing, since --force was specified."
+    else
+        echo "Not doing anything to it!"
+        exit 0
+    fi
 fi
 
 echo "It looks $hostname is out of date (desired $desired_nix_version, running: $actual_nix_version)"
