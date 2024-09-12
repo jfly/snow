@@ -8,21 +8,13 @@ AddKeysToAgent yes
 IdentityFile ~/sync/linux-secrets/.ssh/id_ed25519
 UserKnownHostsFile ~/sync/linux-secrets/.ssh/known_hosts
 
-### misc cloud servers i happen to have access to
+### Misc cloud servers I happen to have access to.
 Host ocf
     HostName ssh.ocf.berkeley.edu
     User jfly
 ###
 
-### my phone
-Host jflysopixel
-    HostName Pixel-4a
-    Port 8022
-###
-
 ### cottage
-Host cottage-router
+Host openwrt.cottage
     User root
-    HostName 192.168.1.1
-    StrictHostKeyChecking no
 ###
