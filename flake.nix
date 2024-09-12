@@ -3,38 +3,31 @@
 
   inputs = {
     nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixos-unstable.url = "github:jfly/nixpkgs/jfly/nixos-unstable";
     # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
-    systems.url = "github:nix-systems/x86_64-linux";
-    flake-utils.url = "github:numtide/flake-utils";
-    flake-utils.inputs.systems.follows = "systems";
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
+    # TODO: switch to poetry2nix
     pypi-deps-db.url = "github:DavHau/pypi-deps-db";
     mach-nix.url = "github:DavHau/mach-nix";
-    mach-nix.inputs.flake-utils.follows = "flake-utils";
     # Can't use the latest nixpkgs because of https://github.com/DavHau/mach-nix/issues/524
     # mach-nix.inputs.nixpkgs.follows = "nixpkgs";
     mach-nix.inputs.pypi-deps-db.follows = "pypi-deps-db";
 
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
-    agenix.inputs.home-manager.follows = "home-manager";
-    # Choose not to download darwin deps (saves some resources on Linux, see
-    # https://github.com/ryantm/agenix#install-module-via-flakes).
-    agenix.inputs.darwin.follows = "";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      # Choose not to download darwin deps (saves some resources on Linux, see
+      # https://github.com/ryantm/agenix#install-module-via-flakes).
+      inputs.darwin.follows = "";
+    };
 
-    # TODO: extract into separate repo, or re-add once relative flake
-    # references are less painful to deal with. See
-    # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
-    # agenix-rooter.url = "path:./shared/agenix-rooter";
-    # agenix-rooter.inputs.nixpkgs.follows = "nixpkgs";
-
+    # TODO: get rid of colmena in favor of `nixos-rebuild --flake ...`
     # Note: colmena comes with nixpkgs, but we need a version with
     # https://github.com/zhaofengli/colmena/commit/ca12be27edf5639fa3c9c98d6b4ab6d1f22e3315
     # so `deage.file`'s impurity works when doing an apply-local.
     colmena.url = "github:zhaofengli/colmena";
-    colmena.inputs.flake-utils.follows = "flake-utils";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager";
@@ -42,8 +35,6 @@
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
     pr-tracker.inputs.nixpkgs.follows = "nixpkgs";
@@ -61,48 +52,31 @@
   };
 
   outputs =
-    { self
+    flake-inputs@{ self
     , nixpkgs
-    , flake-utils
+    , flake-parts
     , mach-nix
-    , pypi-deps-db
     , colmena
-    , nixos-unstable
-    , home-manager
-    , agenix
     , treefmt-nix
-    , nixos-hardware
-    , pr-tracker
     , shtuff
     , with-alacritty
     , on-air
     , ...
     }:
     let
-      agenix-rooter = import ./shared/agenix-rooter { inherit nixpkgs; };
+      # TODO: extract into separate repo, or consume as a relative flake once
+      # relative flake references are less painful to deal with. See
+      # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
+      agenix-rooter = import ./hosts/shared/agenix-rooter;
+      inputs = flake-inputs // { inherit (self.lib) agenix-rooter; };
 
-      patchNixpkgs = { nixpkgs, genPatches }:
-        let
-          patched = nixpkgs.applyPatches
-            {
-              name = "nixos-unstable-patched";
-              src = nixpkgs.path;
-              patches = genPatches nixpkgs;
-            };
-        in
-        import patched {
-          inherit (nixpkgs) system overlays;
-        };
-
-      overlays = import ./overlays {
-        on-air-flake = on-air;
-        shtuff-flake = shtuff;
-        with-alacritty-flake = with-alacritty;
-      };
+      overlays = [
+        (import ./overlay.nix { inherit inputs; })
+      ];
     in
-    (
-      flake-utils.lib.eachDefaultSystem
-        (system:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      perSystem = { inputs', self', system, ... }:
         let
           pkgs = import nixpkgs {
             inherit system overlays;
@@ -110,7 +84,7 @@
           treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         {
-          apps = agenix-rooter.defineApps {
+          apps = self.lib.agenix-rooter.defineApps {
             outputs = self;
             inherit pkgs;
             flakeRoot = ./.;
@@ -130,158 +104,22 @@
           checks = {
             formatting = treefmtEval.config.build.check self;
           };
-        }
-        )
-    ) // rec {
-      colmenaHive = colmena.lib.makeHive {
-        meta = {
-          nixpkgs = import nixos-unstable {
-            system = "x86_64-linux";
-
-            overlays = [
-              (
-                self: super:
-                  let lib = super.lib;
-                  in
-                  {
-                    # This overlay lets us convert a given colmena node into
-                    # something that could get loaded on a usb drive and become a
-                    # "portable" environment.
-                    # See the call to `colmena eval` in `tools/build-portable-usb.sh`
-                    # to see how this is used.
-                    toLiveUsb = { node, encryptedRootDevice, decryptedRootDevice, bootDevice }: node.extendModules {
-                      modules = [
-                        {
-                          boot = {
-                            loader = {
-                              efi.canTouchEfiVariables = lib.mkForce true;
-                              grub.efiInstallAsRemovable = true;
-                            };
-                          };
-
-                          fileSystems."/" = {
-                            device = lib.mkForce decryptedRootDevice;
-                          };
-                          boot.initrd.luks.devices."cryptroot".device = lib.mkForce encryptedRootDevice;
-                          fileSystems."/boot".device = lib.mkForce bootDevice;
-                        }
-                      ];
-                    };
-
-                    toRpiSdCard = { node, pkgs }: node.extendModules {
-                      modules = [
-                        # Despite the name, I don't think sd-image-raspberrypi
-                        # is the right thing to use. It *appears* to be
-                        # deprecated?
-                        # "${pkgs.path}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix"
-                        "${pkgs.path}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-                      ];
-                    };
-                  }
-              )
-            ];
-          };
-
-          # Colmena doesn't require it, but put every single host in here. I'd prefer
-          # to *not* have a fallback value defined for nixpkgs at all.
-          # https://github.com/zhaofengli/colmena/issues/54 tracks that feature
-          # request for Colmena.
-          nodeNixpkgs = rec {
-            clark = patchNixpkgs {
-              nixpkgs = import nixos-unstable {
-                system = "x86_64-linux";
-                inherit overlays;
-              };
-              genPatches = unpatched: [ ];
-            };
-            dallben = import nixos-unstable {
-              system = "x86_64-linux";
-              inherit overlays;
-            };
-            fflewddur = import nixos-unstable {
-              system = "x86_64-linux";
-              inherit overlays;
-            };
-            kent = import nixos-unstable {
-              system = "x86_64-linux";
-              inherit overlays;
-            };
-            pattern = patchNixpkgs {
-              nixpkgs = (import nixos-unstable {
-                system = "x86_64-linux";
-                inherit overlays;
-              });
-              genPatches = unpatched: [
-                (unpatched.fetchpatch {
-                  name = "latest inkscape/silhouette unstable";
-                  url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
-                  hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
-                })
-                # https://github.com/NixOS/nixpkgs/pull/326142
-                (unpatched.fetchpatch {
-                  name = "fix wxPython on Python 3.12";
-                  url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:wxpython-fix.patch";
-                  hash = "sha256-Nv+Di7GNJFSGAclNNCgbDCluPOyDcd7m6jLI2NLRGu8=";
-                })
-              ];
-            };
-          };
         };
 
-        defaults = { pkgs, ... }: {
-          environment.systemPackages = with pkgs; [
-            vim
-            wget
-            curl
-            tmux
-          ];
+      flake = rec {
+        colmenaHive = import ./hosts { inherit self inputs overlays; };
+        nixosConfigurations = colmenaHive.nodes;
 
-          # Use latest nix. There are apparently issues with it [0] [1], but I want
-          # to see if they affect me personally.
-          # Furthermore, the newer version contains one fix [2] I do care about.
-          # [0]: https://github.com/NixOS/nixpkgs/pull/315858
-          # [1]: https://github.com/NixOS/nixpkgs/pull/315262
-          # [2]: https://github.com/NixOS/nix/pull/9930
-          nix.package = pkgs.nixVersions.latest;
+        lib = import ./lib {};
+        nixosModules = import ./modules {};
 
-          programs.mosh.enable = true;
-
-          environment.variables = {
-            EDITOR = "vim";
-          };
-
-          users.groups.media = { gid = 1002; };
-
-          # Ensure that commands like `nix repl` and `nix-shell` have access to the
-          # same nixpkgs we use to install everything else.
-          nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
-        };
-
-        "clark" = import clark/configuration.nix {
-          inherit agenix agenix-rooter pr-tracker;
-        };
-        "dallben" = import dallben/configuration.nix {
-          inherit agenix agenix-rooter;
-        };
-        "fflewddur" = import fflewddur/configuration.nix {
-          inherit agenix agenix-rooter;
-        };
-        "pattern" = import pattern/configuration.nix {
-          inherit agenix agenix-rooter home-manager;
-        };
-        "kent" = import kent/configuration.nix {
-          inherit agenix agenix-rooter;
-        };
+        hydraJobs =
+          let
+            inherit (nixpkgs.lib) mapAttrs' nameValuePair;
+          in
+          mapAttrs'
+            (name: nixosConfiguration: nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
+            nixosConfigurations;
       };
-
-      nixosConfigurations = colmenaHive.nodes;
-
-      hydraJobs =
-        let
-          inherit (nixpkgs) lib;
-        in
-        lib.mapAttrs'
-          (name: nixosConfiguration: lib.nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
-          nixosConfigurations;
     };
 }

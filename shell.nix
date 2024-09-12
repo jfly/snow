@@ -28,11 +28,7 @@ pkgs.mkShell {
     # For building/pushing docker images
     pkgs.skopeo
 
-    # For building portable usb installations.
-    pkgs.parted
-    pkgs.cloud-utils
-
-    # Used by tools/generate-mosquitto-user
+    # Used by tools/gen_mosquitto_user.py
     pkgs.mosquitto
 
     # k8s stuff

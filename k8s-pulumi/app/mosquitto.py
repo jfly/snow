@@ -19,6 +19,7 @@ from pulumi_crds import certmanager
 MQTT_PORT = 1883
 MQTTS_PORT = 8883
 
+
 class Mosquitto:
     def __init__(self, namespace: str):
         self.namespace = namespace

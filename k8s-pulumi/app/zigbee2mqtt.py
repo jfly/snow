@@ -2,6 +2,7 @@ from .snowauth import Snowauth, Access
 from .mosquitto import Mosquitto
 import pulumi_kubernetes as kubernetes
 
+
 class Zigbee2Mqtt:
     def __init__(self, namespace: str, snowauth: Snowauth, mosquitto: Mosquitto):
         self._namespace = namespace

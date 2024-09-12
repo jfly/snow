@@ -13,6 +13,10 @@ To deploy all machines:
 To deploy one machine:
 
     ./deploy 'dallben'
+
+Options:
+
+    --dry-run: build, but do not apply the updated configuration
 " >/dev/stderr
 }
 

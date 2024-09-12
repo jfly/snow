@@ -18,6 +18,8 @@ let
     splitString
     ;
 
+  identities = import ../lib/identities.nix; # TODO: access via `self`
+
   release = "23.05.4";
   profiles = openwrt-imagebuilder.lib.profiles {
     inherit pkgs release;
@@ -90,8 +92,6 @@ let
       '';
     };
   };
-
-  identities = import ../shared/identities.nix;
 
   # Urg, right now installing custom packages is a *pain*. See
   # https://github.com/astro/nix-openwrt-imagebuilder/issues/38 for a

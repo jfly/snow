@@ -9,7 +9,7 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        overlays = import ../overlays { };
+        overlays = import ../overlay.nix { };
       };
       snow-router = pkgs.callPackage ./snow-router.nix {
         inherit openwrt-imagebuilder;
