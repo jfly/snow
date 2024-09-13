@@ -9,9 +9,10 @@ class NixCache:
 
         # Endpoints resource
         #
-        # For some reason the traefik ingress controller doesn't seem to work with
-        # EndpointSlice, so we have to use Endpoints. See
-        # k8s-pulumi/app/jfly_laptop.py for another example of this problem.
+        # For some reason the traefik ingress controller doesn't seem to work
+        # with EndpointSlice, so we have to use Endpoints. See
+        # iac/pulumi/app/misc_k8s_https_proxies.py for another example of this
+        # problem.
         k8s.core.v1.Endpoints(
             "pattern-laptop",
             metadata={

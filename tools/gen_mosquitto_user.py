@@ -51,7 +51,7 @@ def main():
     parser.add_argument("user", nargs="+")
     args = parser.parse_args()
 
-    print("Add this stuff to k8s-pulumi/app/mosquitto.py\n")
+    print("Add this stuff to iac/pulumi/app/mosquitto.py\n")
     generate(args.user)
 
 

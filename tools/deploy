@@ -14,9 +14,9 @@ To deploy an OpenWrt router:
 
     ./deploy openwrt/strider
 
-To deploy to Kubernetes:
+To deploy infra as code (Kubernetes, etc):
 
-    ./deploy k8s
+    ./deploy iac
 
 Options:
 
@@ -61,7 +61,7 @@ done
 function build_containers() {
     [ $DRY_RUN == 1 ] && echo "--dry-run not supported for build_containers, sorry!" && exit 1
 
-    for f in k8s/**/flake.nix; do
+    for f in iac/k8s/**/flake.nix; do
         flake=$(dirname "$f")
         target="./${flake}#stream-docker"
         result=$(nix build "$target" --no-link --print-out-paths)
@@ -88,15 +88,15 @@ function build_containers() {
     done
 }
 
-function deploy_k8s() {
-    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_k8s, sorry!" && exit 1
+function deploy_iac() {
+    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_iac, sorry!" && exit 1
 
-    for f in k8s/**/*{.yaml,.yaml.secret}; do
+    for f in iac/k8s/**/*{.yaml,.yaml.secret}; do
         echo "Applying $f"
         kubectl apply -f "$f"
     done
 
-    pulumi up --cwd k8s-pulumi --stack dev --yes
+    pulumi up --cwd pulumi --stack dev --yes
 }
 
 function deploy_nix() {
@@ -147,9 +147,9 @@ function deploy_nix_router() {
 
 tools/deage
 
-if [ "$target" = "k8s" ]; then
+if [ "$target" = "iac" ]; then
     build_containers
-    deploy_k8s
+    deploy_iac
 elif [[ $target == "openwrt/"* ]]; then
     deploy_nix_router "$target"
 else

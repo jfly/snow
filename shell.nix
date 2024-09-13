@@ -60,7 +60,7 @@ pkgs.mkShell {
           setuptools  # provides pkg_resources which is needed by pulumi-kubernetes: https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10, despite not being mentioned in its setup.py? =(
         '';
         packagesExtra = [
-          (mach-nix.buildPythonPackage ./k8s-pulumi/crds/python)
+          (mach-nix.buildPythonPackage ./iac/pulumi/crds/python)
         ];
       }
     )

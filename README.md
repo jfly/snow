@@ -6,8 +6,8 @@ Short for snowdon, the street on which I started playing around with Nix.
 
 To deploy all machines:
 
-    ./deploy '*'
+    tools/deploy '*'
 
 To deploy one machine:
 
-    ./deploy 'dallben'
+    tools/deploy 'dallben'
