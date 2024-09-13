@@ -1,4 +1,4 @@
-{ pkgs, mach-nix, colmena }:
+{ pkgs, mach-nix }:
 
 let
   unwrap = app: pkgs.symlinkJoin {
@@ -21,9 +21,7 @@ in
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    colmena
     pkgs.age
-    pkgs.nvd
 
     # For building/pushing docker images
     pkgs.skopeo

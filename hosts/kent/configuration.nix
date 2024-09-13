@@ -1,5 +1,4 @@
-{ agenix, agenix-rooter }:
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 {
   system.stateVersion = "22.11";
@@ -16,13 +15,11 @@
     ./kodi.nix
 
     ./nas.nix
-    #<<< ./snow-backup.nix
-    agenix.nixosModules.default
-    agenix-rooter.nixosModules.default
+    # TODO: get off site backups working again!
+    # ./snow-backup.nix
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rooter.nixosModules.default
   ];
 
-  age.rooter = {
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILLwEMWt15EGJ0Cpqu0VjoIyIOS3/qIcPhwRs8QgqG+r";
-    generatedForHostDir = ../../secrets;
-  };
+  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILLwEMWt15EGJ0Cpqu0VjoIyIOS3/qIcPhwRs8QgqG+r";
 }

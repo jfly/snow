@@ -1,7 +1,6 @@
-{ agenix, agenix-rooter }:
-{ config, lib, pkgs, ... }:
+{ inputs, flake, config, lib, pkgs, ... }:
 
-let identities = import ../../lib/identities.nix; # TODO: access via `self`
+let identities = flake.lib.identities;
 in
 {
   imports =
@@ -10,14 +9,11 @@ in
       ./network.nix
       ./nas.nix
       ./binary-cache.nix
-      agenix.nixosModules.default
-      agenix-rooter.nixosModules.default
+      inputs.agenix.nixosModules.default
+      inputs.agenix-rooter.nixosModules.default
     ];
 
-  age.rooter = {
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
-    generatedForHostDir = ../../secrets;
-  };
+  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

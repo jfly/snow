@@ -1,7 +1,6 @@
-{ self, agenix, agenix-rooter, pr-tracker }:
-{ config, lib, pkgs, ... }:
+{ flake, inputs, config, lib, pkgs, ... }:
 
-let identities = self.lib.identities;
+let identities = flake.lib.identities;
 in
 {
   imports =
@@ -12,15 +11,12 @@ in
       ./backup.nix
       ./dbs.nix
       ./dns.nix
-      (import ./pr-tracker.nix { inherit pr-tracker; })
-      agenix.nixosModules.default
-      agenix-rooter.nixosModules.default
+      ./pr-tracker.nix
+      inputs.agenix.nixosModules.default
+      inputs.agenix-rooter.nixosModules.default
     ];
 
-  age.rooter = {
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFeLzY4y2R5GzsHBeuESH9ejQQlciFC7pfru3pdBMaAR";
-    generatedForHostDir = ../../secrets;
-  };
+  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFeLzY4y2R5GzsHBeuESH9ejQQlciFC7pfru3pdBMaAR";
 
   fileSystems."/mnt/media" = {
     device = "fflewddur:/";

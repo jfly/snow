@@ -1,10 +1,9 @@
-{ config, pkgs, ... }:
+{ flake, config, pkgs, ... }:
 
-let identities = import ../../lib/identities.nix; # TODO: access via `self`
+let identities = flake.lib.identities;
 in
 {
-  # Enable colmena deployments by non-root user.
-  deployment.targetUser = "kent";
+  # Enable deployments by non-root user.
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
 

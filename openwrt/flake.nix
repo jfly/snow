@@ -1,6 +1,5 @@
 {
   inputs = {
-    # TODO: switch back to upstream once the hashes are fixed
     # openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
   };
@@ -9,7 +8,7 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        overlays = import ../overlay.nix { };
+        overlays = [ import ../overlay.nix { } ];
       };
       snow-router = pkgs.callPackage ./snow-router.nix {
         inherit openwrt-imagebuilder;

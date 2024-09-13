@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ self, config, pkgs, ... }:
 
 let
-  identities = import ../../lib/identities.nix; # TODO: access via `self`
-  # Generated with: ssh-keygen -t ed25519 -f key -P "" -C fflam  #<<<
+  identities = self.lib.identities;
+  # Generated with: ssh-keygen -t ed25519 -f key -P "" -C fflam
   # Don't forget to update identities.nix if you regenerate this.
   keypair = {
     privateKeyfile = config.age.secrets.snow-backup-ssh-private-key.path;

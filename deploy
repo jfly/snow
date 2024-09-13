@@ -6,17 +6,21 @@ shopt -s globstar
 help() {
     echo "Usage: $0 [target]
 
-To deploy all machines:
+To deploy a NixOS host:
 
-    ./deploy '*'
+    ./deploy dallben
 
-To deploy one machine:
+To deploy an OpenWrt router:
 
-    ./deploy 'dallben'
+    ./deploy openwrt/strider
+
+To deploy to Kubernetes:
+
+    ./deploy k8s
 
 Options:
 
-    --dry-run: build, but do not apply the updated configuration
+    --dry-run: build, but do not apply the changes
 " >/dev/stderr
 }
 
@@ -99,19 +103,29 @@ function deploy_nix() {
     local target="$1"
     shift
 
+    local is_local=0
     if [ "$target" = "$(hostname)" ]; then
-        if [ $DRY_RUN == 1 ]; then
-            echo "Building (but not deploying!) new system..."
-            new_system=$(nix build .#nixosConfigurations.pattern.config.system.build.toplevel --print-out-paths --no-link)
-            nvd diff /run/current-system "$new_system"
-            exit 0
-        fi
+        is_local=1
+    fi
 
+    if [ $DRY_RUN == 1 ]; then
+        echo "Building (but not deploying!) new system..."
+        new_system=$(nix build ".#nixosConfigurations.$target.config.system.build.toplevel" --print-out-paths --no-link)
+        if [ $is_local == 1 ]; then
+            current_system=/run/current-system
+        else
+            current_system=$(ssh "$target" realpath /run/current-system)
+            nix copy --from "ssh://$target" "$current_system"
+        fi
+        nix store diff-closures "$current_system" "$new_system"
+        exit 0
+    fi
+
+    if [ "$target" = "$(hostname)" ]; then
         nixos-rebuild switch --use-remote-sudo --flake ".#$target"
     else
         [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_nix for remote hosts, sorry!" && exit 1
-        # Note: --impure is a workaround for https://github.com/zhaofengli/colmena/issues/202
-        colmena apply --on "$target" --impure
+        nixos-rebuild switch --use-remote-sudo --flake ".#$target" --target-host "$target"
     fi
 }
 

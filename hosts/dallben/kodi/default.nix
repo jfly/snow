@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ flake, config, pkgs, ... }:
 
 let
   inherit (builtins)
     concatStringsSep
     ;
-  identities = import ../../../lib/identities.nix; # TODO: access via `self`
+  identities = flake.lib.identities;
   myKodiPackages = pkgs.callPackage ./kodi-packages { };
   myKodi = pkgs.kodi.withPackages (kodiPackages: [
     kodiPackages.a4ksubtitles

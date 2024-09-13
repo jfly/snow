@@ -1,8 +1,7 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ flake, config, lib, pkgs, modulesPath, ... }:
 
 let
-  inherit
-    (lib)
+  inherit (lib)
     mkIf
     mkEnableOption
     mkOption
@@ -14,7 +13,7 @@ let
 
   cfg = config.services.kodi-colusita;
 
-  identities = import ../../lib/identities.nix; # TODO: access via `self`
+  identities = flake.lib.identities;
   media = pkgs.callPackage ./media {
     deviceName = config.networking.hostName;
   };

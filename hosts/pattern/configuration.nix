@@ -1,9 +1,5 @@
-{ agenix, agenix-rooter, home-manager }:
-{ config, pkgs, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
-let
-  odmpy = pkgs.callPackage ../shared/odmpy { };
-in
 {
   snow.user = {
     name = "jeremy";
@@ -12,20 +8,9 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  nixpkgs = {
-    config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      # Bummer: https://www.hashicorp.com/blog/hashicorp-adopts-business-source-license
-      "vagrant"
-    ];
-  };
-
-  # Enable colmena deployments by non-root user.
-  deployment.targetUser = config.snow.user.name;
+  # Enable deployments by non-root user.
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
-
-  # Allow colmena to deploy this locally.
-  deployment.allowLocalDeployment = true;
 
   programs.nix-ld.enable = true;
 
@@ -35,7 +20,7 @@ in
     ./network.nix
     ./users.nix
     ./audio.nix
-    home-manager.nixosModules.home-manager
+    inputs.home-manager.nixosModules.home-manager
     ./home-manager.nix
     ./shell
     ./desktop
@@ -46,15 +31,12 @@ in
     ./fuse.nix
     ./laptop.nix
     ./garage-status.nix
-    agenix.nixosModules.default
-    agenix-rooter.nixosModules.default
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rooter.nixosModules.default
   ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  age.rooter = {
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
-    generatedForHostDir = ../../secrets;
-  };
+  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
 
   # Add the nix cache running on fflewddur.
   nix.settings = {

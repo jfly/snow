@@ -18,7 +18,7 @@ let
     splitString
     ;
 
-  identities = import ../lib/identities.nix; # TODO: access via `self`
+  identities = import ../lib/identities.nix;
 
   release = "23.05.4";
   profiles = openwrt-imagebuilder.lib.profiles {

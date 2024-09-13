@@ -1,5 +1,4 @@
-{ pr-tracker }:
-{ config, ... }:
+{ inputs, config, ... }:
 
 let
   internalApiPort = 7001;
@@ -7,8 +6,8 @@ let
 in
 {
   imports = [
-    pr-tracker.nixosModules.api
-    pr-tracker.nixosModules.fetcher
+    inputs.pr-tracker.nixosModules.api
+    inputs.pr-tracker.nixosModules.fetcher
   ];
 
   # https://github.com/settings/tokens/1473000486

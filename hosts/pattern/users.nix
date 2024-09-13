@@ -1,6 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ self, config, lib, pkgs, ... }:
 
-let identities = import ../../lib/identities.nix; # TODO: access via `self`
+let identities = self.lib.identities;
 in
 {
   options = {
