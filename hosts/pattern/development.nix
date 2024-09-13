@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ flake', config, pkgs, lib, ... }:
 
 let
-  inherit (pkgs.snow)
+  inherit (flake'.packages)
     mfa
     ;
 in
@@ -169,13 +169,13 @@ in
       strace
       xxd
       rsync
-      snow.mycli
+      flake'.packages.mycli
       miller
       jq
       mfa
 
       ### editor
-      snow.neovim
+      flake'.packages.neovim
       # TODO: don't install these globally, instead just make them available
       # to neovim.
       pyright

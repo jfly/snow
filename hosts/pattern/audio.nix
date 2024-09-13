@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ flake', config, pkgs, ... }:
 
 let
-  mcg = pkgs.snow.cover-grid;
+  mcg = flake'.packages.cover-grid;
 in
 {
   # Enable sound with pipewire.

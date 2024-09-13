@@ -1,14 +1,15 @@
-{ pkgs, callPackage, buildPythonApplication, setuptools, pydantic, click, pyxdg, xlib }:
+{ inputs', flake', pkgs, callPackage, buildPythonApplication, setuptools, pydantic, click, pyxdg, xlib }:
 
 let
-  addToPath = with pkgs; [
+  addToPath = (with pkgs; [
     xorg.xrandr
     killall
     libnotify
-  ] ++ (with pkgs.snow; [
-    with-alacritty
+  ]) ++ (with flake'.packages; [
     setbg
-  ]);
+  ]) ++ [
+    inputs'.with-alacritty.packages.default
+  ];
   pyedid = callPackage ./pyedid.nix { };
 in
 buildPythonApplication {

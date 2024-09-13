@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ inputs', flake', config, lib, pkgs, modulesPath, ... }:
 
 let
   inherit (lib)
@@ -9,16 +9,16 @@ let
     filter
     ;
 
-  inherit (pkgs.snow)
+  inherit (flake'.packages)
     autoperipherals
     colorscheme
     desk-speakers
-    dunst
     jbright
     jvol
-    with-alacritty
     xmonad
     ;
+
+  with-alacritty = inputs'.with-alacritty.packages.default;
 
   dmenu = pkgs.symlinkJoin {
     name = "dmenu";
@@ -134,7 +134,7 @@ in
       # whatsoever.
       path = lib.mkForce [ ];
       serviceConfig = {
-        ExecStart = "${dunst}/bin/dunst";
+        ExecStart = "${flake'.packages.dunst}/bin/dunst";
       };
     };
     "numlock-on" = {
@@ -200,9 +200,9 @@ in
       intercept = "${pkgs.interception-tools}/bin/intercept";
       uinput = "${pkgs.interception-tools}/bin/uinput";
       caps2esc = "${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc";
-      space2meta = "${pkgs.snow.space2meta}/bin/space2meta";
+      space2meta = "${flake'.packages.space2meta}/bin/space2meta";
       # TODO: figure out key drop issues
-      # space2meta-speedcubing = "${pkgs.snow.space2meta-speedcubing}/bin/space2meta";
+      # space2meta-speedcubing = "${flake'.packages.space2meta-speedcubing}/bin/space2meta";
     in
     {
       enable = true;
@@ -277,8 +277,8 @@ in
         noto-fonts-monochrome-emoji
         # I can't read any of this, but it sure looks nicer than boxes :p
         noto-fonts-cjk-serif
-        pkgs.snow.fonts.pica
-        pkgs.snow.fonts.dk-majolica
+        flake'.packages.pica-font
+        flake'.packages.dk-majolica-font
       ];
       fontconfig = {
         defaultFonts = {
@@ -346,8 +346,8 @@ in
       '';
     })
     audible-cli
-    snow.snowcrypt
-    snow.odmpy
+    flake'.packages.snowcrypt
+    flake'.packages.odmpy
 
     ### PDF
     evince
@@ -373,7 +373,6 @@ in
     autoperipherals
     colorscheme
     desk-speakers
-    dunst
     jbright
     jvol
     with-alacritty

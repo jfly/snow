@@ -1,4 +1,4 @@
-{ inputs, ... }:
+args@{ inputs, ... }:
 
 let
   inherit (inputs.nixpkgs.lib)
@@ -8,4 +8,4 @@ let
   libDirs = filterAttrs (_name: type: type == "directory") (builtins.readDir ./.);
 in
 
-mapAttrs (name: _type: import (./. + "/${name}")) libDirs
+mapAttrs (name: _type: import (./. + "/${name}") args) libDirs

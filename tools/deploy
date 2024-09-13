@@ -21,12 +21,14 @@ To deploy infra as code (Kubernetes, etc):
 Options:
 
     --dry-run: build, but do not apply the changes
+    --show-trace: passed to any invocations of the 'nix' cli
 " >/dev/stderr
 }
 
 target=""
 DRY_RUN=0
 FORCE=0
+SHOW_TRACE=()
 for i in "$@"; do
     case $i in
         --dry-run)
@@ -34,6 +36,9 @@ for i in "$@"; do
             ;;
         --force)
             FORCE=1
+            ;;
+        --show-trace)
+            SHOW_TRACE=("--show-trace")
             ;;
         --help | -h)
             help
@@ -58,20 +63,24 @@ for i in "$@"; do
     esac
 done
 
+function _nix() {
+    nix "${SHOW_TRACE[@]}" "$@"
+}
+
 function build_containers() {
     [ $DRY_RUN == 1 ] && echo "--dry-run not supported for build_containers, sorry!" && exit 1
 
     for f in iac/k8s/**/flake.nix; do
         flake=$(dirname "$f")
         target="./${flake}#stream-docker"
-        result=$(nix build "$target" --no-link --print-out-paths)
+        result=$(_nix build "$target" --no-link --print-out-paths)
 
         # Note: we're intentionally using ' here instead of " because we want
         # the $ chars to be passed as-is to `nix eval`.
         # shellcheck disable=SC2016
-        immutable_image=$(nix eval "$target" --raw --apply 'img: "${img.imageName}:${img.imageTag}"')
+        immutable_image=$(_nix eval "$target" --raw --apply 'img: "${img.imageName}:${img.imageTag}"')
         # shellcheck disable=SC2016
-        latest_image=$(nix eval "$target" --raw --apply 'img: "${img.imageName}:latest"')
+        latest_image=$(_nix eval "$target" --raw --apply 'img: "${img.imageName}:latest"')
 
         fq_immutable_name=docker://containers.snow.jflei.com/$immutable_image
         fq_latest_name=docker://containers.snow.jflei.com/$latest_image
@@ -110,14 +119,14 @@ function deploy_nix() {
 
     if [ $DRY_RUN == 1 ]; then
         echo "Building (but not deploying!) new system..."
-        new_system=$(nix build ".#nixosConfigurations.$target.config.system.build.toplevel" --print-out-paths --no-link)
+        new_system=$(_nix build ".#nixosConfigurations.$target.config.system.build.toplevel" --print-out-paths --no-link)
         if [ $is_local == 1 ]; then
             current_system=/run/current-system
         else
             current_system=$(ssh "$target" realpath /run/current-system)
-            nix copy --from "ssh://$target" "$current_system"
+            _nix copy --from "ssh://$target" "$current_system"
         fi
-        nix store diff-closures "$current_system" "$new_system"
+        _nix store diff-closures "$current_system" "$new_system"
         exit 0
     fi
 
@@ -142,7 +151,7 @@ function deploy_nix_router() {
     fi
 
     hostname=${target#openwrt/}
-    (cd openwrt && nix run '.#deploy' -- "$hostname" "${extra_args[@]}")
+    (cd openwrt && _nix run '.#deploy' -- "$hostname" "${extra_args[@]}")
 }
 
 tools/deage

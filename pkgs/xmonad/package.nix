@@ -1,4 +1,4 @@
-{ pkgs }:
+{ flake', pkgs }:
 
 # This was largely copied from nixos/modules/services/x11/window-managers/xmonad.nix
 let
@@ -8,7 +8,7 @@ let
   xmonadHs = pkgs.substituteAll {
     src = ./xmonad.hs;
     inherit (pkgs) libnotify;
-    inherit (pkgs.snow)
+    inherit (flake'.packages)
       autoperipherals
       colorscheme
       jbright

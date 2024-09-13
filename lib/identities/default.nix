@@ -1,3 +1,5 @@
+{ ... }:
+
 {
   # people
   jfly = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIImw0Xc1buEQ9WOskyGGeg3QwdbU7DTUQBiu02fObDlm jeremyfleischman@gmail.com";

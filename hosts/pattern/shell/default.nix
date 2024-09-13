@@ -1,15 +1,16 @@
-{ config, lib, pkgs, stdenv, ... }:
+{ inputs', flake, flake', config, lib, pkgs, stdenv, ... }:
 
 let
-  inherit (pkgs.snow)
-    shtuff
+  inherit (flake'.packages)
     jgit
-    my-yazi
     ;
+
+  shtuff = inputs'.shtuff.packages.default;
 in
 {
   imports = [
-    ../../../modules/q
+    flake.nixosModules.q
+    flake.nixosModules.yazi
   ];
 
   users.users.${config.snow.user.name}.shell = pkgs.zsh;
@@ -34,7 +35,6 @@ in
 
       source ${./zshrc}
       source ${./aliases}
-      ${my-yazi.zshrc}
 
       eval "$(zoxide init zsh)"
     '';
@@ -73,12 +73,11 @@ in
 
   environment.systemPackages = with pkgs; [
     ### sd (script directory)
-    snow.sd
+    flake'.packages.sd
 
     ### Explore filesystem
     file
     tree
-    my-yazi.drv
     zoxide
     ripgrep
 

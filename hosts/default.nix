@@ -1,4 +1,4 @@
-{ flake, inputs, ... }:
+{ flake, inputs, withSystem, ... }:
 
 let
   inherit (inputs.nixpkgs.lib)
@@ -46,6 +46,12 @@ let
     modules = [
       flake.nixosModules.shared
       (./. + "/${name}/configuration.nix")
+      ({ pkgs, ... }: {
+        _module.args = {
+          inputs' = withSystem pkgs.system ({ inputs', ... }: inputs');
+          flake' = withSystem pkgs.system ({ self', ... }: self');
+        };
+      })
     ];
   };
 

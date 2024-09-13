@@ -1,3 +1,3 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ inputs', flake', pkgs }:
 
-pkgs.python3Packages.callPackage ./py-package.nix { }
+pkgs.python3Packages.callPackage ./py-package.nix { inherit inputs' flake'; }

@@ -1,12 +1,8 @@
-{ config, pkgs, ... }:
+{ flake, config, pkgs, ... }:
 
 {
   imports = [
-    # TODO: accesss in a less weird way, perhaps as module args threaded in via
-    # `specialArgs`? See
-    # https://github.com/BirdeeHub/birdeeSystems/blob/8e5538d66690234f5bccd1c2a9211858b933e466/flake.nix#L304
-    # for one such example.
-    ../../modules/kodi-colusita
+    flake.nixosModules.kodi-colusita
   ];
 
   networking.firewall.allowedTCPPorts = [

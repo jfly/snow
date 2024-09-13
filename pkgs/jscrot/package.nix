@@ -1,4 +1,4 @@
-{ pkgs }:
+{ flake', pkgs }:
 
 let
   bell = pkgs.runCommand "" { } ''
@@ -7,13 +7,13 @@ let
 in
 pkgs.writeShellApplication {
   name = "jscrot";
-  runtimeInputs = with pkgs; [
+  runtimeInputs = (with pkgs; [
     xclip
     maim
     python3
     byzanz
     pulseaudio # provides paplay
-  ] ++ (with pkgs.snow; [
+  ]) ++ (with flake'.packages; [
     flameshot
     savepid
   ]);

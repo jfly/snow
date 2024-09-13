@@ -1,4 +1,4 @@
-{ config, ... }:
+{ flake, config, ... }:
 let outerConfig = config;
 in
 { config, lib, pkgs, ... }:
@@ -35,16 +35,16 @@ in
   home.file = (lib.mapAttrs
     (name: target: (link target))
     {
-      sd = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/sd";
-      bin = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/bin";
-      ".config/git" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/config/git";
-      ".gitignore_global" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/gitignore_global";
-      ".ssh/config" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config";
-      ".ssh/config.d" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config.d";
+      sd = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/sd";
+      bin = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/bin";
+      ".config/git" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/git";
+      ".gitignore_global" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/gitignore_global";
+      ".ssh/config" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config";
+      ".ssh/config.d" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config.d";
 
       # Create and set a custom GTK theme.
-      ".themes" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/themes";
-      ".config/gtk-3.0" = pkgs.snow.absoluteRepoPath "/hosts/pattern/homies/config/gtk-3.0";
+      ".themes" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/themes";
+      ".config/gtk-3.0" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/gtk-3.0";
 
       # Secrets
       ".gnupg" = "${homeDir}/sync/linux-secrets/.gnupg";

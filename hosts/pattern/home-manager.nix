@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ flake, config, lib, pkgs, ... }:
 
 {
   home-manager.useGlobalPkgs = true;
   home-manager.users.${config.snow.user.name} = (import ./home.nix {
-    inherit config;
+    inherit flake config;
   });
 
 

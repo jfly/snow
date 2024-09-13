@@ -58,20 +58,26 @@
       # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
       agenix-rooter = import ./hosts/shared/agenix-rooter;
       inputs = flake-inputs // { inherit (self.lib) agenix-rooter; };
-      args = {
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
+    let
+      systemlessArgs = {
         flake = self;
-        inherit inputs;
+        inherit inputs withSystem;
       };
     in
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    {
       systems = [ "x86_64-linux" ];
-      perSystem = { inputs', self', system, ... }:
+      perSystem = { inputs', self', pkgs, system, ... }:
         let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ self.overlays.default ];
+          systemArgs = systemlessArgs // {
+            inherit inputs';
+            flake' = self';
           };
           treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          inherit (inputs.nixpkgs.lib)
+            filesystem
+            ;
         in
         {
           apps = self.lib.agenix-rooter.defineApps {
@@ -80,8 +86,11 @@
             flakeRoot = ./.;
           };
 
-          devShells.default = pkgs.callPackage ./shell.nix {
-            mach-nix = mach-nix.lib."${system}";
+          devShells.default = pkgs.callPackage ./shell.nix systemArgs;
+
+          packages = filesystem.packagesFromDirectoryRecursive {
+            callPackage = pkgs.newScope systemArgs;
+            directory = ./pkgs;
           };
 
           formatter = treefmtEval.config.build.wrapper;
@@ -91,10 +100,9 @@
         };
 
       flake = rec {
-        nixosConfigurations = import ./hosts args;
-        lib = import ./lib args;
-        nixosModules = import ./modules args;
-        overlays.default = import ./overlay.nix args;
+        nixosConfigurations = import ./hosts systemlessArgs;
+        lib = import ./lib systemlessArgs;
+        nixosModules = import ./modules systemlessArgs;
 
         hydraJobs =
           let
@@ -104,5 +112,5 @@
             (name: nixosConfiguration: nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
             nixosConfigurations;
       };
-    };
+    });
 }

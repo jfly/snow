@@ -1,6 +1,7 @@
-{ pkgs, mach-nix }:
+{ inputs, flake, pkgs, ... }:
 
 let
+  mach-nix = inputs.mach-nix.lib."${pkgs.system}";
   unwrap = app: pkgs.symlinkJoin {
     name = app.name;
     paths = [ app ];
@@ -68,7 +69,7 @@ pkgs.mkShell {
 
   # Set up credentials to talk to minio (a self-hosted file server that
   # implements the s3 api).
-  AWS_ACCESS_KEY_ID = pkgs.deage.optionalString "AWS_ACCESS_KEY_ID" ''
+  AWS_ACCESS_KEY_ID = flake.lib.deage.impureOptionalString "AWS_ACCESS_KEY_ID" ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByc0RjL1VESElmbnVDQ0Jk
     VVBITXgrSlk0MTFuTlVQTGtqeXUyMytIblVjClZIb1ZDbHlBZjJDcnQyQW9GZzNW
@@ -77,7 +78,7 @@ pkgs.mkShell {
     g/S7HsJm5j46iTYN
     -----END AGE ENCRYPTED FILE-----
   '';
-  AWS_SECRET_ACCESS_KEY = pkgs.deage.optionalString "AWS_SECRET_ACCESS_KEY" ''
+  AWS_SECRET_ACCESS_KEY = flake.lib.deage.impureOptionalString "AWS_SECRET_ACCESS_KEY" ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2SGtaRlN5Q0IrQXFnQXR2
     MytRSXFkcGd6MXh3M05xdldEY3Z0WTNNZGdjCjltUWc2S3RMWWRId0g0eUVUUHhz
@@ -90,7 +91,7 @@ pkgs.mkShell {
   # to have a region set.
   AWS_REGION = "us-west-2";
 
-  PULUMI_CONFIG_PASSPHRASE = pkgs.deage.optionalString "PULUMI_CONFIG_PASSPHRASE" ''
+  PULUMI_CONFIG_PASSPHRASE = flake.lib.deage.impureOptionalString "PULUMI_CONFIG_PASSPHRASE" ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6RU0wSVR1cWJMUFRkSUxG
     enRmWnpZL2V5c2JFb3FaOTFqTGRlbVVYMUE4CnQzdmlpa2U3QjJxQ2RtQUpRMVBh
@@ -100,7 +101,7 @@ pkgs.mkShell {
     -----END AGE ENCRYPTED FILE-----
   '';
 
-  CLOUDFLARE_API_TOKEN = pkgs.deage.optionalString "CLOUDFLARE_API_TOKEN" ''
+  CLOUDFLARE_API_TOKEN = flake.lib.deage.impureOptionalString "CLOUDFLARE_API_TOKEN" ''
     -----BEGIN AGE ENCRYPTED FILE-----
     YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzZ3N2WHlBclZHWFI4L1NR
     K2MzQzJMbnVtdEFhei9VNEpTSWtwSDFjVFg4Cmt2WWd2b0tKaVNHUmFwWHJ0SzRE

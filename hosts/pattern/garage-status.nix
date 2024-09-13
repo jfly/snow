@@ -1,7 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ inputs', config, lib, pkgs, ... }:
 
 let
-  inherit (pkgs.snow) on-air;
+  on-air = inputs'.on-air.packages.default;
 in
 {
   age.secrets.mosquitto-password = {
