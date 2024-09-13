@@ -1,4 +1,4 @@
-{ self, inputs, ... }:
+{ flake, inputs, ... }:
 
 let
   inherit (inputs.nixpkgs.lib)
@@ -40,12 +40,11 @@ let
     system = null;
 
     specialArgs = {
-      inherit inputs;
-      flake = self;
+      inherit inputs flake;
     };
 
     modules = [
-      self.nixosModules.shared
+      flake.nixosModules.shared
       (./. + "/${name}/configuration.nix")
     ];
   };

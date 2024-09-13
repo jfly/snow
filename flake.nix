@@ -58,6 +58,10 @@
       # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
       agenix-rooter = import ./hosts/shared/agenix-rooter;
       inputs = flake-inputs // { inherit (self.lib) agenix-rooter; };
+      args = {
+        flake = self;
+        inherit inputs;
+      };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
@@ -87,11 +91,10 @@
         };
 
       flake = rec {
-        nixosConfigurations = import ./hosts { inherit self inputs; };
-
-        lib = import ./lib { inherit self inputs; };
-        nixosModules = import ./modules { inherit self inputs; };
-        overlays.default = import ./overlay.nix { inherit self inputs; };
+        nixosConfigurations = import ./hosts args;
+        lib = import ./lib args;
+        nixosModules = import ./modules args;
+        overlays.default = import ./overlay.nix args;
 
         hydraJobs =
           let
