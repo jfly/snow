@@ -1,4 +1,4 @@
-{ inputs, flake, pkgs, ... }:
+{ inputs, flake, flake', pkgs, ... }:
 
 let
   mach-nix = inputs.mach-nix.lib."${pkgs.system}";
@@ -111,7 +111,7 @@ pkgs.mkShell {
     -----END AGE ENCRYPTED FILE-----
   '';
 
-  shellHook = ''
+  shellHook = flake'.checks.pre-commit-check.shellHook + ''
     export KUBECONFIG=$PWD/k8s/kube/config.secret
   '';
 }

@@ -45,6 +45,8 @@
 
     openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
     # openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
+
+    pre-commit-hooks.url = "github:cachix/git-hooks.nix";
   };
 
   outputs =
@@ -56,10 +58,6 @@
     , ...
     }:
     let
-      # TODO: extract into separate repo, or consume as a relative flake once
-      # relative flake references are less painful to deal with. See
-      # https://github.com/NixOS/nix/issues/3978#issuecomment-952418478
-      agenix-rooter = import ./hosts/shared/agenix-rooter;
       inputs = flake-inputs // { inherit (self.lib) agenix-rooter; };
     in
     flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
@@ -96,24 +94,35 @@
             directory = ./pkgs;
           };
 
+          # TODO: consolidate treefmt configuration with pre-commit-hooks? See
+          # https://github.com/cachix/git-hooks.nix/issues/287
           formatter = treefmtEval.config.build.wrapper;
           checks = {
             formatting = treefmtEval.config.build.check self;
+            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                nil = {
+                  enable = true;
+                  package = self'.packages.strict-nil;
+                };
+              };
+            };
           };
         };
 
-      flake = rec {
+      flake = {
         nixosConfigurations = import ./hosts systemlessArgs;
         lib = import ./lib systemlessArgs;
         nixosModules = import ./modules systemlessArgs;
-
-        hydraJobs =
-          let
-            inherit (nixpkgs.lib) mapAttrs' nameValuePair;
-          in
-          mapAttrs'
-            (name: nixosConfiguration: nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
-            nixosConfigurations;
+        #<<< TODO: add to `nix flake check`
+        #<<< hydraJobs =
+        #<<<   let
+        #<<<     inherit (nixpkgs.lib) mapAttrs' nameValuePair;
+        #<<<   in
+        #<<<   mapAttrs'
+        #<<<     (name: nixosConfiguration: nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
+        #<<<     nixosConfigurations;
       };
     });
 }

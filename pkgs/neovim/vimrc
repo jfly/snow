@@ -384,6 +384,11 @@ lua << EOF
       }
     end
 
+    nvim_lsp.nil_ls.setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }
+
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'sh',
       callback = function()

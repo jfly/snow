@@ -3,3 +3,6 @@
 /.direnv
 result
 __pycache__
+
+# https://github.com/cachix/git-hooks.nix?tab=readme-ov-file#flakes-support
+/.pre-commit-config.yaml
