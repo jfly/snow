@@ -113,7 +113,7 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
       cmp-nvim-lsp
       cmp-buffer
       nvim-cmp
-      null-ls-nvim
+      none-ls-nvim  # maintained fork of null-ls
       rust-tools-nvim
       fidget-nvim
       trouble-nvim

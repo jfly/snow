@@ -326,7 +326,7 @@ lua << EOF
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-    -- null-ls is good for wrapping misc tools (such as shellcheck) up into
+    -- null-ls is good for wrapping misc tools that don't have a language server into
     -- something LSP compatible.
 
     local null_ls = require("null-ls")
@@ -340,12 +340,6 @@ lua << EOF
         }),
     }
     null_ls.register(generic_nix_fmt)
-    local shfmt = null_ls.builtins.formatting.shfmt;
-    table.insert(shfmt._opts.args, "-s");  -- add the -s parameter to shfmt
-    local sources = {
-       null_ls.builtins.diagnostics.shellcheck,
-       shfmt,
-    }
     null_ls.setup {
       sources = sources,
 
@@ -389,6 +383,16 @@ lua << EOF
         },
       }
     end
+
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'sh',
+      callback = function()
+        vim.lsp.start({
+          name = 'bash-language-server',
+          cmd = { 'bash-language-server', 'start' },
+        })
+      end,
+    })
 
     local rt = require("rust-tools")
 
