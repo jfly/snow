@@ -62,7 +62,7 @@ Most of the infra-as-code (IAC) in this repo manages resources running on a
 Kubernetes cluster ([k3s](https://k3s.io/) running on NixOS).
 
 - Most of the resources on the cluster are managed in a Pulumi app in
-  [iac/pulumi](iac/pulumi].) There are also some non-k8s resources managed in
+  [iac/pulumi](iac/pulumi). There are also some non-k8s resources managed in
   this Pulumi app as well.
 - Some of the oldest k8s resources are managed as flat yaml files in
   [iac/k8s](iac/k8s). I'd like to port this all to Pulumi.
