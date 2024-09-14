@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs }:
 
 let
   jvol = with pkgs.python3Packages; buildPythonApplication {

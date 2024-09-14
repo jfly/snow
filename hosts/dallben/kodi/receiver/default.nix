@@ -1,2 +1,2 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs }:
 pkgs.callPackage ./receiver.nix { }

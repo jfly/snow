@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs }:
 
 with pkgs.python3Packages; buildPythonApplication rec {
   pname = "imap-strip-attachments";
