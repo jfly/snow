@@ -3,20 +3,23 @@
 set -euo pipefail
 shopt -s globstar
 
+# Change to the root of the repo.
+cd "$(git rev-parse --show-toplevel)"
+
 help() {
     echo "Usage: $0 [target]
 
 To deploy a NixOS host:
 
-    ./deploy dallben
+    $0 dallben
 
 To deploy an OpenWrt router:
 
-    ./deploy openwrt/strider
+    $0 openwrt/strider
 
 To deploy infra as code (Kubernetes, etc):
 
-    ./deploy iac
+    $0 iac
 
 Options:
 
@@ -25,7 +28,7 @@ Options:
 " >/dev/stderr
 }
 
-target=""
+TARGETS=()
 DRY_RUN=0
 FORCE=0
 SHOW_TRACE=()
@@ -51,17 +54,19 @@ for i in "$@"; do
             exit 1
             ;;
         *)
-            if [ -n "$target" ]; then
-                echo "You must specify exactly one target" >/dev/stderr
-                echo "" >/dev/stderr
-                help
-                exit 1
-
-            fi
-            target=$i
+            TARGETS+=("$i")
             ;;
     esac
 done
+
+if [ "${#TARGETS[@]}" -eq 1 ]; then
+    TARGET=${TARGETS[0]}
+else
+    echo "You must specify exactly one target" >/dev/stderr
+    echo "" >/dev/stderr
+    help
+    exit 1
+fi
 
 function _nix() {
     nix "${SHOW_TRACE[@]}" "$@"
@@ -133,7 +138,6 @@ function deploy_nix() {
     if [ "$target" = "$(hostname)" ]; then
         nixos-rebuild switch --use-remote-sudo --flake ".#$target"
     else
-        [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_nix for remote hosts, sorry!" && exit 1
         nixos-rebuild switch --use-remote-sudo --flake ".#$target" --target-host "$target"
     fi
 }
@@ -151,16 +155,16 @@ function deploy_nix_router() {
     fi
 
     hostname=${target#openwrt/}
-    (cd openwrt && _nix run '.#deploy' -- "$hostname" "${extra_args[@]}")
+    tools/deploy-openwrt.sh "$hostname" "${extra_args[@]}"
 }
 
 tools/deage
 
-if [ "$target" = "iac" ]; then
+if [ "$TARGET" = "iac" ]; then
     build_containers
     deploy_iac
-elif [[ $target == "openwrt/"* ]]; then
-    deploy_nix_router "$target"
+elif [[ $TARGET == "openwrt/"* ]]; then
+    deploy_nix_router "$TARGET"
 else
-    deploy_nix "$target"
+    deploy_nix "$TARGET"
 fi

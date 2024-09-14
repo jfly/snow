@@ -42,6 +42,9 @@
       url = "github:jfly/on-air";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
+    # openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
   };
 
   outputs =

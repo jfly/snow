@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+# Change to the root of the repo.
+cd "$(git rev-parse --show-toplevel)"
+
 help() {
     echo "Usage: $0 [hostname]
 " >/dev/stderr
@@ -49,7 +52,7 @@ fi
 
 echo "Deploying to $hostname"
 
-flake_target=".#$hostname"
+flake_target=".#${hostname}-openwrt"
 
 # Note: we use `deage.impureString` in these routers, which means we have to do
 # impure builds. Perhaps we can figure out some clever way of doing something

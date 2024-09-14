@@ -1,6 +1,7 @@
-{ pkgs, lib, openwrt-imagebuilder }:
+{ inputs, flake, ... }:
 
-{ hostname
+{ pkgs
+, hostname
 , profileName
 , config-files
 , config-template-values-by-file ? { }
@@ -11,14 +12,19 @@
 }:
 
 let
-  inherit (lib)
+  inherit (pkgs.lib)
     attrsToList
     concatStringsSep
     optionals
     splitString
     ;
-
-  identities = import ../lib/identities.nix;
+  inherit (inputs)
+    openwrt-imagebuilder
+    ;
+  inherit (flake.lib)
+    deage
+    identities
+    ;
 
   release = "23.05.4";
   profiles = openwrt-imagebuilder.lib.profiles {
@@ -36,7 +42,7 @@ let
   # https://openwrt.org/docs/guide-user/base-system/uci#uci_dataobject_model,
   # and some prior art here:
   # https://discourse.nixos.org/t/example-on-how-to-configure-openwrt-with-nixos-modules/18942
-  # However, I think it would be more interesting to explore explore
+  # However, I think it would be more interesting to explore
   # https://www.liminix.org/ as an alternative to all of this.
   final-template-values-by-file = {
     "/etc/config/system" = {
@@ -70,7 +76,7 @@ let
 
   wifi = {
     home = {
-      password = pkgs.deage.string ''
+      password = deage.impureString ''
         -----BEGIN AGE ENCRYPTED FILE-----
         YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiMjFGNTFPYTVXcWIyeW4x
         M0VuOURsQmZJbXE0QWY1RjNmVnp5VjBKTlRZCllsYitvWWlVY0N0U3hXN1lVTmJO
@@ -81,7 +87,7 @@ let
       '';
     };
     iot = {
-      password = pkgs.deage.string ''
+      password = deage.impureString ''
         -----BEGIN AGE ENCRYPTED FILE-----
         YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBObmJ5Q1NoOFkxSnFPdlYz
         bjAxVzZWd1VvbXBsOWtkRklzVUtPVnNIdkNzCmJSdlBXSmNGc3JRbm93VXBWaHlF

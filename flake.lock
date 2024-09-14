@@ -252,7 +252,7 @@
     "mach-nix_2": {
       "inputs": {
         "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "pypi-deps-db": "pypi-deps-db_2"
       },
       "locked": {
@@ -360,6 +360,22 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1701253981,
+        "narHash": "sha256-ztaDIyZ7HrTAfEEUt9AtTDNoCYxUdSd6NrRHaYOIxtk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e92039b55bcd58469325ded85d4f58dd5a4eaf58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1615259932,
         "narHash": "sha256-IXecmbqCr+XCtFwzBO3tHEd8PoJ4X4EyPZebKbV2ioE=",
         "owner": "NixOS",
@@ -374,7 +390,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1618619705,
         "narHash": "sha256-+yBGazqJxjT+BR00oCNamOgiEFPHBOPkqak7MUYcpBA=",
@@ -434,6 +450,25 @@
         "type": "github"
       }
     },
+    "openwrt-imagebuilder": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1726278313,
+        "narHash": "sha256-7JrXHjHxMLQyzfJRQxPLPg/xYcpH4XaohWalMdv8eb0=",
+        "owner": "jfly",
+        "repo": "nix-openwrt-imagebuilder",
+        "rev": "082ce5c3103e1ac6f0113941375d0dcb2d19bbd4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "ref": "update-hashes",
+        "repo": "nix-openwrt-imagebuilder",
+        "type": "github"
+      }
+    },
     "pr-tracker": {
       "inputs": {
         "by-name": "by-name",
@@ -464,7 +499,7 @@
     "pypi-deps-db": {
       "inputs": {
         "mach-nix": "mach-nix_2",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "nixpkgsPy36": "nixpkgsPy36",
         "pypiIndex": "pypiIndex"
       },
@@ -523,6 +558,7 @@
         "nixos-unstable": "nixos-unstable",
         "nixpkgs": "nixpkgs_2",
         "on-air": "on-air",
+        "openwrt-imagebuilder": "openwrt-imagebuilder",
         "pr-tracker": "pr-tracker",
         "pypi-deps-db": "pypi-deps-db",
         "shtuff": "shtuff",
