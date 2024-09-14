@@ -7,6 +7,7 @@ I manage a mix of things in this repo:
 - [A fleet of NixOS machines](#nixos)
 - [A handful of routers running OpenWrt](#openwrt)
 - [IAC for Kubernetes + misc](#iac)
+- [My Kobo](pkgs/my-kobo/README.md)
 
 # NixOS
 
