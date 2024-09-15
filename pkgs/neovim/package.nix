@@ -113,7 +113,19 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
       cmp-nvim-lsp
       cmp-buffer
       nvim-cmp
-      none-ls-nvim # maintained fork of null-ls
+      # none-js is a maintained fork of null-ls
+      (none-ls-nvim.overrideAttrs {
+        patches = [
+          # TODO: try to upstream this to none-js. Currently blocked by a
+          # treefmt "issue" that I'm chatting with the maintainer (@brianmcgee)
+          # about.
+          (fetchpatch {
+            name = "add 'nix flake fmt' formatter";
+            url = "https://github.com/nvimtools/none-ls.nvim/compare/main...jfly:none-ls.nvim:add-nix-fmt.patch";
+            hash = "sha256-W7bfm0groW7aGyzv8uFU+TbMDJxwyU3HVFh1spg13es=";
+          })
+        ];
+      })
       rust-tools-nvim
       fidget-nvim
       trouble-nvim

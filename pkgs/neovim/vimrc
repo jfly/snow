@@ -330,18 +330,10 @@ lua << EOF
     -- something LSP compatible.
 
     local null_ls = require("null-ls")
-    local generic_nix_fmt = {
-        method = null_ls.methods.FORMATTING,
-        filetypes = {}, -- Try this with *all* filetypes.
-        generator = null_ls.formatter({
-            command = "nix",
-            args = { 'fmt', '$FILENAME' },
-            to_temp_file = true,
-        }),
-    }
-    null_ls.register(generic_nix_fmt)
     null_ls.setup {
-      sources = sources,
+      log_level = "info",
+      -- debug = true,
+      sources = {null_ls.builtins.formatting.nix_flake_fmt},
 
       -- auto format on save
       on_attach = function(client, bufnr)
