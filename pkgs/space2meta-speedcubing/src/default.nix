@@ -1,4 +1,4 @@
-{ stdenv, python3, cmake, lib }:
+{ stdenv, cmake }:
 
 stdenv.mkDerivation {
   name = "space2meta-speedcubing";

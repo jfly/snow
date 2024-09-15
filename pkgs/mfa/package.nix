@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib }:
+{ pkgs }:
 
 let
   twofa = pkgs.writeShellApplication {

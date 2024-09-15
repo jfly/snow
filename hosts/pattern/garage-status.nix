@@ -1,4 +1,4 @@
-{ inputs', config, lib, pkgs, ... }:
+{ inputs', config, ... }:
 
 let
   on-air = inputs'.on-air.packages.default;

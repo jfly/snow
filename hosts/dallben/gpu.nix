@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ pkgs, ... }:
 
 {
   # Enable hardware accelerated video playback

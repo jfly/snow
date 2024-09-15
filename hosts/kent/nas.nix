@@ -1,13 +1,10 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   inherit (pkgs.lib)
-    mapAttrsToList
     imap1
     ;
   inherit (builtins)
-    attrNames
-    concatMap
     concatStringsSep
     ;
 

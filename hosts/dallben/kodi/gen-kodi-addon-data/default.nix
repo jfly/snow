@@ -1,4 +1,4 @@
-{ pkgs, rsync, ytApiKeyFile, ytClientIdFile, ytClientSecretFile, mysqlPasswordFile, hostName, timeZone }:
+{ pkgs, ytApiKeyFile, ytClientIdFile, ytClientSecretFile, mysqlPasswordFile, hostName, timeZone }:
 
 pkgs.stdenv.mkDerivation {
   name = "gen-kodi-addon-data";

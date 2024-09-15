@@ -1,4 +1,4 @@
-{ flake, config, lib, pkgs, ... }:
+{ flake, config, pkgs, ... }:
 
 {
   home-manager.useGlobalPkgs = true;

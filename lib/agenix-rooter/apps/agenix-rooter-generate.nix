@@ -3,16 +3,8 @@
 let
   inherit
     (pkgs.lib)
-    concatLists
-    concatMapStrings
-    concatStringsSep
-    escapeShellArg
-    filter
     flatten
     mapAttrsToList
-    removeSuffix
-    substring
-    unique
     warn
     ;
 

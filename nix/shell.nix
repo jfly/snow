@@ -46,7 +46,6 @@ pkgs.mkShell {
     pkgs.crd2pulumi
     (
       mach-nix.mkPython {
-        # contents of a requirements.txt (use builtins.readFile ./requirements.txt alternatively)
         requirements = ''
           ### Various pulumi requirements
           remote-pdb  # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
@@ -61,7 +60,7 @@ pkgs.mkShell {
           setuptools  # provides pkg_resources which is needed by pulumi-kubernetes: https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10, despite not being mentioned in its setup.py? =(
         '';
         packagesExtra = [
-          (mach-nix.buildPythonPackage ./iac/pulumi/crds/python)
+          (mach-nix.buildPythonPackage ../iac/pulumi/crds/python)
         ];
       }
     )

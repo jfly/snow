@@ -1,15 +1,11 @@
-{ lib, options, config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 let
-  inherit
-    (lib)
-    isPath
+  inherit (lib)
     literalExpression
     mdDoc
     mkIf
     mkOption
-    pathExists
-    readFile
     types
     ;
 

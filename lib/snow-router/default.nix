@@ -32,10 +32,6 @@ let
   };
   profile = profiles.identifyProfile profileName;
 
-  hashes = import "${openwrt-imagebuilder}/hashes/${release}.nix";
-
-  packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
-
   # Substitutions for our final config. Yes, this leaks secrets to the store :cry:.
   # We could potentially clean this up if we were willing to generate UCI ourselves.
   # See
@@ -99,27 +95,30 @@ let
     };
   };
 
-  # Urg, right now installing custom packages is a *pain*. See
-  # https://github.com/astro/nix-openwrt-imagebuilder/issues/38 for a
-  # feature request to make this easier to deal with.
-  wifi-presence-by-arch = {
-    aarch64_cortex-a53 = {
-      file = pkgs.fetchurl {
-        url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
-        sha256 = "sha256-yN2wDs723HGfmEKS4x1QQwCv4938edRQTJaVGwdQe7Y=";
-      };
-      filename = "wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
-    };
+  # Somehow these variables ended up unreferenced? I'm very confused how
+  # `wifi-presence` is actually getting installed on our routers.
+  # TODO: Figure this out when documenting how to do custom packages
+  # (https://github.com/astro/nix-openwrt-imagebuilder/issues/38)
+  # hashes = import "${openwrt-imagebuilder}/hashes/${release}.nix";
+  # packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
+  # wifi-presence-by-arch = {
+  #   aarch64_cortex-a53 = {
+  #     file = pkgs.fetchurl {
+  #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
+  #       sha256 = "sha256-yN2wDs723HGfmEKS4x1QQwCv4938edRQTJaVGwdQe7Y=";
+  #     };
+  #     filename = "wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
+  #   };
 
-    mipsel_24kc = {
-      file = pkgs.fetchurl {
-        url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_mipsel_24kc.ipk";
-        sha256 = "sha256-kCPU9q8mc+qKt6/BMgBfGoO3ZqvhZRFsmBkuZTTRou4=";
-      };
-      filename = "wifi-presence_0.3.0-1_mipsel_24kc.ipk";
-    };
-  };
-  wifi-presence = wifi-presence-by-arch.${packagesArch};
+  #   mipsel_24kc = {
+  #     file = pkgs.fetchurl {
+  #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_mipsel_24kc.ipk";
+  #       sha256 = "sha256-kCPU9q8mc+qKt6/BMgBfGoO3ZqvhZRFsmBkuZTTRou4=";
+  #     };
+  #     filename = "wifi-presence_0.3.0-1_mipsel_24kc.ipk";
+  #   };
+  # };
+  # wifi-presence = wifi-presence-by-arch.${packagesArch};
   built-no-version = (openwrt-imagebuilder.lib.build (profile // {
     packages =
       [

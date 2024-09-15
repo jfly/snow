@@ -1,4 +1,6 @@
-{ flake, pkgs, ... }: {
+{ pkgs, ... }:
+
+{
   # Ensure that commands like `nix repl` and `nix-shell` have access to the
   # same nixpkgs we use to install everything else.
   nix.nixPath = [ "nixpkgs=${pkgs.path}" ];

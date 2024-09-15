@@ -1,4 +1,4 @@
-{ flake, config, lib, pkgs, modulesPath, ... }:
+{ flake, config, lib, pkgs, ... }:
 
 let
   inherit (lib)

@@ -47,7 +47,7 @@
           };
           default = my-transmission;
         };
-        apps = rec {
+        apps = {
           default = {
             type = "app";
             program = "${packages.my-transmission}/bin/transmission";

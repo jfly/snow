@@ -1,4 +1,4 @@
-{ inputs, flake, ... }:
+{ inputs, ... }:
 
 let
   inherit (inputs.nixpkgs.lib)

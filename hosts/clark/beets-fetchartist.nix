@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication {
     description = "Artist Images for Beets";
     homepage = "https://github.com/dkanada/beets-fetchartist";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "beets-fetchartist";
     platforms = platforms.all;
   };

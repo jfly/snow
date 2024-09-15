@@ -4,7 +4,6 @@
 , makeWrapper
 , symlinkJoin
 , xdg-utils
-, lib
 }:
 
 let

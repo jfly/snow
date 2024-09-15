@@ -24,7 +24,7 @@
           };
           default = speedtest-go;
         };
-        apps = rec {
+        apps = {
           default = {
             type = "app";
             program = "${packages.speedtest-go}/bin/speedtest";

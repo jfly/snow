@@ -1,11 +1,9 @@
 { beets
 , pkgs
-, python3
 , formats
 , makeWrapper
 , runCommand
 , symlinkJoin
-, writeTextDir
 , beetsConfig
 }:
 

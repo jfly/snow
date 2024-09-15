@@ -1,4 +1,4 @@
-{ inputs, config, lib, pkgs, ... }:
+{ inputs, ... }:
 
 {
   system.stateVersion = "22.11";

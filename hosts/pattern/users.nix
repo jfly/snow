@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }:
+{ self, config, lib, ... }:
 
 let identities = self.lib.identities;
 in

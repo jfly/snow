@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs }:
 
 pkgs.python3.pkgs.buildPythonApplication rec {
   pname = "CoverGrid";

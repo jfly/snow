@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   yazi = pkgs.symlinkJoin {
@@ -29,4 +29,3 @@ in
     }
   '';
 }
-

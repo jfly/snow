@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub }:
+{ pkgs, fetchFromGitHub }:
 
 let
   mkPenguinFont = ({ name, url, hash }:

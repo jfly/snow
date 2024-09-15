@@ -49,7 +49,7 @@
           };
           default = snow-web;
         };
-        apps = rec {
+        apps = {
           default = {
             type = "app";
             program = "${packages.snow-web}/bin/snow-web";

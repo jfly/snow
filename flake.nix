@@ -75,9 +75,12 @@
             inherit inputs';
             flake' = self';
           };
-          treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          treefmtEval = treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix;
           inherit (inputs.nixpkgs.lib)
             filesystem
+            mapAttrs'
+            nameValuePair
+            filterAttrs
             ;
         in
         {
@@ -87,7 +90,7 @@
             flakeRoot = ./.;
           };
 
-          devShells.default = pkgs.callPackage ./shell.nix systemArgs;
+          devShells.default = pkgs.callPackage ./nix/shell.nix systemArgs;
 
           packages = filesystem.packagesFromDirectoryRecursive {
             callPackage = pkgs.newScope systemArgs;
@@ -97,8 +100,10 @@
           # TODO: consolidate treefmt configuration with pre-commit-hooks? See
           # https://github.com/cachix/git-hooks.nix/issues/287
           formatter = treefmtEval.config.build.wrapper;
-          checks = {
+
+          checks = self.lib.flattenTree {
             formatting = treefmtEval.config.build.check self;
+
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
@@ -108,6 +113,15 @@
                 };
               };
             };
+
+            nixos = filterAttrs
+              #<<< TODO: >>> kent currently won't build due to an error
+              #building the python cryptography package. Hopefully this will go
+              #away when we update nixpkgs.
+              (name: os: name != "kent")
+              (mapAttrs'
+                (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
+                self.nixosConfigurations);
           };
         };
 
@@ -115,14 +129,6 @@
         nixosConfigurations = import ./hosts systemlessArgs;
         lib = import ./lib systemlessArgs;
         nixosModules = import ./modules systemlessArgs;
-        #<<< TODO: add to `nix flake check`
-        #<<< hydraJobs =
-        #<<<   let
-        #<<<     inherit (nixpkgs.lib) mapAttrs' nameValuePair;
-        #<<<   in
-        #<<<   mapAttrs'
-        #<<<     (name: nixosConfiguration: nameValuePair "nixos-${name}" nixosConfiguration.config.system.build.toplevel)
-        #<<<     nixosConfigurations;
       };
     });
 }

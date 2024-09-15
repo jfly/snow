@@ -1,4 +1,4 @@
-{ pkgs, config, deviceName }:
+{ pkgs, deviceName }:
 
 pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
   name = "media";

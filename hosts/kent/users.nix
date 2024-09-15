@@ -1,4 +1,4 @@
-{ flake, config, pkgs, ... }:
+{ flake, ... }:
 
 let identities = flake.lib.identities;
 in

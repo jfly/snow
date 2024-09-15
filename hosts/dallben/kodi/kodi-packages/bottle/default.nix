@@ -1,4 +1,5 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, certifi, chardet, idna, urllib3 }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+
 buildKodiAddon rec {
   pname = "bottle";
   namespace = "script.module.bottle";
