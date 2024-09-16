@@ -53,8 +53,8 @@
     flake-inputs@{ self
     , nixpkgs
     , flake-parts
-    , mach-nix
     , treefmt-nix
+    , pre-commit-hooks
     , ...
     }:
     let
@@ -64,38 +64,37 @@
     let
       systemlessArgs = {
         flake = self;
+        flakeRoot = ./.;
         inherit inputs withSystem;
       };
     in
     {
+      flake = {
+        nixosConfigurations = import ./hosts systemlessArgs;
+        lib = import ./lib systemlessArgs;
+        nixosModules = import ./modules systemlessArgs;
+      };
+
       systems = [ "x86_64-linux" ];
       perSystem = { inputs', self', pkgs, system, ... }:
         let
           systemArgs = systemlessArgs // {
-            inherit inputs';
+            inherit inputs' pkgs system;
             flake' = self';
           };
-          treefmtEval = treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix;
-          inherit (inputs.nixpkgs.lib)
-            filesystem
+          treefmtEval = (self.lib.treefmt systemArgs).eval;
+          inherit (nixpkgs.lib)
             mapAttrs'
             nameValuePair
             filterAttrs
             ;
         in
         {
-          apps = self.lib.agenix-rooter.defineApps {
-            outputs = self;
-            inherit pkgs;
-            flakeRoot = ./.;
-          };
+          apps = self.lib.agenix-rooter.defineApps systemArgs;
 
-          devShells.default = pkgs.callPackage ./nix/shell.nix systemArgs;
+          devShells.default = self.lib.devShell systemArgs;
 
-          packages = filesystem.packagesFromDirectoryRecursive {
-            callPackage = pkgs.newScope systemArgs;
-            directory = ./pkgs;
-          };
+          packages = self.lib.packages systemArgs;
 
           # TODO: consolidate treefmt configuration with pre-commit-hooks? See
           # https://github.com/cachix/git-hooks.nix/issues/287
@@ -104,31 +103,17 @@
           checks = self.lib.flattenTree {
             formatting = treefmtEval.config.build.check self;
 
-            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-              src = ./.;
-              hooks = {
-                nil = {
-                  enable = true;
-                  package = self'.packages.strict-nil;
-                };
-              };
-            };
+            pre-commit-check = self.lib.pre-commit-hooks systemArgs;
 
             nixos = filterAttrs
               #<<< TODO: >>> kent currently won't build due to an error
-              #building the python cryptography package. Hopefully this will go
-              #away when we update nixpkgs.
+              # building the python cryptography package. Hopefully this will go
+              # away when we update nixpkgs.
               (name: os: name != "kent")
               (mapAttrs'
                 (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
                 self.nixosConfigurations);
           };
         };
-
-      flake = {
-        nixosConfigurations = import ./hosts systemlessArgs;
-        lib = import ./lib systemlessArgs;
-        nixosModules = import ./modules systemlessArgs;
-      };
     });
 }

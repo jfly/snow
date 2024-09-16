@@ -1,4 +1,4 @@
-{ outputs, pkgs, flakeRoot, ... }:
+{ flake, pkgs, flakeRoot, ... }:
 
 let
   inherit
@@ -29,7 +29,7 @@ let
         )
         host.config.age.secrets
     else warn "ignoring host '${hostName}' as it appears to not use agenix" [ ];
-  secretsData = flatten (mapAttrsToList hostData outputs.nixosConfigurations);
+  secretsData = flatten (mapAttrsToList hostData flake.nixosConfigurations);
   toPython = val:
     let f = builtins.toFile "nix2py" (builtins.toJSON val);
     in "json.loads(Path('${f}').read_text())  # noqa: E501";
