@@ -50,22 +50,16 @@
   };
 
   outputs =
-    flake-inputs@{ self
-    , nixpkgs
-    , flake-parts
-    , treefmt-nix
-    , pre-commit-hooks
-    , ...
-    }:
+    flake-inputs@{ nixpkgs, ... }: # <<< TODO: remove unused nixpkgs variable after fixing borked lockfile >>>
     let
-      inputs = flake-inputs // { inherit (self.lib) agenix-rooter; };
+      flake = flake-inputs.self;
+      inputs = flake-inputs // { inherit (flake.lib) agenix-rooter; };
     in
-    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
     let
       systemlessArgs = {
-        flake = self;
         flakeRoot = ./.;
-        inherit inputs withSystem;
+        inherit inputs withSystem flake;
       };
     in
     {
@@ -76,35 +70,33 @@
       };
 
       systems = [ "x86_64-linux" ];
-      perSystem = { inputs', self', pkgs, system, ... }:
+      perSystem = { inputs', self', pkgs, lib, system, ... }:
         let
+          flake' = self';
           systemArgs = systemlessArgs // {
-            inherit inputs' pkgs system;
-            flake' = self';
+            inherit inputs' flake' pkgs system;
           };
-          treefmtEval = (self.lib.treefmt systemArgs).eval;
-          inherit (nixpkgs.lib)
+          inherit (lib)
             mapAttrs'
             nameValuePair
             filterAttrs
             ;
+
+          lib' = mapAttrs'
+            (name: lib: nameValuePair name (lib.perSystem systemArgs))
+            (filterAttrs (name: lib: lib ? perSystem) flake.lib);
         in
         {
-          apps = self.lib.agenix-rooter.defineApps systemArgs;
-
-          devShells.default = self.lib.devShell systemArgs;
-
-          packages = self.lib.packages systemArgs;
-
+          apps = lib'.agenix-rooter.apps;
+          devShells.default = flake'.packages.devShell;
+          packages = lib'.packages;
           # TODO: consolidate treefmt configuration with pre-commit-hooks? See
           # https://github.com/cachix/git-hooks.nix/issues/287
-          formatter = treefmtEval.config.build.wrapper;
+          formatter = lib'.treefmt.formatter;
 
-          checks = self.lib.flattenTree {
-            formatting = treefmtEval.config.build.check self;
-
-            pre-commit-check = self.lib.pre-commit-hooks systemArgs;
-
+          checks = flake.lib.flattenTree {
+            formatting = lib'.treefmt.check;
+            pre-commit-check = lib'.pre-commit-hooks;
             nixos = filterAttrs
               #<<< TODO: >>> kent currently won't build due to an error
               # building the python cryptography package. Hopefully this will go
@@ -112,7 +104,7 @@
               (name: os: name != "kent")
               (mapAttrs'
                 (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
-                self.nixosConfigurations);
+                flake.nixosConfigurations);
           };
         };
     });

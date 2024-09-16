@@ -1,9 +1,7 @@
-{ inputs, flake, ... }:
-
-{ flake', pkgs, ... }:
+{ inputs, flake, flake', pkgs, ... }:
 
 let
-  mach-nix = inputs.mach-nix.lib."${pkgs.system}";
+  mach-nix = inputs.mach-nix.lib."${pkgs.system}"; #<<<
   unwrap = app: pkgs.symlinkJoin {
     name = app.name;
     paths = [ app ];
