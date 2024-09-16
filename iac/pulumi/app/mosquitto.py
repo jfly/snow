@@ -12,7 +12,7 @@ from pulumi_kubernetes.core.v1 import (
 from textwrap import dedent
 from .util import snow_deployment
 from .deage import deage
-from pulumi_crds import certmanager
+from pulumi_crds import cert_manager
 
 # Some mqtt clients don't support mqtts :(
 # See https://github.com/awilliams/wifi-presence/issues/21 for one example.
@@ -25,10 +25,10 @@ class Mosquitto:
         self.namespace = namespace
 
         mosquitto_cert_secret_name = "mosquitto-cert"
-        certmanager.v1.Certificate(
+        cert_manager.v1.Certificate(
             "mosquitto-cert",
-            spec=certmanager.v1.CertificateSpecArgs(
-                issuer_ref=certmanager.v1.CertificateSpecIssuerRefArgs(
+            spec=cert_manager.v1.CertificateSpecArgs(
+                issuer_ref=cert_manager.v1.CertificateSpecIssuerRefArgs(
                     name="letsencrypt-prod",
                     group="cert-manager.io",
                     kind="ClusterIssuer",

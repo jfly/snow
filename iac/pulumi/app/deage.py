@@ -2,7 +2,7 @@ import os
 from hashlib import sha256
 from textwrap import dedent
 
-DECRYPTED_SECRETS_DIR = "../.sensitive-decrypted-secrets"
+DECRYPTED_SECRETS_DIR = "../../.sensitive-decrypted-secrets"
 
 
 def deage(encrypted: str):

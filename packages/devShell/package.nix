@@ -1,7 +1,7 @@
 { inputs, flake, flake', pkgs, ... }:
 
 let
-  mach-nix = inputs.mach-nix.lib."${pkgs.system}"; #<<<
+  poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
   unwrap = app: pkgs.symlinkJoin {
     name = app.name;
     paths = [ app ];
@@ -41,29 +41,39 @@ pkgs.mkShell {
     # This environment variable was added a while ago in
     # https://github.com/NixOS/nixpkgs/pull/81879, but things seem to work now
     # without it. :shrug:
-    # TODO: file an issue upstream with nixpkgs
+    # TODO: file an issue upstream with nixpkgs?
     (unwrap pkgs.pulumi-bin)
-    pkgs.crd2pulumi
-    (
-      mach-nix.mkPython {
-        requirements = ''
-          ### Various pulumi requirements
-          remote-pdb  # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
-          pip  # used by `pulumi about`
-          rich
-          pulumi>=3.0.0,<4.0.0
-          pulumi-kubernetes>=3.0.0,<4.0.0
-          pulumi-cloudflare>=3.0.0,<4.0.0
-          pulumi_minio
-          pulumi_keycloak
-          paho-mqtt
-          setuptools  # provides pkg_resources which is needed by pulumi-kubernetes: https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10, despite not being mentioned in its setup.py? =(
-        '';
-        packagesExtra = [
-          (mach-nix.buildPythonPackage ../../iac/pulumi/crds/python)
-        ];
-      }
-    )
+    pkgs.poetry
+    (poetry2nix.mkPoetryEnv {
+      projectDir = ./.;
+      extraPackages = ps: [
+        ps.pip # used by `pulumi about` and `pulumi up`
+        (flake'.packages.pulumi-crds.override { python3 = ps.python; })
+      ];
+      overrides = poetry2nix.defaultPoetryOverrides.extend (
+        final: prev: {
+          remote-pdb = prev.remote-pdb.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+          });
+          urllib3 = prev.urllib3.overridePythonAttrs (old: {
+            # https://github.com/urllib3/urllib3/commit/2beb67e95a7fd908cd75648817c1ab99b1a4588e
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.hatch-vcs ];
+          });
+          paho-mqtt = prev.paho-mqtt.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.hatchling ];
+          });
+          pulumi-keycloak = prev.pulumi-keycloak.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+          });
+          pulumi-cloudflare = prev.pulumi-cloudflare.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+          });
+          pulumi-minio = prev.pulumi-minio.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+          });
+        }
+      );
+    })
   ];
 
   # Set up credentials to talk to minio (a self-hosted file server that

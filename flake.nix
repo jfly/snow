@@ -6,13 +6,7 @@
     # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-
-    # TODO: switch to poetry2nix
-    pypi-deps-db.url = "github:DavHau/pypi-deps-db";
-    mach-nix.url = "github:DavHau/mach-nix";
-    # Can't use the latest nixpkgs because of https://github.com/DavHau/mach-nix/issues/524
-    # mach-nix.inputs.nixpkgs.follows = "nixpkgs";
-    mach-nix.inputs.pypi-deps-db.follows = "pypi-deps-db";
+    poetry2nix.url = "github:nix-community/poetry2nix";
 
     agenix = {
       url = "github:ryantm/agenix";
