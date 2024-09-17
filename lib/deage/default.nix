@@ -17,16 +17,12 @@ let
     ;
 in
 rec {
-  impureAbsoluteRepoPath = encrypted: flake.lib.snow.absoluteRepoPath (impureRepoPath encrypted);
-  impureRepoPath = encrypted: (
+  repoPath = encrypted: (
     let hashed = builtins.hashString "sha256" (removeSuffix "\n" encrypted);
     in "./.sensitive-decrypted-secrets/${hashed}.secret"
   );
-  impureString = encrypted: builtins.readFile (impureAbsoluteRepoPath encrypted);
-  impureOptionalString = description: encrypted: (
-    let
-      missingMsg = "Could not find decrypted ${description}. Try running `tools/deage && direnv reload`";
-    in
-    if builtins.pathExists (impureAbsoluteRepoPath encrypted) then builtins.readFile (impureAbsoluteRepoPath encrypted) else builtins.trace missingMsg missingMsg
-  );
+
+  absoluteRepoPath = encrypted: flake.lib.snow.absoluteRepoPath (repoPath encrypted);
+
+  impureString = encrypted: builtins.readFile (absoluteRepoPath encrypted);
 }

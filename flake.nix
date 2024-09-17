@@ -87,7 +87,10 @@
       systems = [ "x86_64-linux" ];
       perSystem = { inputs', self', lib, system, ... }:
         let
-          flake' = self';
+          lib' = mapAttrs'
+            (name: lib: nameValuePair name (lib.perSystem systemArgs))
+            (filterAttrs (name: lib: lib ? perSystem) flake.lib);
+          flake' = self' // { lib = lib'; };
           pkgs = import patchedNixpkgs { inherit system; };
           systemArgs = systemlessArgs // {
             inherit inputs' flake' pkgs system;
@@ -98,21 +101,18 @@
             filterAttrs
             ;
 
-          lib' = mapAttrs'
-            (name: lib: nameValuePair name (lib.perSystem systemArgs))
-            (filterAttrs (name: lib: lib ? perSystem) flake.lib);
         in
         {
-          apps = lib'.agenix-rooter.apps;
+          apps = flake'.lib.agenix-rooter.apps;
           devShells.default = flake'.packages.devShell;
-          packages = lib'.packages;
+          packages = flake'.lib.packages;
           # TODO: consolidate treefmt configuration with pre-commit-hooks? See
           # https://github.com/cachix/git-hooks.nix/issues/287
           formatter = lib'.treefmt.formatter;
 
           checks = flake.lib.flattenTree {
-            formatting = lib'.treefmt.check;
-            pre-commit-check = lib'.pre-commit-hooks;
+            formatting = flake'.lib.treefmt.check;
+            pre-commit-check = flake'.lib.pre-commit-hooks;
             nixos = mapAttrs'
               (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
               flake.nixosConfigurations;

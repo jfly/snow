@@ -4,7 +4,7 @@ import os
 import re
 import sys
 import subprocess
-from rich import print
+from rich.console import Console
 from hashlib import sha256
 from textwrap import dedent
 from pathlib import Path
@@ -13,6 +13,8 @@ AGE_ARMOR_RE = re.compile(
     r"^(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",
     re.DOTALL | re.MULTILINE,
 )
+
+stderr = Console(file=sys.stderr)
 
 
 def root() -> Path:
@@ -61,18 +63,13 @@ def sanity_check_private_key():
 
     if private_key_problem is not None:
         PRIVATE_KEY_PATH.parent.mkdir(parents=True, exist_ok=True)
-        print(
-            dedent(
-                f"""\
-                [bold red]{private_key_problem}[/bold red]
 
-                Have you successfully decrypted the age private key?
-
-                    age --decrypt --identity ~/sync/linux-secrets/.ssh/id_ed25519 tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}
-                """
-            ),
-            file=sys.stderr,
-        )
+        stderr.print(f"[bold red]{private_key_problem}[/bold red]")
+        stderr.print("")
+        stderr.print("Have you successfully decrypted the age private key?")
+        stderr.print("")
+        # Using `out` rather than `print` to avoid line wrapping.
+        stderr.out(f"    age --decrypt --identity ~/sync/linux-secrets/.ssh/id_ed25519 tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}")
         sys.exit(1)
 
 
