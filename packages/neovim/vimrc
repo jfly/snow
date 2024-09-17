@@ -208,36 +208,6 @@ set tabpagemax=100
 " https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
 set backupcopy=yes
 
-""""""" Enable the ale (just fixers, not linting)
-" Disable all linters.
-let g:ale_linters_explicit=1
-
-let g:ale_fixers = {
-\   'javascript': ['prettier'],
-\   'typescript': ['prettier'],
-\   'typescriptreact': ['prettier'],
-\   'html': ['prettier'],
-\   'css': ['prettier'],
-\   'python': ['black', 'isort'],
-\   'rust': ['rustfmt'],
-\}
-
-" Automatically run ALEFix on save.
-let g:ale_fix_on_save = 1
-" Easily toggle autoformatting (ta). Yes, this steps into the <leader>t... shortcut
-" prefix that I use for vim-test. Hopefully this isn't too confusing.
-function! ToggleAutoFormatting()
-    let g:ale_fix_on_save = g:ale_fix_on_save ? 0 : 1
-    echo "Autoformatting is now " . (g:ale_fix_on_save ? "on" : "off")
-endfunction
-nnoremap <leader>ta :call ToggleAutoFormatting()<CR>
-" Haskell configuration.
-let g:ale_haskell_ghc_options = '-fno-code -v0 -dynamic'
-" I haven't fully investigated this, but without this setting, black fails to
-" import our generated thrift files.
-let g:ale_python_black_change_directory = 0
-"""""""
-
 """"""" Easy debugging.
 let g:conflict_marker = "<" . "<<"
 execute "autocmd FileType python nnoremap <leader>d o__import__('pdb').set_trace()#" . g:conflict_marker . "<Esc>"
@@ -257,10 +227,62 @@ map [s :lua vim.diagnostic.goto_prev()<cr>
 
 " https://github.com/folke/trouble.nvim#commands
 nnoremap <leader>q <cmd>TroubleToggle workspace_diagnostics<cr>
+"""""""
 
-" Configuration modified from
-" https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion and
-" https://github.com/hrsh7th/nvim-cmp/#recommended-configuration
+"""""""
+" Copied from https://github.com/FatBoyXPC/dotfiles/commit/1bae9190f0d4291d08850bf5483986f185bc26fd
+command! Mapsn call fzf#vim#maps('n', 0)
+command! Mapsx call fzf#vim#maps('x', 0)
+command! Mapso call fzf#vim#maps('o', 0)
+command! Mapsi call fzf#vim#maps('i', 0)
+command! Mapsv call fzf#vim#maps('v', 0)
+command! Mapsa call fzf#vim#maps('a', 0)
+"""""""
+
+""""""" Misc shortcuts
+nnoremap <leader>a ggVG
+nnoremap <leader>w :w<CR>
+"""""""
+
+""""""" Make it easier to interface with the system clipboard.
+noremap <leader>y "+y
+noremap <leader>p "+p
+noremap <leader>P "+P
+"""""""
+
+""""""" Easily move blocks of code around.
+" Copied from https://vim.fandom.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+"""""""
+
+""""""" easier notetaking
+let g:markdown_folding = 1  " https://bitcrowd.dev/folding-sections-of-markdown-in-vim
+function! NoteHeader()
+    execute "normal! o# " . strftime('%F %R %z') . ": "
+    startinsert!
+endfunction
+
+function! NoteList()
+    let g:netrw_sort_by = 'time'
+    let g:netrw_sort_direction = 'reversed'
+    let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
+
+    execute "Explore ~/sync/scratch/jfly/notes"
+endfunction
+
+" Note New: start a new note
+noremap <leader>nn :e ~/sync/scratch/jfly/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
+" Note List: open a list of notes
+noremap <leader>nl :call NoteList()<CR>
+" Note Header: create a new header
+autocmd FileType markdown noremap <leader>nh :call NoteHeader()<CR>
+"""""""
+
 lua << EOF
     -- Copied from https://github.com/neovim/nvim-lspconfig/wiki/UI-customization#change-diagnostic-symbols-in-the-sign-column-gutter
     local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = " " }
@@ -326,6 +348,15 @@ lua << EOF
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+    -- Easily toggle autoformatting (ta). Yes, this steps into the <leader>t... shortcut
+    -- prefix that I use for vim-test. Hopefully this isn't too confusing.
+    vim.g.lsp_format_on_save = 1
+    local function toggle_autoformatting()
+        vim.g.lsp_format_on_save = vim.g.lsp_format_on_save == 1 and 0 or 1
+        print("Autoformatting is now " .. (vim.g.lsp_format_on_save == 1 and "on" or "off"))
+    end
+    vim.keymap.set('n', '<leader>ta', toggle_autoformatting, {})
+
     -- null-ls is good for wrapping misc tools that don't have a language server into
     -- something LSP compatible.
 
@@ -348,7 +379,7 @@ lua << EOF
               group = augroup,
               buffer = bufnr,
               callback = function()
-                if vim.g.ale_fix_on_save == 1 then
+                if vim.g.lsp_format_on_save == 1 then
                   vim.lsp.buf.format({ bufnr = bufnr })
                 end
               end,
@@ -501,58 +532,3 @@ lua << EOF
     -- nvim-autopairs
     require("nvim-autopairs").setup {}
 EOF
-"""""""
-
-"""""""
-" Copied from https://github.com/FatBoyXPC/dotfiles/commit/1bae9190f0d4291d08850bf5483986f185bc26fd
-command! Mapsn call fzf#vim#maps('n', 0)
-command! Mapsx call fzf#vim#maps('x', 0)
-command! Mapso call fzf#vim#maps('o', 0)
-command! Mapsi call fzf#vim#maps('i', 0)
-command! Mapsv call fzf#vim#maps('v', 0)
-command! Mapsa call fzf#vim#maps('a', 0)
-"""""""
-
-""""""" Misc shortcuts
-nnoremap <leader>a ggVG
-nnoremap <leader>w :w<CR>
-"""""""
-
-""""""" Make it easier to interface with the system clipboard.
-noremap <leader>y "+y
-noremap <leader>p "+p
-noremap <leader>P "+P
-"""""""
-
-""""""" Easily move blocks of code around.
-" Copied from https://vim.fandom.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-inoremap <C-j> <Esc>:m .+1<CR>==gi
-inoremap <C-k> <Esc>:m .-2<CR>==gi
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
-"""""""
-
-""""""" easier notetaking
-let g:markdown_folding = 1  " https://bitcrowd.dev/folding-sections-of-markdown-in-vim
-function! NoteHeader()
-    execute "normal! o# " . strftime('%F %R %z') . ": "
-    startinsert!
-endfunction
-
-function! NoteList()
-    let g:netrw_sort_by = 'time'
-    let g:netrw_sort_direction = 'reversed'
-    let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
-
-    execute "Explore ~/sync/scratch/jfly/notes"
-endfunction
-
-" Note New: start a new note
-noremap <leader>nn :e ~/sync/scratch/jfly/notes/<C-R>=strftime('%F')<CR>-.md<left><left><left>
-" Note List: open a list of notes
-noremap <leader>nl :call NoteList()<CR>
-" Note Header: create a new header
-autocmd FileType markdown noremap <leader>nh :call NoteHeader()<CR>
-"""""""

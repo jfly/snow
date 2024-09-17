@@ -111,7 +111,6 @@ pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
 
       # Linting/autofixing/LSP, etc
       editorconfig-vim
-      ale
       nvim-lspconfig
       cmp-nvim-lsp
       cmp-buffer
