@@ -43,6 +43,9 @@ let
 
     " Override the VIM definition
     call tcomment#type#Define('vim', '"${conflictMarker} %s')
+
+    " Override the Rust definition
+    call tcomment#type#Define('rust', '//${conflictMarker} %s')
   '';
 in
 
