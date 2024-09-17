@@ -1,4 +1,4 @@
-{ inputs, flake, config, ... }:
+{ flake, config, ... }:
 
 let identities = flake.lib.identities;
 in
@@ -15,8 +15,6 @@ in
       ./bluetooth.nix
       ./desktop
       ./kodi
-      inputs.agenix.nixosModules.default
-      inputs.agenix-rooter.nixosModules.default
     ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+zwjwqpX+3HR/bgVR8O0xmTzNVaRvKhzuTJr7/wjSE";

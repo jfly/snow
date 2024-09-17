@@ -40,10 +40,6 @@ let
   version = "1.0.0";
   src = runCommand "pulumi-crds-src" { } ''
     ${getExe crd2pulumi} --pythonPath $out --pythonName ${name} --version ${version} ${concatStringsSep " " crds}
-
-    # Workaround for https://github.com/pulumi/crd2pulumi/issues/148
-    substituteInPlace $out/pyproject.toml \
-      --replace-fail "pulumi-kubernetes4.18.0" "pulumi-kubernetes>=4.18.0"
   '';
 in
 
@@ -54,6 +50,12 @@ buildPythonPackage {
   pyproject = true;
   build-system = [ setuptools ];
   pythonImportsCheck = [ "pulumi_crds" ];
+
+  # Workaround for https://github.com/pulumi/crd2pulumi/issues/148
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pulumi-kubernetes4.18.0" "pulumi-kubernetes>=4.18.0"
+  '';
 
   propagatedBuildInputs = [
     parver

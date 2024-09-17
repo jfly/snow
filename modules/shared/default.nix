@@ -1,6 +1,11 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
+  imports = [
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rooter.nixosModules.default
+  ];
+
   # Ensure that commands like `nix repl` and `nix-shell` have access to the
   # same nixpkgs we use to install everything else.
   nix.nixPath = [ "nixpkgs=${pkgs.path}" ];

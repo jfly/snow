@@ -57,12 +57,12 @@
     enable = true;
     package = pkgs.sambaFull;
     openFirewall = true;
-    extraConfig = ''
-      load printers = yes
-      printing = cups
-      printcap name = cups
-    '';
-    shares = {
+    settings = {
+      global = {
+        "load printers" = "yes";
+        "printing" = "cups";
+        "printcap name" = "cups";
+      };
       printers = {
         comment = "All Printers";
         path = "/var/spool/samba";

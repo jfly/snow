@@ -31,8 +31,6 @@
     ./fuse.nix
     ./laptop.nix
     ./garage-status.nix
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rooter.nixosModules.default
   ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

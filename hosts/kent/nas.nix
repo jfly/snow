@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   inherit (pkgs.lib)
@@ -92,20 +92,20 @@ in
   services.samba = {
     enable = true;
     openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = kent
-      netbios name = kent
-      security = user
-      use sendfile = yes
-      # note: localhost is the ipv6 localhost ::1
-      hosts allow = 192.168.0. 127.0.0.1 localhost
-      hosts deny = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
-    '';
-    shares = {
+    settings = {
+      global = {
+        "security" = "user";
+        "workgroup" = "WORKGROUP";
+        "server string" = config.networking.hostName;
+        "netbios name" = config.networking.hostName;
+        "use sendfile" = "yes";
+        # note: localhost is the ipv6 localhost ::1
+        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+      };
+
       sc = {
         path = "/mnt/nexus/sc";
         browseable = "yes";

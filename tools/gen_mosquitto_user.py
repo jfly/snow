@@ -34,7 +34,7 @@ def generate(names: list[str]):
         encrypted = encrypt(hashed_pw)
 
         conflict_marker_start = ">" * 3
-        conflict_marker_end = "<"*3
+        conflict_marker_end = "<" * 3
         py = f'''\
             "{name}": deage(
                 # {conflict_marker_start} Unencrypted password (DELETE ME!!!): {pw} {conflict_marker_end}

@@ -1,4 +1,4 @@
-{ flake, inputs, pkgs, ... }:
+{ flake, pkgs, ... }:
 
 let identities = flake.lib.identities;
 in
@@ -12,8 +12,6 @@ in
       ./dbs.nix
       ./dns.nix
       ./pr-tracker.nix
-      inputs.agenix.nixosModules.default
-      inputs.agenix-rooter.nixosModules.default
     ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFeLzY4y2R5GzsHBeuESH9ejQQlciFC7pfru3pdBMaAR";

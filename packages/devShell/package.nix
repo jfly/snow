@@ -120,6 +120,7 @@ pkgs.mkShell {
     -----END AGE ENCRYPTED FILE-----
   '';
 
+  # <<< TODO: figure out why this is painfully slow >>>
   shellHook = flake'.checks.pre-commit-check.shellHook + ''
     export KUBECONFIG=$PWD/k8s/kube/config.secret
   '';

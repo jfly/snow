@@ -2,8 +2,8 @@
   description = "snow";
 
   inputs = {
-    nixos-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixos-unstable.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     poetry2nix.url = "github:nix-community/poetry2nix";
@@ -44,10 +44,31 @@
   };
 
   outputs =
-    flake-inputs@{ nixpkgs, ... }: # <<< TODO: remove unused nixpkgs variable after fixing borked lockfile >>>
+    raw-inputs:
     let
-      flake = flake-inputs.self;
-      inputs = flake-inputs // { inherit (flake.lib) agenix-rooter; };
+      flake = raw-inputs.self;
+      nixpkgs = import raw-inputs.nixpkgs { system = "x86_64-linux"; };
+      inherit (nixpkgs)
+        fetchpatch
+        applyPatches;
+
+      patchedNixpkgs = applyPatches {
+        name = "nixpkgs-patched";
+        src = raw-inputs.nixpkgs;
+        patches = [
+          (fetchpatch {
+            name = "latest inkscape/silhouette unstable";
+            url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
+            hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
+          })
+          (fetchpatch {
+            name = "crd2pulumi: 1.4.0 -> 1.5.0";
+            url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/341701.patch";
+            hash = "sha256-6WQPB2+Y0NTP2D9aCOEOG7VTuHVW3443JJ8RnqjveNA=";
+          })
+        ];
+      };
+      inputs = raw-inputs // { inherit (flake.lib) agenix-rooter; };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
     let
@@ -64,9 +85,10 @@
       };
 
       systems = [ "x86_64-linux" ];
-      perSystem = { inputs', self', pkgs, lib, system, ... }:
+      perSystem = { inputs', self', lib, system, ... }:
         let
           flake' = self';
+          pkgs = import patchedNixpkgs { inherit system; };
           systemArgs = systemlessArgs // {
             inherit inputs' flake' pkgs system;
           };
@@ -91,14 +113,9 @@
           checks = flake.lib.flattenTree {
             formatting = lib'.treefmt.check;
             pre-commit-check = lib'.pre-commit-hooks;
-            nixos = filterAttrs
-              #<<< TODO: >>> kent currently won't build due to an error
-              # building the python cryptography package. Hopefully this will go
-              # away when we update nixpkgs.
-              (name: os: name != "kent")
-              (mapAttrs'
-                (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
-                flake.nixosConfigurations);
+            nixos = mapAttrs'
+              (name: nixosConfiguration: nameValuePair name nixosConfiguration.config.system.build.toplevel)
+              flake.nixosConfigurations;
           };
         };
     });
