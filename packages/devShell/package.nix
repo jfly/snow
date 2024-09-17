@@ -41,6 +41,11 @@ let
     inherit str;
   };
   shellEnvValues = {
+    # We use IFD in flake-modules/patched-nixpkgs.nix.
+    NIX_CONFIG = plaintext ''
+      allow-import-from-derivation = true
+    '';
+
     # Credentials to talk to minio (a self-hosted file server that
     # implements the s3 api).
     AWS_ACCESS_KEY_ID = secret ''
