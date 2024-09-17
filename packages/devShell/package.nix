@@ -157,5 +157,5 @@ pkgs.mkShell {
     })
   ];
 
-  shellHook = concatStringsSep "\n" ([ flake'.lib.pre-commit-hooks.shellHook ] ++ setEnvVars);
+  shellHook = concatStringsSep "\n" ([ flake'.config.pre-commit.installationScript ] ++ setEnvVars);
 }
