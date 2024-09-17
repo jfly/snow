@@ -1,4 +1,12 @@
-{ fetchFromGitHub, writeShellApplication, symlinkJoin, makeWrapper, yq-go, jq, lib }:
+{
+  fetchFromGitHub,
+  writeShellApplication,
+  symlinkJoin,
+  makeWrapper,
+  yq-go,
+  jq,
+  lib,
+}:
 
 let
   base16-alacritty = fetchFromGitHub {
@@ -11,22 +19,22 @@ in
 symlinkJoin {
   name = "colorscheme";
   paths = [
-    (
-      writeShellApplication {
-        name = "colorscheme";
-        runtimeInputs = [ ];
-        text = builtins.readFile ./colorscheme;
-      }
-    )
+    (writeShellApplication {
+      name = "colorscheme";
+      runtimeInputs = [ ];
+      text = builtins.readFile ./colorscheme;
+    })
   ];
 
   buildInputs = [ makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/colorscheme \
       --set COLORSCHEME_PATH ${./colorschemes}:${base16-alacritty} \
-      --prefix PATH : ${lib.makeBinPath [
-        yq-go
-        jq
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          yq-go
+          jq
+        ]
+      }
   '';
 }

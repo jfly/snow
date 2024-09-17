@@ -1,4 +1,9 @@
-{ flake', config, pkgs, ... }:
+{
+  flake',
+  config,
+  pkgs,
+  ...
+}:
 
 let
   inherit (flake'.packages)
@@ -55,14 +60,16 @@ in
       mode = "0400";
       script =
         let
-          docker-config-template = pkgs.writeText "docker-config-template" (builtins.toJSON {
-            "auths" = {
-              "containers.snow.jflei.com" = {
-                "auth" = "@auth_placeholder@";
+          docker-config-template = pkgs.writeText "docker-config-template" (
+            builtins.toJSON {
+              "auths" = {
+                "containers.snow.jflei.com" = {
+                  "auth" = "@auth_placeholder@";
+                };
               };
-            };
-            "detachKeys" = "ctrl-^,q";
-          });
+              "detachKeys" = "ctrl-^,q";
+            }
+          );
           gen-docker-conf = pkgs.writeShellApplication {
             name = "gen-docker-conf";
             runtimeInputs = with pkgs; [ gnused ];

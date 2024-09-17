@@ -1,6 +1,7 @@
 { pkgs, python3Packages }:
 
-with python3Packages; buildPythonApplication {
+with python3Packages;
+buildPythonApplication {
   pname = "snowcrypt";
   version = "2022-11-29";
 

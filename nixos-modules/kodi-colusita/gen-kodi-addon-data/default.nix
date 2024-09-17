@@ -7,8 +7,10 @@ pkgs.stdenv.mkDerivation {
   buildPhase = ''
     cp -r . $out
     wrapProgram $out/gen-kodi-addon-data.sh \
-      --prefix PATH : ${pkgs.lib.makeBinPath [
-        pkgs.rsync
-      ]}
+      --prefix PATH : ${
+        pkgs.lib.makeBinPath [
+          pkgs.rsync
+        ]
+      }
   '';
 }

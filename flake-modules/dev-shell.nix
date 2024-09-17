@@ -1,5 +1,8 @@
-{ ... }: {
-  perSystem = { self', ... }: {
-    devShells.default = self'.packages.devShell;
-  };
+{ ... }:
+{
+  perSystem =
+    { self', ... }:
+    {
+      devShells.default = self'.packages.devShell;
+    };
 }

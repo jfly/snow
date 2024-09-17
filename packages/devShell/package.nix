@@ -1,4 +1,10 @@
-{ inputs, flake, flake', pkgs, ... }:
+{
+  inputs,
+  flake,
+  flake',
+  pkgs,
+  ...
+}:
 
 let
   inherit (builtins)
@@ -10,22 +16,24 @@ let
     ;
 
   poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
-  unwrap = app: pkgs.symlinkJoin {
-    name = app.name;
-    paths = [ app ];
-    buildInputs = [ ];
-    postBuild = ''
-      for full_path in ${app}/bin/.*-wrapped; do
-        f=$(basename $full_path)
-        f=''${f#.}  # remove leading dot
-        f=''${f%-wrapped}  # remove trailing -wrapped
+  unwrap =
+    app:
+    pkgs.symlinkJoin {
+      name = app.name;
+      paths = [ app ];
+      buildInputs = [ ];
+      postBuild = ''
+        for full_path in ${app}/bin/.*-wrapped; do
+          f=$(basename $full_path)
+          f=''${f#.}  # remove leading dot
+          f=''${f%-wrapped}  # remove trailing -wrapped
 
-        rm $out/bin/$f
-        cp ${app}/bin/.$f-wrapped $out/bin/$f
-        chmod +x $out/bin/$f
-      done
-    '';
-  };
+          rm $out/bin/$f
+          cp ${app}/bin/.$f-wrapped $out/bin/$f
+          chmod +x $out/bin/$f
+        done
+      '';
+    };
 
   secret = encrypted: {
     type = "secret";
@@ -84,21 +92,20 @@ let
     KUBECONFIG = plaintext "$PWD/k8s/kube/config.secret";
   };
 
-  setEnvVars = mapAttrsToList
-    (
-      name: envValue:
-        {
-          secret = ''
-            if [ -e ${envValue.path} ]; then
-              export ${name}=$(<${envValue.path})
-            else
-              echo "Could not find decrypted ${name}. Try running 'tools/deage && direnv reload'"
-            fi
-          '';
-          plaintext = "export ${name}=${escapeShellArg envValue.str}";
-        }.${envValue.type}
-    )
-    shellEnvValues;
+  setEnvVars = mapAttrsToList (
+    name: envValue:
+    {
+      secret = ''
+        if [ -e ${envValue.path} ]; then
+          export ${name}=$(<${envValue.path})
+        else
+          echo "Could not find decrypted ${name}. Try running 'tools/deage && direnv reload'"
+        fi
+      '';
+      plaintext = "export ${name}=${escapeShellArg envValue.str}";
+    }
+    .${envValue.type}
+  ) shellEnvValues;
 in
 
 pkgs.mkShell {

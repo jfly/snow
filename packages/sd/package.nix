@@ -1,4 +1,8 @@
-{ pkgs, lib, stdenv }:
+{
+  pkgs,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sd";

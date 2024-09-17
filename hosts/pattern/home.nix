@@ -1,7 +1,13 @@
 { flake, config, ... }:
-let outerConfig = config;
+let
+  outerConfig = config;
 in
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   link = target: {
@@ -32,9 +38,8 @@ in
     };
   };
 
-  home.file = (lib.mapAttrs
-    (name: target: (link target))
-    {
+  home.file =
+    (lib.mapAttrs (name: target: (link target)) {
       sd = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/sd";
       bin = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/bin";
       ".config/git" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/git";
@@ -51,36 +56,37 @@ in
       ".android/adbkey" = "${homeDir}/sync/linux-secrets/.android/adbkey";
       ".android/adbkey.pub" = "${homeDir}/sync/linux-secrets/.android/adbkey.pub";
       ".config/adept" = "${homeDir}/sync/linux-secrets/.config/adept";
-    }) // {
-    ".zshrc".text = ''
-      # zsh really wants this file to exist. If it doesn't, it'll give
-      # us a friendly (but *annoying*) welcome message.
-    '';
-    ".profile".text = ''
-      ###
-      ### Misc default programs
-      ###
-      export VISUAL=vim
-      export EDITOR=vim
+    })
+    // {
+      ".zshrc".text = ''
+        # zsh really wants this file to exist. If it doesn't, it'll give
+        # us a friendly (but *annoying*) welcome message.
+      '';
+      ".profile".text = ''
+        ###
+        ### Misc default programs
+        ###
+        export VISUAL=vim
+        export EDITOR=vim
 
-      if [ -n "$DISPLAY" ]; then
-          export BROWSER=chromium
-      else
-          export BROWSER=elinks
-      fi
-      ##################################
+        if [ -n "$DISPLAY" ]; then
+            export BROWSER=chromium
+        else
+            export BROWSER=elinks
+        fi
+        ##################################
 
-      # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
-      # This is a workaround for
-      # https://github.com/NixOS/nixpkgs/issues/188545.
-      if [ -z "$_DID_SYSTEMD_CAT" ]; then
-        export PATH=$HOME/bin:$PATH
-      fi
-    '';
-    ".zprofile".text = ''
-      source $HOME/.profile
-    '';
-  };
+        # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
+        # This is a workaround for
+        # https://github.com/NixOS/nixpkgs/issues/188545.
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          export PATH=$HOME/bin:$PATH
+        fi
+      '';
+      ".zprofile".text = ''
+        source $HOME/.profile
+      '';
+    };
 
   dconf.settings = {
     # Note: mcg defaults to connecting to localhost:6600 over ipv6,

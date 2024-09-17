@@ -1,15 +1,15 @@
 { flake, ... }:
 
-let identities = flake.lib.identities;
+let
+  identities = flake.lib.identities;
 in
 {
-  imports =
-    [
-      ./boot.nix
-      ./network.nix
-      ./nas.nix
-      ./binary-cache.nix
-    ];
+  imports = [
+    ./boot.nix
+    ./network.nix
+    ./nas.nix
+    ./binary-cache.nix
+  ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
 

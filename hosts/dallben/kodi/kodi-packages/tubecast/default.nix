@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, bottle, requests, youtube }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  bottle,
+  requests,
+  youtube,
+}:
 
 buildKodiAddon rec {
   pname = "tubecast";

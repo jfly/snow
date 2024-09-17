@@ -2,7 +2,8 @@
 
 # This is the owner id of the various files under /mnt/media/mysql/. I think
 # this id came from however Arch Linux packaged up mariadb.
-let mysql_id = 972;
+let
+  mysql_id = 972;
 in
 {
   services.mysql = {

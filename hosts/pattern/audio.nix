@@ -1,4 +1,9 @@
-{ flake', config, pkgs, ... }:
+{
+  flake',
+  config,
+  pkgs,
+  ...
+}:
 
 let
   mcg = flake'.packages.cover-grid;

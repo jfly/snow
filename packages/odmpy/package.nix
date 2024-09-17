@@ -1,4 +1,11 @@
-{ python3, fetchFromGitHub, fetchPypi, ffmpeg, bash, lib }:
+{
+  python3,
+  fetchFromGitHub,
+  fetchPypi,
+  ffmpeg,
+  bash,
+  lib,
+}:
 
 let
   iso639-lang = python3.pkgs.buildPythonPackage rec {
@@ -47,14 +54,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-h0vt4A4c+oV0JBgnBAX6I52Fr+B+rGEjlXTiwKAG+Qo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    beautifulsoup4
-    lxml
-    termcolor
-  ] ++ [
-    iso639-lang
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      requests
+      beautifulsoup4
+      lxml
+      termcolor
+    ]
+    ++ [
+      iso639-lang
+    ];
 
   nativeBuildInputs = [
     ffmpeg

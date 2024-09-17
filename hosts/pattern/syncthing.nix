@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (pkgs)
@@ -121,32 +126,30 @@ in
         RemainAfterExit = true;
         RuntimeDirectory = "syncthing-init";
         Type = "oneshot";
-        ExecStart = pkgs.writers.writeBash "merge-syncthing-config" (
-          ''
-            set -efu
+        ExecStart = pkgs.writers.writeBash "merge-syncthing-config" (''
+          set -efu
 
-            # be careful not to leak secrets in the filesystem or in process listings
-            umask 0077
+          # be careful not to leak secrets in the filesystem or in process listings
+          umask 0077
 
-            curl() {
-                # get the api key by parsing the config.xml
-                while
-                    ! ${pkgs.libxml2}/bin/xmllint \
-                        --xpath 'string(configuration/gui/apikey)' \
-                        ${cfg.configDir}/config.xml \
-                        >"$RUNTIME_DIRECTORY/api_key"
-                do sleep 1; done
-                (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-                ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
-                    --retry 1000 --retry-delay 1 --retry-all-errors \
-                    "$@"
-            }
+          curl() {
+              # get the api key by parsing the config.xml
+              while
+                  ! ${pkgs.libxml2}/bin/xmllint \
+                      --xpath 'string(configuration/gui/apikey)' \
+                      ${cfg.configDir}/config.xml \
+                      >"$RUNTIME_DIRECTORY/api_key"
+              do sleep 1; done
+              (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+              ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+                  --retry 1000 --retry-delay 1 --retry-all-errors \
+                  "$@"
+          }
 
-            payload=${lib.escapeShellArg (builtins.toJSON folderCfg)}
-            payload=''${payload/@LINUX_SECRETS_PASSPHRASE@/$(cat ${config.age.secrets.syncthing-linux-secrets.path})}
-            curl -d "$payload" -X POST ${baseAddress}
-          ''
-        );
+          payload=${lib.escapeShellArg (builtins.toJSON folderCfg)}
+          payload=''${payload/@LINUX_SECRETS_PASSPHRASE@/$(cat ${config.age.secrets.syncthing-linux-secrets.path})}
+          curl -d "$payload" -X POST ${baseAddress}
+        '');
       };
     };
 

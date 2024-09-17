@@ -1,10 +1,14 @@
 { flake, ... }:
 
-let identities = flake.lib.identities;
+let
+  identities = flake.lib.identities;
 in
 {
   # Enable deployments by non-root user.
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
   security.sudo.wheelNeedsPassword = false;
 
   # Set up users + ssh.

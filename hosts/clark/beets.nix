@@ -1,10 +1,11 @@
-{ beets
-, pkgs
-, formats
-, makeWrapper
-, runCommand
-, symlinkJoin
-, beetsConfig
+{
+  beets,
+  pkgs,
+  formats,
+  makeWrapper,
+  runCommand,
+  symlinkJoin,
+  beetsConfig,
 }:
 
 let
@@ -20,7 +21,10 @@ symlinkJoin {
   paths = [
     (beets.override {
       pluginOverrides = {
-        fetchartist = { enable = true; propagatedBuildInputs = [ (pkgs.callPackage ./beets-fetchartist.nix { }) ]; };
+        fetchartist = {
+          enable = true;
+          propagatedBuildInputs = [ (pkgs.callPackage ./beets-fetchartist.nix { }) ];
+        };
       };
     })
   ];

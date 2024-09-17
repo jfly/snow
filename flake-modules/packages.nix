@@ -1,11 +1,26 @@
-{ self, inputs, lib, ... }:
+{
+  self,
+  inputs,
+  lib,
+  ...
+}:
 
 {
-  perSystem = { self', inputs', system, pkgs, config, ... }:
+  perSystem =
+    {
+      self',
+      inputs',
+      system,
+      pkgs,
+      config,
+      ...
+    }:
     let
       pkgArgs = {
         flake = self;
-        flake' = self' // { inherit config; };
+        flake' = self' // {
+          inherit config;
+        };
         inherit inputs inputs' system;
       };
     in

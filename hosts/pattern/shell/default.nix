@@ -1,4 +1,11 @@
-{ inputs', flake, flake', config, pkgs, ... }:
+{
+  inputs',
+  flake,
+  flake',
+  config,
+  pkgs,
+  ...
+}:
 
 let
   inherit (flake'.packages)

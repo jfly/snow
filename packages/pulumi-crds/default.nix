@@ -1,21 +1,22 @@
-{ crd2pulumi
-, runCommand
-, lib
-, buildPythonPackage
-, fetchurl
-, parver
-, pulumi
-, requests
-, semver
-, setuptools
-, typing-extensions
+{
+  crd2pulumi,
+  runCommand,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  parver,
+  pulumi,
+  requests,
+  semver,
+  setuptools,
+  typing-extensions,
   # This is a hack: this package truly does depend on pulumi-kubernetes, but
   # pulumi-kubernetes is not in nixpkgs. That works find for our devShell,
   # because it pulls in pulumi-kubernetes via poetry2nix (and overrides the
   # python package set used here).
   # This is fine, we're not packaging this for other people to use. However, we
   # do need this code to evaluate properly so we don't break `nix flake check`.
-, pulumi-kubernetes ? null
+  pulumi-kubernetes ? null,
 }:
 
 let

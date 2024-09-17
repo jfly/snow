@@ -11,5 +11,6 @@ in
   # something like PWD. For example, if we're building a system using
   # github actions, it really doesn't matter where the repo we're
   # building happens to be cloned.
-  absoluteRepoPath = repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (removePrefix "/" repoPath);
+  absoluteRepoPath =
+    repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (removePrefix "/" repoPath);
 }

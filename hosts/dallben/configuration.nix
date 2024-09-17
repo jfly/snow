@@ -1,21 +1,21 @@
 { flake, config, ... }:
 
-let identities = flake.lib.identities;
+let
+  identities = flake.lib.identities;
 in
 {
-  imports =
-    [
-      ./variables.nix
-      # NUC specific stuff
-      ./boot.nix
-      ./gpu.nix
-      # Hopefully more generic Linux desktop stuff
-      ./network.nix
-      ./audio.nix
-      ./bluetooth.nix
-      ./desktop
-      ./kodi
-    ];
+  imports = [
+    ./variables.nix
+    # NUC specific stuff
+    ./boot.nix
+    ./gpu.nix
+    # Hopefully more generic Linux desktop stuff
+    ./network.nix
+    ./audio.nix
+    ./bluetooth.nix
+    ./desktop
+    ./kodi
+  ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+zwjwqpX+3HR/bgVR8O0xmTzNVaRvKhzuTJr7/wjSE";
 

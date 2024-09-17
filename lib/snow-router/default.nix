@@ -1,14 +1,14 @@
 { inputs, flake, ... }:
 
-{ pkgs
-, hostname
-, profileName
-, config-files
-, config-template-values-by-file ? { }
-, rootPassword
-, mqtt
-, dumbap
-,
+{
+  pkgs,
+  hostname,
+  profileName,
+  config-files,
+  config-template-values-by-file ? { },
+  rootPassword,
+  mqtt,
+  dumbap,
 }:
 
 let
@@ -62,12 +62,19 @@ let
     src = config-files;
     installPhase =
       let
-        toSubtitutions = subtitutionMap: map (param: "--replace-fail '${param.name}' '${param.value}'") (attrsToList subtitutionMap);
+        toSubtitutions =
+          subtitutionMap:
+          map (param: "--replace-fail '${param.name}' '${param.value}'") (attrsToList subtitutionMap);
       in
-      concatStringsSep "\n" ([
-        "mkdir -p $out"
-        "cp -r * $out/"
-      ] ++ map (param: "substituteInPlace $out/${param.name} ${concatStringsSep " " (toSubtitutions param.value)}") (attrsToList final-template-values-by-file));
+      concatStringsSep "\n" (
+        [
+          "mkdir -p $out"
+          "cp -r * $out/"
+        ]
+        ++ map (
+          param: "substituteInPlace $out/${param.name} ${concatStringsSep " " (toSubtitutions param.value)}"
+        ) (attrsToList final-template-values-by-file)
+      );
   };
 
   wifi = {
@@ -119,83 +126,94 @@ let
   #   };
   # };
   # wifi-presence = wifi-presence-by-arch.${packagesArch};
-  built-no-version = (openwrt-imagebuilder.lib.build (profile // {
-    packages =
-      [
-        "luci"
-        # Remove the stripped down version of hostapd in favor of the full
-        # version. This is necessary for awilliams/wifi-presence. See
-        # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
-        # for details.
-        "-wpad-basic-mbedtls"
-        "wpad-mbedtls"
-        "wifi-presence"
-      ] ++ (
-        if dumbap then [ ] else [
-          "luci"
-          # Useful debugging utils.
-          "lsblk"
-          "gdisk"
-          "usbutils"
-          # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
-          "block-mount"
-          "e2fsprogs"
-          "kmod-fs-ext4"
-          "kmod-usb-storage"
-          "kmod-usb2"
-          "kmod-usb3"
-          # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
-          "ddns-scripts"
-          "luci-app-ddns"
-          "ddns-scripts-cloudflare"
-          "curl"
-          "ca-bundle"
-          # More utils
-          "coreutils-nohup"
-          # Remove the stripped down version of hostapd in favor of the full
-          # version. This is necessary for awilliams/wifi-presence. See
-          # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
-          # for details.
-          "-wpad-basic-mbedtls"
-          "wpad-mbedtls"
-        ]
-      );
+  built-no-version = (
+    openwrt-imagebuilder.lib.build (
+      profile
+      // {
+        packages =
+          [
+            "luci"
+            # Remove the stripped down version of hostapd in favor of the full
+            # version. This is necessary for awilliams/wifi-presence. See
+            # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
+            # for details.
+            "-wpad-basic-mbedtls"
+            "wpad-mbedtls"
+            "wifi-presence"
+          ]
+          ++ (
+            if dumbap then
+              [ ]
+            else
+              [
+                "luci"
+                # Useful debugging utils.
+                "lsblk"
+                "gdisk"
+                "usbutils"
+                # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
+                "block-mount"
+                "e2fsprogs"
+                "kmod-fs-ext4"
+                "kmod-usb-storage"
+                "kmod-usb2"
+                "kmod-usb3"
+                # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
+                "ddns-scripts"
+                "luci-app-ddns"
+                "ddns-scripts-cloudflare"
+                "curl"
+                "ca-bundle"
+                # More utils
+                "coreutils-nohup"
+                # Remove the stripped down version of hostapd in favor of the full
+                # version. This is necessary for awilliams/wifi-presence. See
+                # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
+                # for details.
+                "-wpad-basic-mbedtls"
+                "wpad-mbedtls"
+              ]
+          );
 
-    # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
-    # "To save resources on the wireless AP router, disable some now unneeded services"
-    disabledServices = optionals dumbap [
-      "firewall"
-      "dnsmasq"
-      "odhcpd"
-    ];
+        # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
+        # "To save resources on the wireless AP router, disable some now unneeded services"
+        disabledServices = optionals dumbap [
+          "firewall"
+          "dnsmasq"
+          "odhcpd"
+        ];
 
-    files = pkgs.runCommand "image-files" { } ''
-      mkdir -p $out/etc/uci-defaults
-      cat > $out/etc/uci-defaults/99-custom <<EOF
+        files = pkgs.runCommand "image-files" { } ''
+          mkdir -p $out/etc/uci-defaults
+          cat > $out/etc/uci-defaults/99-custom <<EOF
 
-      uci -q batch << EOI
-      set system.@system[0].hostname='${hostname}'
-      commit
-      EOI
+          uci -q batch << EOI
+          set system.@system[0].hostname='${hostname}'
+          commit
+          EOI
 
-      # Set root password.
-      # https://forum.openwrt.org/t/set-password-in-new-custum-or-imagebuild-firmware/94219/2
-      passwd root <<EOP
-      ${rootPassword}
-      ${rootPassword}
-      EOP
+          # Set root password.
+          # https://forum.openwrt.org/t/set-password-in-new-custum-or-imagebuild-firmware/94219/2
+          passwd root <<EOP
+          ${rootPassword}
+          ${rootPassword}
+          EOP
 
-      EOF
+          EOF
 
-      cp -fr ${config}/etc/* $out/etc/
-    '';
-  }));
+          cp -fr ${config}/etc/* $out/etc/
+        '';
+      }
+    )
+  );
 
   last = l: builtins.elemAt l (builtins.length l - 1);
-  nix-build-version = builtins.head (splitString "-" (last (splitString "/" built-no-version.outPath)));
+  nix-build-version = builtins.head (
+    splitString "-" (last (splitString "/" built-no-version.outPath))
+  );
 
-  built-with-version = built-no-version.overrideAttrs
-    (finalAttrs: prevAttrs: {
+  built-with-version = built-no-version.overrideAttrs (
+    finalAttrs: prevAttrs: {
       configurePhase = ''
         ${prevAttrs.configurePhase}
 
@@ -211,7 +229,8 @@ let
         EOF
       '';
       hack-nix-version = nix-build-version;
-    });
+    }
+  );
 in
 
 built-with-version

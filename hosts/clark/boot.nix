@@ -12,22 +12,27 @@
   # Lol: https://discourse.nixos.org/t/whats-the-rationale-behind-not-detected-nix/5403
   hardware.enableRedistributableFirmware = lib.mkDefault true;
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ehci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/c13aba0e-7fc5-49f9-b862-d2e320dc8593";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/c13aba0e-7fc5-49f9-b862-d2e320dc8593";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/58EF-2CB2";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/58EF-2CB2";
+    fsType = "vfat";
+  };
 
   swapDevices = [ ];
 

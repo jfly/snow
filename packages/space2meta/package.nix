@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, cmake }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+}:
 
 let
   version = "0.2.0";

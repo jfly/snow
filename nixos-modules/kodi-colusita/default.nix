@@ -1,4 +1,10 @@
-{ flake, config, lib, pkgs, ... }:
+{
+  flake,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -17,7 +23,10 @@ let
   media = pkgs.callPackage ./media {
     deviceName = config.networking.hostName;
   };
-  myKodiWithPackages = pkgs.kodi.withPackages (p: [ p.a4ksubtitles media ]);
+  myKodiWithPackages = pkgs.kodi.withPackages (p: [
+    p.a4ksubtitles
+    media
+  ]);
 
   # This is unfortunate: it just doesn't seem to be possible to set some kodi
   # settings without creating files in the ~/.kodi/userdata/addon_data
@@ -50,8 +59,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ myKodi ] ++ (with pkgs;
-      [ sshfs ]);
+    environment.systemPackages = [ myKodi ] ++ (with pkgs; [ sshfs ]);
 
     programs.ssh.knownHosts = {
       "clark.snow.jflei.com" = {

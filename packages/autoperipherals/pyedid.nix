@@ -1,4 +1,9 @@
-{ buildPythonPackage, fetchPypi, requests, setuptools }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  setuptools,
+}:
 
 # TODO: consider upstreaming this to nixpkgs?
 buildPythonPackage rec {

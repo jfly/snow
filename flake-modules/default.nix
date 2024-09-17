@@ -16,12 +16,14 @@
     (
       { self, ... }:
       {
-        perSystem = { pkgs, flakeRoot, ... }: {
-          apps = self.lib.agenix-rooter.defineApps {
-            flake = self;
-            inherit pkgs flakeRoot;
+        perSystem =
+          { pkgs, flakeRoot, ... }:
+          {
+            apps = self.lib.agenix-rooter.defineApps {
+              flake = self;
+              inherit pkgs flakeRoot;
+            };
           };
-        };
       }
     )
   ];

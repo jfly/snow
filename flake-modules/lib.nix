@@ -1,4 +1,10 @@
-{ self, inputs, lib, flake-parts-lib, ... }:
+{
+  self,
+  inputs,
+  lib,
+  flake-parts-lib,
+  ...
+}:
 
 let
   inherit (lib)

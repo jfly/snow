@@ -1,10 +1,12 @@
 { pkgs }:
 
-pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
-  name = "kodi-moonlight";
-  namespace = "script.moonlight";
+pkgs.kodiPackages.toKodiAddon (
+  pkgs.stdenv.mkDerivation {
+    name = "kodi-moonlight";
+    namespace = "script.moonlight";
 
-  src = ./src;
+    src = ./src;
 
-  installPhase = "cp -r . $out";
-})
+    installPhase = "cp -r . $out";
+  }
+)

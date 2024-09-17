@@ -7,11 +7,13 @@ let
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/yazi \
-        --prefix PATH : ${pkgs.lib.makeBinPath [
-          # Needed for image previews in alacritty
-          # https://github.com/sxyazi/yazi#image-preview
-          pkgs.ueberzugpp
-        ]}
+        --prefix PATH : ${
+          pkgs.lib.makeBinPath [
+            # Needed for image previews in alacritty
+            # https://github.com/sxyazi/yazi#image-preview
+            pkgs.ueberzugpp
+          ]
+        }
     '';
   };
 in

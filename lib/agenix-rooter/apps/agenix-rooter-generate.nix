@@ -1,8 +1,12 @@
-{ flake, pkgs, flakeRoot, ... }:
+{
+  flake,
+  pkgs,
+  flakeRoot,
+  ...
+}:
 
 let
-  inherit
-    (pkgs.lib)
+  inherit (pkgs.lib)
     flatten
     mapAttrsToList
     warn
@@ -10,29 +14,30 @@ let
 
   rooter-lib = pkgs.callPackage ../lib.nix { };
 
-  hostData = hostName: host:
+  hostData =
+    hostName: host:
     if host.config ? age then
-      mapAttrsToList
-        (_: secret:
-          {
-            inherit hostName;
-            rooterEncrypted = secret.rooterEncrypted;
-            # Destination for the re-encrypted secret, releative to the root of the current repo (flake).
-            relDest = rooter-lib.relativePath {
-              from = flakeRoot;
-              to = pkgs.lib.path.append
-                host.config.age.rooter.generatedForHostDir
-                (rooter-lib.generatedSecretFilename host.config secret);
-            };
-            hostPubkey = host.config.age.rooter.hostPubkey;
-          }
-        )
-        host.config.age.secrets
-    else warn "ignoring host '${hostName}' as it appears to not use agenix" [ ];
+      mapAttrsToList (_: secret: {
+        inherit hostName;
+        rooterEncrypted = secret.rooterEncrypted;
+        # Destination for the re-encrypted secret, releative to the root of the current repo (flake).
+        relDest = rooter-lib.relativePath {
+          from = flakeRoot;
+          to = pkgs.lib.path.append host.config.age.rooter.generatedForHostDir (
+            rooter-lib.generatedSecretFilename host.config secret
+          );
+        };
+        hostPubkey = host.config.age.rooter.hostPubkey;
+      }) host.config.age.secrets
+    else
+      warn "ignoring host '${hostName}' as it appears to not use agenix" [ ];
   secretsData = flatten (mapAttrsToList hostData flake.nixosConfigurations);
-  toPython = val:
-    let f = builtins.toFile "nix2py" (builtins.toJSON val);
-    in "json.loads(Path('${f}').read_text())  # noqa: E501";
+  toPython =
+    val:
+    let
+      f = builtins.toFile "nix2py" (builtins.toJSON val);
+    in
+    "json.loads(Path('${f}').read_text())  # noqa: E501";
 in
 
 pkgs.writers.writePython3 "agenix-rooter-generate" { } ''

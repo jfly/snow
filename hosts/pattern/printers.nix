@@ -20,5 +20,8 @@
   # https://nixos.wiki/wiki/Scanners
   # Ok, not technically printers, but they're in a similar family :p
   hardware.sane.enable = true;
-  users.users.${config.snow.user.name}.extraGroups = [ "scanner" "lp" ];
+  users.users.${config.snow.user.name}.extraGroups = [
+    "scanner"
+    "lp"
+  ];
 }

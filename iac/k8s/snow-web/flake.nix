@@ -3,28 +3,36 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         nginx = pkgs.nginx.override { modules = [ pkgs.nginxModules.fancyindex ]; };
 
-        nginxConf = pkgs.runCommand "nginx-conf"
-          {
-            webroot = ./webroot;
-            inherit nginx;
-          } ''
-          cp -r ${./conf} $out
+        nginxConf =
+          pkgs.runCommand "nginx-conf"
+            {
+              webroot = ./webroot;
+              inherit nginx;
+            }
+            ''
+              cp -r ${./conf} $out
 
-          # This env var is referenced by the nginx conf files we're about to
-          # run substitution on.
-          export nginxConf=$out
+              # This env var is referenced by the nginx conf files we're about to
+              # run substitution on.
+              export nginxConf=$out
 
-          shopt -s globstar
-          for f in $out/**/*.conf; do
-            substituteAllInPlace $f
-          done
-        '';
+              shopt -s globstar
+              for f in $out/**/*.conf; do
+                substituteAllInPlace $f
+              done
+            '';
       in
       rec {
         packages = rec {

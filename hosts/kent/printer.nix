@@ -72,7 +72,7 @@
         "guest ok" = "yes";
         writable = "no";
         printable = "yes";
-        "create mode" = 0700;
+        "create mode" = 700;
       };
     };
   };

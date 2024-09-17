@@ -3,15 +3,17 @@
 let
   receiver = pkgs.callPackage ../../receiver { };
 in
-pkgs.kodiPackages.toKodiAddon (pkgs.stdenv.mkDerivation {
-  name = "kodi-autoreceiver";
-  namespace = "script.autoreceiver";
+pkgs.kodiPackages.toKodiAddon (
+  pkgs.stdenv.mkDerivation {
+    name = "kodi-autoreceiver";
+    namespace = "script.autoreceiver";
 
-  src = ./src;
+    src = ./src;
 
-  prePatch = ''
-    substituteInPlace share/kodi/addons/script.autoreceiver/service.py --replace-fail "@receiver@" "${receiver}"
-  '';
+    prePatch = ''
+      substituteInPlace share/kodi/addons/script.autoreceiver/service.py --replace-fail "@receiver@" "${receiver}"
+    '';
 
-  installPhase = "cp -r . $out";
-})
+    installPhase = "cp -r . $out";
+  }
+)

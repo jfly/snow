@@ -1,4 +1,9 @@
-{ stdenv, python3, space2meta-speedcubing-untested, lndir }:
+{
+  stdenv,
+  python3,
+  space2meta-speedcubing-untested,
+  lndir,
+}:
 
 stdenv.mkDerivation {
   name = "space2meta-speedcubing";

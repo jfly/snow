@@ -9,7 +9,10 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable deployments by non-root user.
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
   security.sudo.wheelNeedsPassword = false;
 
   programs.nix-ld.enable = true;
@@ -44,7 +47,10 @@
   };
 
   # Flakes!
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -58,7 +64,12 @@
   # of space, and I'm not sure I want to allocate that much ram?
   boot.tmp.cleanOnBoot = true;
 
-  swapDevices = [{ device = "/swapfile"; size = 2048; }];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 2048;
+    }
+  ];
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";

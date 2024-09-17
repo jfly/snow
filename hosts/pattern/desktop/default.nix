@@ -1,4 +1,11 @@
-{ inputs', flake', config, lib, pkgs, ... }:
+{
+  inputs',
+  flake',
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -61,16 +68,18 @@ in
     enable = true;
     autorun = true;
     windowManager = {
-      session = [{
-        name = "xmonad";
-        start = ''
-          # Xmonad doesn't set a cursor.
-          ${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr
+      session = [
+        {
+          name = "xmonad";
+          start = ''
+            # Xmonad doesn't set a cursor.
+            ${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr
 
-          systemd-cat -t xmonad -- ${xmonad}/bin/xmonad &
-          waitPID=$!
-        '';
-      }];
+            systemd-cat -t xmonad -- ${xmonad}/bin/xmonad &
+            waitPID=$!
+          '';
+        }
+      ];
     };
     # Set up a pretty fast keyrepeat.
     autoRepeatDelay = 300;
@@ -173,15 +182,22 @@ in
   # when you're at your desk).
   systemd.user.targets =
     let
-      locations = [ "garageman" "projector" "mobile" ];
+      locations = [
+        "garageman"
+        "projector"
+        "mobile"
+      ];
       targetNames = map (name: "location-${name}") locations;
     in
-    genAttrs targetNames (target:
-      let otherTargets = filter (name: name != target) targetNames;
+    genAttrs targetNames (
+      target:
+      let
+        otherTargets = filter (name: name != target) targetNames;
       in
       {
         conflicts = map (name: "${name}.target") otherTargets;
-      });
+      }
+    );
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
@@ -201,9 +217,9 @@ in
       uinput = "${pkgs.interception-tools}/bin/uinput";
       caps2esc = "${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc";
       space2meta = "${flake'.packages.space2meta}/bin/space2meta";
-      # TODO: figure out key drop issues
-      # space2meta-speedcubing = "${flake'.packages.space2meta-speedcubing}/bin/space2meta";
     in
+    # TODO: figure out key drop issues
+    # space2meta-speedcubing = "${flake'.packages.space2meta-speedcubing}/bin/space2meta";
     {
       enable = true;
       # Note: stringified key names are found here: https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
@@ -263,29 +279,28 @@ in
   ###
   ### Fonts!
   ###
-  fonts =
-    {
-      fontDir.enable = true;
-      # Disable the default fonts, things are more predictable that way.
-      enableDefaultPackages = false;
-      packages = with pkgs; [
-        (nerdfonts.override {
-          fonts = [
-            "UbuntuMono" # my preferred monospace font
-          ];
-        })
-        noto-fonts-monochrome-emoji
-        # I can't read any of this, but it sure looks nicer than boxes :p
-        noto-fonts-cjk-serif
-        flake'.packages.pica-font
-        flake'.packages.dk-majolica-font
-      ];
-      fontconfig = {
-        defaultFonts = {
-          monospace = [ "UbuntuMono Nerd Font Mono" ];
-        };
+  fonts = {
+    fontDir.enable = true;
+    # Disable the default fonts, things are more predictable that way.
+    enableDefaultPackages = false;
+    packages = with pkgs; [
+      (nerdfonts.override {
+        fonts = [
+          "UbuntuMono" # my preferred monospace font
+        ];
+      })
+      noto-fonts-monochrome-emoji
+      # I can't read any of this, but it sure looks nicer than boxes :p
+      noto-fonts-cjk-serif
+      flake'.packages.pica-font
+      flake'.packages.dk-majolica-font
+    ];
+    fontconfig = {
+      defaultFonts = {
+        monospace = [ "UbuntuMono Nerd Font Mono" ];
       };
     };
+  };
   ##########
 
   ### Java hacks

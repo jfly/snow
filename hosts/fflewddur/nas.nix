@@ -13,35 +13,39 @@ in
     mergerfs-tools
   ];
 
-  fileSystems = (builtins.mapAttrs
-    (_mntPath: uuid: {
+  fileSystems =
+    (builtins.mapAttrs (_mntPath: uuid: {
       device = "/dev/disk/by-uuid/${uuid}";
       fsType = "ext4";
-      options = [ "rw" "user" "auto" ];
-    })
-    nasDriveUuids) // {
-    "/mnt/bay" = {
-      device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
-      fsType = "fuse.mergerfs";
       options = [
-        # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
-        "cache.files=off"
-        "dropcacheonclose=true"
-        "category.create=mfs"
-        # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
-        "noforget"
-        "inodecalc=path-hash"
-        # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
-        "func.getattr=newest"
+        "rw"
+        "user"
+        "auto"
       ];
+    }) nasDriveUuids)
+    // {
+      "/mnt/bay" = {
+        device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
+        fsType = "fuse.mergerfs";
+        options = [
+          # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
+          "cache.files=off"
+          "dropcacheonclose=true"
+          "category.create=mfs"
+          # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
+          "noforget"
+          "inodecalc=path-hash"
+          # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
+          "func.getattr=newest"
+        ];
+      };
+      # Set up a bind mount so /mnt/bay/media is accessible at /mnt/media.
+      # Why? Partly historical, but this also provides a nice abstraction.
+      "/mnt/media" = {
+        device = "/mnt/bay/media";
+        options = [ "bind" ];
+      };
     };
-    # Set up a bind mount so /mnt/bay/media is accessible at /mnt/media.
-    # Why? Partly historical, but this also provides a nice abstraction.
-    "/mnt/media" = {
-      device = "/mnt/bay/media";
-      options = [ "bind" ];
-    };
-  };
 
   # Set up NFS server.
   services.nfs.server.enable = true;

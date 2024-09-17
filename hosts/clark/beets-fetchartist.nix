@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, beets
-, writeTextFile
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  beets,
+  writeTextFile,
 }:
 
 let
@@ -32,9 +33,12 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-jPm4S02VOYuUgA3wSHX/gdhWIZXZ1k+yLnbui5J/VuU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    hatchling
-  ] ++ [ beets ];
+  nativeBuildInputs =
+    with python3.pkgs;
+    [
+      hatchling
+    ]
+    ++ [ beets ];
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4

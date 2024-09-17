@@ -1,33 +1,35 @@
 { pkgs, fetchpatch }:
 
 let
-  vim-dim = (pkgs.vimUtils.buildVimPlugin {
-    pname = "vim-dim";
-    version = "1.1.1.pre";
-    src = pkgs.fetchFromGitHub {
-      # This fork of jeffkreeftmeijer/vim-dim contains fixes that work
-      # with neovim's updated default colorscheme.
-      # See https://github.com/neovim/neovim/issues/26378 for details.
-      owner = "jfly";
-      repo = "vim-dim";
-      rev = "nvim-tweaks";
-      sha256 = "sha256-xulPcIyJV4Z7csy1/bPq8v96SkNHH5dj+6xxJwv19eE=";
-    };
-    meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
-  }).overrideAttrs (oldAttrs: {
-    preInstall = ''
-      f=colors/dim.vim
+  vim-dim =
+    (pkgs.vimUtils.buildVimPlugin {
+      pname = "vim-dim";
+      version = "1.1.1.pre";
+      src = pkgs.fetchFromGitHub {
+        # This fork of jeffkreeftmeijer/vim-dim contains fixes that work
+        # with neovim's updated default colorscheme.
+        # See https://github.com/neovim/neovim/issues/26378 for details.
+        owner = "jfly";
+        repo = "vim-dim";
+        rev = "nvim-tweaks";
+        sha256 = "sha256-xulPcIyJV4Z7csy1/bPq8v96SkNHH5dj+6xxJwv19eE=";
+      };
+      meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
+    }).overrideAttrs
+      (oldAttrs: {
+        preInstall = ''
+          f=colors/dim.vim
 
-      # Tweak the gutter color so it stands out from the background.
-      echo 'highlight! LineNr ctermbg=8' >> $f
-      echo 'highlight! link SignColumn LineNr' >> $f
+          # Tweak the gutter color so it stands out from the background.
+          echo 'highlight! LineNr ctermbg=8' >> $f
+          echo 'highlight! link SignColumn LineNr' >> $f
 
-      # Link diffRemoved and diffAdded to saner values
-      # (this is basically copied from https://github.com/dracula/vim/issues/46)
-      echo 'highlight! link diffRemoved DiffDelete' >> $f
-      echo 'highlight! link diffAdded DiffAdd' >> $f
-    '';
-  });
+          # Link diffRemoved and diffAdded to saner values
+          # (this is basically copied from https://github.com/dracula/vim/issues/46)
+          echo 'highlight! link diffRemoved DiffDelete' >> $f
+          echo 'highlight! link diffAdded DiffAdd' >> $f
+        '';
+      });
   conflictMarker = "<" + "<<";
   tcommentOverrides = pkgs.writeText "tcomment-overrides" ''
     " Add some missing definitions

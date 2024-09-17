@@ -1,33 +1,39 @@
 { config, pkgs, ... }:
 
 let
-  buildNmConnectionDerivedSecret = { ssid, uuid, psk }: {
-    mode = "0400"; # readonly (user)
-    script = pkgs.writeShellScript "gen-nm-connection" ''
-      echo "[connection]
-      id=${ssid}
-      uuid=${uuid}
-      type=wifi
+  buildNmConnectionDerivedSecret =
+    {
+      ssid,
+      uuid,
+      psk,
+    }:
+    {
+      mode = "0400"; # readonly (user)
+      script = pkgs.writeShellScript "gen-nm-connection" ''
+        echo "[connection]
+        id=${ssid}
+        uuid=${uuid}
+        type=wifi
 
-      [wifi]
-      mode=infrastructure
-      ssid=${ssid}
+        [wifi]
+        mode=infrastructure
+        ssid=${ssid}
 
-      [wifi-security]
-      auth-alg=open
-      key-mgmt=wpa-psk
-      psk=$(cat ${psk.path})
+        [wifi-security]
+        auth-alg=open
+        key-mgmt=wpa-psk
+        psk=$(cat ${psk.path})
 
-      [ipv4]
-      method=auto
+        [ipv4]
+        method=auto
 
-      [ipv6]
-      addr-gen-mode=stable-privacy
-      method=auto
+        [ipv6]
+        addr-gen-mode=stable-privacy
+        method=auto
 
-      [proxy]"
-    '';
-  };
+        [proxy]"
+      '';
+    };
 in
 {
 
@@ -45,11 +51,13 @@ in
       -----END AGE ENCRYPTED FILE-----
     '';
   };
-  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Hen Wen.nmconnection" = buildNmConnectionDerivedSecret {
-    ssid = "Hen Wen";
-    uuid = "9ff99b03-b1db-4c00-ab90-1a0e5b1fdf83";
-    psk = config.age.secrets.hen-wen-passphrase;
-  };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Hen Wen.nmconnection" =
+    buildNmConnectionDerivedSecret
+      {
+        ssid = "Hen Wen";
+        uuid = "9ff99b03-b1db-4c00-ab90-1a0e5b1fdf83";
+        psk = config.age.secrets.hen-wen-passphrase;
+      };
 
   age.secrets.jay-fly-phone-passphrase = {
     rooterEncrypted = ''
@@ -62,11 +70,13 @@ in
       -----END AGE ENCRYPTED FILE-----
     '';
   };
-  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/jay fly phone.nmconnection" = buildNmConnectionDerivedSecret {
-    ssid = "jay fly phone";
-    uuid = "5736556a-cd3e-4588-a049-6cb3362c48e7";
-    psk = config.age.secrets.jay-fly-phone-passphrase;
-  };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/jay fly phone.nmconnection" =
+    buildNmConnectionDerivedSecret
+      {
+        ssid = "jay fly phone";
+        uuid = "5736556a-cd3e-4588-a049-6cb3362c48e7";
+        psk = config.age.secrets.jay-fly-phone-passphrase;
+      };
 
   age.secrets.cal-5g-passphrase = {
     rooterEncrypted = ''
@@ -79,11 +89,13 @@ in
       -----END AGE ENCRYPTED FILE-----
     '';
   };
-  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Cal 5g.nmconnection" = buildNmConnectionDerivedSecret {
-    ssid = "Cal 5g";
-    uuid = "c65efd03-2c3c-4e6e-87c5-a6e1530da250";
-    psk = config.age.secrets.cal-5g-passphrase;
-  };
+  age.rooter.derivedSecrets."/etc/NetworkManager/system-connections/Cal 5g.nmconnection" =
+    buildNmConnectionDerivedSecret
+      {
+        ssid = "Cal 5g";
+        uuid = "c65efd03-2c3c-4e6e-87c5-a6e1530da250";
+        psk = config.age.secrets.cal-5g-passphrase;
+      };
 
   # Let NetworkManager handle everything.
   networking.useDHCP = false;

@@ -25,5 +25,9 @@ let
 in
 pkgs.symlinkJoin {
   name = "mfa";
-  paths = [ twofa twofa-cli mfa-askpass ];
+  paths = [
+    twofa
+    twofa-cli
+    mfa-askpass
+  ];
 }

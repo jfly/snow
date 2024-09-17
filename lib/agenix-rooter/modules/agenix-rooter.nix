@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -17,35 +22,30 @@ in
     system.activationScripts.agenixRooterDerivedSecrets = {
       # Don't run until after agenix has actually generated the secrets.
       deps = [ "agenix" ];
-      text = (
-        ''
+      text =
+        (''
           rm -f /run/agenix-derived-secrets/desired-files
-        ''
-      ) + (
-        lib.concatStringsSep "\n"
-          (lib.mapAttrsToList
-            (filename: generator:
-              ''
-                # First, create a symlink to the (not-yet-existent) derived file.
-                mkdir -p /run/agenix-derived-secrets
-                hash=$(echo -n '${filename}' | md5sum | cut -f1 -d " ")
-                ln -sf '${filename}' "/run/agenix-derived-secrets/$hash"
+        '')
+        + (lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (filename: generator: ''
+            # First, create a symlink to the (not-yet-existent) derived file.
+            mkdir -p /run/agenix-derived-secrets
+            hash=$(echo -n '${filename}' | md5sum | cut -f1 -d " ")
+            ln -sf '${filename}' "/run/agenix-derived-secrets/$hash"
 
-                # Add it to the list of "desired files", so we can clean up any
-                # no-longer-needed files at the end.
-                echo '${filename}' >> /run/agenix-derived-secrets/desired-files
+            # Add it to the list of "desired files", so we can clean up any
+            # no-longer-needed files at the end.
+            echo '${filename}' >> /run/agenix-derived-secrets/desired-files
 
-                # Now, generate that derived file.
-                mkdir -p "$(dirname '${filename}')"
-                ${generator.script} > '${filename}'
+            # Now, generate that derived file.
+            mkdir -p "$(dirname '${filename}')"
+            ${generator.script} > '${filename}'
 
-                chmod ${generator.mode} '${filename}'
-                chown ${generator.user}:${generator.group} '${filename}'
-              ''
-            )
-            cfg.rooter.derivedSecrets)
-      ) + (
-        ''
+            chmod ${generator.mode} '${filename}'
+            chown ${generator.user}:${generator.group} '${filename}'
+          '') cfg.rooter.derivedSecrets
+        ))
+        + (''
           # Finally, remove any no-longer-needed files.
           rm -f /run/agenix-derived-secrets/actual-files
           for f in /run/agenix-derived-secrets/*; do
@@ -60,45 +60,48 @@ in
             rm "/run/agenix-derived-secrets/$hash"
             rm -f "$filename"
           done
-        ''
-      );
+        '');
     };
   };
 
   options.age = {
     # Extend age.secrets with new options
     secrets = mkOption {
-      type = types.attrsOf (types.submodule (submod: {
-        options = {
-          id = mkOption {
-            type = types.str;
-            default = submod.config._module.args.name;
-            readOnly = true;
-            description = mdDoc "The true identifier of this secret as used in `age.secrets`.";
+      type = types.attrsOf (
+        types.submodule (submod: {
+          options = {
+            id = mkOption {
+              type = types.str;
+              default = submod.config._module.args.name;
+              readOnly = true;
+              description = mdDoc "The true identifier of this secret as used in `age.secrets`.";
+            };
+
+            rooterEncrypted = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = literalExpression "-----BEGIN AGE ENCRYPTED FILE----- [...] -----END AGE ENCRYPTED FILE-----";
+              description = mdDoc ''
+                A secret encrypted with `tools/encrypt`.
+
+                This secret will automatically be reencrypted for hosts that use it,
+                and the resulting host-specific .age file will be set as actual
+                `file` attribute. So naturally this is mutually exclusive with
+                specifying `file` directly.
+
+                If you want to avoid having a `secrets.nix` file and only use
+                reencrypted secrets, you should always use this option instead of
+                `file`.
+              '';
+            };
           };
-
-          rooterEncrypted = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = literalExpression "-----BEGIN AGE ENCRYPTED FILE----- [...] -----END AGE ENCRYPTED FILE-----";
-            description = mdDoc ''
-              A secret encrypted with `tools/encrypt`.
-
-              This secret will automatically be reencrypted for hosts that use it,
-              and the resulting host-specific .age file will be set as actual
-              `file` attribute. So naturally this is mutually exclusive with
-              specifying `file` directly.
-
-              If you want to avoid having a `secrets.nix` file and only use
-              reencrypted secrets, you should always use this option instead of
-              `file`.
-            '';
+          config = {
+            file = mkIf (submod.config.rooterEncrypted != null) (
+              rooter-lib.generatedSecretStorePath config submod.config
+            );
           };
-        };
-        config = {
-          file = mkIf (submod.config.rooterEncrypted != null) (rooter-lib.generatedSecretStorePath config submod.config);
-        };
-      }));
+        })
+      );
     };
 
     rooter = {
@@ -130,33 +133,35 @@ in
 
       derivedSecrets = mkOption {
         default = { };
-        type = with types; attrsOf (submodule {
-          options = {
-            script = mkOption {
-              type = with types; path;
-              description = mdDoc "The script to run.";
-            };
+        type =
+          with types;
+          attrsOf (submodule {
+            options = {
+              script = mkOption {
+                type = with types; path;
+                description = mdDoc "The script to run.";
+              };
 
-            mode = mkOption {
-              type = types.str;
-              default = "0400";
-              example = "0644";
-              description = lib.mdDoc "The permissions to apply to the generated file.";
-            };
+              mode = mkOption {
+                type = types.str;
+                default = "0400";
+                example = "0644";
+                description = lib.mdDoc "The permissions to apply to the generated file.";
+              };
 
-            user = mkOption {
-              default = "0";
-              type = types.str;
-              description = lib.mdDoc "User (name or id) of created file.";
-            };
+              user = mkOption {
+                default = "0";
+                type = types.str;
+                description = lib.mdDoc "User (name or id) of created file.";
+              };
 
-            group = mkOption {
-              default = "0";
-              type = types.str;
-              description = lib.mdDoc "Group (name or id) of created file.";
+              group = mkOption {
+                default = "0";
+                type = types.str;
+                description = lib.mdDoc "Group (name or id) of created file.";
+              };
             };
-          };
-        });
+          });
         description = mdDoc ''
           A set of scripts that read in secrets and print to stdout. Useful for
           embedding secrets into larger configuration files without having to

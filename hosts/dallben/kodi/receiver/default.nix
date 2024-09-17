@@ -1,2 +1,1 @@
-{ pkgs }:
-pkgs.callPackage ./receiver.nix { }
+{ pkgs }: pkgs.callPackage ./receiver.nix { }

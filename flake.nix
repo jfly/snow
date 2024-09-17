@@ -34,7 +34,9 @@
     raw-inputs:
     let
       flake = raw-inputs.self;
-      inputs = raw-inputs // { inherit (flake.lib) agenix-rooter; };
+      inputs = raw-inputs // {
+        inherit (flake.lib) agenix-rooter;
+      };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;

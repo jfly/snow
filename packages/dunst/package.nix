@@ -1,18 +1,18 @@
-{ substituteAll
-, dunst
-, dmenu
-, makeWrapper
-, symlinkJoin
-, xdg-utils
+{
+  substituteAll,
+  dunst,
+  dmenu,
+  makeWrapper,
+  symlinkJoin,
+  xdg-utils,
 }:
 
 let
-  config = substituteAll
-    {
-      src = ./dunstrc;
-      inherit dmenu;
-      xdg_utils = xdg-utils;
-    };
+  config = substituteAll {
+    src = ./dunstrc;
+    inherit dmenu;
+    xdg_utils = xdg-utils;
+  };
 in
 symlinkJoin {
   name = "dunst";

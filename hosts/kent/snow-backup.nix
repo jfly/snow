@@ -1,4 +1,9 @@
-{ self, config, pkgs, ... }:
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   identities = self.lib.identities;
@@ -9,7 +14,11 @@ let
   };
   snow-backup = pkgs.writeShellApplication {
     name = "snow-backup";
-    runtimeInputs = [ pkgs.curl pkgs.rsync pkgs.openssh ];
+    runtimeInputs = [
+      pkgs.curl
+      pkgs.rsync
+      pkgs.openssh
+    ];
     text = ''
       set -e
 

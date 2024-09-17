@@ -17,10 +17,14 @@ let
     ;
 in
 rec {
-  repoPath = encrypted: (
-    let hashed = builtins.hashString "sha256" (removeSuffix "\n" encrypted);
-    in "./.sensitive-decrypted-secrets/${hashed}.secret"
-  );
+  repoPath =
+    encrypted:
+    (
+      let
+        hashed = builtins.hashString "sha256" (removeSuffix "\n" encrypted);
+      in
+      "./.sensitive-decrypted-secrets/${hashed}.secret"
+    );
 
   absoluteRepoPath = encrypted: flake.lib.snow.absoluteRepoPath (repoPath encrypted);
 

@@ -1,6 +1,12 @@
-{ self, config, lib, ... }:
+{
+  self,
+  config,
+  lib,
+  ...
+}:
 
-let identities = self.lib.identities;
+let
+  identities = self.lib.identities;
 in
 {
   options = {
