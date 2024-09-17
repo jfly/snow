@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   flake,
   flake',
   pkgs,
@@ -9,10 +10,6 @@
 let
   inherit (builtins)
     concatStringsSep
-    ;
-  inherit (inputs.nixpkgs.lib)
-    mapAttrsToList
-    escapeShellArg
     ;
 
   poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
@@ -92,7 +89,7 @@ let
     KUBECONFIG = plaintext "$PWD/k8s/kube/config.secret";
   };
 
-  setEnvVars = mapAttrsToList (
+  setEnvVars = lib.mapAttrsToList (
     name: envValue:
     {
       secret = ''
@@ -102,7 +99,7 @@ let
           echo "Could not find decrypted ${name}. Try running 'tools/deage && direnv reload'"
         fi
       '';
-      plaintext = "export ${name}=${escapeShellArg envValue.str}";
+      plaintext = "export ${name}=${lib.escapeShellArg envValue.str}";
     }
     .${envValue.type}
   ) shellEnvValues;

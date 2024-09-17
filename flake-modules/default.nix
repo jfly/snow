@@ -13,6 +13,7 @@
     ./git-hooks.nix
     ./dev-shell.nix
 
+    # TODO: move away from agenix-rooter to agenix-rekey.
     (
       { self, ... }:
       {

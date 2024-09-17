@@ -1,10 +1,5 @@
-{ inputs, ... }:
+{ lib, ... }:
 
-let
-  inherit (inputs.nixpkgs.lib)
-    removePrefix
-    ;
-in
 {
   # Kind of weird to be hardcoding the path here, but I want this to
   # work in a pure build, which means we can't (and shouldn't) look at
@@ -12,5 +7,5 @@ in
   # github actions, it really doesn't matter where the repo we're
   # building happens to be cloned.
   absoluteRepoPath =
-    repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (removePrefix "/" repoPath);
+    repoPath: "/home/jeremy/src/github.com/jfly/snow" + "/" + (lib.removePrefix "/" repoPath);
 }

@@ -18,7 +18,7 @@ let
   libDir = ../lib;
   libDirs = lib.filterAttrs (_name: type: type == "directory") (builtins.readDir libDir);
   args = {
-    inherit inputs;
+    inherit inputs lib;
     flake = self;
   };
 in
