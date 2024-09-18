@@ -11,8 +11,12 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim.url = "github:nix-community/nixvim";
     on-air.inputs.nixpkgs.follows = "nixpkgs";
     on-air.url = "github:jfly/on-air";
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";

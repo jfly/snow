@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  flake',
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -19,7 +24,7 @@
   nix.package = pkgs.nixVersions.latest;
 
   environment.systemPackages = with pkgs; [
-    vim
+    flake'.packages.neovim
     wget
     curl
     tmux
