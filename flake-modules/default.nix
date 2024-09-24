@@ -1,5 +1,6 @@
 {
   imports = [
+    # inputs
     ./patched-nixpkgs.nix
 
     # outputs
