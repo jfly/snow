@@ -16,6 +16,20 @@ let
   '';
 in
 {
+  services.geoclue2 = {
+    enable = true;
+    # Workaround for <https://github.com/NixOS/nixpkgs/issues/321121>.
+    geoProviderUrl = "https://beacondb.net/v1/geolocate";
+  };
+
+  # Keep the system timezone in sync as we travel the world. Needs Geoclu in
+  # order to know where we are on Earth.
+  services.automatic-timezoned.enable = true;
+
+  # Shift the color temperature of the screen throughout the day. Needs geoclue
+  # in order to know where we are on Earth.
+  services.redshift.enable = true;
+
   systemd.user.services = {
     "lid" = {
       enable = true;
