@@ -16,11 +16,6 @@ let
         url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
         hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
       })
-      (fetchpatch {
-        name = "crd2pulumi: 1.4.0 -> 1.5.0";
-        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/341701.patch";
-        hash = "sha256-6WQPB2+Y0NTP2D9aCOEOG7VTuHVW3443JJ8RnqjveNA=";
-      })
     ];
   };
 in
