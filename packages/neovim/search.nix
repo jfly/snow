@@ -25,20 +25,49 @@ in
   };
 
   extraConfigLuaPre = ''
-    local SearchDirection = {
-      FORWARD = '/',
-      BACKWARD = '?',
-    }
+    local snowsearch = {}
 
-    local function searchBuf(word, opts)
-      local direction = opts.direction or SearchDirection.FORWARD
-      local case_sensitivity_prefix = ({
-        [true] = "\\C",
-        [false] = "\\c",
-        default = "",
-      })[opts.case_sensitive or "default"]
+    do
+      local Direction = {
+        FORWARD = '/',
+        BACKWARD = '?',
+      }
 
-      vim.fn.feedkeys(direction .. case_sensitivity_prefix .. "\\<" .. word .. "\\>\r", 'n')
+      local function search_buf(word, opts)
+        local direction = opts.direction or Direction.FORWARD
+        local case_sensitivity_prefix = ({
+          [true] = "\\C",
+          [false] = "\\c",
+          default = "",
+        })[opts.case_sensitive or "default"]
+
+        vim.fn.feedkeys(direction .. case_sensitivity_prefix .. "\\<" .. word .. "\\>\r", 'n')
+      end
+
+      local function get_selection()
+        local chunks = vim.fn.getregion(vim.fn.getpos('.'), vim.fn.getpos('v'), { type = vim.fn.mode() })
+        return table.concat(chunks, [[\n]])
+      end
+
+      local function get_search_term()
+        local mode = vim.fn.mode()
+
+        if mode == "n" then
+          return vim.fn.expand("<cword>")
+        elseif mode == "V" then
+          -- Note: this does not do the escaping that upstream does [0]
+          -- Maybe upstream would be interested in making some of that functionality available publicly..
+          --
+          -- [0]: https://github.com/neovim/neovim/blob/v0.10.1/runtime/lua/vim/_defaults.lua#L35-L48
+          return get_selection()
+        else
+          assert(false, "unrecognized mode " .. mode)
+        end
+      end
+
+      snowsearch.Direction = Direction
+      snowsearch.search_buf = search_buf
+      snowsearch.get_search_term = get_search_term
     end
   '';
 
@@ -51,9 +80,9 @@ in
       options.desc = "Search forwards for word under cursor (case sensitive)";
       action = mkRaw ''
         function()
-          local word = vim.fn.expand("<cword>")
-          searchBuf(word, {
-            direction = SearchDirection.FORWARD,
+          local word = snowsearch.get_search_term()
+          snowsearch.search_buf(word, {
+            direction = snowsearch.Direction.FORWARD,
             case_sensitive = true,
           })
         end
@@ -64,9 +93,9 @@ in
       options.desc = "Search backwards for word under cursor (case sensitive)";
       action = mkRaw ''
         function()
-          local word = vim.fn.expand("<cword>")
-          searchBuf(word, {
-            direction = SearchDirection.BACKWARD,
+          local word = snowsearch.get_search_term()
+          snowsearch.search_buf(word, {
+            direction = snowsearch.Direction.BACKWARD,
             case_sensitive = true,
           })
         end
@@ -77,7 +106,7 @@ in
       options.desc = "Search project for word under cursor";
       action = mkRaw ''
         function()
-          local word = vim.fn.expand("<cword>")
+          local word = snowsearch.get_search_term()
           require('fzf-lua').grep { search = word }
         end
       '';
