@@ -163,6 +163,16 @@ config redirect
 	option dest_ip '192.168.1.110'
 	option dest_port '22000'
 
+# Allow mosh to clark.
+config redirect
+	option dest 'lan'
+	option target 'DNAT'
+	option name 'mosh'
+	option src 'wan'
+	option src_dport '60001-60010'
+	option dest_ip '192.168.1.110'
+	option dest_port '60001-60010'
+
 config rule 'iot_dns'
 	option name 'Allow-DNS-iot'
 	option src 'iot'
