@@ -40,6 +40,10 @@ let
     type = "plaintext";
     inherit str;
   };
+  expression = expr: {
+    type = "expression";
+    expression = expr;
+  };
   shellEnvValues = {
     # We use IFD in flake-modules/patched-nixpkgs.nix.
     NIX_CONFIG = plaintext ''
@@ -91,7 +95,7 @@ let
       -----END AGE ENCRYPTED FILE-----
     '';
 
-    KUBECONFIG = plaintext "$PWD/k8s/kube/config.secret";
+    KUBECONFIG = expression "$PWD/iac/k8s/kube/config.secret";
   };
 
   setEnvVars = lib.mapAttrsToList (
@@ -105,6 +109,7 @@ let
         fi
       '';
       plaintext = "export ${name}=${lib.escapeShellArg envValue.str}";
+      expression = "export ${name}=${envValue.expression}";
     }
     .${envValue.type}
   ) shellEnvValues;

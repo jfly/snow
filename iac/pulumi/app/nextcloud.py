@@ -1,6 +1,7 @@
 import pulumi_keycloak as keycloak
 from textwrap import dedent
-from pulumi_kubernetes.helm.v3 import Chart, ChartOpts, FetchOpts
+
+from pulumi_kubernetes.helm.v4 import Chart, RepositoryOptsArgs
 from .snowauth import Access, Snowauth
 from .deage import deage
 from .util import Database, format_traefik_middlewares
@@ -12,8 +13,10 @@ class Nextcloud:
         self._snowauth = snowauth
 
         self._declare_keycloak_client()
-        db = self._declare_db()
-        self._declare_helm_chart(db)
+        _db = self._declare_db()
+        # As of 2024-09-27, Nextcloud is not upgrading cleanly. Something about not being able to find a config file.
+        # Either figure this out, or drop Nextcloud.
+        # self._declare_helm_chart(db)
 
     def _declare_keycloak_client(self):
         snow_realm = self._snowauth.snow_realm
@@ -45,7 +48,7 @@ class Nextcloud:
             "colusa-role",
             realm_id=snow_realm.id,
             client_id=client.id,
-            description="Residents of 612 Colusa",
+            description="Residents of Colusa",
             name="colusa",
         )
 
@@ -138,114 +141,129 @@ class Nextcloud:
         )
         Chart(
             "nextcloud",
-            ChartOpts(
-                chart="nextcloud",
-                version="4.6.6",
-                fetch_opts=FetchOpts(repo="https://nextcloud.github.io/helm/"),
-                values={
-                    "nextcloud": {
-                        "host": "nextcloud.snow.jflei.com",
-                        "username": "admin",
-                        "password": deage(
+            chart="nextcloud",
+            version="6.0.3",
+            repository_opts=RepositoryOptsArgs(
+                repo="https://nextcloud.github.io/helm/",
+            ),
+            values={
+                "image": {
+                    "version": "30",
+                    # Needed in order to enable nginx (see below).
+                    "flavor": "fpm",
+                },
+                "nginx": {
+                    # Workaround for <https://github.com/nextcloud/docker/issues/1423>
+                    "enabled": True,
+                },
+                "nextcloud": {
+                    "host": "nextcloud.snow.jflei.com",
+                    "username": "admin",
+                    "password": deage(
+                        """\
+                        -----BEGIN AGE ENCRYPTED FILE-----
+                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmVytmTEc2a0lVamRydkRl
+                        QmQ5b2R5Z2F0eGtSaUxmQW45L2k0ZUQ3aWtVCkFUdzhJSGJ3V2Z3ZmptbmZnVmpu
+                        WjdNOGMvdmlQMDFxS2w3YmI2NGRsR3cKLS0tIG5GWVZYbG56dlR2VWZGUGNQWVhM
+                        dXBkQlFOeFdhWEpaNHZuVllIS1ArRE0KUv8c2mRG8ISmH2aEP4F6/CMJtuNNeu7s
+                        bb52cUtHNYlg9kbPBXncriMUOR6d68hDFYE2cg==
+                        -----END AGE ENCRYPTED FILE-----
+                    """
+                    ),
+                    "configs": {
+                        "custom.config.php": dedent(
                             """\
-                            -----BEGIN AGE ENCRYPTED FILE-----
-                            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmVytmTEc2a0lVamRydkRl
-                            QmQ5b2R5Z2F0eGtSaUxmQW45L2k0ZUQ3aWtVCkFUdzhJSGJ3V2Z3ZmptbmZnVmpu
-                            WjdNOGMvdmlQMDFxS2w3YmI2NGRsR3cKLS0tIG5GWVZYbG56dlR2VWZGUGNQWVhM
-                            dXBkQlFOeFdhWEpaNHZuVllIS1ArRE0KUv8c2mRG8ISmH2aEP4F6/CMJtuNNeu7s
-                            bb52cUtHNYlg9kbPBXncriMUOR6d68hDFYE2cg==
-                            -----END AGE ENCRYPTED FILE-----
-                        """
+                            <?php
+                            $CONFIG = array (
+                              // Traefik is the entrypoint into our cluster. Trust its
+                              // X-Forwarded-* headers.
+                              'trusted_proxies' => array(
+                                0 => '127.0.0.1',
+                                1 => '10.0.0.0/8',
+                              ),
+                              'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+                              // https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#default-phone-region
+                              'default_phone_region' => 'US',
+                              'maintenance_window_start' => 11,  // 11am UTC = 3 or 4 am Pacific
+
+                              // https://github.com/nextcloud/helm/blob/main/charts/nextcloud/README.md#logging
+                              // 'log_type' => 'file',
+                              // 'logfile' => 'nextcloud.log',
+                              // 'loglevel' => 0,
+                              // 'logdateformat' => 'F d, Y H:i:s'
+                            );
+                            """
                         ),
-                        "configs": {
-                            "custom.config.php": dedent(
-                                """\
-                                <?php
-                                $CONFIG = array (
-                                  // Traefik is the entrypoint into our cluster. Trust its
-                                  // X-Forwarded-* headers.
-                                  'trusted_proxies' => array(
-                                    0 => '127.0.0.1',
-                                    1 => '10.0.0.0/8',
-                                  ),
-                                  'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
-                                  // https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#default-phone-region
-                                  'default_phone_region' => 'US',
-                                  'maintenance_window_start' => 11,  // 11am UTC = 3 or 4 am Pacific
-                                );
-                                """
-                            ),
-                        },
-                    },
-                    "ingress": {
-                        "enabled": True,
-                        "tls": [
-                            {
-                                "hosts": ["nextcloud.snow.jflei.com"],
-                                "secretName": "nextcloud-tls",
-                            },
-                        ],
-                        # Note: this is copied from `http_ingress`, could we DRY this up?
-                        "annotations": {
-                            "cert-manager.io/cluster-issuer": "letsencrypt-prod",
-                            "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
-                            "traefik.ingress.kubernetes.io/router.middlewares": middlewares,
-                        },
-                    },
-                    "phpClientHttpsFix": {
-                        "enabled": True,
-                    },
-                    "persistence": {
-                        "enabled": True,
-                        "storageClass": "manual",
-                        "nextcloudData": {
-                            "enabled": True,
-                            "storageClass": "manual",
-                        },
-                    },
-                    "internalDatabase": {
-                        "enabled": False,
-                    },
-                    "externalDatabase": {
-                        "enabled": True,
-                        "type": "postgresql",
-                        "host": db.hostname(),
-                        "database": db.schema,
-                        "user": db.admin_username,
-                        "password": db.admin_password,
-                    },
-                    "cronjob": {
-                        "enabled": True,
-                    },
-                    "redis": {
-                        "enabled": True,
-                        "auth": {
-                            "password": deage(
-                                """
-                                -----BEGIN AGE ENCRYPTED FILE-----
-                                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA5eTZDdFRFcDA4cXdXQko0
-                                ajY1dVBmdWhiVmw5OGxuT0pLSjBuV0pXSDF3CitRMUU5Q2ViVlFORHlWT0NsVTMr
-                                VE5JY29iLzRlKzB0R3NOWjBsZXUyZmMKLS0tIGFPTDFaNnJCK0hWalptZG0xaG41
-                                U01zbXZnWmxETTdNb3ozbGF4QVRpUjAKG4TCECMwFRybbA/XKURz8vW9P6hAAfM+
-                                S+L4cbZK2ugD7DP5HxqFBS22GFxzb20ZUkanzw==
-                                -----END AGE ENCRYPTED FILE-----
-                                """
-                            ),
-                        },
-                    },
-                    "metrics": {
-                        "token": deage(
-                            """
-                            -----BEGIN AGE ENCRYPTED FILE-----
-                            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4U05MQmJHb2NIT3h0UzA3
-                            a0IzdklGTklBZ2lpU2YyQlJzUzZTVFA1SGhVCkh5dlRiai83ejM5NklwQ1FkbTRH
-                            QlgrejBXNURVc2x4L3lkZ2hSLzBkdmcKLS0tIDlyNHZaZjUyWUdpa2hUZ1IvbS9y
-                            ZGo4Yjh6K21IdFdySmF5aE9wVjNxTjAKzgquEZJQt1Th/8s/qS87LH4uWwOsnMrL
-                            aK25r8bAllYn2WewCLYQ9pqL
-                            -----END AGE ENCRYPTED FILE-----
-                            """
-                        )
                     },
                 },
-            ),
+                "ingress": {
+                    "enabled": True,
+                    "tls": [
+                        {
+                            "hosts": ["nextcloud.snow.jflei.com"],
+                            "secretName": "nextcloud-tls",
+                        },
+                    ],
+                    # Note: this is copied from `http_ingress`, could we DRY this up?
+                    "annotations": {
+                        "cert-manager.io/cluster-issuer": "letsencrypt-prod",
+                        "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
+                        "traefik.ingress.kubernetes.io/router.middlewares": middlewares,
+                    },
+                },
+                "phpClientHttpsFix": {
+                    "enabled": True,
+                },
+                "persistence": {
+                    "enabled": True,
+                    "storageClass": "manual",
+                    "nextcloudData": {
+                        "enabled": True,
+                        "storageClass": "manual",
+                    },
+                },
+                "internalDatabase": {
+                    "enabled": False,
+                },
+                "externalDatabase": {
+                    "enabled": True,
+                    "type": "postgresql",
+                    "host": db.hostname(),
+                    "database": db.schema,
+                    "user": db.admin_username,
+                    "password": db.admin_password,
+                },
+                "cronjob": {
+                    "enabled": True,
+                },
+                "redis": {
+                    "enabled": True,
+                    "auth": {
+                        "password": deage(
+                            """
+                            -----BEGIN AGE ENCRYPTED FILE-----
+                            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA5eTZDdFRFcDA4cXdXQko0
+                            ajY1dVBmdWhiVmw5OGxuT0pLSjBuV0pXSDF3CitRMUU5Q2ViVlFORHlWT0NsVTMr
+                            VE5JY29iLzRlKzB0R3NOWjBsZXUyZmMKLS0tIGFPTDFaNnJCK0hWalptZG0xaG41
+                            U01zbXZnWmxETTdNb3ozbGF4QVRpUjAKG4TCECMwFRybbA/XKURz8vW9P6hAAfM+
+                            S+L4cbZK2ugD7DP5HxqFBS22GFxzb20ZUkanzw==
+                            -----END AGE ENCRYPTED FILE-----
+                            """
+                        ),
+                    },
+                },
+                "metrics": {
+                    "token": deage(
+                        """
+                        -----BEGIN AGE ENCRYPTED FILE-----
+                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4U05MQmJHb2NIT3h0UzA3
+                        a0IzdklGTklBZ2lpU2YyQlJzUzZTVFA1SGhVCkh5dlRiai83ejM5NklwQ1FkbTRH
+                        QlgrejBXNURVc2x4L3lkZ2hSLzBkdmcKLS0tIDlyNHZaZjUyWUdpa2hUZ1IvbS9y
+                        ZGo4Yjh6K21IdFdySmF5aE9wVjNxTjAKzgquEZJQt1Th/8s/qS87LH4uWwOsnMrL
+                        aK25r8bAllYn2WewCLYQ9pqL
+                        -----END AGE ENCRYPTED FILE-----
+                        """
+                    )
+                },
+            },
         )

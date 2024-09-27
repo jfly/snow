@@ -67,7 +67,8 @@ class Snowauth:
                 Access.INTERNET_BEHIND_SSO_FAMILY: "https://snowauth-family.snow.jflei.com/_oauth",
                 Access.LAN_ONLY: None,
             }
-            valid_redirect_uris.append(redirect_uri_by_access[access])
+            if redirect_uri := redirect_uri_by_access[access]:
+                valid_redirect_uris.append(redirect_uri)
 
         self._snowauth_keycloak_client = keycloak.openid.Client(
             "snowauth",

@@ -13,50 +13,50 @@ class Zone:
         self._name = name
         self._id = id
 
-    def cname(self, name: str, value: str):
+    def cname(self, name: str, content: str):
         cloudflare.Record(
             f"{name}.{self._name}",
             name=name,
             ttl=DEFAULT_TTL,
             type="CNAME",
-            value=value,
+            content=content,
             zone_id=self._id,
             opts=pulumi.ResourceOptions(protect=True),
         )
 
     def a(self, name: str, values: list[str]):
-        for i, value in enumerate(values):
+        for i, content in enumerate(values):
             cloudflare.Record(
                 f"{name}-{i+1}",
                 name=name,
                 ttl=DEFAULT_TTL,
                 type="A",
-                value=value,
+                content=content,
                 zone_id=self._id,
                 opts=pulumi.ResourceOptions(protect=True),
             )
 
     def mx(self, name: str, values_by_priority: dict[int, list[str]]):
         for priority, values in values_by_priority.items():
-            for i, value in enumerate(values):
+            for i, content in enumerate(values):
                 cloudflare.Record(
                     f"mx-{name}-p{priority}-{i+1}",
                     name=name,
                     priority=priority,
                     ttl=DEFAULT_TTL,
                     type="MX",
-                    value=value,
+                    content=content,
                     zone_id=self._id,
                     opts=pulumi.ResourceOptions(protect=True),
                 )
 
-    def txt(self, name: str, value: str):
+    def txt(self, name: str, content: str):
         cloudflare.Record(
             f"txt-{name}",
             name=name,
             ttl=DEFAULT_TTL,
             type="TXT",
-            value=value,
+            content=content,
             zone_id=self._id,
             opts=pulumi.ResourceOptions(protect=True),
         )
