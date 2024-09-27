@@ -1,4 +1,6 @@
 {
+  _module.args.flakeRoot = ../.;
+
   imports = [
     # inputs
     ./patched-nixpkgs.nix
@@ -16,10 +18,10 @@
 
     # TODO: move away from agenix-rooter to agenix-rekey.
     (
-      { self, ... }:
+      { self, flakeRoot, ... }:
       {
         perSystem =
-          { pkgs, flakeRoot, ... }:
+          { pkgs, ... }:
           {
             apps = self.lib.agenix-rooter.defineApps {
               flake = self;
