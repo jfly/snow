@@ -8,6 +8,8 @@
     agenix.inputs.home-manager.follows = "home-manager";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -29,6 +31,7 @@
     pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
     shtuff.inputs.nixpkgs.follows = "nixpkgs";
     shtuff.url = "github:jfly/shtuff";
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";

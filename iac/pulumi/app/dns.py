@@ -72,6 +72,7 @@ class Dns:
         self._legacy_snowdon()
         self._snow()
         self._google_workspace()
+        self._mail()
 
         self._secret_projects()
 
@@ -148,3 +149,40 @@ class Dns:
             "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj8SEHdHgkBVlTXdYyahiOOjzgdOa1H87eO74KsWqkMGP4eJ+9lpJWqBuHz9Ql48JNOZgpve7lDy8UTjW68RCg/0QOccXW07dqHNCJETsvRVWj+Z0qpWcoJbdrf+GJqGUgHdPUZ9JQZU3RoFti7Uuz/anpuzE8P8WjQ5JWIy5xCvliHf7liiy7/fdOMzoclieem8SMZ5Bote7vwOlWZ/H9XRYpuZRRlHvp7KXRDjVTgtpliyQ15GLZTKd/mvHfG78Kz9dnsf1I6EqFe1k8US68b3IoWtTVa+anrIXRFtREbwl/y3XpwX1Z6FtLiPwwdWqiQb91C/uYmF4DA1XU7sVnwIDAQAB",
         )
         self._jflei_com.txt("jflei.com", "v=spf1 include:_spf.google.com ~all")
+
+    def _mail(self):
+        # Keep this in sync with hosts/fflam/mail.nix.
+        # Fairly hidden: this is the domain name of the mailserver.
+        mx_domain = "mail.playground.jflei.com"
+        # Very public. This is the thing after the @ sign in email addresses.
+        email_domain = "playground.jflei.com"
+
+        self._jflei_com.a(
+            name=mx_domain,
+            values=["5.78.116.143"],  # hosts/fflam/network.nix
+        )
+
+        # Create MX record.
+        self._jflei_com.mx(
+            email_domain,
+            {10: [mx_domain]},
+        )
+
+        # Create SPF record.
+        self._jflei_com.txt(
+            email_domain,
+            f"v=spf1 a:{mx_domain} -all",
+        )
+
+        # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
+        # From /var/dkim/playground.jflei.com.mail.txt on fflam
+        self._jflei_com.txt(
+            f"mail._domainkey.{email_domain}",
+            "v=DKIM1; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC3gmvUhcCug9NnbXLd+9OS2UYZtS2shgnecMrTV0chvmUUNjl4I3/PRhSJHjMShEV11N+ze/Sh0xIuePp1CX0/rJ/B5soFR5c0o5ZOpZ0/IBW1wtTVrkuwrHZbgQ8k8oQ9w6OukG7Ws9LAIEkYGoQxUGMzn2qVwb9Qkt5nYV4nJQIDAQAB",
+        )
+
+        # Create DMARC record
+        self._jflei_com.txt(
+            f"_dmarc.{email_domain}",
+            "v=DMARC1; p=non",
+        )
