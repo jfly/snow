@@ -23,6 +23,10 @@ in
 
   users.users.${config.snow.user.name}.shell = pkgs.fish;
   programs.fish.enable = true;
+  # Enabling fish enables this setting, and it's slowwww to rebuild. I'm going
+  # to try turning it off and see if I regret it.
+  # https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365/3
+  documentation.man.generateCaches = false;
 
   programs.zsh = {
     enable = true;

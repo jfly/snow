@@ -9,6 +9,8 @@
   click,
   pyxdg,
   xlib,
+  wireplumber,
+  pipewire,
 }:
 
 let
@@ -40,6 +42,8 @@ buildPythonApplication {
     pyedid
     pyxdg
     xlib
+    wireplumber # provides wpctl
+    pipewire # provides pw-link
   ];
   src = ./.;
 

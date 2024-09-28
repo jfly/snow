@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
 
-# decrease the resolution of my primary monitor for screensharing
-xrandr --output DP-3 --mode 1920x1080 --output DP-4 --right-of DP-3
+set -euo pipefail
+
+function cleanup {
+  echo "Exiting pairing mode"
+  rm -r /tmp/pairing
+  systemctl restart --user autoperipherals
+}
+
+trap cleanup EXIT
+
+touch /tmp/pairing
+systemctl restart --user autoperipherals
+
+echo "In pairing mode. ctrl-c to exit."
+read -r

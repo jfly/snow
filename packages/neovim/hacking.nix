@@ -19,18 +19,18 @@ in
 
     # TODO: explore if snippets are a good alternative to this sort of stuff.
     {
-      desc = "Debugger shortcuts for Python";
+      desc = "Breakpoint shortcuts for Python";
       event = "FileType";
       pattern = "python";
       command = ''
-        nnoremap <leader>d odebugger()#${conflictMarker}<Esc>
-        nnoremap <leader>D Odebugger()#${conflictMarker}<Esc>
+        nnoremap <leader>d obreakpoint()#${conflictMarker}<Esc>
+        nnoremap <leader>D Obreakpoint()#${conflictMarker}<Esc>
         nnoremap <leader>o o__import__('os').environ['JFLY'] = '1'#${conflictMarker}<Esc>
         nnoremap <leader>l oif __import__('os').environ.get('JFLY'): __import__('pdb').set_trace()#${conflictMarker}<Esc>
       '';
     }
     {
-      desc = "Debugger shortcuts for Bash";
+      desc = "Breakpoint shortcuts for Bash";
       event = "FileType";
       pattern = "sh";
       command = ''

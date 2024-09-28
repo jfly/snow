@@ -1,13 +1,51 @@
+import enum
 import subprocess
+from pathlib import Path
 import logging
 import click
 from . import highlander_rule
 from . import data
+from .audio import set_loopback
 from . import xrandr
 from .util import notify_send
 from .util import set_dpi
 
 logger = logging.getLogger(__name__)
+
+
+class PairingMode:
+    @staticmethod
+    def message():
+        return " Mode: pairing"
+
+    @staticmethod
+    def mobile_dpi():
+        return 180
+
+    @staticmethod
+    def apply_audio_tweaks():
+        set_loopback(True)
+
+
+class SoloMode:
+    @staticmethod
+    def message():
+        return " Mode: solo"
+
+    @staticmethod
+    def mobile_dpi():
+        return 133
+
+    @staticmethod
+    def apply_audio_tweaks():
+        set_loopback(False)
+
+
+def get_mode():
+    if Path("/tmp/pairing").exists():
+        return PairingMode
+    else:
+        return SoloMode
 
 
 def autoperipherals():
@@ -18,6 +56,8 @@ def autoperipherals():
     display_by_edid_name = {
         f"{d.edid.name} {d.edid.serial}": d for d in displays if d.edid is not None
     }
+
+    mode = get_mode()
 
     if primary_external := display_by_edid_name.get("DELL U2715H H7YCC8AA0DSS"):
         location_name = "garageman"
@@ -40,14 +80,16 @@ def autoperipherals():
         external_display.is_active = True
     else:
         location_name = "mobile"
-        dpi = 133
+        dpi = mode.mobile_dpi()
 
         internal_display = display_by_name["eDP-1"]
         for display in displays:
             display.is_active = False
         internal_display.is_active = True
 
-    notify_send(f"Detected location {location_name}")
+    message = f"Detected location {location_name}."
+    message += mode.message()
+    notify_send(message)
 
     # Enable the corresponding systemd target, so special services can run when we're in a specific location.
     # These systemd targets are defined in pattern/desktop/.
@@ -74,6 +116,8 @@ def autoperipherals():
             display.rotation = rotation
 
     x.apply()
+
+    mode.apply_audio_tweaks()
 
     subprocess.run(
         ["setbg"],

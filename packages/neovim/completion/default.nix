@@ -13,9 +13,9 @@ let
           "\tmain()"
         ];
       };
-      "debugger breakpoint" = {
-        "prefix" = "d";
-        "body" = [ "debugger() # ${conflictMarker}" ];
+      "breakpoint" = {
+        "prefix" = "b";
+        "body" = [ "breakpoint() # ${conflictMarker}" ];
       };
     };
   };
