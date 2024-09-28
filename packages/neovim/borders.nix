@@ -28,8 +28,8 @@ in
       local border = ${helpers.toLuaObject border};
       local ms = vim.lsp.protocol.Methods
 
-      function handlerWithBorder(handler)
-        return vim.lsp.with(handler, { border = border })
+      function handlerWithBorder(handler_name)
+        return vim.lsp.with(vim.lsp.handlers[handler_name], { border = border })
       end
 
       vim.lsp.handlers[ms.textDocument_hover] = handlerWithBorder(ms.textDocument_hover)

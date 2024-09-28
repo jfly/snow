@@ -44,8 +44,6 @@ windowPlacement = composeAll ([
         -- use `xprop` to get window information:
         -- https://wiki.haskell.org/Xmonad/Frequently_asked_questions#A_handy_script_to_print_out_window_information
 
-        className =? "Chromium" <&&> fmap (isInfixOf "Google Play Music") title --> doShift musicWs,
-        appName =? "meet.google.com__zhw-huyd-oam" <&&> className =? "Chromium" --> doShift videoWs,
         fmap (isInfixOf "is sharing a window.") title --> hideQuery,
         fmap (isInfixOf "is sharing your screen.") title --> hideQuery,
 

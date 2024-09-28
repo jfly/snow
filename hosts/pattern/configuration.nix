@@ -47,12 +47,13 @@
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
 
-  # Add the nix cache running on fflewddur.
-  nix.settings = {
-    substituters = [ "https://cache.snow.jflei.com" ];
-    # TODO: DRY up with fflewddur/binary-cache.nix
-    trusted-public-keys = [ "cache.snow.jflei.com:K6CK1XYbt72oXnBNggcgDwxkeLUeyGtSui2e7ibziqc=" ];
-  };
+  # TODO: re-enable or remove this.
+  # # Add the nix cache running on fflewddur.
+  # nix.settings = {
+  #   substituters = [ "https://cache.snow.jflei.com" ];
+  #   # TODO: DRY up with fflewddur/binary-cache.nix
+  #   trusted-public-keys = [ "cache.snow.jflei.com:K6CK1XYbt72oXnBNggcgDwxkeLUeyGtSui2e7ibziqc=" ];
+  # };
 
   # Flakes!
   nix.settings.experimental-features = [
