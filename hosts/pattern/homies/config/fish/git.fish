@@ -9,5 +9,6 @@ abbr --add gd 'git diff'
 abbr --add gds 'git diff --staged'
 abbr --add gapa 'git add --patch'
 abbr --add gc! 'git commit --verbose --amend'
+abbr --add gp 'git push'
 
 bind \ec pick_commits
