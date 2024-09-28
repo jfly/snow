@@ -99,6 +99,4 @@ bindkey '\ep' fzf-xpid-widget
 #   > You may need to set the environmental variable LOCALE_ARCHIVE to point to
 #   > your system's locale-achive.
 export LOCALE_ARCHIVE="${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
-# Basic idea copied from https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
-export NIX_BUILD_SHELL=nix-zshell
 ##################################
