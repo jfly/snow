@@ -54,7 +54,7 @@ in
 
         if mode == "n" then
           return vim.fn.expand("<cword>")
-        elseif mode == "V" then
+        elseif mode == "v" then
           -- Note: this does not do the escaping that upstream does [0]
           -- Maybe upstream would be interested in making some of that functionality available publicly..
           --
@@ -112,7 +112,10 @@ in
       '';
     }
     {
-      key = "<C-CR>";
+      # TODO: change back to `<C-CR>` once Fish supports CSI u. See
+      # hosts/pattern/homies/config/with-alacritty/default.conf for details.
+      # key = "<C-CR>";
+      key = "<C-Q>";
       options.desc = "Do a project-wide search (instead of a buffer search)";
       mode = "c";
       action = mkRaw ''

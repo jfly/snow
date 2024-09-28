@@ -86,8 +86,9 @@ in
           end
         '';
         "<CR>" = "cmp.mapping.confirm({ select = false })";
-        "<C-CR>" = "cmp.mapping.confirm({ select = true })";
-        "<C-F>" = "cmp.mapping.confirm({ select = true })"; # for consistency with Fish
+        # TODO: change back to `<C-CR>` once Fish supports CSI u. See
+        # hosts/pattern/homies/config/with-alacritty/default.conf for details.
+        "<C-Q>" = "cmp.mapping.confirm({ select = true })";
       };
     };
   };
