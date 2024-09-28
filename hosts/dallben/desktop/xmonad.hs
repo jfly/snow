@@ -1,7 +1,7 @@
-import XMonad
-import XMonad.Config.Desktop
-import XMonad.Layout.NoBorders
-import XMonad.Hooks.EwmhDesktops
+import           XMonad
+import           XMonad.Config.Desktop
+import           XMonad.Hooks.EwmhDesktops
+import           XMonad.Layout.NoBorders
 
 
 myLayout = smartBorders $ Full ||| tiled

@@ -1,24 +1,24 @@
-import Data.Map
-import Data.List
-import System.Exit
-import Graphics.X11.ExtraTypes.XF86
+import           Data.List
+import           Data.Map
+import           Graphics.X11.ExtraTypes.XF86
+import           System.Exit
 
-import XMonad.Layout.Hidden
-import XMonad hiding ( (|||) ) -- don't use the normal ||| operator
-import XMonad.Layout.LayoutCombinators -- use the one from LayoutCombinators instead
-import XMonad.Config.Desktop
-import XMonad.Layout.ToggleLayouts
-import XMonad.Layout.ThreeColumns
-import XMonad.Hooks.UrgencyHook
-import XMonad.Actions.CycleWS
-import XMonad.Actions.SpawnOn
-import XMonad.Layout.NoBorders
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Util.Run(spawnPipe)
-import qualified XMonad.StackSet as W
-import qualified XMonad.Util.Hacks as Hacks
-import XMonad.Hooks.WindowSwallowing
+import           XMonad                          hiding ((|||))
+import           XMonad.Actions.CycleWS
+import           XMonad.Actions.SpawnOn
+import           XMonad.Config.Desktop
+import           XMonad.Hooks.EwmhDesktops
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.UrgencyHook
+import           XMonad.Hooks.WindowSwallowing
+import           XMonad.Layout.Hidden
+import           XMonad.Layout.LayoutCombinators
+import           XMonad.Layout.NoBorders
+import           XMonad.Layout.ThreeColumns
+import           XMonad.Layout.ToggleLayouts
+import qualified XMonad.StackSet                 as W
+import qualified XMonad.Util.Hacks               as Hacks
+import           XMonad.Util.Run                 (spawnPipe)
 
 -- Rebind Mod to the Windows key
 myModMask = mod4Mask
