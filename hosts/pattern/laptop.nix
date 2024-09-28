@@ -16,6 +16,7 @@ let
   '';
 in
 {
+  location.provider = "geoclue2";
   services.geoclue2 = {
     enable = true;
     # Workaround for <https://github.com/NixOS/nixpkgs/issues/321121>.

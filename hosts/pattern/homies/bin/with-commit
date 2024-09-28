@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+_og_ref=$(git symbolic-ref HEAD 2>/dev/null) || _og_ref=$(git rev-parse --short HEAD 2>/dev/null)
+_og_ref=${_og_ref#refs/heads/}
+
+_commit=$1
+shift
+git checkout -b temp "$_commit"
+function _cleanup {
+    git checkout "$_og_ref"
+    git branch -D temp
+}
+trap _cleanup EXIT
+
+"$@"

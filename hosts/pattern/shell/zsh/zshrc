@@ -100,3 +100,50 @@ bindkey '\ep' fzf-xpid-widget
 #   > your system's locale-achive.
 export LOCALE_ARCHIVE="${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
 ##################################
+
+###
+### Aliases
+###
+alias k="kubectl"
+alias o=xdg-open
+# Workaround to get a bash with readline support. See
+# https://github.com/NixOS/nixpkgs/issues/59209
+alias bash="nix run nixpkgs#bashInteractive --"
+##################################
+
+###
+### Docker
+###
+function de {
+    CONTAINER=$1
+    shift
+    CMD="docker exec -it $CONTAINER env TERM=xterm bash"
+    if [ "$#" -gt 0 ]; then
+        CMD="$CMD -c '$*'"
+    fi
+    echo "$CMD"
+    eval "$CMD"
+}
+function dr {
+    IMAGE=$1
+    shift
+    CMD="docker run -it --entrypoint=bash $IMAGE"
+    if [ "$#" -gt 0 ]; then
+        CMD="$CMD -c '$*'"
+    fi
+    echo "$CMD"
+    eval "$CMD"
+}
+##################################
+
+###
+### Git
+###
+function pick_commit {
+    glola --color=always | fzf --ansi --no-sort --reverse --multi | while read -r item; do
+        echo -n "${item}" | sed 's/^[ |/\\*]*//' | awk '{printf $1" "}'
+    done
+
+    echo
+}
+##################################

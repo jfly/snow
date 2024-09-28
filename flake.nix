@@ -13,6 +13,8 @@
     home-manager.url = "github:nix-community/home-manager";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database.url = "github:nix-community/nix-index-database";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";

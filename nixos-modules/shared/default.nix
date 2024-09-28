@@ -1,4 +1,5 @@
 {
+  flake,
   flake',
   inputs,
   pkgs,
@@ -9,6 +10,7 @@
   imports = [
     inputs.agenix.nixosModules.default
     inputs.agenix-rooter.nixosModules.default
+    flake.nixosModules.nix-index
   ];
 
   # Ensure that commands like `nix repl` and `nix-shell` have access to the

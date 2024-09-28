@@ -627,6 +627,26 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1726975622,
+        "narHash": "sha256-bPDZosnom0+02ywmMZAvmj7zvsQ6mVv/5kmvSgbTkaY=",
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "rev": "c7515c2fdaf2e1f3f49856cef6cec95bb2138417",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1719082008,
@@ -906,6 +926,7 @@
         "git-hooks-nix": "git-hooks-nix",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
+        "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
         "on-air": "on-air",
@@ -1171,11 +1192,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1715755369,
-        "narHash": "sha256-1XQNEyLI3SEXLYB8cTl6fpjszmJI80bjTiSsghUoW00=",
+        "lastModified": 1727540490,
+        "narHash": "sha256-ANcGPLLbQrn/m7UW94vghqzSky7elQWBdWjj4F0FBG4=",
         "owner": "FatBoyXPC",
         "repo": "with-alacritty",
-        "rev": "c6afd0f71e3d056ff5a8ec4217422f6f14405690",
+        "rev": "5dd8476aeb78758607e6ca04d9a6060100806eea",
         "type": "github"
       },
       "original": {

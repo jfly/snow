@@ -87,6 +87,7 @@ in
         '';
         "<CR>" = "cmp.mapping.confirm({ select = false })";
         "<C-CR>" = "cmp.mapping.confirm({ select = true })";
+        "<C-F>" = "cmp.mapping.confirm({ select = true })"; # for consistency with Fish
       };
     };
   };

@@ -29,7 +29,7 @@ in
   };
 
   keymaps = [
-    # Remap `gf` to actually do `gF`. `gF` better: it can understand line
+    # Remap `gf` to actually do `gF`. `gF` is better: it can understand line
     # numbers and navigate directly to the line if one is present.
     {
       key = "gf";
@@ -41,12 +41,18 @@ in
       action = mkRaw ''
         function()
           local target_path = vim.fn.expand('<cfile>')
-          local current_file = vim.fn.expand('%:p')
-          local cwd = vim.fn.fnamemodify(current_file, ':h')
-          local target_absolute = vim.fn.resolve(cwd .. '/' .. target_path)
-          local target_relative_cwd = vim.fn.fnamemodify(target_absolute, ':.')
 
-          vim.cmd('edit ' .. vim.fn.fnameescape(target_relative_cwd))
+          local path
+          if target_path[0] == "." then
+            local current_file = vim.fn.expand('%:p')
+            local cwd = vim.fn.fnamemodify(current_file, ':h')
+            local target_absolute = vim.fn.resolve(cwd .. '/' .. target_path)
+            path = vim.fn.fnamemodify(target_absolute, ':.')
+          else
+            path = target_path
+          end
+
+          vim.cmd('edit ' .. vim.fn.fnameescape(vim.fn.expand(path)))
         end
       '';
       options.noremap = true;

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 dir_prefix=~/tmp/$(date -I)-pyhack
 suffix=1

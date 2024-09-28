@@ -8,49 +8,53 @@
 }:
 
 let
-  inherit (flake'.packages)
-    jgit
-    ;
-
   shtuff = inputs'.shtuff.packages.default;
 in
 {
   imports = [
     flake.nixosModules.q
+    flake.nixosModules.jgit
     flake.nixosModules.yazi
+    flake.nixosModules.zoxide
+    flake.nixosModules.newpy
+    flake.nixosModules.nix-hack
+    flake.nixosModules.fzf
   ];
 
-  users.users.${config.snow.user.name}.shell = pkgs.zsh;
+  users.users.${config.snow.user.name}.shell = pkgs.fish;
+  programs.fish.enable = true;
+
   programs.zsh = {
     enable = true;
-    interactiveShellInit = ''
-      ###
-      ### Powerlevel10k
-      ###
-      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-      if [[ -r "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh" ]]; then
-          source "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh"
-      fi
-      ##################################
+    interactiveShellInit =
+      # bash
+      ''
+        ###
+        ### Powerlevel10k
+        ###
+        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+        if [[ -r "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh" ]]; then
+            source "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh"
+        fi
+        ##################################
 
-      ###
-      ### Load ohmyzsh
-      ###
-      plugins=(git)
-      source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
-      ##################################
+        ###
+        ### Load ohmyzsh
+        ###
+        plugins=(git)
+        source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
+        ##################################
 
-      source ${./zshrc}
-      source ${./aliases}
+        source ${./zsh/zshrc}
+      '';
 
-      eval "$(zoxide init zsh)"
-    '';
-
-    promptInit = ''
-      # Load p10k prompt
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ${./p10k.zsh}
-    '';
+    promptInit =
+      # bash
+      ''
+        # Load p10k prompt
+        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+        source ${./zsh/p10k.zsh}
+      '';
   };
   programs.tmux = {
     clock24 = true;
@@ -58,25 +62,22 @@ in
     aggressiveResize = true;
   };
 
-  programs.fzf = {
-    fuzzyCompletion = true;
-    keybindings = true;
-  };
-
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
-  environment.etc."direnv/direnv.toml".text = ''
-    [global]
-    strict_env = true
+  environment.etc."direnv/direnv.toml".text =
+    # toml
+    ''
+      [global]
+      strict_env = true
 
-    [whitelist]
-    prefix = [
-        "~/src/github.com/jfly",
-        "~/sync/scratch",
-    ]
-  '';
+      [whitelist]
+      prefix = [
+          "~/src/github.com/jfly",
+          "~/sync/scratch",
+      ]
+    '';
 
   environment.systemPackages = with pkgs; [
     ### sd (script directory)
@@ -85,12 +86,10 @@ in
     ### Explore filesystem
     file
     tree
-    zoxide
     ripgrep
 
     ### Misc utils
     q
-    jgit
     psmisc # provides pstree
     acpi # check laptop battery
     pwgen

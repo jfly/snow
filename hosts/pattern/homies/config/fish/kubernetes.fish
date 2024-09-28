@@ -1,0 +1,1 @@
+abbr --add k kubectl
