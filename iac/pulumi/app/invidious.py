@@ -1,4 +1,5 @@
 import dataclasses
+from typing import cast
 import pulumi_kubernetes as kubernetes
 from pulumi_kubernetes.core.v1 import ServiceAccount
 from pulumi_kubernetes.rbac.v1 import (
@@ -48,6 +49,10 @@ class InvidiousConfig:
     unseen_only: bool
     extend_desc: bool
 
+    signature_server: str
+    po_token: str
+    visitor_data: str
+
 
 class Invidious:
     def __init__(self, namespace: str, snowauth: Snowauth):
@@ -71,6 +76,8 @@ class Invidious:
                 """
             ),
         )
+
+        signature_server = self._declare_inv_sig_helper()
 
         name = "yt"
         namespace = self.namespace
@@ -96,23 +103,55 @@ class Invidious:
                     login_enabled=True,
                     captcha_enabled=False,
                     banner=None,
-                    hmac_key=deage(
-                        """
-                            -----BEGIN AGE ENCRYPTED FILE-----
-                            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzU1A5YjRXdUdpNkZqcVRO
-                            Qk5XcnpibHhWTVZxRFNBUWduR0FwMXpGWjNNCnIzVjgwWUl0aWo1TTM1dlE2K3BM
-                            T2xaWEdaTkMycVF3YWExUTZmK3VTTTgKLS0tIEVVcFhuQUhqY1YxbkVVVEVxQktH
-                            NHUwNllRcmRKa3lyS1gvUE0xNysxcUUKWL10MpMAaamypm9d+kGxznKoeMsZenzK
-                            DmO7cKs0LANSwHMWV7xlFqPfZhoAv8oPltMr5w==
-                            -----END AGE ENCRYPTED FILE-----
-                        """
-                    ),
                     default_home="Subscriptions",
                     related_videos=False,
                     quality="dash",
                     save_player_pos=True,
                     unseen_only=True,
                     extend_desc=True,
+                    # https://docs.invidious.io/installation/#post-install-configuration
+                    hmac_key=deage(
+                        """
+                        -----BEGIN AGE ENCRYPTED FILE-----
+                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzU1A5YjRXdUdpNkZqcVRO
+                        Qk5XcnpibHhWTVZxRFNBUWduR0FwMXpGWjNNCnIzVjgwWUl0aWo1TTM1dlE2K3BM
+                        T2xaWEdaTkMycVF3YWExUTZmK3VTTTgKLS0tIEVVcFhuQUhqY1YxbkVVVEVxQktH
+                        NHUwNllRcmRKa3lyS1gvUE0xNysxcUUKWL10MpMAaamypm9d+kGxznKoeMsZenzK
+                        DmO7cKs0LANSwHMWV7xlFqPfZhoAv8oPltMr5w==
+                        -----END AGE ENCRYPTED FILE-----
+                        """
+                    ),
+                    # Configure the signature server.
+                    # To generate `po_token` and `visitor_data`:
+                    #
+                    #   kubectl run yt-session-gen --attach --rm --image=quay.io/invidious/youtube-trusted-session-generator
+                    signature_server=signature_server,
+                    po_token=deage(
+                        """
+                        -----BEGIN AGE ENCRYPTED FILE-----
+                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSArUWNxcmw4ZGpoTEhWRFFD
+                        MHFFUXNhYnh4REtTdlJVSmxWME1GcnBVa2hZClpodGNYajUzaHNHK2NpUUxwTE5T
+                        TFlMdlQ2WVZrSkMrV2tsYVFUZDFaY0UKLS0tIFRhZDdHOWwzdUFBOEo2SlVPYlEv
+                        aUFoU1U5T0Vka2NYdlBtamZLUmJwQUUK0J09k6qO+7JaD4XAs+B3zLoW16zqmWXI
+                        dBn92OS5e1JsforVz3QWBi2vK3g0WZmcpqxTGfWm4jc/eM9o6MNdMqXZM6tjy1ju
+                        yF1H9zyAfodiVduj4mUkPiFHI74xc705KtkEKsaKgvYi7OXWTqvq11g/Wy2ATPII
+                        scfQrGwQM7OOxNZ42BJ3hFv/GkrxvKdVT+8CPN8v1KT3EgZ4h+E30zVkNvL7gFtt
+                        PoZyZKVxEwzYQTRBx/u+AgwH1kKgZZVz
+                        -----END AGE ENCRYPTED FILE-----
+                        """
+                    ),
+                    visitor_data=deage(
+                        """
+                        -----BEGIN AGE ENCRYPTED FILE-----
+                        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtcTRneCtPSE4yM0VacERM
+                        TFFzUWZ0cDhpdGZEUjBYZHZEWWdwb2tnTzJRCngwdGZiRThJZ0dTUFVyS2ovYTc4
+                        Nmc5UmVXWUhaLzNDRVFqRWZqRk1ydEEKLS0tIGV1NEJLT05Iei9meXNpa0lPczhx
+                        UW13NFAxZGRQYzhGajRLZnA0b0l0OWMKsyDIERtznvwKdBQYEob50h3p2eAwbbRI
+                        bk5PExinqum9DgV2EtX0gaArOafL50t+0hf79DIUfUUQKmSui9ho5LOoSf1T0oRO
+                        ybcB4w1f1YY=
+                        -----END AGE ENCRYPTED FILE-----
+                        """
+                    ),
                 ).to_yaml(),
             },
         )
@@ -144,6 +183,46 @@ class Invidious:
         # > Because of various issues Invidious must be restarted often, at
         # > least once a day, ideally every hour.
         self.schedule_restart("yt", "@hourly")
+
+    def _declare_inv_sig_helper(self) -> str:
+        name = "inv-sig-helper"
+        port = 12999
+        deployment = snow_deployment(
+            name=name,
+            namespace=self.namespace,
+            image="quay.io/invidious/inv-sig-helper:latest",
+            args=["--tcp", f"0.0.0.0:{port}"],
+            env={
+                "RUST_LOG": "info",
+            },
+        )
+        deployment_metadata = cast(
+            kubernetes.meta.v1.ObjectMetaArgs, deployment.metadata
+        )
+        kubernetes.core.v1.Service(
+            deployment._name,
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name=deployment_metadata.name,
+                namespace=deployment_metadata.namespace,
+            ),
+            spec=kubernetes.core.v1.ServiceSpecArgs(
+                ports=[
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="inv-sig-helper",
+                        port=port,
+                        protocol="TCP",
+                        target_port=port,
+                    ),
+                ],
+                selector=cast(
+                    kubernetes.meta.v1.LabelSelectorArgs,
+                    cast(
+                        kubernetes.apps.v1.DeploymentSpecArgs, deployment.spec
+                    ).selector,
+                ).match_labels,
+            ),
+        )
+        return f"{name}:{port}"
 
     def schedule_restart(self, deployment: str, schedule: str):
         role = kubernetes.rbac.v1.Role(
