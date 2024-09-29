@@ -1,4 +1,5 @@
 {
+  flake,
   inputs',
   flake',
   config,
@@ -18,7 +19,6 @@ let
 
   inherit (flake'.packages)
     autoperipherals
-    colorscheme
     desk-speakers
     jbright
     jvol
@@ -57,6 +57,7 @@ in
 {
   imports = [
     ./kodi.nix
+    flake.nixosModules.colorscheme
   ];
 
   services.displayManager = {
@@ -383,7 +384,6 @@ in
 
     ### Misc desktop utils
     autoperipherals
-    colorscheme
     desk-speakers
     jbright
     jvol

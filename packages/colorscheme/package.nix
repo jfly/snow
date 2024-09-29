@@ -6,7 +6,6 @@
   yq-go,
   jq,
   lib,
-  openssh,
 }:
 
 let
@@ -24,18 +23,6 @@ symlinkJoin {
       name = "colorscheme";
       runtimeInputs = [ ];
       text = builtins.readFile ./colorscheme;
-    })
-    (writeShellApplication {
-      name = "ssh";
-      text = ''
-        colorscheme set current base16-cupcake
-        function finish {
-            colorscheme clear current
-        }
-        trap finish EXIT
-
-        ${lib.getExe openssh} "$@"
-      '';
     })
   ];
 
