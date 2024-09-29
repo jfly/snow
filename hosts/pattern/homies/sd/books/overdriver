@@ -45,5 +45,5 @@ echo "Working in temp dir: $tmpdir"
     done
 )
 
-# vi: ft=bash
+# vi: ft=sh
 # shellcheck shell=bash
