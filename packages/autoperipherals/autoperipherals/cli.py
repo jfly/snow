@@ -1,7 +1,9 @@
-import enum
+from dataclasses import dataclass
+import sys
 import subprocess
 from pathlib import Path
 import logging
+import traceback
 import click
 from . import highlander_rule
 from . import data
@@ -49,6 +51,54 @@ def get_mode():
 
 
 def autoperipherals():
+    detected = _detect()
+    location_name = detected.location_name
+    dpi = detected.dpi
+    x = detected.x
+    mode = detected.mode
+
+    message = f"Detected location {location_name}."
+    message += mode.message()
+    notify_send(message)
+
+    todo = {
+        # Enable the corresponding systemd target, so special services can run when we're in a specific location.
+        # These systemd targets are defined in pattern/desktop/.
+        "set-location": lambda: subprocess.run(
+            ["systemctl", "start", "--user", f"location-{location_name}.target"],
+            check=True,
+        ),
+        "update-monitors": x.apply,
+        # This can fail on boot with this error:
+        #  > Translate ID error: '-1' is not a valid ID (returned by default-nodes-api)
+        "apply-audio-tweaks": mode.apply_audio_tweaks,
+        "setbg": lambda: subprocess.run(["setbg"], check=True),
+        "set-dpi": lambda: set_dpi(dpi),
+    }
+
+    success = True
+    for name, thing in todo.items():
+        try:
+            thing()
+        except subprocess.SubprocessError as e:
+            success = False
+            print(f"Something went wrong when trying to: {name}", file=sys.stderr)
+            traceback.print_exception(e)
+
+    if not success:
+        print("Something went wrong. See above for details.", file=sys.stderr)
+        sys.exit(1)
+
+
+@dataclass
+class Detection:
+    x: xrandr.XRandr
+    mode: type[SoloMode] | type[PairingMode]
+    location_name: str
+    dpi: int
+
+
+def _detect() -> Detection:
     x = xrandr.XRandr()
 
     displays = x.connected_displays
@@ -87,25 +137,6 @@ def autoperipherals():
             display.is_active = False
         internal_display.is_active = True
 
-    message = f"Detected location {location_name}."
-    message += mode.message()
-    notify_send(message)
-
-    # Enable the corresponding systemd target, so special services can run when we're in a specific location.
-    # These systemd targets are defined in pattern/desktop/.
-    subprocess.run(
-        ["systemctl", "start", "--user", f"location-{location_name}.target"],
-        # The call to `systemctl start` seems to fail on boot with the following message:
-        #   > Failed to connect to bus: No medium found
-        # This is likely related to the setbg bug described below, which we should fix.
-        #
-        # Furthermore if anything in
-        # 'services.xserver.displayManager.setupCommands' fails, it prevents x11
-        # from starting up entirely. So, we should only crash if things are really
-        # broken.
-        check=False,
-    )
-
     # Set the rotation for all displays according to whatever we last had saved for them.
     state = data.State.load()
     for display in displays:
@@ -115,26 +146,12 @@ def autoperipherals():
         if rotation := state.rotation_by_edid_hex.get(display.edid_hex):
             display.rotation = rotation
 
-    x.apply()
-
-    mode.apply_audio_tweaks()
-
-    subprocess.run(
-        ["setbg"],
-        # setbg can fail for a couple of reasons:
-        #  - autoperipherals gets called as root when booting (we can and should
-        #    fix this), and root doesn't have a collection of wallpaper
-        #  - on a freshly provisioned machine, ~/sync/wallpaper doesn't exist until
-        #    after we've set up syncthing.
-        #
-        # Furthermore if anything in
-        # 'services.xserver.displayManager.setupCommands' fails, it prevents x11
-        # from starting up entirely. So, we should only crash if things are really
-        # broken.
-        check=False,
+    return Detection(
+        x=x,
+        mode=mode,
+        location_name=location_name,
+        dpi=dpi,
     )
-
-    set_dpi(dpi)
 
 
 @click.group()

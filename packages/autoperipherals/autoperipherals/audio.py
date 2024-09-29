@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import re
 import logging
 
@@ -6,9 +7,14 @@ logger = logging.getLogger(__name__)
 
 
 def _wpctl_id(name: str) -> int:
-    cp = subprocess.run(
-        ["wpctl", "inspect", name], text=True, capture_output=True, check=True
-    )
+    try:
+        cp = subprocess.run(
+            ["wpctl", "inspect", name], text=True, capture_output=True, check=True
+        )
+    except subprocess.CalledProcessError as e:
+        print(e.stdout, file=sys.stdout)
+        print(e.stderr, file=sys.stderr)
+        raise e
 
     # Parse the id out of a line like this:
     #

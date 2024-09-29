@@ -159,9 +159,6 @@ in
   };
 
   # Run autoperipherals on boot + whenever hardware changes
-  services.xserver.displayManager.setupCommands = ''
-    ${autoperipherals}/bin/autoperipherals sync
-  '';
   systemd.user.services = {
     "autoperipherals" = {
       enable = true;
