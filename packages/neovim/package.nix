@@ -3,6 +3,7 @@
   inputs',
   system,
   pkgs,
+  full ? true,
 }:
 
 inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
@@ -14,23 +15,28 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
     viAlias = true;
     vimAlias = true;
 
-    imports = [
-      ./keys
-      ./formatting.nix
-      ./syntax.nix
-      ./colorscheme.nix
-      ./search.nix
-      ./git.nix
-      ./vimtest.nix
-      ./lightline.nix
-      ./hacking.nix
-      ./notetaking.nix
-      ./lsp.nix
-      ./diagnostics.nix
-      ./borders.nix
-      ./spell.nix
-      ./notifications.nix
-      ./completion
-    ];
+    imports = (
+      if full then
+        [
+          ./keys
+          ./formatting.nix
+          ./syntax.nix
+          ./colorscheme.nix
+          ./search.nix
+          ./git.nix
+          ./vimtest.nix
+          ./lightline.nix
+          ./hacking.nix
+          ./notetaking.nix
+          ./lsp.nix
+          ./diagnostics.nix
+          ./borders.nix
+          ./spell.nix
+          ./notifications.nix
+          ./completion
+        ]
+      else
+        [ ]
+    );
   };
 }

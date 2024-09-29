@@ -55,12 +55,6 @@
   #   trusted-public-keys = [ "cache.snow.jflei.com:K6CK1XYbt72oXnBNggcgDwxkeLUeyGtSui2e7ibziqc=" ];
   # };
 
-  # Flakes!
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   # Keep only a finite number of boot configurations. This prevents /boot from

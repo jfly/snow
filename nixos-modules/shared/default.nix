@@ -1,5 +1,6 @@
 {
   lib,
+  flake',
   flake,
   config,
   inputs,
@@ -15,7 +16,9 @@
   ];
 
   options = {
-    snow.neovim.package = lib.mkPackageOption pkgs "neovim" { };
+    snow.neovim.package = lib.mkPackageOption {
+      neovim-lite = flake'.packages.neovim.override { full = false; };
+    } "neovim-lite" { };
   };
 
   config = {
@@ -49,5 +52,11 @@
     };
 
     age.rooter.generatedForHostDir = ../../secrets;
+
+    # Flakes!
+    nix.settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 }
