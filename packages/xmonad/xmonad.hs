@@ -151,9 +151,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = Data.Map.fromList $
     , ((controlMask .|. altMask, xK_Up), spawn "@autoperipherals@/bin/autoperipherals rotate current inverted")
 
     -- Dunst shortcuts
-    , ((controlMask, xK_space), spawn "dunstctl close")
-    , ((controlMask, xK_grave), spawn "dunstctl history-pop")
-    , ((controlMask .|. shiftMask, xK_period), spawn "dunstctl context")
+    , ((controlMask, xK_space), spawn "@dunst@/bin/dunstctl close")
+    , ((controlMask, xK_grave), spawn "@dunst@/bin/dunstctl history-pop")
+    , ((controlMask .|. shiftMask, xK_period), spawn "@dunst@/bin/dunstctl context")
 
     , ((modMask, xK_a), spawn "systemctl restart --user autoperipherals")
     ]

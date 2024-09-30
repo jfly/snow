@@ -10,7 +10,10 @@ let
   xmonadEnv = haskellPkgs.ghcWithPackages (p: xmonadAndPackages);
   xmonadHs = pkgs.substituteAll {
     src = ./xmonad.hs;
-    inherit (pkgs) libnotify;
+    inherit (pkgs)
+      libnotify
+      dunst
+      ;
     inherit (flake'.packages)
       autoperipherals
       colorscheme
