@@ -6,6 +6,15 @@ in
 {
   plugins.fugitive.enable = true;
   plugins.fzf-lua.enable = true;
+  plugins.fzf-lua.package = pkgs.vimPlugins.fzf-lua.overrideAttrs {
+    patches = [
+      # Fixes <https://github.com/ibhagwan/fzf-lua/issues/1462>
+      (pkgs.fetchurl {
+        url = "https://github.com/ibhagwan/fzf-lua/commit/d76cc35a2945beb4d916050a8ad34b7daf1b4054.patch";
+        hash = "sha256-RepcJrwR4mYxszShoc83Z37QByOu5qrNoN5Ww9bHECo=";
+      })
+    ];
+  };
 
   extraPlugins = with pkgs.vimPlugins; [
     vim-rhubarb
