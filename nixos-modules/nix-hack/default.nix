@@ -11,7 +11,7 @@ in
     # bash
     ''
       nix-hack() {
-          if dir=$(${lib.getExe nix-hack}); then
+          if dir=$(${lib.getExe nix-hack} "$@"); then
               cd "$dir"
           else
               return $?
@@ -23,7 +23,7 @@ in
     # fish
     ''
       function nix-hack
-          set -l dir (${lib.getExe nix-hack})
+          set -l dir (${lib.getExe nix-hack} $argv)
           if test $status -eq 0
               cd $dir
           else
