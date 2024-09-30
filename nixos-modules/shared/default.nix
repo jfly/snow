@@ -8,6 +8,9 @@
   ...
 }:
 
+let
+  identities = flake.lib.identities;
+in
 {
   imports = [
     inputs.agenix.nixosModules.default
@@ -58,5 +61,15 @@
       "nix-command"
       "flakes"
     ];
+
+    # Enable deployments by non-root user.
+    nix.settings.trusted-users = [ "@wheel" ];
+    security.sudo.wheelNeedsPassword = false;
+
+    users.users.jfly = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+      openssh.authorizedKeys.keys = [ identities.jfly ];
+    };
   };
 }
