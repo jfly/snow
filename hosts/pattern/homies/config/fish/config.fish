@@ -5,6 +5,7 @@ if status is-interactive
     source $HOME/.config/fish/docker.fish
     source $HOME/.config/fish/kubernetes.fish
     source $HOME/.config/fish/bigword.fish
+    source $HOME/.config/fish/directories.fish
 
     # TODO: remove once we can bind <C-CR> to this instead. See
     # hosts/pattern/homies/config/with-alacritty/default.conf for details.
