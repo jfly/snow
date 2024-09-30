@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+print_usage() {
+    echo "Usage $0 [--is [location]]" >/dev/stderr
+    echo "Examples:" >/dev/stderr
+    echo "" >/dev/stderr
+
+    echo "    $ $0" >/dev/stderr
+    echo "    colusa" >/dev/stderr
+
+    echo "" >/dev/stderr
+    echo "    $ $0 location --is colusa" >/dev/stderr
+    echo "    yes" >/dev/stderr
+    echo '    $ echo $?' >/dev/stderr
+    echo "    0" >/dev/stderr
+
+    echo "" >/dev/stderr
+    echo "    $ $0 location --is moon" >/dev/stderr
+    echo "    no" >/dev/stderr
+    echo '    $ echo $?' >/dev/stderr
+    echo "    1" >/dev/stderr
+
+    echo "" >/dev/stderr
+    echo "    $ $0 location --not moon" >/dev/stderr
+    echo "    yes" >/dev/stderr
+    echo '    $ echo $?' >/dev/stderr
+    echo "    0" >/dev/stderr
+}
+
+main() {
+    local is_location
+    local not_location
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h | --help)
+                print_usage
+                exit 1
+                ;;
+            --is)
+                shift                   # past option
+                is_location=$1
+                shift                   # past option value
+                ;;
+            --not)
+                shift                   # past option
+                not_location=$1
+                shift                   # past option value
+                ;;
+            --* | -*)
+                echo "Unknown option $1"
+                exit 1
+                ;;
+            *)
+                echo "Unknown positional argument $1"
+                exit 1
+                ;;
+        esac
+    done
+
+    local actual_location
+
+    # Use the DNS search domain to figure out where we are.
+    actual_location=$(grep -Po "(?<=^search ).+" /etc/resolv.conf)
+
+    if [ -n "$is_location" ]; then
+        if [ "$is_location" = "$actual_location" ]; then
+            echo "yes"
+            exit 0
+        else
+            echo "no"
+            exit 1
+        fi
+    elif [ -n "$not_location" ]; then
+        if [ "$not_location" != "$actual_location" ]; then
+            echo "yes"
+            exit 0
+        else
+            echo "no"
+            exit 1
+        fi
+    else
+        echo "$actual_location"
+    fi
+}
+
+main "$@"

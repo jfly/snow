@@ -1,46 +1,60 @@
 # vi: ft=sshconfig
 
+Host clark
+    # Intentionally not tagged as "colusa", because this is our jump host.
+    HostName snow.jflei.com
+    User root
+
 # Primary router
 Host strider
+    Tag colusa
     HostName strider
     User root
 
 # Secondary router ("dumb ap")
 Host aragorn
+    Tag colusa
     HostName aragorn
     User root
 
 # Garage door router ("dumb ap")
 Host elfstone
+    Tag colusa
     HostName elfstone
     User root
 
-Host clark
-    HostName snow.jflei.com
-    User root
-
 Host dallben
+    Tag colusa
     User dallben
 
 Host fflewddur
-    User root
+    Tag colusa
+    User jfly
 
 Host thermometer
+    Tag colusa
     HostName thermometer
     User root
     # Urg
     SetEnv TERM=xterm-256color
 
 Host thermostat
+    Tag colusa
     HostName thermostat
     User root
 
 Host garage
+    Tag colusa
     HostName garage
     User root
 
 Host ramscan
+    Tag colusa
     User alarm
 
 Host ospi
+    Tag colusa
     User ospi
+
+Match tagged colusa exec "location --not colusa"
+    ProxyJump clark
