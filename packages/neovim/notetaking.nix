@@ -53,7 +53,6 @@ in
           local heading = os.date('# %Y-%m-%d %H:%M %z: ')
 
           vim.api.nvim_put({heading}, 'l', true, true)
-          vim.cmd('norm! k')
           vim.cmd("startinsert!")
         end
       '';
