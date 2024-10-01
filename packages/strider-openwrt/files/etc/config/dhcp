@@ -61,6 +61,12 @@ config host
 	option ip '192.168.1.197'
 	option mac 'B8:27:EB:00:60:83'
 
+# Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
+config host
+	option name 'fflewddur'
+	option ip '192.168.1.172'
+	option mac 'FC:AA:14:98:7C:54'
+
 config host
 	option name 'receiver'
 	option ip '192.168.1.202'
@@ -77,4 +83,3 @@ config host
 	option name 'taran'
 	option ip '192.168.3.101'
 	option mac '50:14:79:36:E7:ED'
-

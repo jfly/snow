@@ -2,17 +2,22 @@
 
 {
   age.secrets.restic-password = {
+    # On fflewddur:
+    # $ sudo restic -r /mnt/bay/restic key add --host clark
+    # $ sudo chown -R restic:restic /mnt/bay/restic/keys
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjN3M4bnZFbzI0Z3FpanE4
-      TnNTcXZ4ak8yd0wwRCtTanNyZm9OSGFJRXc4ClFZNWQ3aTgzeG9NbzN5MkRLTUJN
-      UUpJNjBqQlg0eWVhakFvWnF3dytzY0kKLS0tIC9wMGp1YVRNeEpPSldCTWowdXVh
-      QXZlbnp5dlNybnNkTHJwOTk4ZXdDVGcKS4cR59+RVUhod5+R3aNNVBdoBLLvL5Yk
-      V3Y26qcufEV7G+v7P1aN8NuJ/QsqRuIHHkJj
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuTll2dHZadE91bUplZE1J
+      Qkl5clQ3eitDWGtUcSt2WU9uS3dpcmdoZXdZCkc5aEw3bkpQdm1MWFl3bldlSTEv
+      RnRNRUxWSzd0U0l4cXdQalRNUnFaQ00KLS0tIDV5L0RZaEZSN3VqSlEyOUdkdmFM
+      MDNVTFpzN2d0TzMwdWhoaHpSZWVxbjQKzMr7xrvVcjZOe2s9SIjrRG1t9J4zeQM3
+      0BKKYDpUnebNlG8ckv3jL26tB+uOwRM4SiC8jQ==
       -----END AGE ENCRYPTED FILE-----
     '';
   };
   age.secrets.backup-monitor-api-key = {
+    # Create a new monitor on <https://monitoring.snow.jflei.com/>, copy the
+    # token from the heartbeat url.
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsSVpzVzdPblNmWkM3TWdq
