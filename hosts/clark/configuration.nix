@@ -62,7 +62,6 @@ in
     createHome = false;
 
     openssh.authorizedKeys.keys = [
-      identities.pattern-kodi
       identities.kent-kodi
     ];
   };

@@ -68,7 +68,10 @@ in
 
     users.users.jfly = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [
+        "wheel"
+        "media"
+      ];
       openssh.authorizedKeys.keys = [ identities.jfly ];
     };
   };

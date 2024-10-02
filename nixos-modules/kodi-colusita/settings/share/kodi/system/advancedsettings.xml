@@ -1,0 +1,11 @@
+<advancedsettings version="1.0">
+    <!-- Enable remote control: https://kodi.wiki/view/Smartphone/tablet_remotes#Manually_enabling_remote_control -->
+    <services>
+        <devicename>@devicename@</devicename>
+        <esenabled>true</esenabled>
+        <esallinterfaces>true</esallinterfaces>
+        <webserver>true</webserver>
+        <webserverauthentication>false</webserverauthentication>
+        <zeroconf>true</zeroconf>
+    </services>
+</advancedsettings>

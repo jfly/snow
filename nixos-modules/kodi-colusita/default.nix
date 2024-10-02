@@ -1,5 +1,21 @@
+# This doesn't fully configure Kodi, because the Jellyfin plugin has a number
+# of things to do on first boot. Here's what you need to do to get it working:
+#
+# 1. (If necessary) Add a new Jellyfin user for whatever device you're configuring: <https://jellyfin.snow.jflei.com/web/#/dashboard/users>
+#    - Do NOT allow media deletion!
+# 2. Start up Kodi.
+# 3. It should ask if you want to enable Jellyfin. Say yes.
+# 4. A "Select main server" modal will pop up. Fill in "jellyfin.snow.jflei.com"
+# 5. Fill in the username and password from step 1.
+# 6. You'll be asked if you
+# 7. When asked about playback mode, select "Add-on".
+# 8. Add "All" libraries. Note that it's non-obvious how to select things! See
+#    https://github.com/jellyfin/jellyfin-kodi/issues/923#issuecomment-2387278578
+#    for details.
+#    I also found that this didn't work on the first try and I had to do it
+#    again from the addon. Weird. When you get it right, there will be a very
+#    obvious progress bar at the top right of the screen.
 {
-  flake,
   config,
   lib,
   pkgs,
@@ -13,34 +29,26 @@ let
     mkOption
     types
     ;
-  inherit (builtins)
-    concatStringsSep
-    ;
 
   cfg = config.services.kodi-colusita;
 
-  identities = flake.lib.identities;
-  media = pkgs.callPackage ./media {
-    deviceName = config.networking.hostName;
-  };
-  myKodiWithPackages = pkgs.kodi.withPackages (p: [
-    p.a4ksubtitles
-    media
-  ]);
+  settingsAddon = pkgs.kodiPackages.toKodiAddon (
+    pkgs.stdenv.mkDerivation {
+      name = "settings";
+      src = ./settings;
 
-  # This is unfortunate: it just doesn't seem to be possible to set some kodi
-  # settings without creating files in the ~/.kodi/userdata/addon_data
-  # directory. So, we wrap kodi to give us an opportunity to do that.
-  genKodiAddonData = pkgs.callPackage ./gen-kodi-addon-data { };
-  myKodi = pkgs.symlinkJoin {
-    name = "kodi";
-    paths = [ myKodiWithPackages ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/kodi \
-          --run "${genKodiAddonData}/gen-kodi-addon-data.sh"
-    '';
-  };
+      postBuild = ''
+        substituteInPlace share/kodi/system/advancedsettings.xml \
+          --replace-fail "@devicename@" ${config.networking.hostName}
+      '';
+      installPhase = "cp -r . $out";
+    }
+  );
+
+  myKodi = pkgs.kodi.withPackages (kodiAddons: [
+    settingsAddon
+    kodiAddons.jellyfin
+  ]);
 in
 
 {
@@ -51,47 +59,10 @@ in
       description = "Whether to start kodi on boot";
       default = false;
     };
-    sshIdentityPath = mkOption {
-      type = types.str;
-      description = "Path to ssh identity to connect to clark.";
-      example = "/run/secrets/id_rsa";
-    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ myKodi ] ++ (with pkgs; [ sshfs ]);
-
-    programs.ssh.knownHosts = {
-      "clark.snow.jflei.com" = {
-        publicKey = identities.clark;
-      };
-    };
-
-    systemd.mounts = [
-      {
-        where = "/mnt/colusita";
-        what = "media-ro@clark.snow.jflei.com:/mnt/media";
-        type = "fuse.sshfs";
-        startLimitBurst = 0; # keep retrying indefinitely (https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#StartLimitIntervalSec=interval)
-        requires = [ "network-online.target" ];
-        options = concatStringsSep "," [
-          "ro"
-          "noauto"
-          "allow_other"
-          "IdentityFile=${cfg.sshIdentityPath}"
-          # Reconnect automatically if the connection drops.
-          "reconnect"
-          "ServerAliveInterval=15"
-          "ServerAliveCountMax=3"
-        ];
-      }
-    ];
-    systemd.automounts = [
-      {
-        where = "/mnt/colusita";
-        wantedBy = [ "multi-user.target" ];
-      }
-    ];
+    environment.systemPackages = [ myKodi ];
 
     systemd.user.services = {
       "kodi" = {
@@ -99,7 +70,7 @@ in
         wantedBy = [ "graphical-session.target" ];
         partOf = [ "graphical-session.target" ];
         serviceConfig = {
-          ExecStart = "${myKodi}/bin/kodi";
+          ExecStart = lib.getExe myKodi;
         };
       };
     };
