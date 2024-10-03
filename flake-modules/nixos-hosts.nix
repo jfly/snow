@@ -27,7 +27,6 @@ let
       };
 
       modules = [
-        flake.nixosModules.shared
         (hostsDir + "/${hostname}/configuration.nix")
         (
           { pkgs, ... }:

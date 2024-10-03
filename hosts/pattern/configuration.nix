@@ -1,4 +1,5 @@
 {
+  flake,
   flake',
   inputs,
   pkgs,
@@ -23,6 +24,7 @@
   programs.nix-ld.enable = true;
 
   imports = [
+    flake.nixosModules.shared
     ./hardware-configuration.nix # Include the results of the hardware scan.
     ./hardware-configuration-custom.nix
     ./network.nix

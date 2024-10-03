@@ -1,5 +1,7 @@
+{ flake, ... }:
 {
   imports = [
+    flake.nixosModules.shared
     ./boot.nix
     ./network.nix
     ./gpu.nix
@@ -23,10 +25,7 @@
   services.xserver.xkb.layout = "us";
 
   # Enable ssh.
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-  };
+  services.openssh.enable = true;
 
   users.users.root.hashedPassword = "$6$qZbruBYDeCvoleSI$6Qn9rUHVvutADJ7kxK9efrPLnNiW1dXgrdjrwFKIH338mq8A8dIk/tv/QV/kwrylK1GJtMW6qBsEkcszOh4f11";
 }

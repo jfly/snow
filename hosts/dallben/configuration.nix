@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    flake.nixosModules.shared
     ./variables.nix
     # NUC specific stuff
     ./boot.nix

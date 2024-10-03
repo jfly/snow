@@ -62,6 +62,11 @@ in
       "flakes"
     ];
 
+    # Disable ssh password auth. I'm a little surprised that this isn't the default.
+    # Note that we don't enable openssh itself, that's for individual machines
+    # to decide.
+    services.openssh.settings.PasswordAuthentication = false;
+
     # Enable deployments by non-root user.
     nix.settings.trusted-users = [ "@wheel" ];
     security.sudo.wheelNeedsPassword = false;

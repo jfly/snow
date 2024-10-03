@@ -10,6 +10,7 @@ in
   services.openssh.enable = true;
 
   imports = [
+    flake.nixosModules.shared
     ./hardware-configuration.nix
     ./network.nix
     ./disko-config.nix

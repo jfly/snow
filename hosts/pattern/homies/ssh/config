@@ -21,4 +21,8 @@ Host fflam
 ### cottage
 Host openwrt.cottage
     User root
+
+Host kent2
+    HostName kent2.cottage
+    User jfly
 ###

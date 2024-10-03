@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    flake.nixosModules.shared
     ./boot.nix
     ./network.nix
     ./containers.nix

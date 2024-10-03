@@ -1,9 +1,5 @@
 { ... }:
 {
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "kent";
-  };
   services.xserver = {
     enable = true;
 

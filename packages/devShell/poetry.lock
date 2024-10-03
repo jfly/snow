@@ -145,6 +145,31 @@ files = [
 ]
 
 [[package]]
+name = "click"
+version = "8.1.7"
+description = "Composable command line interface toolkit"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
+    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
+name = "colorama"
+version = "0.4.6"
+description = "Cross-platform colored terminal text."
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
+files = [
+    {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
+    {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
+]
+
+[[package]]
 name = "debugpy"
 version = "1.8.6"
 description = "An implementation of the Debug Adapter Protocol for Python"
@@ -362,12 +387,12 @@ files = [
 
 [[package]]
 name = "pulumi"
-version = "3.134.1"
+version = "3.135.0"
 description = "Pulumi's Python SDK"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pulumi-3.134.1-py3-none-any.whl", hash = "sha256:74ac0d67454256cea6b2cd338ba64cf3067265299dd5212f740638bb7ecdd2b0"},
+    {file = "pulumi-3.135.0-py3-none-any.whl", hash = "sha256:fadda283509e360afac92f8b569b1f14b15667984ad966a2a66c6595228f9042"},
 ]
 
 [package.dependencies]
@@ -381,13 +406,13 @@ six = ">=1.12,<2.0"
 
 [[package]]
 name = "pulumi-cloudflare"
-version = "5.39.1"
+version = "5.40.0"
 description = "A Pulumi package for creating and managing Cloudflare cloud resources."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pulumi_cloudflare-5.39.1-py3-none-any.whl", hash = "sha256:790b4ce73ff52a2b45b52c1fd282fa869921226dcda1791ccff664a1a545c3e6"},
-    {file = "pulumi_cloudflare-5.39.1.tar.gz", hash = "sha256:864efdd0a59de114854ce7832675ae086eaaef2dc50f6cf25388cbe83f30ac3e"},
+    {file = "pulumi_cloudflare-5.40.0-py3-none-any.whl", hash = "sha256:c83b1665a077532efe5a8878532647ac017599f9fa77caec4af31ad385823ab7"},
+    {file = "pulumi_cloudflare-5.40.0.tar.gz", hash = "sha256:161240bb2ab0ff717f745056b2887a0fcb74ce3c34a1de4ef69e41980c3a8078"},
 ]
 
 [package.dependencies]
@@ -554,13 +579,13 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "rich"
-version = "13.8.1"
+version = "13.9.1"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 optional = false
-python-versions = ">=3.7.0"
+python-versions = ">=3.8.0"
 files = [
-    {file = "rich-13.8.1-py3-none-any.whl", hash = "sha256:1760a3c0848469b97b558fc61c85233e3dafb69c7a071b4d60c38099d3cd4c06"},
-    {file = "rich-13.8.1.tar.gz", hash = "sha256:8260cda28e3db6bf04d2d1ef4dbc03ba80a824c88b0e7668a0f23126a424844a"},
+    {file = "rich-13.9.1-py3-none-any.whl", hash = "sha256:b340e739f30aa58921dc477b8adaa9ecdb7cecc217be01d93730ee1bc8aa83be"},
+    {file = "rich-13.9.1.tar.gz", hash = "sha256:097cffdf85db1babe30cc7deba5ab3a29e1b9885047dab24c57e9a7f8a9c1466"},
 ]
 
 [package.dependencies]
@@ -632,4 +657,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "f611cf79822676f366ce8641c1281b2a3789d4c2e5dc6691b17b0236b62ddd7f"
+content-hash = "dd58c97c8e7901292fabdb8430afdf2c47ea17adae7887e37772aa79d1ee6f63"

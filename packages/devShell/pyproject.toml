@@ -8,6 +8,7 @@ description = ""
 python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
+click = "*"
 remote-pdb = "*" # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
 rich = "*"
 pulumi = "*"
