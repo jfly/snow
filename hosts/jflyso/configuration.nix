@@ -2,13 +2,16 @@
   lib,
   flake',
   flake,
+  config,
   ...
 }:
 
+let
+  identities = flake.lib.identities;
+in
 {
   imports = [
     flake.nixosModules.shared
-    ./livecd.nix
   ];
 
   networking.hostName = "jflyso";
@@ -24,4 +27,10 @@
 
   # Use "full" neovim.
   snow.neovim.package = flake'.packages.neovim;
+
+  # Allow ssh as the root user. nixos-anywhere needs this:
+  # <https://github.com/nix-community/nixos-anywhere/pull/293#pullrequestreview-1962541552>
+  users.users.root.openssh.authorizedKeys.keys = [ identities.jfly ];
+
+  system.stateVersion = config.system.nixos.release;
 }
