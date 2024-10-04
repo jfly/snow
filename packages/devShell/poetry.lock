@@ -438,13 +438,13 @@ semver = ">=2.8.1"
 
 [[package]]
 name = "pulumi-kubernetes"
-version = "4.18.1"
+version = "4.18.0"
 description = "A Pulumi package for creating and managing Kubernetes resources."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pulumi_kubernetes-4.18.1-py3-none-any.whl", hash = "sha256:ccdd4505f01a9d596a59f81822045ecfeda50ffa8987d974266711f32bce85a4"},
-    {file = "pulumi_kubernetes-4.18.1.tar.gz", hash = "sha256:c286ef62f7c5eb7b449b8745b7b1b6bb7f73d6a74f245b6809e38012f0b6fdea"},
+    {file = "pulumi_kubernetes-4.18.0-py3-none-any.whl", hash = "sha256:e8747630e43f5a90f2563452f6a1b9689c981e209b0662dd35c70542126bea5b"},
+    {file = "pulumi_kubernetes-4.18.0.tar.gz", hash = "sha256:581289054065464949dcc3c816d30bfb63903235a19f281508a285e79bccd259"},
 ]
 
 [package.dependencies]
@@ -657,4 +657,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "dd58c97c8e7901292fabdb8430afdf2c47ea17adae7887e37772aa79d1ee6f63"
+content-hash = "c23d477d125764189833965f43eea186e8a4443b16c040cbbeb468a574185130"

@@ -25,5 +25,5 @@ Plug it into a machine, boot, and have fun hacking!
 Try out netboot!
 
 ```shell
-nix run .#jflyso-netboot
+sudo nix run .#jflyso-netboot
 ```

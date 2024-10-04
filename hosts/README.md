@@ -20,7 +20,7 @@ physical machine.
 ## Bootstrapping a machine
 
 You need SSH access to the machine. One easy way to do that is to boot with the
-`jflyso` live USB (see `../jflyso/README.md` for instructions). If you're not
+`jflyso` live USB (see `./jflyso/README.md` for instructions). If you're not
 using `jflyso`, change the `--ssh` option accordingly.
 
     tools/fleet.py bootstrap --ssh jfly@jflyso [HOSTNAME]

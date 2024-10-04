@@ -52,12 +52,6 @@ buildPythonPackage {
   build-system = [ setuptools ];
   pythonImportsCheck = [ "pulumi_crds" ];
 
-  # Workaround for https://github.com/pulumi/crd2pulumi/issues/148
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "pulumi-kubernetes4.18.0" "pulumi-kubernetes>=4.18.0"
-  '';
-
   propagatedBuildInputs = [
     parver
     pulumi

@@ -33,4 +33,8 @@ in
   users.users.root.openssh.authorizedKeys.keys = [ identities.jfly ];
 
   system.stateVersion = config.system.nixos.release;
+
+  # Some minimal config necessary to define a buildable machine.
+  fileSystems."/".device = "/dev/null";
+  boot.loader.systemd-boot.enable = true;
 }

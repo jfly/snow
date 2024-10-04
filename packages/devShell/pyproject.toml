@@ -12,7 +12,7 @@ click = "*"
 remote-pdb = "*" # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
 rich = "*"
 pulumi = "*"
-pulumi-kubernetes = "*"
+pulumi-kubernetes = "== 4.18.0"  # must be kept in sync with https://github.com/pulumi/crd2pulumi/blob/v1.5.3/pkg/codegen/packagegenerator.go#L28
 pulumi-cloudflare = "*"
 pulumi_minio = "*"
 pulumi_keycloak = "*"
