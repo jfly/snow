@@ -1,7 +1,18 @@
+# kent
+
 A secondary NAS/HTPC running on a ThinkCentre M92p in San Clemente.
 
-## Manual setup tasks (not yet automated)
+## Provision
 
-- kodi
-    - set the content type on the media sources explicitly
-    - Settings > System > Audio > Audio output device -> change to "HDMI"
+1. Boot the machine with `jflyso`. Is F12 the magic key?
+2. `tools/fleet.py bootstrap --ssh jfly@jflyso kent`
+3. Set the default card profile to "Digital Stereo (HDMI) Output". (It defaults to the internal speaker):
+   This is what I ran:
+   ```
+   pw-cli s 51 Profile '{ index: 4, save: true }'
+   ```
+   Cobbled together from instructions on
+   <https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Migrate-PulseAudio#set-card-profile>.
+   `pavucontrol` is way easier to debug this, though.
+4. Follow instructions in `nixos-modules/kodi-colusita/README.md` to finish
+   bootstrapping.
