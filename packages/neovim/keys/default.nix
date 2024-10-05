@@ -26,6 +26,16 @@ in
       node_incremental = "<CR>";
       node_decremental = "<BS>";
     };
+    # Workaround for <https://github.com/nvim-treesitter/nvim-treesitter/issues/2634>
+    is_supported = mkRaw ''
+      function()
+        local mode = vim.api.nvim_get_mode().mode
+        if mode == "c" then
+          return false
+        end
+        return true
+      end
+    '';
   };
 
   keymaps = [
