@@ -120,6 +120,7 @@ in
     # <https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35>,
     # I see that Home Manager *does* have this logic, but it also sounds like
     # there's some hope it'll end up in core nixpkgs someday.
+    services.avahi.enable = true;
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
   };
