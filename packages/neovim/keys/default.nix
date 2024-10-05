@@ -53,7 +53,7 @@ in
           local target_path = vim.fn.expand('<cfile>')
 
           local path
-          if target_path[0] == "." then
+          if target_path:sub(1, 1) == "." then
             local current_file = vim.fn.expand('%:p')
             local cwd = vim.fn.fnamemodify(current_file, ':h')
             local target_absolute = vim.fn.resolve(cwd .. '/' .. target_path)
