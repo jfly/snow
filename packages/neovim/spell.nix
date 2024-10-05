@@ -4,7 +4,7 @@ let
   inherit (lib.nixvim) mkRaw;
 in
 {
-  opts.spell = true;
+  opts.spell = false;
 
   keymaps = [
     {
