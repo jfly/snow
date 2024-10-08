@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -10,6 +11,17 @@ let
   inherit (lib.options) mkOption;
 
   cfg = config.snow.quickfix;
+
+  qf_helper-nvim = pkgs.vimUtils.buildVimPlugin {
+    pname = "qf_helper.nvim";
+    version = "2024-05-16";
+    src = pkgs.fetchFromGitHub {
+      owner = "stevearc";
+      repo = "qf_helper.nvim";
+      rev = "fa3c2f3f2706e2c9984409c9c14b5993302ddfa7";
+      sha256 = "sha256-v6ZJZEhZnHFMGTeRJas4y0C1H8j8+Deq9ZOSnv8C9Rk=";
+    };
+  };
 in
 {
   options = {
@@ -28,7 +40,16 @@ in
   config = {
     plugins.sticky-quickfix.enable = true;
 
+    extraPlugins = [ qf_helper-nvim ];
+
     extraConfigLuaPre = ''
+      require("qf_helper").setup({
+        sort_lsp_diagnostics = true, -- Sort LSP diagnostic results
+        quickfix = {
+          track_location = true,     -- Keep qf updated with your current location
+        },
+      })
+
       local snow_qf = {}
 
       do
