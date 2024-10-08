@@ -18,6 +18,8 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
     imports = (
       if full then
         [
+          inputs.sticky-quickfix-nvim.modules.nixvim.default
+
           ./keys
           ./formatting.nix
           ./syntax.nix
@@ -29,6 +31,7 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
           ./hacking.nix
           ./notetaking.nix
           ./lsp.nix
+          ./quickfix.nix
           ./diagnostics.nix
           ./borders.nix
           ./spell.nix

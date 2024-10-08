@@ -25,7 +25,7 @@ in
   };
 
   extraConfigLuaPre = ''
-    local snowsearch = {}
+    local snow_search = {}
 
     do
       local Direction = {
@@ -65,9 +65,9 @@ in
         end
       end
 
-      snowsearch.Direction = Direction
-      snowsearch.search_buf = search_buf
-      snowsearch.get_search_term = get_search_term
+      snow_search.Direction = Direction
+      snow_search.search_buf = search_buf
+      snow_search.get_search_term = get_search_term
     end
   '';
 
@@ -80,9 +80,9 @@ in
       options.desc = "Search forwards for word under cursor (case sensitive)";
       action = mkRaw ''
         function()
-          local word = snowsearch.get_search_term()
-          snowsearch.search_buf(word, {
-            direction = snowsearch.Direction.FORWARD,
+          local word = snow_search.get_search_term()
+          snow_search.search_buf(word, {
+            direction = snow_search.Direction.FORWARD,
             case_sensitive = true,
           })
         end
@@ -93,9 +93,9 @@ in
       options.desc = "Search backwards for word under cursor (case sensitive)";
       action = mkRaw ''
         function()
-          local word = snowsearch.get_search_term()
-          snowsearch.search_buf(word, {
-            direction = snowsearch.Direction.BACKWARD,
+          local word = snow_search.get_search_term()
+          snow_search.search_buf(word, {
+            direction = snow_search.Direction.BACKWARD,
             case_sensitive = true,
           })
         end
@@ -106,7 +106,7 @@ in
       options.desc = "Search project for word under cursor";
       action = mkRaw ''
         function()
-          local word = snowsearch.get_search_term()
+          local word = snow_search.get_search_term()
           require('fzf-lua').grep { search = word }
         end
       '';
@@ -142,16 +142,6 @@ in
           end)
         end
       '';
-    }
-    {
-      key = "]q";
-      options.desc = "Select next item in the quickfix list";
-      action = ":cnext<CR>";
-    }
-    {
-      key = "[q";
-      options.desc = "Select previous item in the quickfix list";
-      action = ":cprevious<CR>";
     }
     # TBH, this isn't really searching or fzf related, but it kind of makes
     # sense to have this live near fzf's buffer switching keymap.

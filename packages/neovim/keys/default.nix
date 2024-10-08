@@ -138,8 +138,8 @@ in
     }
   ];
 
-  # Toggle a list of diagnostics.
-  snow.diagnostics.toggle_list_key = "<leader>q";
+  # Toggle the quickfix list.
+  snow.quickfix.toggle_key = "<leader>q";
 
   # Pop up the diagnostics window automatically when jumpin.
   diagnostics.jump.float = true;

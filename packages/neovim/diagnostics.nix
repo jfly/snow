@@ -1,53 +1,43 @@
-{
-  config,
-  lib,
-  helpers,
-  ...
-}:
-
-let
-  inherit (lib) types;
-  inherit (lib.nixvim) mkRaw;
-  inherit (lib.options) mkOption;
-  cfg = config.snow.diagnostics;
-in
+{ ... }:
 
 {
-  options = {
-    snow.diagnostics.toggle_list_key = mkOption {
-      description = "The key to toggle visibility of a list of diagnostics.";
-      type = types.str;
-      default = null;
-    };
-  };
+  # Populate a quickfix list (and keep it up to date with changes!) with all
+  # diagnostics in a workspace.
+  # This is basically a simplified (quickfix-only) version of
+  # <https://github.com/onsails/diaglist.nvim>. This code also takes advantage
+  # of quickfix list ids to ensure we always update the exact same list each
+  # time.
 
-  config = {
-    # Nice way to get a list of all diagnostics. Especially useful when dealing
-    # with multiple files in a workspace.
-    # This is re-inventing the quickfix list. TODO: Look into [diaglist] instead.
-    # [diaglist]: https://github.com/onsails/diaglist.nvim
-    plugins.trouble.enable = true;
-    plugins.trouble.settings.focus = true;
-    keymaps = [
-      {
-        key = cfg.toggle_list_key;
-        options.desc = "Toggle code diagnostics list";
-        action = mkRaw ''
-          function()
-            require("trouble").toggle("diagnostics")
-          end
-        '';
-      }
-    ];
+  extraConfigLuaPre = ''
+    snow_diag = {}
+    do
+      snow_diag.title = "Diagnostics"
+      snow_diag._qf_id = nil
 
-    # Cute diagnostics signs in the gutter =)
-    diagnostics.signs = {
-      text = helpers.toRawKeys {
-        "vim.diagnostic.severity.ERROR" = "󰅚";
-        "vim.diagnostic.severity.WARN" = "󰀪";
-        "vim.diagnostic.severity.INFO" = "󰌶";
-        "vim.diagnostic.severity.HINT" = "";
-      };
-    };
-  };
+      snow_diag.replace_qf_list = function()
+        local all_diags = vim.diagnostic.get()
+        local qflist = vim.diagnostic.toqflist(all_diags)
+
+        if snow_diag._qf_id then
+          vim.fn.setqflist({}, 'r', {
+            items = qflist,
+            id = snow_diag._qf_id,
+          })
+        else
+          vim.fn.setqflist({}, ' ', {
+            items = qflist,
+            title = snow_diag.title,
+            id = snow_diag._qf_id,
+          })
+
+          -- Get the id of the newly created quickfix list.
+          snow_diag._qf_id = vim.fn.getqflist({ id = 0 }).id
+        end
+      end
+
+      vim.api.nvim_create_autocmd('DiagnosticChanged', {
+        callback = snow_diag.replace_qf_list,
+      })
+    end
+  '';
 }
