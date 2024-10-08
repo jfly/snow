@@ -15,4 +15,6 @@ if status is-interactive
     # See <https://github.com/fish-shell/fish-shell/issues/10756> for details.
     bind \e. history-last-token-search-backward
     bind \e\> history-last-token-search-forward
+
+    abbr --add sap 'shtuff as $PWD'
 end

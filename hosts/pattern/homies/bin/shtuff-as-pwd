@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec shtuff as "$PWD"

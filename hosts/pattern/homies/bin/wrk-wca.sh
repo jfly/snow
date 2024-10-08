@@ -15,5 +15,5 @@ docker start mysql-8 || docker run --name mysql-8 -e MYSQL_ALLOW_EMPTY_PASSWORD=
 
 cd ~/src/github.com/thewca/worldcubeassociation.org/WcaOnRails/
 terminalOn "bin/rails s" "be"
-terminalOn "shtuff-as-pwd" "be"
+terminalOn "sap" "be"
 terminalOn "vim" "be"
