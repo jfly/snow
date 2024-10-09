@@ -26,7 +26,7 @@ class PairingMode:
 
     @staticmethod
     def projector_dpi():
-        return 400
+        return 250
 
     @staticmethod
     def apply_audio_tweaks():
