@@ -20,4 +20,7 @@
 
   # TypeScript/JavaScript
   plugins.lsp.servers.ts_ls.enable = true;
+
+  # C/C++
+  plugins.lsp.servers.clangd.enable = true;
 }
