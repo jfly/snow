@@ -1,4 +1,5 @@
 {
+  flake',
   config,
   lib,
   pkgs,
@@ -11,6 +12,9 @@ let
     mkEnableOption
     mkOption
     types
+    ;
+  inherit (builtins)
+    concatStringsSep
     ;
 
   cfg = config.services.kodi-colusita;
@@ -31,6 +35,7 @@ let
   myKodi = pkgs.kodi.withPackages (kodiAddons: [
     settingsAddon
     kodiAddons.jellyfin
+    flake'.packages.kodiPackages.moonlight
   ]);
 in
 
@@ -99,6 +104,25 @@ in
           #    that:
           #    https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35.
           TimeoutStopSec = "10s";
+        };
+      };
+
+      "moonlight" = {
+        enable = true;
+        partOf = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = concatStringsSep " " [
+            "${pkgs.moonlight-qt}/bin/moonlight"
+            "stream"
+            # TODO: figure out why moonlight wastes ~6 seconds doing this DNS lookup
+            # "gurgi"
+            "192.168.1.140"
+            "Desktop" # so-called "app"
+            "--resolution"
+            "1920x1080"
+            "--capture-system-keys"
+            "always" # ensure the windows key gets sent to the host
+          ];
         };
       };
     };

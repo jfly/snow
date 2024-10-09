@@ -1,5 +1,6 @@
 {
   flake,
+  flake',
   config,
   pkgs,
   ...
@@ -10,13 +11,12 @@ let
     concatStringsSep
     ;
   identities = flake.lib.identities;
-  myKodiPackages = pkgs.callPackage ./kodi-packages { };
   myKodi = pkgs.kodi.withPackages (kodiPackages: [
     kodiPackages.a4ksubtitles
     kodiPackages.joystick
-    myKodiPackages.autoreceiver
-    myKodiPackages.moonlight
-    myKodiPackages.tubecast
+    flake'.packages.kodiPackages.autoreceiver
+    flake'.packages.kodiPackages.moonlight
+    flake'.packages.kodiPackages.tubecast
   ]);
   # This is unfortunate: it just doesn't seem to be possible to set some kodi
   # settings without creating files in the ~/.kodi/userdata/addon_data
@@ -146,7 +146,7 @@ in
 
         # Don't start up kodi until we think we can connect to the remote mysql
         # server.
-        # Note: keep this in sync with the mysql server in dallben/kodi/kodi-packages/media/src/share/kodi/system/advancedsettings.xml
+        # Note: keep this in sync with the mysql server in packages/kodiPackages/media/src/share/kodi/system/advancedsettings.xml
         ${wait-for-mysql}/bin/wait-for-mysql clark
       '';
       serviceConfig = {
