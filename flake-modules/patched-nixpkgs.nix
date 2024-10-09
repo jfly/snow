@@ -16,6 +16,12 @@ let
         url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
         hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
       })
+      # https://github.com/NixOS/nixpkgs/pull/341086
+      (fetchpatch {
+        name = "upower: Upgrade to 1.90.6 and extend CriticalPowerActions";
+        url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
+        hash = "sha256-Fcqi/M3Cmdrq/RxWuVTne/Os6LbCw3NFqVUYGIZ54YA=";
+      })
     ];
   };
 in

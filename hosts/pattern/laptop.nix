@@ -68,4 +68,22 @@ in
       '';
     };
   };
+
+  # Suspend my laptop on low power rather than letting it die.
+  # It might then die while suspending (powering RAM isn't free), but normally
+  # this happens just because I've forgotten to plug in my laptop, and this
+  # just gives me a moment to plug in before I lose whatever I'm in the middle
+  # of.
+  # Interestingly, upstream `upower` really doesn't want you to use "Suspend".
+  # I believe their fear is is that you'll run out of power while sleeping, and
+  # risk filesystem corruption. I've been uncleanly letting my laptop die for
+  # years and have never had a ext4 issue though, so I'm not very concerned.
+  # The *best* thing to do would be to enable hibernation (which at time of
+  # writing I have not done yet), and use HybridSleep, which combines the speed
+  # of Suspend with the guarantees of Hibernation.
+  services.upower = {
+    enable = true;
+    criticalPowerAction = "Suspend";
+    allowRiskyCriticalPowerAction = true;
+  };
 }
