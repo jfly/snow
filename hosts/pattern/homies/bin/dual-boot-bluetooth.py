@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import argparse
 import os
 import sys
+import argparse
 from typing import List
+from pathlib import Path
 
 from dual_blueoot import linux
 from dual_blueoot.types import BluetoothDevice, MacAddress
@@ -79,10 +80,48 @@ def diff_devices(
 
 def main():
     require_root()
-    adapter = MacAddress(
-        "F8:94:C2:2F:A9:7B"
-    )  # TODO: make this a command line parameter
-    path_to_windows_registry = "/mnt/Windows/System32/config/SYSTEM"  # TODO: make this a command line parameter
+
+    adapter_macs = [
+        adapter.mac_address for adapter in linux.get_local_bluetooth_adapters()
+    ]
+    if len(adapter_macs) == 1:
+        (adapter_mac,) = adapter_macs
+    else:
+        adapter_mac = None
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--adapter",
+        choices=adapter_macs,
+        default=adapter_mac,
+        help="Bluetooth adapter",
+    )
+    parser.add_argument(
+        "--windows-registry",
+        required=True,
+        help="Path to Windows registry. How to decrypt a BitLocker partition and mount it...?",
+    )
+
+    args = parser.parse_args()
+
+    if args.adapter is None:
+        print("Adapter is required", file=sys.stderr)
+        sys.exit(1)
+
+    if args.windows_registry is None:
+        print("Path to Windows registry is required", file=sys.stderr)
+        sys.exit(1)
+
+    adapter = MacAddress(args.adapter)
+    path_to_windows_registry = Path(args.windows_registry)
+
+    if not path_to_windows_registry.exists():
+        print(
+            f"Given Windows registry does not exist: {path_to_windows_registry}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     linux_devices = linux.get_devices(adapter)
     windows = Windows(path_to_windows_registry)
     windows_devices = windows.get_devices(adapter)

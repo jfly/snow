@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Union
 
 from .util import chunkify
 
@@ -70,5 +69,5 @@ class BleKey:
 @dataclass
 class BluetoothDevice:
     mac_address: MacAddress
-    link_key: Union[bytes, BleKey]
+    link_key: bytes | BleKey | None
     description: str

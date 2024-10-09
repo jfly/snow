@@ -1,5 +1,5 @@
 import configparser
-import os
+from pathlib import Path
 from typing import List
 
 from .types import (
@@ -12,14 +12,14 @@ from .types import (
 )
 from .util import chunkify
 
-BLUETOOTH_DIR = "/var/lib/bluetooth"
+BLUETOOTH_DIR = Path("/var/lib/bluetooth")
 
 
 def get_local_bluetooth_adapters() -> List[MacAddress]:
     """
     Finds all locally attached bluetooth adapters. Returns their MAC addresses.
     """
-    return [MacAddress(f) for f in os.listdir(BLUETOOTH_DIR)]
+    return [MacAddress(f.name) for f in BLUETOOTH_DIR.iterdir()]
 
 
 def to_bytes(hex_str: str):
@@ -27,16 +27,18 @@ def to_bytes(hex_str: str):
     return bytes(int("".join(hexed), 16) for hexed in chunkify(hex_str, 2))
 
 
-def get_devices(adapter: MacAddress) -> BluetoothDevice:
-    adapter_dir = os.path.join(BLUETOOTH_DIR, adapter.format(caps=True, separator=":"))
+def get_devices(adapter: MacAddress) -> list[BluetoothDevice]:
+    adapter_dir = BLUETOOTH_DIR / adapter.format(caps=True, separator=":")
     devices = []
-    for mac_address in os.listdir(adapter_dir):
-        if not MacAddress.is_valid_mac_address(mac_address):
+    for mac_address_dir in adapter_dir.iterdir():
+        if not MacAddress.is_valid_mac_address(mac_address_dir.name):
             continue
 
         config = configparser.ConfigParser()
-        config.optionxform = str  # Preserve the case of the option names
-        info_path = os.path.join(adapter_dir, mac_address, "info")
+        config.optionxform = lambda optionstr: str(
+            optionstr
+        )  # Preserve the case of the option names
+        info_path = mac_address_dir / "info"
         with open(info_path, "r") as f:
             config.read_file(f)
 
@@ -71,7 +73,7 @@ def get_devices(adapter: MacAddress) -> BluetoothDevice:
 
         devices.append(
             BluetoothDevice(
-                mac_address=MacAddress(mac_address),
+                mac_address=MacAddress(mac_address_dir.name),
                 link_key=link_key,
                 description=description,
             )
