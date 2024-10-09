@@ -25,6 +25,10 @@ class PairingMode:
         return 180
 
     @staticmethod
+    def projector_dpi():
+        return 400
+
+    @staticmethod
     def apply_audio_tweaks():
         set_loopback(True)
 
@@ -37,6 +41,10 @@ class SoloMode:
     @staticmethod
     def mobile_dpi():
         return 133
+
+    @staticmethod
+    def projector_dpi():
+        return 96
 
     @staticmethod
     def apply_audio_tweaks():
@@ -123,7 +131,7 @@ def _detect() -> Detection:
             secondary_external.right_of = primary_external
     elif external_display := display_by_name.get("HDMI-1"):
         location_name = "projector"
-        dpi = 96
+        dpi = mode.projector_dpi()
 
         for display in displays:
             display.is_active = False
