@@ -19,5 +19,5 @@
   plugins.rustaceanvim.enable = true;
 
   # TypeScript/JavaScript
-  plugins.lsp.servers.ts-ls.enable = true;
+  plugins.lsp.servers.ts_ls.enable = true;
 }

@@ -2,8 +2,8 @@
 
 let
   inherit (pkgs)
+    fetchurl
     vimPlugins
-    fetchpatch
     ;
   inherit (lib.nixvim) mkRaw;
 in
@@ -52,16 +52,9 @@ in
         # TODO: try to upstream this to none-js. Currently blocked by a
         # treefmt "issue" that I'm chatting with the maintainer (@brianmcgee)
         # about.
-        (fetchpatch {
-          name = "add 'nix flake fmt' formatter";
-          url = "https://github.com/nvimtools/none-ls.nvim/compare/main...jfly:none-ls.nvim:add-nix-fmt~.patch";
-          hash = "sha256-W7bfm0groW7aGyzv8uFU+TbMDJxwyU3HVFh1spg13es=";
-        })
-        # TODO: upstream this. No blockers here.
-        (fetchpatch {
-          name = "fix bugs with conditions";
-          url = "https://github.com/nvimtools/none-ls.nvim/commit/8670f794a2672f1a0c7983a12f7a95f4e147a816.patch";
-          hash = "sha256-LJHRgfcWwz6CeHDqvgPf4Ciu2a8lsczMLevkbdQKuII=";
+        (fetchurl {
+          url = "https://github.com/nvimtools/none-ls.nvim/compare/main...jfly:none-ls.nvim:add-nix-fmt.patch";
+          hash = "sha256-fishasjC3umtDCNR3w3ua8eauBra1xB75uRsTb0XnEE=";
         })
       ];
     }

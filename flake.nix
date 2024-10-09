@@ -23,8 +23,8 @@
     nixvim.url = "github:nix-community/nixvim";
     on-air.inputs.nixpkgs.follows = "nixpkgs";
     on-air.url = "github:jfly/on-air";
-    openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
-    # openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
+    # openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
+    openwrt-imagebuilder.url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
     poetry2nix.url = "github:nix-community/poetry2nix";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
     pr-tracker.inputs.nixpkgs.follows = "nixpkgs";

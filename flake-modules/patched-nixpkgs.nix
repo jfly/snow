@@ -16,12 +16,6 @@ let
         url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
         hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
       })
-      # https://github.com/NixOS/nixpkgs/pull/345767 / https://github.com/NixOS/nixpkgs/issues/345965
-      (fetchpatch {
-        name = "[PATCH] luaPackages.dkjson: revert hash change";
-        url = "https://github.com/NixOS/nixpkgs/commit/2a6764d5134c3ac3d0d14a75a279afffd308e147.patch";
-        hash = "sha256-UqVVzrECky7A1p7tgnem6guluYL/zJGwEsDDU/uLKrc=";
-      })
     ];
   };
 in
