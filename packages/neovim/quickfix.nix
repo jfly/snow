@@ -38,8 +38,6 @@ in
   };
 
   config = {
-    plugins.sticky-quickfix.enable = true;
-
     extraPlugins = [ qf_helper-nvim ];
 
     extraConfigLuaPre = ''

@@ -22,6 +22,7 @@
           vim.fn.setqflist({}, 'r', {
             items = qflist,
             id = snow_diag._qf_id,
+            keep_idx = true,
           })
         else
           vim.fn.setqflist({}, ' ', {

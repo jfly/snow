@@ -31,10 +31,6 @@
     pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
     shtuff.inputs.nixpkgs.follows = "nixpkgs";
     shtuff.url = "github:jfly/shtuff";
-    sticky-quickfix-nvim.inputs.nixpkgs.follows = "nixpkgs";
-    sticky-quickfix-nvim.inputs.nixvim.follows = "nixvim";
-    sticky-quickfix-nvim.inputs.flake-parts.follows = "flake-parts";
-    sticky-quickfix-nvim.url = "github:jfly/sticky-quickfix.nvim";
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
