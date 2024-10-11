@@ -2,7 +2,6 @@
 
 let
   inherit (pkgs)
-    fetchurl
     vimPlugins
     ;
   inherit (lib.nixvim) mkRaw;
@@ -49,11 +48,13 @@ in
   plugins.none-ls.package = (
     vimPlugins.none-ls-nvim.overrideAttrs {
       patches = [
-        # Adds a "nix flake fmt" builtin formatter
+        # "dynamic_command is now async, and runs immediately when opening buffers"
+        # https://github.com/nvimtools/none-ls.nvim/pull/197
+        # This includes the not-yet-merged "nix flake fmt" builtin formatter:
         # https://github.com/nvimtools/none-ls.nvim/pull/192
-        (fetchurl {
-          url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/192.patch";
-          hash = "sha256-DzTXhfo/Xk7L7ZKqFGeS7GTkDofYz4DfApWT082CbOM=";
+        (pkgs.fetchurl {
+          url = "https://github.com/nvimtools/none-ls.nvim/pull/197.patch";
+          hash = "sha256-USvK4ePICuvCOhvIvR1fJajIbXjNwt2+RGJZjxyBTHE=";
         })
       ];
     }
