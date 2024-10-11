@@ -40,21 +40,20 @@ in
 
   # Instead, configure none-ls to be the only formatter used by lsp-format.
   plugins.none-ls.enable = true;
+  # plugins.none-ls.settings.debug = true;
   plugins.none-ls.settings.enableLspFormat = true;
+  # Note: nixvim will generate a nice nixified option for this once
+  # https://github.com/nvimtools/none-ls.nvim/pull/192 lands in none-ls.
   plugins.none-ls.settings.sources = [ ''require("null-ls").builtins.formatting.nix_flake_fmt'' ];
 
-  # Apply my patches to none-ls that add the `nix_flake_fmt` formatter.
-  # Bonus: if I get this upstreamed, then nixvim should generate a nice nixified
-  # option I can use above instead.
   plugins.none-ls.package = (
     vimPlugins.none-ls-nvim.overrideAttrs {
       patches = [
-        # TODO: try to upstream this to none-js. Currently blocked by a
-        # treefmt "issue" that I'm chatting with the maintainer (@brianmcgee)
-        # about.
+        # Adds a "nix flake fmt" builtin formatter
+        # https://github.com/nvimtools/none-ls.nvim/pull/192
         (fetchurl {
-          url = "https://github.com/nvimtools/none-ls.nvim/compare/main...jfly:none-ls.nvim:add-nix-fmt.patch";
-          hash = "sha256-fishasjC3umtDCNR3w3ua8eauBra1xB75uRsTb0XnEE=";
+          url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/192.patch";
+          hash = "sha256-DzTXhfo/Xk7L7ZKqFGeS7GTkDofYz4DfApWT082CbOM=";
         })
       ];
     }
