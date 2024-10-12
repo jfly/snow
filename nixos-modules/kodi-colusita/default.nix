@@ -35,6 +35,7 @@ let
   myKodi = pkgs.kodi.withPackages (kodiAddons: [
     settingsAddon
     kodiAddons.jellyfin
+    kodiAddons.joystick
     flake'.packages.kodiPackages.moonlight
   ]);
 in
