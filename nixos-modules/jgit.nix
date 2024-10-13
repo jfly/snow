@@ -1,7 +1,6 @@
 { flake', ... }:
 
 {
-
   environment.systemPackages = with flake'.packages; [
     jgit
   ];
