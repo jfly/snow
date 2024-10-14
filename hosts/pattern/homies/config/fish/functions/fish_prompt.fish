@@ -22,11 +22,6 @@ function __fish_prompt_format_duration
 end
 
 function fish_prompt --description 'Write out the prompt'
-    if set -q HACK_DIR
-        printf "$(realpath --relative-to=$HACK_DIR $(pwd))/ \$ "
-        return
-    end
-
     set -l last_pipestatus $pipestatus
     set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
     set -l normal (set_color normal)
@@ -84,6 +79,11 @@ function fish_prompt --description 'Write out the prompt'
 
     if test $CMD_DURATION -gt 2500
         set duration " "(set_color yellow)(__fish_prompt_format_duration $CMD_DURATION)$normal
+    end
+
+    if set -q HACK_DIR
+        printf "$(realpath --relative-to=$HACK_DIR $(pwd))/ \$ "
+        return
     end
 
     set -l line1 "$statusb_color╭─$normal$login$cwd$date$(fish_vcs_prompt)$job_info$duration"
