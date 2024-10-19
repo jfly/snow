@@ -12,11 +12,11 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = oldAttrs.patches ++ [
-        # Backport of <https://github.com/vim/vim/pull/15841> to Neovim.
-        # Hopefully this gets merged!🤞
+        # RFC: vim.diagnostic.setqflist improvements
+        # https://github.com/neovim/neovim/pull/30868
         (pkgs.fetchpatch {
-          url = "https://github.com/neovim/neovim/compare/master...jfly:neovim:backport-add-keep_idx.patch";
-          hash = "sha256-oBpd5PAUdyoMSore+i//IYKBn9BRRSHvCs5O6hWlox8=";
+          url = "https://github.com/neovim/neovim/pull/30868.patch";
+          hash = "sha256-BNCpwZ3pfxS2ZH6XMFJOlyMWjIQEZJCAobCN33cvkNQ=";
         })
       ];
     });

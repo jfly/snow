@@ -167,7 +167,7 @@ in
       }
       {
         # This is down here rather than up in `lsbBuf` because this should run
-        # in normal *and* insert mode.
+        # in normal *and* visual mode.
         key = "<leader>f";
         action = mkRaw "vim.lsp.buf.code_action";
       }
