@@ -1,4 +1,4 @@
-{ ... }:
+{ helpers, ... }:
 
 {
   # Populate a quickfix list (and keep it up to date with changes!) with all
@@ -16,4 +16,14 @@
       })
     end
   '';
+
+  # Cute diagnostics signs in the gutter =)
+  diagnostics.signs = {
+    text = helpers.toRawKeys {
+      "vim.diagnostic.severity.ERROR" = "󰅚";
+      "vim.diagnostic.severity.WARN" = "󰀪";
+      "vim.diagnostic.severity.INFO" = "󰌶";
+      "vim.diagnostic.severity.HINT" = "";
+    };
+  };
 }
