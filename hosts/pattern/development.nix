@@ -138,6 +138,9 @@ in
     programs.sysdig.enable = true;
 
     environment.systemPackages = with pkgs; [
+      ### Editor
+      neovim
+
       ### Version control
       git
       git-filter-repo
@@ -180,27 +183,6 @@ in
       miller
       jq
       mfa
-
-      ### editor
-      flake'.packages.neovim
-      # TODO: don't install these globally, instead just make them available
-      # to neovim.
-      pyright
-      flake'.packages.strict-nil
-      nodePackages.typescript-language-server
-      nodePackages.bash-language-server
-      shellcheck # used by bash-language-server
-      shfmt # used by bash-language-server
-      (ruff-lsp.overridePythonAttrs (old: {
-        # ruff-lsp automatically falls back to some version of ruff (see
-        # https://github.com/jfly/nixpkgs/blob/5e5319a2b01f4aa39dc99a7d7a1b70bacfe60f24/pkgs/development/tools/language-servers/ruff-lsp/default.nix#L57-L58).
-        # I don't want that, because I only want ruff autoformatting to occur
-        # in projects that actually use ruff. So, we override ruff-lsp's
-        # makeWrapperArgs to not include `ruff` itself.
-        makeWrapperArgs = [
-          "--unset PYTHONPATH"
-        ];
-      })) # (used by neovim)
     ];
   };
 }

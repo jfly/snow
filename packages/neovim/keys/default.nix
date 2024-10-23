@@ -160,11 +160,6 @@ in
     };
 
     extra = [
-      # Show workspace symbols
-      {
-        key = "<leader>fs";
-        action = mkRaw ''require("fzf-lua").lsp_workspace_symbols'';
-      }
       {
         # This is down here rather than up in `lsbBuf` because this should run
         # in normal *and* visual mode.

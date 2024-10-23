@@ -1,6 +1,7 @@
 {
   inputs,
   inputs',
+  flake',
   system,
   pkgs,
   full ? true,
@@ -26,6 +27,8 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
         })
       ];
     });
+
+    _module.args.flake' = flake';
 
     viAlias = true;
     vimAlias = true;

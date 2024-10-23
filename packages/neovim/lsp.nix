@@ -1,6 +1,8 @@
 {
   imports = [ ./lsp-diagnostic-quirks.nix ];
 
+  # extraConfigLuaPre = ''vim.lsp.set_log_level("debug")'';
+
   plugins.lsp.enable = true;
 
   # Bash
