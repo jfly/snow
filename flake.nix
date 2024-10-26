@@ -2,7 +2,7 @@
   description = "snow";
 
   inputs = {
-    # Choose not to download darwin deps (saves some resources on Linux, see
+    # Choose not to download darwin dependencies (saves some resources on Linux, see
     # https://github.com/ryantm/agenix#install-module-via-flakes).
     agenix.inputs.darwin.follows = "";
     agenix.inputs.home-manager.follows = "home-manager";

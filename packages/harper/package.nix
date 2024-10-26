@@ -1,8 +1,3 @@
-# This is a patched version of Harper that includes an experimental version of
-# `tower-lsp`. This fixes an issue where `harper-ls` doesn't actually exit when
-# asked to.
-#  - https://github.com/ebkalderon/tower-lsp/pull/428
-#  - https://github.com/elijah-potter/harper/issues/139
 {
   lib,
   rustPlatform,
@@ -10,11 +5,19 @@
 }:
 
 let
+  # This is a patched version of Harper that includes an experimental version of
+  # `tower-lsp`. This fixes an issue where `harper-ls` doesn't actually exit when
+  # asked to.
+  #  - https://github.com/ebkalderon/tower-lsp/pull/428
+  #  - https://github.com/elijah-potter/harper/issues/139
+  #
+  # This branch also includes this not-yet-released support for `nix`:
+  # https://github.com/elijah-potter/harper/pull/244.
   src = fetchFromGitHub {
     owner = "jfly";
     repo = "harper";
-    rev = "actually-exit";
-    hash = "sha256-0tnaCDq8vV3lw3Jgdl+xbG4nks/o6/YMh7rgM+QOxtI=";
+    rev = "actually-exit-and-nix";
+    hash = "sha256-5GmJuawFud+L4PM86gXOuAAHGr99JywN5baGBWpvQ8E=";
   };
 in
 

@@ -5,6 +5,16 @@ let
 in
 {
   plugins.lsp.servers.harper_ls.enable = true;
+  plugins.lsp.servers.harper_ls.extraOptions = {
+    # Add `nix` to the list of filetypes harper-ls runs on.
+    # This requires using our forked version of harper with support for nix.
+    # TODO: upstream this to lspconfig once https://github.com/elijah-potter/harper/pull/244 lands.
+    # TODO: change to `.configs` once we pull in a version of lspconfig with
+    # <https://github.com/neovim/nvim-lspconfig/commit/bedb2a0df105f68a624a49b867f269b6d55a2c89>.
+    filetypes = mkRaw ''
+      vim.list_extend({"nix"}, require('lspconfig.server_configurations.harper_ls').default_config.filetypes)
+    '';
+  };
   # Use our patched version of harper-ls. See `packages/harper/package.nix` for details.
   plugins.lsp.servers.harper_ls.package = flake'.packages.harper;
 
