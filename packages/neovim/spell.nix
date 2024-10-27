@@ -1,18 +1,26 @@
-{ lib, flake', ... }:
+{
+  lib,
+  flake',
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib.nixvim) mkRaw;
 in
 {
   plugins.lsp.servers.harper_ls.enable = true;
-  plugins.lsp.servers.harper_ls.extraOptions = {
-    # Add `nix` to the list of filetypes harper-ls runs on.
-    # This requires using our forked version of harper with support for nix.
-    # TODO: upstream this to lspconfig once https://github.com/elijah-potter/harper/pull/244 lands.
-    filetypes = mkRaw ''
-      vim.list_extend({"nix"}, require('lspconfig.configs.harper_ls').default_config.filetypes)
-    '';
-  };
+
+  # "Add nix to harper"
+  # https://github.com/neovim/nvim-lspconfig/pull/3407
+  plugins.lsp.package = pkgs.vimPlugins.nvim-lspconfig.overrideAttrs (oldAttrs: {
+    patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
+      (pkgs.fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/neovim/nvim-lspconfig/pull/3407.patch";
+        hash = "sha256-CgWYPXQR8Mfb1Y4fqZFcfpDGdmiPZ+0+vZ6nhE/u/7Q=";
+      })
+    ];
+  });
   # Use our patched version of harper-ls. See `packages/harper/package.nix` for details.
   plugins.lsp.servers.harper_ls.package = flake'.packages.harper;
 

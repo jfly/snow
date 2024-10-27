@@ -73,9 +73,13 @@ function _nix() {
 }
 
 function build_containers() {
-    for f in iac/k8s/**/flake.nix; do
-        flake=$(dirname "$f")
-        target="./${flake}#stream-docker"
+    # Our cluster (currently) only has x86 machines in it.
+    local k8s_system=x86_64-linux
+
+    for container_path in containers/*; do
+        # Convert something like `containers/snow-web` to `snow-web`.
+        container=$(basename "$container_path")
+        target=".#containers.${k8s_system}.${container}"
         result=$(_nix build "$target" --no-link --print-out-paths)
 
         # Note: we're intentionally using ' here instead of " because we want

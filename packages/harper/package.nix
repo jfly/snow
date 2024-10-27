@@ -10,14 +10,11 @@ let
   # asked to.
   #  - https://github.com/ebkalderon/tower-lsp/pull/428
   #  - https://github.com/elijah-potter/harper/issues/139
-  #
-  # This branch also includes this not-yet-released support for `nix`:
-  # https://github.com/elijah-potter/harper/pull/244.
   src = fetchFromGitHub {
     owner = "jfly";
     repo = "harper";
-    rev = "actually-exit-and-nix";
-    hash = "sha256-5GmJuawFud+L4PM86gXOuAAHGr99JywN5baGBWpvQ8E=";
+    rev = "actually-exit";
+    hash = "sha256-CJ2P2xldn6YXv/PMuHeiw9TYiutUzor8bOcq/h0pt/M=";
   };
 in
 

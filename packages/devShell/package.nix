@@ -45,13 +45,13 @@ let
     expression = expr;
   };
   shellEnvValues = {
-    # We use IFD in flake-modules/patched-nixpkgs.nix.
+    # We use IFD in `flake-modules/patched-nixpkgs.nix`.
     NIX_CONFIG = plaintext ''
       allow-import-from-derivation = true
     '';
 
-    # Credentials to talk to minio (a self-hosted file server that
-    # implements the s3 api).
+    # Credentials to talk to `minio` (a self-hosted file server that
+    # implements the S3 API).
     AWS_ACCESS_KEY_ID = secret ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByc0RjL1VESElmbnVDQ0Jk
@@ -71,7 +71,7 @@ let
       yeQL3c9LBDac5ZjwmxWse7JyLStg0Sk3XrG0rQ==
       -----END AGE ENCRYPTED FILE-----
     '';
-    # This region doesn't mean anything to minio, but some AWS sdks expect you
+    # This region doesn't mean anything to `minio`, but some AWS SDKs expect you
     # to have a region set.
     AWS_REGION = plaintext "us-west-2";
 
@@ -122,7 +122,7 @@ pkgs.mkShell {
     # For building/pushing docker images
     pkgs.skopeo
 
-    # Used by tools/gen_mosquitto_user.py
+    # Used by `tools/gen_mosquitto_user.py`
     pkgs.mosquitto
 
     # k8s stuff
@@ -130,8 +130,10 @@ pkgs.mkShell {
     # pulumi-bin wraps pulumi with a shell script that sets LD_LIBRARY_PATH,
     # which causes issues when pulumi tries to invoke subprocesses.
     # For example:
+    #  ```
     #  $ LD_LIBRARY_PATH=/nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib python --version
     #  /nix/store/x24kxyqwqg2ln8kh9ky342kdcmhbng3h-python3-3.9.9/bin/python: /nix/store/jcb7fny2k03pfbdqk1hcnh12bxgax6vf-glibc-2.33-108/lib/libc.so.6: version `GLIBC_2.34' not found (required by /nix/store/bym6162f9mf4qqsr7k9d73526ar176x4-gcc-11.3.0-lib/lib/libgcc_s.so.1)
+    #  ```
     #
     # This environment variable was added a while ago in
     # https://github.com/NixOS/nixpkgs/pull/81879, but things seem to work now
@@ -142,7 +144,7 @@ pkgs.mkShell {
     (poetry2nix.mkPoetryEnv {
       projectDir = ./.;
       extraPackages = ps: [
-        ps.pip # used by `pulumi about` and `pulumi up`
+        ps.pip # Used by `pulumi about` and `pulumi up`.
         (flake'.packages.pulumi-crds.override { python3 = ps.python; })
       ];
       overrides = poetry2nix.defaultPoetryOverrides.extend (

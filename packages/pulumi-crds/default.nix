@@ -11,7 +11,7 @@
   setuptools,
   typing-extensions,
   # This is a hack: this package truly does depend on pulumi-kubernetes, but
-  # pulumi-kubernetes is not in nixpkgs. That works find for our devShell,
+  # pulumi-kubernetes is not in `nixpkgs`. That works fine for our `devShell`,
   # because it pulls in pulumi-kubernetes via poetry2nix (and overrides the
   # python package set used here).
   # This is fine, we're not packaging this for other people to use. However, we
@@ -60,4 +60,13 @@ buildPythonPackage {
     semver
     typing-extensions
   ];
+
+  # This package depends on `python3.pkgs.pulumi`, which doesn't currently build:
+  # https://github.com/NixOS/nixpkgs/issues/351751
+  # However (for some reason I don't understand) this *does* build when used
+  # via our `devShell` (which does override the Python package set, so perhaps
+  # that's relevant).
+  # The presence of `pulumi-kubernetes` is a hack (see parameter documentation
+  # above) to detect if we're being used inside that `devShell`.
+  passthru.skipFlakeCheckBuild = pulumi-kubernetes == null;
 }

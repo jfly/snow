@@ -2,21 +2,22 @@
   _module.args.flakeRoot = ../.;
 
   imports = [
-    # inputs
+    # Inputs
     ./patched-nixpkgs.nix
 
-    # outputs
+    # Outputs
     ./lib.nix
     ./packages.nix
+    ./containers.nix
     ./nixos-modules.nix
     ./nixos-hosts.nix
 
-    # development
+    # Development
     ./formatting.nix
     ./git-hooks.nix
     ./dev-shell.nix
 
-    # TODO: move away from agenix-rooter to agenix-rekey.
+    # TODO: move away from `agenix-rooter` to `agenix-rekey`.
     (
       { self, flakeRoot, ... }:
       {
