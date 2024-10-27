@@ -3,7 +3,6 @@
 cleanup_etc_hosts() {
     echo "Removing entries from /etc/hosts"
     sudo sed -i '/127.0.0.1 clark/d' /etc/hosts
-    sudo sed -i '/127.0.0.1 containers.snow.jflei.com/d' /etc/hosts
 }
 trap cleanup_etc_hosts EXIT
 
@@ -12,7 +11,6 @@ cleanup_etc_hosts
 
 echo "Adding entries to /etc/hosts"
 sudo bash -c 'echo "127.0.0.1 clark" >>/etc/hosts'
-sudo bash -c 'echo "127.0.0.1 containers.snow.jflei.com" >>/etc/hosts'
 
 echo "Running ssh proxy on port 6443"
 ssh -N -L 6443:localhost:6443 -L 8080:localhost:80 clark

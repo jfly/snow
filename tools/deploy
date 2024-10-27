@@ -73,8 +73,6 @@ function _nix() {
 }
 
 function build_containers() {
-    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for build_containers, sorry!" && exit 1
-
     for f in iac/k8s/**/flake.nix; do
         flake=$(dirname "$f")
         target="./${flake}#stream-docker"
@@ -90,27 +88,38 @@ function build_containers() {
         fq_immutable_name=docker://containers.snow.jflei.com/$immutable_image
         fq_latest_name=docker://containers.snow.jflei.com/$latest_image
 
-        # Only build and upload the image if it doesn't already exist remotely.
-        if ! skopeo inspect "$fq_immutable_name" &>/dev/null; then
-            $result | gzip --fast | skopeo --insecure-policy copy docker-archive:/dev/stdin "$fq_immutable_name"
-        fi
+        if [ $DRY_RUN == 1 ]; then
+            echo "Dry run: skipping upload of $fq_immutable_name"
+        else
+            # Only build and upload the image if it doesn't already exist remotely.
+            if ! skopeo inspect "$fq_immutable_name" &>/dev/null; then
+                $result | gzip --fast | skopeo --insecure-policy copy docker-archive:/dev/stdin "$fq_immutable_name"
+            fi
 
-        # Finally, tag it as the latest version.
-        skopeo --insecure-policy copy --preserve-digests --quiet "$fq_immutable_name" "$fq_latest_name"
+            # Finally, tag it as the latest version.
+            skopeo --insecure-policy copy --preserve-digests --quiet "$fq_immutable_name" "$fq_latest_name"
+        fi
 
         # TODO: restart affected deployments, or (better) use immutable image tags in manifests.
     done
 }
 
 function deploy_iac() {
-    [ $DRY_RUN == 1 ] && echo "--dry-run not supported for deploy_iac, sorry!" && exit 1
-
     for f in iac/k8s/**/*{.yaml,.yaml.secret}; do
-        echo "Applying $f"
-        kubectl apply -f "$f"
+        if [ $DRY_RUN == 1 ]; then
+            echo "Diffing $f"
+            kubectl diff -f "$f"
+        else
+            echo "Applying $f"
+            kubectl apply -f "$f"
+        fi
     done
 
-    pulumi up --cwd pulumi --stack dev --yes
+    if [ $DRY_RUN == 1 ]; then
+        pulumi preview --cwd iac/pulumi --stack dev
+    else
+        pulumi up --cwd iac/pulumi --stack dev --yes
+    fi
 }
 
 function deploy_nix() {
