@@ -1,8 +1,8 @@
 # kent2
 
-A Lenovo ThinkCentre M710q I impulse bought on ebay.
+A Lenovo ThinkCentre M710q I impulse bought on eBay.
 
-If it can play 4k content smoothly, it'll likely replace kent.
+If it can play 4k content smoothly, it'll likely replace `kent`.
 
 ## Provision
 
