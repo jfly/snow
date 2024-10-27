@@ -18,15 +18,15 @@ in
 {
   imports = [
     (mkTransposedPerSystemModule {
-      name = "containers";
+      name = "routers";
       option = mkOption {
         type = types.lazyAttrsOf types.package;
         default = { };
         description = ''
-          An attribute set of container images defined with [`streamLayeredImage`](https://nixos.org/manual/nixpkgs/stable/#ssec-pkgs-dockerTools-streamLayeredImage) to be built by [`nix build`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-build.html).
+          An attribute set of OpenWrt routers defined with [`nix-openwrt-imagebuilder`](https://github.com/astro/nix-openwrt-imagebuilder).
         '';
       };
-      file = ./containers.nix;
+      file = ./routers.nix;
     })
   ];
 
@@ -49,17 +49,13 @@ in
       };
     in
     {
-      containers = lib.filesystem.packagesFromDirectoryRecursive {
+      routers = lib.filesystem.packagesFromDirectoryRecursive {
         callPackage = pkgs.newScope pkgArgs;
-        directory = ../containers;
+        directory = ../routers;
       };
 
-      # Add checks for each container image.
-      checks = lib.mapAttrs' (name: container: {
-        # `checks` is a global namespace, so prefix each check so it
-        # (hopefully) gets unique name.
-        name = "containers/${name}";
-        value = container;
-      }) self'.containers;
+      # Note: these router builds are impure (they read gitignored secrets from
+      # the filesystem), so we don't add them to our flake checks (which should
+      # be pure).
     };
 }

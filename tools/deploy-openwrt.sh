@@ -52,7 +52,8 @@ fi
 
 echo "Deploying to $hostname"
 
-flake_target=".#${hostname}-openwrt"
+system=$(nix config show system)
+flake_target=".${system}.routers.#${hostname}"
 
 # Note: we use `deage.impureString` in these routers, which means we have to do
 # impure builds. Perhaps we can figure out some clever way of doing something

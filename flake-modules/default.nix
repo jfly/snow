@@ -9,6 +9,7 @@
     ./lib.nix
     ./packages.nix
     ./containers.nix
+    ./routers.nix
     ./nixos-modules.nix
     ./nixos-hosts.nix
 
