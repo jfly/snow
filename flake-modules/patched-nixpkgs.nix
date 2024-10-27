@@ -11,10 +11,11 @@ let
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
+      # https://github.com/NixOS/nixpkgs/pull/342343
       (fetchpatch {
-        name = "latest inkscape/silhouette unstable";
-        url = "https://github.com/jfly/nixpkgs/commit/653dd896a6cb28f2bc206dc8566348e649bea7d4.patch";
-        hash = "sha256-/NJqA1zYJ+uYMQ3tV9zyUG6n4LqeIjcyvvfSr07BVps=";
+        name = "inkscape-extensions.silhouette: 1.28 -> 1.29";
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/342343.patch";
+        hash = "sha256-Hyxr5y0UnQJw9NctZZ0S/3GgcvlvS0KeOizO3/PoEd8=";
       })
       # https://github.com/NixOS/nixpkgs/pull/341086
       (fetchpatch {
