@@ -19,8 +19,10 @@ let
       # https://github.com/NixOS/nixpkgs/pull/341086
       (fetchpatch {
         name = "upower: Upgrade to 1.90.6 and extend CriticalPowerActions";
-        url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
-        hash = "sha256-Fcqi/M3Cmdrq/RxWuVTne/Os6LbCw3NFqVUYGIZ54YA=";
+        # The PR currently has conflicts.
+        # url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
+        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:upower-critical-actions.patch";
+        hash = "sha256-n0njQ9gBS4WE8ShB2Fd+0BkXFD1oA/8QrbO/kLt3Ei4=";
       })
     ];
   };
