@@ -4,6 +4,7 @@
   # extraConfigLuaPre = ''vim.lsp.set_log_level("debug")'';
 
   plugins.lsp.enable = true;
+  plugins.lsp.inlayHints = true;
 
   # Bash
   plugins.lsp.servers.bashls.enable = true;
