@@ -1326,16 +1326,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1730061312,
+        "lastModified": 1730090494,
         "narHash": "sha256-PMz/8jmMVKroeRge51tgtR1kyyLF8duW6LlTnTEeCyQ=",
         "owner": "FatBoyXPC",
         "repo": "with-alacritty",
-        "rev": "e354ae733679cfabd22b8639beab2b2a8fcbd34e",
+        "rev": "26527c6a709322305e511be70cecac6ebfc0bf9d",
         "type": "github"
       },
       "original": {
         "owner": "FatBoyXPC",
-        "ref": "config-change",
         "repo": "with-alacritty",
         "type": "github"
       }

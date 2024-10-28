@@ -36,9 +36,7 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     with-alacritty.inputs.nixpkgs.follows = "nixpkgs";
-    # TODO: remove once <https://github.com/FatBoyXPC/with-alacritty/pull/2> is merged.
-    with-alacritty.url = "github:FatBoyXPC/with-alacritty/config-change";
-    # with-alacritty.url = "github:FatBoyXPC/with-alacritty";
+    with-alacritty.url = "github:FatBoyXPC/with-alacritty";
   };
 
   outputs =
