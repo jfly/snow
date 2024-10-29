@@ -4,7 +4,7 @@ from .deage import deage
 
 
 # See https://serverfault.com/questions/7478/recommended-dns-ttl for a discussion of this.
-# tl;dr: 5 minutes is a nice balance between short and not crazy short.
+# TL;DR: 5 minutes is a nice balance between short and not crazy short.
 DEFAULT_TTL = 300
 
 
@@ -77,7 +77,7 @@ class Dns:
         self._secret_projects()
 
     def _secret_projects(self):
-        # hush now
+        # Hush now
         secret_project = deage(
             """
             -----BEGIN AGE ENCRYPTED FILE-----
@@ -116,21 +116,21 @@ class Dns:
         )
 
     def _san_clemente(self):
-        # sc.jflei.com
-        # NOTE: sc.jflei.com is a DDNS entry that should be updated by a
+        # `sc.jflei.com`
+        # NOTE: `sc.jflei.com` is a DDNS entry that should be updated by a
         # Raspberry Pi in San Clemente, but that's currently broken.
         self._jflei_com.cname("*.sc", "sc.jflei.com")
 
     def _legacy_snowdon(self):
-        # snowdon.jflei.com
-        # NOTE: colusa.jflei.com is a DDNS entry that's managed by strider (our
+        # `snowdon.jflei.com`
+        # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
         # primary Colusa router).
         self._jflei_com.cname("*.snowdon", "colusa.jflei.com")
         self._jflei_com.cname("snowdon", "colusa.jflei.com")
 
     def _snow(self):
-        # snow.jflei.com
-        # NOTE: colusa.jflei.com is a DDNS entry that's managed by strider (our
+        # `snow.jflei.com`
+        # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
         # primary Colusa router).
         self._jflei_com.cname("*.snow", "colusa.jflei.com")
         self._jflei_com.cname("snow", "colusa.jflei.com")
@@ -151,7 +151,7 @@ class Dns:
         self._jflei_com.txt("jflei.com", "v=spf1 include:_spf.google.com ~all")
 
     def _mail(self):
-        # Keep this in sync with hosts/fflam/mail.nix.
+        # Keep this in sync with `hosts/fflam/mail.nix`.
         # Fairly hidden: this is the domain name of the mailserver.
         mx_domain = "mail.playground.jflei.com"
         # Very public. This is the thing after the @ sign in email addresses.
@@ -159,7 +159,7 @@ class Dns:
 
         self._jflei_com.a(
             name=mx_domain,
-            values=["5.78.116.143"],  # hosts/fflam/network.nix
+            values=["5.78.116.143"],  # `hosts/fflam/network.nix`
         )
 
         # Create MX record.
@@ -175,13 +175,13 @@ class Dns:
         )
 
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
-        # From /var/dkim/playground.jflei.com.mail.txt on fflam
+        # From `/var/dkim/playground.jflei.com.mail.txt` on `fflam`.
         self._jflei_com.txt(
             f"mail._domainkey.{email_domain}",
             "v=DKIM1; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC3gmvUhcCug9NnbXLd+9OS2UYZtS2shgnecMrTV0chvmUUNjl4I3/PRhSJHjMShEV11N+ze/Sh0xIuePp1CX0/rJ/B5soFR5c0o5ZOpZ0/IBW1wtTVrkuwrHZbgQ8k8oQ9w6OukG7Ws9LAIEkYGoQxUGMzn2qVwb9Qkt5nYV4nJQIDAQAB",
         )
 
-        # Create DMARC record
+        # Create `DMARC` record
         self._jflei_com.txt(
             f"_dmarc.{email_domain}",
             "v=DMARC1; p=non",

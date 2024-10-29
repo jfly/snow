@@ -1,4 +1,9 @@
-{ inputs, config, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -9,7 +14,7 @@
     enable = true;
     certificateScheme = "acme-nginx";
 
-    # Keep in sync with iac/pulumi/app/dns.py
+    # Keep in sync with `iac/pulumi/app/dns.py`
     fqdn = "mail.playground.jflei.com";
     domains = [ "playground.jflei.com" ];
 
@@ -18,11 +23,22 @@
     };
   };
 
+  services.postfix.config.virtual_alias_maps = [
+    # Expanding https://github.com/NixOS/nixpkgs/blob/a9fe4d6d8ccde780e872ed1446f3746498152663/nixos/modules/services/mail/postfix.nix#L833C87-L833C108
+    "hash:/etc/postfix/virtual-jfly-test"
+  ];
+
+  services.postfix.mapFiles.virtual-jfly-test = pkgs.writeText "postfix-virtual-jfly" ''
+    me@playground.jflei.com jfly@playground.jflei.com, jeremyfleischman+subscriber@gmail.com
+  '';
+
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "jeremyfleischman@gmail.com";
 
   age.secrets.mail-jfly = {
+    # ```
     # nix run nixpkgs#mkpasswd -- -m bcrypt | python -m tools.encrypt
+    # ```
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSArM2dYQ2M0elcreWtJbmFh

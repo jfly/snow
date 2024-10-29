@@ -1,4 +1,4 @@
-# fflam
+# `fflam`
 
 Experimental mail server running on Hetzner Cloud.
 
@@ -10,7 +10,7 @@ Following the instructions on
 
 1. `cd hosts/fflam`
 2. Set up a hcloud context: `hcloud context create snow`.
-   - This requires creating a hetzner project and a read/write API token associated with that project.
+   - This requires creating a Hetzner project and a read/write API token associated with that project.
    - I opted to remove `active_context` from `~/.config/hcloud/cli.toml` in
      favor of setting it explicitly with `HCLOUD_CONTEXT`.
 3. Upload my SSH public key to Hetzner:
