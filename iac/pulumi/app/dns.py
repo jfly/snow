@@ -184,5 +184,5 @@ class Dns:
         # Create `DMARC` record
         self._jflei_com.txt(
             f"_dmarc.{email_domain}",
-            "v=DMARC1; p=non",
+            "v=DMARC1; p=none",
         )
