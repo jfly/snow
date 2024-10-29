@@ -25,13 +25,17 @@ Options:
 
     --dry-run: build, but do not apply the changes
     --show-trace: passed to any invocations of the 'nix' cli
+    --use-substitutes: use if the connection between the target host and
+                       cache.nixos.org is faster than the connection between
+                       your laptop and the target
 " >/dev/stderr
 }
 
 TARGETS=()
 DRY_RUN=0
 FORCE=0
-SHOW_TRACE=()
+EXTRA_NIX_ARGS=()
+EXTRA_SWITCH_ARGS=()
 for i in "$@"; do
     case $i in
         --dry-run)
@@ -41,7 +45,10 @@ for i in "$@"; do
             FORCE=1
             ;;
         --show-trace)
-            SHOW_TRACE=("--show-trace")
+            EXTRA_NIX_ARGS+=("--show-trace")
+            ;;
+        --use-substitutes)
+            EXTRA_SWITCH_ARGS+=("--use-substitutes")
             ;;
         --help | -h)
             help
@@ -69,7 +76,7 @@ else
 fi
 
 function _nix() {
-    nix "${SHOW_TRACE[@]}" "$@"
+    nix "${EXTRA_NIX_ARGS[@]}" "$@"
 }
 
 function build_containers() {
@@ -151,7 +158,7 @@ function deploy_nix() {
     if [ "$target" = "$(hostname)" ]; then
         nixos-rebuild switch --use-remote-sudo --flake ".#$target"
     else
-        nixos-rebuild switch --use-remote-sudo --flake ".#$target" --target-host "$target"
+        nixos-rebuild switch --use-remote-sudo --flake ".#$target" --target-host "$target" "${EXTRA_SWITCH_ARGS[@]}"
     fi
 }
 
