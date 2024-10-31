@@ -16,6 +16,10 @@ Host ocf
 Host fflam
     HostName mail.playground.jflei.com
     User fflam
+
+Host umbriel
+    HostName umbriel.nixos.org
+    User root
 ###
 
 ### cottage

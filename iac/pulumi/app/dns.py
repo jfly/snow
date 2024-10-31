@@ -27,10 +27,22 @@ class Zone:
     def a(self, name: str, values: list[str]):
         for i, content in enumerate(values):
             cloudflare.Record(
-                f"{name}-{i+1}",
+                f"a-{name}-{i+1}",
                 name=name,
                 ttl=DEFAULT_TTL,
                 type="A",
+                content=content,
+                zone_id=self._id,
+                opts=pulumi.ResourceOptions(protect=True),
+            )
+
+    def aaaa(self, name: str, values: list[str]):
+        for i, content in enumerate(values):
+            cloudflare.Record(
+                f"aaaa-{name}-{i+1}",
+                name=name,
+                ttl=DEFAULT_TTL,
+                type="AAAA",
                 content=content,
                 zone_id=self._id,
                 opts=pulumi.ResourceOptions(protect=True),
@@ -161,6 +173,10 @@ class Dns:
             name=mx_domain,
             values=["5.78.116.143"],  # `hosts/fflam/network.nix`
         )
+        self._jflei_com.aaaa(
+            name=mx_domain,
+            values=["2a01:4ff:1f0:ad06::"],  # `hosts/fflam/network.nix`
+        )
 
         # Create MX record.
         self._jflei_com.mx(
@@ -171,7 +187,7 @@ class Dns:
         # Create SPF record.
         self._jflei_com.txt(
             email_domain,
-            f"v=spf1 a:{mx_domain} -all",
+            "v=spf1 mx -all",
         )
 
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
@@ -184,5 +200,5 @@ class Dns:
         # Create `DMARC` record
         self._jflei_com.txt(
             f"_dmarc.{email_domain}",
-            "v=DMARC1; p=none",
+            "v=DMARC1; p=reject; adkim=s; aspf=s;",
         )
