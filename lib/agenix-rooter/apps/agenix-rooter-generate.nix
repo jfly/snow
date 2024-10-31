@@ -20,7 +20,7 @@ let
       mapAttrsToList (_: secret: {
         inherit hostName;
         rooterEncrypted = secret.rooterEncrypted;
-        # Destination for the re-encrypted secret, releative to the root of the current repo (flake).
+        # Destination for the re-encrypted secret, relative to the root of the current repo (flake).
         relDest = rooter-lib.relativePath {
           from = flakeRoot;
           to = pkgs.lib.path.append host.config.age.rooter.generatedForHostDir (
@@ -82,6 +82,8 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
       decrypt_process.communicate(encrypted_data)
       check_wait(decrypt_process)
       check_wait(encrypt_process)
+
+      subprocess.run(["git", "add", "--intent-to-add", dest], check=True)
 
 
   def sync(dry_run: bool):
