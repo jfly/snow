@@ -1113,15 +1113,16 @@
         "nixpkgs-24_05": "nixpkgs-24_05"
       },
       "locked": {
-        "lastModified": 1722877200,
-        "narHash": "sha256-qgKDNJXs+od+1UbRy62uk7dYal3h98I4WojfIqMoGcg=",
-        "owner": "simple-nixos-mailserver",
+        "lastModified": 1730406890,
+        "narHash": "sha256-NsBUQQWiMp8Hn/aocIHwaxcuwbcLIgIgATmDZrEhwBw=",
+        "owner": "jflysohigh",
         "repo": "nixos-mailserver",
-        "rev": "af7d3bf5daeba3fc28089b015c0dd43f06b176f2",
+        "rev": "bcc76e9dc7547eaaf58013b29c232415a337c25c",
         "type": "gitlab"
       },
       "original": {
-        "owner": "simple-nixos-mailserver",
+        "owner": "jflysohigh",
+        "ref": "dkim-path",
         "repo": "nixos-mailserver",
         "type": "gitlab"
       }

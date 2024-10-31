@@ -31,7 +31,11 @@
     pr-tracker.url = "github:molybdenumsoftware/pr-tracker";
     shtuff.inputs.nixpkgs.follows = "nixpkgs";
     shtuff.url = "github:jfly/shtuff";
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+    # TODO: switch back to upstream when/if
+    # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344/
+    # is merged.
+    # simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
