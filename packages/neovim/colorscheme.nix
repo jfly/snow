@@ -12,10 +12,10 @@
         # https://github.com/jeffkreeftmeijer/vim-dim/issues/12#issuecomment-2302537189?
         # I'm subscribed to the relevant issue.
         (pkgs.fetchpatch {
-          name = "latest inkscape/silhouette unstable";
+          name = "this is such a mess";
           # https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:nvim-tweaks.patch
-          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:23124b9d4da1e1ecbfdb145714a4f0759bdde8d1.patch";
-          hash = "sha256-J/rL6oDxs8ySxKDK2rlgcBxtNWCc+Jf6BdypFFJMAuc=";
+          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:ed371f4192731358c2aea5a8a95a52d0ce4d85b6.patch";
+          hash = "sha256-3lNBngTIRotFSeWriHl1n9Y8w89eFN5vi4L849VCnVI=";
         })
       ];
     })

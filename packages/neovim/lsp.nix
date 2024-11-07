@@ -26,4 +26,7 @@
 
   # C/C++
   plugins.lsp.servers.clangd.enable = true;
+
+  # Go
+  plugins.lsp.servers.gopls.enable = true;
 }
