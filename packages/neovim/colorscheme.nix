@@ -14,8 +14,8 @@
         (pkgs.fetchpatch {
           name = "this is such a mess";
           # https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:nvim-tweaks.patch
-          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:ed371f4192731358c2aea5a8a95a52d0ce4d85b6.patch";
-          hash = "sha256-3lNBngTIRotFSeWriHl1n9Y8w89eFN5vi4L849VCnVI=";
+          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:a4b146433912428934ad57ed15e75ee36d5b63cf.patch";
+          hash = "sha256-0VwOWU1XzHgY9gdWsFXnVIagBiocKc178Ypjkka/BO0=";
         })
       ];
     })
