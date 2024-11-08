@@ -8,7 +8,7 @@ class Sonarr:
             name="sonarr",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_FAMILY,
-            image="ghcr.io/hotio/sonarr:latest",
+            image="ghcr.io/hotio/sonarr:release-4.0.10.2544",
             port=8989,
             env={
                 "TZ": "America/Los_Angeles",

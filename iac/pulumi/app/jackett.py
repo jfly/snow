@@ -8,7 +8,7 @@ class Jackett:
             name="jackett",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            image="ghcr.io/hotio/jackett:latest",
+            image="ghcr.io/hotio/jackett:release-0.22.891",
             port=9117,
             env={
                 "TZ": "America/Los_Angeles",
