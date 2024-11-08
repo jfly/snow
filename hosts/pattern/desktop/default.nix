@@ -279,17 +279,12 @@ in
   ###
   fonts = {
     fontDir.enable = true;
-    # Disable the default fonts, things are more predictable that way.
-    enableDefaultPackages = false;
     packages = with pkgs; [
       (nerdfonts.override {
         fonts = [
-          "UbuntuMono" # my preferred monospace font
+          "UbuntuMono" # My preferred monospace font
         ];
       })
-      noto-fonts-monochrome-emoji
-      # I can't read any of this, but it sure looks nicer than boxes :p
-      noto-fonts-cjk-serif
       flake'.packages.pica-font
       flake'.packages.dk-majolica-font
     ];

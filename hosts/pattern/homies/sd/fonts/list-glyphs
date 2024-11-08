@@ -1,0 +1,15 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ps.freetype-py])"
+# vi: ft=python
+
+import freetype
+import sys
+stdout = open(1, mode="w", encoding="utf8")
+
+font_path = sys.argv[1]
+face = freetype.Face(font_path)
+
+for charcode, _glyph_index in face.get_chars():
+    char = chr(charcode)
+    print(hex(charcode), ":", repr(char))
+# <<< print("".join(sorted(chr(c) for c, g in face.get_chars() if c)))
