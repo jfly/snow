@@ -187,7 +187,9 @@ class Dns:
         # Create SPF record.
         self._jflei_com.txt(
             email_domain,
-            "v=spf1 mx -all",
+            # See <https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/302> for an explanation
+            # why we use `~all` rather than `-all`.
+            "v=spf1 mx ~all",
         )
 
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
