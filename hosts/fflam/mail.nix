@@ -20,6 +20,7 @@
 
     loginAccounts = {
       "jfly@playground.jflei.com".hashedPasswordFile = config.age.secrets.mail-jfly.path;
+      "jeremy@playground.jflei.com".hashedPasswordFile = config.age.secrets.mail-jeremy.path;
     };
 
     dkimPrivateKeyFiles = {
@@ -51,6 +52,21 @@
       ZzdpZEdXeXNYTW1qTE5DV0VxR0pFakkK0suG6kluCm5bKU2cuh0coi2Z95zmuvXs
       H/sUL+gqBNFs4jZ4rE6m+OP6i03Aw8IIGt4w7nyfHu7fxtNgDzdfRCLP8GprXdIi
       tfM1IreQ/f5dDkyvfgLwDTbwc/E=
+      -----END AGE ENCRYPTED FILE-----
+    '';
+  };
+  age.secrets.mail-jeremy = {
+    # ```
+    # nix run nixpkgs#mkpasswd -- -m bcrypt | python -m tools.encrypt
+    # ```
+    rooterEncrypted = ''
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiNWoyVGprOGgrZEIzY1F0
+      ZmVhNGd4UytPUjlWUVF3T1Bpb082c1h2aVE4CldkVFExa3NFNEp4R2hoM1JEQzQ5
+      VjNIQkhXL1BKYnZHYmRiZFl0N3Q1RGsKLS0tIFExam1FVmdiSHg5Ly9aQzR3RW5R
+      T2Rja3M0eGIxRlo2clRDbmNGdmhaSTgK6sS0ZmX1gdJ+anSKsOviuX0ruFdq9/aG
+      nmoCogqfspY6vKvyIy7kA5xUZbDnradxsjpQWnntxUinjY44/4OWMCfg23Trs8iX
+      ksJ4FSAy5Dtx92+JzPCX+mgD4WQ=
       -----END AGE ENCRYPTED FILE-----
     '';
   };
