@@ -16,8 +16,6 @@ in
         end
       '';
     }
-
-    # TODO: explore if snippets are a good alternative to this sort of stuff.
     {
       desc = "Breakpoint shortcuts for Python";
       event = "FileType";
@@ -26,7 +24,7 @@ in
         nnoremap <leader>d obreakpoint()#${conflictMarker}<Esc>
         nnoremap <leader>D Obreakpoint()#${conflictMarker}<Esc>
         nnoremap <leader>o o__import__('os').environ['JFLY'] = '1'#${conflictMarker}<Esc>
-        nnoremap <leader>l oif __import__('os').environ.get('JFLY'): __import__('pdb').set_trace()#${conflictMarker}<Esc>
+        nnoremap <leader>O oif __import__('os').environ.get('JFLY'): __import__('pdb').set_trace()#${conflictMarker}<Esc>
       '';
     }
     {
