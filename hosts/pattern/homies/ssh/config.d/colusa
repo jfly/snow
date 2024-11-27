@@ -3,7 +3,7 @@
 Host clark
     # Intentionally not tagged as "colusa", because this is our jump host.
     HostName snow.jflei.com
-    User root
+    User jfly
 
 # Primary router
 Host strider
@@ -25,7 +25,7 @@ Host elfstone
 
 Host dallben
     Tag colusa
-    User dallben
+    User jfly
 
 Host fflewddur
     Tag colusa

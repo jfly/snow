@@ -1,4 +1,4 @@
-# kodi-colusita
+# `kodi-colusita`
 
 This doesn't fully configure Kodi, because the Jellyfin plugin has a number of
 things to do on first boot. Here's what you need to do to get it working:
@@ -8,12 +8,12 @@ things to do on first boot. Here's what you need to do to get it working:
    - Do NOT allow media deletion!
 2. Start up Kodi.
 3. It should ask if you want to enable Jellyfin. Say yes.
-4. A "Select main server" modal will pop up. Fill in "jellyfin.snow.jflei.com"
+4. A "Select main server" modal will pop up. Fill in `jellyfin.snow.jflei.com`
 5. Fill in the username and password from step 1.
 6. When asked about playback mode, select "Add-on".
 7. Addons > Jellyfin > Settings > Advanced > Startup delay (in seconds): set this to 5.
    Why the hack? This is because Kodi often starts Jellyfin up before the
-   network has finished initialzing. Ideally Jellyfin would change to be more
+   network has finished initializing. Ideally Jellyfin would change to be more
    resilient to that. For more details:
      - <https://github.com/jellyfin/jellyfin-kodi/issues/343>: mentions the
        startup delay workaround we're using
@@ -21,9 +21,9 @@ things to do on first boot. Here's what you need to do to get it working:
        not-very-robust clients, but it doesn't work due to a mix of reasons:
        1. NixOS's default network configuration (so-called "scripted
           networking") doesn't register a "wait" service. It seems like we
-          could fix this by using either systemd-networkd or NetworkManager, but
+          could fix this by using either `systemd-networkd` or `NetworkManager`, but
           I tried that and...
-       2. systemd-networkd's definition of network-online.target doesn't
+       2. The `systemd-networkd` definition of `network-online.target` doesn't
           actually guarantee that DNS is up. I'm still seeing Jellyfin fail on
           boot.
 7. Finally, you will be asked to "Select the libraries to add". Add "All"

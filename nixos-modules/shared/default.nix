@@ -62,6 +62,10 @@ in
       "flakes"
     ];
 
+    # I18N stuff
+    i18n.defaultLocale = "en_US.UTF-8";
+    services.xserver.xkb.layout = "us";
+
     # Disable ssh password auth. I'm a little surprised that this isn't the default.
     # Note that we don't enable openssh itself, that's for individual machines
     # to decide.

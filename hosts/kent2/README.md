@@ -1,4 +1,4 @@
-# kent2
+# `kent2`
 
 A Lenovo ThinkCentre M710q I impulse bought on eBay.
 
