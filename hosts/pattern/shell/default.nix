@@ -24,7 +24,7 @@ in
   users.users.${config.snow.user.name}.shell = pkgs.fish;
   programs.fish.enable = true;
   programs.fish.package = pkgs.fish.overrideAttrs (oldAttrs: {
-    patches = (if oldAttrs ? patches then oldAttrs.patchs else [ ]) ++ [
+    patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
       # Add history-last-token-search-backward/history-last-token-search-forward
       # https://github.com/fish-shell/fish-shell/issues/10756
       (pkgs.fetchpatch {

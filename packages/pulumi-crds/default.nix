@@ -54,7 +54,14 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     parver
-    pulumi
+    (pulumi.overrideAttrs (oldAttrs: {
+      # See comment below about `skipFlakeCheckBuild` for the weird state that
+      # `pulumi-kubernetes` is in. Hopefully this will all just go away at
+      # some point.
+      meta = oldAttrs.meta // {
+        broken = false;
+      };
+    }))
     pulumi-kubernetes
     requests
     semver

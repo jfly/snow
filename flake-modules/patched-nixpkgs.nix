@@ -11,19 +11,13 @@ let
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
-      # https://github.com/NixOS/nixpkgs/pull/342343
-      (fetchpatch {
-        name = "inkscape-extensions.silhouette: 1.28 -> 1.29";
-        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/342343.patch";
-        hash = "sha256-Hyxr5y0UnQJw9NctZZ0S/3GgcvlvS0KeOizO3/PoEd8=";
-      })
       # https://github.com/NixOS/nixpkgs/pull/341086
       (fetchpatch {
         name = "upower: Upgrade to 1.90.6 and extend CriticalPowerActions";
         # The PR currently has conflicts.
         # url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
         url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:upower-critical-actions.patch";
-        hash = "sha256-n0njQ9gBS4WE8ShB2Fd+0BkXFD1oA/8QrbO/kLt3Ei4=";
+        hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
       })
     ];
   };

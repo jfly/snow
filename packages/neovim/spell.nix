@@ -1,7 +1,6 @@
 {
   lib,
   flake',
-  pkgs,
   ...
 }:
 
@@ -11,16 +10,6 @@ in
 {
   plugins.lsp.servers.harper_ls.enable = true;
 
-  # "Add nix to harper"
-  # https://github.com/neovim/nvim-lspconfig/pull/3407
-  plugins.lsp.package = pkgs.vimPlugins.nvim-lspconfig.overrideAttrs (oldAttrs: {
-    patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-      (pkgs.fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/neovim/nvim-lspconfig/pull/3407.patch";
-        hash = "sha256-CgWYPXQR8Mfb1Y4fqZFcfpDGdmiPZ+0+vZ6nhE/u/7Q=";
-      })
-    ];
-  });
   # Use our patched version of harper-ls. See `packages/harper/package.nix` for details.
   plugins.lsp.servers.harper_ls.package = flake'.packages.harper;
 

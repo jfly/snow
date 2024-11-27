@@ -1,7 +1,7 @@
 { lib, helpers, ... }:
 
-# There isn't currently a convinient way to restyle *all* windows in Neovim.
-# [borderline.nvim] seems to be trying to tackle the problem, but its README
+# There isn't currently a convenient way to restyle *all* windows in Neovim.
+# [`borderline.nvim`] seems to be trying to tackle the problem, but its `README`
 # scared me away ("This project is still a work in progress").
 #
 # In other news, it looks like there's some hope for core Neovim to get support
@@ -11,7 +11,7 @@
 # For now, I just manually re-configure all the types of borders I tend to see,
 # as described in <https://vi.stackexchange.com/a/39075>.
 #
-# [borderline.nvim]: https://github.com/mikesmithgh/borderline.nvim
+# [`borderline.nvim`]: https://github.com/mikesmithgh/borderline.nvim
 let
   inherit (lib.nixvim) mkRaw;
   border = "rounded";
