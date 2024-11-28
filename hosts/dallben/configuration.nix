@@ -1,4 +1,4 @@
-{ flake, ... }:
+{ flake, config, ... }:
 
 let
   identities = flake.lib.identities;
@@ -25,5 +25,12 @@ in
     flake.nixosModules.kodi-colusita
   ];
 
-  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+zwjwqpX+3HR/bgVR8O0xmTzNVaRvKhzuTJr7/wjSE";
+  services.kodi-colusita = {
+    enable = true;
+    startOnBoot = true;
+  };
+
+  # Give the default user sudo permissions. Sometimes it's nice to be able to
+  # debug things with a keyboard rather than ssh-ing to the box.
+  users.users.${config.services.kodi-colusita.user}.extraGroups = [ "wheel" ];
 }
