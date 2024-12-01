@@ -71,7 +71,12 @@ in
     environment.systemPackages = [ myKodi ];
 
     users.users.${cfg.user} = mkIf (cfg.user != null) {
-      isNormalUser = true; # kodi needs a home directory to store `~/.kodi/`
+      isNormalUser = true; # Kodi needs a home directory to store `~/.kodi/`.
+      extraGroups = [
+        # Needed to access `/dev/ttyACM0`, which is used by `libcec`. See
+        # https://flameeyes.blog/2020/06/25/kodi-nuc-and-cec-adapters/ for details.
+        "dialout"
+      ];
     };
 
     services.displayManager.autoLogin = mkIf cfg.startOnBoot {
@@ -86,22 +91,24 @@ in
         partOf = [ "graphical-session.target" ];
         serviceConfig = {
           ExecStart = "${myKodi}/bin/kodi";
+          # Kodi segfaults periodically :cry:. Start it back up if it crashes.
+          Restart = "on-failure";
           # Kodi often hangs when shutting down. I haven't been able to find
           # much of a discussion about this, but I have found how 2 other projects handle this:
           #
-          # - kodi-standalone-service sends a killall to kodi.bin:
+          # - `kodi-standalone-service` sends a `killall` to `kodi.bin`:
           #   https://github.com/graysky2/kodi-standalone-service/blob/v1.137/x86/init/kodi-x11.service#L14
-          # - LibreElec: wraps Kodi with a script that does a killall kodi.bin:
+          # - LibreElec: wraps Kodi with a script that does a `killall kodi.bin`:
           #   https://github.com/LibreELEC/LibreELEC.tv/blob/e7837d8fcbd6e884fad69472b55ff1f993b9c370/packages/mediacenter/kodi/scripts/kodi.sh#L31-L35
-          #   They configure systemd to send that wrapper script a SIGTERM on
+          #   They configure systemd to send that wrapper script a `SIGTERM` on
           #   exit:
           #   https://github.com/LibreELEC/LibreELEC.tv/blob/12.0.1/packages/mediacenter/kodi/system.d/kodi.service#L13
           #
           # Thoughts for improvement:
           #  - Has anyone asked about this upstream? Seems like kodi itself
           #    should (be changed to) be able to exit cleanly.
-          #  - If not, this should live in a systemd unit definition in
-          #    nixpkgs. It sounds like @aanderse might be open to investing in
+          #  - If that doesn't happen, this should live in a systemd unit definition in
+          #    `nixpkgs`. It sounds like `@aanderse` might be open to investing in
           #    that:
           #    https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35.
           TimeoutStopSec = "10s";
@@ -116,13 +123,13 @@ in
             "${pkgs.moonlight-qt}/bin/moonlight"
             "stream"
             # TODO: figure out why moonlight wastes ~6 seconds doing this DNS lookup
-            # "gurgi"
+            # `gurgi`
             "192.168.1.140"
-            "Desktop" # so-called "app"
+            "Desktop" # So-called "app".
             "--resolution"
             "1920x1080"
             "--capture-system-keys"
-            "always" # ensure the windows key gets sent to the host
+            "always" # Ensure the windows key gets sent to the host.
           ];
         };
       };
@@ -138,13 +145,13 @@ in
 
     # Needed for Kodi zeroconf to work.
     # Unfortunately, I think it doesn't really make sense to put this logic
-    # into Nixpkgs because Nixpkgs doesn't have a mechanism for
+    # into `nixpkgs` because `nixpkgs` doesn't have a mechanism for
     # enabling/disabling Kodi's Zeroconf feature (by creating an
-    # advancedsettings.xml). We do that ourselves above in `settingsAddon`.
+    # `advancedsettings.xml`). We do that ourselves above in `settingsAddon`.
     # Reading through
     # <https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35>,
     # I see that Home Manager *does* have this logic, but it also sounds like
-    # there's some hope it'll end up in core nixpkgs someday.
+    # there's some hope it'll end up in core `nixpkgs` someday.
     services.avahi.enable = true;
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;

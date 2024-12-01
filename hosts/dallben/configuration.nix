@@ -30,7 +30,7 @@ in
     startOnBoot = true;
   };
 
-  # Give the default user sudo permissions. Sometimes it's nice to be able to
+  # Give the default user `sudo` permissions. Sometimes it's nice to be able to
   # debug things with a keyboard rather than ssh-ing to the box.
   users.users.${config.services.kodi-colusita.user}.extraGroups = [ "wheel" ];
 }
