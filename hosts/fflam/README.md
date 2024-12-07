@@ -15,7 +15,7 @@ Following the instructions on
      favor of setting it explicitly with `HCLOUD_CONTEXT`.
 3. Upload my SSH public key to Hetzner:
    ```shell
-   hcloud ssh-key create --name 'jfly laptop' --public-key-from-file ~/sync/linux-secrets/.ssh/id_ed25519.pub
+   hcloud ssh-key create --name 'jfly laptop' --public-key-from-file ~/sync/jfly-linux-secrets/.ssh/id_ed25519.pub
    ```
 4. Create a VM:
    ```shell

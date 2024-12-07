@@ -4,7 +4,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-DB=$HOME/sync/linux-secrets/otp/free-otp-plus.db
+DB=$HOME/sync/jfly-linux-secrets/otp/free-otp-plus.db
 
 if [ ! -e "$DB" ]; then
     DB_PREFIX=/tmp/data

@@ -350,7 +350,7 @@ in
       buildInputs = [ pkgs.makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/calibre \
-          --add-flags "--with-library=~/sync/jeremy/books/calibre"
+          --add-flags "--with-library= ~/sync/jfly/books/calibre"
       '';
     })
     audible-cli

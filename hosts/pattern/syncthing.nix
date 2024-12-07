@@ -44,26 +44,11 @@ in
           };
         };
         folders = {
-          "music" = {
-            type = "receiveonly";
-            id = "wgvgw-yqwcq";
-            path = "${syncDir}/music";
-            devices = [ "snow" ]; # Which devices to share the folder with
-          };
-          "calibre" = {
-            id = "ahnvm-wqudj";
-            devices = [ "snow" ];
-            path = "${syncDir}/jeremy/books/calibre";
-          };
-          "scratch" = {
+          "jfly" = {
             id = "etyx6-oh4ft";
             devices = [ "snow" ];
             ignorePerms = false; # By default, Syncthing doesn't sync file permissions, but there are some scripts in here.
-            path = "${syncDir}/scratch";
-          };
-          "wallpaper" = {
-            devices = [ "snow" ];
-            path = "${syncDir}/wallpaper";
+            path = "${syncDir}/jfly";
           };
           "manman" = {
             id = "amnsl-rxpc2";
@@ -75,7 +60,7 @@ in
     };
   };
 
-  age.secrets.syncthing-linux-secrets = {
+  age.secrets.syncthing-jfly-linux-secrets = {
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaWUhYQ28wOEdMcVNPaC9Y
@@ -91,10 +76,11 @@ in
   };
 
   # The NixOS syncthing module doesn't have support for encrypted folders yet.
-  # I hacked this systemd unit together by copying swaths of code from nixpkgs
-  # (nixos/modules/services/networking/syncthing.nix). It works (-ish, see note above about `overrideFolders`), but hopefully
-  # we can get rid of it someday. It looks like there's a chance that upstream
-  # will support this someday, see
+  # I hacked this systemd unit together by copying swaths of code from
+  # `nixpkgs` (`nixos/modules/services/networking/syncthing.nix`). It works-ish
+  # (see note above about `overrideFolders`), but hopefully we can get rid of
+  # it someday. It looks like there's a chance that upstream will support this
+  # someday, see
   # https://github.com/NixOS/nixpkgs/issues/121286 and
   # https://github.com/NixOS/nixpkgs/pull/205653.
   systemd.services.syncthing-add-encrypted-folders =
@@ -103,15 +89,15 @@ in
       curlAddressArgs = path: "${cfg.guiAddress}${path}";
       baseAddress = curlAddressArgs "/rest/config/folders";
       folderCfg = {
-        id = "linux-secrets";
-        label = "linux-secrets";
+        id = "jfly-linux-secrets";
+        label = "jfly-linux-secrets";
         ignorePerms = false; # The files in this directory have very carefully chosen permissions, don't mess with them.
-        path = "${syncDir}/linux-secrets";
+        path = "${syncDir}/jfly-linux-secrets";
         devices = [
-          ({
+          {
             deviceId = cfg.settings.devices."snow".id;
             encryptionPassword = "@LINUX_SECRETS_PASSPHRASE@";
-          })
+          }
         ];
       };
     in
@@ -126,7 +112,7 @@ in
         RemainAfterExit = true;
         RuntimeDirectory = "syncthing-init";
         Type = "oneshot";
-        ExecStart = pkgs.writers.writeBash "merge-syncthing-config" (''
+        ExecStart = pkgs.writers.writeBash "merge-syncthing-config" ''
           set -efu
 
           # be careful not to leak secrets in the filesystem or in process listings
@@ -147,14 +133,14 @@ in
           }
 
           payload=${lib.escapeShellArg (builtins.toJSON folderCfg)}
-          payload=''${payload/@LINUX_SECRETS_PASSPHRASE@/$(cat ${config.age.secrets.syncthing-linux-secrets.path})}
+          payload=''${payload/@LINUX_SECRETS_PASSPHRASE@/$(cat ${config.age.secrets.syncthing-jfly-linux-secrets.path})}
           curl -d "$payload" -X POST ${baseAddress}
-        '');
+        '';
       };
     };
 
   environment.systemPackages = [
-    # Add a wrapped version of `stc` that knows where our syncthing homedir is.
+    # Add a wrapped version of `stc` that knows where our syncthing `homedir` is.
     (symlinkJoin {
       name = stc-cli.name;
       paths = [ stc-cli ];

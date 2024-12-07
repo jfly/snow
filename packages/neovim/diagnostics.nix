@@ -3,9 +3,14 @@
 {
   plugins.lsp-lines = {
     enable = true;
-    luaConfig.post = ''
-      vim.diagnostic.config({ virtual_text = false })
-    '';
+    luaConfig.post =
+      # lua
+      ''
+        vim.diagnostic.config({
+          virtual_text = true,
+          virtual_lines = false,
+        })
+      '';
   };
 
   plugins.lsp.keymaps.extra = [
@@ -45,14 +50,20 @@
   # <https://github.com/onsails/diaglist.nvim>.
 
   extraConfigLuaPre = ''
-    do
-      vim.api.nvim_create_autocmd('DiagnosticChanged', {
-        callback = function(args)
-          -- The pcall is a workaround for <https://github.com/neovim/neovim/issues/30867>.
-          pcall(vim.diagnostic.setqflist, { open = false })
-        end,
-      })
-    end
+    vim.diagnostic.handlers.qflist = {
+      show = function(_, _, _, opts)
+        -- Generally don't want it to open on every update
+        opts.qflist.open = opts.qflist.open or false
+        vim.diagnostic.setqflist(opts.qflist)
+      end
+    }
+
+    vim.diagnostic.config({
+      qflist = {
+        open = false,
+        severity = { min = vim.diagnostic.severity.HINT },
+      }
+    })
   '';
 
   # Cute diagnostics signs in the gutter =)

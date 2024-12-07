@@ -36,11 +36,11 @@ echo "Working in temp dir: $tmpdir"
         if pgrep calibre >/dev/null; then
             warn "It appears that Calibre is currently running, so I can't add this to Calibre for you!"
             warn "Either add it manually, or stop Calibre and run this command to add it:"
-            warn "calibredb add --with-library ~/sync/jeremy/books/calibre/ \"$(realpath "$f")\""
+            warn "calibredb add --with-library ~/sync/jfly/books/calibre/ \"$(realpath "$f")\""
             exit 2
         else
             echo "Adding to Calibre now"
-            calibredb add --with-library ~/sync/jeremy/books/calibre/ "$f"
+            calibredb add --with-library ~/sync/jfly/books/calibre/ "$f"
         fi
     done
 )

@@ -2,7 +2,7 @@
 
 let
   inherit (lib.nixvim) mkRaw;
-  notesDir = "~/sync/scratch/jfly/notes/";
+  notesDir = "~/sync/jfly/notes/";
 in
 {
   # Don't automatically fold a file when first opening it. I prefer to start

@@ -5,8 +5,8 @@ Include config.d/*
 ServerAliveInterval 120
 AddKeysToAgent yes
 
-IdentityFile ~/sync/linux-secrets/.ssh/id_ed25519
-UserKnownHostsFile ~/sync/linux-secrets/.ssh/known_hosts
+IdentityFile ~/sync/jfly-linux-secrets/.ssh/id_ed25519
+UserKnownHostsFile ~/sync/jfly-linux-secrets/.ssh/known_hosts
 
 ### Misc cloud servers I happen to have access to.
 Host ocf
