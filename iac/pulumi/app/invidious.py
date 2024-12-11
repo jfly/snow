@@ -124,7 +124,9 @@ class Invidious:
                     # Configure the signature server.
                     # To generate `po_token` and `visitor_data`:
                     #
+                    #   ```
                     #   kubectl run yt-session-gen --attach --rm --image=quay.io/invidious/youtube-trusted-session-generator
+                    #   ```
                     signature_server=signature_server,
                     po_token=deage(
                         """
