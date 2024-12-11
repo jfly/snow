@@ -44,7 +44,8 @@ in
       bin = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/bin";
       ".config/git" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/git";
       ".config/fish" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/fish";
-      ".config/with-alacritty" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/with-alacritty";
+      ".config/with-alacritty" =
+        flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/with-alacritty";
       ".gitignore_global" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/gitignore_global";
       ".ssh/config" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config";
       ".ssh/config.d" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config.d";

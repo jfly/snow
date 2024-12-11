@@ -70,8 +70,10 @@ in
         # will return the buffer to its original, unmodified state. See the
         # remapping of `<Esc>` above for an analogous thing we do for Neovim's builtin keyword completion.
         # I see nvim-cmp has support for an
-        "<C-p>" = "cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i', 's'})";
-        "<C-n>" = "cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i', 's'})";
+        "<C-p>" =
+          "cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i', 's'})";
+        "<C-n>" =
+          "cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i', 's'})";
 
         "<C-e>" = "cmp.mapping.abort()";
         "<Esc>" = ''

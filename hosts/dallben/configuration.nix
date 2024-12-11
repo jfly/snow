@@ -1,19 +1,10 @@
 { flake, config, ... }:
 
-let
-  identities = flake.lib.identities;
-in
 {
   networking.hostName = "dallben";
   time.timeZone = "America/Los_Angeles";
   system.stateVersion = "21.11";
   services.openssh.enable = true;
-  #<<< TODO: remove >>>
-
-  # Allow ssh access as root user.
-  users.users.root = {
-    openssh.authorizedKeys.keys = [ identities.jfly ];
-  };
 
   imports = [
     flake.nixosModules.shared

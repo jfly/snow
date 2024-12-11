@@ -1,9 +1,6 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 let
-  inherit (pkgs)
-    vimPlugins
-    ;
   inherit (lib.nixvim) mkRaw;
 in
 {
@@ -45,18 +42,4 @@ in
   # https://github.com/nvimtools/none-ls.nvim/pull/192 lands in none-ls.
   plugins.none-ls.settings.sources = [ ''require("null-ls").builtins.formatting.nix_flake_fmt'' ];
 
-  plugins.none-ls.package = (
-    vimPlugins.none-ls-nvim.overrideAttrs {
-      patches = [
-        # "dynamic_command is now async, and runs immediately when opening buffers"
-        # https://github.com/nvimtools/none-ls.nvim/pull/197
-        # This includes the not-yet-merged "nix flake fmt" builtin formatter:
-        # https://github.com/nvimtools/none-ls.nvim/pull/192
-        (pkgs.fetchurl {
-          url = "https://github.com/nvimtools/none-ls.nvim/pull/197.patch";
-          hash = "sha256-USvK4ePICuvCOhvIvR1fJajIbXjNwt2+RGJZjxyBTHE=";
-        })
-      ];
-    }
-  );
 }

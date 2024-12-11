@@ -152,10 +152,6 @@ pkgs.mkShell {
           remote-pdb = prev.remote-pdb.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
           });
-          urllib3 = prev.urllib3.overridePythonAttrs (old: {
-            # https://github.com/urllib3/urllib3/commit/2beb67e95a7fd908cd75648817c1ab99b1a4588e
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.hatch-vcs ];
-          });
           paho-mqtt = prev.paho-mqtt.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.hatchling ];
           });
@@ -167,6 +163,17 @@ pkgs.mkShell {
           });
           pulumi-minio = prev.pulumi-minio.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+          });
+          pyyaml = prev.pyyaml.overridePythonAttrs (old: {
+            # https://github.com/yaml/pyyaml/pull/823
+            # fix: don't import deprecated "wheel" (just to do nothing with it)
+            # This fixes https://github.com/pypa/setuptools/issues/4683
+            patches = (if old ? patches then old.patches else [ ]) ++ [
+              (pkgs.fetchpatch {
+                url = "https://patch-diff.githubusercontent.com/raw/yaml/pyyaml/pull/823.patch";
+                hash = "sha256-FA8J6X9HcwrsirAY+pjQJLdwzK9imwVNY+e35XGa9pc=";
+              })
+            ];
           });
         }
       );

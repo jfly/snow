@@ -1,7 +1,6 @@
 {
   python3,
   fetchFromGitHub,
-  fetchPypi,
   ffmpeg,
   bash,
   lib,
@@ -10,13 +9,14 @@
 let
   iso639-lang = python3.pkgs.buildPythonPackage rec {
     pname = "iso639";
-    version = "2.1.0";
+    version = "2.5.1";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "LBeaudoux";
       repo = "iso639";
       rev = "v${version}";
-      hash = "sha256-d7oLVj/rlyGsdHp36r4ueE6CIvgWdHmAFdPXrs5awbk=";
+      hash = "sha256-NMArGcr2FHmB6o9cySceLw8SVTdJtbG7SdrT2qzkcqI=";
     };
 
     propagatedBuildInputs = with python3.pkgs; [
@@ -26,32 +26,17 @@ let
       setuptools # needs pkg_resources at runtime
     ];
   };
-
-  ebooklib = python3.pkgs.buildPythonPackage rec {
-    pname = "EbookLib";
-    version = "0.18";
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
-    };
-
-    propagatedBuildInputs = with python3.pkgs; [
-      lxml
-      six
-    ];
-  };
 in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "odmpy";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "ping";
     repo = "odmpy";
     rev = version;
-    hash = "sha256-h0vt4A4c+oV0JBgnBAX6I52Fr+B+rGEjlXTiwKAG+Qo=";
+    hash = "sha256-RWaB/W8ilAKRr0ZSISisCG8Mdgw5LXRCLOl5o1RsmbA=";
   };
 
   propagatedBuildInputs =
@@ -61,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
       beautifulsoup4
       lxml
       termcolor
+      ebooklib
     ]
     ++ [
       iso639-lang

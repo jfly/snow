@@ -269,7 +269,7 @@ in
       serviceConfig = {
         User = config.snow.user.name;
         ExecStartPre = "${pkgs.xorg.xset}/bin/xset dpms force suspend";
-        ExecStart = "/run/wrappers/bin/slock"; # use the setuid slock wrapper
+        ExecStart = "/run/wrappers/bin/slock"; # Use the setuid slock wrapper.
       };
     };
   };
@@ -280,11 +280,7 @@ in
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-      (nerdfonts.override {
-        fonts = [
-          "UbuntuMono" # My preferred monospace font
-        ];
-      })
+      nerd-fonts.ubuntu-mono # My preferred monospace font.
       flake'.packages.pica-font
       flake'.packages.dk-majolica-font
     ];
