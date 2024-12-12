@@ -49,8 +49,21 @@ class MiscK8sHttpsProxies:
         self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.1.172",  # ffflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
             destination_port=8096,
+        )
+
+        self._add_proxy(
+            "cryptpad",
+            access=Access.INTERNET_UNSECURED,
+            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_port=80,
+        )
+        self._add_proxy(
+            "cryptpad-ui",
+            access=Access.INTERNET_UNSECURED,
+            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_port=80,
         )
 
     def _add_proxy(
