@@ -12,4 +12,5 @@ face = freetype.Face(font_path)
 for charcode, _glyph_index in face.get_chars():
     char = chr(charcode)
     print(hex(charcode), ":", repr(char))
-# <<< print("".join(sorted(chr(c) for c, g in face.get_chars() if c)))
+
+print("".join(sorted(chr(c) for c, g in face.get_chars() if c)))

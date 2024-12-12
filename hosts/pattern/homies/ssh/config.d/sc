@@ -2,7 +2,7 @@
 
 Host kent
     HostName kent.sc.jflei.com
-    User kent
+    User jfly
 
 Host sc-router
     User root

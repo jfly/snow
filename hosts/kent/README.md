@@ -1,10 +1,10 @@
-# kent
+# `kent`
 
-A secondary NAS/HTPC running on a ThinkCentre M92p in San Clemente.
+A secondary HTPC running on a ThinkCentre M92p in San Clemente.
 
 ## Provision
 
-1. Boot the machine with `jflyso`. Is F12 the magic key?
+1. Boot the machine with `jflyso`. F12 is the "select boot device" keypress.
 2. `tools/fleet.py bootstrap --ssh jfly@jflyso kent`
 3. Set the default card profile to "Digital Stereo (HDMI) Output". (It defaults to the internal speaker):
    This is what I ran:
