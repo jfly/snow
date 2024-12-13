@@ -8,6 +8,7 @@
       httpSafeOrigin = "https://cryptpad-ui.snow.jflei.com";
       adminKeys = [
         "[jfly@cryptpad.snow.jflei.com/ZwwZaxCmQTnfQI7WZ1BRrrhbKKYLvLmanv03UGJPtks=]"
+        "[rachel@cryptpad.snow.jflei.com/Su7meyEBZ4vs-kTXFwHHoZghJeun9mRgOUgVGsVhLVg=]"
       ];
     };
   };
