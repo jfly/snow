@@ -53,18 +53,17 @@ class MiscK8sHttpsProxies:
             destination_port=8096,
         )
 
-        self._add_proxy(
+        fflewddur_services = [
             "cryptpad",
-            access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
-            destination_port=80,
-        )
-        self._add_proxy(
             "cryptpad-ui",
-            access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
-            destination_port=80,
-        )
+        ]
+        for service in fflewddur_services:
+            self._add_proxy(
+                service,
+                access=Access.INTERNET_UNSECURED,
+                destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+                destination_port=80,
+            )
 
     def _add_proxy(
         self,
