@@ -14,10 +14,14 @@ let
       # https://github.com/NixOS/nixpkgs/pull/341086
       (fetchpatch {
         name = "upower: Upgrade to 1.90.6 and extend CriticalPowerActions";
-        # The PR currently has conflicts.
-        # url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
-        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:upower-critical-actions.patch";
+        url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
         hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
+      })
+      # https://github.com/NixOS/nixpkgs/pull/365126
+      (fetchpatch {
+        name = "cryptpad: add missing x2t.js";
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/365126.patch";
+        hash = "sha256-rq406dNOmWHJA/vxkR1z6ZPkR3WbpAJDd+s1IqZ5MUc=";
       })
     ];
   };
