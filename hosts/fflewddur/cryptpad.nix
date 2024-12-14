@@ -1,6 +1,16 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   services.cryptpad = {
+    package = pkgs.cryptpad.overrideAttrs (oldAttrs: {
+      patches = oldAttrs.patches ++ [
+        # Sort files and folders with "natural" sort
+        # https://github.com/cryptpad/cryptpad/pull/1739
+        (pkgs.fetchpatch {
+          url = "https://patch-diff.githubusercontent.com/raw/cryptpad/cryptpad/pull/1739.diff";
+          hash = "sha256-65N0SuVPh6FAl/Qq8FDetIT3Ov5Z8C7hn83H/AAvgUY=";
+        })
+      ];
+    });
     enable = true;
     configureNginx = true;
     settings = {
