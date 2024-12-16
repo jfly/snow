@@ -20,12 +20,12 @@ in
 {
   config = mkIf (cfg.secrets != { }) {
     system.activationScripts.agenixRooterDerivedSecrets = {
-      # Don't run until after agenix has actually generated the secrets.
+      # Don't run until after `agenix` has actually generated the secrets.
       deps = [ "agenix" ];
       text =
-        (''
+        ''
           rm -f /run/agenix-derived-secrets/desired-files
-        '')
+        ''
         + (lib.concatStringsSep "\n" (
           lib.mapAttrsToList (filename: generator: ''
             # First, create a symlink to the (not-yet-existent) derived file.
@@ -45,7 +45,7 @@ in
             chown ${generator.user}:${generator.group} '${filename}'
           '') cfg.rooter.derivedSecrets
         ))
-        + (''
+        + ''
           # Finally, remove any no-longer-needed files.
           rm -f /run/agenix-derived-secrets/actual-files
           for f in /run/agenix-derived-secrets/*; do
@@ -60,12 +60,12 @@ in
             rm "/run/agenix-derived-secrets/$hash"
             rm -f "$filename"
           done
-        '');
+        '';
     };
   };
 
   options.age = {
-    # Extend age.secrets with new options
+    # Extend `age.secrets` with new options.
     secrets = mkOption {
       type = types.attrsOf (
         types.submodule (submod: {
