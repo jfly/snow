@@ -26,7 +26,7 @@ let
       (fetchpatch {
         name = "cryptpad: verify that we've installed the correct versions of OnlyOffice";
         url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/365514.patch";
-        hash = "sha256-1W58fPuBR9Jk3WfHDvo7/44CX3B1OMXgU4RlG4M/i5w=";
+        hash = "sha256-Xbu4BSG5NYswk5Hv9Yhbw2LVMqSMhK6IFMz/PNHUbtA=";
       })
     ];
   };

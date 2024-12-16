@@ -8,16 +8,22 @@ description = ""
 python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
+# 24.3.0 introduces
+# [`project.license-files`](https://github.com/python-attrs/attrs/commit/3a5a49ecca857375ee63663c8cbf54b17116d34d),
+# which doesn't work with the version of `hatchling` in `nixpkgs` (see
+# https://github.com/pypa/hatch/issues/1715), which is blocked by a [related `setuptools` issue](https://github.com/pypa/setuptools/issues/4759).
+# TODO: unpin once `nixpkgs` has `hatchling >= 1.26.0`
+attrs = "< 24.3.0"
 click = "*"
-remote-pdb = "*" # useful for debugging. see https://github.com/pulumi/pulumi/issues/1372 for details
+remote-pdb = "*" # Useful for debugging. See <https://github.com/pulumi/pulumi/issues/1372> for details
 rich = "*"
 pulumi = "*"
-pulumi-kubernetes = "== 4.18.0"  # must be kept in sync with https://github.com/pulumi/crd2pulumi/blob/v1.5.3/pkg/codegen/packagegenerator.go#L28
+pulumi-kubernetes = "== 4.18.0"  # Must be kept in sync with <https://github.com/pulumi/crd2pulumi/blob/v1.5.3/pkg/codegen/packagegenerator.go#L28>.
 pulumi-cloudflare = "*"
 pulumi_minio = "*"
 pulumi_keycloak = "*"
 paho-mqtt = "*"
-setuptools = "*" # provides pkg_resources which is needed by pulumi-kubernetes: https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10, despite not being mentioned in its setup.py? =(
+setuptools = "*" # Provides pkg_resources which is needed by `pulumi-kubernetes`: <https://github.com/pulumi/pulumi-kubernetes/blob/ce9ab9137af0aa53ceddb18104fce194cb1a0228/sdk/python/pulumi_kubernetes/_utilities.py#L10>, despite not being mentioned in its `setup.py`? =(
 
 [build-system]
 requires = ["poetry-core"]
