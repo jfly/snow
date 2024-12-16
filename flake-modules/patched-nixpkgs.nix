@@ -17,11 +17,16 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
         hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
       })
-      # https://github.com/NixOS/nixpkgs/pull/365126
       (fetchpatch {
         name = "cryptpad: add missing x2t.js";
-        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/365126.patch";
-        hash = "sha256-rq406dNOmWHJA/vxkR1z6ZPkR3WbpAJDd+s1IqZ5MUc=";
+        url = "https://github.com/NixOS/nixpkgs/commit/74e9258a0b4fc6bca5574307a26b6193819348e3.patch";
+        hash = "sha256-kDhbkwhoDXuhhzWadFHj7DaHcedXSMBe4/8HpEzcFe8=";
+      })
+      # https://github.com/NixOS/nixpkgs/pull/365514
+      (fetchpatch {
+        name = "cryptpad: verify that we've installed the correct versions of OnlyOffice";
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/365514.patch";
+        hash = "sha256-1W58fPuBR9Jk3WfHDvo7/44CX3B1OMXgU4RlG4M/i5w=";
       })
     ];
   };
