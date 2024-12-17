@@ -157,6 +157,7 @@ in
           wrapProgram $out/bin/gh --unset GITHUB_TOKEN
         '';
       })
+      mob
 
       ### Network
       curl
