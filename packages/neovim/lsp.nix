@@ -19,7 +19,17 @@
   plugins.lsp.diagnostic-quirks.enable = true;
 
   # Rust
-  plugins.rustaceanvim.enable = true;
+  plugins.rustaceanvim = {
+    enable = true;
+    settings = {
+      default_settings.rust-analyzer = {
+        check = {
+          command = "clippy";
+          allTargets = true;
+        };
+      };
+    };
+  };
 
   # TypeScript/JavaScript
   plugins.lsp.servers.ts_ls.enable = true;
