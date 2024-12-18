@@ -20,7 +20,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs.url = "path:/home/jeremy/src/github.com/NixOS/nixpkgs";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
-    nixvim.url = "github:nix-community/nixvim";
+    # TODO: switch to upstream when/if
+    # https://github.com/nix-community/nixvim/pull/2712 is merged.
+    # nixvim.url = "github:nix-community/nixvim";
+    nixvim.url = "github:jfly/nixvim/use-buffer-for-keymaps";
     on-air.inputs.nixpkgs.follows = "nixpkgs";
     on-air.url = "github:jfly/on-air";
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";

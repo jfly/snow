@@ -32,7 +32,6 @@ in
         return vim.lsp.with(vim.lsp.handlers[handler_name], { border = border })
       end
 
-      vim.lsp.handlers[ms.textDocument_hover] = handlerWithBorder(ms.textDocument_hover)
       vim.lsp.handlers[ms.textDocument_signatureHelp] = handlerWithBorder(vim.lsp.handlers.signature_help)
     end
   '';
