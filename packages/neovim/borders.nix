@@ -34,7 +34,6 @@ in
 
       vim.lsp.handlers[ms.textDocument_hover] = handlerWithBorder(ms.textDocument_hover)
       vim.lsp.handlers[ms.textDocument_signatureHelp] = handlerWithBorder(vim.lsp.handlers.signature_help)
-      require('lspconfig.ui.windows').default_options.border = border
     end
   '';
 }
