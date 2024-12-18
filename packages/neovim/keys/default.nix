@@ -16,7 +16,7 @@ in
   opts.mouse = "";
 
   extraPlugins = with pkgs.vimPlugins; [
-    vim-rsi # readline shortcuts in useful places
+    vim-rsi # Readline shortcuts in useful places.
   ];
 
   plugins.treesitter.settings.incremental_selection = {
@@ -141,16 +141,16 @@ in
   # Toggle the quickfix list.
   snow.quickfix.toggle_key = "<leader>q";
 
-  # Pop up the diagnostics window automatically when jumpin.
+  # Pop up the diagnostics window automatically when jumping.
   diagnostics.jump.float = true;
 
   plugins.lsp.keymaps = {
-    # vim.diagnostic.<action> mappings.
+    # `vim.diagnostic.<action>` mappings.
     diagnostic = {
       "<leader>e" = "open_float";
     };
 
-    # vim.lsb.buf.<action> mappings.
+    # `vim.lsb.buf.<action>` mappings.
     lspBuf = {
       "gd" = "definition";
       "gD" = "references";
