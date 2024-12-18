@@ -985,16 +985,15 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1734554476,
-        "narHash": "sha256-sHjcuh1h5XbsJMi2JX4VMGhfDzCFp3cOSCjxSQnXmk8=",
-        "owner": "jfly",
+        "lastModified": 1734564467,
+        "narHash": "sha256-u1ozSx2I3gMDvA93AQ3sOG3uwUPtKG8cA0T+f63o10U=",
+        "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "4d04d2ed65b55730e48e8e34c7f5ed2460056208",
+        "rev": "7aed1c4b577b227fc4c892d15a77fb015a7f693e",
         "type": "github"
       },
       "original": {
-        "owner": "jfly",
-        "ref": "use-buffer-for-keymaps",
+        "owner": "nix-community",
         "repo": "nixvim",
         "type": "github"
       }
