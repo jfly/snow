@@ -8,7 +8,7 @@ in
   plugins.lsp-format.enable = true;
   # By default, lsp-format is configured to try to format with *all*
   # attached LSPs. I don't want that to happen: if I'm hacking on some
-  # random repository, I don't want to suddently reformat all their code.
+  # random repository, I don't want to suddenly reformat all their code.
   # So, we disable all lsp servers here.
   plugins.lsp-format.lspServersToEnable = "none";
 
