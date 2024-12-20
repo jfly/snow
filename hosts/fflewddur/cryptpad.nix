@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
+
 {
   services.cryptpad = {
     package = pkgs.cryptpad.overrideAttrs (oldAttrs: {
@@ -30,7 +35,24 @@
     forceSSL = lib.mkForce false;
   };
 
-  # TODO: backup `/var/lib/cryptpad`
+  snow.backup = {
+    paths = [
+      # This is actually just a symlink to ...
+      "/var/lib/cryptpad"
+      # This
+      "/var/lib/private/cryptpad"
+    ];
+    # Exclude various unfortunate symlinks to `/nix/store/`.
+    # See
+    # <https://github.com/NixOS/nixpkgs/blob/9de99ed5360a06e94752385d9ec94a9385b1e253/pkgs/by-name/cr/cryptpad/package.nix#L139-L151>
+    # for details.
+    exclude = [
+      "/var/lib/private/cryptpad/customize.dist"
+      "/var/lib/private/cryptpad/lib"
+      "/var/lib/private/cryptpad/www"
+    ];
+  };
+
   # TODO: look through options here:
   # https://docs.cryptpad.org/en/admin_guide/customization.html#restricting-guest-access,
   # probably want to close registration? Might want to continue to allow guest

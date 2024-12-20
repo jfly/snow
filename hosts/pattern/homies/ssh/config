@@ -8,7 +8,7 @@ AddKeysToAgent yes
 IdentityFile ~/sync/jfly-linux-secrets/.ssh/id_ed25519
 UserKnownHostsFile ~/sync/jfly-linux-secrets/.ssh/known_hosts
 
-### Misc cloud servers I happen to have access to.
+### Misc cloud servers I have access to.
 Host ocf
     HostName ssh.ocf.berkeley.edu
     User jfly
@@ -20,6 +20,11 @@ Host fflam
 Host umbriel
     HostName umbriel.nixos.org
     User root
+
+Host hetzner-storage-box
+    HostName u438808.your-storagebox.de
+    Port 23
+    User u438808
 ###
 
 ### cottage

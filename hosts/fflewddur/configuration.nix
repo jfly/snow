@@ -6,7 +6,7 @@
     ./network.nix
     ./gpu.nix
     ./nas.nix
-    ./backup.nix
+    ./backup
     ./binary-cache.nix
     ./jellyfin.nix
     ./cryptpad.nix
