@@ -52,9 +52,4 @@
       "/var/lib/private/cryptpad/www"
     ];
   };
-
-  # TODO: look through options here:
-  # https://docs.cryptpad.org/en/admin_guide/customization.html#restricting-guest-access,
-  # probably want to close registration? Might want to continue to allow guest
-  # access.
 }
