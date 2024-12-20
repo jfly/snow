@@ -17,12 +17,7 @@ in
 symlinkJoin {
   name = "dunst";
   paths = [
-    (dunst.overrideAttrs (oldAttrs: {
-      patches = [
-        # TODO: see if we can upstream this to dunst?
-        ./search-symbolic-icons.patch
-      ];
-    }))
+    dunst
   ];
   buildInputs = [ makeWrapper ];
   postBuild = ''
