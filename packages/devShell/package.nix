@@ -149,6 +149,9 @@ pkgs.mkShell {
       ];
       overrides = poetry2nix.defaultPoetryOverrides.extend (
         final: prev: {
+          click = prev.click.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.flit-core ];
+          });
           remote-pdb = prev.remote-pdb.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
           });

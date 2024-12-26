@@ -39,4 +39,7 @@
 
   # Go
   plugins.lsp.servers.gopls.enable = true;
+
+  # Lua
+  plugins.lsp.servers.lua_ls.enable = true;
 }
