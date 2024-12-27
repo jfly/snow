@@ -44,17 +44,17 @@ in
         url = "https://github.com/nvimtools/none-ls.nvim/commit/43b7bb58793b7d2e892656accf393f767c508a70.diff";
         hash = "sha256-vQEhPLz7v9fAqcGaV572rnvzFEG7ZVmmv2uuLp+pIWc=";
       })
+      # https://github.com/nvimtools/none-ls.nvim/pull/220
+      (pkgs.fetchpatch {
+        name = "Run `dynamic_command` immediately when opening a buffer";
+        url = "https://github.com/nvimtools/none-ls.nvim/commit/40dc2e983560acaea29d6312b33fafba37b0c272.diff";
+        hash = "sha256-n+3e9s2fH9CcH3aIf3HxtSYqeT0kW/azXifevbR5VU0=";
+      })
       # https://github.com/nvimtools/none-ls.nvim/pull/192
       (pkgs.fetchpatch {
         name = "Add 'nix flake fmt' builtin formatter";
         url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/192.diff";
-        hash = "sha256-OTdvrV/k01+IPl5F9grfDeyahnRnfwTkxbo4MNkMTaQ=";
-      })
-      # https://github.com/nvimtools/none-ls.nvim/pull/220
-      (pkgs.fetchpatch {
-        name = "Run `dynamic_command` immediately when opening a buffer";
-        url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/220.diff";
-        hash = "sha256-n+3e9s2fH9CcH3aIf3HxtSYqeT0kW/azXifevbR5VU0=";
+        hash = "sha256-F32gixa54g2o2G+L6ZGJv7+ldTbYoszvasOgCdtPwlE=";
       })
     ];
   });
