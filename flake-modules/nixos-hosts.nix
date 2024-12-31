@@ -47,6 +47,6 @@ in
 {
   imports = lib.mapAttrsToList (hostname: nixosConfiguration: {
     flake.nixosConfigurations.${hostname} = nixosConfiguration;
-    perSystem.checks.${hostname} = nixosConfiguration.config.system.build.toplevel;
+    perSystem.checks."hosts/${hostname}" = nixosConfiguration.config.system.build.toplevel;
   }) nixosConfigurations;
 }

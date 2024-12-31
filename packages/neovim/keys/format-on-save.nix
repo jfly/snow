@@ -9,7 +9,7 @@ in
   # By default, lsp-format is configured to try to format with *all*
   # attached LSPs. I don't want that to happen: if I'm hacking on some
   # random repository, I don't want to suddenly reformat all their code.
-  # So, we disable all lsp servers here.
+  # So, we disable all LSP servers here.
   plugins.lsp-format.lspServersToEnable = "none";
 
   keymaps = [
@@ -38,18 +38,6 @@ in
   plugins.none-ls.enable = true;
   plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
     patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-      # https://github.com/nvimtools/none-ls.nvim/commit/43b7bb58793b7d2e892656accf393f767c508a70
-      (pkgs.fetchpatch {
-        name = "helpers: make dynamic_command async";
-        url = "https://github.com/nvimtools/none-ls.nvim/commit/43b7bb58793b7d2e892656accf393f767c508a70.diff";
-        hash = "sha256-vQEhPLz7v9fAqcGaV572rnvzFEG7ZVmmv2uuLp+pIWc=";
-      })
-      # https://github.com/nvimtools/none-ls.nvim/pull/220
-      (pkgs.fetchpatch {
-        name = "Run `dynamic_command` immediately when opening a buffer";
-        url = "https://github.com/nvimtools/none-ls.nvim/commit/40dc2e983560acaea29d6312b33fafba37b0c272.diff";
-        hash = "sha256-n+3e9s2fH9CcH3aIf3HxtSYqeT0kW/azXifevbR5VU0=";
-      })
       # https://github.com/nvimtools/none-ls.nvim/pull/192
       (pkgs.fetchpatch {
         name = "Add 'nix flake fmt' builtin formatter";

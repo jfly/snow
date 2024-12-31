@@ -55,7 +55,10 @@
   # Set up samba (from https://nixos.wiki/wiki/Samba#Printer_sharing)
   services.samba = {
     enable = true;
-    package = pkgs.sambaFull;
+    package = pkgs.sambaFull.override {
+      # Workaround for https://github.com/NixOS/nixpkgs/issues/359723
+      enableCephFS = false;
+    };
     openFirewall = true;
     settings = {
       global = {

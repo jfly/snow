@@ -17,6 +17,12 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
         hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
       })
+      # https://github.com/NixOS/nixpkgs/pull/369019
+      (fetchpatch {
+        name = "byzanz: fix build";
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/369019.patch";
+        hash = "sha256-nkYNt5NElOzTo/H/BOw+G3zW9IZF2auVrXOeNaw7hPA=";
+      })
     ];
   };
 in
