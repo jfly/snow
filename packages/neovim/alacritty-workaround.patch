@@ -1,0 +1,17 @@
+diff --git a/src/nvim/tui/tui.c b/src/nvim/tui/tui.c
+index f4337d5011..bdca73dba0 100644
+--- a/src/nvim/tui/tui.c
++++ b/src/nvim/tui/tui.c
+@@ -299,7 +299,11 @@ void tui_set_key_encoding(TUIData *tui)
+     // Progressive enhancement flags:
+     //   0b01   (1) Disambiguate escape codes
+     //   0b10   (2) Report event types
+-    out(tui, S_LEN("\x1b[>3u"));
++    // Workaround for alacritty issue with Kitty keys. See:
++    // - https://github.com/alacritty/alacritty/issues/8385
++    // - https://github.com/neovim/neovim/issues/31806
++    // out(tui, S_LEN("\x1b[>3u"));
++    out(tui, S_LEN("\x1b[>1u"));
+     break;
+   case kKeyEncodingXterm:
+     out(tui, S_LEN("\x1b[>4;2m"));
