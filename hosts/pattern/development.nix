@@ -184,6 +184,7 @@ in
       miller
       jq
       mfa
+      inotify-info
     ];
   };
 }

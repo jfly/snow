@@ -384,5 +384,6 @@ in
     xdotool
     xmonad
     dmenu
+    gscan2pdf
   ];
 }
