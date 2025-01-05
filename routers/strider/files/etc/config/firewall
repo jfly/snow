@@ -207,3 +207,46 @@ config rule
 	list dest_ip '192.168.1.110'
 	option dest_port '8883'
 	option target 'ACCEPT'
+
+config zone
+	option name 'guest'
+	option input 'REJECT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	list network 'guest'
+
+config forwarding
+	option src 'guest'
+	option dest 'wan'
+
+config forwarding
+	option src 'lan'
+	option dest 'guest'
+
+config rule
+	option name 'Allow-DNS-guest'
+	option src 'guest'
+	option dest_port '53'
+	option target 'ACCEPT'
+
+config rule
+	option name 'Allow-DHCP-guest'
+	option src 'guest'
+	option dest_port '67'
+	option target 'ACCEPT'
+
+config rule
+	option name 'Allow-HTTP-guest-to-lan'
+	option src 'guest'
+	option dest 'lan'
+	list dest_ip '192.168.1.110'
+	option dest_port '80'
+	option target 'ACCEPT'
+
+config rule
+	option name 'Allow-HTTPs-guest-to-lan'
+	option src 'guest'
+	option dest 'lan'
+	list dest_ip '192.168.1.110'
+	option dest_port '443'
+	option target 'ACCEPT'

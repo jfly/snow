@@ -42,7 +42,18 @@ config bridge-vlan
 	list ports 'lan4:t'
 	list ports 'wan:t'
 
+config bridge-vlan
+	option device 'br-lan'
+	option vlan '34'
+	list ports 'lan4:t'
+	list ports 'wan:t'
+
 config interface 'iot'
 	option proto 'static'
 	option device 'br-lan.33'
 	option ipaddr '192.168.3.2'
+
+config interface 'guest'
+	option proto 'static'
+	option device 'br-lan.34'
+	option ipaddr '192.168.4.2'

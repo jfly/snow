@@ -47,6 +47,7 @@ let
     "/etc/config/wireless" = {
       "@wifi_password@" = wifi.home.password;
       "@wifi_iot_password@" = wifi.iot.password;
+      "@wifi_guest_password@" = wifi.guest.password;
     };
     "/etc/config/wifi-presence" = {
       "@mqtt_password@" = mqtt.password;
@@ -97,6 +98,17 @@ let
         V1pPZEMvVmgwUXdoaVNDM2hENmVBQUEKLS0tIDNEdENXOE1SQUhpaWdMR0htVlc4
         QUNmd2ZGWVVLQnZ5bFBEQUgvOXZlSDAK8byIeNYA/+PhYh/a9Y3kZsRpSx42wFFY
         W59sGFTSHLPDqALbQLqu2ywq
+        -----END AGE ENCRYPTED FILE-----
+      '';
+    };
+    guest = {
+      password = deage.impureString ''
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByQnRuMHdPTkUvZmdMM1J0
+        RkwwdXJhVmlTbFREM3QvL3U4em1RYmJzNHo0CjcyeWRoN0JnV3Z0RXpMZjRCMjUz
+        OHNLSHBncUREMndLcm1mK0ZNVkFNMUEKLS0tIEM5Sk93YnA5WlJubWZDTFBPM1BU
+        RlJrbGtmUlRGZFRoVlhVZFN2aitEaGsKjMnt3ttGO+Lgz180DcxNS9vZEFB/wtHy
+        Jq/Bi7Qw3GTuBxdECM2WL2JzPSo=
         -----END AGE ENCRYPTED FILE-----
       '';
     };

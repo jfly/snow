@@ -35,3 +35,7 @@ config odhcpd 'odhcpd'
 config dhcp 'iot'
 	option interface 'iot'
 	option ignore '1'
+
+config dhcp 'guest'
+	option interface 'guest'
+	option ignore '1'

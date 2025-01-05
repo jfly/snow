@@ -51,7 +51,6 @@ config bridge-vlan
 	option device 'br-lan'
 	option vlan '31'
 	list ports 'lan1:u*'
-	list ports 'lan2:u*'
 	list ports 'lan3:u*'
 	list ports 'lan4:t'
 
@@ -59,3 +58,21 @@ config bridge-vlan
 	option device 'br-lan'
 	option vlan '33'
 	list ports 'lan4:t'
+
+config bridge-vlan
+	option device 'br-lan'
+	option vlan '34'
+	list ports 'lan2:u*'
+	list ports 'lan4:t'
+
+config device
+	option type '8021q'
+	option ifname 'br-lan'
+	option vid '34'
+	option name 'br-lan.34'
+
+config interface 'guest'
+	option proto 'static'
+	option device 'br-lan.34'
+	option ipaddr '192.168.4.1'
+	option netmask '255.255.255.0'
