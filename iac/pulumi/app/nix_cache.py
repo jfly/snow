@@ -22,7 +22,7 @@ class NixCache:
                 {
                     "addresses": [
                         {
-                            "ip": "192.168.1.172",  # fflewddur.lan
+                            "ip": "192.168.1.172",  # fflewddur.ec
                         }
                     ],
                     "ports": [

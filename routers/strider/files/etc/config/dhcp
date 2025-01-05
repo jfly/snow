@@ -2,8 +2,8 @@
 config dnsmasq
 	option domainneeded '1'
 	option localise_queries '1'
-	option local '/lan/'
-	option domain 'lan'
+	option local '/ec/'
+	option domain 'ec'
 	option expandhosts '1'
 	option authoritative '1'
 	option readethers '1'
@@ -16,8 +16,8 @@ config dnsmasq
 	option localservice '1'
 	option ednspacket_max '1232'
 	option rebind_protection '0'
-	list address '/aragorn.lan/192.168.1.2'
-	list address '/elfstone.lan/192.168.1.3'
+	list address '/aragorn.ec/192.168.1.2'
+	list address '/elfstone.ec/192.168.1.3'
 	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf)
 	list address '/snow.jflei.com/192.168.1.110'
 	# Legacy: hardcode *.clark.snowdon.jflei.com to clark's ip address (see /etc/dnsmasq.conf)

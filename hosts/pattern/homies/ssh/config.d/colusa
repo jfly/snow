@@ -8,19 +8,19 @@ Host clark
 # Primary router
 Host strider
     Tag colusa
-    HostName strider
+    HostName strider.ec
     User root
 
 # Secondary router ("dumb ap")
 Host aragorn
     Tag colusa
-    HostName aragorn
+    HostName aragorn.ec
     User root
 
 # Garage door router ("dumb ap")
 Host elfstone
     Tag colusa
-    HostName elfstone
+    HostName elfstone.ec
     User root
 
 Host dallben
@@ -33,19 +33,19 @@ Host fflewddur
 
 Host thermometer
     Tag colusa
-    HostName thermometer
+    HostName thermometer.ec
     User root
     # Urg
     SetEnv TERM=xterm-256color
 
 Host thermostat
     Tag colusa
-    HostName thermostat
+    HostName thermostat.ec
     User root
 
 Host garage
     Tag colusa
-    HostName garage
+    HostName garage.ec
     User root
 
 Host ramscan
@@ -56,5 +56,5 @@ Host ospi
     Tag colusa
     User ospi
 
-Match tagged colusa exec "location --not colusa"
+Match tagged colusa exec "location --not ec"
     ProxyJump clark

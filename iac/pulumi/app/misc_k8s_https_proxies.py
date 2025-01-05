@@ -10,21 +10,21 @@ class MiscK8sHttpsProxies:
         # Feel free to enable/tweak as necessary.
         # self._add_proxy(
         #     "jflysolaptop",
-        #     destination_ip="192.168.1.182",  # pattern.lan (jfly laptop)
+        #     destination_ip="192.168.1.182",  # pattern.ec (jfly laptop)
         #     destination_port=8080,
         # )
 
         self._add_proxy(
             "pr-tracker",
             access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.1.110",  # clark.lan
+            destination_ip="192.168.1.110",  # clark.ec
             destination_port=7000,  # see clark/pr-tracker.nix
         )
 
         self._add_proxy(
             "lloyd",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.1.242",  # lloyd.lan
+            destination_ip="192.168.1.242",  # lloyd.ec
             destination_port=80,
         )
 
@@ -35,33 +35,34 @@ class MiscK8sHttpsProxies:
         self._add_proxy(
             "kodi",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.1.163",  # dallben.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.1.163",  # dallben.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
             destination_port=8080,
         )
 
         self._add_proxy(
             "ospi",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.1.197",  # ospi.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.1.197",  # ospi.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
             destination_port=8080,
         )
 
         self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.1.172",  # fflewddur.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
             destination_port=8096,
         )
 
         fflewddur_services = [
             "cryptpad",
             "cryptpad-ui",
+            "nextcloud",
         ]
         for service in fflewddur_services:
             self._add_proxy(
                 service,
                 access=Access.INTERNET_UNSECURED,
-                destination_ip="192.168.1.172",  # fflewddur.lan (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+                destination_ip="192.168.1.172",  # fflewddur.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
                 destination_port=80,
             )
 
