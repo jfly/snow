@@ -60,7 +60,10 @@
   services.k3s = {
     enable = true;
     role = "server";
-    extraFlags = "--private-registry /etc/snow/k3s/registries.yaml";
+    extraFlags = [
+      "--private-registry /etc/snow/k3s/registries.yaml"
+      "--tls-san clark.ec"
+    ];
   };
 
   boot = {

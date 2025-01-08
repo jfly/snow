@@ -19,17 +19,17 @@ config device
 	list ports 'wan'
 
 config interface 'lan'
-	option device 'br-lan.31'
+	option device 'br-lan.28'
 	option proto 'static'
 	option netmask '255.255.255.0'
-	option ipaddr '192.168.1.2'
-	option gateway '192.168.1.1'
-	list dns '192.168.1.1'
+	option ipaddr '192.168.28.2'
+	option gateway '192.168.28.1'
+	list dns '192.168.28.1'
 	option ip6assign '60'
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '31'
+	option vlan '28'
 	list ports 'lan1:u*'
 	list ports 'lan2:u*'
 	list ports 'lan3:u*'
@@ -38,22 +38,22 @@ config bridge-vlan
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '33'
+	option vlan '29'
 	list ports 'lan4:t'
 	list ports 'wan:t'
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '34'
+	option vlan '30'
 	list ports 'lan4:t'
 	list ports 'wan:t'
 
 config interface 'iot'
 	option proto 'static'
-	option device 'br-lan.33'
-	option ipaddr '192.168.3.2'
+	option device 'br-lan.29'
+	option ipaddr '192.168.29.2'
 
 config interface 'guest'
 	option proto 'static'
-	option device 'br-lan.34'
-	option ipaddr '192.168.4.2'
+	option device 'br-lan.30'
+	option ipaddr '192.168.30.2'

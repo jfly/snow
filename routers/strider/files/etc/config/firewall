@@ -132,7 +132,7 @@ config redirect
 	option name 'k8s https'
 	option src 'wan'
 	option src_dport '443'
-	option dest_ip '192.168.1.110'
+	option dest_ip '192.168.28.110'
 	option dest_port '443'
 
 config redirect
@@ -141,8 +141,17 @@ config redirect
 	option name 'k8s http'
 	option src 'wan'
 	option src_dport '80'
-	option dest_ip '192.168.1.110'
+	option dest_ip '192.168.28.110'
 	option dest_port '80'
+
+config redirect
+	option dest 'lan'
+	option target 'DNAT'
+	option name 'wireguard vpn'
+	option src 'wan'
+	option src_dport '51820'
+	option dest_ip '192.168.28.172'  # fflewddur.ec
+	option dest_port '51820'
 
 config redirect
 	option dest 'lan'
@@ -150,7 +159,7 @@ config redirect
 	option name 'clark ssh'
 	option src 'wan'
 	option src_dport '22'
-	option dest_ip '192.168.1.110'
+	option dest_ip '192.168.28.110'
 	option dest_port '22'
 
 # See iac/pulumi/app/syncthing.py for details.
@@ -160,18 +169,8 @@ config redirect
 	option name 'syncthing'
 	option src 'wan'
 	option src_dport '22000'
-	option dest_ip '192.168.1.110'
+	option dest_ip '192.168.28.110'
 	option dest_port '22000'
-
-# Allow mosh to clark.
-config redirect
-	option dest 'lan'
-	option target 'DNAT'
-	option name 'mosh'
-	option src 'wan'
-	option src_dport '60001-60010'
-	option dest_ip '192.168.1.110'
-	option dest_port '60001-60010'
 
 config rule 'iot_dns'
 	option name 'Allow-DNS-iot'
@@ -196,7 +195,7 @@ config rule
 	option name 'Allow-MQTT-iot'
 	option src 'iot'
 	option dest 'lan'
-	list dest_ip '192.168.1.110'
+	list dest_ip '192.168.28.110'
 	option dest_port '1883'
 	option target 'ACCEPT'
 
@@ -204,7 +203,7 @@ config rule
 	option name 'Allow-MQTTS-iot'
 	option src 'iot'
 	option dest 'lan'
-	list dest_ip '192.168.1.110'
+	list dest_ip '192.168.28.110'
 	option dest_port '8883'
 	option target 'ACCEPT'
 
@@ -239,7 +238,7 @@ config rule
 	option name 'Allow-HTTP-guest-to-lan'
 	option src 'guest'
 	option dest 'lan'
-	list dest_ip '192.168.1.110'
+	list dest_ip '192.168.28.110'
 	option dest_port '80'
 	option target 'ACCEPT'
 
@@ -247,6 +246,6 @@ config rule
 	option name 'Allow-HTTPs-guest-to-lan'
 	option src 'guest'
 	option dest 'lan'
-	list dest_ip '192.168.1.110'
+	list dest_ip '192.168.28.110'
 	option dest_port '443'
 	option target 'ACCEPT'

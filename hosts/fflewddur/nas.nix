@@ -50,7 +50,7 @@ in
   # Set up NFS server.
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /mnt/media 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=root,anonuid=1000,anongid=1000)
+    /mnt/media 192.168.28.0/24(rw,sync,insecure,no_root_squash,fsid=root,anonuid=1000,anongid=1000)
   '';
 
   # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)

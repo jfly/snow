@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-# TODO: figure out why moonlight wastes ~6 seconds doing this DNS lookup
-gurgi=192.168.1.140
-
 # It's very annoying, but moonlight-qt and moonlight-embeded have completely
 # different command line apis. Here's an example of how to do this with
 # moonlight-embedded:
@@ -24,7 +21,7 @@ aspect_ratio=1920x1080
 # control of the mod key (Windows key). However, if I'm really going to be
 # spending some time in the stream, I can enable fullscreen mode
 # (ctrl+alt+shift+x), and now the stream gets all my keys.
-moonlight stream $gurgi Desktop \
+moonlight stream "gurgi.ec" Desktop \
     -resolution $aspect_ratio \
     --capture-system-keys fullscreen --display-mode windowed
 

@@ -178,7 +178,7 @@ function deploy_nix_router() {
     tools/deploy-openwrt.sh "$hostname" "${extra_args[@]}"
 }
 
-tools/deage
+python -m tools.deage
 
 if [ "$TARGET" = "iac" ]; then
     build_containers

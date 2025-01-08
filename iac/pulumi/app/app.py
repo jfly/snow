@@ -14,7 +14,6 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .mosquitto import Mosquitto
 from .zigbee2mqtt import Zigbee2Mqtt
-from .nix_cache import NixCache
 from .music import Music
 from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
@@ -43,7 +42,6 @@ def build_app():
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
-    NixCache(namespace="default", snowauth=snowauth)
     Nextcloud(snowauth=snowauth)
     # Useful if you really need to run a service somewhere outside of the
     # cluster (perhaps on your laptop) with a valid https cert.

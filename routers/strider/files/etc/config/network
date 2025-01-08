@@ -17,9 +17,9 @@ config device
 	list ports 'lan4'
 
 config interface 'lan'
-	option device 'br-lan.31'
+	option device 'br-lan.28'
 	option proto 'static'
-	option ipaddr '192.168.1.1'
+	option ipaddr '192.168.28.1'
 	option netmask '255.255.255.0'
 	option ip6assign '60'
 
@@ -43,36 +43,42 @@ config interface 'wan6'
 
 config interface 'iot'
 	option proto 'static'
-	option device 'br-lan.33'
-	option ipaddr '192.168.3.1'
+	option device 'br-lan.29'
+	option ipaddr '192.168.29.1'
 	option netmask '255.255.255.0'
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '31'
+	option vlan '28'
 	list ports 'lan1:u*'
 	list ports 'lan3:u*'
 	list ports 'lan4:t'
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '33'
+	option vlan '29'
 	list ports 'lan4:t'
 
 config bridge-vlan
 	option device 'br-lan'
-	option vlan '34'
+	option vlan '30'
 	list ports 'lan2:u*'
 	list ports 'lan4:t'
 
-config device
-	option type '8021q'
-	option ifname 'br-lan'
-	option vid '34'
-	option name 'br-lan.34'
-
 config interface 'guest'
 	option proto 'static'
-	option device 'br-lan.34'
-	option ipaddr '192.168.4.1'
+	option device 'br-lan.30'
+	option ipaddr '192.168.30.1'
 	option netmask '255.255.255.0'
+	option ip6assign '64'
+
+# Route traffic back to VPN clients.
+config route
+	option interface 'lan'
+	option target '192.168.31.0/24'
+	option gateway '192.168.28.172' # fflewddur.ec
+
+config route6
+	option interface 'lan'
+	option target 'fda0:f78f:a59e:ff00::1/56'
+	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec

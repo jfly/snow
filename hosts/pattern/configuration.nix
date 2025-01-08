@@ -49,14 +49,6 @@
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAgwlwF1H+tjq6ZFHBV5g1p6XCxRk8ee1uKvZr0eK+TP";
 
-  # TODO: re-enable or remove this.
-  # # Add the nix cache running on fflewddur.
-  # nix.settings = {
-  #   substituters = [ "https://cache.snow.jflei.com" ];
-  #   # TODO: DRY up with fflewddur/binary-cache.nix
-  #   trusted-public-keys = [ "cache.snow.jflei.com:K6CK1XYbt72oXnBNggcgDwxkeLUeyGtSui2e7ibziqc=" ];
-  # };
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   # Keep only a finite number of boot configurations. This prevents /boot from

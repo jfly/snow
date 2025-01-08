@@ -50,7 +50,7 @@ class Snowauth:
             ),
             spec=traefik.v1alpha1.MiddlewareSpecArgs(
                 ip_white_list=traefik.v1alpha1.MiddlewareSpecIpWhiteListArgs(
-                    source_range=["192.168.1.1/24"],
+                    source_range=["192.168.28.1/24"],
                 ),
             ),
         )

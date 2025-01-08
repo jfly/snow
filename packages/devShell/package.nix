@@ -105,7 +105,7 @@ let
         if [ -e ${envValue.path} ]; then
           export ${name}=$(<${envValue.path})
         else
-          echo "Could not find decrypted ${name}. Try running 'tools/deage && direnv reload'"
+          echo "Could not find decrypted ${name}. Try running 'python -m tools.deage && direnv reload'"
         fi
       '';
       plaintext = "export ${name}=${lib.escapeShellArg envValue.str}";
@@ -124,6 +124,9 @@ pkgs.mkShell {
 
     # Used by `tools/gen_mosquitto_user.py`
     pkgs.mosquitto
+
+    # Used by `tools/gen_wg_peer.py`
+    pkgs.wireguard-tools
 
     # k8s stuff
     pkgs.kubectl
@@ -177,6 +180,9 @@ pkgs.mkShell {
                 hash = "sha256-FA8J6X9HcwrsirAY+pjQJLdwzK9imwVNY+e35XGa9pc=";
               })
             ];
+          });
+          wgconfig = prev.wgconfig.overridePythonAttrs (old: {
+            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
           });
         }
       );

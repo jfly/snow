@@ -16,12 +16,22 @@ config dnsmasq
 	option localservice '1'
 	option ednspacket_max '1232'
 	option rebind_protection '0'
-	list address '/aragorn.ec/192.168.1.2'
-	list address '/elfstone.ec/192.168.1.3'
-	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf)
-	list address '/snow.jflei.com/192.168.1.110'
-	# Legacy: hardcode *.clark.snowdon.jflei.com to clark's ip address (see /etc/dnsmasq.conf)
-	list address '/clark.snowdon.jflei.com/192.168.1.110'
+	list address '/aragorn.ec/192.168.28.2'
+	list address '/elfstone.ec/192.168.28.3'
+	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf).
+	list address '/snow.jflei.com/192.168.28.110'
+	list address '/arris.ec/192.168.27.1'
+	# Listen for DNS requests on all interfaces except `wan*` (this is to
+	# prevent being a part of DNS aplification attacks)
+	# OpenWRT defaults to starting `dnsmasq` with `--local-service`, which also
+	# protects against DNS aplification attacks, but that setting also prevents
+	# `dnsmasq` from responding to DNS queries from VPN clients (because
+	# they're not on a local subnet).
+	# Explicitly disabling some interfaces is enough to turn off the
+	# `--local-service` functionality, though: `dnsmasq` trusts that we're
+	# being careful.
+	list notinterface 'wan'
+	list notinterface 'wan6'
 
 config dhcp 'lan'
 	option interface 'lan'
@@ -46,30 +56,30 @@ config odhcpd 'odhcpd'
 
 config host
 	option name 'clark'
-	option ip '192.168.1.110'
+	option ip '192.168.28.110'
 	option mac 'C0:3F:D5:6B:51:16'
 
 # Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'dallben'
-	option ip '192.168.1.163'
+	option ip '192.168.28.163'
 	option mac '1C:69:7A:AC:4C:E6'
 
 # Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'ospi'
-	option ip '192.168.1.197'
+	option ip '192.168.28.197'
 	option mac 'B8:27:EB:00:60:83'
 
 # Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'fflewddur'
-	option ip '192.168.1.172'
+	option ip '192.168.28.172'
 	option mac 'FC:AA:14:98:7C:54'
 
 config host
 	option name 'receiver'
-	option ip '192.168.1.202'
+	option ip '192.168.28.202'
 	option mac '00:A0:DE:CF:48:EF'
 
 config dhcp 'iot'
@@ -81,7 +91,7 @@ config dhcp 'iot'
 
 config host
 	option name 'taran'
-	option ip '192.168.3.101'
+	option ip '192.168.29.101'
 	option mac '50:14:79:36:E7:ED'
 
 config dhcp 'guest'
@@ -89,4 +99,8 @@ config dhcp 'guest'
 	option start '100'
 	option limit '150'
 	option leasetime '12h'
+	option ra 'server'
+	option dhcpv6 'server'
+	list ra_flags 'managed-config'
+	list ra_flags 'other-config'
 

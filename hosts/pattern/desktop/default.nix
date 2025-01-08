@@ -45,7 +45,7 @@ let
   polybarConfig = pkgs.substituteAll {
     src = ./polybar-config.ini;
   };
-  # TODO: consolidate with pattern/laptop.nix
+  # TODO: consolidate with `pattern/laptop.nix`.
   restart-user-service = pkgs.writeShellScript "restart-user-service" ''
     user=$1
     service=$2
@@ -134,8 +134,8 @@ in
       enable = true;
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      # stage2ServiceConfig in nixos/lib/systemd-lib.nix really wants to give
-      # us a default PATH. However, dunst currently uses xdg-open to fire up a
+      # `stage2ServiceConfig` in `nixos/lib/systemd-lib.nix` really wants to give
+      # us a default `PATH`. However, dunst currently uses `xdg-open` to fire up a
       # browser, and *that* needs a PATH with whatever default browser we've
       # got set up. So, it's better to use systemctl's "user environment block"
       # (populated by xsessionWrapper when it calls `systemctl
@@ -309,6 +309,9 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    ### Messaging
+    signal-desktop
+
     ### Browsers
     qutebrowser
     (pkgs.symlinkJoin {
@@ -370,8 +373,8 @@ in
     libva-utils
     glxinfo
     pciutils
-    gucharmap # view fonts
-    usbutils # provides `lsusb`
+    gucharmap # View fonts.
+    usbutils # Provides `lsusb`.
 
     ### Misc desktop utils
     autoperipherals
@@ -385,5 +388,8 @@ in
     xmonad
     dmenu
     gscan2pdf
+
+    ### VPN
+    flake'.packages.snowvpn
   ];
 }

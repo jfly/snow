@@ -5,6 +5,7 @@ import re
 import sys
 import subprocess
 from rich.console import Console
+from .encrypt import decrypt
 from hashlib import sha256
 from textwrap import dedent
 from pathlib import Path
@@ -27,18 +28,6 @@ def root() -> Path:
 
 DECRYPTED_SECRETS_DIR = root() / ".sensitive-decrypted-secrets"
 PRIVATE_KEY_PATH = DECRYPTED_SECRETS_DIR / "age-private-key.txt"
-
-
-def decrypt(encrypted: str) -> str:
-    p = subprocess.run(
-        ["age", "--identity", PRIVATE_KEY_PATH, "--decrypt"],
-        input=encrypted,
-        check=True,
-        stdout=subprocess.PIPE,
-        text=True,
-    )
-    return p.stdout
-
 
 def extract_and_decrypt_secrets(src: Path):
     document = src.read_text()

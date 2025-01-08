@@ -122,9 +122,7 @@ in
           ExecStart = concatStringsSep " " [
             "${pkgs.moonlight-qt}/bin/moonlight"
             "stream"
-            # TODO: figure out why moonlight wastes ~6 seconds doing this DNS lookup
-            # `gurgi`
-            "192.168.1.140"
+            "gurgi.ec"
             "Desktop" # So-called "app".
             "--resolution"
             "1920x1080"
