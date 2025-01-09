@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import io
 from typing import Self
 import wgconfig
 from ipaddress import (
@@ -167,28 +168,25 @@ def conf(hostname: str):
 
     node = nodes[hostname]
 
-    # Unfortunately, `wgconfig` requires a concrete file.
-    # See <https://github.com/towalink/wgconfig/issues/8> for a feature
-    # request to deal with file-like objects.
-    with NamedTemporaryFile("wt", suffix=".conf") as conf_path:
-        config = wgconfig.WGConfig(conf_path.name)
-        config.add_attr(None, "PrivateKey", decrypt(node.keypair.private_encrypted))
-        for address in node.addresses:
-            config.add_attr(None, "Address", str(address))
+    config = wgconfig.WGConfig()
+    config.add_attr(None, "PrivateKey", decrypt(node.keypair.private_encrypted))
+    for address in node.addresses:
+        config.add_attr(None, "Address", str(address))
 
-        # Keep in sync with `routers/strider/files/etc/config/network`.
-        config.add_attr(None, "DNS", "192.168.28.1", "# strider.ec")
-        config.add_attr(None, "DNS", "fda0:f78f:a59e::1", "# strider.ec")
+    # Keep in sync with `routers/strider/files/etc/config/network`.
+    config.add_attr(None, "DNS", "192.168.28.1", "# strider.ec")
+    config.add_attr(None, "DNS", "fda0:f78f:a59e::1", "# strider.ec")
 
-        for hostname, node in nodes.items():
-            if node.endpoint is not None:
-                config.add_peer(node.keypair.public, f"# {hostname}")
-                for allowed_ip in node.allowed_ips:
-                    config.add_attr(node.keypair.public, "AllowedIPs", allowed_ip)
-                config.add_attr(node.keypair.public, "Endpoint", node.endpoint)
+    for hostname, node in nodes.items():
+        if node.endpoint is not None:
+            config.add_peer(node.keypair.public, f"# {hostname}")
+            for allowed_ip in node.allowed_ips:
+                config.add_attr(node.keypair.public, "AllowedIPs", allowed_ip)
+            config.add_attr(node.keypair.public, "Endpoint", node.endpoint)
 
-        config.write_file()
-        conf_raw = Path(conf_path.name).read_text()
+    conf_buffer = io.StringIO()
+    config.write_to_fileobj(conf_buffer)
+    conf_raw = conf_buffer.getvalue()
 
     print(conf_raw, end="")
 

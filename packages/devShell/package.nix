@@ -183,6 +183,15 @@ pkgs.mkShell {
           });
           wgconfig = prev.wgconfig.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
+            patches = (if old ? patches then old.patches else [ ]) ++ [
+              # `wgconfig` v1.1.0 has this change, but hasn't been released to `pypi` yet.
+              (pkgs.fetchpatch {
+                name = "Support the use of file-like objects like StringIO";
+                url = "https://github.com/towalink/wgconfig/commit/337045d39c1440915a75e37cb5b77d96267f007d.patch";
+                excludes = [ "CHANGELOG.md" ];
+                hash = "sha256-exAaTxoU7Xq3JCoktGEi9CFy50Z269969FQLLNgdUnE=";
+              })
+            ];
           });
         }
       );
