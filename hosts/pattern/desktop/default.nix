@@ -25,7 +25,21 @@ let
     xmonad
     ;
 
-  with-alacritty = inputs'.with-alacritty.packages.default;
+  with-alacritty = inputs'.with-alacritty.packages.default.override {
+    alacritty = pkgs.alacritty.overrideAttrs (oldAttrs: {
+      patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
+        # Fixes an annoying bug in alacritty with Kitty keys. See:
+        # - https://github.com/alacritty/alacritty/issues/8385
+        # - https://github.com/neovim/neovim/issues/31806
+        (pkgs.fetchpatch {
+          name = "Fix report of Enter/Tab/Backspace in kitty keyboard";
+          url = "https://github.com/alacritty/alacritty/commit/7bda13b8aa59ed7bc3efe6d5b0bdb09b8e75f8a3.patch";
+          hash = "sha256-HoE8GDAOqoLbaBgH7tM8HhKZ0EAvCY2fmWS3IHp24Pw=";
+          excludes = [ "CHANGELOG.md" ];
+        })
+      ];
+    });
+  };
 
   dmenu = pkgs.symlinkJoin {
     name = "dmenu";
