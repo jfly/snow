@@ -384,6 +384,17 @@ pep8test = ["flake8", "pep8-naming"]
 test = ["hypothesis", "pretend", "pytest"]
 
 [[package]]
+name = "pip"
+version = "24.3.1"
+description = "The PyPA recommended tool for installing Python packages."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pip-24.3.1-py3-none-any.whl", hash = "sha256:3790624780082365f47549d032f3770eeb2b1e8bd1f7b2e02dace1afa361b4ed"},
+    {file = "pip-24.3.1.tar.gz", hash = "sha256:ebcb60557f2aefabc2e0f918751cd24ea0d56d8ec5445fe1807f1d2109660b99"},
+]
+
+[[package]]
 name = "protobuf"
 version = "4.25.5"
 description = ""
@@ -405,18 +416,19 @@ files = [
 
 [[package]]
 name = "pulumi"
-version = "3.144.1"
+version = "3.145.0"
 description = "Pulumi's Python SDK"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "pulumi-3.144.1-py3-none-any.whl", hash = "sha256:42a7c66d81000874e0ec44bfaacfe56a0dbf5cc0060014b10d064e0bc01580f7"},
+    {file = "pulumi-3.145.0-py3-none-any.whl", hash = "sha256:5ef1e73e8c07fd25fcfa2e5a68d03e84141d23e584153915c328ec1de6f14611"},
 ]
 
 [package.dependencies]
 debugpy = ">=1.8.7,<1.9.0"
 dill = ">=0.3,<1.0"
 grpcio = ">=1.66.2,<1.67.0"
+pip = ">=24.3.1,<24.4.0"
 protobuf = ">=4.21,<5.0"
 pyyaml = ">=6.0,<7.0"
 semver = ">=2.13,<3.0"
@@ -424,13 +436,13 @@ six = ">=1.12,<2.0"
 
 [[package]]
 name = "pulumi-cloudflare"
-version = "5.46.0"
+version = "5.47.0"
 description = "A Pulumi package for creating and managing Cloudflare cloud resources."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pulumi_cloudflare-5.46.0-py3-none-any.whl", hash = "sha256:fd97bbebc98c052605ef67819dda1822f2708765e8d41a87e171e87acae07346"},
-    {file = "pulumi_cloudflare-5.46.0.tar.gz", hash = "sha256:1bc3d485368586248e343794805b163e8e2bd7e17323d4bcc1f931e2c0285194"},
+    {file = "pulumi_cloudflare-5.47.0-py3-none-any.whl", hash = "sha256:432b755777ba6eaae905e0b26ff7e4b84abed27764ce48659f0dec9b77ef4769"},
+    {file = "pulumi_cloudflare-5.47.0.tar.gz", hash = "sha256:90e8fc1949791553bbaa664371bddc672debf6f7823ef891d2321afe85465f5e"},
 ]
 
 [package.dependencies]
@@ -758,13 +770,13 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "75.7.0"
+version = "75.8.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "setuptools-75.7.0-py3-none-any.whl", hash = "sha256:84fb203f278ebcf5cd08f97d3fb96d3fbed4b629d500b29ad60d11e00769b183"},
-    {file = "setuptools-75.7.0.tar.gz", hash = "sha256:886ff7b16cd342f1d1defc16fc98c9ce3fde69e087a4e1983d7ab634e5f41f4f"},
+    {file = "setuptools-75.8.0-py3-none-any.whl", hash = "sha256:e3982f444617239225d675215d51f6ba05f845d4eec313da4418fdbb56fb27e3"},
+    {file = "setuptools-75.8.0.tar.gz", hash = "sha256:c5afc8f407c626b8313a86e10311dd3f661c6cd9c09d4bf8c15c0e11f9f2b0e6"},
 ]
 
 [package.extras]
@@ -817,16 +829,16 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "wgconfig"
-version = "1.0.4"
+version = "1.1.0"
 description = "parsing and writing WireGuard configuration files"
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "wgconfig-1.0.4-py3-none-any.whl", hash = "sha256:989b48376d6532d214c67e006d66d17813236c31447607cf4f4ada078e85a075"},
-    {file = "wgconfig-1.0.4.tar.gz", hash = "sha256:b87a539b0d28941381666ed4cef67840f4c38a2523459cc56153a14610d4f961"},
+    {file = "wgconfig-1.1.0-py3-none-any.whl", hash = "sha256:8a57aaf2dd29c7c4b3ce89ff87cfeb385cd3e5e1e06fa84c483d7934559d339e"},
+    {file = "wgconfig-1.1.0.tar.gz", hash = "sha256:7b6733ac79c9a4eb3e945202abed722a7266308c5acc5f9f7d2785adbc9a112b"},
 ]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "42f51d1498a96078e0c08dde45f8edfdbb163a2a8ff60afbe73b4faa6c7f097a"
+content-hash = "36a2365fc2b43e2369d977c58739369b6739f65572dd8f6d6dddc2f0836fac0a"

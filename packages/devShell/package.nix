@@ -173,7 +173,7 @@ pkgs.mkShell {
           pyyaml = prev.pyyaml.overridePythonAttrs (old: {
             # https://github.com/yaml/pyyaml/pull/823
             # fix: don't import deprecated "wheel" (just to do nothing with it)
-            # This fixes https://github.com/pypa/setuptools/issues/4683
+            # This fixes (works around?) https://github.com/pypa/setuptools/issues/4683
             patches = (if old ? patches then old.patches else [ ]) ++ [
               (pkgs.fetchpatch {
                 url = "https://patch-diff.githubusercontent.com/raw/yaml/pyyaml/pull/823.patch";
@@ -183,15 +183,6 @@ pkgs.mkShell {
           });
           wgconfig = prev.wgconfig.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-            patches = (if old ? patches then old.patches else [ ]) ++ [
-              # `wgconfig` v1.1.0 has this change, but hasn't been released to `pypi` yet.
-              (pkgs.fetchpatch {
-                name = "Support the use of file-like objects like StringIO";
-                url = "https://github.com/towalink/wgconfig/commit/337045d39c1440915a75e37cb5b77d96267f007d.patch";
-                excludes = [ "CHANGELOG.md" ];
-                hash = "sha256-exAaTxoU7Xq3JCoktGEi9CFy50Z269969FQLLNgdUnE=";
-              })
-            ];
           });
         }
       );

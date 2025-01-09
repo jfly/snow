@@ -17,21 +17,12 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
         hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
       })
-      # https://github.com/NixOS/nixpkgs/pull/369019
+      # Fix broken `Image-Magick` build, which affects `gscan2pdf`
+      # https://github.com/NixOS/nixpkgs/pull/372231
       (fetchpatch {
-        name = "byzanz: fix build";
-        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/369019.patch";
-        hash = "sha256-nkYNt5NElOzTo/H/BOw+G3zW9IZF2auVrXOeNaw7hPA=";
-      })
-      (fetchpatch {
-        name = "sane-frontends: fix gcc14 compilation";
-        url = "https://github.com/NixOS/nixpkgs/commit/6b1e48102d5d5d4b5cf1440713016d988b352e36.patch";
-        hash = "sha256-KOrowivGArI6ON2ksOIkzqW1OArUpjiD/CxGwnvR3/w=";
-      })
-      (fetchpatch {
-        name = "goocanvas2: fix gcc14 compilation";
-        url = "https://github.com/NixOS/nixpkgs/commit/1edac59cc67598d3c5179d7090a98e308b7a2da7.patch";
-        hash = "sha256-+ccYl8VnovTOd+aSQbqgzILpaY46o7uImIQrCq+ZMd0=";
+        name = "perlPackages.ImageMagick: use same version as main imagemagick package";
+        url = "https://github.com/NixOS/nixpkgs/pull/372231.patch";
+        hash = "sha256-mwQh1UJDvIEbLrmxPfZDvuZnVI/nLya3Vjx0vodCVsE=";
       })
     ];
   };
