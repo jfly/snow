@@ -41,7 +41,6 @@ config dhcp 'lan'
 	option dhcpv4 'server'
 	option dhcpv6 'server'
 	option ra 'server'
-	list ra_flags 'managed-config'
 	list ra_flags 'other-config'
 
 config dhcp 'wan'
@@ -88,6 +87,9 @@ config dhcp 'iot'
 	option limit '150'
 	option leasetime '1h'
 	option netmask '255.255.255.0'
+	option ra 'server'
+	option dhcpv6 'server'
+	list ra_flags 'other-config'
 
 config host
 	option name 'taran'
@@ -101,6 +103,9 @@ config dhcp 'guest'
 	option leasetime '12h'
 	option ra 'server'
 	option dhcpv6 'server'
-	list ra_flags 'managed-config'
 	list ra_flags 'other-config'
+
+config dhcp 'wan6'
+	option interface 'wan6'
+	option ignore '1'
 

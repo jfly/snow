@@ -14,13 +14,17 @@ config zone
 
 config zone
 	option name 'wan'
-	list network 'wan'
-	list network 'wan6'
 	option input 'REJECT'
 	option output 'ACCEPT'
 	option forward 'REJECT'
 	option masq '1'
 	option mtu_fix '1'
+	list network 'wan'
+	list network 'wan6'
+	list network 'WAN6GUEST'
+	list network 'WAN6IOT'
+	list network 'WAN6LAN'
+	list network 'WAN6VPN'
 
 config zone 'iot'
 	option name 'iot'
@@ -249,3 +253,4 @@ config rule
 	list dest_ip '192.168.28.110'
 	option dest_port '443'
 	option target 'ACCEPT'
+

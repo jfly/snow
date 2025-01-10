@@ -184,6 +184,9 @@ let
                 # for details.
                 "-wpad-basic-mbedtls"
                 "wpad-mbedtls"
+                # Necessary for a hack to request multiple /64 prefixes from AT&T
+                # https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+                "kmod-macvlan"
               ]
           );
 

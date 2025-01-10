@@ -3,12 +3,11 @@
         "fflewddur": {
             "endpoint": "colusa.jflei.com:51820",
             "addresses": [
-                "fda0:f78f:a59e:ff01::/64",
+                "fda0:f78f:a59e:31::1/128",
                 "192.168.31.1/32"
             ],
             "allowed_ips": [
                 "fda0:f78f:a59e::/48",
-                "2600:1700:a41a:381f::/64",
                 "192.168.27.0/24",
                 "192.168.28.0/24",
                 "192.168.29.0/24",
@@ -23,11 +22,11 @@
         "jflysopixel3": {
             "endpoint": null,
             "addresses": [
-                "fda0:f78f:a59e:ff02::/64",
+                "fda0:f78f:a59e:31::2/128",
                 "192.168.31.2/32"
             ],
             "allowed_ips": [
-                "fda0:f78f:a59e:ff02::/64",
+                "fda0:f78f:a59e:31::2/128",
                 "192.168.31.2/32"
             ],
             "keypair": {
@@ -38,11 +37,11 @@
         "pattern": {
             "endpoint": null,
             "addresses": [
-                "fda0:f78f:a59e:ff03::/64",
+                "fda0:f78f:a59e:31::3/128",
                 "192.168.31.3/32"
             ],
             "allowed_ips": [
-                "fda0:f78f:a59e:ff03::/64",
+                "fda0:f78f:a59e:31::3/128",
                 "192.168.31.3/32"
             ],
             "keypair": {
@@ -52,7 +51,7 @@
         }
     },
     "vpn_network": {
-        "ipv4": "192.168.31.0/24",
-        "ipv6": "fda0:f78f:a59e:ff00::/56"
+        "ipv6": "fda0:f78f:a59e:31::/64",
+        "ipv4": "192.168.31.0/24"
     }
 }

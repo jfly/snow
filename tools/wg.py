@@ -4,13 +4,13 @@ import io
 from typing import Self
 import wgconfig
 from ipaddress import (
+    IPv4Address,
     IPv6Interface,
     IPv4Interface,
     IPv6Network,
     IPv4Network,
-    IPv6Address,
 )
-from tempfile import NamedTemporaryFile, TemporaryDirectory
+from tempfile import TemporaryDirectory
 import click
 import subprocess
 import rich
@@ -86,9 +86,9 @@ def wg_genkey() -> Keypair:
     )
 
 
-def find_offset(network: IPv6Network, used: set[IPv6Address]) -> int:
+def find_offset(network: IPv4Network, used: set[IPv4Address]) -> int:
     for offset in range(1, 255):
-        ipv6_network = network[offset << 64]
+        ipv6_network = network[offset]
         if ipv6_network not in used:
             return offset
 
@@ -106,18 +106,22 @@ def gen(hostname: str):
         raise click.ClickException(f"{hostname!r} already found in {WgInfo.path()}")
 
     offset = find_offset(
-        wg_info.vpn_network.ipv6,
+        wg_info.vpn_network.ipv4,
         used=set(
             address.ip
             for node in wg_info.nodes.values()
             for address in node.addresses
-            if address.version == 6
+            if address.version == 4
         ),
     )
 
-    ipv6_interface = IPv6Interface((wg_info.vpn_network.ipv6[offset << 64], 64))
-    ipv4_interface = IPv4Interface((wg_info.vpn_network.ipv4[offset], 32))
-    addresses = [ipv6_interface, ipv4_interface]
+    ipv4_address = wg_info.vpn_network.ipv4[offset]
+    ipv6_address = wg_info.vpn_network.ipv6[offset]
+
+    addresses = [
+        IPv4Interface((ipv4_address, 32)),
+        IPv6Network((ipv6_address, 128), strict=False),
+    ]
 
     node = Node(
         # See comment above about adding a host vs a 'site'.
@@ -142,24 +146,54 @@ def gen(hostname: str):
 
 @main.command()
 @click.argument("hostname")
-def conf(hostname: str):
+@click.option(
+    "--split-ip/--no-split-ip",
+    default=False,
+    help="Only send IP traffic destined for the 'site' through the VPN, rather than all traffic. Default: all traffic is sent through the VPN (so-called 'full' vpn)",
+)
+@click.option(
+    "--split-dns/--no-split-dns",
+    default=False,
+    help="Whether to send all DNS traffic through the VPN, or only DNS 'controlled' by the VPN site. Requires a client with `systemd-resolved`: <https://systemd.io/RESOLVED-VPNS/>",
+)
+@click.option(
+    "--split-all",
+    is_flag=True,
+    default=False,
+    help="Enables --split-ip and --split-dns",
+)
+def conf(hostname: str, split_ip: bool, split_dns: bool, split_all: bool):
     wg_info = WgInfo.load()
     nodes = wg_info.nodes
 
-    # This is the GUA IPv6 prefix that Sonic (AT&T?) has assigned us. Unfortunately, there's
-    # no guarantee it's stable. See <https://forums.sonic.net/viewtopic.php?t=18132> for details.
+    if split_all:
+        split_ip = True
+        split_dns = True
+
+    # Unfortunately, Sonic/AT&T doesn't give us a stable the GUA IPv6 prefix.
+    # See <https://forums.sonic.net/viewtopic.php?t=18132> for details.
+    # What's funny is that right now we don't really need stable IP prefixes
+    # (because we're not hosting any IPv6 services... yet).
+    # However, we need a static prefix to set up a static route that directs traffic
+    # to our VPN server (see commented out code in `routers/strider/files/etc/config/network`).
     #
-    # TODO: figure out a better solution for this. Some ideas:
-    #   1. Use NPT (network prefix translation) to completely hide our GUA prefix from the internal network.
+    # Some ideas:
+    #   1. We actually might be getting stable IPv6 prefixes from AT&T, but
+    #      the "delegation" of those prefixes to the macvlan interfaces we added is not stable.
+    #      I suspect this would not be an issue if we bypass the Arris
+    #      gateway: <https://github.com/up-n-atom/8311>
+    #   2. Could clients obtain IPs via SLAAC? <https://forum.netgate.com/topic/166781/wireguard-with-ipv6-slaac-addresses/14>
+    #   3. Use NPT (network prefix translation) to completely hide our GUA prefix from the internal network.
     #      Seems like it would make some IPv6 zealots cry, but IMO it's a good
     #      option until we have an ISP that can provide a stable prefix.
-    #   2. Reconfigure `dnsmasq` to not return GUAs for local hosts. I can't find a
-    #      way to do this with `dnsmasq`, though. Perhaps they'd accept a patch?
-    #      Also see [ULA is Broken (in Dual-stack Networks)](https://blogs.infoblox.com/ipv6-coe/ula-is-broken-in-dual-stack-networks/).
-    #   3. Use an IPv6 tunnel that will give a static prefix.
+    #   4. Use an IPv6 tunnel that will give a static prefix.
     #      [Hurricane Electric](https://tunnelbroker.net/) comes up in a lot of research.
     #      Downside: latency, bandwidth?
-    assert IPv6Network("2600:1700:a41a:381f::/64") in nodes["fflewddur"].allowed_ips
+    #
+    # For now, we've allocated some space in our personal ULA prefix for VPN clients,
+    # and set up NAT so they can talk to the outside world.
+    assert IPv6Interface("fda0:f78f:a59e:31::1/128") in nodes["fflewddur"].addresses
+    assert IPv6Network("fda0:f78f:a59e::/48") in nodes["fflewddur"].allowed_ips
 
     if hostname not in nodes:
         raise click.ClickException(
@@ -174,14 +208,50 @@ def conf(hostname: str):
         config.add_attr(None, "Address", str(address))
 
     # Keep in sync with `routers/strider/files/etc/config/network`.
-    config.add_attr(None, "DNS", "192.168.28.1", "# strider.ec")
-    config.add_attr(None, "DNS", "fda0:f78f:a59e::1", "# strider.ec")
+    dns_servers = [
+        "192.168.28.1",
+        # TODO: How to support DNS over IPv6? Use a ULA for our DNS server?
+        #       See notes above about dynamic IPv6 prefixes.
+    ]
+    if not split_dns:
+        config.add_attr(None, "DNS", ", ".join(dns_servers), "# strider.ec")
+    else:
+        internal_domains = [
+            # Keep in sync with `option domain` in `routers/strider/files/etc/config/dhcp`.
+            "ec",
+            "ramfly.net",
+            # Legacy: we'll eventually move all of this to `ramfly.net`.
+            "snow.jflei.com",
+        ]
+        # Format the domains for `resolvectl`: "~domain1 ~domain2 ...".
+        formatted_domains = " ".join(f"~{domain}" for domain in internal_domains)
+        formatted_dns_servers = " ".join(dns_servers)
+        config.add_attr(
+            None,
+            "PostUp",
+            f"resolvectl dns %i {formatted_dns_servers} && resolvectl domain %i {formatted_domains}",
+        )
 
     for hostname, node in nodes.items():
         if node.endpoint is not None:
             config.add_peer(node.keypair.public, f"# {hostname}")
-            for allowed_ip in node.allowed_ips:
-                config.add_attr(node.keypair.public, "AllowedIPs", allowed_ip)
+
+            if split_ip:
+                for allowed_ip in node.allowed_ips:
+                    config.add_attr(node.keypair.public, "AllowedIPs", allowed_ip)
+            else:
+                config.add_attr(
+                    node.keypair.public,
+                    "AllowedIPs",
+                    "0.0.0.0/0",
+                    "# Full (not split) VPN",
+                )
+                config.add_attr(
+                    node.keypair.public,
+                    "AllowedIPs",
+                    "::/0",
+                )
+
             config.add_attr(node.keypair.public, "Endpoint", node.endpoint)
 
     conf_buffer = io.StringIO()

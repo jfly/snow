@@ -8,21 +8,6 @@ config interface 'loopback'
 config globals 'globals'
 	option ula_prefix 'fda0:f78f:a59e::/48'
 
-config device
-	option name 'br-lan'
-	option type 'bridge'
-	list ports 'lan1'
-	list ports 'lan2'
-	list ports 'lan3'
-	list ports 'lan4'
-
-config interface 'lan'
-	option device 'br-lan.28'
-	option proto 'static'
-	option ipaddr '192.168.28.1'
-	option netmask '255.255.255.0'
-	option ip6assign '60'
-
 config interface 'wan'
 	option device 'wan'
 	option proto 'dhcp'
@@ -40,12 +25,76 @@ config interface 'wan6'
 	option peerdns '0'
 	list dns '2606:4700:4700::1111'
 	list dns '2606:4700:4700::1001'
+	# From <https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber>:
+	#  > Bonus step: Because you no longer will be assigning addresses based on
+	#  > your WAN interface's PD, you can disable the request to pull a PD on
+	#  > your WAN interface by adding this to your /etc/config/network file (on
+	#  > your WAN interface):
+	option reqprefix 'no'
+	option reqaddress 'try'
 
-config interface 'iot'
-	option proto 'static'
-	option device 'br-lan.29'
-	option ipaddr '192.168.29.1'
-	option netmask '255.255.255.0'
+# These `vwan*` devices are a hack to get the AT&T Arris Gateway to give us a
+# few more /64s to use.
+# https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+config device 'vwan1'
+	option name 'vwan1'
+	option type 'macvlan'
+	option ifname 'wan'
+	option macaddr '70:e7:cf:ae:f2:01'
+
+config interface 'WAN6LAN'
+	option proto 'dhcpv6'
+	option peerdns '0'
+	option device 'vwan1'
+	option reqprefix '64'
+	option reqaddress 'none'
+
+config device 'vwan2'
+	option name 'vwan2'
+	option type 'macvlan'
+	option ifname 'wan'
+	option macaddr '70:e7:cf:ae:f2:02'
+
+config interface 'WAN6IOT'
+	option proto 'dhcpv6'
+	option device 'vwan2'
+	option reqprefix '64'
+	option peerdns '0'
+	option reqaddress 'none'
+
+config device 'vwan3'
+	option name 'vwan3'
+	option type 'macvlan'
+	option ifname 'wan'
+	option macaddr '70:e7:cf:ae:f2:03'
+
+config interface 'WAN6GUEST'
+	option proto 'dhcpv6'
+	option device 'vwan3'
+	option reqaddress 'none'
+	option reqprefix '64'
+	option peerdns '0'
+
+config device 'vwan4'
+	option name 'vwan4'
+	option type 'macvlan'
+	option ifname 'wan'
+	option macaddr '70:e7:cf:ae:f2:04'
+
+config interface 'WAN6VPN'
+	option proto 'dhcpv6'
+	option device 'vwan4'
+	option reqaddress 'none'
+	option reqprefix '64'
+	option peerdns '0'
+
+config device
+	option name 'br-lan'
+	option type 'bridge'
+	list ports 'lan1'
+	list ports 'lan2'
+	list ports 'lan3'
+	list ports 'lan4'
 
 config bridge-vlan
 	option device 'br-lan'
@@ -54,10 +103,28 @@ config bridge-vlan
 	list ports 'lan3:u*'
 	list ports 'lan4:t'
 
+config interface 'lan'
+	option device 'br-lan.28'
+	option proto 'static'
+	option ipaddr '192.168.28.1'
+	option netmask '255.255.255.0'
+	# https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+	list ip6class 'WAN6LAN'
+	option ip6assign '64'
+
 config bridge-vlan
 	option device 'br-lan'
 	option vlan '29'
 	list ports 'lan4:t'
+
+config interface 'iot'
+	option proto 'static'
+	option device 'br-lan.29'
+	option ipaddr '192.168.29.1'
+	option netmask '255.255.255.0'
+	# https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+	list ip6class 'WAN6IOT'
+	option ip6assign '64'
 
 config bridge-vlan
 	option device 'br-lan'
@@ -70,6 +137,8 @@ config interface 'guest'
 	option device 'br-lan.30'
 	option ipaddr '192.168.30.1'
 	option netmask '255.255.255.0'
+	# https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+	list ip6class 'WAN6GUEST'
 	option ip6assign '64'
 
 # Route traffic back to VPN clients.
@@ -78,7 +147,16 @@ config route
 	option target '192.168.31.0/24'
 	option gateway '192.168.28.172' # fflewddur.ec
 
-config route6
-	option interface 'lan'
-	option target 'fda0:f78f:a59e:ff00::1/56'
-	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec
+# TODO: Figure out how to provide non-NAT IPv6 to WG clients.
+#       See comments about "IPv6 prefix" in `tools/wg.py` for more details
+#       about why this is tricky.
+#
+# config route6
+# 	option interface 'lan'
+# 	option target 'fda0:f78f:a59e:31::/64'
+# 	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec
+#
+# config route6
+# 	option interface 'lan'
+# 	option target '2600:1700:a41a:381c::/64'
+# 	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec
