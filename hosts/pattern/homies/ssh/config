@@ -25,6 +25,12 @@ Host hetzner-storage-box
     HostName u438808.your-storagebox.de
     Port 23
     User u438808
+
+Host *.cubing.net
+    User cubing_deploy
+
+Host jfly.cubing.net
+    User jeremyfleischman
 ###
 
 ### cottage

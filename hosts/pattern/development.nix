@@ -137,12 +137,14 @@ in
     # Needed by ~/bin/allprocs
     programs.sysdig.enable = true;
 
+    programs.git.enable = true;
+    programs.git.lfs.enable = true;
+
     environment.systemPackages = with pkgs; [
       ### Editor
       neovim
 
       ### Version control
-      git
       git-filter-repo
       # `gh` manages credentials internally, but it also honors the
       # `GITHUB_TOKEN` env var if one is present. However, this interferes with
