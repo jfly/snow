@@ -140,10 +140,10 @@ in
     programs.git.enable = true;
     programs.git.lfs.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      ### Editor
-      neovim
+    # Use our fancy configured neovim rather than stock.
+    snow.neovim.package = flake'.packages.neovim;
 
+    environment.systemPackages = with pkgs; [
       ### Version control
       git-filter-repo
       # `gh` manages credentials internally, but it also honors the
