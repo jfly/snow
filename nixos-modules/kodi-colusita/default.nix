@@ -32,12 +32,22 @@ let
     }
   );
 
-  myKodi = pkgs.kodi.withPackages (kodiAddons: [
-    settingsAddon
-    kodiAddons.jellyfin
-    kodiAddons.joystick
-    flake'.packages.kodiPackages.moonlight
-  ]);
+  myKodi = pkgs.symlinkJoin {
+    name = "kodi";
+    paths = [
+      (pkgs.kodi.withPackages (kodiAddons: [
+        settingsAddon
+        kodiAddons.jellyfin
+        kodiAddons.joystick
+        flake'.packages.kodiPackages.moonlight
+      ]))
+    ];
+    buildInputs = [ pkgs.makeWrapper ];
+    # Adding `gdb` to the `PATH` allows Kodi's coredumps to include stack traces.
+    postBuild = ''
+      wrapProgram $out/bin/kodi --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]}
+    '';
+  };
 in
 
 {
