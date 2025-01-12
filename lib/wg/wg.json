@@ -48,10 +48,25 @@
                 "public": "7KYYnrvvPq61YDQIBYE5gXH12jPcArxZNwY4WLdrvg4=",
                 "private_encrypted": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYOUcxVEprb0pHZEoxL3Fn\nenhGVnNnb0d6V0RsckoyVlROYWQvYndxeEF3CjFPQkRKSTRYcHErOXdDdHJDMzEw\nN2NDa3FvR3pIenJEb1M0b2NLYXZBajgKLS0tIEtJQnBHYzRIb0pKYzVyMGR5NERr\nc3dEUTdTNnFTUXVsT3hRZ2lYWDh0RmMKDdhpM+J2Ye/HJVcDTPydXIATr9sjHNBs\nGEN57QJhldaNFOHaO8WplJJyepRbJh05pnvnwr5TuwkytpwWVExBA67tzaOdQi5D\nyAcFKA==\n-----END AGE ENCRYPTED FILE-----\n"
             }
+        },
+        "ansible": {
+            "endpoint": null,
+            "addresses": [
+                "192.168.31.4/32",
+                "fda0:f78f:a59e:31::4/128"
+            ],
+            "allowed_ips": [
+                "192.168.31.4/32",
+                "fda0:f78f:a59e:31::4/128"
+            ],
+            "keypair": {
+                "public": "XyO/Itf81vXG7IvoaBa8WDx7VZUiaxsvmwv+BqspLm0=",
+                "private_encrypted": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvcDdSZk9VSDRCYmhpclpk\nc01tUEpWaXY0cEpGTmZhZ0ZLaXpMaTZKS0NrCk1YZldvdmpZQ3Qxb2RzcjQ0WC9w\ndzZvWHM5MDZmcDc2cm90OFg2ZjAxcnMKLS0tIENRLzU5REdxb3hZeE9tSTZKd1RH\nQXNTcHh4RE1MdWpEQzgzaWUxaDdsUHMKdQrRERf5mp2zz9723NK0+wLlJiyhpG4M\njck1NpEmroqntmXW813YVHGIfffqShq9B0zNl2893XgAu3RynNjdg4133uGytGj/\naSJvvw==\n-----END AGE ENCRYPTED FILE-----\n"
+            }
         }
     },
     "vpn_network": {
-        "ipv6": "fda0:f78f:a59e:31::/64",
-        "ipv4": "192.168.31.0/24"
+        "ipv4": "192.168.31.0/24",
+        "ipv6": "fda0:f78f:a59e:31::/64"
     }
 }
