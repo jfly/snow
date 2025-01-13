@@ -59,14 +59,6 @@ let
   polybarConfig = pkgs.substituteAll {
     src = ./polybar-config.ini;
   };
-  # TODO: consolidate with `pattern/laptop.nix`.
-  restart-user-service = pkgs.writeShellScript "restart-user-service" ''
-    user=$1
-    service=$2
-    uid=$(id -u $user)
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
-    ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart "$service"
-  '';
 in
 {
   imports = [
@@ -188,8 +180,9 @@ in
       };
     };
   };
+  # TODO: consolidate with `pattern/laptop.nix`.
   services.udev.extraRules = ''
-    SUBSYSTEM=="drm", ACTION=="change", RUN+="${restart-user-service} ${config.snow.user.name} autoperipherals"
+    SUBSYSTEM=="drm", ACTION=="change", RUN+="${lib.getExe pkgs.sudo} systemctl --machine ${config.snow.user.name}@ --user restart autoperipherals.service"
   '';
   # These targets are activated by autoperipherals itself. Other units may
   # depend on them (for example, imagine a service that you only want running

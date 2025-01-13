@@ -5,16 +5,6 @@
   ...
 }:
 
-let
-  # TODO: consolidate with pattern/desktop/.
-  restart-user-service = pkgs.writeShellScript "restart-user-service" ''
-    user=$1
-    service=$2
-    uid=$(id -u $user)
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
-    ${pkgs.sudo}/bin/sudo -u "$1" --preserve-env=DBUS_SESSION_BUS_ADDRESS ${pkgs.systemd}/bin/systemctl --user restart "$service"
-  '';
-in
 {
   location.provider = "geoclue2";
   services.geoclue2 = {
@@ -64,7 +54,7 @@ in
     handlers.lid = {
       event = "button/lid.*";
       action = ''
-        ${restart-user-service} ${config.snow.user.name} lid
+        ${lib.getExe pkgs.sudo} systemctl --machine ${config.snow.user.name}@ --user restart lid.service
       '';
     };
   };
