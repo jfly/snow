@@ -12,8 +12,9 @@
 [user]
 	name = Jeremy Fleischman
 	email = jeremyfleischman@gmail.com
+	signingkey = ~/sync/jfly-linux-secrets/.ssh/id_ed25519.pub
 [commit]
-	gpgsign = true
+	gpgSign = true
 	verbose = true
 [push]
 	default = simple
@@ -52,6 +53,11 @@
 	whitespace = red reverse
 [tag]
 	sort = version:refname
+	gpgSign = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/sync/jfly-linux-secrets/.git/allowed_signers
 
 # Allow local customizations in the .gitconfig_local file
 [include]

@@ -55,7 +55,6 @@ in
       ".config/gtk-3.0" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/gtk-3.0";
 
       # Secrets
-      ".gnupg" = "${homeDir}/sync/jfly-linux-secrets/.gnupg";
       ".android/adbkey" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey";
       ".android/adbkey.pub" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey.pub";
       ".config/adept" = "${homeDir}/sync/jfly-linux-secrets/.config/adept";

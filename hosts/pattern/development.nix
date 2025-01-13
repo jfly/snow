@@ -119,18 +119,6 @@ in
     };
     environment.variables.SSH_ASKPASS_REQUIRE = "prefer";
 
-    # Enable gpg agent
-    programs.gnupg.agent = {
-      enable = true;
-      settings = {
-        # Reconfigure gpg-agent to have a longer lived cache: up to 8 hours after
-        # last used, but the cache also expires when it is 8 hours old, even if it
-        # has been used recently.
-        default-cache-ttl = toString (12 * 3600);
-        max-cache-ttl = toString (12 * 3600);
-      };
-    };
-
     # QEMU emulation used for compiling for other architectures.
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
