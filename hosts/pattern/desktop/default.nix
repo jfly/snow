@@ -52,18 +52,12 @@ let
       done
     '';
   };
-
-  polybar = pkgs.polybar.override {
-    mpdSupport = true;
-  };
-  polybarConfig = pkgs.substituteAll {
-    src = ./polybar-config.ini;
-  };
 in
 {
   imports = [
     ./kodi.nix
     ./xmonad-startup-workaround.nix
+    ./polybar
     ./messaging.nix
     flake.nixosModules.colorscheme
   ];
@@ -119,14 +113,6 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.xsettingsd}/bin/xsettingsd";
-      };
-    };
-    "polybar" = {
-      enable = true;
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        ExecStart = "${polybar}/bin/polybar --config=${polybarConfig}";
       };
     };
     "pasystray" = {
@@ -290,6 +276,7 @@ in
     fontDir.enable = true;
     packages = with pkgs; [
       nerd-fonts.ubuntu-mono # My preferred monospace font.
+      noto-fonts-monochrome-emoji # We use this in `polybar` to keep everything nice and black and white.
       flake'.packages.pica-font
       flake'.packages.dk-majolica-font
     ];

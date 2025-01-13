@@ -33,4 +33,6 @@ pkgs.python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  meta.mainProgram = "mcg";
 }
