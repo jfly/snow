@@ -33,7 +33,9 @@ myBorderWidth = 2
 musicWs = "🎶"
 videoWs = "📹"
 backspaceWs = "⌫"
-myWorkspaces = ["`", "wrk", "be", "fe", "test", videoWs, "6", "7", "8", "9", "0", "-", "=", backspaceWs, musicWs]
+msgsWs = "📜"
+wwwWs = "🌐"
+myWorkspaces = ["`", msgsWs, "2", "3", "4", videoWs, "6", "7", wwwWs, "9", "0", "-", "=", backspaceWs, musicWs]
 myWorkspaceKeys = [xK_grave] ++ [xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal, xK_BackSpace, xK_m]
 
 workspaceSenders = [ appName =? ("send to " ++ wsName) --> doShift wsName | wsName <- myWorkspaces ]
@@ -51,7 +53,10 @@ windowPlacement = composeAll ([
         className =? "Mcg" --> doShift musicWs,
         title =? "CoverGrid" --> doShift musicWs,
 
-        appName =? "picker" --> doFloat
+        appName =? "picker" --> doFloat,
+
+        -- Messaging
+        appName =? "signal" --> doShift msgsWs
     ] ++ workspaceSenders) where role = stringProperty "WM_WINDOW_ROLE"
 
 fullscreenChrome :: X ()

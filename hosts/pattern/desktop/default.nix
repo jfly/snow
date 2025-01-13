@@ -71,6 +71,8 @@ in
 {
   imports = [
     ./kodi.nix
+    ./xmonad-startup-workaround.nix
+    ./messaging.nix
     flake.nixosModules.colorscheme
   ];
 
@@ -323,9 +325,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    ### Messaging
-    signal-desktop
-
     ### Browsers
     qutebrowser
     (pkgs.symlinkJoin {
