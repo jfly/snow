@@ -11,11 +11,10 @@ let
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
-      # https://github.com/NixOS/nixpkgs/pull/341086
       (fetchpatch {
-        name = "upower: Upgrade to 1.90.6 and extend CriticalPowerActions";
-        url = "https://github.com/NixOS/nixpkgs/pull/341086.patch";
-        hash = "sha256-F/viEIWqJup/0llSWcGYlFl9LXq1UYHURcIbSzbp15E=";
+        name = "upower: 1.90.4 -> 1.90.6";
+        url = "https://github.com/NixOS/nixpkgs/commit/5c4767a41c3132c0327a9ea9c420893bf7eaa60a.patch";
+        hash = "sha256-zM7iPxJieiHYoWUgpS9A2iLuGEmbBzScu3SoXjcr3RI=";
       })
       # Fix broken `Image-Magick` build, which affects `gscan2pdf`
       # https://github.com/NixOS/nixpkgs/pull/372231
