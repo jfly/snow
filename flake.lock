@@ -1625,15 +1625,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1730090494,
-        "narHash": "sha256-PMz/8jmMVKroeRge51tgtR1kyyLF8duW6LlTnTEeCyQ=",
+        "lastModified": 1737002533,
+        "narHash": "sha256-R47cn5F4sjGZVa0zWtsLsJqSCu5+FLMoL2DRbGH7YP8=",
         "owner": "FatBoyXPC",
         "repo": "with-alacritty",
-        "rev": "26527c6a709322305e511be70cecac6ebfc0bf9d",
+        "rev": "6215324e508c898fc57c09c3dbca3a6faba404d3",
         "type": "github"
       },
       "original": {
         "owner": "FatBoyXPC",
+        "ref": "dpi",
         "repo": "with-alacritty",
         "type": "github"
       }

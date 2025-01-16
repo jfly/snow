@@ -40,7 +40,10 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     with-alacritty.inputs.nixpkgs.follows = "nixpkgs";
-    with-alacritty.url = "github:FatBoyXPC/with-alacritty";
+    # TODO: switch back to default branch once
+    # https://github.com/FatBoyXPC/with-alacritty/pull/3 lands.
+    # with-alacritty.url = "github:FatBoyXPC/with-alacritty";
+    with-alacritty.url = "github:FatBoyXPC/with-alacritty/dpi";
   };
 
   outputs =
