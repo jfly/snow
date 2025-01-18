@@ -1,15 +1,11 @@
 {
   flake',
   config,
+  lib,
   pkgs,
   ...
 }:
 
-let
-  inherit (flake'.packages)
-    mfa
-    ;
-in
 {
   options = {
     snow = { };
@@ -112,7 +108,7 @@ in
     programs.ssh = {
       startAgent = true;
       enableAskPassword = true;
-      askPassword = "${mfa}/bin/mfa-askpass";
+      askPassword = lib.getExe pkgs.lxqt.lxqt-openssh-askpass;
       extraConfig = ''
         AddKeysToAgent yes
       '';
@@ -173,7 +169,6 @@ in
       flake'.packages.mycli
       miller
       jq
-      mfa
       inotify-info
     ];
   };
