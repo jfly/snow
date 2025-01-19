@@ -24,15 +24,15 @@ class Torrents:
                     name="mnt-media",
                 ),
                 kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/state/transmission/stats.json",
+                    mount_path="/root/.config/transmission/stats.json",
                     name="transmission-stats",
                 ),
                 kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/state/transmission/resume",
+                    mount_path="/root/.config/transmission/resume",
                     name="transmission-resume",
                 ),
                 kubernetes.core.v1.VolumeMountArgs(
-                    mount_path="/state/transmission/torrents",
+                    mount_path="/root/.config/transmission/torrents",
                     name="transmission-torrents",
                 ),
             ],
@@ -47,21 +47,21 @@ class Torrents:
                 ),
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/root/.config/transmission-daemon/stats.json",
+                        path="/state/transmission/stats.json",
                         type="",
                     ),
                     name="transmission-stats",
                 ),
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/root/.config/transmission-daemon/resume",
+                        path="/state/transmission/resume",
                         type="",
                     ),
                     name="transmission-resume",
                 ),
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
-                        path="/root/.config/transmission-daemon/torrents",
+                        path="/state/transmission/torrents",
                         type="",
                     ),
                     name="transmission-torrents",

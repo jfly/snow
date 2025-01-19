@@ -79,7 +79,7 @@ function _nix() {
     nix "${EXTRA_NIX_ARGS[@]}" "$@"
 }
 
-function build_containers() {
+function push_containers() {
     # Our cluster (currently) only has x86 machines in it.
     local k8s_system=x86_64-linux
 
@@ -180,8 +180,10 @@ function deploy_nix_router() {
 
 python -m tools.deage
 
-if [ "$TARGET" = "iac" ]; then
-    build_containers
+if [ "$TARGET" = "containers" ]; then
+    push_containers
+elif [ "$TARGET" = "iac" ]; then
+    push_containers
     deploy_iac
 elif [[ $TARGET == "openwrt/"* ]]; then
     deploy_nix_router "$TARGET"
