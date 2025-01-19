@@ -382,6 +382,9 @@ in
     dmenu
     gscan2pdf
 
+    ### WiFi
+    flake'.packages.ap
+
     ### VPN
     flake'.packages.snowvpn
   ];
