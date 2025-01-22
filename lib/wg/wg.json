@@ -63,6 +63,21 @@
                 "public": "XyO/Itf81vXG7IvoaBa8WDx7VZUiaxsvmwv+BqspLm0=",
                 "private_encrypted": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvcDdSZk9VSDRCYmhpclpk\nc01tUEpWaXY0cEpGTmZhZ0ZLaXpMaTZKS0NrCk1YZldvdmpZQ3Qxb2RzcjQ0WC9w\ndzZvWHM5MDZmcDc2cm90OFg2ZjAxcnMKLS0tIENRLzU5REdxb3hZeE9tSTZKd1RH\nQXNTcHh4RE1MdWpEQzgzaWUxaDdsUHMKdQrRERf5mp2zz9723NK0+wLlJiyhpG4M\njck1NpEmroqntmXW813YVHGIfffqShq9B0zNl2893XgAu3RynNjdg4133uGytGj/\naSJvvw==\n-----END AGE ENCRYPTED FILE-----\n"
             }
+        },
+        "rachel-mbp": {
+            "endpoint": null,
+            "addresses": [
+                "192.168.31.5/32",
+                "fda0:f78f:a59e:31::5/128"
+            ],
+            "allowed_ips": [
+                "192.168.31.5/32",
+                "fda0:f78f:a59e:31::5/128"
+            ],
+            "keypair": {
+                "public": "h/A79MAnrkitG/L4g1wgqVM22gTfIgujKyxhxg271CA=",
+                "private_encrypted": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBBN013dE5HKzNNMVFIcWRC\naEdCLzNiTWJVUXdUVzhaM0dieUpkTUFSNEYwCjZRKzBrVDlLVHRUUmY3NUFRWEpI\neVVaN1JsNjRMbUZQNkFKRTBSdnI4OVUKLS0tIEdna2tIYk0xYXBVV2tXaVR4cFNH\nYXJGVVR6N1pHMVBtTVNvazFVUEx2UnMKkMQ8nSUl455F8tRnfqbUka9aK4oWP9H/\n9/xTYtkhwqy0GXlT51dvvu8zfMvjXGDLL7dgtRfHwqEBfl2xVbnpsLe98QANGoT8\nTqp2fg==\n-----END AGE ENCRYPTED FILE-----\n"
+            }
         }
     },
     "vpn_network": {
