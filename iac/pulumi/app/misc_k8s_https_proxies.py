@@ -8,23 +8,25 @@ class MiscK8sHttpsProxies:
         self._snowauth = snowauth
 
         # Feel free to enable/tweak as necessary.
+        # ```
         # self._add_proxy(
         #     "jflysolaptop",
         #     destination_ip="192.168.28.182",  # pattern.ec (jfly laptop)
         #     destination_port=8080,
         # )
+        # ```
 
         self._add_proxy(
             "pr-tracker",
             access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.28.110",  # clark.ec
-            destination_port=7000,  # see clark/pr-tracker.nix
+            destination_ip="192.168.28.110",  # `clark.ec`
+            destination_port=7000,  # See `clark/pr-tracker.nix`
         )
 
         self._add_proxy(
             "lloyd",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.242",  # lloyd.ec
+            destination_ip="192.168.28.242",  # `lloyd.ec`
             destination_port=80,
         )
 
@@ -35,21 +37,21 @@ class MiscK8sHttpsProxies:
         self._add_proxy(
             "kodi",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.163",  # dallben.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.28.163",  # `dallben.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=8080,
         )
 
         self._add_proxy(
             "ospi",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.197",  # ospi.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.28.197",  # `ospi.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=8080,
         )
 
         self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.28.172",  # fflewddur.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=8096,
         )
 
@@ -57,12 +59,13 @@ class MiscK8sHttpsProxies:
             "cryptpad",
             "cryptpad-ui",
             "nextcloud",
+            "prometheus",
         ]
         for service in fflewddur_services:
             self._add_proxy(
                 service,
                 access=Access.INTERNET_UNSECURED,
-                destination_ip="192.168.28.172",  # fflewddur.ec (keep this in sync with packages/strider-openwrt/files/etc/config/dhcp)
+                destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
                 destination_port=80,
             )
 
@@ -88,20 +91,21 @@ class MiscK8sHttpsProxies:
             metadata={
                 "name": name,
             },
-            spec={
-                "ports": [
-                    {
-                        "port": 80,
-                        "targetPort": 11000,
-                    }
+            spec=k8s.core.v1.ServiceSpecArgs(
+                ports=[
+                    k8s.core.v1.ServicePortArgs(
+                        port=80,
+                        target_port=11000,
+                    ),
                 ],
-            },
+            ),
         )
 
         # Endpoints resource
         #
         # For some reason the traefik ingress controller doesn't seem to work with
-        # EndpointSlice, so we have to use Endpoints.
+        # `EndpointSlice`, so we have to use Endpoints.
+        # ```yaml
         # ---
         # apiVersion: discovery.k8s.io/v1
         # kind: EndpointSlice
@@ -118,6 +122,7 @@ class MiscK8sHttpsProxies:
         # endpoints:
         #   - addresses:
         #       - {destination_ip}
+        # ```
         k8s.core.v1.Endpoints(
             name,
             metadata={

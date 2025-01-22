@@ -2,6 +2,7 @@
 {
   imports = [
     flake.nixosModules.shared
+    flake.nixosModules.monitoring
     ./boot.nix
     ./network.nix
     ./gpu.nix
@@ -10,6 +11,7 @@
     ./jellyfin.nix
     ./cryptpad.nix
     ./vpn.nix
+    ./prometheus.nix
   ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
@@ -17,6 +19,7 @@
   system.stateVersion = "21.11";
 
   networking.hostName = "fflewddur";
+  networking.domain = "ec";
   # Disable the firewall. I'm not used to having one, and we're behind a NAT anyways...
   networking.firewall.enable = false;
 

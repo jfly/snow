@@ -5,12 +5,14 @@
 
   imports = [
     flake.nixosModules.shared
+    # flake.nixosModules.monitoring # Delete if this device will roam.
     ./hardware-configuration.nix
     ./disko-config.nix
   ];
 
   ### CHANGEME ##
   networking.hostName = "template";
+  # networking.domain = "template"; # Delete if this device will roam.
   disko.devices.disk.main.device = "/dev/nvme0n1";
 
   services.getty.helpLine = ''

@@ -2,6 +2,7 @@
 
 {
   networking.hostName = "dallben";
+  networking.domain = "ec";
   time.timeZone = "America/Los_Angeles";
   system.stateVersion = "21.11";
   services.openssh.enable = true;

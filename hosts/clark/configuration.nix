@@ -6,6 +6,7 @@ in
 {
   imports = [
     flake.nixosModules.shared
+    flake.nixosModules.monitoring
     ./boot.nix
     ./network.nix
     ./containers.nix
@@ -36,6 +37,7 @@ in
   system.stateVersion = "21.11"; # Did you read the comment?
 
   networking.hostName = "clark";
+  networking.domain = "ec";
   # Disable the firewall. I'm not used to having one, and we're behind a NAT anyways...
   networking.firewall.enable = false;
 
@@ -122,7 +124,6 @@ in
             flac = "echo good";
           };
         };
-
       };
     })
   ];

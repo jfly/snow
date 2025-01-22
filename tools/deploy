@@ -25,14 +25,13 @@ Options:
 
     --dry-run: build, but do not apply the changes
     --show-trace: passed to any invocations of the 'nix' cli
-    --use-substitutes: use if the connection between the target host and
-                       cache.nixos.org is faster than the connection between
-                       your laptop and the target
+    --build-remote: minimize the compute and internet usage locally
 " >/dev/stderr
 }
 
 TARGETS=()
 DRY_RUN=0
+BUILD_REMOTE=0
 FORCE=0
 EXTRA_NIX_ARGS=()
 EXTRA_SWITCH_ARGS=()
@@ -47,7 +46,8 @@ for i in "$@"; do
         --show-trace)
             EXTRA_NIX_ARGS+=("--show-trace")
             ;;
-        --use-substitutes)
+        --build-remote)
+            BUILD_REMOTE=1
             EXTRA_SWITCH_ARGS+=("--use-substitutes")
             ;;
         --help | -h)
@@ -57,7 +57,6 @@ for i in "$@"; do
         --* | -*)
             echo "Unknown option $i" >/dev/stderr
             echo "" >/dev/stderr
-            help
             exit 1
             ;;
         *)
@@ -188,5 +187,8 @@ elif [ "$TARGET" = "iac" ]; then
 elif [[ $TARGET == "openwrt/"* ]]; then
     deploy_nix_router "$TARGET"
 else
+    if [ $BUILD_REMOTE == 1 ]; then
+        EXTRA_SWITCH_ARGS+=("--build-host" "$TARGET")
+    fi
     deploy_nix "$TARGET"
 fi
