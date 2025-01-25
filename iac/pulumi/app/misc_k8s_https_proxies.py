@@ -55,19 +55,24 @@ class MiscK8sHttpsProxies:
             destination_port=8096,
         )
 
-        fflewddur_services = [
-            "cryptpad",
-            "cryptpad-ui",
-            "nextcloud",
-            "prometheus",
-        ]
-        for service in fflewddur_services:
-            self._add_proxy(
-                service,
-                access=Access.INTERNET_UNSECURED,
-                destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
-                destination_port=80,
-            )
+        fflewddur_services = {
+            Access.INTERNET_UNSECURED: [
+                "cryptpad",
+                "cryptpad-ui",
+                "nextcloud",
+            ],
+            Access.INTERNET_BEHIND_SSO_RAREMY: [
+                "prometheus",
+            ],
+        }
+        for access, services in fflewddur_services.items():
+            for service in services:
+                self._add_proxy(
+                    service,
+                    access=access,
+                    destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+                    destination_port=80,
+                )
 
     def _add_proxy(
         self,

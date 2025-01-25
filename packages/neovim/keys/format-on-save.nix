@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 let
   inherit (lib.nixvim) mkRaw;
@@ -36,22 +36,6 @@ in
 
   # Instead, configure none-ls to be the only formatter used by lsp-format.
   plugins.none-ls.enable = true;
-  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
-    patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-      # https://github.com/nvimtools/none-ls.nvim/pull/192
-      (pkgs.fetchpatch {
-        name = "Add 'nix flake fmt' builtin formatter";
-        url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/192.diff";
-        hash = "sha256-F32gixa54g2o2G+L6ZGJv7+ldTbYoszvasOgCdtPwlE=";
-      })
-      # https://github.com/nvimtools/none-ls.nvim/pull/231
-      (pkgs.fetchpatch {
-        name = "Dynamically detect if `supports_method` is being called as a method or a function";
-        url = "https://patch-diff.githubusercontent.com/raw/nvimtools/none-ls.nvim/pull/231.patch";
-        hash = "sha256-YlnDHQxMLBpUFygoxJgcwfCdYHR7lZEmwFecgusD1tc=";
-      })
-    ];
-  });
   # plugins.none-ls.settings.debug = true;
   plugins.none-ls.settings.enableLspFormat = true;
   # Note: nixvim will generate a nice nixified option for this once

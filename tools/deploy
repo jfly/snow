@@ -25,7 +25,8 @@ Options:
 
     --dry-run: build, but do not apply the changes
     --show-trace: passed to any invocations of the 'nix' cli
-    --build-remote: minimize the compute and internet usage locally
+    --use-substitutes: instruct remote to download from cache.nixos.org if possible
+    --build-remote: build on remote machine rather than locally
 " >/dev/stderr
 }
 
@@ -46,9 +47,11 @@ for i in "$@"; do
         --show-trace)
             EXTRA_NIX_ARGS+=("--show-trace")
             ;;
+        --use-substitutes)
+            EXTRA_SWITCH_ARGS+=("--use-substitutes")
+            ;;
         --build-remote)
             BUILD_REMOTE=1
-            EXTRA_SWITCH_ARGS+=("--use-substitutes")
             ;;
         --help | -h)
             help

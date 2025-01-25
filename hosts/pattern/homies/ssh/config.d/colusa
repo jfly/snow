@@ -58,6 +58,3 @@ Host ospi
     Tag colusa
     HostName ospi.ec
     User ospi
-
-Match tagged colusa exec "location --not ec"
-    ProxyJump clark
