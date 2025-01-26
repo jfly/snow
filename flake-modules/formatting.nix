@@ -11,7 +11,7 @@
       black.enable = true;
       clang-format.enable = true;
       fish_indent.enable = true;
-      stylish-haskell.enable = true;
+      ormolu.enable = true;
     };
   };
 }
