@@ -15,16 +15,6 @@
       0BKKYDpUnebNlG8ckv3jL26tB+uOwRM4SiC8jQ==
       -----END AGE ENCRYPTED FILE-----
     '';
-    # https://monitoring.snow.jflei.com/dashboard/2
-    monitorApiKeyEncrypted = ''
-      -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsSVpzVzdPblNmWkM3TWdq
-      MnB6MTZFalRQZ2pSSUhtMk1GR2RERGQwdW5JCk9acjVRSTJpSTdtQjhNOUdSa2tn
-      UEJINDZyZkp3U0dkeEp1aitlM3daYkkKLS0tICtRNmNzYkNnOENHUlJUQXVMRHBt
-      bjZ4T2VnK1BFamhMVEo0Q3VRelhPajgKHeURvOoU4DyYjHLknN5bHmwWg7DzRlDE
-      c3xp6XFvhTJGXO7BZu5fEClY
-      -----END AGE ENCRYPTED FILE-----
-    '';
 
     # First, do some special handling of anything like a database that needs a
     # transactionally consistent view of the world.

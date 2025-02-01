@@ -8,7 +8,6 @@ from .speedtest import Speedtest
 from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
-from .monitoring import Monitoring
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
@@ -38,7 +37,6 @@ def build_app():
 
     Budget(snowauth)
     Whoami(snowauth)
-    Monitoring(snowauth)
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)

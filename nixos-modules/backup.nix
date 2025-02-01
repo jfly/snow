@@ -10,7 +10,7 @@ let
 in
 {
   options.snow.backup = {
-    enable = lib.mkEnableOption "kodi-colusita";
+    enable = lib.mkEnableOption "snow-backup";
 
     resticPasswordEncrypted = lib.mkOption {
       type = lib.types.str;
@@ -22,18 +22,6 @@ in
         $ sudo chown -R restic:restic /mnt/bay/restic/keys
 
         Then encrypt the key with `python -m tools.encrypt`.
-      '';
-    };
-
-    monitorApiKeyEncrypted = lib.mkOption {
-      type = lib.types.str;
-      description = ''
-        Encrypted monitoring api token.
-
-        Create a new monitor on <https://monitoring.snow.jflei.com/>, copy the
-        token from the heartbeat url.
-
-        Then encrypt the token with `python -m tools.encrypt`.
       '';
     };
 
@@ -62,10 +50,7 @@ in
   };
 
   config = {
-    age.secrets = {
-      restic-password.rooterEncrypted = cfg.resticPasswordEncrypted;
-      backup-monitor-api-key.rooterEncrypted = cfg.monitorApiKeyEncrypted;
-    };
+    age.secrets.restic-password.rooterEncrypted = cfg.resticPasswordEncrypted;
 
     services.restic.backups = {
       snow = {
@@ -84,14 +69,14 @@ in
 
         # Report success!
         backupCleanupCommand = ''
-          echo "Reporing success to monitoring.snow.jflei.com"
-          ${pkgs.curl}/bin/curl --no-progress-meter "https://monitoring.snow.jflei.com/api/push/$(cat ${config.age.secrets.backup-monitor-api-key.path})?status=up&msg=OK&ping="
+          echo "Reporting success to Prometheus"
+          echo 'backup_completion_timestamp_seconds{site="snow"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds.prom
         '';
 
         passwordFile = config.age.secrets.restic-password.path;
         paths = cfg.paths;
         exclude = cfg.exclude;
-        repository = "rest:http://fflewddur:8000/";
+        repository = "rest:http://fflewddur.ec:8000/";
         timerConfig = {
           OnCalendar = "daily";
         };

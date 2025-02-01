@@ -51,7 +51,8 @@ let
         :sftp:./manman
 
       # Finally, report a successful backup =)
-      curl --no-progress-meter "https://monitoring.snow.jflei.com/api/push/$(cat ${config.age.secrets.fflewddur-backup-to-hetzner-monitor-api-key.path})?status=up&msg=OK&ping="
+      echo "Reporting success to Prometheus"
+      echo 'backup_completion_timestamp_seconds{site="hetzner"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds-hetzner.prom
     '';
   };
 in
