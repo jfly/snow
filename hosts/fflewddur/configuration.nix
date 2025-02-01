@@ -11,7 +11,7 @@
     ./jellyfin.nix
     ./cryptpad.nix
     ./vpn.nix
-    ./prometheus.nix
+    ./prometheus
   ];
 
   age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBu1H1RFGjmzpUncYWUGwCDcQPVfgAxH4S2yYPt46a/5";
