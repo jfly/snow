@@ -60,6 +60,7 @@ class MiscK8sHttpsProxies:
                 "cryptpad",
                 "cryptpad-ui",
                 "nextcloud",
+                "healthcheck",
             ],
             Access.INTERNET_BEHIND_SSO_RAREMY: [
                 "prometheus",
