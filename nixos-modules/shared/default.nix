@@ -83,5 +83,14 @@ in
       ];
       openssh.authorizedKeys.keys = [ identities.jfly ];
     };
+
+    users.users.rachel = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+        "media"
+      ];
+      openssh.authorizedKeys.keys = [ identities.rachel ];
+    };
   };
 }
