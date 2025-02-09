@@ -37,4 +37,13 @@ in
   # Some minimal config necessary to define a buildable machine.
   fileSystems."/".device = "/dev/null";
   boot.loader.systemd-boot.enable = true;
+
+  # WiFi
+  networking.wireless = {
+    allowAuxiliaryImperativeNetworks = true;
+    networks = {
+      # Format:
+      # "SSID".psk = "password";
+    };
+  };
 }
