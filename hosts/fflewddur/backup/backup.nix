@@ -15,5 +15,7 @@
       aK5wQ1moF31hcxQzrIl8deVboCrVjI+Ov/yvDA==
       -----END AGE ENCRYPTED FILE-----
     '';
+
+    paths = [ "/mnt/bay/archive" ];
   };
 }

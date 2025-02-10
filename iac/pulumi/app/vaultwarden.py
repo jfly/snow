@@ -24,7 +24,7 @@ class Vaultwarden:
         snowauth.declare_app(
             name="vw",
             namespace="default",
-            image="vaultwarden/server:1.33.0",
+            image="vaultwarden/server:1.33.2",
             port=80,
             env={
                 "DOMAIN": domain,
