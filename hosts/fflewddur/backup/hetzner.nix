@@ -34,6 +34,8 @@ let
       pkgs.rclone
     ];
     text = ''
+      start_time=$(date +%s.%N)
+
       # From <https://docs.hetzner.com/storage/storage-box/access/access-ssh-rsync-borg>
       # > If you receive md5 checksum errors while you upload larger
       # > directories, you probably have reached the connection limit for your
@@ -50,9 +52,13 @@ let
         /mnt/bay/restic \
         :sftp:./manman
 
+      end_time=$(date +%s.%N)
+      duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
+
       # Finally, report a successful backup =)
-      echo "Reporting success to Prometheus"
+      echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
       echo 'backup_completion_timestamp_seconds{site="hetzner"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds-hetzner.prom
+      echo 'backup_duration_seconds{site="hetzner"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_duration_seconds-hetzner.prom
     '';
   };
 in

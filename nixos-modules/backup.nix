@@ -65,13 +65,26 @@ in
           ];
         });
 
-        backupPrepareCommand = cfg.backupPrepareCommand;
+        backupPrepareCommand =
+          ''
+            date +%s.%N > $RUNTIME_DIRECTORY/start-ts
+          ''
+          + (if cfg.backupPrepareCommand != null then cfg.backupPrepareCommand else "");
 
         # Report success!
-        backupCleanupCommand = ''
-          echo "Reporting success to Prometheus"
-          echo 'backup_completion_timestamp_seconds{site="snow"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds.prom
-        '';
+        backupCleanupCommand =
+          # bash
+          ''
+            if [ "$SERVICE_RESULT" = "success" ]; then
+              start_time=$(cat $RUNTIME_DIRECTORY/start-ts)
+              end_time=$(date +%s.%N)
+              duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
+
+              echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
+              echo 'backup_completion_timestamp_seconds{site="snow"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds-snow.prom
+              echo 'backup_duration_seconds{site="snow"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_duration_seconds-snow.prom
+            fi
+          '';
 
         passwordFile = config.age.secrets.restic-password.path;
         paths = cfg.paths;
