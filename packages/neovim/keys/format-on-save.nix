@@ -38,8 +38,6 @@ in
   plugins.none-ls.enable = true;
   # plugins.none-ls.settings.debug = true;
   plugins.none-ls.settings.enableLspFormat = true;
-  # Note: nixvim will generate a nice nixified option for this once
-  # https://github.com/nvimtools/none-ls.nvim/pull/192 lands in none-ls.
-  plugins.none-ls.settings.sources = [ ''require("null-ls").builtins.formatting.nix_flake_fmt'' ];
+  plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
 
 }
