@@ -58,8 +58,13 @@ in
 
     # Flakes!
     nix.settings.experimental-features = [
+      "recursive-nix"
       "nix-command"
       "flakes"
+    ];
+
+    nix.settings.extra-system-features = [
+      "recursive-nix"
     ];
 
     # I18N stuff
