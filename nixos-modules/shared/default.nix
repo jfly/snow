@@ -58,8 +58,20 @@ in
 
     # Flakes!
     nix.settings.experimental-features = [
+      "recursive-nix"
       "nix-command"
       "flakes"
+    ];
+
+    nix.settings.system-features = [
+      # Defaults (copied from
+      # https://github.com/NixOS/nixpkgs/blob/866edf51b8f5b69a3ea648a489ff0c6a0bbd0bab/nixos/modules/config/nix.nix#L319-L324)
+      "benchmark"
+      "big-parallel"
+      "kvm"
+      "nixos-test"
+      # Extra
+      "recursive-nix"
     ];
 
     # I18N stuff
