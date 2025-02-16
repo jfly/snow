@@ -7,6 +7,9 @@
     # `nixos-modules/monitoring/default.nix`.
     ./scrapers/up.nix
     ./scrapers/node.nix
+    # Blackbox is unique: we run the exporter and the corresponding scraper on
+    # only this node.
+    ./blackbox.nix
   ];
 
   services.prometheus = {
