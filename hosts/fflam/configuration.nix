@@ -15,6 +15,7 @@ in
     ./network.nix
     ./disko-config.nix
     ./mail.nix
+    ../fflewddur/prometheus/blackbox.nix # <<<
   ];
 
   # Enable deployments by non-root user.

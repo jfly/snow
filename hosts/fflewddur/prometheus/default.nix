@@ -7,6 +7,9 @@
     # `nixos-modules/monitoring/default.nix`.
     ./scrapers/up.nix
     ./scrapers/node.nix
+    # Blackbox is a bit interesting: we run the exporter (as well as the
+    # corresponding scraper) on just this node.
+    ./blackbox.nix
   ];
 
   services.prometheus = {
