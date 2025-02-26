@@ -118,7 +118,7 @@
     # QEMU emulation used for compiling for other architectures.
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    # Needed by ~/bin/allprocs
+    # Needed by `~/bin/allprocs`
     programs.sysdig.enable = true;
 
     programs.git.enable = true;
@@ -126,6 +126,9 @@
 
     # Use our fancy configured neovim rather than stock.
     snow.neovim.package = flake'.packages.neovim;
+
+    # Get debug symbols in gdb.
+    services.nixseparatedebuginfod.enable = true;
 
     environment.systemPackages = with pkgs; [
       ### Version control
