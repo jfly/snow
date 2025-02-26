@@ -81,7 +81,10 @@ class Invidious:
 
         name = "yt"
         namespace = self.namespace
-        image = "quay.io/invidious/invidious:latest"
+        # Using `master` instead of `latest` because as of 2025-02-26,
+        # https://github.com/iv-org/invidious/commit/eae3c42 hasn't been released.
+        # image = "quay.io/invidious/invidious:latest"
+        image = "quay.io/invidious/invidious:master"
         port = 3000
 
         deployment = snow_deployment(
