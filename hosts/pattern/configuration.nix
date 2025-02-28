@@ -80,4 +80,14 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.11"; # Did you read the comment?
+
+  # https://wiki.nixos.org/wiki/Samba#Samba_Client
+  environment.systemPackages = [ pkgs.cifs-utils ];
+  fileSystems."/mnt/archive" = {
+    device = "//fflewddur.ec/archive";
+    fsType = "cifs";
+    options = [
+      "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s"
+    ];
+  };
 }

@@ -50,9 +50,8 @@ in
       EDITOR = "vim";
     };
 
-    users.groups.media = {
-      gid = 1002;
-    };
+    users.groups.media.gid = 1002;
+    users.groups.bay.gid = 1003;
 
     age.rooter.generatedForHostDir = ../../secrets;
 

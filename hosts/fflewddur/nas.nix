@@ -53,6 +53,11 @@ in
     /mnt/media 192.168.28.0/24(rw,sync,insecure,no_root_squash,fsid=root,anonuid=1000,anongid=1000)
   '';
 
+  users.users.archive = {
+    isSystemUser = true;
+    group = "bay";
+  };
+
   # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
@@ -64,8 +69,10 @@ in
         "server string" = config.networking.hostName;
         "netbios name" = config.networking.hostName;
         "use sendfile" = "yes";
-        # note: localhost is the ipv6 localhost ::1
-        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
+        # Note: `localhost` is the IPv6 localhost `::1`.
+        # `192.168.28.*` is our trusted home VLAN.
+        # `192.168.31.*` is our VPN VLAN.
+        "hosts allow" = "192.168.28. 192.168.31. 127.0.0.1 localhost";
         "hosts deny" = "0.0.0.0/0";
         "guest account" = "nobody";
         "map to guest" = "bad user";
@@ -76,6 +83,14 @@ in
         browseable = "yes";
         "read only" = "yes";
         "guest ok" = "yes";
+      };
+
+      archive = {
+        path = "/mnt/bay/archive";
+        browseable = "yes";
+        writeable = "yes";
+        "guest ok" = "yes";
+        "force user" = config.users.users.archive.name;
       };
     };
   };
