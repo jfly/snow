@@ -173,6 +173,11 @@
       miller
       jq
       inotify-info
+
+      ### Docs
+      linux-manual
+      man-pages
+      man-pages-posix
     ];
   };
 }
