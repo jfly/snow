@@ -92,6 +92,14 @@ in
         "guest ok" = "yes";
         "force user" = config.users.users.archive.name;
       };
+
+      dangerzone = {
+        path = "/mnt/bay/dangerzone";
+        browseable = "yes";
+        writeable = "yes";
+        "guest ok" = "yes";
+        "force user" = config.users.users.archive.name;
+      };
     };
   };
 }
