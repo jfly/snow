@@ -17,10 +17,6 @@ Host fflam
     HostName mail.playground.jflei.com
     User fflam
 
-Host umbriel
-    HostName umbriel.nixos.org
-    User root
-
 Host hetzner-storage-box
     HostName u438808.your-storagebox.de
     Port 23

@@ -1,0 +1,20 @@
+# vi: ft=sshconfig
+
+# Official infrastructure
+Host umbriel
+    HostName umbriel.nixos.org
+    User root
+
+Host wiki.nixos.org
+    User root
+
+# Community builders
+# https://nix-community.org/community-builders/
+Host build-box.nix-community.org
+    User jfly
+
+Host aarch64-build-box.nix-community.org
+    User jfly
+
+Host darwin-build-box.nix-community.org
+    User jfly
