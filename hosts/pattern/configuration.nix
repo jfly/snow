@@ -40,6 +40,7 @@
     ./fuse.nix
     ./laptop.nix
     ./garage-status.nix
+    ./remote-builders.nix
   ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
