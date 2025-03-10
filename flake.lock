@@ -981,8 +981,8 @@
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "rev": "632f04521e847173c54fa72973ec6c39a371211c",
         "type": "github"
       }
     },
