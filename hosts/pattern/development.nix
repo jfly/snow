@@ -173,6 +173,7 @@
       miller
       jq
       inotify-info
+      nix-output-monitor
 
       ### Docs
       linux-manual
