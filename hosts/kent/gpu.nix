@@ -4,7 +4,10 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver
+      # For older processors. `intel-media-driver` doesn't seem to work with
+      # the Intel i5-3470T we have in this machine.
+      intel-vaapi-driver
+
     ];
   };
 }

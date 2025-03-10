@@ -1,5 +1,4 @@
 {
-  flake',
   config,
   lib,
   pkgs,
@@ -12,9 +11,6 @@ let
     mkEnableOption
     mkOption
     types
-    ;
-  inherit (builtins)
-    concatStringsSep
     ;
 
   cfg = config.services.kodi-colusita;
@@ -35,12 +31,14 @@ let
   myKodi = pkgs.symlinkJoin {
     name = "kodi";
     paths = [
-      (pkgs.kodi.withPackages (kodiAddons: [
-        settingsAddon
-        kodiAddons.jellyfin
-        kodiAddons.joystick
-        flake'.packages.kodiPackages.moonlight
-      ]))
+      (cfg.package.withPackages (
+        kodiAddons:
+        [
+          settingsAddon
+          kodiAddons.jellyfin
+        ]
+        ++ cfg.extraAddons
+      ))
     ];
     buildInputs = [ pkgs.makeWrapper ];
     # Adding `gdb` to the `PATH` allows Kodi's coredumps to include stack traces.
@@ -51,8 +49,12 @@ let
 in
 
 {
+  imports = [ ./moonlight.nix ];
+
   options.services.kodi-colusita = {
     enable = mkEnableOption "kodi-colusita";
+
+    package = lib.mkPackageOption pkgs "kodi" { };
 
     startOnBoot = mkOption {
       type = types.bool;
@@ -67,6 +69,14 @@ in
         {option}`services.kodi-colusita.startOnBoot` is enabled.
       '';
       default = if cfg.startOnBoot then "kodi" else null;
+    };
+
+    extraAddons = mkOption {
+      type = types.listOf types.package;
+      description = ''
+        Additional Kodi addons to install.
+      '';
+      default = [ ];
     };
   };
 
@@ -94,52 +104,33 @@ in
       user = cfg.user;
     };
 
-    systemd.user.services = {
-      "kodi" = {
-        enable = cfg.startOnBoot;
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          ExecStart = "${myKodi}/bin/kodi";
-          # Kodi segfaults periodically :cry:. Start it back up if it crashes.
-          Restart = "on-failure";
-          # Kodi often hangs when shutting down. I haven't been able to find
-          # much of a discussion about this, but I have found how 2 other projects handle this:
-          #
-          # - `kodi-standalone-service` sends a `killall` to `kodi.bin`:
-          #   https://github.com/graysky2/kodi-standalone-service/blob/v1.137/x86/init/kodi-x11.service#L14
-          # - LibreElec: wraps Kodi with a script that does a `killall kodi.bin`:
-          #   https://github.com/LibreELEC/LibreELEC.tv/blob/e7837d8fcbd6e884fad69472b55ff1f993b9c370/packages/mediacenter/kodi/scripts/kodi.sh#L31-L35
-          #   They configure systemd to send that wrapper script a `SIGTERM` on
-          #   exit:
-          #   https://github.com/LibreELEC/LibreELEC.tv/blob/12.0.1/packages/mediacenter/kodi/system.d/kodi.service#L13
-          #
-          # Thoughts for improvement:
-          #  - Has anyone asked about this upstream? Seems like kodi itself
-          #    should (be changed to) be able to exit cleanly.
-          #  - If that doesn't happen, this should live in a systemd unit definition in
-          #    `nixpkgs`. It sounds like `@aanderse` might be open to investing in
-          #    that:
-          #    https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35.
-          TimeoutStopSec = "10s";
-        };
-      };
-
-      "moonlight" = {
-        enable = true;
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          ExecStart = concatStringsSep " " [
-            "${pkgs.moonlight-qt}/bin/moonlight"
-            "stream"
-            "gurgi.ec"
-            "Desktop" # So-called "app".
-            "--resolution"
-            "1920x1080"
-            "--capture-system-keys"
-            "always" # Ensure the windows key gets sent to the host.
-          ];
-        };
+    systemd.user.services.kodi = {
+      enable = cfg.startOnBoot;
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${myKodi}/bin/kodi";
+        # Kodi segfaults periodically :cry:. Start it back up if it crashes.
+        Restart = "on-failure";
+        # Kodi often hangs when shutting down. I haven't been able to find
+        # much of a discussion about this, but I have found how 2 other projects handle this:
+        #
+        # - `kodi-standalone-service` sends a `killall` to `kodi.bin`:
+        #   https://github.com/graysky2/kodi-standalone-service/blob/v1.137/x86/init/kodi-x11.service#L14
+        # - LibreElec: wraps Kodi with a script that does a `killall kodi.bin`:
+        #   https://github.com/LibreELEC/LibreELEC.tv/blob/e7837d8fcbd6e884fad69472b55ff1f993b9c370/packages/mediacenter/kodi/scripts/kodi.sh#L31-L35
+        #   They configure systemd to send that wrapper script a `SIGTERM` on
+        #   exit:
+        #   https://github.com/LibreELEC/LibreELEC.tv/blob/12.0.1/packages/mediacenter/kodi/system.d/kodi.service#L13
+        #
+        # Thoughts for improvement:
+        #  - Has anyone asked about this upstream? Seems like kodi itself
+        #    should (be changed to) be able to exit cleanly.
+        #  - If that doesn't happen, this should live in a systemd unit definition in
+        #    `nixpkgs`. It sounds like `@aanderse` might be open to investing in
+        #    that:
+        #    https://discourse.nixos.org/t/right-way-to-install-kodi-and-plugins/19181/35.
+        TimeoutStopSec = "10s";
       };
     };
 

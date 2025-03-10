@@ -20,6 +20,7 @@
   services.kodi-colusita = {
     enable = true;
     startOnBoot = true;
+    moonlight.enable = true;
   };
 
   # Give the default user `sudo` permissions. Sometimes it's nice to be able to

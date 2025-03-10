@@ -5,5 +5,8 @@
     flake.nixosModules.kodi-colusita
   ];
 
-  services.kodi-colusita.enable = true;
+  services.kodi-colusita = {
+    enable = true;
+    moonlight.enable = true;
+  };
 }

@@ -1,6 +1,6 @@
 # `kent`
 
-A secondary HTPC running on a ThinkCentre M92p in San Clemente.
+A HTPC running on a ThinkCentre M92p in San Clemente.
 
 ## Provision
 
