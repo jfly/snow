@@ -96,5 +96,14 @@ in
       ];
       openssh.authorizedKeys.keys = [ identities.rachel ];
     };
+
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+
+    # Disable nix channels. Use flakes instead.
+    nix.channel.enable = false;
   };
 }
