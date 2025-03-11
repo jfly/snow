@@ -4,13 +4,23 @@ let
   unpatchedPkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
   inherit (unpatchedPkgs)
     applyPatches
+    fetchpatch
     ;
 
   patched-nixpkgs = applyPatches {
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
-      # Yay! Nothing right now.
+      (fetchpatch {
+        name = "nixos/cloudflare-dyndns: fix missing home error";
+        url = "https://github.com/NixOS/nixpkgs/commit/4fac92529970a3b84659260e32bb5cfc0d0afb04.patch";
+        hash = "sha256-uq023W+uJqvbWUNZsub1YAlMQ2/wuYHam2rFp9KmkgE=";
+      })
+      (fetchpatch {
+        name = "services/cloudflare-dyndns: require that apiTokenFile be a api token";
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/388853.patch";
+        hash = "sha256-+cewCxOzcIghKAR9Q2FIQDhnZzkh11eolc6KcRotjNQ=";
+      })
     ];
   };
 in

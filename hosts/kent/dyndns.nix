@@ -16,11 +16,9 @@
     -----END AGE ENCRYPTED FILE-----
   '';
 
-  services.cfdyndns = {
+  services.cloudflare-dyndns = {
     enable = true;
-    records = [ "sc.jflei.com" ];
-
-    email = "jeremyfleischman@gmail.com";
+    domains = [ "sc.jflei.com" ];
     apiTokenFile = config.age.secrets.sc-dyndns-api-token.path;
   };
 }
