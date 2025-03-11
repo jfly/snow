@@ -19,7 +19,7 @@ let
       (fetchpatch {
         name = "services/cloudflare-dyndns: require that apiTokenFile be a api token";
         url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/388853.patch";
-        hash = "sha256-+cewCxOzcIghKAR9Q2FIQDhnZzkh11eolc6KcRotjNQ=";
+        hash = "sha256-5VXRjeL+EiqgMWN+YWDayZT+jILa+kuXJ5VWAwj7hEA=";
       })
     ];
   };
