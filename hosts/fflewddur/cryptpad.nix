@@ -8,10 +8,9 @@
   services.cryptpad = {
     package = pkgs.cryptpad.overrideAttrs (oldAttrs: {
       patches = oldAttrs.patches ++ [
-        # Sort files and folders with "natural" sort
-        # https://github.com/cryptpad/cryptpad/pull/1739
         (pkgs.fetchpatch {
-          url = "https://patch-diff.githubusercontent.com/raw/cryptpad/cryptpad/pull/1739.diff";
+          name = ''Sort files and folders with "natural" sort'';
+          url = "https://github.com/cryptpad/cryptpad/commit/36b66c0c2dcc99794352a2d61ae55287d9d8cda9.patch";
           hash = "sha256-DdFe39RCyFKXbUpJHRnmhPjCC+4zmht0ga6OFKOt1ew=";
         })
       ];
