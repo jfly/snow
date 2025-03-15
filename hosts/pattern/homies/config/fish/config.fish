@@ -11,7 +11,7 @@ if status is-interactive
     # hosts/pattern/homies/config/with-alacritty/default.conf for details.
     bind \cq forward-char
 
-    # More Zsh/Bash-like behavior for Alt+.
+    # More Zsh/Bash-like behavior for Alt+. and Alt+>
     # See <https://github.com/fish-shell/fish-shell/issues/10756> for details.
     bind \e. history-last-token-search-backward
     bind \e\> history-last-token-search-forward

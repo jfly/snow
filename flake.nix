@@ -16,12 +16,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.url = "github:nix-community/nix-index-database";
-    # Blocked because newer versions contain curl 8.12.0 with segfaults. See
-    # - Bug report: https://github.com/NixOS/nixpkgs/issues/386970
-    # - The fix (to `staging`): https://github.com/NixOS/nixpkgs/pull/381673
-    # - The merge of `staging` to `master`: https://github.com/NixOS/nixpkgs/pull/386822
-    nixpkgs.url = "github:NixOS/nixpkgs/632f04521e847173c54fa72973ec6c39a371211c";
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
     on-air.inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +33,11 @@
     # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344/
     # is merged.
     # simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
-    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
+    # TODO: switch back to when/if
+    # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/370/
+    # is merged.
+    # simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
+    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path-and-dovecot-modules-fix";
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
