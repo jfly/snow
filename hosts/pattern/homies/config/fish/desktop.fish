@@ -1,3 +1,3 @@
-bind \ep pick_pid
+bind alt-p pick_pid
 
 abbr --add o xdg-open

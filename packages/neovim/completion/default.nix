@@ -88,9 +88,11 @@ in
           end
         '';
         "<CR>" = "cmp.mapping.confirm({ select = false })";
-        # TODO: change back to `<C-CR>` once Fish supports CSI u. See
-        # hosts/pattern/homies/config/with-alacritty/default.conf for details.
-        "<C-Q>" = "cmp.mapping.confirm({ select = true })";
+        # This is to get Fish and Neovim behaving the same with "ghost text"
+        # completions. See <C-CR> in
+        # `hosts/pattern/homies/config/fish/config.fish` for the Fish side of
+        # this.
+        "<C-CR>" = "cmp.mapping.confirm({ select = true })";
       };
     };
   };

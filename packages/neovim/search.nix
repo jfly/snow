@@ -112,10 +112,7 @@ in
       '';
     }
     {
-      # TODO: change back to `<C-CR>` once Fish supports CSI u. See
-      # hosts/pattern/homies/config/with-alacritty/default.conf for details.
-      # key = "<C-CR>";
-      key = "<C-Q>";
+      key = "<C-CR>";
       options.desc = "Do a project-wide search (instead of a buffer search)";
       mode = "c";
       action = mkRaw ''
