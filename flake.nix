@@ -33,11 +33,7 @@
     # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344/
     # is merged.
     # simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
-    # TODO: switch back to when/if
-    # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/370/
-    # is merged.
-    # simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
-    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path-and-dovecot-modules-fix";
+    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";

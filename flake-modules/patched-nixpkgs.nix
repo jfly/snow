@@ -11,16 +11,6 @@ let
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
-      (fetchpatch {
-        name = "services/cloudflare-dyndns: require that apiTokenFile be a api token";
-        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/388853.patch";
-        hash = "sha256-5VXRjeL+EiqgMWN+YWDayZT+jILa+kuXJ5VWAwj7hEA=";
-      })
-      (fetchpatch {
-        name = "fish: 4.0.0 -> 4.0.1";
-        url = "https://github.com/nixos/nixpkgs/commit/751d16bea37fd276f1ed495cac9418d7ae97574f.patch";
-        hash = "sha256-eLHHmYTpQmfBo2LdoBIvRC3576d12SzFniTI95QDC8I=";
-      })
       # From https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable
       # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
       (fetchpatch {
