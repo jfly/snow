@@ -8,13 +8,17 @@ class Sonarr:
             name="sonarr",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_FAMILY,
-            image="ghcr.io/hotio/sonarr:release-4.0.10.2544",
+            image="ghcr.io/hotio/sonarr:release-4.0.14.2939",
             port=8989,
             env={
                 "TZ": "America/Los_Angeles",
                 "PUID": "1000",
                 "PGID": "1002",
                 "UMASK": "002",
+                # Sonarr can produce overly long path names when downloading thumbnails.
+                # See https://github.com/Sonarr/Sonarr/issues/7782 for details.
+                # Set MAX_NAME to a number quite a bit smaller than 255 as a workaround
+                "MAX_NAME": "245",
             },
             volume_mounts=[
                 kubernetes.core.v1.VolumeMountArgs(
