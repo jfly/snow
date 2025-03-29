@@ -18,6 +18,11 @@ let
         url = "https://github.com/NixOS/nixpkgs/commit/5b6c05e1fb335b90a692131e325885b1e3e481c9.patch";
         hash = "sha256-jDIV3Y6ThblKD7CxvBX9bOdav3+Nkm6ymz2UayjnwqQ=";
       })
+      (fetchpatch {
+        name = "cloudflare-dyndns: 5.0 -> 5.3";
+        url = "https://github.com/NixOS/nixpkgs/pull/394352.patch";
+        hash = "sha256-D00nFseHun4J+eopACFPxtrP0s+94Q5SbcuRkKPrWIw=";
+      })
     ];
   };
 in
