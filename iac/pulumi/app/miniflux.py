@@ -26,8 +26,9 @@ class Miniflux:
 
         snowauth.declare_app(
             name="miniflux",
+            # args=["miniflux", "-debug"],
             namespace="default",
-            image="miniflux/miniflux:2.0.43",
+            image="miniflux/miniflux:2.2.6",
             port=8080,
             # miniflux has its own login flow -> it should be exposed to
             # the outside world.

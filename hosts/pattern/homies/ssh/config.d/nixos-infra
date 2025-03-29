@@ -17,4 +17,6 @@ Host aarch64-build-box.nix-community.org
     User jfly
 
 Host darwin-build-box.nix-community.org
+    # Urg, "alacritty" is not recognized yet :(
+    SetEnv TERM=xterm-256color
     User jfly

@@ -1,5 +1,4 @@
 {
-  inputs',
   flake',
   pkgs,
   callPackage,
@@ -22,10 +21,7 @@ let
     ])
     ++ (with flake'.packages; [
       setbg
-    ])
-    ++ [
-      inputs'.with-alacritty.packages.default
-    ];
+    ]);
   pyedid = callPackage ./pyedid.nix { };
 in
 buildPythonApplication {
