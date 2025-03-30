@@ -112,7 +112,7 @@ pkgs.mkShell {
 
     # k8s stuff
     pkgs.kubectl
-    (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-language-python ]))
+    (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-python ]))
     pkgs.poetry
     (poetry2nix.mkPoetryEnv {
       projectDir = ./.;
