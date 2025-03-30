@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   inherit (lib.nixvim) mkRaw;
@@ -6,6 +6,15 @@ in
 {
   # Format on save.
   plugins.lsp-format.enable = true;
+  plugins.lsp-format.package = pkgs.vimPlugins.lsp-format-nvim.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [
+      (pkgs.fetchpatch {
+        name = "Switch to non-deprecated client methods";
+        url = "https://github.com/lukas-reineke/lsp-format.nvim/pull/97.patch";
+        hash = "sha256-7P2YOE8cM6QHnKYRBC3t4aJkox7xobyiHkvPEp53WQA=";
+      })
+    ];
+  });
   # By default, lsp-format is configured to try to format with *all*
   # attached LSPs. I don't want that to happen: if I'm hacking on some
   # random repository, I don't want to suddenly reformat all their code.
