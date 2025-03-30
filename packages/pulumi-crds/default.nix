@@ -28,12 +28,12 @@ let
     ;
   crds = [
     (fetchurl {
-      url = "https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.crds.yaml";
-      sha256 = "sha256-b2U1SZVPZ2JexaPqub8csRtBUi7bBo2zPlrkJQWYCBk=";
+      url = "https://github.com/cert-manager/cert-manager/releases/download/v1.17.1/cert-manager.crds.yaml";
+      sha256 = "sha256-E013nz0IZKd6ARP+CjTFgci1Tr2R8y109y7ifN7V1mE=";
     })
     (fetchurl {
-      url = "https://raw.githubusercontent.com/jfly/traefik/2.9.10-custom-status-code-for-ip-list-middleware/docs/content/reference/dynamic-configuration/traefik.containo.us_middlewares.yaml";
-      sha256 = "sha256-ZqN9xu5zSBsmuau/feJjT+0vlUudp1vsMceUJl/fJYI=";
+      url = "https://raw.githubusercontent.com/traefik/traefik/refs/tags/v3.3.2/docs/content/reference/dynamic-configuration/traefik.io_middlewares.yaml";
+      sha256 = "sha256-c/BumomtKei3YbZP+r9oo0I7YW6Q3FkwQLz149pPi4M=";
     })
   ];
 

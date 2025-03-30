@@ -38,16 +38,6 @@
         namespace: kube-system
       spec:
         valuesContent: |-
-          image:
-            # TODO: extract docker.io once the registry field is merged up
-            # https://github.com/traefik/traefik-helm-chart/commit/24cf0ee00338970ab7f3cae03eaf2edb451632f7
-            repository: docker.io/jfly/traefik
-            # TODO: switch back to regular image if
-            # https://github.com/traefik/traefik/pull/10130 gets merged and
-            # released (also remove overridden crd in 'k8s/crds' and regenerate
-            # pulumi crds).
-            tag: "2.9.10-custom-status-code-for-ip-list-middleware@sha256:c73efc904a1a03fd43f5561660039b168491243a0a7b0d8ba541367c2177591f"
-            pullPolicy: IfNotPresent
           additionalArguments:
             - '--accesslog'
             - '--log.level=INFO'

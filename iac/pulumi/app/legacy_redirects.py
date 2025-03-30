@@ -10,6 +10,10 @@ class LegacyRedirects:
     def _clark_snowdon_to_snow_redirect(self):
         clark_to_snow_redirect = traefik.v1alpha1.Middleware(
             resource_name="clark-to-snow-redirect",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="clark-to-snow-redirect",
+                namespace="default",
+            ),
             spec=traefik.v1alpha1.MiddlewareSpecArgs(
                 redirect_regex=traefik.v1alpha1.MiddlewareSpecRedirectRegexArgs(
                     regex="^https://(.*).clark.snowdon.jflei.com/(.*)$",
