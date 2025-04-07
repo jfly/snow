@@ -3,7 +3,9 @@ import pulsectl
 import dbus
 
 # Names from `nix-shell -p pulseaudio --run 'pactl list sinks | grep "Name:\|Description:"'`
-DESK_SPEAKERS = "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_3__sink"
+DESK_SPEAKERS = (
+    "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__HDMI1__sink"
+)
 GAMING_HEADSET = (
     "alsa_output.usb-Kingston_HyperX_Cloud_Flight_S_000000000001-00.analog-stereo"
 )
@@ -68,7 +70,7 @@ def main():
             sink = pulse.get_sink_by_name(default_sink_name)
             notify(
                 "Audio switcher",
-                f"Unrecognized default sink: {sink.description}. I'm not sure what to do to it.",
+                f"Unrecognized default sink: {default_sink_name} ({sink.description}). I'm not sure what to do to it.",
             )
 
 
