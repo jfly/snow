@@ -33,6 +33,9 @@ class Vaultwarden:
                 "INVITATIONS_ALLOWED": "false",
                 # https://github.com/dani-garcia/vaultwarden/wiki/Hardening-Guide#disable-password-hint-display
                 "SHOW_PASSWORD_HINT": "false",
+                # https://github.com/dani-garcia/vaultwarden/wiki/Logging
+                # "LOG_LEVEL": "trace",
+                # "EXTENDED_LOGGING": "true",
             },
             # This is ok to expose "unsecured", as bitwarden has its own login
             # flow.
