@@ -23,6 +23,11 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/394352.patch";
         hash = "sha256-D00nFseHun4J+eopACFPxtrP0s+94Q5SbcuRkKPrWIw=";
       })
+      (fetchpatch {
+        name = "postsrsd: 1.12 -> 2.0.10 + corresponding service changes";
+        url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
+        hash = "sha256-Yc1X5nwdTy1zJsApQExL20jgri+fvJ4MJWF3/vNKil4=";
+      })
     ];
   };
 in

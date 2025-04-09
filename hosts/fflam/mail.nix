@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
+    ./postsrsd.nix
   ];
 
   mailserver = {
