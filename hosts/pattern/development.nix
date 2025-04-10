@@ -77,8 +77,8 @@
         "${gen-docker-conf}/bin/gen-docker-conf";
     };
 
-    # I probably don't need this anymore. It was useful back when I used
-    # openvpn3, to keep it from stomping on /etc/resolv.conf.
+    # `systemd-resolved` is nice for VPNs because it understands how to query
+    # different DNS servers for different TLDs.
     services.resolved.enable = true;
 
     # Set up a local DNS server
@@ -93,7 +93,7 @@
         # when booting up.
         # It's important for dnsmasq to bind on specific interfaces, because
         # otherwise it will try to bind to a wildcard address, which conflicts
-        # with the 127.0.0.54 that sytsemd-resolved listens on.
+        # with the 127.0.0.54 that systemd-resolved listens on.
         bind-dynamic = true;
 
         address = [
