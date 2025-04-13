@@ -4,7 +4,7 @@
 {
   services.postsrsd = {
     enable = true;
-    domain = "playground.jflei.com";
+    domains = [ "playground.jflei.com" ];
     secretsFile = config.age.secrets.postsrsd-secret.path;
   };
 
