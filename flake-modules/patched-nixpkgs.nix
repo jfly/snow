@@ -26,7 +26,7 @@ let
       (fetchpatch {
         name = "postsrsd: 1.12 -> 2.0.10 + corresponding service changes";
         url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
-        hash = "sha256-LVX59SxFeYVISYCujLaX0Awnzu5Iz3Ggw/Y/+m198GY=";
+        hash = "sha256-HKbcagytkr3iKL4T+eod/v1Ns2fD27DgKMRby6PWWvk=";
       })
     ];
   };
