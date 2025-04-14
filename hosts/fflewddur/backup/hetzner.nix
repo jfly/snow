@@ -6,11 +6,18 @@
 }:
 
 let
-  # Generated with: `ssh-keygen -t ed25519 -f key -P "" -C fflewddur-hetzner-backup`
+  # Generated with: `ssh-keygen -t ed25519 -f key -P "" -C fflewddur-hetzner-backup`.
+  # NOTE: the newline at the end of the file is really important for ssh!
+  # https://unix.stackexchange.com/questions/577402/ssh-error-while-logging-in-using-private-key-loaded-pubkey-invalid-format-and
   # Copied to hetzner storage box with `ssh-copy-id -s -p 23 -f -i key u438808@u438808.your-storagebox.de`
   keypair = {
     privateKeyfile = config.age.secrets.fflewddur-hetzner-backup-ssh-private-key.path;
     publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJUTFU9OcGUIEkPqJ7Zzs74duSEFQ7hnpwlYHoYYgaT fflewddur-hetzner-backup";
+  };
+  box = {
+    user = "u438808";
+    host = "u438808.your-storagebox.de";
+    port = 23;
   };
   hetznerKnownHosts = pkgs.writeTextFile {
     name = "hetzner-known-hosts";
@@ -42,9 +49,9 @@ let
       # > account [...] To avoid this behaviour, you can add the flag
       # > `--checkers=<count lower 8>` for sftp connections...
       rclone sync \
-        --sftp-user u438808 \
-        --sftp-host u438808.your-storagebox.de \
-        --sftp-port 23 \
+        --sftp-user ${box.user} \
+        --sftp-host ${box.host} \
+        --sftp-port ${toString box.port} \
         --sftp-key-file ${keypair.privateKeyfile} \
         --sftp-known-hosts-file ${hetznerKnownHosts} \
         --checkers=7 \
@@ -61,6 +68,70 @@ let
       echo 'backup_duration_seconds{site="hetzner"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_duration_seconds-hetzner.prom
     '';
   };
+
+  generateStorageBoxUsageMetrics =
+    pkgs.writers.writePython3Bin "hetzner-generate-storage-box-usage-metrics" { }
+      ''
+        import subprocess
+        from pathlib import Path
+
+        node_textfile_dir = Path("${config.snow.monitoring.node_textfile_dir}")
+
+        cp = subprocess.run(
+            [
+                "${lib.getExe pkgs.openssh}",   # noqa: E501
+                "${box.user}@${box.host}",
+                "-p",
+                "${toString box.port}",
+                "-i",
+                "${keypair.privateKeyfile}",
+                "-o",
+                "UserKnownHostsFile=${hetznerKnownHosts}",  # noqa: E501
+                "df",
+                "--block-size=1",  # 1 block = 1 byte
+            ],
+            text=True,
+            check=True,
+            stdout=subprocess.PIPE,
+        )
+
+        # Output is *almost* a space separated table. Example:
+        # Filesystem      1K-blocks      Used Available Use% Mounted on
+        # u438808        1073607936 290169472 783438464  28% /home
+        header, *data = cp.stdout.splitlines()
+        expected_columns = [
+            "Filesystem",
+            "1B-blocks",
+            "Used",
+            "Available",
+            "Use%",
+            "Mounted on",
+        ]
+        column_count = len(expected_columns)
+        columns = header.split(maxsplit=column_count - 1)
+        assert (
+            columns == expected_columns
+        ), f"Expected {expected_columns}, got {columns}"
+
+        for datum in data:
+            (
+                filesystem,
+                total_bytes,
+                used_bytes,
+                available_bytes,
+                used_percentage,
+                mountpoint,
+            ) = datum.split(maxsplit=column_count)
+
+            metric_file = (
+                node_textfile_dir /
+                f"hetzner_storage_box_{filesystem}.prom"
+            )
+            metric_file.write_text(
+                f'hetzner_storage_box_avail_bytes{{filesystem="{filesystem}", mountpoint="{mountpoint}"}} {available_bytes}\n'  # noqa: E501
+                f'hetzner_storage_box_size_bytes{{filesystem="{filesystem}", mountpoint="{mountpoint}"}} {total_bytes}\n'  # noqa: E501
+            )
+      '';
 in
 {
   age.secrets.fflewddur-backup-to-hetzner-monitor-api-key = {
@@ -79,23 +150,24 @@ in
 
   age.secrets.fflewddur-hetzner-backup-ssh-private-key.rooterEncrypted = ''
     -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBQc2JaY0ZjRmJ6VnJpU2N6
-    cHM0VXE0U3VaVHBRNnNJYm5Pa3JjQm5ZQTNjCk1RU3F0ZU5rMW9zUWd0RWkySUhJ
-    OE5pSUdOMkR3R3pLZTY4NVNHZndXY0UKLS0tIFA2a3BmKzd3N2xDSnUwQUtXLzMy
-    cCtreFByQjRWM01veFJjRndyR2tEWmcK5BWpzwlvRcnlhfrS1JR4CGvQXF6B30B9
-    d18ja6HSwqaz2F1xiQ8YuiTafP270b3P1lxKgIPLNhVxoxebj82xhpyEQr+2ojg5
-    b90vmnpzTIDb4Xzcz2cnLp+PhccmRJ0SHgaSLHbkQEo7/BZ8Gx4SZQU1hB2V6sNf
-    kKwVvq237TiK/m/NmzlmTujrGfEhBw/f69oNbl9nwfvTuFzpXj/FTbd/xDT1BkHX
-    7z+kJIegbcZzanIsiZ/fWcaOK6enbiqCLp/3Xk9BLTaJuql4o0dsxnyCmBB5Cgj9
-    97SlaCAktH4Q0jKyYgxCl6q9jSzgvf93AwXGb3A+q441bgKv+3ISjfTNSZXk4yFj
-    BLRuypZr/8LerhdpU6gDx2A1iUbsLAcC3Sr7HB4/BlB/BiHeOeKYnCjGBLpzf/e2
-    IjfMy/7WE53qAwcxlLfUyTnqc2g1kDjHfjbzI73yYa6/hqQ15cZcduSWYvVgHKq1
-    IRcM1kfCg0J7lXsC/PupmLTkeO/+47h9+NLYa+mmGwDl+2sxwahrunWBtEduKDMA
-    CCWBOOzk/a9+khh+weVoXP74kU4Qpwbytm8VSgKEW9VyuKNshZPlz3VY
+    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtUk9ONG1ZQjQwaTFyNVVp
+    MnI0QnlhTDJXTVZKUllvOVNCbzJ0VndrVkM4Ci82QmszU1Rxb2lDMzl0eWlrVjQ5
+    dUVNZGNLTytuTTJYL05hZ1ZGK0JlMVEKLS0tIE1MY2x5aVRVVENQbkxqQzNTbDVk
+    TmFncTh6YkhGOG5JZUU5OVpyNmV4WlUKPJ5JV9TC0KU9Qc8gdQV3KogQt6TKewyT
+    rqJjkpa0zu5jAq8yToXbZD79LBkrn5+9S/I+RUqUpVzpJIWxV7u6qGRKV13mNpQO
+    CdE4+XIv+uu11lgeeZRUBWYL/PMwxlBeKvCd5m/rdrL34V/zvbmKZ+6ynDZM73dM
+    N/dNwP37XVbCQv/3h/jnGN6EAa9iv/hAlicBrnX64feWnvcSNggg8xp0fAXzQmdy
+    YuC95WeHKkHs9A1iNu11gzZKZhNjQx3kScgLNA1xFDq926MotIx27GSamBl8/84X
+    OPBl2Q04gHk/hZDQM85ont4uRml/IZMWG0a89nIxEhUf6Nj0AX7eh7LHf/7DnbVh
+    hsuidkOXpu4hhhU4SW5CXJpcgF8CZ3+9txb0kXQjCNDcwhakOOWNBZ+/XGKVHTGN
+    FzTUIjYUB5GsjWI6158LAcy4luLt2gDJJmg79/6/OBzkY5GpYXhc15ciQPp+1DL0
+    wBbLXifWEeE0sr9fN9Iacn1dF3ByaDS7TZT8Pf4JFu5AKZjDcoP0E70W3PGR/4b9
+    WeqrWd+EWrataajeQCc8mGgniW8le6kQdnGcNWDo05B0cxVP5AQ4Lj2SRw==
     -----END AGE ENCRYPTED FILE-----
   '';
 
   systemd = {
+    # Offsite backups.
     timers.fflewddur-backup-to-hetzner = {
       description = "snow backup timer";
       wantedBy = [ "timers.target" ];
@@ -108,6 +180,22 @@ in
       description = "snow backup";
       enable = true;
       script = lib.getExe fflewddur-backup-to-hetzner;
+    };
+
+    # Regularly generate metrics about the disk usage of our Hetzner storage
+    # box.
+    timers.hetzner-generate-storage-box-usage-metrics = {
+      description = "Generate Hetzner storage box usage metrics timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "hourly";
+        Unit = "hetzner-generate-storage-box-usage-metrics.service";
+      };
+    };
+    services.hetzner-generate-storage-box-usage-metrics = {
+      description = "Generate Hetzner storage box usage metrics";
+      enable = true;
+      script = lib.getExe generateStorageBoxUsageMetrics;
     };
   };
 }

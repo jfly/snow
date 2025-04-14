@@ -48,6 +48,7 @@
                     annotations.summary = "systemd unit {{ $labels.name }} on {{ $labels.instance }} has been down for more than 15 minutes.";
                   }
 
+                  # Monitor root drive free space across the fleet.
                   {
                     alert = "PartitionLowInodes";
                     expr = ''
@@ -60,7 +61,7 @@
                   {
                     alert = "PartitionLowDiskSpace";
                     expr = ''
-                      round((node_filesystem_free_bytes{${diskSelector}} * 100) / node_filesystem_size_bytes{${diskSelector}}) < 10
+                      round((node_filesystem_avail_bytes{${diskSelector}} * 100) / node_filesystem_size_bytes{${diskSelector}}) < 10
                     '';
                     for = "30m";
                     labels.severity = "warning";
@@ -84,12 +85,24 @@
                   {
                     alert = "BayPartitionLowDiskSpace";
                     expr = ''
-                      round((node_filesystem_free_bytes{mountpoint="/mnt/bay"} * 100) / node_filesystem_size_bytes{mountpoint="/mnt/bay"}) < 5
+                      round((node_filesystem_avail_bytes{mountpoint="/mnt/bay"} * 100) / node_filesystem_size_bytes{mountpoint="/mnt/bay"}) < 5
                     '';
                     for = "30m";
                     labels.severity = "warning";
                     annotations.summary = "{{ $labels.device }} mounted to {{ $labels.mountpoint }} ({{ $labels.fstype }}) on {{ $labels.instance }} has {{ $value }}% free.";
                   }
+
+                  # Monitor Hetzner storage box free space.
+                  {
+                    alert = "HetznerStorageBoxLowDiskSpace";
+                    expr = ''
+                      round((hetzner_storage_box_avail_bytes * 100) / hetzner_storage_box_size_bytes) < 10
+                    '';
+                    for = "30m";
+                    labels.severity = "warning";
+                    annotations.summary = "{{ $labels.filesystem }} mounted to {{ $labels.mountpoint }} has {{ $value }}% free.";
+                  }
+
                 ];
             }
 
