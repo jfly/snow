@@ -10,6 +10,7 @@
     ./backup
     ./jellyfin.nix
     ./cryptpad.nix
+    ./syncthing.nix
     ./vpn.nix
     ./prometheus
     ./healthcheck.nix

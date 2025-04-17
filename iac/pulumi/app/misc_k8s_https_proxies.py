@@ -66,6 +66,7 @@ class MiscK8sHttpsProxies:
             Access.INTERNET_BEHIND_SSO_RAREMY: [
                 "prometheus",
                 "alerts",
+                "syncthing",
             ],
         }
         for access, services in fflewddur_services.items():

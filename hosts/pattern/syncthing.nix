@@ -39,20 +39,24 @@ in
 
       settings = {
         devices = {
-          "snow" = {
-            id = "D3NFS4D-DHERIM7-T62ZVKD-RE6T37K-MCYWHDE-CHH56RW-E6KN4HF-TDWVXAR";
+          "fflewddur" = {
+            id = "OMHZ67W-HXT6UWE-VDTEKUO-FOPG5BR-R3PAOZE-NOYS42G-2G2W4OU-MYVUEQA";
           };
         };
         folders = {
           "jfly" = {
             id = "etyx6-oh4ft";
-            devices = [ "snow" ];
+            devices = [
+              "fflewddur"
+            ];
             ignorePerms = false; # By default, Syncthing doesn't sync file permissions, but there are some scripts in here.
             path = "${syncDir}/jfly";
           };
           "manman" = {
             id = "amnsl-rxpc2";
-            devices = [ "snow" ];
+            devices = [
+              "fflewddur"
+            ];
             path = "${syncDir}/manman";
           };
         };
@@ -95,7 +99,7 @@ in
         path = "${syncDir}/jfly-linux-secrets";
         devices = [
           {
-            deviceId = cfg.settings.devices."snow".id;
+            deviceId = cfg.settings.devices."fflewddur".id;
             encryptionPassword = "@LINUX_SECRETS_PASSPHRASE@";
           }
         ];

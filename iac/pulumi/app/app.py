@@ -5,7 +5,6 @@ from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
 from .speedtest import Speedtest
-from .syncthing import Syncthing
 from .whoami import Whoami
 from .budget import Budget
 from .miniflux import Miniflux
@@ -47,7 +46,6 @@ def build_app():
     Speedtest(namespace="default", snowauth=snowauth)
 
     # sync, etc
-    Syncthing(snowauth)
     Music(snowauth)
 
     Torrents(snowauth)
