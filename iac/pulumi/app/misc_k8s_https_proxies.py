@@ -67,6 +67,7 @@ class MiscK8sHttpsProxies:
                 "prometheus",
                 "alerts",
                 "syncthing",
+                "grafana",
             ],
         }
         for access, services in fflewddur_services.items():

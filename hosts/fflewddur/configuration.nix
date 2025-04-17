@@ -13,6 +13,7 @@
     ./syncthing.nix
     ./vpn.nix
     ./prometheus
+    ./grafana.nix
     ./healthcheck.nix
     ./immich.nix
   ];
