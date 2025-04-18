@@ -54,16 +54,17 @@ in
 
     services.restic.backups = {
       snow = {
-        package = pkgs.restic.overrideAttrs (oldAttrs: {
-          patches = oldAttrs.patches ++ [
-            # https://github.com/restic/restic/pull/5190 backported to v0.17.3
-            (pkgs.fetchpatch {
-              name = "fs: error if a symlink points at a file that is not included in the snapshot";
-              url = "https://github.com/restic/restic/pull/5190.patch";
-              hash = "sha256-2tQT29MNo0LAZVO0isUzVlPkU31MAti55vh1mCwGrI0=";
-            })
-          ];
-        });
+        # TODO: revisit this. doesn't feel like this PR is likely to land. also probably need some mechanism for exceptions.
+        # package = pkgs.restic.overrideAttrs (oldAttrs: {
+        #   patches = oldAttrs.patches ++ [
+        #     # https://github.com/restic/restic/pull/5190 backported to v0.17.3
+        #     (pkgs.fetchpatch {
+        #       name = "fs: error if a symlink points at a file that is not included in the snapshot";
+        #       url = "https://github.com/restic/restic/pull/5190.patch";
+        #       hash = "sha256-2tQT29MNo0LAZVO0isUzVlPkU31MAti55vh1mCwGrI0=";
+        #     })
+        #   ];
+        # });
 
         backupPrepareCommand =
           ''

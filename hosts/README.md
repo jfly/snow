@@ -7,7 +7,7 @@ Each folder in `hosts/` is a different NixOS host.
 This just creates the relevant nix code, it does not try to connect to
 anything:
 
-    tools/fleet.py add [HOSTNAME]
+    tools/fleet.py declare [HOSTNAME]
 
 Notably, this configuration will be incomplete: it won't have a
 `hardware-configuration.nix` yet. That will be generated when you bootstrap a
