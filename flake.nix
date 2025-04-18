@@ -20,7 +20,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.url = "github:nix-community/nix-index-database";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # <<< TODO switch back to nixos-unstable >>>
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
     on-air.inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +41,8 @@
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    vars.inputs.nixpkgs.follows = "nixpkgs";
+    vars.url = "github:Lassulus/vars";
     with-alacritty.inputs.nixpkgs.follows = "nixpkgs";
     with-alacritty.url = "github:FatBoyXPC/with-alacritty";
   };

@@ -1144,6 +1144,7 @@
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "systems": "systems_7",
         "treefmt-nix": "treefmt-nix_6",
+        "vars": "vars",
         "with-alacritty": "with-alacritty"
       }
     },
@@ -1476,6 +1477,26 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "vars": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1744004503,
+        "narHash": "sha256-CksT6aPanP1WZTU0BX2UtMM93P7YXmWirEIJAvj8VXM=",
+        "owner": "Lassulus",
+        "repo": "vars",
+        "rev": "066dbc738838b79be6bc80b88559cb88e0fffffd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Lassulus",
+        "repo": "vars",
         "type": "github"
       }
     },
