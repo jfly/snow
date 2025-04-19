@@ -1,14 +1,10 @@
-{ inputs, ... }:
 {
-  imports = [ inputs.disko.nixosModules.disko ];
-
   boot.loader.systemd-boot.enable = true;
 
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        # <<< device = "/dev/vdb"; # <<<
         content = {
           type = "gpt";
           partitions = {
@@ -28,7 +24,6 @@
                 type = "luks";
                 name = "crypted";
                 settings.allowDiscards = true;
-                # <<< passwordFile = "/tmp/secret.key";
                 content = {
                   type = "filesystem";
                   format = "ext4";

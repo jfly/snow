@@ -24,6 +24,7 @@ let
 
       specialArgs = {
         inherit inputs flake;
+        clan-core = null;
       };
 
       modules = [

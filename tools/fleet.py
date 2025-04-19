@@ -10,6 +10,8 @@ import subprocess
 from pathlib import Path
 from textwrap import dedent
 
+MACHINES_DIR = Path("machines")
+
 HOSTS_DIR = Path("hosts")
 HELP = (HOSTS_DIR / "README.md").read_text()
 
@@ -27,25 +29,23 @@ def main():
 )
 @click.argument("hostname")
 def declare(hostname: str, force: bool):
-    host_dir = HOSTS_DIR / hostname
-    if host_dir.exists():
+    machine_dir = MACHINES_DIR / hostname
+    if machine_dir.exists():
         if force:
-            shutil.rmtree(host_dir)
+            shutil.rmtree(machine_dir)
         else:
             raise click.ClickException(
-                f"{host_dir} already exists. Use --force to overwrite."
+                f"{machine_dir} already exists. Use --force to overwrite."
             )
 
-    template_host_dir = HOSTS_DIR / "template"
+    template_host_dir = MACHINES_DIR / "template"
 
-    host_dir.mkdir()
-    shutil.copy(template_host_dir / "configuration.nix", host_dir / "configuration.nix")
-    shutil.copy(template_host_dir / "disko-config.nix", host_dir / "disko-config.nix")
+    shutil.copytree(template_host_dir, machine_dir)
 
     click.echo(
         dedent(
             f"""
-            Successfully generated {host_dir}. Next steps:
+            Successfully generated {machine_dir}. Next steps:
 
               - Try it out in a VM: `tools/fleet.py vm {hostname}`
               - Bootstrap a real machine: `tools/fleet.py bootstrap {hostname}`
@@ -67,7 +67,6 @@ def vm(hostname: str):
                 "nix",
                 "build",
                 f".#nixosConfigurations.{hostname}.config.system.build.vmWithBootLoader",
-                # <<< f".#nixosConfigurations.{hostname}.config.system.build.vmWithDisko",
                 "--out-link",
                 result_dir,
             ],
@@ -145,15 +144,14 @@ NixosAnywherePhase = Literal["kexec", "disko", "install", "reboot"]
 
 def nixos_anywhere(ssh: str, ssh_port: int, hostname: str, phase: NixosAnywherePhase):
     host_dir = HOSTS_DIR / hostname
-    # <<< TODO: are we regenerating hardware config N times? >>>
+    # Note: this regenerates hardware config N times.
     hardware_configuration_path = host_dir / "hardware-configuration.nix"
 
     subprocess.run(
         [
             "nix",
             "run",
-            # <<< "github:nix-community/nixos-anywhere",
-            "/home/jeremy/src/github.com/nix-community/nixos-anywhere",  # <<<
+            "github:nix-community/nixos-anywhere",
             "--",
             "--flake",
             f".#{hostname}",
@@ -164,7 +162,6 @@ def nixos_anywhere(ssh: str, ssh_port: int, hostname: str, phase: NixosAnywhereP
             str(ssh_port),
             "--phases",
             phase,
-            "--debug",  # <<<
             ssh,
         ],
         check=True,
