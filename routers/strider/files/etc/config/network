@@ -100,7 +100,6 @@ config bridge-vlan
 	option device 'br-lan'
 	option vlan '28'
 	list ports 'lan1:u*'
-	list ports 'lan3:u*'
 	list ports 'lan4:t'
 
 config interface 'lan'
@@ -115,6 +114,7 @@ config interface 'lan'
 config bridge-vlan
 	option device 'br-lan'
 	option vlan '29'
+	list ports 'lan3:u*'
 	list ports 'lan4:t'
 
 config interface 'iot'
