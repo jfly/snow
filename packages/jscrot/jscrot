@@ -23,7 +23,7 @@ beep() {
     paplay ./bell.oga &
 }
 
-SCREENSHOTS_DIR=$HOME/screenshots
+SCREENSHOTS_DIR=$HOME/sync/jfly/screenshots
 mkdir -p "$SCREENSHOTS_DIR"
 
 file_noext=$SCREENSHOTS_DIR/"$(date +"%Y-%m-%d_%H-%M-%S")_$HOSTNAME"
