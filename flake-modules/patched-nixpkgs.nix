@@ -28,6 +28,11 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
         hash = "sha256-HKbcagytkr3iKL4T+eod/v1Ns2fD27DgKMRby6PWWvk=";
       })
+      (fetchpatch {
+        name = "nixos/restic-rest-server Fixed htpasswd-path when null.";
+        url = "https://github.com/NixOS/nixpkgs/commit/b539e4848f5695992ea0963f4640b245d5b598d9.patch";
+        hash = "sha256-nOSDGRJien4Ahz6RN3XE5Xe4VZBa5lUG9o12Shc/q8w=";
+      })
     ];
   };
 in

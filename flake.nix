@@ -1,6 +1,10 @@
 {
   description = "snow";
 
+  nixConfig = {
+    abort-on-warn = true;
+  };
+
   inputs = {
     # Choose not to download darwin dependencies (saves some resources on Linux, see
     # https://github.com/ryantm/agenix#install-module-via-flakes).

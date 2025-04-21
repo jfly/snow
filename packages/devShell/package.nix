@@ -140,17 +140,6 @@ pkgs.mkShell {
           pulumi-minio = prev.pulumi-minio.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
           });
-          pyyaml = prev.pyyaml.overridePythonAttrs (old: {
-            # https://github.com/yaml/pyyaml/pull/823
-            # fix: don't import deprecated "wheel" (just to do nothing with it)
-            # This fixes (works around?) https://github.com/pypa/setuptools/issues/4683
-            patches = (if old ? patches then old.patches else [ ]) ++ [
-              (pkgs.fetchpatch {
-                url = "https://patch-diff.githubusercontent.com/raw/yaml/pyyaml/pull/823.patch";
-                hash = "sha256-FA8J6X9HcwrsirAY+pjQJLdwzK9imwVNY+e35XGa9pc=";
-              })
-            ];
-          });
           wgconfig = prev.wgconfig.overridePythonAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
           });
