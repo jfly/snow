@@ -56,7 +56,7 @@ in
       (pkgs.fetchpatch {
         name = "fix(nix_flake_fmt): handle flakes with a `formatter` package";
         url = "https://github.com/nvimtools/none-ls.nvim/pull/272.patch";
-        hash = "sha256-NPL+KPBkkZmCOB4tdSkec8q75e2TgjR4qyJf0z9jnEA=";
+        hash = "sha256-lvxffTBIVVs14OBi2zKDd/aSwGrpPgQkxqM0TPU5A6U=";
       })
     ];
   });
