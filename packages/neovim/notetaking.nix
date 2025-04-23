@@ -5,13 +5,6 @@ let
   notesDir = "~/sync/jfly/notes/";
 in
 {
-  # Don't automatically fold a file when first opening it. I prefer to start
-  # with everything visible.
-  opts.foldenable = false;
-
-  # https://bitcrowd.dev/folding-sections-of-markdown-in-vim
-  globals.markdown_folding = 1;
-
   keymaps = [
     {
       options.desc = "Note New: start a new note";

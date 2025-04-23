@@ -35,6 +35,7 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
           ./lightline.nix
           ./hacking.nix
           ./notetaking.nix
+          ./markdown.nix
           ./lsp.nix
           ./quickfix.nix
           ./diagnostics.nix
