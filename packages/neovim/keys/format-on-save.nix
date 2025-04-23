@@ -46,7 +46,18 @@ in
   # Instead, configure none-ls to be the only formatter used by lsp-format.
   plugins.none-ls.enable = true;
   # plugins.none-ls.settings.debug = true;
+  # extraConfigLuaPre = ''
+  #   vim.opt.rtp:prepend("/home/jeremy/src/github.com/nvimtools/none-ls.nvim")
+  # '';
   plugins.none-ls.settings.enableLspFormat = true;
   plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
-
+  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [
+      (pkgs.fetchpatch {
+        name = "fix(nix_flake_fmt): handle flakes with a `formatter` package";
+        url = "https://github.com/nvimtools/none-ls.nvim/pull/272.patch";
+        hash = "sha256-NPL+KPBkkZmCOB4tdSkec8q75e2TgjR4qyJf0z9jnEA=";
+      })
+    ];
+  });
 }
