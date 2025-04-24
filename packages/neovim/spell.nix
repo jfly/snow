@@ -33,7 +33,7 @@ in
         local client = find_lsp_client(server_name)
 
         if client then
-          client.stop()
+          client:stop()
           vim.notify("Stopped " .. server_name, vim.log.levels.INFO)
         else
           local config = require('lspconfig.configs')[server_name]
