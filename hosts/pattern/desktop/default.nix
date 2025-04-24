@@ -203,7 +203,7 @@ in
       enable = true;
       # Note: stringified key names are found here: https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
       udevmonConfig = ''
-        - CMD: ${mux} -c caps2esc
+        - CMD: ${mux} -c muxedEvents
 
         # The `-d` passed to uinput creates a virtual keyboard on the fly that looks
         # like my laptop's keyboard. This is arguably kind of weird as these
@@ -216,21 +216,21 @@ in
         # regardless:
         #   - https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/31#note_725827382
         #   - https://gitlab.com/interception/linux/tools#hybrid-device-configurations
-        - JOB: ${mux} -i caps2esc | ${caps2esc} -m 1 | ${space2meta} | ${uinput} -d /dev/input/by-path/platform-i8042-serio-0-event-kbd
+        - JOB: ${mux} -i muxedEvents | ${caps2esc} -m 1 | ${space2meta} | ${uinput} -d /dev/input/by-path/platform-i8042-serio-0-event-kbd
 
         # Match devices that look like a mouse. Copied from
         # https://gitlab.com/interception/linux/plugins/dual-function-keys#multiple-devices
         # Note: this must go before the keyboard job, as my mouse bizarrely
         # (apparently this isn't so uncommon :() *does* have a bunch of keys
         # that make it look like a keyboard.
-        - JOB: ${intercept} $DEVNODE | ${mux} -o caps2esc
+        - JOB: ${intercept} $DEVNODE | ${mux} -o muxedEvents
           DEVICE:
             EVENTS:
               EV_REL: [REL_WHEEL]
               EV_KEY: [BTN_LEFT]
 
         # Match devices that look like a keyboard.
-        - JOB: ${intercept} -g $DEVNODE | ${mux} -o caps2esc
+        - JOB: ${intercept} -g $DEVNODE | ${mux} -o muxedEvents
           DEVICE:
             EVENTS:
               EV_KEY: [KEY_CAPSLOCK]
