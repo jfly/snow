@@ -45,6 +45,7 @@ in
     ./xmonad-startup-workaround.nix
     ./polybar
     ./messaging.nix
+    ./remote-desktop-client.nix
     flake.nixosModules.colorscheme
   ];
 
