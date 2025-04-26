@@ -13,7 +13,7 @@
       partOf = [ "xmonad.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.signal-desktop-source;
+        ExecStart = lib.getExe pkgs.signal-desktop;
       };
     };
   };

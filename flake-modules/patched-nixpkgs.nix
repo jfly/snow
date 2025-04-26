@@ -11,27 +11,26 @@ let
     name = "nixpkgs-patched";
     src = inputs.nixpkgs;
     patches = [
-      # From https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable
       # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
       (fetchpatch {
-        name = "fish: 4.0.1 -> 4.1.0-unstable";
-        url = "https://github.com/NixOS/nixpkgs/commit/5b6c05e1fb335b90a692131e325885b1e3e481c9.patch";
-        hash = "sha256-jDIV3Y6ThblKD7CxvBX9bOdav3+Nkm6ymz2UayjnwqQ=";
+        name = "fish: 4.0.2 -> 4.1.0-unstable";
+        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
+        hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
       })
       (fetchpatch {
         name = "cloudflare-dyndns: 5.0 -> 5.3";
-        url = "https://github.com/NixOS/nixpkgs/pull/394352.patch";
+        url = "https://github.com/NixOS/nixpkgs/commit/24f9910708d0d38c0e0cd9cc863bde4149b48fb6.patch";
         hash = "sha256-D00nFseHun4J+eopACFPxtrP0s+94Q5SbcuRkKPrWIw=";
       })
       (fetchpatch {
         name = "postsrsd: 1.12 -> 2.0.10 + corresponding service changes";
         url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
-        hash = "sha256-HKbcagytkr3iKL4T+eod/v1Ns2fD27DgKMRby6PWWvk=";
+        hash = "sha256-ZKzzqBI4m3lK/mxJEorrCUEFHJXVUjefD5o0P7Q752Y=";
       })
       (fetchpatch {
-        name = "nixos/restic-rest-server Fixed htpasswd-path when null.";
-        url = "https://github.com/NixOS/nixpkgs/commit/b539e4848f5695992ea0963f4640b245d5b598d9.patch";
-        hash = "sha256-nOSDGRJien4Ahz6RN3XE5Xe4VZBa5lUG9o12Shc/q8w=";
+        name = "services(cloudflare-dyndns): use new `CLOUDFLARE_API_TOKEN_FILE` setting";
+        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:use-new-cloudflare-dyndns-option.patch";
+        hash = "sha256-XjrjEqkTxc+HPZZNtacNkPrbAhd+DNVo3HPBLzHgxVs=";
       })
     ];
   };
