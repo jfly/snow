@@ -30,7 +30,7 @@
       key = "[d";
       action = lib.nixvim.mkRaw ''
         function()
-          vim.diagnostic.goto_prev({ float = false })
+          vim.diagnostic.jump({ count = -1, float = false })
         end
       '';
     }
@@ -38,7 +38,7 @@
       key = "]d";
       action = lib.nixvim.mkRaw ''
         function()
-          vim.diagnostic.goto_next({ float = false })
+          vim.diagnostic.jump({ count = 1, float = false })
         end
       '';
     }
@@ -67,7 +67,7 @@
   '';
 
   # Cute diagnostics signs in the gutter =)
-  diagnostics.signs = {
+  diagnostic.config.signs = {
     text = helpers.toRawKeys {
       "vim.diagnostic.severity.ERROR" = "󰅚";
       "vim.diagnostic.severity.WARN" = "󰀪";

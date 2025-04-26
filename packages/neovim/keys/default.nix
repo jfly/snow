@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -147,7 +146,7 @@ in
   snow.quickfix.toggle_key = "<leader>q";
 
   # Pop up the diagnostics window automatically when jumping.
-  diagnostics.jump.float = true;
+  diagnostic.config.jump.float = true;
 
   plugins.lsp.keymaps = {
     # `vim.diagnostic.<action>` mappings.
@@ -170,19 +169,6 @@ in
         # in normal *and* visual mode.
         key = "<leader>f";
         action = mkRaw "vim.lsp.buf.code_action";
-      }
-      # `neovim` no longer has a mechanism for configuring the borders of the
-      # hover window. Instead, you are supposed to call `vim.lsp.buf.hover`
-      # yourself [0]. [0]:
-      # https://github.com/neovim/neovim/pull/30935#issuecomment-2449897286
-      {
-        key = "K";
-        mode = "n";
-        action = mkRaw ''
-          function()
-            vim.lsp.buf.hover({ border = '${config.diagnostics.float.border}' });
-          end
-        '';
       }
     ];
   };
