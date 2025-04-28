@@ -25,11 +25,11 @@ let
       (fetchpatch {
         name = "postsrsd: 1.12 -> 2.0.10 + corresponding service changes";
         url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
-        hash = "sha256-ZKzzqBI4m3lK/mxJEorrCUEFHJXVUjefD5o0P7Q752Y=";
+        hash = "sha256-aN3KL9n0FKyRKq9jbSTp5z4HeMDzMR0eX9hapEIOLxw=";
       })
       (fetchpatch {
         name = "services(cloudflare-dyndns): use new `CLOUDFLARE_API_TOKEN_FILE` setting";
-        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:use-new-cloudflare-dyndns-option.patch";
+        url = "https://github.com/NixOS/nixpkgs/commit/ae0f2bc1a3935666c03cb5dda8fb52858bdc4ace.patch";
         hash = "sha256-XjrjEqkTxc+HPZZNtacNkPrbAhd+DNVo3HPBLzHgxVs=";
       })
     ];

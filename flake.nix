@@ -22,7 +22,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.url = "github:nix-community/nix-index-database";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
     on-air.inputs.nixpkgs.follows = "nixpkgs";

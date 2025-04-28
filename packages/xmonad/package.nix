@@ -8,8 +8,7 @@ let
     haskellPkgs.xmonad-contrib
   ];
   xmonadEnv = haskellPkgs.ghcWithPackages (p: xmonadAndPackages);
-  xmonadHs = pkgs.substituteAll {
-    src = ./xmonad.hs;
+  xmonadHs = pkgs.replaceVars ./xmonad.hs {
     inherit (pkgs)
       libnotify
       dunst
@@ -20,7 +19,6 @@ let
       jbright
       jscrot
       jvol
-      setbg
       ;
   };
   configured = pkgs.writers.writeHaskellBin "xmonad" {

@@ -100,7 +100,7 @@ in
       };
 
       # Enable ssh for non-roaming machines.
-      services.openssh.enable = lib.mkDefault config.networking.domain != null;
+      services.openssh.enable = lib.mkDefault (config.networking.domain != null);
 
       users.users.rachel = {
         isNormalUser = true;

@@ -1,5 +1,5 @@
 {
-  substituteAll,
+  replaceVars,
   dunst,
   dmenu,
   makeWrapper,
@@ -8,8 +8,7 @@
 }:
 
 let
-  config = substituteAll {
-    src = ./dunstrc;
+  config = replaceVars ./dunstrc {
     inherit dmenu;
     xdg_utils = xdg-utils;
   };
