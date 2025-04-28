@@ -68,6 +68,7 @@ class MiscK8sHttpsProxies:
                 "alerts",
                 "syncthing",
                 "grafana",
+                "yt2",  # <<< TODO: yt
             ],
         }
         for access, services in fflewddur_services.items():

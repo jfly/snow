@@ -16,6 +16,7 @@
     ./grafana.nix
     ./healthcheck.nix
     ./immich.nix
+    ./invidious.nix
     ./remote-desktop.nix
   ];
 
