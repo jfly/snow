@@ -170,7 +170,7 @@ def conf(hostname: str, split_ip: bool, split_dns: bool, split_all: bool):
         split_ip = True
         split_dns = True
 
-    # Unfortunately, Sonic/AT&T doesn't give us a stable the GUA IPv6 prefix.
+    # Unfortunately, Sonic/AT&T doesn't give us a stable GUA IPv6 prefix.
     # See <https://forums.sonic.net/viewtopic.php?t=18132> for details.
     # What's funny is that right now we don't really need stable IP prefixes
     # (because we're not hosting any IPv6 services... yet).
