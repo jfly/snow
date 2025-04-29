@@ -52,10 +52,14 @@
   extraConfigLuaPre = ''
     vim.diagnostic.handlers.qflist = {
       show = function(_, _, _, opts)
-        -- Generally don't want it to open on every update
+        -- Generally don't want it to open on every update.
         opts.qflist.open = opts.qflist.open or false
         vim.diagnostic.setqflist(opts.qflist)
-      end
+      end,
+      hide = function(namespace, bufnr)
+        local opts = vim.tbl_extend("force", vim.diagnostic.config().qflist, { open = false })
+        vim.diagnostic.setqflist(opts)
+      end,
     }
 
     vim.diagnostic.config({

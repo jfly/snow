@@ -13,7 +13,33 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-        # Yay, nothing right now!
+        (pkgs.fetchpatch {
+          name = "fix(trust): better support for trusting directories";
+          url = "https://github.com/neovim/neovim/pull/33617.patch";
+          hash = "sha256-JS7fVZhDVcNmVacwZ+aWSAC6i7LAmNmwaVbB3ooSCJ8=";
+        })
+        (pkgs.fetchpatch {
+          name = "Start and stop LSPs as necessary during `vim.lsp.enable`";
+          url = "https://github.com/neovim/neovim/pull/33702.patch";
+          hash = "sha256-zKzNdg5eWPH8++1Ez4ELZafBcnSYLjJJFaaPY9iO10E=";
+        })
+        (pkgs.fetchpatch {
+          name = "feat(lsp): add a `vim.lsp.is_enabled`";
+          url = "https://github.com/neovim/neovim/pull/33703.patch";
+          hash = "sha256-QyJ3nthQIedCQJTWHoD6SZDR0FXzQpgRBGr2ZsHHxII=";
+        })
+        (pkgs.fetchpatch {
+          name = "feat(lsp): automatically stop LSP clients when filetype changes";
+          url = "https://github.com/neovim/neovim/pull/33707.patch";
+          hash = "sha256-ElOK4esm6sJZXksxX4L3AzUegsEio+AR0TCBXZryxaM=";
+        })
+        # TODO: send in a PR for this after PR33707 (above) lands.
+        # https://github.com/jfly/neovim/tree/diagnostics-race-while-detaching
+        (pkgs.fetchpatch {
+          name = "fix(lsp): ignore diagnostics from a LSP we're detached from";
+          url = "https://github.com/neovim/neovim/commit/d42ee194a3d249ac90cb5548fa41281bbe9eab82.patch";
+          hash = "sha256-rYLZk4HXD0FhuPNA22WER1g+yTYcfyRU/uX4t3SIj3s=";
+        })
       ];
     });
     _module.args.flake' = flake';
