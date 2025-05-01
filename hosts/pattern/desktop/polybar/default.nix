@@ -4,9 +4,6 @@ let
   polybar = pkgs.polybar.override {
     mpdSupport = true;
   };
-  polybarConfig = pkgs.substituteAll {
-    src = ./polybar-config.ini;
-  };
 in
 {
   systemd.user.services.polybar = {
@@ -14,7 +11,7 @@ in
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
     serviceConfig = {
-      ExecStart = "${polybar}/bin/polybar --config=${polybarConfig}";
+      ExecStart = "${polybar}/bin/polybar --config=${./polybar-config.ini}";
     };
   };
 }

@@ -58,6 +58,16 @@ in
         url = "https://github.com/nvimtools/none-ls.nvim/pull/272.patch";
         hash = "sha256-lvxffTBIVVs14OBi2zKDd/aSwGrpPgQkxqM0TPU5A6U=";
       })
+      (pkgs.fetchpatch {
+        name = "fix (client.lua): fixes issue";
+        url = "https://github.com/nvimtools/none-ls.nvim/commit/3ac8b7b6d6177f31e425aa5aa3c6f07d4b0e788b.patch";
+        hash = "sha256-sac+h6g3itqbQ95WJoenIysa2/3sOxPsGzV0T9GBPe0=";
+      })
+      (pkgs.fetchpatch {
+        name = "chore: rework nix_flake_fmt to use the new nix formatter subcommand";
+        url = "https://github.com/nvimtools/none-ls.nvim/pull/279.diff";
+        hash = "sha256-zZ/zailZY8l9xkxQlM67Tuog9RGoE7sTiCAq63kYb7w=";
+      })
     ];
   });
 }

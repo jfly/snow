@@ -14,16 +14,6 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
         (pkgs.fetchpatch {
-          name = "fix(trust): better support for trusting directories";
-          url = "https://github.com/neovim/neovim/pull/33617.patch";
-          hash = "sha256-JS7fVZhDVcNmVacwZ+aWSAC6i7LAmNmwaVbB3ooSCJ8=";
-        })
-        (pkgs.fetchpatch {
-          name = "Start and stop LSPs as necessary during `vim.lsp.enable`";
-          url = "https://github.com/neovim/neovim/pull/33702.patch";
-          hash = "sha256-zKzNdg5eWPH8++1Ez4ELZafBcnSYLjJJFaaPY9iO10E=";
-        })
-        (pkgs.fetchpatch {
           name = "feat(lsp): add a `vim.lsp.is_enabled`";
           url = "https://github.com/neovim/neovim/pull/33703.patch";
           hash = "sha256-QyJ3nthQIedCQJTWHoD6SZDR0FXzQpgRBGr2ZsHHxII=";
@@ -50,9 +40,10 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
     imports = (
       if full then
         [
-          ./keys
+          ./keys.nix
           ./numbers.nix
           ./formatting.nix
+          ./format-on-save.nix
           ./syntax.nix
           ./colorscheme.nix
           ./search.nix

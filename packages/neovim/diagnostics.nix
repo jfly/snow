@@ -71,7 +71,7 @@
   '';
 
   # Cute diagnostics signs in the gutter =)
-  diagnostic.config.signs = {
+  diagnostic.settings.signs = {
     text = helpers.toRawKeys {
       "vim.diagnostic.severity.ERROR" = "󰅚";
       "vim.diagnostic.severity.WARN" = "󰀪";

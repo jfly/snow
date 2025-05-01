@@ -10,10 +10,6 @@ in
 {
   plugins.which-key.enable = true;
 
-  imports = [
-    ./format-on-save.nix
-  ];
-
   globals.mapleader = " ";
 
   # Disable mouse (neovim enables it by default).
@@ -146,7 +142,7 @@ in
   snow.quickfix.toggle_key = "<leader>q";
 
   # Pop up the diagnostics window automatically when jumping.
-  diagnostic.config.jump.float = true;
+  diagnostic.settings.jump.float = true;
 
   plugins.lsp.keymaps = {
     # `vim.diagnostic.<action>` mappings.

@@ -17,21 +17,6 @@ let
         url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
         hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
       })
-      (fetchpatch {
-        name = "cloudflare-dyndns: 5.0 -> 5.3";
-        url = "https://github.com/NixOS/nixpkgs/commit/24f9910708d0d38c0e0cd9cc863bde4149b48fb6.patch";
-        hash = "sha256-D00nFseHun4J+eopACFPxtrP0s+94Q5SbcuRkKPrWIw=";
-      })
-      (fetchpatch {
-        name = "postsrsd: 1.12 -> 2.0.10 + corresponding service changes";
-        url = "https://github.com/NixOS/nixpkgs/pull/397316.patch";
-        hash = "sha256-aN3KL9n0FKyRKq9jbSTp5z4HeMDzMR0eX9hapEIOLxw=";
-      })
-      (fetchpatch {
-        name = "services(cloudflare-dyndns): use new `CLOUDFLARE_API_TOKEN_FILE` setting";
-        url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:use-new-cloudflare-dyndns-option.patch";
-        hash = "sha256-XjrjEqkTxc+HPZZNtacNkPrbAhd+DNVo3HPBLzHgxVs=";
-      })
     ];
   };
 in
