@@ -68,6 +68,11 @@ in
         url = "https://github.com/nvimtools/none-ls.nvim/pull/279.diff";
         hash = "sha256-zZ/zailZY8l9xkxQlM67Tuog9RGoE7sTiCAq63kYb7w=";
       })
+      (pkgs.fetchpatch {
+        name = "fix(nix_flake_fmt): ask the user if the project is trusted";
+        url = "https://github.com/nvimtools/none-ls.nvim/pull/280.diff";
+        hash = "sha256-4IhU31f9ROAUo3guspJXXHRGqMzqZ0uCaLp0gaTyIQY=";
+      })
     ];
   });
 }
