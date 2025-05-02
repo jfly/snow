@@ -13,4 +13,7 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+
+  # Useful tool for file deduplication.
+  environment.systemPackages = [ pkgs.czkawka-full ];
 }
