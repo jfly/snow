@@ -65,13 +65,13 @@ in
       })
       (pkgs.fetchpatch {
         name = "chore: rework nix_flake_fmt to use the new nix formatter subcommand";
-        url = "https://github.com/nvimtools/none-ls.nvim/pull/279.diff";
+        url = "https://github.com/nvimtools/none-ls.nvim/commit/6ff3ab9c6b333edcc89f25a3b9332fbdb8543fa9.patch";
         hash = "sha256-zZ/zailZY8l9xkxQlM67Tuog9RGoE7sTiCAq63kYb7w=";
       })
       (pkgs.fetchpatch {
         name = "fix(nix_flake_fmt): ask the user if the project is trusted";
         url = "https://github.com/nvimtools/none-ls.nvim/pull/280.diff";
-        hash = "sha256-4IhU31f9ROAUo3guspJXXHRGqMzqZ0uCaLp0gaTyIQY=";
+        hash = "sha256-HkvIM4HdOzOJtC5lzvb275LSql5I0T+DWTIaJ8v/Qpg=";
       })
     ];
   });

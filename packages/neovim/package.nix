@@ -15,8 +15,8 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
         (pkgs.fetchpatch {
           name = "feat(lsp): add a `vim.lsp.is_enabled`";
-          url = "https://github.com/neovim/neovim/pull/33703.patch";
-          hash = "sha256-QyJ3nthQIedCQJTWHoD6SZDR0FXzQpgRBGr2ZsHHxII=";
+          url = "https://github.com/neovim/neovim/commit/03d378fda68fc5942660707cdd2314c0e12fb0a0.patch";
+          hash = "sha256-0iwvmAgPXBoduiOKI2i5GnFr4NjY7T9eJSm+jvjtdoM=";
         })
         (pkgs.fetchpatch {
           name = "feat(lsp): automatically stop LSP clients when filetype changes";
