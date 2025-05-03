@@ -6,17 +6,11 @@
   ### GPU
   # Intel graphics
   # Enable hardware accelerated video playback
-  # (copied from https://nixos.wiki/wiki/Accelerated_Video_Playback)
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
+  # https://wiki.nixos.org/wiki/Accelerated_Video_Playback
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-      vaapiVdpau
-      libvdpau-va-gl
+      intel-media-driver # For Broadwell (2014) or newer processors. LIBVA_DRIVER_NAME=iHD
     ];
   };
   # Disabling PSR as a workaround for lag issues.

@@ -296,7 +296,16 @@ in
     qutebrowser
     (pkgs.symlinkJoin {
       name = "chromium";
-      paths = [ chromium ];
+      paths = [
+        (chromium.override {
+          commandLineArgs = [
+            # https://wiki.nixos.org/wiki/Chromium#Accelerated_video_playback
+            "--enable-features=AcceleratedVideoEncoder"
+            "--ignore-gpu-blocklist"
+            "--enable-zero-copy"
+          ];
+        })
+      ];
       buildInputs = [ makeWrapper ];
       # Adding these as command line flags doesn't seem to work. Perhaps
       # because we don't have this patch?
