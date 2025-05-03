@@ -52,7 +52,6 @@ in
 
       # Create and set a custom GTK theme.
       ".themes" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/themes";
-      ".config/gtk-3.0" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/gtk-3.0";
 
       # Secrets
       ".android/adbkey" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey";
@@ -90,6 +89,30 @@ in
       '';
     };
 
+  gtk = {
+    enable = true;
+    gtk3 = {
+      bookmarks = [
+        "file:///home/jeremy/tmp"
+        "file:///home/jeremy/Downloads"
+        "file:///home/jeremy/scans"
+        "file:///home/jeremy/sync/jfly/screenshots"
+        "file:///home/jeremy/sync"
+      ];
+      extraCss = ''
+        * {
+            /*
+             * Tell applications that they should render symbolic tray icons rather than regular icons.
+             * TODO: can we scope this to polybar somehow? Maybe we can actually make
+             *       this a polybar setting?
+             * https://mail.gnome.org/archives/gtk-devel-list/2014-May/msg00020.html
+             */
+            -gtk-icon-style: symbolic;
+        }
+      '';
+    };
+  };
+
   dconf.settings = {
     # Note: mcg defaults to connecting to localhost:6600 over ipv6,
     # which doesn't work. Changing the hostname to 127.0.0.1 works
@@ -98,6 +121,10 @@ in
     # pattern/audio.nix, where mpc and mcg are installed.
     "xyz/suruatoel/mcg" = {
       host = "127.0.0.1";
+    };
+
+    "org/gnome/desktop/interface" = {
+      "gtk-key-theme" = "Emacs";
     };
   };
 }
