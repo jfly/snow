@@ -7,11 +7,7 @@
 
 {
   location.provider = "geoclue2";
-  services.geoclue2 = {
-    enable = true;
-    # Workaround for <https://github.com/NixOS/nixpkgs/issues/321121>.
-    geoProviderUrl = "https://beacondb.net/v1/geolocate";
-  };
+  services.geoclue2.enable = true;
 
   # Keep the system timezone in sync as we travel the world. Needs Geoclu in
   # order to know where we are on Earth.

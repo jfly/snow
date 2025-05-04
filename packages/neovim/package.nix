@@ -13,16 +13,6 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-        (pkgs.fetchpatch {
-          name = "feat(lsp): add a `vim.lsp.is_enabled`";
-          url = "https://github.com/neovim/neovim/commit/03d378fda68fc5942660707cdd2314c0e12fb0a0.patch";
-          hash = "sha256-0iwvmAgPXBoduiOKI2i5GnFr4NjY7T9eJSm+jvjtdoM=";
-        })
-        (pkgs.fetchpatch {
-          name = "feat(lsp): automatically stop LSP clients when filetype changes";
-          url = "https://github.com/neovim/neovim/pull/33707.patch";
-          hash = "sha256-ElOK4esm6sJZXksxX4L3AzUegsEio+AR0TCBXZryxaM=";
-        })
         # TODO: send in a PR for this after PR33707 (above) lands.
         # https://github.com/jfly/neovim/tree/diagnostics-race-while-detaching
         (pkgs.fetchpatch {
