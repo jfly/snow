@@ -197,9 +197,9 @@ in
       uinput = "${pkgs.interception-tools}/bin/uinput";
       caps2esc = "${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc";
       space2meta = "${flake'.packages.space2meta}/bin/space2meta";
+      # TODO: figure out key drop issues
+      # space2meta-speedcubing = "${flake'.packages.space2meta-speedcubing}/bin/space2meta";
     in
-    # TODO: figure out key drop issues
-    # space2meta-speedcubing = "${flake'.packages.space2meta-speedcubing}/bin/space2meta";
     {
       enable = true;
       # Note: stringified key names are found here: https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
