@@ -144,28 +144,34 @@ in
   # Pop up the diagnostics window automatically when jumping.
   diagnostic.settings.jump.float = true;
 
-  plugins.lsp.keymaps = {
-    # `vim.diagnostic.<action>` mappings.
-    diagnostic = {
-      "<leader>e" = "open_float";
-    };
-
-    # `vim.lsb.buf.<action>` mappings.
-    lspBuf = {
-      "gd" = "definition";
-      "gD" = "references";
-      "gt" = "type_definition";
-      "gi" = "implementation";
-      "<leader>rn" = "rename";
-    };
-
-    extra = [
-      {
-        # This is down here rather than up in `lsbBuf` because this should run
-        # in normal *and* visual mode.
-        key = "<leader>f";
-        action = mkRaw "vim.lsp.buf.code_action";
-      }
-    ];
-  };
+  lsp.keymaps = [
+    {
+      key = "<leader>e";
+      action = mkRaw "vim.diagnostic.open_float";
+    }
+    {
+      key = "gd";
+      lspBufAction = "definition";
+    }
+    {
+      key = "gD";
+      lspBufAction = "references";
+    }
+    {
+      key = "gt";
+      lspBufAction = "type_definition";
+    }
+    {
+      key = "gi";
+      lspBufAction = "implementation";
+    }
+    {
+      key = "<leader>rn";
+      lspBufAction = "rename";
+    }
+    {
+      key = "<leader>f";
+      action = mkRaw "vim.lsp.buf.code_action";
+    }
+  ];
 }

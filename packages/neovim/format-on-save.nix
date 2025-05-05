@@ -48,8 +48,9 @@ in
   # plugins.none-ls.settings.debug = true;
   # extraConfigLuaPre = ''
   #   vim.opt.rtp:prepend("/home/jeremy/src/github.com/nvimtools/none-ls.nvim")
+  #   vim.opt.rtp:prepend("/home/jeremy/src/github.com/lukas-reineke/lsp-format.nvim")
   # '';
-  plugins.none-ls.settings.enableLspFormat = true;
+  plugins.none-ls.enableLspFormat = true;
   plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
   plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [

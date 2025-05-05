@@ -13,7 +13,7 @@
       '';
   };
 
-  plugins.lsp.keymaps.extra = [
+  lsp.keymaps = [
     {
       key = "<leader>l";
       action = lib.nixvim.mkRaw ''

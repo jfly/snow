@@ -9,7 +9,7 @@
 let
   inherit (lib.options) mkOption;
 
-  cfg = config.plugins.lsp.diagnostic-quirks;
+  cfg = config.plugins.lsp-diagnostic-quirks;
 
   lsp-diagnostics-quirks = pkgs.vimUtils.buildVimPlugin {
     pname = "lsp-diagnostic-quirks.nvim";
@@ -24,7 +24,7 @@ let
 in
 {
   options = {
-    plugins.lsp.diagnostic-quirks.enable = mkOption {
+    plugins.lsp-diagnostic-quirks.enable = mkOption {
       description = "Enable workarounds for LSP diagnostic quirks";
       type = lib.types.bool;
       default = false;

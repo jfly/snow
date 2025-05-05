@@ -8,10 +8,10 @@ let
   inherit (lib.nixvim) mkRaw;
 in
 {
-  plugins.lsp.servers.harper_ls.enable = true;
+  lsp.servers.harper_ls.enable = true;
 
   # Use our patched version of harper-ls. See `packages/harper/package.nix` for details.
-  plugins.lsp.servers.harper_ls.package = flake'.packages.harper;
+  lsp.servers.harper_ls.package = flake'.packages.harper;
 
   extraConfigLuaPre = ''
     local snow_lsp = {}

@@ -13,8 +13,7 @@ inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-        # TODO: send in a PR for this after PR33707 (above) lands.
-        # https://github.com/jfly/neovim/tree/diagnostics-race-while-detaching
+        # This is a workaround for https://github.com/neovim/neovim/issues/33864
         (pkgs.fetchpatch {
           name = "fix(lsp): ignore diagnostics from a LSP we're detached from";
           url = "https://github.com/neovim/neovim/commit/d42ee194a3d249ac90cb5548fa41281bbe9eab82.patch";

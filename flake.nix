@@ -39,11 +39,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     nixvim = {
-      # I'm using a fork of nixvim with support for neovim's native `vim.lsp`
-      # API. See
-      # https://github.com/nix-community/nixvim/pull/3204#issuecomment-2849356488
-      # nixvim.url = "github:nix-community/nixvim";
-      url = "github:jfly/nixvim/use-native-vim-lsp-api";
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
