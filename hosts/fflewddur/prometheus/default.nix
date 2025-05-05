@@ -7,8 +7,8 @@
     # `nixos-modules/monitoring/default.nix`.
     ./scrapers/up.nix
     ./scrapers/node.nix
-    # Blackbox is a bit interesting: we run the exporter (as well as the
-    # corresponding scraper) on just this node.
+    # Blackbox is unique: we run the exporter and the corresponding scraper on
+    # only this node.
     ./blackbox.nix
   ];
 

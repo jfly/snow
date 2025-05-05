@@ -25,51 +25,55 @@ let
         }
         {
           target_label = "__address__";
-          # <<< replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
-          replacement = "mail.playground.jflei.com:${toString config.services.prometheus.exporters.blackbox.port}";
+          replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
         }
       ];
     };
 
-  mkDnsSdProbe = module: dns_sd_config: {
-    job_name = "blackbox-${module}";
-    metrics_path = "/probe";
-    params = {
-      module = [ module ];
-    };
-    dns_sd_configs = [
-      dns_sd_config
-    ];
-    relabel_configs = [
-      {
-        source_labels = [ "__address__" ];
-        target_label = "__param_target";
-      }
-      {
-        source_labels = [ "__address__" ];
-        target_label = "host";
-      }
-      {
-        source_labels = [ "__meta_dns_name" ];
-        target_label = "instance";
-      }
-      {
-        target_label = "__address__";
-        # <<< replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
-        replacement = "mail.playground.jflei.com:${toString config.services.prometheus.exporters.blackbox.port}";
-      }
-    ];
-  };
+
+  # See note below for why we currently cannot scrape our mailserver.
+  # mkDnsSdProbe = module: dns_sd_config: {
+  #   job_name = "blackbox-${module}";
+  #   metrics_path = "/probe";
+  #   params = {
+  #     module = [ module ];
+  #   };
+  #   dns_sd_configs = [
+  #     dns_sd_config
+  #   ];
+  #   relabel_configs = [
+  #     {
+  #       source_labels = [ "__address__" ];
+  #       target_label = "__param_target";
+  #     }
+  #     {
+  #       source_labels = [ "__address__" ];
+  #       target_label = "host";
+  #     }
+  #     {
+  #       source_labels = [ "__meta_dns_name" ];
+  #       target_label = "instance";
+  #     }
+  #     {
+  #       target_label = "__address__";
+  #       replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
+  #     }
+  #   ];
+  # };
 in
 {
   services.prometheus = {
     exporters.blackbox = {
       enable = true;
-      # <<< listenAddress = "127.0.0.1";
-      listenAddress = "0.0.0.0"; # <<<
-      openFirewall = true; # <<<
+      listenAddress = "127.0.0.1";
       configFile = pkgs.writeText "probes.yml" (
         builtins.toJSON {
+          modules.https_success = {
+            prober = "http";
+            tcp.tls = true;
+            http.headers.User-Agent = "blackbox-exporter";
+          };
+
           # From https://github.com/prometheus/blackbox_exporter/blob/53e78c2b3535ecedfd072327885eeba2e9e51ea2/example.yml#L120-L133
           modules.smtp_starttls = {
             prober = "tcp";
@@ -93,22 +97,63 @@ in
     };
 
     scrapeConfigs = [
-      # TODO: remove this static probe once `umbriel` is our MX record, and
-      # ImprovMX is out of the picture.
-      # https://github.com/NixOS/infra/issues/485
+      # This probe doesn't work because our home internet doesn't have
+      # permission to talk to port 25 on the internet :cry:
+      # I intend to solve this problem by putting all our nodes on an overlay
+      # network.
+      # (mkDnsSdProbe "smtp_starttls" {
+      #   names = [ "playground.jflei.com" ];
+      #   type = "MX";
+      #   port = 25;
+      # })
       (mkStaticProbe {
-        module = "smtp_starttls";
-        job_suffix = "_umbriel";
-        targets = [ "umbriel.nixos.org:25" ];
-      })
-      (mkDnsSdProbe "smtp_starttls" {
-        names = [
-          "playground.jflei.com"
-          "nixos.org"
+        module = "https_success";
+        targets = [
+          "https://ospi.snow.jflei.com"
         ];
-        type = "MX";
-        port = 25;
       })
+    ];
+
+    ruleFiles = [
+      (pkgs.writeText "blackbox-exporter.rules" (
+        builtins.toJSON {
+          groups = [
+            {
+              name = "blackbox";
+              rules = [
+                {
+                  alert = "CertificateExpiry";
+                  expr = ''
+                    probe_ssl_earliest_cert_expiry - time() < 86400 * 14
+                  '';
+                  for = "15m";
+                  labels.severity = "warning";
+                  annotations.summary = "Certificate for {{ $labels.instance }} is expiring soon.";
+                }
+                {
+                  alert = "HttpUnreachable";
+                  expr = ''
+                    probe_success{job="blackbox-https_success"} == 0
+                  '';
+                  for = "15m";
+                  labels.severity = "warning";
+                  annotations.summary = "Endpoint {{ $labels.instance }} is unreachable";
+                }
+                # See note above about not being able to scrape our mailserver.
+                # {
+                #   alert = "MxUnreachable";
+                #   expr = ''
+                #     probe_success{job=~"blackbox-smtp_starttls.*"} == 0
+                #   '';
+                #   for = "15m";
+                #   labels.severity = "warning";
+                #   annotations.summary = "Mail server {{ $labels.instance }} is unreachable";
+                # }
+              ];
+            }
+          ];
+        }
+      ))
     ];
   };
 }
