@@ -88,6 +88,8 @@ in
 
   programs.nm-applet.enable = true;
 
+  services.udisks2.enable = true;
+
   services.xserver.displayManager.importedVariables = [
     "PATH"
     "BROWSER"
