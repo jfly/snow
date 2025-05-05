@@ -87,7 +87,7 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     set -l line1 "$statusb_color╭─$normal$login$cwd$date$(fish_vcs_prompt)$job_info$duration"
-    set -l line2 "$statusb_color╰─$normal$prompt_status$suffix "
+    set -l line2 "$statusb_color╰─$normal$prompt_status$statusb_color$suffix$normal "
 
     echo $line1
     echo -n $line2
