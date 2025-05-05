@@ -932,15 +932,16 @@
         "nuschtosSearch": "nuschtosSearch"
       },
       "locked": {
-        "lastModified": 1746360866,
-        "narHash": "sha256-FYpcHko595nQ+d4KpwTj3o1cJUn912xaIxRb8rntz7I=",
-        "owner": "nix-community",
+        "lastModified": 1746383976,
+        "narHash": "sha256-z0JEA8Maoxi/Av0ap0kDM0kiB+uOnt3ONHHFllyLJj4=",
+        "owner": "jfly",
         "repo": "nixvim",
-        "rev": "f7f2dd042f28d235f7bf16cb31dbaee8f35159ca",
+        "rev": "13a82d72fe4ba02bb92a8b8c699f406ea0dbccd1",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "jfly",
+        "ref": "use-native-vim-lsp-api",
         "repo": "nixvim",
         "type": "github"
       }
