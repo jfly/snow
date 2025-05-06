@@ -19,3 +19,6 @@ abbr --add gcp 'git cherry-pick'
 abbr --add gcpc 'git cherry-pick --continue'
 
 bind alt-c pick_commits
+
+# GitHub specific
+abbr --add ghf 'gh repo set-default && gh repo fork --remote'
