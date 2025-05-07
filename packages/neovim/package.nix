@@ -1,13 +1,11 @@
 {
-  inputs,
   inputs',
   flake',
-  system,
   pkgs,
   full ? true,
 }:
 
-inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
+inputs'.nixvim.legacyPackages.makeNixvimWithModule {
   inherit pkgs;
 
   module = {
