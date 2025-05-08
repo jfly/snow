@@ -24,7 +24,7 @@
       "jeremy@playground.jflei.com".hashedPasswordFile = config.age.secrets.mail-jeremy.path;
     };
 
-    dkimPrivateKeyFiles = {
+    dkimDomainPrivateKeyFiles = {
       "playground.jflei.com" = config.age.secrets."playground.jflei.com.mail.key".path;
     };
   };
@@ -73,8 +73,8 @@
   };
 
   age.secrets."playground.jflei.com.mail.key" = {
-    owner = config.services.opendkim.user;
-    group = config.services.opendkim.group;
+    owner = config.services.rspamd.user;
+    group = config.services.rspamd.group;
     rooterEncrypted = ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPTTE4UEVWMk8vQnhLMW9y
