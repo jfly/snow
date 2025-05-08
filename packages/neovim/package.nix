@@ -26,9 +26,9 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
     vimAlias = true;
 
     imports =
-      [ ./clipboard.nix ]
-      ++ lib.optionals full [
+      [
         ./keys.nix
+        ./clipboard.nix
         ./numbers.nix
         ./formatting.nix
         ./format-on-save.nix
@@ -41,13 +41,15 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
         ./hacking.nix
         ./notetaking.nix
         ./markdown.nix
-        ./lsp.nix
         ./quickfix.nix
         ./diagnostics.nix
         ./borders.nix
         ./spell.nix
         ./notifications.nix
         ./completion
+      ]
+      ++ lib.optionals full [
+        ./lsp.nix
       ];
   };
 }

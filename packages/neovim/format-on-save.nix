@@ -5,6 +5,7 @@ let
 in
 {
   # Format on save.
+  plugins.lspconfig.enable = true; # lsp-format depends on lspconfig
   plugins.lsp-format.enable = true;
   plugins.lsp-format.package = pkgs.vimPlugins.lsp-format-nvim.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [
