@@ -77,19 +77,6 @@ in
         end
       '';
     }
-    # Easier copying/pasting with system clipboard.
-    {
-      key = "<leader>y";
-      action = ''"+y'';
-    }
-    {
-      key = "<leader>p";
-      action = ''"+p'';
-    }
-    {
-      key = "<leader>P";
-      action = ''"+P'';
-    }
     # Select whole buffer.
     {
       key = "<leader>a";

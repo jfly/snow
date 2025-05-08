@@ -2,6 +2,7 @@
   inputs',
   flake',
   pkgs,
+  lib,
   full ? true,
 }:
 
@@ -24,32 +25,29 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
     viAlias = true;
     vimAlias = true;
 
-    imports = (
-      if full then
-        [
-          ./keys.nix
-          ./numbers.nix
-          ./formatting.nix
-          ./format-on-save.nix
-          ./syntax.nix
-          ./colorscheme.nix
-          ./search.nix
-          ./git.nix
-          ./vimtest.nix
-          ./lightline.nix
-          ./hacking.nix
-          ./notetaking.nix
-          ./markdown.nix
-          ./lsp.nix
-          ./quickfix.nix
-          ./diagnostics.nix
-          ./borders.nix
-          ./spell.nix
-          ./notifications.nix
-          ./completion
-        ]
-      else
-        [ ]
-    );
+    imports =
+      [ ./clipboard.nix ]
+      ++ lib.optionals full [
+        ./keys.nix
+        ./numbers.nix
+        ./formatting.nix
+        ./format-on-save.nix
+        ./syntax.nix
+        ./colorscheme.nix
+        ./search.nix
+        ./git.nix
+        ./vimtest.nix
+        ./lightline.nix
+        ./hacking.nix
+        ./notetaking.nix
+        ./markdown.nix
+        ./lsp.nix
+        ./quickfix.nix
+        ./diagnostics.nix
+        ./borders.nix
+        ./spell.nix
+        ./notifications.nix
+        ./completion
+      ];
   };
 }
