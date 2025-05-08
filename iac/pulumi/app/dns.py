@@ -199,6 +199,13 @@ class Dns:
             "v=DKIM1; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC3gmvUhcCug9NnbXLd+9OS2UYZtS2shgnecMrTV0chvmUUNjl4I3/PRhSJHjMShEV11N+ze/Sh0xIuePp1CX0/rJ/B5soFR5c0o5ZOpZ0/IBW1wtTVrkuwrHZbgQ8k8oQ9w6OukG7Ws9LAIEkYGoQxUGMzn2qVwb9Qkt5nYV4nJQIDAQAB",
         )
 
+        # Create ARC signing key.
+        # See instructions on `hosts/fflam/mail.nix`.
+        self._jflei_com.txt(
+            f"arc-2025._domainkey.{email_domain}",
+            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwjEcQFvUWvARgXtehwv6G6lF3RDzFZOpYVXjgVdu2bckU+LM/t14ZZrRUSuSs6sCTW9/yCR+CfrZKcNIEblV+8rJ6ADf2BhF+rt40xfgt2xX8BKHfD2iPDrhzCaddizfFgAM5CWQUGjkH15lD0UNkUyi5AMAURSUqUk6x5h+xyyX8bgP6d+bxIrqaVdqgRu/N9ifUSEL82sZBRUFaqWNK20AtMuiu/GAvvYAryEvYeFXA40M5fr+G2PdvtZXhF76Jx6aR7Of62UjslAOorLC0OMhbasSYxfQ7nHAc6iwpB5ifRndIjUV2gIvaY7vCMhlKuDR6BZkx4qbWCMoyeUPswIDAQAB",
+        )
+
         # Create `DMARC` record
         self._jflei_com.txt(
             f"_dmarc.{email_domain}",

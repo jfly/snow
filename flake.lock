@@ -1214,11 +1214,11 @@
         "nixpkgs-24_11": "nixpkgs-24_11"
       },
       "locked": {
-        "lastModified": 1744616506,
-        "narHash": "sha256-d0mkd2oFgjdye9klM+sNFGyVlaBT57RhTO+Og5nSD/I=",
+        "lastModified": 1746731059,
+        "narHash": "sha256-5j+qhLKSBs1osU4Pr28o5C6L4epwdAbttASWmQD/Ur0=",
         "owner": "jflysohigh",
         "repo": "nixos-mailserver",
-        "rev": "7ca7f1f16fbaaecb413c90287b0ef061b1b33cc8",
+        "rev": "135360c48a39376f568a90981c1b13798ba49a76",
         "type": "gitlab"
       },
       "original": {
