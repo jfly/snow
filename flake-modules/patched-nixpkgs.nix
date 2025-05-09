@@ -17,6 +17,11 @@ let
         url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
         hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
       })
+      (fetchpatch {
+        name = "nixos/syncthing: define and handle encryptionPassword option";
+        url = "https://github.com/NixOS/nixpkgs/pull/383442.diff";
+        hash = "sha256-PAy3peRbZ2xK+0iZt9RRLtAkC8v1wuRVIwN4TPMkFJ4=";
+      })
     ];
   };
 in
