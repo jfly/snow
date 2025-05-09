@@ -34,6 +34,10 @@
     "hash:/etc/postfix/virtual-jfly-test"
   ];
 
+  #<<<
+  mailserver.rejectSender = [ "nixos.org" ];
+  #<<<
+
   services.postfix.mapFiles.virtual-jfly-test = pkgs.writeText "postfix-virtual-jfly" ''
     me@playground.jflei.com jfly@playground.jflei.com, jeremyfleischman+subscriber@gmail.com
   '';
