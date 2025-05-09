@@ -9,7 +9,6 @@ let
   inherit (pkgs.lib)
     flatten
     mapAttrsToList
-    warn
     ;
 
   rooter-lib = pkgs.callPackage ../lib.nix { };
@@ -30,7 +29,7 @@ let
         hostPubkey = host.config.age.rooter.hostPubkey;
       }) host.config.age.secrets
     else
-      warn "ignoring host '${hostName}' as it appears to not use agenix" [ ];
+      null;
   secretsData = flatten (mapAttrsToList hostData flake.nixosConfigurations);
   toPython =
     val:
@@ -93,6 +92,8 @@ pkgs.writers.writePython3 "agenix-rooter-generate" { } ''
       flake_root = Path(flake_root)
       secrets = ${toPython secretsData}
       for secret in secrets:
+          if secret is None:
+              continue
           rel_dest = Path(secret['relDest'])
           secret['relDest'] = rel_dest
 

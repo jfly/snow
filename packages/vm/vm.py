@@ -22,7 +22,7 @@ def find_disks(vm_dir: Path) -> list[Path]:
     return disks
 
 
-def start_vm(vm_dir: Path, iso: Path):
+def start_vm(vm_dir: Path, iso: Path | None):
     disks = sorted(find_disks(vm_dir))
 
     drive_argss: list[tuple[str, str]] = []
@@ -36,7 +36,8 @@ def start_vm(vm_dir: Path, iso: Path):
     for disk in disks:
         add_drive(file=disk, _if="ide", media="disk")
 
-    add_drive(file=iso, _if="ide", media="cdrom")
+    if iso is not None:
+        add_drive(file=iso, _if="ide", media="cdrom")
 
     os.chdir(vm_dir)
     os.execvp(
@@ -61,7 +62,7 @@ def start_vm(vm_dir: Path, iso: Path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("vm_name")
-    parser.add_argument("iso")
+    parser.add_argument("--iso")
 
     args = parser.parse_args()
     assert isinstance(args.vm_name, str)

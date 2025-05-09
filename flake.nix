@@ -17,6 +17,11 @@
       };
     };
 
+    clan-core = {
+      url = "git+https://git.clan.lol/clan/clan-core";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";

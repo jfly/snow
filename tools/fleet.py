@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
+import shlex
+import os
+from typing import Literal
 import click
 import shutil
 import tempfile
 import subprocess
 from pathlib import Path
 from textwrap import dedent
+
+MACHINES_DIR = Path("machines")
 
 HOSTS_DIR = Path("hosts")
 HELP = (HOSTS_DIR / "README.md").read_text()
@@ -24,25 +29,23 @@ def main():
 )
 @click.argument("hostname")
 def declare(hostname: str, force: bool):
-    host_dir = HOSTS_DIR / hostname
-    if host_dir.exists():
+    machine_dir = MACHINES_DIR / hostname
+    if machine_dir.exists():
         if force:
-            shutil.rmtree(host_dir)
+            shutil.rmtree(machine_dir)
         else:
             raise click.ClickException(
-                f"{host_dir} already exists. Use --force to overwrite."
+                f"{machine_dir} already exists. Use --force to overwrite."
             )
 
-    template_host_dir = HOSTS_DIR / "template"
+    template_host_dir = MACHINES_DIR / "template"
 
-    host_dir.mkdir()
-    shutil.copy(template_host_dir / "configuration.nix", host_dir / "configuration.nix")
-    shutil.copy(template_host_dir / "disko-config.nix", host_dir / "disko-config.nix")
+    shutil.copytree(template_host_dir, machine_dir)
 
     click.echo(
         dedent(
             f"""
-            Successfully generated {host_dir}. Next steps:
+            Successfully generated {machine_dir}. Next steps:
 
               - Try it out in a VM: `tools/fleet.py vm {hostname}`
               - Bootstrap a real machine: `tools/fleet.py bootstrap {hostname}`
@@ -80,22 +83,70 @@ def vm(hostname: str):
         )
 
 
-@main.command()
-@click.option("--ssh", required=True)
-@click.argument("hostname")
-def bootstrap(ssh: str, hostname: str):
+def ssh_and_run(ssh: str, ssh_port: int, command: str):
+    subprocess.run(
+        [
+            "ssh",
+            ssh,
+            "-p",
+            str(ssh_port),
+            "-t",  # Allocate TTY in case var generation prompts us for input.
+            command,
+        ],
+        check=True,
+    )
+
+
+def generate_vars(ssh: str, ssh_port: int, hostname: str):
+    print(f"Generating vars for {hostname}")
+    generate_script = (
+        subprocess.run(
+            [
+                "nix",
+                "build",
+                f".#nixosConfigurations.{hostname}.config.system.build.generate-vars",
+                "--no-link",
+                "--print-out-paths",
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            text=True,
+        ).stdout.strip()
+        + "/bin/generate-vars"
+    )
+    subprocess.run(
+        [
+            "nix",
+            "copy",
+            generate_script,
+            "--to",
+            f"ssh-ng://{ssh}",
+            # https://discourse.nixos.org/t/trusting-the-remote-store-of-my-own-machines-because-it-lacks-a-signature-by-a-trusted-key/46659/5?u=jfly
+            "--no-check-sigs",
+        ],
+        check=True,
+        env={**os.environ, "NIX_SSHOPTS": f"-p {ssh_port}"},
+    )
+    ssh_and_run(ssh=ssh, ssh_port=ssh_port, command=generate_script)
+
+
+def move_vars(ssh: str, ssh_port: int):
+    print(f"Moving vars on {ssh}:{ssh_port}")
+    ssh_and_run(
+        ssh=ssh,
+        ssh_port=ssh_port,
+        command="mkdir /mnt/etc && mv /etc/vars /mnt/etc/vars",
+    )
+
+
+NixosAnywherePhase = Literal["kexec", "disko", "install", "reboot"]
+
+
+def nixos_anywhere(ssh: str, ssh_port: int, hostname: str, phase: NixosAnywherePhase):
     host_dir = HOSTS_DIR / hostname
-
-    if not host_dir.exists():
-        raise click.ClickException(
-            "{host_dir} does not exist. Have you created it yet? See `tools/fleet declare`"
-        )
-
+    # Note: this regenerates hardware config N times.
     hardware_configuration_path = host_dir / "hardware-configuration.nix"
 
-    click.echo(
-        f"Bootstrapping {hostname}. This should create {hardware_configuration_path}."
-    )
     subprocess.run(
         [
             "nix",
@@ -107,9 +158,36 @@ def bootstrap(ssh: str, hostname: str):
             "--generate-hardware-config",
             "nixos-generate-config",
             hardware_configuration_path,
+            "--ssh-port",
+            str(ssh_port),
+            "--phases",
+            phase,
             ssh,
-        ]
+        ],
+        check=True,
     )
+
+
+@main.command()
+@click.option("--ssh", required=True)
+@click.option("-p", "--ssh-port", type=int, default=22)
+@click.argument("hostname")
+def bootstrap(ssh: str, ssh_port: int, hostname: str):
+    host_dir = HOSTS_DIR / hostname
+
+    if not host_dir.exists():
+        raise click.ClickException(
+            f"{host_dir} does not exist. Have you created it yet? See `tools/fleet declare`"
+        )
+
+    click.echo(f"Bootstrapping {hostname}.")
+
+    nixos_anywhere(ssh=ssh, ssh_port=ssh_port, hostname=hostname, phase="kexec")
+    generate_vars(ssh=ssh, ssh_port=ssh_port, hostname=hostname)
+    nixos_anywhere(ssh=ssh, ssh_port=ssh_port, hostname=hostname, phase="disko")
+    move_vars(ssh=ssh, ssh_port=ssh_port)
+    nixos_anywhere(ssh=ssh, ssh_port=ssh_port, hostname=hostname, phase="install")
+    nixos_anywhere(ssh=ssh, ssh_port=ssh_port, hostname=hostname, phase="reboot")
 
 
 if __name__ == "__main__":

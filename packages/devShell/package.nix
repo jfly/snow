@@ -1,5 +1,6 @@
 {
   inputs,
+  inputs',
   lib,
   flake,
   flake',
@@ -99,6 +100,8 @@ in
 
 pkgs.mkShell {
   nativeBuildInputs = [
+    inputs'.clan-core.packages.default
+
     pkgs.age
 
     # For building/pushing docker images

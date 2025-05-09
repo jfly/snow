@@ -12,6 +12,7 @@
     ./routers.nix
     ./nixos-modules.nix
     ./nixos-hosts.nix
+    ./clan.nix
 
     # Development
     ./formatting.nix
