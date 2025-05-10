@@ -1,4 +1,5 @@
 import pulumi
+from pathlib import Path
 import pulumi_cloudflare as cloudflare
 from .deage import deage
 
@@ -194,10 +195,11 @@ class Dns:
 
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
         # From `/var/dkim/playground.jflei.com.mail.txt` on `fflam`.
-        self._jflei_com.txt(
-            f"mail._domainkey.{email_domain}",
-            "v=DKIM1; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC3gmvUhcCug9NnbXLd+9OS2UYZtS2shgnecMrTV0chvmUUNjl4I3/PRhSJHjMShEV11N+ze/Sh0xIuePp1CX0/rJ/B5soFR5c0o5ZOpZ0/IBW1wtTVrkuwrHZbgQ8k8oQ9w6OukG7Ws9LAIEkYGoQxUGMzn2qVwb9Qkt5nYV4nJQIDAQAB",
-        )
+        selector = "mail"
+        txt_value = Path(
+            f"../../vars/per-machine/fflam/dkim-{email_domain}.{selector}/txt/value"
+        ).read_text()
+        self._jflei_com.txt(f"{selector}._domainkey.{email_domain}", txt_value)
 
         # Create `DMARC` record
         self._jflei_com.txt(

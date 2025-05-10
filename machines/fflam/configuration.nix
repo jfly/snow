@@ -4,16 +4,20 @@ let
   identities = flake.lib.identities;
 in
 {
-  networking.hostName = "fflam";
-  system.stateVersion = "24.05";
   boot.loader.grub.enable = true;
   services.openssh.enable = true;
+
+  networking.hostName = "fflam";
+  clan.core.networking = {
+    buildHost = "localhost";
+    targetHost = "jfly@fflam";
+  };
 
   imports = [
     flake.nixosModules.shared
     ./hardware-configuration.nix
     ./network.nix
-    ./disko-config.nix
+    ./disko.nix
     ./mail.nix
   ];
 
@@ -26,6 +30,4 @@ in
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [ identities.jfly ];
   };
-
-  age.rooter.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIME4wpWrY4RYMhtx+B+eFb8HPTEIEv4DfXA75DcddffS";
 }

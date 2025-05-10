@@ -18,7 +18,24 @@
     };
 
     clan-core = {
-      url = "git+https://git.clan.lol/clan/clan-core";
+      # For hacking.
+      # url = "path:/home/jeremy/src/git.clan.lol/clan/clan-core";
+
+      # Can't run generators that depend on `/bin/sh` in the vars sandbox.
+      # https://git.clan.lol/clan/clan-core/pulls/3551
+      # url = "https://git.clan.lol/jfly/clan-core/archive/bin-sh-in-sandbox.tar.gz";
+
+      # https://git.clan.lol/clan/clan-core/issues/3556
+      url = "https://git.clan.lol/jfly/clan-core/archive/local-update.tar.gz";
+
+      # TODO: switch back to upstream once the above issues are resolved.
+      # Note: we're using `https://...tar.gz` urls here instead of git as a
+      # workaround for <https://git.clan.lol/clan/clan-core/issues/3555>.
+      # url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+
+      # TODO: switch back to vanilla git once above issues are resolved.
+      # url = "git+https://git.clan.lol/clan/clan-core";
+
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
