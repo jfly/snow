@@ -14,6 +14,12 @@ let
   light-dark-ssh = writeShellApplication {
     name = "light-dark-ssh";
     text = ''
+      # If there's no DISPLAY (perhaps we're in a TTY or are sshed to this machine),
+      # just ssh, don't bother with colorschemes.
+      if [ -z "''${DISPLAY+x}" ]; then
+        exec ${lib.getExe openssh} "$@"
+      fi
+
       colorscheme set current base16-cupcake
       function finish {
           colorscheme clear current
