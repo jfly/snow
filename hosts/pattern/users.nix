@@ -1,12 +1,12 @@
 {
-  self,
+  flake,
   config,
   lib,
   ...
 }:
 
 let
-  identities = self.lib.identities;
+  identities = flake.lib.identities;
 in
 {
   options = {

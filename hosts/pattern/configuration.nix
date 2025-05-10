@@ -31,6 +31,7 @@
     ./audio.nix
     inputs.home-manager.nixosModules.home-manager
     ./home-manager.nix
+    ./sshd.nix
     ./shell
     ./desktop
     ./android.nix
