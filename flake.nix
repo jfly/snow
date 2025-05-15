@@ -21,10 +21,6 @@
       # For hacking.
       # url = "path:/home/jeremy/src/git.clan.lol/clan/clan-core";
 
-      # Can't run generators that depend on `/bin/sh` in the vars sandbox.
-      # https://git.clan.lol/clan/clan-core/pulls/3551
-      # url = "https://git.clan.lol/jfly/clan-core/archive/bin-sh-in-sandbox.tar.gz";
-
       # https://git.clan.lol/clan/clan-core/issues/3556
       url = "https://git.clan.lol/jfly/clan-core/archive/local-update.tar.gz";
 
