@@ -6,7 +6,7 @@
 	lola = log --graph --all --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	web = "!xdg-open `git ls-remote --get-url origin | sed 's_.*[/:]\\(.\\+/.\\+\\)\\.git$_https://github.com/\\1_'`"
 	x = "grep -I '<''<<'"
-	rium = ! git rebase -i --autosquash $(git my-main)
+	rium = ! git rebase -i --autosquash $(git my-main --with-remote)
 	modify-files = ! git grep -I -z --full-name -l '.' ':(exclude).gitmodules' | xargs -0 modify-files.py
 	sed = ! git grep -I -z --full-name -l '.' ':(exclude).gitmodules' | xargs -0 sed
 [user]

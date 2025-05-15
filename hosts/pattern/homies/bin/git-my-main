@@ -1,10 +1,51 @@
 #!/usr/bin/env bash
 
+help() {
+    echo "Usage: $0 [--with-remote]
+
+Example:
+
+    $ $0
+    main
+
+Example:
+
+    $ $0 --with-remote
+    upstream/main
+" >/dev/stderr
+}
+
+WITH_REMOTE=0
+for i in "$@"; do
+    case $i in
+        --with-remote)
+            WITH_REMOTE=1
+            ;;
+        --help | -h)
+            help
+            exit 0
+            ;;
+        --* | -*)
+            echo "Unknown option $i" >/dev/stderr
+            echo "" >/dev/stderr
+            exit 1
+            ;;
+        *)
+            echo "Unknown argument $i" >/dev/stderr
+            echo "" >/dev/stderr
+            exit 1
+            ;;
+    esac
+done
+
 command git rev-parse --git-dir &> /dev/null || exit 1
-for ref in refs/{remotes/{origin,upstream},heads}/{main,master,trunk}; do
-    if command git show-ref -q --verify "$ref"
-    then
-        echo "${ref##*/}"
+for ref in refs/{remotes/{upstream,origin},heads}/{main,master,trunk}; do
+    if command git show-ref -q --verify "$ref"; then
+        if [ $WITH_REMOTE == 1 ]; then
+            echo "${ref#refs/remotes/}"
+        else
+            echo "${ref##*/}"
+        fi
         exit 0
     fi
 done
