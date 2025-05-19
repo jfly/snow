@@ -56,21 +56,6 @@ in
   plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [
       (pkgs.fetchpatch {
-        name = "fix(nix_flake_fmt): handle flakes with a `formatter` package";
-        url = "https://github.com/nvimtools/none-ls.nvim/pull/272.patch";
-        hash = "sha256-lvxffTBIVVs14OBi2zKDd/aSwGrpPgQkxqM0TPU5A6U=";
-      })
-      (pkgs.fetchpatch {
-        name = "fix (client.lua): fixes issue";
-        url = "https://github.com/nvimtools/none-ls.nvim/commit/3ac8b7b6d6177f31e425aa5aa3c6f07d4b0e788b.patch";
-        hash = "sha256-sac+h6g3itqbQ95WJoenIysa2/3sOxPsGzV0T9GBPe0=";
-      })
-      (pkgs.fetchpatch {
-        name = "chore: rework nix_flake_fmt to use the new nix formatter subcommand";
-        url = "https://github.com/nvimtools/none-ls.nvim/commit/6ff3ab9c6b333edcc89f25a3b9332fbdb8543fa9.patch";
-        hash = "sha256-zZ/zailZY8l9xkxQlM67Tuog9RGoE7sTiCAq63kYb7w=";
-      })
-      (pkgs.fetchpatch {
         name = "fix(nix_flake_fmt): ask the user if the project is trusted";
         url = "https://github.com/nvimtools/none-ls.nvim/pull/280.diff";
         hash = "sha256-HkvIM4HdOzOJtC5lzvb275LSql5I0T+DWTIaJ8v/Qpg=";

@@ -18,9 +18,9 @@ let
         hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
       })
       (fetchpatch {
-        name = "nixos/syncthing: define and handle encryptionPassword option";
-        url = "https://github.com/NixOS/nixpkgs/pull/383442.diff";
-        hash = "sha256-PAy3peRbZ2xK+0iZt9RRLtAkC8v1wuRVIwN4TPMkFJ4=";
+        name = "k3s: use patched util-linuxMinimal";
+        url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
+        hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
       })
     ];
   };
