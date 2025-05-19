@@ -40,18 +40,18 @@ in
 
   home.file =
     (lib.mapAttrs (name: target: (link target)) {
-      sd = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/sd";
-      bin = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/bin";
-      ".config/git" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/git";
-      ".config/fish" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/fish";
+      sd = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/sd";
+      bin = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/bin";
+      ".config/git" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/config/git";
+      ".config/fish" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/config/fish";
       ".config/with-alacritty" =
-        flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/config/with-alacritty";
-      ".gitignore_global" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/gitignore_global";
-      ".ssh/config" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config";
-      ".ssh/config.d" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/ssh/config.d";
+        flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/config/with-alacritty";
+      ".gitignore_global" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/gitignore_global";
+      ".ssh/config" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/ssh/config";
+      ".ssh/config.d" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/ssh/config.d";
 
       # Create and set a custom GTK theme.
-      ".themes" = flake.lib.snow.absoluteRepoPath "/hosts/pattern/homies/themes";
+      ".themes" = flake.lib.snow.absoluteRepoPath "/machines/pattern/homies/themes";
 
       # Secrets
       ".android/adbkey" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey";
@@ -87,6 +87,9 @@ in
       ".zprofile".text = ''
         source $HOME/.profile
       '';
+      ".docker/config.json".text = builtins.toJSON {
+        "detachKeys" = "ctrl-^,q";
+      };
     };
 
   gtk = {

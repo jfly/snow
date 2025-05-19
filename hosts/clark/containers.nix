@@ -1,28 +1,17 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  age.secrets.container-registry-password.rooterEncrypted = ''
-    -----BEGIN AGE ENCRYPTED FILE-----
-    YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBQQVRFTUlCZWx5Q2h3eTBV
-    L1NPVzlCUkF0NXJHdGJHQ21RU241YWx6UVJVCkp3OXlqbTZPaDk2dXh4eHdrcW9z
-    TDkvakZPNWNZRmtmWjN4T0syMHZyTVEKLS0tIHRFai9mbmg1d0NCTGtud3IrSmdM
-    Mnh5R3BQanh5Z0E5SUY0dEpqZjRkQm8KCMOJ1z95tlc9BjFdqwDdKlk/fAqKMh9x
-    ctwQ/vg5pVGjmqHbuHHtRsDuFXOn+OS1uEKc0w==
-    -----END AGE ENCRYPTED FILE-----
-  '';
-
-  # Set up a kubernetes cluser with k3s
+  # Set up a kubernetes cluster with `k3s`.
   systemd.services.k3s = {
     preStart = ''
       set -euo pipefail
 
       mkdir -p /etc/snow/k3s
       echo -n "
-      configs:
-        containers.snow.jflei.com:
-          auth:
-            username: k8s
-            password: $(cat ${config.age.secrets.container-registry-password.path})
+      mirrors:
+        clark.ec:5000:
+          endpoint:
+            - 'http://clark.ec:5000'
       " > /etc/snow/k3s/registries.yaml
 
       # This config comes from https://github.com/k3s-io/k3s/discussions/2997#discussioncomment-417679
@@ -56,9 +45,16 @@
     ];
   };
 
+  # Run a docker registry (see `--private-registry` where we teach `k3s` about this registry).
+  services.dockerRegistry = {
+    enable = true;
+    listenAddress = "0.0.0.0";
+    openFirewall = true;
+  };
+
   boot = {
     kernel.sysctl = {
-      # The system seems to run out of watches and instances with k3s running.
+      # The system seems to run out of watches and instances with `k3s` running.
       # Increase the limit to something much larger than the default.
       "fs.inotify.max_user_watches" = "1048576";
       "fs.inotify.max_user_instances" = "8192";

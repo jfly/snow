@@ -8,7 +8,7 @@ update_nixos() {
         poetry lock
     )
     nix flake update
-    tools/deploy "$HOSTNAME"
+    clan machines update "$HOSTNAME"
 }
 
 fw_check() {

@@ -9,7 +9,7 @@ class Torrents:
             name="torrents",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_FAMILY,
-            image="containers.snow.jflei.com/transmission:latest",
+            image="clark.ec:5000/transmission:latest",
             port=9091,
             pod_security_context=PodSecurityContextArgs(
                 # This is similar to the PGID/PUID stuff that the linuxserver folks do:

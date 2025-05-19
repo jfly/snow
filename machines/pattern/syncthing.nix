@@ -47,7 +47,7 @@ in
             devices = [
               {
                 name = "fflewddur";
-                encryptionPasswordFile = config.age.secrets.syncthing-jfly-linux-secrets.path;
+                encryptionPasswordFile = config.clan.core.vars.generators.syncthing.files."jfly-linux-secrets".path;
               }
             ];
             path = "${syncDir}/jfly-linux-secrets";
@@ -64,19 +64,18 @@ in
     };
   };
 
-  age.secrets.syncthing-jfly-linux-secrets = {
-    rooterEncrypted = ''
-      -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaWUhYQ28wOEdMcVNPaC9Y
-      TTFCTmR3bjhNUHgwa05HaXljbVVnS3VNVTI4CjMrV2tZbENWekZlK2FjSDVjOVBz
-      MGM4OWZxb3h5b2ZsOEVuQWF1WnlVREEKLS0tIEpFREpYSk5sQ0FoMXhIZWVtMDIv
-      V3ZqNGVNUGhwOEdEQnhtZDhiNmFJbEkKAsTd1rVUPuvf+WuLtVwz76EiqDc0DQcE
-      z3FlFXEJCoPdI5VrzCi2CcIf7hDZ2h66bHfMMA==
-      -----END AGE ENCRYPTED FILE-----
+  clan.core.vars.generators.syncthing = {
+    files."jfly-linux-secrets" = {
+      mode = "0400";
+      owner = config.services.syncthing.user;
+      group = "root";
+    };
+    prompts.jfly-linux-secrets = {
+      type = "hidden";
+    };
+    script = ''
+      cp $prompts/jfly-linux-secrets $out/jfly-linux-secrets
     '';
-    mode = "400";
-    owner = config.services.syncthing.user;
-    group = "root";
   };
 
   environment.systemPackages = [

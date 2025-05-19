@@ -11,7 +11,7 @@ class SnowWeb:
         deployment = snow_deployment(
             name="snow-web",
             namespace="default",
-            image="containers.snow.jflei.com/snow-web:latest",
+            image="clark.ec:5000/snow-web:latest",
             volume_mounts=[
                 # Only expose the movies, shows, and torrents subdirectories.
                 # This works, but we might want to consider restructuring

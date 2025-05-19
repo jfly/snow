@@ -7,6 +7,6 @@ class Speedtest:
             name="speedtest",
             namespace=namespace,
             access=Access.INTERNET_UNSECURED,
-            image="containers.snow.jflei.com/speedtest-go:latest",
+            image="clark.ec:5000/speedtest-go:latest",
             port=8989,
         )

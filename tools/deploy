@@ -98,19 +98,19 @@ function push_containers() {
         # shellcheck disable=SC2016
         latest_image=$(_nix eval "$target" --raw --apply 'img: "${img.imageName}:latest"')
 
-        fq_immutable_name=docker://containers.snow.jflei.com/$immutable_image
-        fq_latest_name=docker://containers.snow.jflei.com/$latest_image
+        fq_immutable_name=docker://clark.ec:5000/$immutable_image
+        fq_latest_name=docker://clark.ec:5000/$latest_image
 
         if [ $DRY_RUN == 1 ]; then
             echo "Dry run: skipping upload of $fq_immutable_name"
         else
             # Only build and upload the image if it doesn't already exist remotely.
             if ! skopeo inspect "$fq_immutable_name" &>/dev/null; then
-                $result | gzip --fast | skopeo --insecure-policy copy docker-archive:/dev/stdin "$fq_immutable_name"
+                $result | gzip --fast | skopeo --insecure-policy copy --dest-tls-verify=false docker-archive:/dev/stdin "$fq_immutable_name"
             fi
 
             # Finally, tag it as the latest version.
-            skopeo --insecure-policy copy --preserve-digests --quiet "$fq_immutable_name" "$fq_latest_name"
+            skopeo --insecure-policy copy --src-tls-verify=false --dest-tls-verify=false --preserve-digests --quiet "$fq_immutable_name" "$fq_latest_name"
         fi
 
         # TODO: restart affected deployments, or (better) use immutable image tags in manifests.

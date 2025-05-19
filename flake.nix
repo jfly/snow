@@ -21,8 +21,9 @@
       # For hacking.
       # url = "path:/home/jeremy/src/git.clan.lol/clan/clan-core";
 
+      # TODO: this doesn't work when pattern is deploying to itself? (perhaps only when copying/bootstrapping secrets?) >>>
       # https://git.clan.lol/clan/clan-core/issues/3556
-      url = "https://git.clan.lol/jfly/clan-core/archive/local-update.tar.gz";
+      # url = "https://git.clan.lol/jfly/clan-core/archive/local-update.tar.gz";
 
       # TODO: switch back to upstream once the above issues are resolved.
       # Note: we're using `https://...tar.gz` urls here instead of git as a
@@ -30,7 +31,7 @@
       # url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
 
       # TODO: switch back to vanilla git once above issues are resolved.
-      # url = "git+https://git.clan.lol/clan/clan-core";
+      url = "git+https://git.clan.lol/clan/clan-core";
 
       inputs.nixpkgs.follows = "nixpkgs";
     };

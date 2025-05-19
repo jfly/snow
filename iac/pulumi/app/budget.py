@@ -71,7 +71,7 @@ class Budget:
                                 containers=[
                                     kubernetes.core.v1.ContainerArgs(
                                         command=["just", "fetch-and-commit"],
-                                        image="containers.snow.jflei.com/snow-budget-import:latest",
+                                        image="clark.ec:5000/snow-budget-import:latest",
                                         name="import",
                                         working_dir="/manmanmon",
                                         volume_mounts=[
@@ -135,7 +135,7 @@ class Budget:
         )
 
     def _snow_budget_deployment(self, name: str, namespace: str, args: list[str]):
-        image = "containers.snow.jflei.com/snow-budget:latest"
+        image = "clark.ec:5000/snow-budget:latest"
         return snow_deployment(
             name=name,
             namespace=namespace,
