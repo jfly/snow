@@ -12,19 +12,6 @@ in
   options.snow.backup = {
     enable = lib.mkEnableOption "snow-backup";
 
-    resticPasswordEncrypted = lib.mkOption {
-      type = lib.types.str;
-      description = ''
-        Encrypted restic password.
-        To generate, run this on fflewddur:
-
-        $ sudo restic -r /mnt/bay/restic key add --host fflewddur
-        $ sudo chown -R restic:restic /mnt/bay/restic/keys
-
-        Then encrypt the key with `python -m tools.encrypt`.
-      '';
-    };
-
     paths = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       description = ''
@@ -50,7 +37,20 @@ in
   };
 
   config = {
-    age.secrets.restic-password.rooterEncrypted = cfg.resticPasswordEncrypted;
+    # This is still tedious. TODO: look into clan's native support for backups instead.
+    clan.core.vars.generators.snow-backup-restic = {
+      prompts."password" = {
+        description = ''
+          Encrypted restic password.
+          To generate, run this on fflewddur:
+
+          $ sudo restic -r /mnt/bay/restic key add --host fflewddur
+          $ sudo chown -R restic:restic /mnt/bay/restic/keys
+        '';
+        type = "hidden";
+        persist = true;
+      };
+    };
 
     services.restic.backups = {
       snow = {
@@ -87,7 +87,7 @@ in
             fi
           '';
 
-        passwordFile = config.age.secrets.restic-password.path;
+        passwordFile = config.clan.core.vars.generators.snow-backup-restic.files."password".path;
         paths = cfg.paths;
         exclude = cfg.exclude;
         repository = "rest:http://fflewddur.ec:8000/";

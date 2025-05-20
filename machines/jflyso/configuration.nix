@@ -15,6 +15,7 @@ in
   ];
 
   networking.hostName = "jflyso";
+  clan.deployment.requireExplicitUpdate = true;
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

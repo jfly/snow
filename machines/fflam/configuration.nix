@@ -8,10 +8,7 @@ in
   services.openssh.enable = true;
 
   networking.hostName = "fflam";
-  clan.core.networking = {
-    buildHost = "localhost";
-    targetHost = "jfly@fflam";
-  };
+  clan.core.networking.targetHost = "jfly@mail.playground.jflei.com";
 
   imports = [
     flake.nixosModules.shared

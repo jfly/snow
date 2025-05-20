@@ -14,6 +14,11 @@
   );
 
   clan.core.vars.generators.wallabag = {
+    files."client-id".owner = config.snow.user.name;
+    files."client-secret".owner = config.snow.user.name;
+    files."username".owner = config.snow.user.name;
+    files."password".owner = config.snow.user.name;
+
     prompts.client-id = {
       type = "line";
       persist = true;

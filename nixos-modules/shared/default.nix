@@ -24,6 +24,9 @@ in
       else
         [
           inputs.clan-core.clanModules.state-version
+          {
+            clan.core.networking.buildHost = "jfly@localhost";
+          }
         ]
     )
     ++ [

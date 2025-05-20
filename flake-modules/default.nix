@@ -7,7 +7,6 @@
     ./containers.nix
     ./routers.nix
     ./nixos-modules.nix
-    ./nixos-hosts.nix
     ./clan.nix
     ./formatting.nix
     ./git-hooks.nix

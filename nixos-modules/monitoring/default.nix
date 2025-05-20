@@ -43,6 +43,7 @@ in
       node = {
         enable = true;
         port = 9000;
+        openFirewall = true;
         enabledCollectors = [ "systemd" ];
         extraFlags = [
           "--collector.textfile.directory=${cfg.node_textfile_dir}"
