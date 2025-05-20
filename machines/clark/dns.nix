@@ -5,6 +5,14 @@
     enable = true;
     resolveLocalQueries = false;
     settings = {
+      # Bind on all interfaces as they come and go. This is important for
+      # docker, as the docker0 interface appears at some point asynchronously
+      # when booting up.
+      # It's important for dnsmasq to bind on specific interfaces, because
+      # otherwise it will try to bind to a wildcard address, which conflicts
+      # with the 127.0.0.54 that systemd-resolved listens on.
+      bind-dynamic = true;
+
       no-resolv = true;
       server = [
         # Dropbox stuff
