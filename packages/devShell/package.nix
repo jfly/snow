@@ -33,6 +33,8 @@ let
       allow-import-from-derivation = true
     '';
 
+    SOPS_AGE_KEY_FILE = plaintext "/home/jeremy/sync/jfly-linux-secrets/age/key.txt";
+
     # Credentials to talk to `minio` (a self-hosted file server that
     # implements the S3 API).
     AWS_ACCESS_KEY_ID = secret ''
