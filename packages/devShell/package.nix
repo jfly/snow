@@ -28,7 +28,7 @@ let
     expression = expr;
   };
   shellEnvValues = {
-    # We use IFD in `flake-modules/patched-nixpkgs.nix`.
+    # We use IFD in `flake.nix` to patch flake inputs.
     NIX_CONFIG = plaintext ''
       allow-import-from-derivation = true
     '';

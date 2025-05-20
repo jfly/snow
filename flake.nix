@@ -108,9 +108,51 @@
   outputs =
     raw-inputs:
     let
+      unpatchedPkgs = import raw-inputs.nixpkgs {
+        system = "x86_64-linux";
+      };
+      inherit (unpatchedPkgs)
+        applyPatches
+        fetchpatch
+        ;
+
+      patchNixpkgs =
+        {
+          name,
+          src,
+          patches,
+        }:
+        let
+          patchedSrc = applyPatches {
+            inherit name src patches;
+          };
+          flake = import (patchedSrc + "/flake.nix");
+
+          outputs = patchedSrc // (flake.outputs { self = outputs; });
+        in
+        outputs;
+
       flake = raw-inputs.self;
       inputs = raw-inputs // {
         inherit (flake.lib) agenix-rooter;
+
+        nixpkgs = patchNixpkgs {
+          name = "nixpkgs-patched";
+          src = raw-inputs.nixpkgs;
+          patches = [
+            # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
+            (fetchpatch {
+              name = "fish: 4.0.2 -> 4.1.0-unstable";
+              url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
+              hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
+            })
+            (fetchpatch {
+              name = "k3s: use patched util-linuxMinimal";
+              url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
+              hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
+            })
+          ];
+        };
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

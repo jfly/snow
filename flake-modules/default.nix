@@ -2,10 +2,6 @@
   _module.args.flakeRoot = ../.;
 
   imports = [
-    # Inputs
-    ./patched-nixpkgs.nix
-
-    # Outputs
     ./lib.nix
     ./packages.nix
     ./containers.nix
@@ -13,8 +9,6 @@
     ./nixos-modules.nix
     ./nixos-hosts.nix
     ./clan.nix
-
-    # Development
     ./formatting.nix
     ./git-hooks.nix
     ./dev-shell.nix
