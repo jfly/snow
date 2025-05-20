@@ -1,7 +1,7 @@
 .sensitive-decrypted-secrets
 **/*.secret
 /.direnv
-result
+/result*
 __pycache__
 
 # https://github.com/cachix/git-hooks.nix?tab=readme-ov-file#flakes-support
