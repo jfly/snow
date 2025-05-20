@@ -151,6 +151,11 @@
               url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
               hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
             })
+            (fetchpatch {
+              name = "nixos/direnv: fix silent option... again";
+              url = "https://github.com/NixOS/nixpkgs/pull/402399.diff";
+              hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
+            })
           ];
         };
       };

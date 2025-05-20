@@ -69,19 +69,14 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+    settings = {
+      global.strict_env = true;
+      whitelist.prefix = [
+        "~/src/github.com/jfly"
+        "~/sync/scratch"
+      ];
+    };
   };
-  environment.etc."direnv/direnv.toml".text =
-    # toml
-    ''
-      [global]
-      strict_env = true
-
-      [whitelist]
-      prefix = [
-          "~/src/github.com/jfly",
-          "~/sync/scratch",
-      ]
-    '';
 
   environment.systemPackages = with pkgs; [
     ### sd (script directory)
