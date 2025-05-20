@@ -13,8 +13,6 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  clan.core.networking.targetHost = "jfly@pattern.ec";
-
   # Enable deployments by non-root user.
   nix.settings.trusted-users = [
     "root"

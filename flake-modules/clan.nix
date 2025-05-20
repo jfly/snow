@@ -25,6 +25,24 @@ in
       flake = self;
     };
 
+    inventory = {
+      services.zerotier.default = {
+        roles.controller.machines = [ "fflewddur" ];
+        roles.peer.tags = [ "all" ];
+      };
+      services.data-mesher.default = {
+        roles.admin.machines = [ "fflewddur" ];
+        roles.peer.tags = [ "all" ];
+
+        # This interface name is determined from the network id, but we don't
+        # have eval-time access to it.
+        # I hear this will get cleaner in the future when clan has a "unified
+        # networking layer that the module can hook into and make saner default
+        # decisions".
+        config.network.interface = "zthjzvlscg";
+      };
+    };
+
     machines = lib.listToAttrs (
       map (hostname: {
         name = hostname;

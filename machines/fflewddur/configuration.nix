@@ -21,8 +21,6 @@
   ];
 
   networking.hostName = "fflewddur";
-  networking.domain = "ec";
-  clan.core.networking.targetHost = "jfly@fflewddur.ec";
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";

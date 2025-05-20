@@ -25,7 +25,13 @@ in
         [
           inputs.clan-core.clanModules.state-version
           {
-            clan.core.networking.buildHost = "jfly@localhost";
+            clan.core.networking = {
+              # Ideally this would be just `localhost`, and not require ssh to
+              # be enabled on the build machine. See
+              # https://git.clan.lol/clan/clan-core/issues/3556.
+              buildHost = "jfly@localhost";
+              targetHost = "jfly@${config.networking.fqdn}";
+            };
           }
         ]
     )
@@ -96,8 +102,10 @@ in
         openssh.authorizedKeys.keys = [ identities.jfly ];
       };
 
-      # Enable ssh for non-roaming machines.
-      services.openssh.enable = lib.mkDefault (config.networking.domain != null);
+      networking.domain = "snow";
+
+      # Enable ssh for all machines.
+      services.openssh.enable = true;
 
       users.users.rachel = {
         isNormalUser = true;

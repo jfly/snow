@@ -2,8 +2,6 @@
 
 {
   networking.hostName = "kent";
-  networking.domain = "sc";
-  clan.core.networking.targetHost = "jfly@kent.sc.jflei.com";
 
   imports = [
     flake.nixosModules.shared

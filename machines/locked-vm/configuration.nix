@@ -9,7 +9,6 @@
   ];
 
   networking.hostName = "locked-vm";
-  clan.core.networking.targetHost = "jfly@localhost:5555";
   clan.core.deployment.requireExplicitUpdate = true;
 
   disko.devices.disk.main.device = "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001";

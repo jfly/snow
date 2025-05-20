@@ -2,10 +2,8 @@
 
 {
   networking.hostName = "dallben";
-  networking.domain = "ec";
   time.timeZone = "America/Los_Angeles";
   services.openssh.enable = true;
-  clan.core.networking.targetHost = "jfly@dallben.ec";
 
   imports = [
     flake.nixosModules.shared

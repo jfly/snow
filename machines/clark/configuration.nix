@@ -27,8 +27,6 @@ in
   };
 
   networking.hostName = "clark";
-  networking.domain = "ec";
-  clan.core.networking.targetHost = "jfly@clark.ec";
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";
