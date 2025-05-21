@@ -10,9 +10,10 @@ in
     inputs.pr-tracker.nixosModules.fetcher
   ];
 
-  # https://github.com/settings/tokens/1473000486
   clan.core.vars.generators.pr-tracker-github = {
+    files.token.owner = config.services.pr-tracker.fetcher.user;
     prompts."token" = {
+      description = "https://github.com/settings/tokens/1473000486";
       type = "hidden";
       persist = true;
     };
