@@ -56,8 +56,7 @@ system=$(nix config show system)
 flake_target=".#routers.${system}.${hostname}"
 
 # Note: we use `deage.impureString` in these routers, which means we have to do
-# impure builds. Perhaps we can figure out some clever way of doing something
-# like agenix instead?
+# impure builds. See it's docstring for ideas to get rid of it.
 purity=("--impure")
 
 # First, check if the version currently installed/running is already up to date?

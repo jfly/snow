@@ -6,17 +6,6 @@
   };
 
   inputs = {
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs = {
-        # Choose not to download darwin dependencies (saves some resources on Linux, see
-        # https://github.com/ryantm/agenix#install-module-via-flakes).
-        darwin.follows = "";
-        home-manager.follows = "home-manager";
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-
     clan-core = {
       # For hacking.
       # url = "path:/home/jeremy/src/git.clan.lol/clan/clan-core";
@@ -132,10 +121,7 @@
         in
         outputs;
 
-      flake = raw-inputs.self;
       inputs = raw-inputs // {
-        inherit (flake.lib) agenix-rooter;
-
         nixpkgs = patchNixpkgs {
           name = "nixpkgs-patched";
           src = raw-inputs.nixpkgs;

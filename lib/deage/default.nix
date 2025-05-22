@@ -20,6 +20,10 @@ rec {
 
     The reason this exists is to get secrets onto our
     astro/nix-openwrt-imagebuilder managed routers.
+
+    TODO: get rid of this in favor of something like:
+    - [Liminix](https://www.liminix.org/)
+    - Regular NixOS running on something like a Banana Pi
   */
   impureString = encrypted: builtins.readFile (absoluteRepoPath encrypted);
 }

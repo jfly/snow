@@ -7,4 +7,4 @@
 
 set -euo pipefail
 
-exec mqttui --broker mqtts://mqtt.snow.jflei.com --username jfly --password "$(</run/agenix/mosquitto-password)" "$@"
+exec mqttui --broker mqtts://mqtt.snow.jflei.com --username jfly --password "$(</run/secrets/vars/mosquitto/password)" "$@"
