@@ -15,12 +15,9 @@
   };
   systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
-  services.nginx = {
-    enable = true;
-    virtualHosts."syncthing.snow.jflei.com" = {
-      locations."/" = {
-        proxyPass = "http://${config.services.syncthing.guiAddress}";
-      };
+  services.nginx.virtualHosts."syncthing.snow.jflei.com" = {
+    locations."/" = {
+      proxyPass = "http://${config.services.syncthing.guiAddress}";
     };
   };
 
