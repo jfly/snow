@@ -11,5 +11,6 @@
     ./formatting.nix
     ./git-hooks.nix
     ./dev-shell.nix
+    ./check-hosts.nix
   ];
 }
