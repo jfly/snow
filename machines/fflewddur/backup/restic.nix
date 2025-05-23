@@ -1,8 +1,11 @@
+let
+  resticPort = 8000;
+in
 {
   # Enable the Restic REST server.
   services.restic.server = {
     enable = true;
-    listenAddress = "8000";
+    listenAddress = toString resticPort;
     dataDir = "/mnt/bay/restic";
     # We're not (currently) requiring authentication to speak to the rest
     # server. This allows us to avoid futzing with HTTPS and certificates.
@@ -18,4 +21,6 @@
       "--no-auth"
     ];
   };
+
+  networking.firewall.allowedTCPPorts = [ resticPort ];
 }
