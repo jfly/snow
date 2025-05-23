@@ -14,7 +14,6 @@ let
   ];
 in
 {
-
   imports = [
     inputs.clan-core.flakeModules.default
   ];
