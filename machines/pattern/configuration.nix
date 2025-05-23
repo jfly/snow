@@ -75,7 +75,7 @@
   # https://wiki.nixos.org/wiki/Samba#Samba_Client
   environment.systemPackages = [ pkgs.cifs-utils ];
   fileSystems."/mnt/archive" = {
-    device = "//fflewddur.ec/archive";
+    device = "//fflewddur.snow/archive";
     fsType = "cifs";
     options = [
       "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s"
