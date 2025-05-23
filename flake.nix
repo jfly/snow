@@ -127,6 +127,16 @@
             hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
           })
         ];
+        clan-core.inputs.data-mesher.patches = [
+          # Relax data-mesher's NameRegex to allow for subdomains.
+          # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
+          (fetchpatch {
+            name = "yolo";
+            # Patch from <https://git.clan.lol/jfly/data-mesher/compare/main...more-names>.
+            url = "https://git.clan.lol/jfly/data-mesher/commit/065398b48dfb704d2998837b07c9ad804730f1ff.diff";
+            hash = "sha256-TBiA/3cD9izRQ5PcXAkG0hYccw+6Q9aZHHXCMY3stSk=";
+          })
+        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

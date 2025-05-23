@@ -31,6 +31,27 @@
     "render"
   ];
 
+  services.data-mesher.settings.host.names = [ "immich" ];
+  services.nginx.virtualHosts."immich.snow" = {
+    # Disable ACME/SSL. TODO: investigate what it would take to self host a
+    # ACME server and do HTTPS here.
+    enableACME = false;
+    forceSSL = lib.mkForce false;
+
+    # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
+    locations."/" = {
+      proxyPass = "http://[::1]:${toString config.services.immich.port}";
+      proxyWebsockets = true;
+      recommendedProxySettings = true;
+      extraConfig = ''
+        client_max_body_size 50000M;
+        proxy_read_timeout   600s;
+        proxy_send_timeout   600s;
+        send_timeout         600s;
+      '';
+    };
+  };
+
   services.nginx.virtualHosts."immich.snow.jflei.com" = {
     # Disable ACME/SSL. This isn't exposed to the outside, it's all proxied via
     # our `k3s` cluster which does HTTPS termination.
