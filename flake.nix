@@ -30,6 +30,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    flake-input-patcher = {
+      url = "github:jfly/flake-input-patcher";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+    };
+
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     home-manager = {
@@ -84,66 +90,43 @@
     systems.url = "github:nix-systems/x86_64-linux";
 
     treefmt-nix = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     with-alacritty = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:FatBoyXPC/with-alacritty";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs =
-    raw-inputs:
+    unpatchedInputs:
     let
-      unpatchedPkgs = import raw-inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
-      inherit (unpatchedPkgs)
-        applyPatches
-        fetchpatch
-        ;
+      # Unfortunately, this utility requires hardcoding a single system. See
+      # <https://github.com/jfly/flake-input-patcher?tab=readme-ov-file#known-issues>.
+      patcher = unpatchedInputs.flake-input-patcher.lib.x86_64-linux;
+      fetchpatch = patcher.fetchpatch;
 
-      patchNixpkgs =
-        {
-          name,
-          src,
-          patches,
-        }:
-        let
-          patchedSrc = applyPatches {
-            inherit name src patches;
-          };
-          flake = import (patchedSrc + "/flake.nix");
-
-          outputs = patchedSrc // (flake.outputs { self = outputs; });
-        in
-        outputs;
-
-      inputs = raw-inputs // {
-        nixpkgs = patchNixpkgs {
-          name = "nixpkgs-patched";
-          src = raw-inputs.nixpkgs;
-          patches = [
-            # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
-            (fetchpatch {
-              name = "fish: 4.0.2 -> 4.1.0-unstable";
-              url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
-              hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
-            })
-            (fetchpatch {
-              name = "k3s: use patched util-linuxMinimal";
-              url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
-              hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
-            })
-            (fetchpatch {
-              name = "nixos/direnv: fix silent option... again";
-              url = "https://github.com/NixOS/nixpkgs/pull/402399.diff";
-              hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
-            })
-          ];
-        };
+      inputs = patcher.patch unpatchedInputs {
+        nixpkgs.patches = [
+          # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
+          (fetchpatch {
+            name = "fish: 4.0.2 -> 4.1.0-unstable";
+            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
+            hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
+          })
+          (fetchpatch {
+            name = "k3s: use patched util-linuxMinimal";
+            url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
+            hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
+          })
+          (fetchpatch {
+            name = "nixos/direnv: fix silent option... again";
+            url = "https://github.com/NixOS/nixpkgs/pull/402399.diff";
+            hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
+          })
+        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

@@ -296,6 +296,29 @@
         "type": "github"
       }
     },
+    "flake-input-patcher": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1747965452,
+        "narHash": "sha256-nSjZ0D56rG7NUmhttbf+ehOoUlJASjjcxG0st3mySmU=",
+        "owner": "jfly",
+        "repo": "flake-input-patcher",
+        "rev": "a6583a29cec0626d7c086dc035523153e58290f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "repo": "flake-input-patcher",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -1306,6 +1329,7 @@
       "inputs": {
         "clan-core": "clan-core",
         "disko": "disko_2",
+        "flake-input-patcher": "flake-input-patcher",
         "flake-parts": "flake-parts_2",
         "git-hooks-nix": "git-hooks-nix",
         "home-manager": "home-manager",
