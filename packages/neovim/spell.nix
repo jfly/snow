@@ -1,6 +1,5 @@
 {
   lib,
-  flake',
   ...
 }:
 
@@ -9,9 +8,6 @@ let
 in
 {
   lsp.servers.harper_ls.enable = true;
-
-  # Use our patched version of harper-ls. See `packages/harper/package.nix` for details.
-  lsp.servers.harper_ls.package = flake'.packages.harper;
 
   extraConfigLuaPre = ''
     local snow_lsp = {}

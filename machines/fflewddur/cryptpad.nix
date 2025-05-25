@@ -1,20 +1,10 @@
 {
   lib,
-  pkgs,
   ...
 }:
 
 {
   services.cryptpad = {
-    package = pkgs.cryptpad.overrideAttrs (oldAttrs: {
-      patches = oldAttrs.patches ++ [
-        (pkgs.fetchpatch {
-          name = ''Sort files and folders with "natural" sort'';
-          url = "https://github.com/cryptpad/cryptpad/commit/36b66c0c2dcc99794352a2d61ae55287d9d8cda9.patch";
-          hash = "sha256-DdFe39RCyFKXbUpJHRnmhPjCC+4zmht0ga6OFKOt1ew=";
-        })
-      ];
-    });
     enable = true;
     configureNginx = true;
     settings = {

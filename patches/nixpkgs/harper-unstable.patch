@@ -1,0 +1,24 @@
+diff --git a/pkgs/by-name/ha/harper/package.nix b/pkgs/by-name/ha/harper/package.nix
+index 3a65ecf600c9..b8bcc522a892 100644
+--- a/pkgs/by-name/ha/harper/package.nix
++++ b/pkgs/by-name/ha/harper/package.nix
+@@ -10,15 +10,15 @@ rustPlatform.buildRustPackage rec {
+   version = "0.38.0";
+ 
+   src = fetchFromGitHub {
+-    owner = "Automattic";
++    owner = "jfly";
+     repo = "harper";
+-    rev = "v${version}";
+-    hash = "sha256-kLOU88yz+7uC+AyvAh0DwPLYiClSL4ZgkPrBBFmDu8w=";
++    rev = "1813beab241739923fdfffdcbc368c4fb9a83950";
++    hash = "sha256-rsEk1BnRLJTt8CPPAfZTIvJ+u2Nj7O/fomxJC5GGQ6I=";
+   };
+ 
+   buildAndTestSubdir = "harper-ls";
+   useFetchCargoVendor = true;
+-  cargoHash = "sha256-WhkIvo5hGYYvurq/7McCu3GMIJ8qmFeWm4JeruaZ00A=";
++  cargoHash = "sha256-3zYb7YjnlV4zekdpNbqqZpOtwp/vQvyaMj4lf0GThKw=";
+ 
+   passthru.updateScript = nix-update-script { };
+ 

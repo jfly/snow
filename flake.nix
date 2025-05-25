@@ -7,21 +7,7 @@
 
   inputs = {
     clan-core = {
-      # For hacking.
-      # url = "path:/home/jeremy/src/git.clan.lol/clan/clan-core";
-
-      # TODO: this doesn't work when pattern is deploying to itself? (perhaps only when copying/bootstrapping secrets?) >>>
-      # https://git.clan.lol/clan/clan-core/issues/3556
-      # url = "https://git.clan.lol/jfly/clan-core/archive/local-update.tar.gz";
-
-      # TODO: switch back to upstream once the above issues are resolved.
-      # Note: we're using `https://...tar.gz` urls here instead of git as a
-      # workaround for <https://git.clan.lol/clan/clan-core/issues/3555>.
-      # url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
-
-      # TODO: switch back to vanilla git once above issues are resolved.
       url = "git+https://git.clan.lol/clan/clan-core";
-
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -62,10 +48,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openwrt-imagebuilder = {
-      url = "github:astro/nix-openwrt-imagebuilder";
-      # url = "github:jfly/nix-openwrt-imagebuilder/update-hashes";
-    };
+    openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
 
     poetry2nix.url = "github:nix-community/poetry2nix";
 
@@ -81,11 +64,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # TODO: switch back to upstream when/if
-    # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344/
-    # is merged.
-    # simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
-    simple-nixos-mailserver.url = "gitlab:jflysohigh/nixos-mailserver/dkim-path";
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
 
     systems.url = "github:nix-systems/x86_64-linux";
 
@@ -110,33 +89,51 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
+          (fetchpatch {
+            name = "nixos/direnv: fix silent option... again";
+            url = "https://github.com/NixOS/nixpkgs/commit/6f9a8cf29359ed29ffc71996b5f27bfca8835d5b.diff";
+            hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
+          })
+          (fetchpatch {
+            name = "harper: 0.36.0 -> 0.38.0";
+            url = "https://github.com/NixOS/nixpkgs/commit/65e2c1ad85c1dc4735271ed2a9200cae923d1c72.diff";
+            hash = "sha256-k6KUAwfbAK9WqIUh1TIcoIzy4WNWm47OSm5fCwCOKy4=";
+          })
+          # To pull in https://github.com/Automattic/harper/commit/e594a60d433b31872746c98be26e3fbe34d296ed
+          ./patches/nixpkgs/harper-unstable.patch
+          (fetchpatch {
+            name = "fetchpatch: add support for patches to files with apostrophes";
+            url = "https://github.com/NixOS/nixpkgs/pull/410320.diff";
+            hash = "sha256-3LZclq5mpiyEs4vCHkXNZcYvWMcrITyHuETUhdDGRHQ=";
+          })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
             hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
           })
+        ];
+
+        simple-nixos-mailserver.patches = [
           (fetchpatch {
-            name = "k3s: use patched util-linuxMinimal";
-            url = "https://github.com/NixOS/nixpkgs/pull/407810.diff";
-            hash = "sha256-N8tzwSZB9d4Htvimy00+Jcw8TKRCeV8PJWp80x+VtSk=";
-          })
-          (fetchpatch {
-            name = "nixos/direnv: fix silent option... again";
-            url = "https://github.com/NixOS/nixpkgs/pull/402399.diff";
-            hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
+            name = "feat: add support for DKIM private key files";
+            url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
+            hash = "sha256-bi13EuDgOMz01bVp5G4H6dKfM0yNnvpFLGrPyVuuEGg=";
           })
         ];
-        clan-core.inputs.data-mesher.patches = [
-          # Relax data-mesher's NameRegex to allow for subdomains.
-          # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
-          (fetchpatch {
-            name = "yolo";
-            # Patch from <https://git.clan.lol/jfly/data-mesher/compare/main...more-names>.
-            url = "https://git.clan.lol/jfly/data-mesher/commit/065398b48dfb704d2998837b07c9ad804730f1ff.diff";
-            hash = "sha256-TBiA/3cD9izRQ5PcXAkG0hYccw+6Q9aZHHXCMY3stSk=";
-          })
-        ];
+
+        clan-core = {
+          inputs.data-mesher.patches = [
+            # Relax data-mesher's NameRegex to allow for subdomains.
+            # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
+            (fetchpatch {
+              name = "yolo";
+              # Patch from <https://git.clan.lol/jfly/data-mesher/compare/main...more-names>.
+              url = "https://git.clan.lol/jfly/data-mesher/commit/065398b48dfb704d2998837b07c9ad804730f1ff.diff";
+              hash = "sha256-TBiA/3cD9izRQ5PcXAkG0hYccw+6Q9aZHHXCMY3stSk=";
+            })
+          ];
+        };
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
