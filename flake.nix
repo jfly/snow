@@ -134,6 +134,14 @@
             })
           ];
         };
+
+        treefmt-nix.patches = [
+          (fetchpatch {
+            name = "Add nixf-diagnose, a Nix linter";
+            url = "https://github.com/numtide/treefmt-nix/pull/360.diff";
+            hash = "sha256-kXGi49+zHE+ElT07Ef8+74EIqLh7SA6WSz1e5wbOMK8=";
+          })
+        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

@@ -9,7 +9,6 @@
     ./nixos-modules.nix
     ./clan.nix
     ./formatting.nix
-    ./git-hooks.nix
     ./dev-shell.nix
     ./check-hosts.nix
   ];
