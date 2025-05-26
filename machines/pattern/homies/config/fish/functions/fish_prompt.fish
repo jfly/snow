@@ -82,7 +82,7 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     if set -q HACK_DIR
-        printf "$(realpath --relative-to=$HACK_DIR $(pwd))/ \$ "
+        printf "$(realpath --no-symlinks --relative-to=$HACK_DIR $(pwd))/ \$ "
         return
     end
 
