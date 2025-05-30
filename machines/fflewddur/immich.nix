@@ -33,10 +33,8 @@
 
   services.data-mesher.settings.host.names = [ "immich" ];
   services.nginx.virtualHosts."immich.snow" = {
-    # Disable ACME/SSL. TODO: investigate what it would take to self host a
-    # ACME server and do HTTPS here.
-    enableACME = false;
-    forceSSL = lib.mkForce false;
+    enableACME = true;
+    forceSSL = true;
 
     # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
     locations."/" = {

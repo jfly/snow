@@ -24,6 +24,7 @@ in
       };
     }
     flake.nixosModules.nix-index
+    flake.nixosModules.step-ca
   ];
 
   options = {
@@ -110,5 +111,7 @@ in
 
     # Disable nix channels. Use flakes instead.
     nix.channel.enable = false;
+
+    snow.step-ca.role = lib.mkDefault "client";
   };
 }

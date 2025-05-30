@@ -94,12 +94,9 @@ in
     };
   };
 
-  services.nginx = {
-    enable = true;
-    virtualHosts."alerts.snow.jflei.com" = {
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString config.services.prometheus.alertmanager.port}";
-      };
+  services.nginx.virtualHosts."alerts.snow.jflei.com" = {
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${toString config.services.prometheus.alertmanager.port}";
     };
   };
 }

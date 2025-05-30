@@ -1,8 +1,10 @@
 { config, ... }:
 
 let
-  stSld = "st.${config.networking.hostName}";
-  stFqdn = "${stSld}.${config.networking.domain}";
+  domain = rec {
+    sld = "st.${config.networking.hostName}";
+    fqdn = "${sld}.${config.networking.domain}";
+  };
 in
 {
   services.syncthing = {
@@ -26,8 +28,10 @@ in
     };
   };
 
-  services.data-mesher.settings.host.names = [ stSld ];
-  services.nginx.virtualHosts.${stFqdn} = {
+  services.data-mesher.settings.host.names = [ domain.sld ];
+  services.nginx.virtualHosts.${domain.fqdn} = {
+    forceSSL = true;
+    enableACME = true;
     locations."/" = {
       proxyPass = "http://${config.services.syncthing.guiAddress}";
     };

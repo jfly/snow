@@ -18,6 +18,7 @@
     ./healthcheck.nix
     ./immich.nix
     ./remote-desktop.nix
+    ./step-ca.nix
   ];
 
   networking.hostName = "fflewddur";
