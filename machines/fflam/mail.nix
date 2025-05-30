@@ -42,8 +42,13 @@
     me@playground.jflei.com jfly@playground.jflei.com, jeremyfleischman+subscriber@gmail.com
   '';
 
-  security.acme.acceptTerms = true;
-  security.acme.defaults.email = "jeremyfleischman@gmail.com";
+  # Our step-ca module (used by every machine in the cluster) defaults to
+  # querying ca.snow for certs. However, that ACME server is only able to
+  # generate `*.snow` certs. For "real" domain names, we still need to talk to
+  # Let's Encrypt.
+  # TODO: investigate what would be involved in configuring ACME server globs/regexes.
+  security.acme.certs.${config.mailserver.fqdn}.server =
+    "https://acme-v02.api.letsencrypt.org/directory";
 
   clan.core.vars.generators.mail-jfly = {
     files."password".deploy = false;
