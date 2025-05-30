@@ -30,7 +30,9 @@ class PairingMode:
 
     @staticmethod
     def apply_audio_tweaks():
-        set_loopback(True)
+        # Loopback is unbearably confusing.
+        # set_loopback(True)
+        pass
 
 
 class SoloMode:
@@ -119,7 +121,7 @@ def _detect() -> Detection:
 
     if primary_external := display_by_edid_name.get("DELL U2715H H7YCC8AA0DSS"):
         location_name = "garageman"
-        dpi = 96
+        dpi = mode.projector_dpi()
 
         for display in displays:
             display.is_active = False
