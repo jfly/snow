@@ -4,7 +4,18 @@
 #  - tools/wg.py
 #  - lib/wg
 
+{ inputs, ... }:
 {
+  imports = [ inputs.clan-core.clanModules.zerotier-static-peers ];
+
+  # How to add a non-NixOS device to the network:
+  # 1. Install ZeroTier One.
+  # 2. Connect to network "d4aa51eed904269f".
+  # 3. Add the node id here. To confirm, you can run `sudo zerotier-members
+  #    list` on fflewddur (you may have to wait a while before this works).
+  clan.zerotier-static-peers.networkIds = [
+    "d1064a4d50" # jfly phone
+  ];
 }
 
 # {
