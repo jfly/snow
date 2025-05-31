@@ -53,6 +53,11 @@ in
             "https://${domain.fqdn}/acme/acme/directory"
           else
             throw "Unrecognized role ${cfg.role}";
+
+        # `step-ca` gives us certs that are valid for 1 day, so we need to renew
+        # them frequently (the default for this is daily, which works fine with
+        # Let's Encrypt's 90-day certs).
+        renewInterval = "hourly";
       };
     };
 
@@ -65,26 +70,39 @@ in
       };
       files."ca.crt".secret = false;
       runtimeInputs = [ pkgs.step-cli ];
-      script = ''
-        step certificate create \
-          --template ${pkgs.writeText "root.tmpl" ''
-            {
-              "subject": {{ toJson .Subject }},
-              "issuer": {{ toJson .Subject }},
-              "keyUsage": ["certSign", "crlSign"],
-              "basicConstraints": {
-                "isCA": true,
-                "maxPathLen": 1
-              },
-              "nameConstraints": {
-                "critical": true,
-                "permittedDNSDomains": ${builtins.toJSON permittedDnsDomains}
+
+      # `step-cli` has a `root-ca` profile [0] which makes this simpler, but we
+      # want to add `nameConstraints`. That requires specifying a template,
+      # which means we also need to be explicit about the certificate validity
+      # (because `defaultTemplatevalidity` defaults to 1 day [1]).
+      # [0]: https://github.com/smallstep/crypto/blob/v0.66.0/x509util/templates.go#L206-L214
+      # [1]: https://github.com/smallstep/cli/blob/v0.28.6/command/certificate/create.go#L37
+      script =
+        let
+          # https://github.com/smallstep/cli/blob/v0.28.6/command/certificate/create.go#L36
+          rootValidityDuration = "${toString (10 * 365 * 24)}h";
+        in
+        ''
+          step certificate create \
+            --not-after ${rootValidityDuration} \
+            --template ${pkgs.writeText "root.tmpl" ''
+              {
+                "subject": {{ toJson .Subject }},
+                "issuer": {{ toJson .Subject }},
+                "keyUsage": ["certSign", "crlSign"],
+                "basicConstraints": {
+                  "isCA": true,
+                  "maxPathLen": 1
+                },
+                "nameConstraints": {
+                  "critical": true,
+                  "permittedDNSDomains": ${builtins.toJSON permittedDnsDomains}
+                }
               }
-            }
-          ''} \
-          --no-password --insecure \
-          "Snow Root CA" $out/ca.crt $out/ca.key
-      '';
+            ''} \
+            --no-password --insecure \
+            "Snow Root CA" $out/ca.crt $out/ca.key
+        '';
     };
   };
 

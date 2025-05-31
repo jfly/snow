@@ -47,8 +47,10 @@
   # generate `*.snow` certs. For "real" domain names, we still need to talk to
   # Let's Encrypt.
   # TODO: investigate what would be involved in configuring ACME server globs/regexes.
-  security.acme.certs.${config.mailserver.fqdn}.server =
-    "https://acme-v02.api.letsencrypt.org/directory";
+  security.acme.certs.${config.mailserver.fqdn} = {
+    server = "https://acme-v02.api.letsencrypt.org/directory";
+    renewInterval = "daily";
+  };
 
   clan.core.vars.generators.mail-jfly = {
     files."password".deploy = false;
