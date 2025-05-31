@@ -34,6 +34,8 @@ in
   };
 
   config = {
+    networking.domain = "mm";
+
     # Ensure that commands like `nix repl` and `nix-shell` have access to the
     # same nixpkgs we use to install everything else.
     nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
@@ -88,8 +90,6 @@ in
       ];
       openssh.authorizedKeys.keys = [ identities.jfly ];
     };
-
-    networking.domain = "snow";
 
     # Enable ssh for all machines.
     services.openssh.enable = true;

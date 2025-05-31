@@ -2,12 +2,12 @@
 
 Host clark
     Tag colusa
-    HostName clark.snow
+    HostName clark.mm
     User jfly
 
 Host fflewddur
     Tag colusa
-    HostName fflewddur.snow
+    HostName fflewddur.mm
     User jfly
 
 # Primary router

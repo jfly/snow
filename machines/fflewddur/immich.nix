@@ -32,7 +32,7 @@
   ];
 
   services.data-mesher.settings.host.names = [ "immich" ];
-  services.nginx.virtualHosts."immich.snow" = {
+  services.nginx.virtualHosts."immich.mm" = {
     enableACME = true;
     forceSSL = true;
 
