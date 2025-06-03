@@ -89,12 +89,20 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          # To pull in https://github.com/Automattic/harper/commit/e594a60d433b31872746c98be26e3fbe34d296ed
-          ./patches/nixpkgs/harper-unstable.patch
           (fetchpatch {
             name = "fetchpatch: add support for patches to files with apostrophes";
-            url = "https://github.com/NixOS/nixpkgs/pull/410320.diff";
+            url = "https://github.com/NixOS/nixpkgs/commit/ae61cffc494295f2e188cc53233ef066f45d6aea.diff";
             hash = "sha256-3LZclq5mpiyEs4vCHkXNZcYvWMcrITyHuETUhdDGRHQ=";
+          })
+          (fetchpatch {
+            name = "coredns: 1.11.3 -> 1.12.1";
+            url = "https://github.com/NixOS/nixpkgs/pull/400104.diff";
+            hash = "sha256-EaPQAqUMRdeyY83AArELMOIShtg9Oxw2WDAPNRqIcEQ=";
+          })
+          (fetchpatch {
+            name = "harper: 0.38.0 -> 0.40.0";
+            url = "https://github.com/NixOS/nixpkgs/pull/411278.diff";
+            hash = "sha256-F1+SHDcQ/k9A+i8J2jbI12xIl5el9r2v2ckmDPwtht4=";
           })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {

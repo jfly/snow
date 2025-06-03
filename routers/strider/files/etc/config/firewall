@@ -24,7 +24,6 @@ config zone
 	list network 'WAN6GUEST'
 	list network 'WAN6IOT'
 	list network 'WAN6LAN'
-	list network 'WAN6VPN'
 
 config zone 'iot'
 	option name 'iot'
@@ -147,15 +146,6 @@ config redirect
 	option src_dport '80'
 	option dest_ip '192.168.28.110'
 	option dest_port '80'
-
-config redirect
-	option dest 'lan'
-	option target 'DNAT'
-	option name 'wireguard vpn'
-	option src 'wan'
-	option src_dport '51820'
-	option dest_ip '192.168.28.172'  # fflewddur.ec
-	option dest_port '51820'
 
 config redirect
 	option dest 'lan'

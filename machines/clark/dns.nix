@@ -1,6 +1,9 @@
 { ... }:
 
 {
+  networking.firewall.allowedUDPPorts = [ 53 ];
+  networking.firewall.allowedTCPPorts = [ 53 ];
+
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = false;

@@ -21,17 +21,6 @@ config dnsmasq
 	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf).
 	list address '/snow.jflei.com/192.168.28.110'
 	list address '/arris.ec/192.168.27.1'
-	# Listen for DNS requests on all interfaces except `wan*` (this is to
-	# prevent being a part of DNS aplification attacks)
-	# OpenWRT defaults to starting `dnsmasq` with `--local-service`, which also
-	# protects against DNS aplification attacks, but that setting also prevents
-	# `dnsmasq` from responding to DNS queries from VPN clients (because
-	# they're not on a local subnet).
-	# Explicitly disabling some interfaces is enough to turn off the
-	# `--local-service` functionality, though: `dnsmasq` trusts that we're
-	# being careful.
-	list notinterface 'wan'
-	list notinterface 'wan6'
 
 config dhcp 'lan'
 	option interface 'lan'

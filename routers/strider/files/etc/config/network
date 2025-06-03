@@ -75,19 +75,6 @@ config interface 'WAN6GUEST'
 	option reqprefix '64'
 	option peerdns '0'
 
-config device 'vwan4'
-	option name 'vwan4'
-	option type 'macvlan'
-	option ifname 'wan'
-	option macaddr '70:e7:cf:ae:f2:04'
-
-config interface 'WAN6VPN'
-	option proto 'dhcpv6'
-	option device 'vwan4'
-	option reqaddress 'none'
-	option reqprefix '64'
-	option peerdns '0'
-
 config device
 	option name 'br-lan'
 	option type 'bridge'
@@ -140,23 +127,3 @@ config interface 'guest'
 	# https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
 	list ip6class 'WAN6GUEST'
 	option ip6assign '64'
-
-# Route traffic back to VPN clients.
-config route
-	option interface 'lan'
-	option target '192.168.31.0/24'
-	option gateway '192.168.28.172' # fflewddur.ec
-
-# TODO: Figure out how to provide non-NAT IPv6 to WG clients.
-#       See comments about "IPv6 prefix" in `tools/wg.py` for more details
-#       about why this is tricky.
-#
-# config route6
-# 	option interface 'lan'
-# 	option target 'fda0:f78f:a59e:31::/64'
-# 	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec
-#
-# config route6
-# 	option interface 'lan'
-# 	option target '2600:1700:a41a:381c::/64'
-# 	option gateway 'fda0:f78f:a59e::172' # fflewddur.ec
