@@ -60,11 +60,6 @@ in
         url = "https://github.com/nvimtools/none-ls.nvim/pull/280.diff";
         hash = "sha256-HkvIM4HdOzOJtC5lzvb275LSql5I0T+DWTIaJ8v/Qpg=";
       })
-      (pkgs.fetchpatch {
-        name = "fix: don't assume `flake_ref` exists";
-        url = "https://github.com/nvimtools/none-ls.nvim/pull/286.diff";
-        hash = "sha256-mQ1yLLrdALUvHZbTsQ/sCGVimsY5lLgnnLIewyJcVgg=";
-      })
     ];
   });
 }

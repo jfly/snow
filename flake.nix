@@ -89,16 +89,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          (fetchpatch {
-            name = "nixos/direnv: fix silent option... again";
-            url = "https://github.com/NixOS/nixpkgs/commit/6f9a8cf29359ed29ffc71996b5f27bfca8835d5b.diff";
-            hash = "sha256-cn3t99Oa7X1dZtEyOOF1QxnP2dZUpyKL4ujoCjRSPL8=";
-          })
-          (fetchpatch {
-            name = "harper: 0.36.0 -> 0.38.0";
-            url = "https://github.com/NixOS/nixpkgs/commit/65e2c1ad85c1dc4735271ed2a9200cae923d1c72.diff";
-            hash = "sha256-k6KUAwfbAK9WqIUh1TIcoIzy4WNWm47OSm5fCwCOKy4=";
-          })
           # To pull in https://github.com/Automattic/harper/commit/e594a60d433b31872746c98be26e3fbe34d296ed
           ./patches/nixpkgs/harper-unstable.patch
           (fetchpatch {
@@ -118,13 +108,13 @@
           (fetchpatch {
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-bi13EuDgOMz01bVp5G4H6dKfM0yNnvpFLGrPyVuuEGg=";
+            hash = "sha256-CtT5SX5ZpH029Ce4vSi11xMgfI3xK/+keUYCVX0Z024=";
           })
         ];
 
         clan-core = {
           inputs.data-mesher.patches = [
-            # Relax data-mesher's NameRegex to allow for subdomains.
+            # Relax data-mesher's `NameRegex` to allow for subdomains.
             # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
             (fetchpatch {
               name = "yolo";
@@ -134,14 +124,6 @@
             })
           ];
         };
-
-        treefmt-nix.patches = [
-          (fetchpatch {
-            name = "Add nixf-diagnose, a Nix linter";
-            url = "https://github.com/numtide/treefmt-nix/pull/360.diff";
-            hash = "sha256-kXGi49+zHE+ElT07Ef8+74EIqLh7SA6WSz1e5wbOMK8=";
-          })
-        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
