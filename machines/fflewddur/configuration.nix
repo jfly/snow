@@ -12,7 +12,7 @@
     ./jellyfin.nix
     ./cryptpad.nix
     ./syncthing.nix
-    ./vpn.nix
+    ./vpn
     ./prometheus
     ./grafana.nix
     ./healthcheck.nix

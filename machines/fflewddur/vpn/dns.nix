@@ -1,39 +1,5 @@
+{ config, pkgs, ... }:
 {
-  config,
-  inputs,
-  pkgs,
-  ...
-}:
-{
-  imports = [ inputs.clan-core.clanModules.zerotier-static-peers ];
-
-  # How to add a mobile device to the network:
-  # 1. Install ZeroTier One app.
-  # 2. Connect to network "d4aa51eed904269f".
-  #    - Enable "Network DNS".
-  #      - Note: iOS has a bug where this doesn't work. Instead, select "Custom
-  #              DNS" and add fflewddur's IPv6 address. See
-  #              https://github.com/zerotier/ZeroTierOne/issues/2464
-  #
-  #    - For Android, enable "Route all traffic through ZeroTier. Requires external
-  #      configuration of the network".
-  #
-  #      Why? This allows the `2000::` hack (see
-  #      below) to work, which enables AAAA DNS lookups over ZeroTier even when
-  #      you're on an IPv4-only network.
-  #
-  #      Note: this does not actually route all traffic through Zerotier. It
-  #      just ingests the routes the controller advertises.
-  #      TODO: file an issue with https://github.com/zerotier/ZeroTierOne/ and
-  #            confirm I'm understanding this correctly.
-  # 3. Add the node id here. To confirm, you can run `sudo zerotier-members list`
-  #    on the controller (you may have to wait a while before this works).
-  clan.zerotier-static-peers.networkIds = [
-    "d1064a4d50" # jfly phone
-    "fce56a3a26" # ansible
-    "06fda2b62d" # ram mbp
-  ];
-
   # We run a DNS server for the members of our VPN that do not support
   # data-mesher.
   # See <https://git.clan.lol/clan/data-mesher/issues/223>.
@@ -87,9 +53,4 @@
       { target = "2000::"; }
     ];
   };
-
-  # TODO: contribute docs to clan-core explaining how to do all this:
-  #       https://git.clan.lol/clan/clan-core/issues/1268
-
-  # TODO: back up controller data
 }
