@@ -31,41 +31,12 @@
   clan.zerotier-static-peers.networkIds = [
     "d1064a4d50" # jfly phone
     "fce56a3a26" # ansible
+    "06fda2b62d" # ram mbp
   ];
 
   # We run a DNS server for the members of our VPN that do not support
   # data-mesher.
   # See <https://git.clan.lol/clan/data-mesher/issues/223>.
-  # This requires some manual configuration on the VPN controller:
-  #  1. Need to add the DNS server. Try something like this:
-  #     ```
-  #     $ curl -s \
-  #         -H "X-ZT1-Auth: $(sudo cat /var/lib/zerotier-one/authtoken.secret)" \
-  #         -d '{"dns": {"domain": "<ZEROTIER DOMAIN>", "servers": ["<ZEROTIER IP OF DNS SERVER>"]}}' \
-  #         -X POST http://localhost:9993/controller/network/<ZEROTIER NETWORK ID>
-  #     ```
-  #     (get the Zerotier network id from `sudo zerotier-cli listnetworks`)
-  #  2. Need to add a bogus IPv6 route for `2000::` to trick Android into doing
-  #     AAAA DNS lookups even when only connected to the internet via IPv4. See
-  #     this excellent SO answer [0] and relevant Android source code [1]
-  #     I ran something like this:
-  #     ```
-  #     $ curl -s \
-  #         -H "X-ZT1-Auth: keny22ndwa6nbwkhq9owtn81" \
-  #         -d '{"routes": [{"target": "2000::"}]}' \
-  #         -X POST http://localhost:9993/controller/network/<ZEROTIER NETWORK ID>
-  #     ```
-  #
-  #     TODO: contribute a Zerotier controller module to clan-core so I can
-  #           managed this stuff declaratively. See API docs here:
-  #           https://docs.zerotier.com/api/service/ref-v1/#tag/Controller
-  #
-  #     TODO: contribute docs to clan-core explaining how to do all this:
-  #           https://git.clan.lol/clan/clan-core/issues/1268
-  #
-  #     [0]: https://android.stackexchange.com/a/257790
-  #     [1]: https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/DnsResolver/getaddrinfo.cpp;l=228;drc=442fcb158a5b2e23340b74ce2e29e5e1f5bf9d66
-
   networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.allowedTCPPorts = [ 53 ];
   services.coredns = {
@@ -96,4 +67,29 @@
       }
     '';
   };
+
+  clan.core.networking.zerotier.settings = {
+    # Make this DNS server available for easy client configuration. Clients can
+    # choose to use the DNS settings provided by a ZeroTier controller when
+    # they connect.
+    dns = {
+      "domain" = config.networking.domain;
+      "servers" = [ config.clan.core.vars.generators.zerotier.files.zerotier-ip.value ];
+    };
+
+    # We add a bogus IPv6 route for `2000::` to trick Android into doing
+    # AAAA DNS lookups even when only connected to the internet via IPv4. See
+    # this excellent SO answer [0] and relevant Android source code [1].
+    #
+    # [0]: https://android.stackexchange.com/a/257790
+    # [1]: https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/DnsResolver/getaddrinfo.cpp;l=228;drc=442fcb158a5b2e23340b74ce2e29e5e1f5bf9d66
+    routes = [
+      { target = "2000::"; }
+    ];
+  };
+
+  # TODO: contribute docs to clan-core explaining how to do all this:
+  #       https://git.clan.lol/clan/clan-core/issues/1268
+
+  # TODO: back up controller data
 }
