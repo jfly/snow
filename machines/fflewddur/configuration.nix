@@ -19,6 +19,7 @@
     ./immich.nix
     ./remote-desktop.nix
     ./step-ca.nix
+    ./vaultwarden.nix
   ];
 
   networking.hostName = "fflewddur";
