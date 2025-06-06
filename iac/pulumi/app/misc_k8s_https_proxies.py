@@ -61,6 +61,7 @@ class MiscK8sHttpsProxies:
                 "cryptpad-ui",
                 "nextcloud",
                 "healthcheck",
+                # Urg, the immich Android app doesn't respect user-installed certificates.
                 "immich",
             ],
             Access.INTERNET_BEHIND_SSO_RAREMY: [
