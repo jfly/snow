@@ -13,9 +13,9 @@ Host ocf
     HostName ssh.ocf.berkeley.edu
     User jfly
 
-Host fflam
-    HostName mail.playground.jflei.com
-    User fflam
+Host doli
+    HostName doli.mm
+    User jfly
 
 Host hetzner-storage-box
     HostName u438808.your-storagebox.de

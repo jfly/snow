@@ -164,7 +164,7 @@ class Dns:
         self._jflei_com.txt("jflei.com", "v=spf1 include:_spf.google.com ~all")
 
     def _mail(self):
-        # Keep this in sync with `hosts/fflam/mail.nix`.
+        # Keep this in sync with `hosts/doli/mail.nix`.
         # Fairly hidden: this is the domain name of the mailserver.
         mx_domain = "mail.playground.jflei.com"
         # Very public. This is the thing after the @ sign in email addresses.
@@ -172,11 +172,11 @@ class Dns:
 
         self._jflei_com.a(
             name=mx_domain,
-            values=["5.78.116.143"],  # `hosts/fflam/network.nix`
+            values=["5.78.116.143"],  # `hosts/doli/network.nix`
         )
         self._jflei_com.aaaa(
             name=mx_domain,
-            values=["2a01:4ff:1f0:ad06::"],  # `hosts/fflam/network.nix`
+            values=["2a01:4ff:1f0:ad06::"],  # `hosts/doli/network.nix`
         )
 
         # Create MX record.
@@ -194,10 +194,10 @@ class Dns:
         )
 
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
-        # From `/var/dkim/playground.jflei.com.mail.txt` on `fflam`.
+        # From `/var/dkim/playground.jflei.com.mail.txt` on `doli`.
         selector = "mail"
         txt_value = Path(
-            f"../../vars/per-machine/fflam/dkim-{email_domain}.{selector}/txt/value"
+            f"../../vars/per-machine/doli/dkim-{email_domain}.{selector}/txt/value"
         ).read_text()
         self._jflei_com.txt(f"{selector}._domainkey.{email_domain}", txt_value)
 
