@@ -20,6 +20,7 @@
     ./remote-desktop.nix
     ./step-ca.nix
     ./vaultwarden.nix
+    ./audiobookshelf.nix
   ];
 
   networking.hostName = "fflewddur";
