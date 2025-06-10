@@ -76,8 +76,8 @@ in
           "convert"
         ];
 
-        directory = "/mnt/media/music";
-        library = "/mnt/media/music/beets.db";
+        directory = "/mnt/media/music/jfly";
+        library = "/mnt/media/music/jfly/beets.db";
         unimported = {
           ignore_extensions = "db jpg";
           ignore_subdirectories = "";
