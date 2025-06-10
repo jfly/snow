@@ -12,7 +12,6 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .mosquitto import Mosquitto
 from .zigbee2mqtt import Zigbee2Mqtt
-from .music import Music
 from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
 from .home_assistant import HomeAssistant
@@ -44,9 +43,6 @@ def build_app():
     # cluster (perhaps on your laptop) with a valid https cert.
     MiscK8sHttpsProxies(snowauth=snowauth)
     Speedtest(namespace="default", snowauth=snowauth)
-
-    # sync, etc
-    Music(snowauth)
 
     Torrents(snowauth)
     Jackett(snowauth)
