@@ -1,0 +1,3 @@
+{
+  services.tor.enable = true;
+}

@@ -10,6 +10,11 @@ Host fflewddur
     HostName fflewddur.mm
     User jfly
 
+Host fflam
+    Tag colusa
+    HostName fflam.mm
+    User jfly
+
 # Primary router
 Host strider
     Tag colusa

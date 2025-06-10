@@ -10,8 +10,6 @@
 
   ### CHANGEME ##
   networking.hostName = "template";
-  # networking.domain = "ec"; # Delete if this device will roam.
-  # clan.core.networking.targetHost = "jfly@localhost:5555";
   clan.core.deployment.requireExplicitUpdate = true; # You likely want to remove this.
 
   # Fill in the root device. Run `lsblk --output NAME,ID-LINK,FSTYPE,SIZE,MOUNTPOINT`

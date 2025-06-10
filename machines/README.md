@@ -9,6 +9,8 @@ anything:
 
     cp -r machines/template/ machines/[HOSTNAME]
 
+Edit the resulting files to your taste.
+
 ## Test host in a VM
 
     clan vms run [HOSTNAME]
@@ -16,7 +18,13 @@ anything:
 ## Bootstrapping a machine
 
 You need SSH access to the machine. One easy way to do that is to boot with the
-`jflyso` live USB (see `./jflyso/README.md` for instructions). If you're not
+`jflyso` live USB:
+
+    sudo nix run .#jflyso-netboot
+
+If netboot is not an option, see `./jflyso/README.md` for alternatives.
+
+Next, bootstrap the machine. If you're not
 using `jflyso`, change the `--target-host` option accordingly.
 
     clan machines install --target-host jfly@jflyso [HOSTNAME]

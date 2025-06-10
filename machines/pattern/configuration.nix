@@ -42,6 +42,7 @@
     ./laptop.nix
     ./garage-status.nix
     ./remote-builders.nix
+    ./tor.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
