@@ -42,6 +42,7 @@
     extraFlags = [
       "--private-registry /etc/snow/k3s/registries.yaml"
       "--tls-san clark.ec"
+      "--tls-san clark.mm"
     ];
   };
 
