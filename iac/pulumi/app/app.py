@@ -12,7 +12,6 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .mosquitto import Mosquitto
 from .zigbee2mqtt import Zigbee2Mqtt
-from .nextcloud import Nextcloud
 from .snow_web import SnowWeb
 from .home_assistant import HomeAssistant
 from .snow_state import SnowState
@@ -38,7 +37,6 @@ def build_app():
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
-    Nextcloud(snowauth=snowauth)
     # Useful if you really need to run a service somewhere outside of the
     # cluster (perhaps on your laptop) with a valid https cert.
     MiscK8sHttpsProxies(snowauth=snowauth)

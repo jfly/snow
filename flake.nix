@@ -94,6 +94,11 @@
             url = "https://github.com/NixOS/nixpkgs/pull/400104.diff";
             hash = "sha256-EaPQAqUMRdeyY83AArELMOIShtg9Oxw2WDAPNRqIcEQ=";
           })
+          (fetchpatch {
+            name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
+            url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
+            hash = "sha256-Fpexlm4jdTQKAIZSDPUB3b8kGMJWgxlNyowcmXt7Cn4=";
+          })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";

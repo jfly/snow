@@ -21,6 +21,7 @@
     ./step-ca.nix
     ./vaultwarden.nix
     ./audiobookshelf.nix
+    ./nextcloud.nix
   ];
 
   networking.hostName = "fflewddur";
