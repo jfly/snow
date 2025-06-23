@@ -25,7 +25,7 @@
   # 3. Add the node id here. To confirm, you can run `sudo zerotier-members list`
   #    on the controller (you may have to wait a while before this works).
   clan.zerotier-static-peers.networkIds = [
-    "d1064a4d50" # jfly phone
+    "06557d77cb" # jfly phone
     "fce56a3a26" # ansible
     "06fda2b62d" # ram mbp
     "8d0ee1ad66" # ram desktop
