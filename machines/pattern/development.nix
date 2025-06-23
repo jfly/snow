@@ -27,17 +27,6 @@
     # dependency.
     # TODO: get rid of k8s, and get rid of this
     insecure-registries = [ "clark.ec:5000" ];
-
-    # Override default docker DNS in order to implement a
-    # `host.docker.internal` domain.
-    # As of 2023, it appears there's no good, consistent way of speaking to the
-    # host on both macOS and Linux. Note: adding an entry to the containerized
-    # `/etc/hosts` is not good enough, as some stuff like nginx actually ignores
-    # /etc/hosts:
-    # https://github.com/NginxProxyManager/nginx-proxy-manager/issues/259. For more information:
-    # - https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal
-    # - https://sam-ngu.medium.com/connecting-to-docker-host-mysql-from-docker-container-linux-ubuntu-766e526542fdd
-    dns = [ "172.17.0.1" ];
   };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
   clan.core.vars.generators.snow-containers-auth = {
@@ -63,29 +52,6 @@
   # `systemd-resolved` is nice for VPNs because it understands how to query
   # different DNS servers for different TLDs.
   services.resolved.enable = true;
-
-  # Set up a local DNS server
-  services.dnsmasq = {
-    enable = true;
-    # Configure the system to actually *use* dnsmasq (in this case, this
-    # updates systemd-resolved to use 127.0.0.1 as a DNS resolver).
-    resolveLocalQueries = true;
-    settings = {
-      # Bind on all interfaces as they come and go. This is important for
-      # docker, as the docker0 interface appears at some point asynchronously
-      # when booting up.
-      # It's important for dnsmasq to bind on specific interfaces, because
-      # otherwise it will try to bind to a wildcard address, which conflicts
-      # with the 127.0.0.54 that systemd-resolved listens on.
-      bind-dynamic = true;
-
-      address = [
-        # See notes above about `virtualisation.docker.daemon.settings.dns` to
-        # understand why this is necessary.
-        "/host.docker.internal/172.17.0.1"
-      ];
-    };
-  };
 
   # Set up ssh agent
   programs.ssh = {
