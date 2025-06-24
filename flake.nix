@@ -97,7 +97,7 @@
           (fetchpatch {
             name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
             url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
-            hash = "sha256-Fpexlm4jdTQKAIZSDPUB3b8kGMJWgxlNyowcmXt7Cn4=";
+            hash = "sha256-FbfVz9xiFDZ6s0zyPOIVgcjKj0zYeBVq2KBfQKSL2bU=";
           })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
