@@ -24,6 +24,8 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    git-hooks-nix.url = "github:cachix/git-hooks.nix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,12 +52,20 @@
 
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
 
-    poetry2nix.url = "github:nix-community/poetry2nix";
-
-    git-hooks-nix.url = "github:cachix/git-hooks.nix";
-
     pr-tracker = {
       url = "github:molybdenumsoftware/pr-tracker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pyproject-build-systems = {
+      url = "github:pyproject-nix/build-system-pkgs";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.uv2nix.follows = "uv2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pyproject-nix = {
+      url = "github:pyproject-nix/pyproject.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -70,6 +80,12 @@
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs.pyproject-nix.follows = "pyproject-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -90,14 +106,19 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "coredns: 1.11.3 -> 1.12.1";
-            url = "https://github.com/NixOS/nixpkgs/pull/400104.diff";
-            hash = "sha256-EaPQAqUMRdeyY83AArELMOIShtg9Oxw2WDAPNRqIcEQ=";
-          })
-          (fetchpatch {
             name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
             url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
             hash = "sha256-FbfVz9xiFDZ6s0zyPOIVgcjKj0zYeBVq2KBfQKSL2bU=";
+          })
+          (fetchpatch {
+            name = "python3Packages.lxml-html-clean: switch to pytestCheckHook to skip failing tests";
+            url = "https://github.com/NixOS/nixpkgs/pull/419713.diff";
+            hash = "sha256-o9IlgPnlnsv3bUrXXHnL5s2GeKbsbmqwf56JsnE/aAw=";
+          })
+          (fetchpatch {
+            name = "perlPackages.ImagePNGLibpng: 0.57 -> 0.59";
+            url = "https://github.com/NixOS/nixpkgs/pull/419622.diff";
+            hash = "sha256-0cOIopSuyMK0QtPDK6d3hRkRDsMN1/pfhv8XtEzhO4s=";
           })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {

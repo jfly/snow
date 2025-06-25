@@ -6,15 +6,14 @@
 }:
 
 let
+in
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.0";
   pname = "interception-tools-space2meta";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://gitlab.com/interception/linux/plugins/space2meta/-/archive/v${version}/space2meta-v${version}.tar.gz";
-    sha256 = "dXEtlqkco3e7R5dnJaOedRSA+PYa6pArM3IxCwS0SHo=";
+    url = "https://gitlab.com/interception/linux/plugins/space2meta/-/archive/v${finalAttrs.version}/space2meta-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-dXEtlqkco3e7R5dnJaOedRSA+PYa6pArM3IxCwS0SHo=";
   };
 
   buildInputs = [ cmake ];
@@ -27,4 +26,4 @@ to another key (on key release only).";
     maintainers = [ ];
     platforms = platforms.linux;
   };
-}
+})

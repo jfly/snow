@@ -5,7 +5,7 @@ set -euo pipefail
 update_nixos() {
     (
         cd packages/devShell
-        poetry lock
+        uv lock
     )
     nix flake update
     clan machines update "$HOSTNAME"

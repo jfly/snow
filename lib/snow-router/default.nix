@@ -124,7 +124,7 @@ let
   #   aarch64_cortex-a53 = {
   #     file = pkgs.fetchurl {
   #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
-  #       sha256 = "sha256-yN2wDs723HGfmEKS4x1QQwCv4938edRQTJaVGwdQe7Y=";
+  #       hash = "sha256-yN2wDs723HGfmEKS4x1QQwCv4938edRQTJaVGwdQe7Y=";
   #     };
   #     filename = "wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
   #   };
@@ -132,7 +132,7 @@ let
   #   mipsel_24kc = {
   #     file = pkgs.fetchurl {
   #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_mipsel_24kc.ipk";
-  #       sha256 = "sha256-kCPU9q8mc+qKt6/BMgBfGoO3ZqvhZRFsmBkuZTTRou4=";
+  #       hash = "sha256-kCPU9q8mc+qKt6/BMgBfGoO3ZqvhZRFsmBkuZTTRou4=";
   #     };
   #     filename = "wifi-presence_0.3.0-1_mipsel_24kc.ipk";
   #   };

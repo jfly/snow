@@ -21,7 +21,7 @@
             ${pkgs.sox}/bin/play -q ${./wav}/doh.wav &
         fi
 
-        # Ring the bell
+        # Ring the bell.
         echo -e "\a"
 
         # Preserve the exit code.

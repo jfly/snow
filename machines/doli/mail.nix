@@ -15,7 +15,7 @@
   mailserver = {
     enable = true;
     certificateScheme = "acme-nginx";
-    stateVersion = 2; # https://nixos-mailserver.readthedocs.io/en/latest/migrations.html
+    stateVersion = 3; # https://nixos-mailserver.readthedocs.io/en/latest/migrations.html
 
     # Keep in sync with `iac/pulumi/app/dns.py`
     fqdn = "mail.playground.jflei.com";

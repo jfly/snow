@@ -13,7 +13,24 @@ let
     concatStringsSep
     ;
 
-  poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
+  workspace = inputs.uv2nix.lib.workspace.loadWorkspace {
+    workspaceRoot = ./.;
+  };
+
+  overlay = workspace.mkPyprojectOverlay {
+    sourcePreference = "wheel";
+  };
+
+  pythonSet =
+    (pkgs.callPackage inputs.pyproject-nix.build.packages {
+      python = pkgs.python3;
+    }).overrideScope
+      (
+        lib.composeManyExtensions [
+          inputs.pyproject-build-systems.overlays.default
+          overlay
+        ]
+      );
 
   secret = encrypted: {
     type = "secret";
@@ -118,39 +135,7 @@ pkgs.mkShell {
     # k8s stuff
     pkgs.kubectl
     (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-python ]))
-    pkgs.poetry
-    (poetry2nix.mkPoetryEnv {
-      projectDir = ./.;
-      extraPackages = ps: [
-        ps.pip # Used by `pulumi about` and `pulumi up`.
-        (flake'.packages.pulumi-crds.override { python3 = ps.python; })
-      ];
-      overrides = poetry2nix.defaultPoetryOverrides.extend (
-        final: prev: {
-          click = prev.click.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.flit-core ];
-          });
-          remote-pdb = prev.remote-pdb.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-          });
-          paho-mqtt = prev.paho-mqtt.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.hatchling ];
-          });
-          pulumi-keycloak = prev.pulumi-keycloak.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-          });
-          pulumi-cloudflare = prev.pulumi-cloudflare.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-          });
-          pulumi-minio = prev.pulumi-minio.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-          });
-          wgconfig = prev.wgconfig.overridePythonAttrs (old: {
-            buildInputs = (old.buildInputs or [ ]) ++ [ prev.setuptools ];
-          });
-        }
-      );
-    })
+    (pythonSet.mkVirtualEnv "devshell" workspace.deps.all)
   ];
 
   shellHook = concatStringsSep "\n" ([ flake'.config.pre-commit.installationScript ] ++ setEnvVars);

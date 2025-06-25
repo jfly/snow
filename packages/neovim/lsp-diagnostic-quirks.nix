@@ -18,7 +18,7 @@ let
       owner = "jfly";
       repo = "lsp-diagnostic-quirks.nvim";
       rev = "f3883cb5c5c39033b4b127c11811ddec6f06858d";
-      sha256 = "sha256-bg3uUtdrBd/fGqW/fXviXj04lSacQBZSqaoa89dpOk0=";
+      hash = "sha256-bg3uUtdrBd/fGqW/fXviXj04lSacQBZSqaoa89dpOk0=";
     };
   };
 in

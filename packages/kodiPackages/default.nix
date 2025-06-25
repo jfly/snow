@@ -6,13 +6,7 @@ let
     # packages we're defining available as well so they can depend on each other.
     callPackage = newScope (pkgs.kodiPackages // self);
 
-    # TODO: these should all get upstreamed to
-    #       nixpkgs/pkgs/top-level/kodi-packages.nix
-    bottle = callPackage ./bottle { };
-    tubecast = callPackage ./tubecast { };
-
     # Mine! No intention of upstreaming these.
-    autoreceiver = callPackage ./autoreceiver { };
     moonlight = callPackage ./moonlight { };
   };
 in

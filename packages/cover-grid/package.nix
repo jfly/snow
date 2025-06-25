@@ -10,7 +10,7 @@ pkgs.python3.pkgs.buildPythonApplication rec {
     owner = "coderkun";
     repo = "mcg";
     rev = "v${version}";
-    sha256 = "sha256-awPMXGruCB/2nwfDqYlc0Uu9E6VV1AleEZAw9Xdsbt8=";
+    hash = "sha256-awPMXGruCB/2nwfDqYlc0Uu9E6VV1AleEZAw9Xdsbt8=";
   };
 
   nativeBuildInputs = with pkgs; [

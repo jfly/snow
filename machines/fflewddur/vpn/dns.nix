@@ -1,38 +1,20 @@
-{ config, pkgs, ... }:
+{ flake, config, ... }:
 {
+  imports = [ flake.nixosModules.gaidns ];
+
   # We run a DNS server for the members of our VPN that do not support
   # data-mesher.
   # See <https://git.clan.lol/clan/data-mesher/issues/223>.
   networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.allowedTCPPorts = [ 53 ];
-  services.coredns = {
-    enable = true;
-    package = pkgs.coredns.override {
-      externalPlugins = [
-        {
-          position = "start-of-file"; # This should happen *before* we forward requests to another DNS server.
-          name = "data-mesher";
-          repo = "github.com/jfly/coredns-data-mesher";
-          version = "v0.1.3";
-        }
-      ];
-      vendorHash = "sha256-fXzY3IqTVHhpixoMdD71AxpBthZDBkVcXUFOATXWLUA=";
-    };
-
-    # Ideally we'd only respond to queries for the "mm" zone, but Android (or
-    # Android's Zerotier app) don't support split DNS, so we unfortunately end
-    # up receiving *all* queries.
-    # https://github.com/zerotier/ZeroTierOne/issues/2400
-    config = ''
-      . {
-        bind ${config.services.data-mesher.settings.cluster.interface}
-
-        data-mesher
-        # Keep this in sync with routers/strider/files/etc/config/network
-        forward . 1.1.1.1 1.0.0.1
-      }
-    '';
-  };
+  services.gaidns.enable = true;
+  # Disable the systemd-resolve stub DNS server to make way for gaidns.
+  # Alternatively, we could have gaidns bind on
+  # `config.services.data-mesher.settings.cluster.interface`, but it doesn't
+  # have the ability to do that.
+  services.resolved.extraConfig = ''
+    DNSStubListener=no
+  '';
 
   clan.core.networking.zerotier.settings = {
     # Make this DNS server available for easy client configuration. Clients can
