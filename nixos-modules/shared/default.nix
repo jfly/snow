@@ -3,7 +3,6 @@
   flake',
   flake,
   config,
-  inputs,
   pkgs,
   ...
 }:
@@ -13,7 +12,6 @@ let
 in
 {
   imports = [
-    inputs.clan-core.clanModules.state-version
     {
       clan.core.networking = {
         # Ideally this would be just `localhost`, and not require ssh to

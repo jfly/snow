@@ -25,10 +25,19 @@ in
     };
 
     inventory = {
+      instances.state-version = {
+        module = {
+          name = "state-version";
+          input = "clan-core";
+        };
+        roles.default.tags."all" = { };
+      };
+
       services.zerotier.mm = {
         roles.controller.machines = [ "fflewddur" ];
         roles.peer.tags = [ "all" ];
       };
+
       services.data-mesher.default = {
         roles.admin.machines = [ "fflewddur" ];
         roles.peer.tags = [ "all" ];
