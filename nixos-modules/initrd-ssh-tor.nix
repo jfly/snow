@@ -87,7 +87,7 @@ in
       mkp224o-donna snow -n 1 -d . -q -O addr
       mv "$(cat addr)"/hs_ed25519_secret_key "$out"/hs_ed25519_secret_key
       mv "$(cat addr)"/hs_ed25519_public_key "$out"/hs_ed25519_public_key
-      mv "$(cat addr)"/hostname "$out"/hostname
+      <"$(cat addr)"/hostname tr -d '\n' > "$out"/hostname
     '';
   };
 
