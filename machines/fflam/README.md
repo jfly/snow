@@ -10,9 +10,9 @@ Our backup NAS running on a ThinkCentre M710.
 We have full disk encryption enabled for this machine. If it reboots, you must
 manually unlock it:
 
-    nix shell nixpkgs#torsocks --command torsocks ssh -t "root@$(clan vars get fflam tor-hidden-service/hostname)" systemctl restart systemd-cryptsetup@crypted.service
+    torsocks ssh -t "root@$(clan vars get fflam tor-hidden-service/hostname)" systemctl restart systemd-cryptsetup@crypted.service
 
-Note: this requires the `tor` service to be running.
+Note: this requires the `tor` service to be running (see `machines/pattern/tor.nix`).
 
 ## Adding another drive ##
 
