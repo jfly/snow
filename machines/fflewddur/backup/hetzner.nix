@@ -50,7 +50,7 @@ let
         --sftp-key-file ${keypair.privateKeyfile} \
         --sftp-known-hosts-file ${hetznerKnownHosts} \
         --checkers=7 \
-        --log-level=INFO \
+        --log-level=DEBUG \
         /mnt/bay/restic \
         :sftp:./manman
 

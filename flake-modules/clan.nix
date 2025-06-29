@@ -27,15 +27,20 @@ in
     inventory = {
       instances.state-version = {
         module = {
-          name = "state-version";
           input = "clan-core";
+          name = "state-version";
         };
         roles.default.tags."all" = { };
       };
 
-      services.zerotier.mm = {
-        roles.controller.machines = [ "fflewddur" ];
-        roles.peer.tags = [ "all" ];
+      instances.zerotier = {
+        module = {
+          input = "clan-core";
+          name = "zerotier";
+        };
+        roles.controller.machines.fflewddur = { };
+        roles.moon.machines = { }; # <<< ??? >>>
+        roles.peer.tags."all" = { };
       };
 
       services.data-mesher.default = {
