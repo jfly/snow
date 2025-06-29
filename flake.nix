@@ -113,7 +113,7 @@
           (fetchpatch {
             name = "python3Packages.lxml-html-clean: switch to pytestCheckHook to skip failing tests";
             url = "https://github.com/NixOS/nixpkgs/pull/419713.diff";
-            hash = "sha256-o9IlgPnlnsv3bUrXXHnL5s2GeKbsbmqwf56JsnE/aAw=";
+            hash = "sha256-p/bgw1AcAHjr2RkuQHL4V2+O6wlCrdlh7xAUNvMAUZc=";
           })
           (fetchpatch {
             name = "perlPackages.ImagePNGLibpng: 0.57 -> 0.59";
