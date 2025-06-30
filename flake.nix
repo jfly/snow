@@ -106,6 +106,11 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
+            name = "rclone: 1.70.1 -> 1.70.2";
+            url = "https://github.com/NixOS/nixpkgs/pull/420551.diff";
+            hash = "sha256-NPjv12I2w+UJ3QZOZKOMYD1Wt7UFeoa9ubAEu+/vK2A=";
+          })
+          (fetchpatch {
             name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
             url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
             hash = "sha256-FbfVz9xiFDZ6s0zyPOIVgcjKj0zYeBVq2KBfQKSL2bU=";
