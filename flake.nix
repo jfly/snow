@@ -1,9 +1,13 @@
 {
   description = "snow";
 
-  nixConfig = {
-    abort-on-warn = true;
-  };
+  # <<< $ nix eval .#nixosConfigurations.fflewddur.config.system.build.toplevel
+  # <<< evaluation warning: The clan.admin module is deprecated and will be removed on 2025-07-15.
+  # <<<                         Please migrate to user-maintained configuration or the new equivalent clan services
+  # <<<                         (https://docs.clan.lol/reference/clanServices).
+  # <<< nixConfig = {
+  # <<<   abort-on-warn = true;
+  # <<< };
 
   inputs = {
     clan-core = {
