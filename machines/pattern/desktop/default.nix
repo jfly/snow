@@ -279,7 +279,7 @@ in
 
   ### Java hacks
   environment.variables = {
-    # Enable antialiasing. See: https://nixos.wiki/wiki/Java#Better_font_rendering
+    # Enable antialiasing. See: https://wiki.nixos.org/wiki/Java#Better_font_rendering
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     # Hint to Java that xmonad is a "non-reparenting" window manager:
     # https://wiki.archlinux.org/title/Java#Gray_window,_applications_not_resizing_with_WM,_menus_immediately_closing
