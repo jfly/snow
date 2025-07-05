@@ -18,8 +18,6 @@ config dnsmasq
 	option rebind_protection '0'
 	list address '/aragorn.ec/192.168.28.2'
 	list address '/elfstone.ec/192.168.28.3'
-	# Hardcode *.snow.jflei.com to clark's ip address (see /etc/dnsmasq.conf).
-	list address '/snow.jflei.com/192.168.28.110'
 	list address '/arris.ec/192.168.27.1'
 
 config dhcp 'lan'
