@@ -13,7 +13,6 @@ in
     ./backup.nix
     ./dbs.nix
     ./dns.nix
-    ./pr-tracker.nix
   ];
 
   fileSystems."/mnt/media" = {
@@ -58,10 +57,10 @@ in
   # Some useful packages to have globally installed.
   environment.systemPackages = [
     pkgs.vim
-    pkgs.git # needed so we can push to repos hosted on this machine
+    pkgs.git # Needed so we can push to repos hosted on this machine.
     (pkgs.callPackage ./beets.nix {
       beetsConfig = {
-        # TODO: i had to manually run `mkdir -p /root/.local/state/beet/` before this would work
+        # TODO: I had to manually run `mkdir -p /root/.local/state/beet/` before this would work.
         statefile = "/root/.local/state/beet/state.pickle";
 
         plugins = [
@@ -99,7 +98,7 @@ in
         };
 
         badfiles = {
-          # Hacks to avoid deps on noisy third party checkers such as
+          # Hacks to avoid dependencies on noisy third party checkers such as
           # https://aur.archlinux.org/packages/mp3val/). For now I'm just
           # interested in finding files that are in the database but not on the
           # filesystem.

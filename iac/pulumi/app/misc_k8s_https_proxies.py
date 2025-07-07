@@ -17,13 +17,6 @@ class MiscK8sHttpsProxies:
         # ```
 
         self._add_proxy(
-            "pr-tracker",
-            access=Access.INTERNET_UNSECURED,
-            destination_ip="192.168.28.110",  # `clark.ec`
-            destination_port=7000,  # See `clark/pr-tracker.nix`
-        )
-
-        self._add_proxy(
             "lloyd",
             access=Access.INTERNET_BEHIND_SSO_RAREMY,
             destination_ip="192.168.28.242",  # `lloyd.ec`

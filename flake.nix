@@ -52,13 +52,11 @@
 
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
 
-    pr-tracker = {
-      url = "github:molybdenumsoftware/pr-tracker";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     pyproject-build-systems = {
-      url = "github:pyproject-nix/build-system-pkgs";
+      # TODO: upstream my build backend to `build-system-pkgs`.
+      # url = "github:pyproject-nix/build-system-pkgs";
+      url = "github:jfly/build-system-pkgs/add-py-generator-build-backend";
+
       inputs.pyproject-nix.follows = "pyproject-nix";
       inputs.uv2nix.follows = "uv2nix";
       inputs.nixpkgs.follows = "nixpkgs";
