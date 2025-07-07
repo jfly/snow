@@ -121,9 +121,9 @@ in
       # us a default `PATH`. However, dunst currently uses `xdg-open` to fire up a
       # browser, and *that* needs a PATH with whatever default browser we've
       # got set up. So, it's better to use systemctl's "user environment block"
-      # (populated by xsessionWrapper when it calls `systemctl
-      # import-environment`), because that'll have the right PATH and BROWSER,
-      # but to inherit that PATH, we have to make sure we don't specify a PATH
+      # (populated by `xsessionWrapper` when it calls `systemctl import-environment`),
+      # because that'll have the right PATH and BROWSER.
+      # However, to inherit that PATH, we have to make sure we don't specify a PATH
       # whatsoever.
       path = lib.mkForce [ ];
       serviceConfig = {
@@ -381,7 +381,7 @@ in
     dmenu
     gscan2pdf
 
-    ### WiFi
+    ### Wi-Fi
     flake'.packages.ap
 
     ### VPN

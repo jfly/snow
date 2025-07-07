@@ -106,24 +106,9 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "rclone: 1.70.1 -> 1.70.2";
-            url = "https://github.com/NixOS/nixpkgs/pull/420551.diff";
-            hash = "sha256-NPjv12I2w+UJ3QZOZKOMYD1Wt7UFeoa9ubAEu+/vK2A=";
-          })
-          (fetchpatch {
             name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
             url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
-            hash = "sha256-FbfVz9xiFDZ6s0zyPOIVgcjKj0zYeBVq2KBfQKSL2bU=";
-          })
-          (fetchpatch {
-            name = "python3Packages.lxml-html-clean: switch to pytestCheckHook to skip failing tests";
-            url = "https://github.com/NixOS/nixpkgs/pull/419713.diff";
-            hash = "sha256-p/bgw1AcAHjr2RkuQHL4V2+O6wlCrdlh7xAUNvMAUZc=";
-          })
-          (fetchpatch {
-            name = "perlPackages.ImagePNGLibpng: 0.57 -> 0.59";
-            url = "https://github.com/NixOS/nixpkgs/pull/419622.diff";
-            hash = "sha256-0cOIopSuyMK0QtPDK6d3hRkRDsMN1/pfhv8XtEzhO4s=";
+            hash = "sha256-+/Q/8PXYF5Gnc14okwdhhKerijK12UF+r1xcKnD3YqI=";
           })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
@@ -142,6 +127,17 @@
         ];
 
         clan-core = {
+          patches = [
+            # Remove warning about deprecated data-mesher. I don't think there
+            # is a non-deprecated alternative yet, see
+            # <https://git.clan.lol/clan/clan-core/issues/3849#issuecomment-35182>
+            (fetchpatch {
+              name = "undeprecate data-mesher";
+              # Patch from <https://git.clan.lol/jfly/clan-core/compare/main...undeprecate-data-mesher>.
+              url = "https://git.clan.lol/jfly/clan-core/commit/8389e3ef36c093415d9c90acd1e4bc237ca3640a.diff";
+              hash = "sha256-3Tp3aVqBAAuovnBnpP7iiRkH/09FX2n71mx97fRZSlE=";
+            })
+          ];
           inputs.data-mesher.patches = [
             # Relax data-mesher's `NameRegex` to allow for subdomains.
             # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
@@ -153,6 +149,14 @@
             })
           ];
         };
+
+        with-alacritty.patches = [
+          (fetchpatch {
+            name = "Update deps, add missing `format`";
+            url = "https://github.com/FatBoyXPC/with-alacritty/pull/4.diff";
+            hash = "sha256-4h7BYvTOWiL0u7KlrZN9gXPb25TXRgVyPGwkKVTscEU=";
+          })
+        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

@@ -4,9 +4,12 @@ with python3Packages;
 buildPythonApplication {
   pname = "snowcrypt";
   version = "2022-11-29";
+  pyproject = true;
 
   # Repo doesn't currently have any tests.
   doCheck = false;
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     pycryptodome

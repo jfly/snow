@@ -43,6 +43,7 @@
     ./garage-status.nix
     ./remote-builders.nix
     ./tor.nix
+    ./waydroid.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

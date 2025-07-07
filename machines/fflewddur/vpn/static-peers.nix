@@ -29,5 +29,6 @@
     "fce56a3a26" # ansible
     "06fda2b62d" # ram mbp
     "8d0ee1ad66" # ram desktop
+    "d83fdfb31b" # waydroid
   ];
 }

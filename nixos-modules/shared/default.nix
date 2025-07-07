@@ -12,15 +12,6 @@ let
 in
 {
   imports = [
-    {
-      clan.core.networking = {
-        # Ideally this would be just `localhost`, and not require ssh to
-        # be enabled on the build machine. See
-        # https://git.clan.lol/clan/clan-core/issues/3556.
-        buildHost = "jfly@localhost";
-        targetHost = "jfly@${config.networking.fqdn}";
-      };
-    }
     flake.nixosModules.nix-index
     flake.nixosModules.step-ca
   ];
@@ -33,6 +24,17 @@ in
 
   config = {
     networking.domain = "mm";
+
+    clan.core = {
+      settings.state-version.enable = true;
+      networking = {
+        # Ideally this would be just `localhost`, and not require ssh to
+        # be enabled on the build machine. See
+        # https://git.clan.lol/clan/clan-core/issues/3556.
+        buildHost = "jfly@localhost";
+        targetHost = "jfly@${config.networking.fqdn}";
+      };
+    };
 
     # Ensure that commands like `nix repl` and `nix-shell` have access to the
     # same nixpkgs we use to install everything else.

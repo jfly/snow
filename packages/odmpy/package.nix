@@ -9,14 +9,15 @@
 let
   iso639-lang = python3.pkgs.buildPythonPackage rec {
     pname = "iso639";
-    version = "2.5.1";
+    version = "2.6.1";
     pyproject = true;
+    build-system = [ python3.pkgs.setuptools ];
 
     src = fetchFromGitHub {
       owner = "LBeaudoux";
       repo = "iso639";
       rev = "v${version}";
-      hash = "sha256-NMArGcr2FHmB6o9cySceLw8SVTdJtbG7SdrT2qzkcqI=";
+      hash = "sha256-S5e8RNVG9QEEIjh0IFsRYe7myhUGuPyk/ia3fcbo1qQ=";
     };
 
     propagatedBuildInputs = with python3.pkgs; [
@@ -31,6 +32,8 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "odmpy";
   version = "0.8.1";
+  pyproject = true;
+  build-system = [ python3.pkgs.setuptools ];
 
   src = fetchFromGitHub {
     owner = "ping";

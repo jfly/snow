@@ -120,7 +120,7 @@ in
 pkgs.mkShell {
   nativeBuildInputs = [
     inputs'.clan-core.packages.default
-
+    pkgs.uv
     pkgs.age
 
     # For building/pushing docker images
