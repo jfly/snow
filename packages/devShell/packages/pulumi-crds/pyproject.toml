@@ -1,0 +1,14 @@
+[project]
+name = "pulumi-crds"
+
+dynamic = ["version", "dependencies"]
+
+[build-system]
+requires = [
+    "py-generator-build-backend",
+    "setuptools>=61.0",
+]
+build-backend = "py_generator_build_backend"
+
+[tools.py-generator-build-backend]
+generator = "$CRD_2_PULUMI_BIN --pythonPath $GENERATOR_OUT_PATH --pythonName crds --version 1.0.0 $CRDS"

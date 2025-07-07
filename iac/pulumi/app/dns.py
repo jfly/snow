@@ -196,9 +196,13 @@ class Dns:
         # Create DKIM record (https://nixos-mailserver.readthedocs.io/en/latest/setup-guide.html#set-dkim-signature)
         # From `/var/dkim/playground.jflei.com.mail.txt` on `doli`.
         selector = "mail"
-        txt_value = Path(
-            f"../../vars/per-machine/doli/dkim-{email_domain}.{selector}/txt/value"
-        ).read_text()
+        txt_value = (
+            Path(
+                f"../../vars/per-machine/doli/dkim-{email_domain}.{selector}/txt/value"
+            )
+            .read_text()
+            .strip()
+        )
         self._jflei_com.txt(f"{selector}._domainkey.{email_domain}", txt_value)
 
         # Create `DMARC` record

@@ -1321,15 +1321,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1749519371,
-        "narHash": "sha256-UJONN7mA2stweZCoRcry2aa1XTTBL0AfUOY84Lmqhos=",
-        "owner": "pyproject-nix",
+        "lastModified": 1747086119,
+        "narHash": "sha256-iXK0HeggoZVCulNBwPykco43mdRehj3Iaehh6To3Xq8=",
+        "owner": "jfly",
         "repo": "build-system-pkgs",
-        "rev": "7c06967eca687f3482624250428cc12f43c92523",
+        "rev": "e7fa49295468487d6152588dd31c6ecc833a0c9f",
         "type": "github"
       },
       "original": {
-        "owner": "pyproject-nix",
+        "owner": "jfly",
+        "ref": "add-py-generator-build-backend",
         "repo": "build-system-pkgs",
         "type": "github"
       }

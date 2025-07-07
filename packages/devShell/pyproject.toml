@@ -9,6 +9,7 @@ dependencies = [
     "paho-mqtt",
     "pulumi",
     "pulumi-cloudflare",
+    "pulumi-crds",
     "pulumi-keycloak",
     "pulumi-kubernetes == 4.18.0", # Must be kept in sync with <https://github.com/pulumi/crd2pulumi/blob/v1.5.3/pkg/codegen/packagegenerator.go#L28>.
     "pulumi-minio",
@@ -16,6 +17,9 @@ dependencies = [
     "remote-pdb", # Useful for debugging. See <https://github.com/pulumi/pulumi/issues/1372> for details.
     "rich",
 ]
+
+[tool.uv.sources]
+pulumi-crds = { path = "packages/pulumi-crds", editable = false }
 
 [build-system]
 requires = ["hatchling"]

@@ -13,6 +13,26 @@ let
     concatStringsSep
     ;
 
+  pulumiCrdsBuildEnv = {
+    CRD_2_PULUMI_BIN = lib.getExe pkgs.crd2pulumi;
+    CRDS =
+      let
+        crds = [
+          (pkgs.fetchurl {
+            url = "https://github.com/cert-manager/cert-manager/releases/download/v1.17.1/cert-manager.crds.yaml";
+            hash = "sha256-E013nz0IZKd6ARP+CjTFgci1Tr2R8y109y7ifN7V1mE=";
+          })
+          (pkgs.fetchurl {
+            url = "https://raw.githubusercontent.com/traefik/traefik/refs/tags/v3.3.2/docs/content/reference/dynamic-configuration/traefik.io_middlewares.yaml";
+            hash = "sha256-c/BumomtKei3YbZP+r9oo0I7YW6Q3FkwQLz149pPi4M=";
+          })
+        ];
+      in
+      concatStringsSep " " crds;
+  };
+
+  python = pkgs.python3;
+
   workspace = inputs.uv2nix.lib.workspace.loadWorkspace {
     workspaceRoot = ./.;
   };
@@ -21,14 +41,27 @@ let
     sourcePreference = "wheel";
   };
 
+  pyprojectOverrides = final: prev: {
+    pulumi-crds = prev.pulumi-crds.overrideAttrs (oldAttrs: {
+      env = pulumiCrdsBuildEnv;
+
+      # We need a `$HOME` for `py-generator-build-backend`:
+      # <https://github.com/jfly/py-generator-build-backend?tab=readme-ov-file#notes>
+      preBuild = ''
+        export HOME=$(mktemp -d)
+      '';
+    });
+  };
+
   pythonSet =
     (pkgs.callPackage inputs.pyproject-nix.build.packages {
-      python = pkgs.python3;
+      inherit python;
     }).overrideScope
       (
         lib.composeManyExtensions [
           inputs.pyproject-build-systems.overlays.default
           overlay
+          pyprojectOverrides
         ]
       );
 
@@ -137,6 +170,8 @@ pkgs.mkShell {
     (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-python ]))
     (pythonSet.mkVirtualEnv "devshell" workspace.deps.all)
   ];
+
+  env = pulumiCrdsBuildEnv;
 
   shellHook = concatStringsSep "\n" ([ flake'.config.pre-commit.installationScript ] ++ setEnvVars);
 }

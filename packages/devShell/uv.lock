@@ -120,6 +120,7 @@ dependencies = [
     { name = "paho-mqtt" },
     { name = "pulumi" },
     { name = "pulumi-cloudflare" },
+    { name = "pulumi-crds" },
     { name = "pulumi-keycloak" },
     { name = "pulumi-kubernetes" },
     { name = "pulumi-minio" },
@@ -134,6 +135,7 @@ requires-dist = [
     { name = "paho-mqtt" },
     { name = "pulumi" },
     { name = "pulumi-cloudflare" },
+    { name = "pulumi-crds", directory = "packages/pulumi-crds" },
     { name = "pulumi-keycloak" },
     { name = "pulumi-kubernetes", specifier = "==4.18.0" },
     { name = "pulumi-minio" },
@@ -282,6 +284,27 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/68/12/3c92f0a9d72650920e654110e276ca8331984915b5b49d0b821e005cde44/pulumi_cloudflare-5.47.0.tar.gz", hash = "sha256:90e8fc1949791553bbaa664371bddc672debf6f7823ef891d2321afe85465f5e", size = 596809, upload-time = "2025-01-08T10:32:43.367Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/29/63/3c6cb62bfd9e6fc3046075d3704ca94e66ae4942c1a6019949dc83a65acc/pulumi_cloudflare-5.47.0-py3-none-any.whl", hash = "sha256:432b755777ba6eaae905e0b26ff7e4b84abed27764ce48659f0dec9b77ef4769", size = 863624, upload-time = "2025-01-08T10:32:41.057Z" },
+]
+
+[[package]]
+name = "pulumi-crds"
+source = { directory = "packages/pulumi-crds" }
+dependencies = [
+    { name = "parver" },
+    { name = "pulumi" },
+    { name = "pulumi-kubernetes" },
+    { name = "requests" },
+    { name = "semver" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "parver", specifier = ">=0.2.1" },
+    { name = "pulumi", specifier = ">=3.109.0,<4.0.0" },
+    { name = "pulumi-kubernetes", specifier = "==4.18.0" },
+    { name = "requests", specifier = ">=2.21,<3.0" },
+    { name = "semver", specifier = ">=2.8.1" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'", specifier = ">=4.11" },
 ]
 
 [[package]]
