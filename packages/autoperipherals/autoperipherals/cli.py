@@ -26,11 +26,11 @@ class PairingMode:
 
     @staticmethod
     def projector_dpi():
-        return 250
+        return 150
 
     @staticmethod
     def apply_audio_tweaks():
-        # Loopback is unbearably confusing.
+        # The delay with loopback is unbearably confusing.
         # set_loopback(True)
         pass
 
