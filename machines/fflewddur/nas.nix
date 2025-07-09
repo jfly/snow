@@ -60,7 +60,7 @@ in
   };
 
   # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  services.samba-wsdd.enable = true; # Make shares visible for Windows 10 clients.
   services.samba = {
     enable = true;
     openFirewall = true;

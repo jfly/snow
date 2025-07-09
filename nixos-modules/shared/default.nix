@@ -82,6 +82,9 @@ in
     nix.settings.trusted-users = [ "@wheel" ];
     security.sudo.wheelNeedsPassword = false;
 
+    # Enable ssh for all machines.
+    services.openssh.enable = true;
+
     users.users.jfly = {
       isNormalUser = true;
       extraGroups = [
@@ -90,9 +93,6 @@ in
       ];
       openssh.authorizedKeys.keys = [ identities.jfly ];
     };
-
-    # Enable ssh for all machines.
-    services.openssh.enable = true;
 
     users.users.rachel = {
       isNormalUser = true;

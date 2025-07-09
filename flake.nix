@@ -103,11 +103,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          (fetchpatch {
-            name = "nextcloud: add `nextcloud.nginx.enableFastcgiRequestBuffering` option";
-            url = "https://github.com/NixOS/nixpkgs/pull/419120.diff";
-            hash = "sha256-+/Q/8PXYF5Gnc14okwdhhKerijK12UF+r1xcKnD3YqI=";
-          })
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
@@ -120,7 +115,7 @@
           (fetchpatch {
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-SL2yptzqP51y/6Y+Q7W675E1i8pybbVKQlu63d/Mocg=";
+            hash = "sha256-owIYa598cbqEAZ5aLK61Owy94kAn1NfoHA6nLsSWNek=";
           })
         ];
 
@@ -147,14 +142,6 @@
             })
           ];
         };
-
-        with-alacritty.patches = [
-          (fetchpatch {
-            name = "Update deps, add missing `format`";
-            url = "https://github.com/FatBoyXPC/with-alacritty/pull/4.diff";
-            hash = "sha256-4h7BYvTOWiL0u7KlrZN9gXPb25TXRgVyPGwkKVTscEU=";
-          })
-        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

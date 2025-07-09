@@ -25,7 +25,7 @@ in
     };
 
     inventory = {
-      instances.zerotier = {
+      instances.mm = {
         module = {
           input = "clan-core";
           name = "zerotier";
