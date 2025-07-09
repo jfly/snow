@@ -47,11 +47,3 @@ def build_app():
     Radarr(snowauth)
     Sonarr(snowauth)
     Bazarr(snowauth)
-
-    ###
-    ### Some stuff that's useful to turn on as necessary, but not stuff I want running 24/7
-    ###
-
-    # An example of using a helm chart and dealing with ingress. Also, using
-    # Pulumi to declare an s3 bucket.
-    # from .baserow import Baserow; Baserow(namespace="default", snowauth=snowauth)
