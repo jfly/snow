@@ -47,6 +47,7 @@ in
       };
     };
 
+  # TODO: remove once k8s no longer needs this.
   # Set up NFS server.
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
@@ -59,8 +60,7 @@ in
     group = "bay";
   };
 
-  # Set up Samba server (from https://nixos.wiki/wiki/Samba#Samba_Server)
-  services.samba-wsdd.enable = true; # Make shares visible for Windows 10 clients.
+  # Set up Samba server (from https://wiki.nixos.org/wiki/Samba)
   services.samba = {
     enable = true;
     openFirewall = true;
@@ -73,35 +73,45 @@ in
         "use sendfile" = "yes";
         # Note: `localhost` is the IPv6 localhost `::1`.
         # `192.168.28.*` is our trusted home VLAN.
-        # `192.168.31.*` is our VPN VLAN.
-        "hosts allow" = "192.168.28. 192.168.31. 127.0.0.1 localhost";
+        # `fdd4:aa51:eed9:426:9f99:93::/88` is our VPN.
+        "hosts allow" = "127.0.0.1 localhost 192.168.28. fdd4:aa51:eed9:426:9f99:93::/88";
         "hosts deny" = "0.0.0.0/0";
         "guest account" = "nobody";
         "map to guest" = "bad user";
       };
 
-      media = {
-        path = "/mnt/media";
-        browseable = "yes";
-        "read only" = "yes";
-        "guest ok" = "yes";
-      };
-
       archive = {
         path = "/mnt/bay/archive";
+        "valid users" = "jfly rachel";
         browseable = "yes";
         writeable = "yes";
-        "guest ok" = "yes";
         "force user" = config.users.users.archive.name;
+        "guest ok" = "no";
       };
 
       dangerzone = {
         path = "/mnt/bay/dangerzone";
+        "valid users" = "jfly rachel";
         browseable = "yes";
         writeable = "yes";
-        "guest ok" = "yes";
         "force user" = config.users.users.archive.name;
+        "guest ok" = "no";
       };
     };
+  };
+
+  # Advertise shares.
+  services.avahi = {
+    publish.enable = true;
+    publish.userServices = true;
+    nssmdns4 = true;
+    enable = true;
+    openFirewall = true;
+  };
+
+  # Advertise shares for Windows clients.
+  services.samba-wsdd = {
+    enable = true;
+    openFirewall = true;
   };
 }
