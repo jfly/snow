@@ -22,6 +22,7 @@
     ./vaultwarden.nix
     ./audiobookshelf.nix
     ./nextcloud.nix
+    ./home-assistant
   ];
 
   networking.hostName = "fflewddur";

@@ -109,6 +109,21 @@
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
             hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
           })
+          (fetchpatch {
+            name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";
+            url = "https://github.com/NixOS/nixpkgs/pull/423969.diff";
+            hash = "sha256-hHFI9oYCuNeaMFAq0NC6tRwrsi9LjOoy4ISSNaVIlKE=";
+          })
+          (fetchpatch {
+            name = "home-assistant-custom-lovelace-modules.restriction-card: init at 1.2.19";
+            url = "https://github.com/NixOS/nixpkgs/pull/424387.diff";
+            hash = "sha256-w21m2xHgxhxeC9syo4wxgPsSg2bTWPToC+/jRHGBfWo=";
+          })
+          (fetchpatch {
+            name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13";
+            url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
+            hash = "sha256-cTDlIquv8hYLnNhVWesVp2win2BNMpTskjEagrtSLag=";
+          })
         ];
 
         simple-nixos-mailserver.patches = [

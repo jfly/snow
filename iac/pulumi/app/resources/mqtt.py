@@ -38,7 +38,7 @@ class MqttRetainedMessageProvider(ResourceProvider):
             if elapsed_seconds > timeout.total_seconds():
                 assert (
                     False
-                ), "Timed out after {elapsed_seconds}s trying to created MqttRetainedMessage"
+                ), f"Timed out after {elapsed_seconds}s trying to created MqttRetainedMessage"
             try:
                 publish.single(
                     topic,

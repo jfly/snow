@@ -30,7 +30,7 @@ def build_app():
     SnowWeb(snowauth)
     mosquitto = Mosquitto(namespace="default")
     Zigbee2Mqtt(namespace="default", mosquitto=mosquitto, snowauth=snowauth)
-    HomeAssistant(namespace="default", snowauth=snowauth, mosquitto=mosquitto)
+    HomeAssistant(namespace="default", mosquitto=mosquitto)
 
     Budget(snowauth)
     Whoami(snowauth)

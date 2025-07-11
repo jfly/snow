@@ -1,5 +1,5 @@
 config wifi-presence main
-	option mqttAddr 'tcp://mqtt.snow.jflei.com:1883'
+	option mqttAddr 'tcp://mqtt.ec:1883'
 
 	option mqttUsername '@mqtt_username@'
 	option mqttPassword '@mqtt_password@'

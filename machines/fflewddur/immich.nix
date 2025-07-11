@@ -50,30 +50,5 @@
     };
   };
 
-  # This is needed because the Immich android app doesn't support custom CAs:
-  #  - https://github.com/immich-app/immich/pull/14335
-  #  - https://github.com/immich-app/immich/issues/15230
-  #  - https://github.com/dart-lang/sdk/issues/50435
-  #  - https://github.com/immich-app/immich/pull/5869
-  services.nginx.virtualHosts."immich.snow.jflei.com" = {
-    # Disable ACME/SSL. This isn't exposed to the outside, it's all proxied via
-    # our `k3s` cluster which does HTTPS termination.
-    enableACME = false;
-    forceSSL = lib.mkForce false;
-
-    # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
-    locations."/" = {
-      proxyPass = "http://[::1]:${toString config.services.immich.port}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
-      extraConfig = ''
-        client_max_body_size 50000M;
-        proxy_read_timeout   600s;
-        proxy_send_timeout   600s;
-        send_timeout         600s;
-      '';
-    };
-  };
-
   snow.backup.paths = [ "/var/lib/immich" ];
 }

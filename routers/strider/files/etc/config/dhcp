@@ -19,6 +19,7 @@ config dnsmasq
 	list address '/aragorn.ec/192.168.28.2'
 	list address '/elfstone.ec/192.168.28.3'
 	list address '/arris.ec/192.168.27.1'
+	list address '/mqtt.ec/192.168.28.172'
 
 config dhcp 'lan'
 	option interface 'lan'
