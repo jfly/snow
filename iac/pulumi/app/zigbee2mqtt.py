@@ -1,17 +1,28 @@
 from .snowauth import Snowauth, Access
-from .mosquitto import Mosquitto
+from .deage import deage
 import pulumi_kubernetes as kubernetes
 
 
+# TODO: port from k8s to nix
 class Zigbee2Mqtt:
-    def __init__(self, namespace: str, snowauth: Snowauth, mosquitto: Mosquitto):
+    def __init__(self, namespace: str, snowauth: Snowauth):
         self._namespace = namespace
 
         host_serial_path = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_4e9906adc812ec118b8a23c7bd930c07-if00-port0"
         containerized_serial_path = "/dev/ttyACM0"
 
-        mqtt_username = mosquitto.zigbee2mqtt_username
-        mqtt_password = mosquitto.zigbee2mqtt_password
+        mqtt_username = "zigbee2mqtt"
+        mqtt_password = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3WFFtdmErMy9haGIwWW5v
+            VXpyOUc2RlFzV2pYdk1BMDZ5cmVBb0ZiS1ZRCitBY2dkT0F1NFJReGttQkwwd1Rk
+            TFNXcGpMWVVBUXI3citUaXFKbHQrNkUKLS0tIG0zM1I1WkZleHJtRW9lUU5GNFpp
+            aU9CRlJ0aUl2eDhKbHNUeHVFTWJRYnMKFwrhrlu/Kd8Y9gW3JbhY7GQW1qbmbuz7
+            7hPBVnMllz2wkCF8bBxoWcU0yPXMIErQmXPYauHxkXGZ0guvL69IG+Y=
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
 
         snowauth.declare_app(
             name="zigbee2mqtt",
@@ -25,7 +36,7 @@ class Zigbee2Mqtt:
                 "ZIGBEE2MQTT_CONFIG_HOMEASSISTANT": "true",
                 "ZIGBEE2MQTT_CONFIG_PERMIT_JOIN": "false",
                 "ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC": "zigbee2mqtt",
-                "ZIGBEE2MQTT_CONFIG_MQTT_SERVER": mosquitto.url(),
+                "ZIGBEE2MQTT_CONFIG_MQTT_SERVER": "mqtt://192.168.28.172:1883",  # TODO: switch to "mqtts://mqtt.mm" (possibly with ":8883" suffix).
                 "ZIGBEE2MQTT_CONFIG_MQTT_USER": mqtt_username,
                 "ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD": mqtt_password,
                 "ZIGBEE2MQTT_CONFIG_SERIAL_PORT": containerized_serial_path,
@@ -55,7 +66,6 @@ class Zigbee2Mqtt:
                     ),
                     name="ttyacm",
                 ),
-                # TODO: look into k8s persistent volumes for this
                 kubernetes.core.v1.VolumeArgs(
                     host_path=kubernetes.core.v1.HostPathVolumeSourceArgs(
                         path="/state/zigbee2mqtt-data",

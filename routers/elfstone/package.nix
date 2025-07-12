@@ -25,11 +25,11 @@ snow-router {
     username = "elfstone";
     password = deage.impureString ''
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuR1ByeEQ1MkNpL3UxTlUy
-      Wlc1L0tUUmZ2N2RDeFJQWjZ0dERyV1E1djI4CjBWSUNodjl3OWZqaGhSZWxSN3ZN
-      VjJhNHlVOHJkTUdLMVFQTFpyU1hiejAKLS0tIElsbytMdEpVQmlTUDQzYytOanJz
-      OFE2dER3VTFVeVhtTzFMWFlhSFZWajQK5bmkkgas1uyi8xkMKNUH4i7F9mHzWZ9S
-      eKaXqKII7KroBW0sRs36rjm5LibqY7fvBqUE7w==
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzbkxQd3N4aGp2dXIyQ1Y0
+      d2RMdkkyaTFRM2R4dE9OMUFBRDRRWFJHWUQwCldmOVNUcUtCT1l2WCtsTWZ1VkVo
+      S0tueVRqaXQrQWFWSDFRMkNiMHQzejgKLS0tIGdZY0d2R004YzcrRTZ3WUcramVL
+      Y1lWa0ZGM0w3S0pXV1J4aUpjZ0RMRmcKtaNdTvvw3AV+nRyZa1AGNuWNfk5CloDs
+      MsrTPSyYLfK1V290tDu892KTc42cA9HaP6WriSK9V4of8ZpukQ9+8w==
       -----END AGE ENCRYPTED FILE-----
     '';
   };

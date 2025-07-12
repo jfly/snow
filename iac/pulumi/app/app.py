@@ -10,10 +10,8 @@ from .budget import Budget
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
-from .mosquitto import Mosquitto
 from .zigbee2mqtt import Zigbee2Mqtt
 from .snow_web import SnowWeb
-from .home_assistant import HomeAssistant
 from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
@@ -28,9 +26,7 @@ def build_app():
     LegacyRedirects()
 
     SnowWeb(snowauth)
-    mosquitto = Mosquitto(namespace="default")
-    Zigbee2Mqtt(namespace="default", mosquitto=mosquitto, snowauth=snowauth)
-    HomeAssistant(namespace="default", mosquitto=mosquitto)
+    Zigbee2Mqtt(namespace="default", snowauth=snowauth)
 
     Budget(snowauth)
     Whoami(snowauth)

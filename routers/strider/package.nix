@@ -39,11 +39,11 @@ snow-router {
     username = "strider";
     password = deage.impureString ''
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiVHc1UXJmMkJpeVdlTWFX
-      TzB3TnFHZHBwaG1hbGhqb2k1VUpWYyt4bFQwCnJodmsvQ3VsOWFtWUZsbnBJM2pO
-      SzBRTDM3VVpnSnF4dE5KZ29uVm9wd3MKLS0tIHRxQlhTOSt4citFbm9RalFFdndz
-      OHZDdVhFdnU3eUZESjNabVcraDhlbEEKAW54k9Ne4JZ76adEBmvrcKrxdVcMQe+q
-      pbReTtYwFdORWth/mhrKJG1xffW2jNzORDbfow==
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLRlRJWUdjRjdXc0JpL2Fh
+      QmkwZ1JHRVVPZXRjRTNpVEI4VW9senBrV1hnCkFPWWNuSFlYMS82d0s0Q0wwdWY5
+      U0FXKzJPTkh1Tk91Y2d5R3JjQThXa0UKLS0tIHFGamtOLzd0WGV6RDhnOUtteStJ
+      ZkRGUlJtRms1T1VoV2hxOUhWYnVsNGsK6xpJECTrq5S1HRmNbrI8fSDZfKRiMlzs
+      MM1VUK4Mj+UjXPfzF39zyDAD2ULbr4lXHBwLSwPCio9zc8FwneQ=
       -----END AGE ENCRYPTED FILE-----
     '';
   };

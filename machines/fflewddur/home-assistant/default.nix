@@ -38,6 +38,7 @@
       vacuum-card
     ];
     config = {
+      # logger.default = "debug";
       http = {
         server_host = "::1";
         trusted_proxies = [ "::1" ];
@@ -49,10 +50,20 @@
       default_config = { };
 
       # YAML mode is required in order to use `customLovelaceModules`.
-      # I'm not ready to programatically managed all my dashboards, though.
+      # I'm not ready to programmatically managed all my dashboards, though.
       # Fortunately, this seems to only require the "Overview" dashboard to be
-      # yaml, other dashboards can still be managed in yaml or storage.
+      # YAML, other dashboards can still be managed in YAML or storage.
       lovelace.mode = "yaml";
+
+      # Note about people and presence detection:
+      # - We currently manage people/users imperatively through the HA ui:
+      #   <https://home-assistant.mm/config/person>.
+      # - Configuring presence detection is a manual process involving 2 steps:
+      #   - Edit a retained MQTT message to reconfigure wifi-presence to
+      #     track devices by MAC:
+      #     <https://github.com/awilliams/wifi-presence/issues/29>.
+      #   - Add the resulting tracking devices (there should be one per AP) to
+      #     the HA person on <https://home-assistant.mm/config/person>.
 
       group = {
         everyone = {

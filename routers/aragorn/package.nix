@@ -25,11 +25,11 @@ snow-router {
     username = "aragorn";
     password = deage.impureString ''
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmeFBZeUo1cVFJeVUvK1hL
-      cGkvT0psbUxnUDlDelFTSmhpOXY4TUtxKzFjCmZycm5BWS9ZYXA2aUFwYyt1bi96
-      cTNDRFFDaEsrK2FPQ1RvOWpvVVhSbUUKLS0tIHFrWGpDN1BTZFNmaVJiOUVKZU1i
-      TC9ULzdsbCsyL3hDbGVqdjAwUGlQNUkKGzVGPVjUblP8AeZI1uPhMHwZMk5yNxnI
-      W3vQFZe+gBiYFpe6bKA+v8kJh7+t/xeraKvBRQ==
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlRkJ2ZTdEZ3RTd25kSnRw
+      S1lJN2FNSWdwM2thNTdVSU9rMW1DLzJFSUdrCk80cXhrdDl1SjFUK3JINEROcVlv
+      bVNVSi8zdnJNajJFL3ZOOVVUbFM2ZUUKLS0tIHNaM2pHekVBWklsNEJKaGJIckV2
+      MXdQbTRnVUVxWjU4ekVVNzR4d1NZbzQKQ2SEVYIgnipdBuuyKCmWwkw7kJCNY4fi
+      wEkxE5eJ//SEICstP0jKL7cq2I8NrQyaMYxA2hGKLzYvjNtdyglipS/R5Q==
       -----END AGE ENCRYPTED FILE-----
     '';
   };
