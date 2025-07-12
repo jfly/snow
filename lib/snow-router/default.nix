@@ -26,7 +26,7 @@ let
     identities
     ;
 
-  release = "24.10.1";
+  release = "24.10.2";
   profiles = openwrt-imagebuilder.lib.profiles {
     inherit pkgs release;
   };
