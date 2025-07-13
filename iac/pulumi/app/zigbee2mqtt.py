@@ -27,13 +27,13 @@ class Zigbee2Mqtt:
         snowauth.declare_app(
             name="zigbee2mqtt",
             namespace=self._namespace,
-            image="koenkk/zigbee2mqtt:1.39.1",
+            image="koenkk/zigbee2mqtt:2.5.1",
             port=8080,
             access=Access.LAN_ONLY,
             env={
                 "TZ": "America/Los_Angeles",
                 # https://www.zigbee2mqtt.io/guide/configuration/
-                "ZIGBEE2MQTT_CONFIG_HOMEASSISTANT": "true",
+                "ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED": "true",
                 "ZIGBEE2MQTT_CONFIG_PERMIT_JOIN": "false",
                 "ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC": "zigbee2mqtt",
                 "ZIGBEE2MQTT_CONFIG_MQTT_SERVER": "mqtt://192.168.28.172:1883",  # TODO: switch to "mqtts://mqtt.mm" (possibly with ":8883" suffix).
