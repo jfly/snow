@@ -35,13 +35,6 @@ class MiscK8sHttpsProxies:
         )
 
         self._add_proxy(
-            "ospi",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.197",  # `ospi.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
-            destination_port=8080,
-        )
-
-        self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)

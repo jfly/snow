@@ -61,6 +61,14 @@ let
   # };
 in
 {
+  # Hack to work around the fact that Prometheus's blackbox exporter doesn't
+  # seem to honor `getaddrinfo`.
+  # TODO: figure out how to get blackbox exporter to use a configured DNS
+  #       server instead (or get it to use `getaddrinfo`).
+  networking.extraHosts = ''
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.mm
+  '';
+
   services.prometheus = {
     exporters.blackbox = {
       enable = true;
@@ -70,12 +78,6 @@ in
           modules.https_success = {
             prober = "http";
             tcp.tls = true;
-            http.headers.User-Agent = "blackbox-exporter";
-          };
-
-          modules.http_success = {
-            prober = "http";
-            tcp.tls = false;
             http.headers.User-Agent = "blackbox-exporter";
           };
 
@@ -115,14 +117,8 @@ in
         module = "https_success";
         targets = [
           "https://snow.jflei.com"
+          "https://ospi.mm"
         ];
-      })
-      # We scrape ospi.ec directly because the reverse proxy (which terminates
-      # HTTPs) always looks healthy. Ideally we'd have ospi itself get a valid
-      # cert.
-      (mkStaticProbe {
-        module = "http_success";
-        targets = [ "http://ospi.ec:8080" ];
       })
     ];
 
@@ -136,7 +132,7 @@ in
                 {
                   alert = "CertificateExpiry";
                   expr = ''
-                    probe_ssl_earliest_cert_expiry - time() < 86400 * 14
+                    probe_ssl_earliest_cert_expiry - time() < 60 * 60 * 12
                   '';
                   for = "15m";
                   labels.severity = "warning";

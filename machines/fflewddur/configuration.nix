@@ -23,6 +23,7 @@
     ./audiobookshelf.nix
     ./nextcloud.nix
     ./home-assistant
+    ./ospi.nix
   ];
 
   networking.hostName = "fflewddur";
