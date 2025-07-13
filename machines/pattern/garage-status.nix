@@ -9,8 +9,8 @@ let
   on-air = inputs'.on-air.packages.default;
 in
 {
-  # TODO: port mosquitto (iac/pulumi/app/mosquitto.py) to nix, and combine this
-  # with the creation of the user.
+  # TODO: port machines/fflewddur/home-assistant/mqtt.nix to clan's inventory
+  # system, and combine this with the creation of the user.
   clan.core.vars.generators.mosquitto = {
     files."username" = {
       secret = false;

@@ -8,6 +8,7 @@
   imports = [
     ./postgresql.nix
     ./mqtt.nix
+    ./zigbee2mqtt.nix
   ];
 
   services.home-assistant = {

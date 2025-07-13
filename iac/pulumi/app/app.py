@@ -10,7 +10,6 @@ from .budget import Budget
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
-from .zigbee2mqtt import Zigbee2Mqtt
 from .snow_web import SnowWeb
 from .snow_state import SnowState
 from .dns import Dns
@@ -26,7 +25,6 @@ def build_app():
     LegacyRedirects()
 
     SnowWeb(snowauth)
-    Zigbee2Mqtt(namespace="default", snowauth=snowauth)
 
     Budget(snowauth)
     Whoami(snowauth)

@@ -63,7 +63,7 @@ let
     (map (
       userName:
       (lib.nameValuePair "mqtt-${userName}" {
-        files."password".deploy = false;
+        files."password".deploy = userName == "zigbee2mqtt"; # TODO: port to clan's inventory system and put this in machines/fflewddur/home-assistant/zigbee2mqtt.nix instead.
         files."password.hashed" = { };
         runtimeInputs = with pkgs; [
           coreutils
