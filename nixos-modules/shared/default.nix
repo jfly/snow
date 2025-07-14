@@ -17,13 +17,22 @@ in
   ];
 
   options = {
-    snow.neovim.package = lib.mkPackageOption {
-      neovim-lite = flake'.packages.neovim.override { full = false; };
-    } "neovim-lite" { };
+    snow = {
+      neovim.package = lib.mkPackageOption {
+        neovim-lite = flake'.packages.neovim.override { full = false; };
+      } "neovim-lite" { };
+
+      tld = lib.mkOption {
+        type = lib.types.str;
+        description = "TLD for services hosted on the overlay network";
+        default = "m";
+        readOnly = true;
+      };
+    };
   };
 
   config = {
-    networking.domain = "mm";
+    networking.domain = config.snow.tld;
 
     clan.core = {
       settings.state-version.enable = true;

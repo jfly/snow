@@ -3,7 +3,7 @@
 let
   domain = rec {
     sld = "syncthing.${config.networking.hostName}";
-    fqdn = "${sld}.${config.networking.domain}";
+    fqdn = "${sld}.${config.snow.tld}";
   };
 in
 {

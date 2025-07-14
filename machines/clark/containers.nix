@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   # Set up a kubernetes cluster with `k3s`.
@@ -42,7 +42,7 @@
     extraFlags = [
       "--private-registry /etc/snow/k3s/registries.yaml"
       "--tls-san clark.ec"
-      "--tls-san clark.mm"
+      "--tls-san clark.${config.snow.tld}"
     ];
   };
 

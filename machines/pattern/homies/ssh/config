@@ -14,7 +14,7 @@ Host ocf
     User jfly
 
 Host doli
-    HostName doli.mm
+    HostName doli.m
     User jfly
 
 Host hetzner-storage-box

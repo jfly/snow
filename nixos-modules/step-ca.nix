@@ -6,22 +6,23 @@
 }:
 
 let
-  # Only allow the CA to generate certs for these domains. That way, even if
-  # the CA key is leaked, attackers can't MITM "real" websites. More
-  # realistically, it means I cannot snoop on my spouse's web traffic, which is
-  # a good thing.
-  permittedDnsDomains = [ "mm" ];
-
   domain = {
+    tld = config.snow.tld;
     sld = "ca";
     # This domain is handled by nginx (other servers will use this to generate certs).
-    fqdn = "ca.mm";
+    fqdn = "${domain.sld}.${domain.tld}";
     # This local domain is specifically for step-ca, which needs to run over
     # https with a domain name it can generate a cert for. The CA is not
     # allowed to generate certs for `localhost`, so we need some other domain
     # that resolves to localhost instead.
-    local = "local.ca.mm";
+    local = "local.${domain.fqdn}";
   };
+
+  # Only allow the CA to generate certs for these domains. That way, even if
+  # the CA key is leaked, attackers can't MITM "real" websites. More
+  # realistically, it means I cannot snoop on my spouse's web traffic, which is
+  # a good thing.
+  permittedDnsDomains = [ domain.tld ];
 
   cfg = config.snow.step-ca;
 in

@@ -4,7 +4,7 @@
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud31;
-    hostName = "nextcloud.mm";
+    hostName = "nextcloud.${config.snow.tld}";
     database.createLocally = true;
     config = {
       dbtype = "pgsql";
@@ -24,7 +24,7 @@
   };
 
   # Force HTTPS.
-  services.nginx.virtualHosts."nextcloud.mm" = {
+  services.nginx.virtualHosts."nextcloud.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
   };

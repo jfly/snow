@@ -1,6 +1,7 @@
+{ config, ... }:
 {
   services.data-mesher.settings.host.names = [ "ospi" ];
-  services.nginx.virtualHosts."ospi.mm" = {
+  services.nginx.virtualHosts."ospi.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 

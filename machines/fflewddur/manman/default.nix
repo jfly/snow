@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   services.nginx.package = pkgs.nginx.override { modules = [ pkgs.nginxModules.fancyindex ]; };
 
@@ -7,7 +7,7 @@
     "media"
   ];
 
-  services.nginx.virtualHosts."manman.mm" = {
+  services.nginx.virtualHosts."manman.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 
@@ -17,7 +17,7 @@
     };
   };
 
-  services.nginx.virtualHosts."media.mm" = {
+  services.nginx.virtualHosts."media.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 

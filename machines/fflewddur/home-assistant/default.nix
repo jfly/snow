@@ -58,13 +58,13 @@
 
       # Note about people and presence detection:
       # - We currently manage people/users imperatively through the HA ui:
-      #   <https://home-assistant.mm/config/person>.
+      #   <https://home-assistant.m/config/person>.
       # - Configuring presence detection is a manual process involving 2 steps:
       #   - Edit a retained MQTT message to reconfigure wifi-presence to
       #     track devices by MAC:
       #     <https://github.com/awilliams/wifi-presence/issues/29>.
       #   - Add the resulting tracking devices (there should be one per AP) to
-      #     the HA person on <https://home-assistant.mm/config/person>.
+      #     the HA person on <https://home-assistant.m/config/person>.
 
       group = {
         everyone = {
@@ -167,7 +167,7 @@
   };
 
   services.data-mesher.settings.host.names = [ "home-assistant" ];
-  services.nginx.virtualHosts."home-assistant.mm" = {
+  services.nginx.virtualHosts."home-assistant.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
     extraConfig = ''

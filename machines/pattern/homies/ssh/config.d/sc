@@ -1,7 +1,7 @@
 ### San Clemente stuff
 
 Host kent
-    HostName kent.sc.jflei.com
+    HostName kent.m
     User jfly
 
 Host sc-router

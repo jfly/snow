@@ -94,9 +94,9 @@ in
 
   # Note that we use nginx to generate a cert for MQTT because nginx is capable
   # of passing the "host a file" HTTP challenge.
-  security.acme.certs."mqtt.mm".reloadServices = [ "mosquitto.service" ];
+  security.acme.certs."mqtt.${config.snow.tld}".reloadServices = [ "mosquitto.service" ];
   services.data-mesher.settings.host.names = [ "mqtt" ];
-  services.nginx.virtualHosts."mqtt.mm" = {
+  services.nginx.virtualHosts."mqtt.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 
@@ -114,8 +114,8 @@ in
   clan.core.vars.generators = mqttPwGenerators;
   systemd.services.mosquitto.serviceConfig = {
     LoadCredential = [
-      "cert.pem:${config.security.acme.certs."mqtt.mm".directory}/cert.pem"
-      "key.pem:${config.security.acme.certs."mqtt.mm".directory}/key.pem"
+      "cert.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/cert.pem"
+      "key.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/key.pem"
     ];
   };
   services.mosquitto = {

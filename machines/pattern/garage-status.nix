@@ -19,11 +19,11 @@ in
       owner = "jeremy";
     };
     prompts.username = {
-      description = "Username for mqtt.mm";
+      description = "Username for mqtt.${config.snow.tld}";
       type = "line";
     };
     prompts.password = {
-      description = "Password for mqtt.mm";
+      description = "Password for mqtt.${config.snow.tld}";
       type = "hidden";
     };
     runtimeInputs = with pkgs; [
@@ -44,7 +44,7 @@ in
 
     script = ''
       ${on-air}/bin/on-air mqtt \
-        --broker mqtts://mqtt.mm \
+        --broker mqtts://mqtt.${config.snow.tld} \
         --username $(< ${config.clan.core.vars.generators.mosquitto.files."username".path}) \
         --password-file ${config.clan.core.vars.generators.mosquitto.files."password".path} \
         --device-name ${config.networking.hostName} \

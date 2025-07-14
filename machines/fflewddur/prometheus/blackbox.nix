@@ -66,8 +66,8 @@ in
   # TODO: figure out how to get blackbox exporter to use a configured DNS
   #       server instead (or get it to use `getaddrinfo`).
   networking.extraHosts = ''
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.mm
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} manman.mm
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.${config.snow.tld}
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} manman.${config.snow.tld}
   '';
 
   services.prometheus = {
@@ -117,8 +117,8 @@ in
       (mkStaticProbe {
         module = "https_success";
         targets = [
-          "https://manman.mm"
-          "https://ospi.mm"
+          "https://manman.${config.snow.tld}"
+          "https://ospi.${config.snow.tld}"
         ];
       })
     ];

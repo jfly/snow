@@ -1,12 +1,13 @@
+{ config, ... }:
 {
   # This is just a proxy.
   # TODO: actually port vaultwarden from k8s to nix.
 
   imports = [
-    # TODO: remove once everything is switched over to `vaultwarden.mm`.
+    # TODO: remove once everything is switched over to `vaultwarden.${config.snow.tld}`.
     {
       services.data-mesher.settings.host.names = [ "vw" ];
-      services.nginx.virtualHosts."vw.mm" = {
+      services.nginx.virtualHosts."vw.${config.snow.tld}" = {
         enableACME = true;
         forceSSL = true;
 
@@ -26,7 +27,7 @@
   ];
 
   services.data-mesher.settings.host.names = [ "vaultwarden" ];
-  services.nginx.virtualHosts."vaultwarden.mm" = {
+  services.nginx.virtualHosts."vaultwarden.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 

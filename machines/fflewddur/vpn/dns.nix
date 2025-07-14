@@ -21,7 +21,7 @@
     # choose to use the DNS settings provided by a ZeroTier controller when
     # they connect.
     dns = {
-      "domain" = config.networking.domain;
+      "domain" = config.snow.tld;
       "servers" = [ config.clan.core.vars.generators.zerotier.files.zerotier-ip.value ];
     };
 

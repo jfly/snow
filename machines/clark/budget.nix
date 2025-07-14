@@ -1,12 +1,18 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   user = "root";
   group = "media";
+  domain = "budget.${config.snow.tld}";
 in
 {
   services.data-mesher.settings.host.names = [ "budget" ];
-  services.nginx.virtualHosts."budget.mm" = {
+  services.nginx.virtualHosts.${domain} = {
     enableACME = true;
     forceSSL = true;
 
@@ -24,7 +30,7 @@ in
     serviceConfig = {
       Type = "notify";
       NotifyAccess = "all"; # The service invokes `systemd-notify --ready` as a subprocess.
-      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod https://budget.mm";
+      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod https://${domain}";
       WorkingDirectory = "/state/git/manmanmon";
       User = user;
       Group = group;

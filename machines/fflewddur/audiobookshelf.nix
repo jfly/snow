@@ -11,7 +11,7 @@
     # work, presumably because of where their datacenter is located.
     {
       services.data-mesher.settings.host.names = [ "podhacks" ];
-      services.nginx.virtualHosts."podhacks.mm" = {
+      services.nginx.virtualHosts."podhacks.${config.snow.tld}" = {
         enableACME = true;
         forceSSL = true;
 
@@ -51,7 +51,7 @@
   users.users.audiobookshelf.extraGroups = [ "media" ];
 
   services.data-mesher.settings.host.names = [ "audiobookshelf" ];
-  services.nginx.virtualHosts."audiobookshelf.mm" = {
+  services.nginx.virtualHosts."audiobookshelf.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 

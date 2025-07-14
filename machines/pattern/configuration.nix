@@ -2,6 +2,7 @@
   flake,
   inputs,
   pkgs,
+  config,
   ...
 }:
 
@@ -77,7 +78,7 @@
   # https://wiki.nixos.org/wiki/Samba#Samba_Client
   environment.systemPackages = [ pkgs.cifs-utils ];
   fileSystems."/mnt/archive" = {
-    device = "//fflewddur.mm/archive";
+    device = "//fflewddur.${config.snow.tld}/archive";
     fsType = "cifs";
     options = [
       "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s"

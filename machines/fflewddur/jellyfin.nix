@@ -10,7 +10,7 @@
 
   # TODO: remove jellyfin.snow.jflei.com proxy from k8s
   services.data-mesher.settings.host.names = [ "jellyfin" ];
-  services.nginx.virtualHosts."jellyfin.mm" = {
+  services.nginx.virtualHosts."jellyfin.${config.snow.tld}" = {
     enableACME = true;
     forceSSL = true;
 
