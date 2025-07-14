@@ -67,6 +67,7 @@ in
   #       server instead (or get it to use `getaddrinfo`).
   networking.extraHosts = ''
     ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.mm
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} manman.mm
   '';
 
   services.prometheus = {

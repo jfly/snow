@@ -5,7 +5,6 @@ from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
 from .speedtest import Speedtest
-from .budget import Budget
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
@@ -19,7 +18,6 @@ def build_app():
     snowauth = Snowauth()
     SnowState()
 
-    Budget(snowauth)
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
