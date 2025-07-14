@@ -5,7 +5,6 @@ from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
 from .speedtest import Speedtest
-from .whoami import Whoami
 from .budget import Budget
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
@@ -24,7 +23,6 @@ def build_app():
     LegacyRedirects()
 
     Budget(snowauth)
-    Whoami(snowauth)
     Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
