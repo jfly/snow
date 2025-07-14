@@ -62,7 +62,7 @@
       mkpasswd
     ];
     script = ''
-      xkcdpass --numwords 4 --delimiter - > $out/password
+      xkcdpass --numwords 4 --delimiter - | tr -d "\n" > $out/password
       mkpasswd --method=bcrypt --stdin < $out/password > $out/password.bcrypt
     '';
   };
@@ -76,7 +76,7 @@
       mkpasswd
     ];
     script = ''
-      xkcdpass --numwords 4 --delimiter - > $out/password
+      xkcdpass --numwords 4 --delimiter - | tr -d "\n" > $out/password
       mkpasswd --method=bcrypt --stdin < $out/password > $out/password.bcrypt
     '';
   };

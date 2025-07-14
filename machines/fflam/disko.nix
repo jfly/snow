@@ -9,7 +9,7 @@
       xkcdpass
     ];
     script = ''
-      xkcdpass --numwords 4 --delimiter - > $out/password
+      xkcdpass --numwords 4 --delimiter - | tr -d "\n" > $out/password
     '';
   };
 
