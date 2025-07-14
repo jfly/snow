@@ -2,7 +2,7 @@
 
 let
   domain = rec {
-    sld = "st.${config.networking.hostName}";
+    sld = "syncthing.${config.networking.hostName}";
     fqdn = "${sld}.${config.networking.domain}";
   };
 in
