@@ -103,6 +103,12 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
+          (fetchpatch {
+            name = "home-assistant-custom-lovelace-modules.restriction-card: init at 1.2.19";
+            url = "https://github.com/NixOS/nixpkgs/commit/97c2ecfa4d575f393fc198771a8620952ebc3174.diff";
+            hash = "sha256-iQ7QasY/JqdSMhe2UzgGNmoWF5Dc3wVlTdKA44CXI38=";
+          })
+
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
@@ -113,11 +119,6 @@
             name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";
             url = "https://github.com/NixOS/nixpkgs/pull/423969.diff";
             hash = "sha256-hHFI9oYCuNeaMFAq0NC6tRwrsi9LjOoy4ISSNaVIlKE=";
-          })
-          (fetchpatch {
-            name = "home-assistant-custom-lovelace-modules.restriction-card: init at 1.2.19";
-            url = "https://github.com/NixOS/nixpkgs/pull/424387.diff";
-            hash = "sha256-w21m2xHgxhxeC9syo4wxgPsSg2bTWPToC+/jRHGBfWo=";
           })
           (fetchpatch {
             name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13";
