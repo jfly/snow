@@ -3,7 +3,6 @@ import pulumi
 import dataclasses
 from typing import cast
 import pulumi_kubernetes as kubernetes
-from typing import cast
 from pulumi_crds import traefik
 from pulumi import Output
 from urllib.parse import urlparse
@@ -141,7 +140,7 @@ def http_ingress(
     enabled, the path (in this case, /some-path) will be removed before the
     request gets forwarded to the underlying service. This is useful to nest
     some services under a subpath. For example, hledger-web's url generation
-    logic can be changed, but not it's url parsing logic. In other words, you
+    logic can be changed, but not its url parsing logic. In other words, you
     can tell it "hey, whenever you generate a link prefix it with this path",
     but you can't tell it to actually respond to those urls, you actually need
     a proxy in front of it to manipulate the path. I personally find this to be

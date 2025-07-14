@@ -30,7 +30,7 @@ class Budget:
                 Access.INTERNET_BEHIND_SSO_RAREMY
             ),
             base_url=hledger_base_url,
-            # hledger-web (actually yesod) is a bit weird when you give it a
+            # `hledger-web` (actually `yesod`) is a bit weird when you give it a
             # base-url with a path: it'll generate links correctly, but it
             # expects a proxy in front that'll remove the prefix before the
             # request arrives. See

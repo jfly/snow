@@ -11,7 +11,6 @@ from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .snow_state import SnowState
 from .dns import Dns
-from .legacy_redirects import LegacyRedirects
 from .misc_k8s_https_proxies import MiscK8sHttpsProxies
 
 
@@ -19,8 +18,6 @@ def build_app():
     Dns()
     snowauth = Snowauth()
     SnowState()
-
-    LegacyRedirects()
 
     Budget(snowauth)
     Miniflux(snowauth)
