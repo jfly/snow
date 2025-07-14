@@ -21,16 +21,14 @@ in
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    # Reset the git working directory if necessary (this lets us recover from
-    # previous failed imports).
-    environment.MANMAN_RESET_REPO_IF_NECESSARY = "1";
-
     serviceConfig = {
       Type = "notify";
-      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod";
+      NotifyAccess = "all"; # The service invokes `systemd-notify --ready` as a subprocess.
+      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod https://budget.mm";
       WorkingDirectory = "/state/git/manmanmon";
       User = user;
       Group = group;
+      TimeoutStartSec = "300s"; # We do *entirely* too much work at startup. It takes a while.
       Restart = "on-failure";
       RestartSec = 5;
     };
@@ -39,6 +37,9 @@ in
   # Regularly fetch the latest data.
   systemd.services.manmanmon-fetch = {
     description = "manmanmon fetch";
+    # Reset the git working directory if necessary (this lets us recover from
+    # previous failed imports).
+    environment.MANMAN_RESET_REPO_IF_NECESSARY = "1";
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "${lib.getExe pkgs.nix} develop --command just fetch-and-commit";
