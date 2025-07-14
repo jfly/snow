@@ -23,17 +23,6 @@ class MiscK8sHttpsProxies:
             destination_port=80,
         )
 
-        # TODO: figure out how to get websockets working with Kodi's Chorus2 web ui.
-        # The UI is hardcoded to use port 9090 for websockets:
-        #  https://github.com/xbmc/chorus2/blob/f9f376930fd544e86b1dd3c0dc5f8999031d73c5/src/js/app.coffee#L8
-        # It shouldn't be this way, see discussion on https://github.com/xbmc/chorus2/issues/133.
-        self._add_proxy(
-            "kodi",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.163",  # `dallben.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
-            destination_port=8080,
-        )
-
         self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,

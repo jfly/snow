@@ -10,7 +10,6 @@ from .budget import Budget
 from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
-from .snow_web import SnowWeb
 from .snow_state import SnowState
 from .dns import Dns
 from .legacy_redirects import LegacyRedirects
@@ -23,8 +22,6 @@ def build_app():
     SnowState()
 
     LegacyRedirects()
-
-    SnowWeb(snowauth)
 
     Budget(snowauth)
     Whoami(snowauth)

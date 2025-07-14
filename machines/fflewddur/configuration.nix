@@ -24,6 +24,7 @@
     ./nextcloud.nix
     ./home-assistant
     ./ospi.nix
+    ./manman
   ];
 
   networking.hostName = "fflewddur";

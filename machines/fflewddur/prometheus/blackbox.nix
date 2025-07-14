@@ -116,7 +116,7 @@ in
       (mkStaticProbe {
         module = "https_success";
         targets = [
-          "https://snow.jflei.com"
+          "https://manman.mm"
           "https://ospi.mm"
         ];
       })
