@@ -125,6 +125,12 @@
             url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
             hash = "sha256-cTDlIquv8hYLnNhVWesVp2win2BNMpTskjEagrtSLag=";
           })
+
+          (fetchpatch {
+            name = "nixos/postsrd: settings option, hardening, postfix integration";
+            url = "https://github.com/NixOS/nixpkgs/pull/424954.diff";
+            hash = "sha256-MYkWpn8zmi0Y0XHNmSOcI5mH6bDRrVeOhWOfnk5P4yk=";
+          })
         ];
 
         openwrt-imagebuilder.patches = [
