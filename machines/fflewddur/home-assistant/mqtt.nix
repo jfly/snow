@@ -26,17 +26,17 @@ let
     # for notes on how to provision new light switches.
     "pelydryn-dining-north"
     "pelydryn-dining-south"
-    # "pelydryn-fireplace"
-    # "pelydryn-kitchen-north"
-    # "pelydryn-kitchen-south"
-    # "pelydryn-living-room-east"
-    # "pelydryn-living-room-south"
+    "pelydryn-fireplace"
+    "pelydryn-kitchen-north"
+    "pelydryn-kitchen-south"
+    "pelydryn-living-room-east"
+    "pelydryn-living-room-south"
     "pelydryn-north-bathroom"
     "pelydryn-northeast-bedroom"
-    # "pelydryn-northwest-bedroom"
-    # "pelydryn-south-bathroom"
-    # "pelydryn-south-bedroom-north"
-    # "pelydryn-south-bedroom-south"
+    "pelydryn-northwest-bedroom"
+    "pelydryn-south-bathroom"
+    "pelydryn-south-bedroom-north"
+    "pelydryn-south-bedroom-south"
   ];
 
   # Generate an attrset suitable for passing to `services.mosquitto.listeners.*.users`.
