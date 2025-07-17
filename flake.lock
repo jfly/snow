@@ -985,11 +985,11 @@
         "systems": "systems_5"
       },
       "locked": {
-        "lastModified": 1752222437,
-        "narHash": "sha256-wUb8B/hbXDzvL9wwYQDUpXNAZL68zzcTxSUVb7pwD+4=",
+        "lastModified": 1752740790,
+        "narHash": "sha256-rBFccl+QxU5rAWG7DxhMlx7kkg3zRQ8nW+3z1HCNOgE=",
         "owner": "astro",
         "repo": "nix-openwrt-imagebuilder",
-        "rev": "b8b155e30faeb08efd806bcec18871c469f82115",
+        "rev": "6eb7d5d46dab4e50d2b5357f727b3c516fb00f66",
         "type": "github"
       },
       "original": {
