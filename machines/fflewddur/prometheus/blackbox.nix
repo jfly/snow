@@ -68,6 +68,7 @@ in
   networking.extraHosts = ''
     ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.${config.snow.tld}
     ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} manman.${config.snow.tld}
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} media.${config.snow.tld}
   '';
 
   services.prometheus = {
@@ -118,7 +119,6 @@ in
         module = "https_success";
         targets = [
           "https://manman.${config.snow.tld}"
-          "https://vaultwarden.${config.snow.tld}"
           "https://media.${config.snow.tld}"
           "https://ospi.${config.snow.tld}"
         ];
