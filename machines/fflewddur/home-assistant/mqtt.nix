@@ -117,6 +117,18 @@ in
       "cert.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/cert.pem"
       "key.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/key.pem"
     ];
+
+    # nixpkgs's implementation of `ExecReload` for mosquitto sends a SIGHUP to
+    # the service, which causes the service to reload its config and re-read
+    # any certificates mentioned in the config. *Unfortunately*, systemd does
+    # not reload the `LoadCredential`s above, so the service just re-reads the
+    # exact same (outdated) credentials.
+    # AFAICT, the best fix for now is to restart the service rather than reload
+    # it. This causes systemd to reload the credentials in `LoadCredential`,
+    # but does mean we have a brief outage :cry:.
+    # See <https://github.com/systemd/systemd/issues/21099> for hope that
+    # systemd will allow reloading `LoadCredential`s someday.
+    ExecReload = lib.mkForce null;
   };
   services.mosquitto = {
     enable = true;
