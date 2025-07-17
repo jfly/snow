@@ -22,12 +22,6 @@ in
   };
   systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
-  services.nginx.virtualHosts."syncthing.snow.jflei.com" = {
-    locations."/" = {
-      proxyPass = "http://${config.services.syncthing.guiAddress}";
-    };
-  };
-
   services.data-mesher.settings.host.names = [ domain.sld ];
   services.nginx.virtualHosts.${domain.fqdn} = {
     forceSSL = true;
