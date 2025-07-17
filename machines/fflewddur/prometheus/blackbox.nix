@@ -118,6 +118,8 @@ in
         module = "https_success";
         targets = [
           "https://manman.${config.snow.tld}"
+          "https://vaultwarden.${config.snow.tld}"
+          "https://media.${config.snow.tld}"
           "https://ospi.${config.snow.tld}"
         ];
       })
