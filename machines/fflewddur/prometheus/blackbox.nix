@@ -134,8 +134,13 @@ in
               rules = [
                 {
                   alert = "CertificateExpiry";
+                  # TODO: change this to something like 12 hours rather than 1.
+                  # This requires changing the nixos acme module to specify a
+                  # tighter `AccuracySec` (and perhaps `RandomizedDelaySec`)
+                  # than it currently does. See
+                  # <https://github.com/NixOS/nixpkgs/blob/ed269f843bb3577b84740f5a8e45a8080a1afdbe/nixos/modules/security/acme/default.nix#L361-L363>.
                   expr = ''
-                    probe_ssl_earliest_cert_expiry - time() < 60 * 60 * 12
+                    probe_ssl_earliest_cert_expiry - time() < 60 * 60 * 1
                   '';
                   for = "15m";
                   labels.severity = "warning";
