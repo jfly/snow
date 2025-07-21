@@ -4,6 +4,12 @@
   pkgs,
   ...
 }:
+let
+  domain = {
+    sld = "home-assistant";
+    fqdn = "${domain.sld}.${config.snow.tld}";
+  };
+in
 {
   imports = [
     ./postgresql.nix
@@ -44,6 +50,13 @@
         server_host = "::1";
         trusted_proxies = [ "::1" ];
         use_x_forwarded_for = true;
+      };
+
+      # https://www.home-assistant.io/integrations/homeassistant/
+      homeassistant = {
+        external_url = "https://${domain.fqdn}";
+        internal_url = "https://${domain.fqdn}";
+        unit_system = "us_customary";
       };
 
       # Includes dependencies for a basic setup
@@ -166,8 +179,8 @@
     };
   };
 
-  services.data-mesher.settings.host.names = [ "home-assistant" ];
-  services.nginx.virtualHosts."home-assistant.${config.snow.tld}" = {
+  services.data-mesher.settings.host.names = [ domain.sld ];
+  services.nginx.virtualHosts.${domain.fqdn} = {
     enableACME = true;
     forceSSL = true;
     extraConfig = ''
