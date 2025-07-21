@@ -56,7 +56,8 @@ let
     "/etc/dropbear/authorized_keys" = {
       "@authorized_key@" = identities.jfly;
     };
-  } // config-template-values-by-file;
+  }
+  // config-template-values-by-file;
 
   config = pkgs.stdenv.mkDerivation {
     name = "openwrt-config-files";
@@ -142,53 +143,52 @@ let
     openwrt-imagebuilder.lib.build (
       profile
       // {
-        packages =
-          [
-            "luci"
-            # Remove the stripped down version of hostapd in favor of the full
-            # version. This is necessary for awilliams/wifi-presence. See
-            # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
-            # for details.
-            "-wpad-basic-mbedtls"
-            "wpad-mbedtls"
-            "wifi-presence"
-          ]
-          ++ (
-            if dumbap then
-              [ ]
-            else
-              [
-                "luci"
-                # Useful debugging utils.
-                "lsblk"
-                "gdisk"
-                "usbutils"
-                # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
-                "block-mount"
-                "e2fsprogs"
-                "kmod-fs-ext4"
-                "kmod-usb-storage"
-                "kmod-usb2"
-                "kmod-usb3"
-                # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
-                "ddns-scripts"
-                "luci-app-ddns"
-                "ddns-scripts-cloudflare"
-                "curl"
-                "ca-bundle"
-                # More utils
-                "coreutils-nohup"
-                # Remove the stripped down version of hostapd in favor of the full
-                # version. This is necessary for awilliams/wifi-presence. See
-                # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
-                # for details.
-                "-wpad-basic-mbedtls"
-                "wpad-mbedtls"
-                # Necessary for a hack to request multiple /64 prefixes from AT&T
-                # https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
-                "kmod-macvlan"
-              ]
-          );
+        packages = [
+          "luci"
+          # Remove the stripped down version of hostapd in favor of the full
+          # version. This is necessary for awilliams/wifi-presence. See
+          # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
+          # for details.
+          "-wpad-basic-mbedtls"
+          "wpad-mbedtls"
+          "wifi-presence"
+        ]
+        ++ (
+          if dumbap then
+            [ ]
+          else
+            [
+              "luci"
+              # Useful debugging utils.
+              "lsblk"
+              "gdisk"
+              "usbutils"
+              # From step 3 of https://openwrt.org/docs/guide-user/storage/usb-drives-quickstart#procedure
+              "block-mount"
+              "e2fsprogs"
+              "kmod-fs-ext4"
+              "kmod-usb-storage"
+              "kmod-usb2"
+              "kmod-usb3"
+              # From https://openwrt.org/docs/guide-user/services/ddns/client#requirements
+              "ddns-scripts"
+              "luci-app-ddns"
+              "ddns-scripts-cloudflare"
+              "curl"
+              "ca-bundle"
+              # More utils
+              "coreutils-nohup"
+              # Remove the stripped down version of hostapd in favor of the full
+              # version. This is necessary for awilliams/wifi-presence. See
+              # https://github.com/awilliams/wifi-presence?tab=readme-ov-file#hostapd
+              # for details.
+              "-wpad-basic-mbedtls"
+              "wpad-mbedtls"
+              # Necessary for a hack to request multiple /64 prefixes from AT&T
+              # https://openwrt.org/docs/guide-user/network/wan/isp-configurations#fiber
+              "kmod-macvlan"
+            ]
+        );
 
         # Step 11 of https://openwrt.org/docs/guide-user/network/wifi/dumbap:
         # "To save resources on the wireless AP router, disable some now unneeded services"

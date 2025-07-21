@@ -1,10 +1,5 @@
 { flake', pkgs }:
 
-let
-  bell = pkgs.runCommand "" { } ''
-    cp ${./bell.oga} $out
-  '';
-in
 pkgs.writeShellApplication {
   name = "jscrot";
   runtimeInputs =
@@ -13,13 +8,13 @@ pkgs.writeShellApplication {
       maim
       python3
       byzanz
-      pulseaudio # provides paplay
+      pulseaudio # provides `paplay`
     ])
     ++ (with flake'.packages; [
       flameshot
       savepid
     ]);
-  text = builtins.replaceStrings [ "./bell.oga" ] [ (builtins.toString bell) ] (
+  text = builtins.replaceStrings [ "./bell.oga" ] [ (builtins.toString ./bell.oga) ] (
     builtins.readFile ./jscrot
   );
 }

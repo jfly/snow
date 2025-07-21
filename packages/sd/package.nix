@@ -18,9 +18,7 @@ pkgs.script-directory.overrideAttrs (oldAttrs: {
     })
   ];
 
-  installPhase =
-    oldAttrs.installPhase
-    + ''
-      installShellCompletion sd.fish
-    '';
+  installPhase = oldAttrs.installPhase + ''
+    installShellCompletion sd.fish
+  '';
 })

@@ -53,10 +53,7 @@
     openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
 
     pyproject-build-systems = {
-      # TODO: upstream my build backend to `build-system-pkgs`.
-      # url = "github:pyproject-nix/build-system-pkgs";
-      url = "github:jfly/build-system-pkgs/add-py-generator-build-backend";
-
+      url = "github:pyproject-nix/build-system-pkgs";
       inputs.pyproject-nix.follows = "pyproject-nix";
       inputs.uv2nix.follows = "uv2nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -103,12 +100,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          (fetchpatch {
-            name = "home-assistant-custom-lovelace-modules.restriction-card: init at 1.2.19";
-            url = "https://github.com/NixOS/nixpkgs/commit/97c2ecfa4d575f393fc198771a8620952ebc3174.diff";
-            hash = "sha256-iQ7QasY/JqdSMhe2UzgGNmoWF5Dc3wVlTdKA44CXI38=";
-          })
-
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
@@ -124,6 +115,11 @@
             name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13";
             url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
             hash = "sha256-cTDlIquv8hYLnNhVWesVp2win2BNMpTskjEagrtSLag=";
+          })
+          (fetchpatch {
+            name = "byzanz: fix build with gettext 0.25";
+            url = "https://github.com/NixOS/nixpkgs/pull/427190.diff";
+            hash = "sha256-t2gBU3L2K3aIdRwfHfbQ2D1bA2BHFkHuQ45FxOA+pfk=";
           })
         ];
 

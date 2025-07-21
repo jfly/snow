@@ -66,11 +66,10 @@ in
         #   ];
         # });
 
-        backupPrepareCommand =
-          ''
-            date +%s.%N > $RUNTIME_DIRECTORY/start-ts
-          ''
-          + (if cfg.backupPrepareCommand != null then cfg.backupPrepareCommand else "");
+        backupPrepareCommand = ''
+          date +%s.%N > $RUNTIME_DIRECTORY/start-ts
+        ''
+        + (if cfg.backupPrepareCommand != null then cfg.backupPrepareCommand else "");
 
         # Report success!
         backupCleanupCommand =

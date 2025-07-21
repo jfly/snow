@@ -84,6 +84,7 @@ let
 
   cmds = [
     "mkdir $out"
-  ] ++ (map (font: ''ln -s ${font} "$out/${font.name}"'') fonts);
+  ]
+  ++ (map (font: ''ln -s ${font} "$out/${font.name}"'') fonts);
 in
 pkgs.runCommand "kobo-fonts" { } (builtins.concatStringsSep "\n" cmds)
