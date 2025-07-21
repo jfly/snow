@@ -147,17 +147,6 @@
         ];
 
         clan-core = {
-          patches = [
-            # Remove warning about deprecated data-mesher. I don't think there
-            # is a non-deprecated alternative yet, see
-            # <https://git.clan.lol/clan/clan-core/issues/3849#issuecomment-35182>
-            (fetchpatch {
-              name = "undeprecate data-mesher";
-              # Patch from <https://git.clan.lol/jfly/clan-core/compare/main...undeprecate-data-mesher>.
-              url = "https://git.clan.lol/jfly/clan-core/commit/8389e3ef36c093415d9c90acd1e4bc237ca3640a.diff";
-              hash = "sha256-3Tp3aVqBAAuovnBnpP7iiRkH/09FX2n71mx97fRZSlE=";
-            })
-          ];
           inputs.data-mesher.patches = [
             # Relax data-mesher's `NameRegex` to allow for subdomains.
             # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
