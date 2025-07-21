@@ -35,9 +35,13 @@ in
         roles.peer.tags."all" = { };
       };
 
-      services.data-mesher.default = {
-        roles.admin.machines = [ "fflewddur" ];
-        roles.peer.tags = [ "all" ];
+      instances.data-mesher = {
+        module = {
+          input = "clan-core";
+          name = "data-mesher";
+        };
+        roles.admin.machines.fflewddur = { };
+        roles.peer.tags."all" = { };
 
         # This interface name is determined from the network id, but we don't
         # have eval-time access to it. So, you have to first deploy the
@@ -45,7 +49,7 @@ in
         # This could be done in one shot if data-mesher supported Linux's
         # interface altnames. See
         # https://git.clan.lol/clan/data-mesher/issues/222.
-        config.network.interface = "zthjzvlscg";
+        roles.peer.settings.network.interface = "zthjzvlscg";
       };
     };
 
