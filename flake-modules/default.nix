@@ -1,6 +1,4 @@
 {
-  _module.args.flakeRoot = ../.;
-
   imports = [
     ./lib.nix
     ./packages.nix
