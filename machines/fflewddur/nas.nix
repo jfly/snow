@@ -64,6 +64,12 @@ in
   services.samba = {
     enable = true;
     openFirewall = true;
+    # `samba4Full` is compiled with avahi support, which is required for samba
+    # to register mDNS records for auto discovery
+    package = pkgs.sambaFull.override {
+      # Workaround for <https://github.com/NixOS/nixpkgs/issues/426401>
+      enableCephFS = false;
+    };
     settings = {
       global = {
         "security" = "user";
@@ -107,6 +113,9 @@ in
     nssmdns4 = true;
     enable = true;
     openFirewall = true;
+    # Workaround for avahi crash on name conflicts:
+    # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
+    allowInterfaces = [ config.clan.data-mesher.network.interface ];
   };
 
   # Advertise shares for Windows clients.
