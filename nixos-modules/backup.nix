@@ -10,19 +10,18 @@ let
 in
 {
   options.snow.backup = {
-    enable = lib.mkEnableOption "snow-backup";
-
     paths = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       description = ''
-        The paths to backup.
+        Paths to backup.
       '';
+      default = [ ];
     };
 
     exclude = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       description = ''
-        paths to exclude from the backup.
+        Paths to exclude from the backup.
       '';
       default = [ ];
     };
@@ -36,15 +35,15 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (cfg.paths != [ ]) {
     # This is still tedious. TODO: look into clan's native support for backups instead.
     clan.core.vars.generators.snow-backup-restic = {
       prompts."password" = {
         description = ''
-          Encrypted restic password.
+          Restic password.
           To generate, run this on fflewddur:
 
-          $ sudo restic -r /mnt/bay/restic key add --host fflewddur
+          $ sudo restic -r /mnt/bay/restic key add --host ${config.networking.hostName}
           $ sudo chown -R restic:restic /mnt/bay/restic/keys
         '';
         type = "hidden";
@@ -81,8 +80,8 @@ in
               duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
 
               echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
-              echo 'backup_completion_timestamp_seconds{site="snow"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds-snow.prom
-              echo 'backup_duration_seconds{site="snow"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_duration_seconds-snow.prom
+              echo 'backup_completion_timestamp_seconds{site="snow"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_completion_timestamp_seconds-snow.prom
+              echo 'backup_duration_seconds{site="snow"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_duration_seconds-snow.prom
             fi
           '';
 

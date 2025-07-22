@@ -59,6 +59,8 @@
   # of space, and I'm not sure I want to allocate that much ram?
   boot.tmp.cleanOnBoot = true;
 
+  snow.monitoring.expose = false; # This device roams, so scraping it is iffy.
+
   swapDevices = [
     {
       device = "/swapfile";

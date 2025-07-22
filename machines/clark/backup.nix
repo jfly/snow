@@ -1,11 +1,7 @@
-{ flake, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [ flake.nixosModules.backup ];
-
   snow.backup = {
-    enable = true;
-
     # First, do some special handling of anything like a database that needs a
     # transactionally consistent view of the world.
     # TODO: this doesn't handle our various mysql and postgresql dbs. Rather

@@ -116,8 +116,8 @@
                   snowBackupRules = lib.pipe flake.nixosConfigurations [
                     # Get just the `config`s.
                     (lib.mapAttrsToList (_name: nixosConfiguration: nixosConfiguration.config))
-                    # Filter to hosts that have snow backup enabled.
-                    (builtins.filter (config: (config.snow ? backup) && config.snow.backup.enable))
+                    # Filter to hosts that have paths to back up.
+                    (builtins.filter (config: (config.snow.backup.paths != [ ])))
                     # For each host, produce an instance such as "clark.ec:9000".
                     (map (
                       config: "${config.networking.fqdn}:${toString config.services.prometheus.exporters.node.port}"

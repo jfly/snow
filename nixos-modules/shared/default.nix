@@ -14,6 +14,8 @@ in
   imports = [
     flake.nixosModules.nix-index
     flake.nixosModules.step-ca
+    flake.nixosModules.backup
+    flake.nixosModules.monitoring
   ];
 
   options = {

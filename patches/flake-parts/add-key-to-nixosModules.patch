@@ -1,0 +1,17 @@
+diff --git a/modules/nixosModules.nix b/modules/nixosModules.nix
+index 89cb301..43f0d47 100644
+--- a/modules/nixosModules.nix
++++ b/modules/nixosModules.nix
+@@ -15,7 +15,12 @@ in
+       nixosModules = mkOption {
+         type = types.lazyAttrsOf types.deferredModule;
+         default = { };
+-        apply = mapAttrs (k: v: { _file = "${toString moduleLocation}#nixosModules.${k}"; imports = [ v ]; });
++        apply = mapAttrs (k: v:
++          let
++            file = "${toString moduleLocation}#nixosModules.${k}";
++          in
++          { _file = file; key = file; imports = [ v ]; }
++        );
+         description = ''
+           NixOS modules.

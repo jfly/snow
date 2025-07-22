@@ -123,4 +123,6 @@ in
     enable = true;
     openFirewall = true;
   };
+
+  snow.backup.paths = [ "/mnt/bay/archive" ];
 }

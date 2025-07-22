@@ -59,8 +59,8 @@ let
 
       # Finally, report a successful backup =)
       echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
-      echo 'backup_completion_timestamp_seconds{site="hetzner"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_completion_timestamp_seconds-hetzner.prom
-      echo 'backup_duration_seconds{site="hetzner"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.node_textfile_dir}/backup_duration_seconds-hetzner.prom
+      echo 'backup_completion_timestamp_seconds{site="hetzner"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_completion_timestamp_seconds-hetzner.prom
+      echo 'backup_duration_seconds{site="hetzner"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_duration_seconds-hetzner.prom
     '';
   };
 
@@ -70,7 +70,7 @@ let
         import subprocess
         from pathlib import Path
 
-        node_textfile_dir = Path("${config.snow.monitoring.node_textfile_dir}")
+        node_textfile_dir = Path("${config.snow.monitoring.nodeTextfileDir}")
 
         cp = subprocess.run(
             [

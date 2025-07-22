@@ -3,7 +3,6 @@
 {
   imports = [
     flake.nixosModules.shared
-    # flake.nixosModules.monitoring # Delete if this device will roam.
     ./hardware-configuration.nix
     ./disko.nix
   ];
@@ -11,6 +10,7 @@
   ### CHANGEME ##
   networking.hostName = "template";
   clan.core.deployment.requireExplicitUpdate = true; # You likely want to remove this.
+  # snow.monitoring.expose = false; # Add this if the device will roam.
 
   # Fill in the root device. Run `lsblk --output NAME,ID-LINK,FSTYPE,SIZE,MOUNTPOINT`
   # on the remote machine to get the disk id.

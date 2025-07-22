@@ -163,6 +163,11 @@
             })
           ];
         };
+
+        flake-parts.patches = [
+          # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
+          ./patches/flake-parts/add-key-to-nixosModules.patch
+        ];
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {

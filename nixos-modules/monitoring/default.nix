@@ -17,7 +17,7 @@ in
         instance to scrape those metrics.
       '';
     };
-    node_textfile_dir = lib.mkOption {
+    nodeTextfileDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/prometheus-node-exporter-text-files";
     };
@@ -35,7 +35,7 @@ in
     ];
 
     system.activationScripts.node-exporter-text-files-dir = ''
-      mkdir --parents --mode 0777 ${cfg.node_textfile_dir}
+      mkdir --parents --mode 0777 ${cfg.nodeTextfileDir}
     '';
 
     # Keep the list of exporters in sync with `scrapeConfigs` in `hosts/fflewddur/prometheus.nix`.
@@ -46,7 +46,7 @@ in
         openFirewall = true;
         enabledCollectors = [ "systemd" ];
         extraFlags = [
-          "--collector.textfile.directory=${cfg.node_textfile_dir}"
+          "--collector.textfile.directory=${cfg.nodeTextfileDir}"
         ];
       };
     };
