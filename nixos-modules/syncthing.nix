@@ -1,12 +1,14 @@
-{ config, ... }:
+{ flake, config, ... }:
 
 let
-  domain = rec {
+  domain = {
     sld = "syncthing.${config.networking.hostName}";
-    fqdn = "${sld}.${config.snow.tld}";
+    fqdn = "${domain.sld}.${config.snow.tld}";
   };
 in
 {
+  imports = [ flake.nixosModules.nginx ];
+
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;

@@ -3,6 +3,7 @@
   imports = [
     flake.nixosModules.shared
     flake.nixosModules.nginx
+    flake.nixosModules.syncthing
     ./boot.nix
     ./network.nix
     ./gpu.nix
@@ -10,7 +11,6 @@
     ./backup
     ./jellyfin.nix
     ./cryptpad.nix
-    ./syncthing.nix
     ./vpn
     ./prometheus
     ./grafana.nix
