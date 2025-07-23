@@ -10,7 +10,8 @@
   ### CHANGEME ##
   networking.hostName = "template";
   clan.core.deployment.requireExplicitUpdate = true; # You likely want to remove this.
-  # snow.monitoring.expose = false; # Add this if the device will roam.
+  # Remove if this device is expected to be online all the time.
+  snow.monitoring.alertIfDown = false;
 
   # Fill in the root device. Run `lsblk --output NAME,ID-LINK,FSTYPE,SIZE,MOUNTPOINT`
   # on the remote machine to get the disk id.

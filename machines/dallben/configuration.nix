@@ -21,7 +21,8 @@
     moonlight.enable = true;
   };
 
-  snow.monitoring.expose = false; # This device regularly goes to sleep, so scraping it is iffy.
+  # This device regularly goes to sleep.
+  snow.monitoring.alertIfDown = false;
 
   # Give the default user `sudo` permissions. Sometimes it's nice to be able to
   # debug things with a keyboard rather than ssh-ing to the box.

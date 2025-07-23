@@ -10,20 +10,35 @@
     scrapeConfigs = [
       {
         job_name = "node";
-        static_configs = [
-          {
+        static_configs =
+          let
             targets = lib.pipe flake.nixosConfigurations [
               # Get just the `config`s.
               (lib.mapAttrsToList (_name: nixosConfiguration: nixosConfiguration.config))
               # Filter to hosts that have the `node` exporter enabled.
               (builtins.filter (config: config.services.prometheus.exporters.node.enable))
+              (lib.groupBy (
+                config: if config.snow.monitoring.alertIfDown then "alertIfDown" else "noAlertIfDown"
+              ))
               # For each host, produce a target such as "clark.ec:9000".
-              (map (
-                config: "${config.networking.fqdn}:${toString config.services.prometheus.exporters.node.port}"
+              (lib.mapAttrs (
+                _: configs:
+                map (
+                  config: "${config.networking.fqdn}:${toString config.services.prometheus.exporters.node.port}"
+                ) configs
               ))
             ];
-          }
-        ];
+          in
+          [
+            {
+              targets = targets.alertIfDown;
+              labels.alert_if_down = "true";
+            }
+            {
+              targets = targets.noAlertIfDown;
+              labels.alert_if_down = "false";
+            }
+          ];
       }
     ];
 

@@ -9,12 +9,12 @@ let
 in
 {
   options.snow.monitoring = {
-    expose = lib.mkOption {
+    alertIfDown = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = ''
-        Whether to expose metrics on this host and configure our Prometheus
-        instance to scrape those metrics.
+        Whether to alert if this host is down. Disable for any devices that
+        are not expected to be online all the time.
       '';
     };
     nodeTextfileDir = lib.mkOption {
@@ -23,7 +23,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.expose {
+  config = {
     assertions = [
       {
         assertion = config.networking.domain != null;

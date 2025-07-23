@@ -14,7 +14,7 @@
                 {
                   alert = "NotUp";
                   expr = ''
-                    up == 0
+                    up{alert_if_down="true"} == 0
                   '';
                   for = "10m";
                   labels.severity = "warning";
