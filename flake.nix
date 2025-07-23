@@ -118,9 +118,9 @@
             hash = "sha256-hHFI9oYCuNeaMFAq0NC6tRwrsi9LjOoy4ISSNaVIlKE=";
           })
           (fetchpatch {
-            name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13";
+            name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13.1";
             url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
-            hash = "sha256-cTDlIquv8hYLnNhVWesVp2win2BNMpTskjEagrtSLag=";
+            hash = "sha256-+WGWiVuPvGjfjKQE/uUVoYRCC8rVigJjcCU6OePD8SY=";
           })
         ];
 
