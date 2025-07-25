@@ -51,8 +51,8 @@ in
 
       # https://www.home-assistant.io/integrations/homeassistant/
       homeassistant = {
-        external_url = services.home-assistant.url;
-        internal_url = services.home-assistant.url;
+        external_url = services.home-assistant.base_url;
+        internal_url = services.home-assistant.base_url;
         unit_system = "us_customary";
       };
 

@@ -19,7 +19,7 @@
               type = lib.types.str;
               default = "https";
             };
-            url = lib.mkOption {
+            base_url = lib.mkOption {
               type = lib.types.str;
               readOnly = true;
               default = "${local.config.scheme}://${local.config.fqdn}";

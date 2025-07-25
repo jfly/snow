@@ -46,7 +46,7 @@ in
 
     script = ''
       ${on-air}/bin/on-air mqtt \
-        --broker ${services.mqtt.url} \
+        --broker ${services.mqtt.base_url} \
         --username $(< ${config.clan.core.vars.generators.mosquitto.files."username".path}) \
         --password-file ${config.clan.core.vars.generators.mosquitto.files."password".path} \
         --device-name ${config.networking.hostName} \

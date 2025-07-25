@@ -120,9 +120,9 @@ in
       (mkStaticProbe {
         module = "https_success";
         targets = [
-          services.manman.url
-          services.media.url
-          services.ospi.url
+          services.manman.base_url
+          services.media.base_url
+          services.ospi.base_url
         ];
       })
     ];
