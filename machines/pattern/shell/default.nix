@@ -19,6 +19,7 @@ in
     flake.nixosModules.newpy
     flake.nixosModules.nix-hack
     flake.nixosModules.fzf
+    ./ripgrep.nix
   ];
 
   users.users.${config.snow.user.name}.shell = pkgs.fish;
@@ -85,7 +86,6 @@ in
     ### Explore filesystem
     file
     tree
-    ripgrep
 
     ### Misc utils
     q
