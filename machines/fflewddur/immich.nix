@@ -50,5 +50,64 @@
     };
   };
 
+  # This is needed because the Immich android app doesn't support custom CAs:
+  #  - https://github.com/immich-app/immich/pull/14335
+  #  - https://github.com/immich-app/immich/issues/15230
+  #  - https://github.com/dart-lang/sdk/issues/50435
+  #  - https://github.com/immich-app/immich/pull/5869
+  security.acme.certs."immich.snow.jflei.com".server =
+    "https://acme-v02.api.letsencrypt.org/directory";
+  services.nginx.virtualHosts."immich.snow.jflei.com" = {
+    enableACME = true;
+    forceSSL = true;
+
+    # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
+    locations."/" = {
+      proxyPass = "http://[::1]:${toString config.services.immich.port}";
+      proxyWebsockets = true;
+      recommendedProxySettings = true;
+      extraConfig = ''
+        client_max_body_size 50000M;
+        proxy_read_timeout   600s;
+        proxy_send_timeout   600s;
+        send_timeout         600s;
+      '';
+    };
+
+    #<<<
+    extraConfig = ''
+      ssl_verify_client      on;
+      ssl_client_certificate ${config.clan.core.vars.generators.step-root-ca.files."ca.crt".path};
+    '';
+    #<<<
+  };
+
+  # <<< # Note how we're *not* overridding `security.acme.certs."...".server` for
+  # <<< # this domain. We should end up with a self-signed cert.
+  # <<< services.nginx.virtualHosts."immich-ss.snow.jflei.com" = {
+  # <<<   enableACME = true;
+  # <<<   forceSSL = true;
+  # <<<
+  # <<<   # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
+  # <<<   locations."/" = {
+  # <<<     proxyPass = "http://[::1]:${toString config.services.immich.port}";
+  # <<<     proxyWebsockets = true;
+  # <<<     recommendedProxySettings = true;
+  # <<<     extraConfig = ''
+  # <<<       client_max_body_size 50000M;
+  # <<<       proxy_read_timeout   600s;
+  # <<<       proxy_send_timeout   600s;
+  # <<<       send_timeout         600s;
+  # <<<     '';
+  # <<<   };
+  # <<<
+  # <<<   #<<<
+  # <<<   extraConfig = ''
+  # <<<     ssl_verify_client      on;
+  # <<<     ssl_client_certificate ${config.clan.core.vars.generators.step-root-ca.files."ca.crt".path};
+  # <<<   '';
+  # <<<   #<<<
+  # <<< };
+
   snow.backup.paths = [ "/var/lib/immich" ];
 }
