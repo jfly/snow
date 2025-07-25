@@ -10,10 +10,14 @@
               type = lib.types.str;
               default = name;
             };
+            tld = lib.mkOption {
+              type = lib.types.str;
+              default = config.snow.tld;
+            };
             fqdn = lib.mkOption {
               type = lib.types.str;
               readOnly = true;
-              default = "${local.config.sld}.${config.snow.tld}";
+              default = "${local.config.sld}.${local.config.tld}";
             };
             scheme = lib.mkOption {
               type = lib.types.str;
