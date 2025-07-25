@@ -100,12 +100,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          (fetchpatch {
-            name = "byzanz: fix build with gettext 0.25";
-            url = "https://github.com/NixOS/nixpkgs/commit/7d263236e2744aef85e9d10040c87b89c49d70f7.diff";
-            hash = "sha256-t2gBU3L2K3aIdRwfHfbQ2D1bA2BHFkHuQ45FxOA+pfk=";
-          })
-
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
