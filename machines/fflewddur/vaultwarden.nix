@@ -1,10 +1,13 @@
 { config, ... }:
+let
+  inherit (config.snow) services;
+in
 {
   # This is just a proxy.
   # TODO: actually port vaultwarden from k8s to nix.
 
-  services.data-mesher.settings.host.names = [ "vaultwarden" ];
-  services.nginx.virtualHosts."vaultwarden.${config.snow.tld}" = {
+  services.data-mesher.settings.host.names = [ services.vaultwarden.sld ];
+  services.nginx.virtualHosts.${services.vaultwarden.fqdn} = {
     enableACME = true;
     forceSSL = true;
 

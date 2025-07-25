@@ -6,11 +6,13 @@
 }:
 
 let
+  inherit (config.snow) services;
+
   domain = {
     tld = config.snow.tld;
-    sld = "ca";
+    sld = services.step-ca.sld;
     # This domain is handled by nginx (other servers will use this to generate certs).
-    fqdn = "${domain.sld}.${domain.tld}";
+    fqdn = services.step-ca.fqdn;
     # This local domain is specifically for step-ca, which needs to run over
     # https with a domain name it can generate a cert for. The CA is not
     # allowed to generate certs for `localhost`, so we need some other domain

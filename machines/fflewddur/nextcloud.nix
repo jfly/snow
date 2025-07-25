@@ -1,10 +1,13 @@
 { config, pkgs, ... }:
+let
+  inherit (config.snow) services;
+in
 {
-  services.data-mesher.settings.host.names = [ "nextcloud" ];
+  services.data-mesher.settings.host.names = [ services.nextcloud.sld ];
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud31;
-    hostName = "nextcloud.${config.snow.tld}";
+    hostName = services.nextcloud.fqdn;
     database.createLocally = true;
     config = {
       dbtype = "pgsql";
@@ -24,7 +27,7 @@
   };
 
   # Force HTTPS.
-  services.nginx.virtualHosts."nextcloud.${config.snow.tld}" = {
+  services.nginx.virtualHosts.${services.nextcloud.fqdn} = {
     enableACME = true;
     forceSSL = true;
   };

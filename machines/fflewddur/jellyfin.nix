@@ -1,5 +1,7 @@
 { config, ... }:
-
+let
+  inherit (config.snow) services;
+in
 {
   services.jellyfin = {
     enable = true;
@@ -9,8 +11,8 @@
   snow.backup.paths = [ config.services.jellyfin.dataDir ];
 
   # TODO: remove jellyfin.snow.jflei.com proxy from k8s
-  services.data-mesher.settings.host.names = [ "jellyfin" ];
-  services.nginx.virtualHosts."jellyfin.${config.snow.tld}" = {
+  services.data-mesher.settings.host.names = [ services.jellyfin.sld ];
+  services.nginx.virtualHosts.${services.jellyfin.fqdn} = {
     enableACME = true;
     forceSSL = true;
 

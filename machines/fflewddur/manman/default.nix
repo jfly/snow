@@ -1,13 +1,16 @@
 { config, pkgs, ... }:
+let
+  inherit (config.snow) services;
+in
 {
   services.nginx.package = pkgs.nginx.override { modules = [ pkgs.nginxModules.fancyindex ]; };
 
   services.data-mesher.settings.host.names = [
-    "manman"
-    "media"
+    services.manman.sld
+    services.media.sld
   ];
 
-  services.nginx.virtualHosts."manman.${config.snow.tld}" = {
+  services.nginx.virtualHosts.${services.manman.fqdn} = {
     enableACME = true;
     forceSSL = true;
 
@@ -17,7 +20,7 @@
     };
   };
 
-  services.nginx.virtualHosts."media.${config.snow.tld}" = {
+  services.nginx.virtualHosts.${services.media.fqdn} = {
     enableACME = true;
     forceSSL = true;
 

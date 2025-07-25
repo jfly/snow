@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  inherit (config.snow) services;
+in
 {
   services.immich = {
     enable = true;
@@ -31,8 +34,8 @@
     "render"
   ];
 
-  services.data-mesher.settings.host.names = [ "immich" ];
-  services.nginx.virtualHosts."immich.${config.snow.tld}" = {
+  services.data-mesher.settings.host.names = [ services.immich.sld ];
+  services.nginx.virtualHosts.${services.immich.fqdn} = {
     enableACME = true;
     forceSSL = true;
 

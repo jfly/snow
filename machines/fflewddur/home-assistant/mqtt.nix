@@ -6,6 +6,8 @@
 }:
 
 let
+  inherit (config.snow) services;
+
   ports.mqtt = 1883;
   ports.mqtts = 8883;
   # After adding a user to the list, get their password with:
@@ -94,9 +96,9 @@ in
 
   # Note that we use nginx to generate a cert for MQTT because nginx is capable
   # of passing the "host a file" HTTP challenge.
-  security.acme.certs."mqtt.${config.snow.tld}".reloadServices = [ "mosquitto.service" ];
-  services.data-mesher.settings.host.names = [ "mqtt" ];
-  services.nginx.virtualHosts."mqtt.${config.snow.tld}" = {
+  security.acme.certs.${services.mqtt.fqdn}.reloadServices = [ "mosquitto.service" ];
+  services.data-mesher.settings.host.names = [ services.mqtt.sld ];
+  services.nginx.virtualHosts.${services.mqtt.fqdn} = {
     enableACME = true;
     forceSSL = true;
 

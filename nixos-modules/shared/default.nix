@@ -16,6 +16,7 @@ in
     flake.nixosModules.step-ca
     flake.nixosModules.backup
     flake.nixosModules.monitoring
+    ./services.nix
   ];
 
   options = {

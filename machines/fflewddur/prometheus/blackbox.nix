@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 let
+  inherit (config.snow) services;
+
   mkStaticProbe =
     {
       module,
@@ -66,9 +68,9 @@ in
   # TODO: figure out how to get blackbox exporter to use a configured DNS
   #       server instead (or get it to use `getaddrinfo`).
   networking.extraHosts = ''
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ospi.${config.snow.tld}
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} manman.${config.snow.tld}
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} media.${config.snow.tld}
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.ospi.fqdn}
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.manman.fqdn}
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.media.fqdn}
   '';
 
   services.prometheus = {
@@ -118,9 +120,9 @@ in
       (mkStaticProbe {
         module = "https_success";
         targets = [
-          "https://manman.${config.snow.tld}"
-          "https://media.${config.snow.tld}"
-          "https://ospi.${config.snow.tld}"
+          services.manman.url
+          services.media.url
+          services.ospi.url
         ];
       })
     ];

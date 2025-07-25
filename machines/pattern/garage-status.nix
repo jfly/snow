@@ -6,6 +6,8 @@
 }:
 
 let
+  inherit (config.snow) services;
+
   on-air = inputs'.on-air.packages.default;
 in
 {
@@ -19,11 +21,11 @@ in
       owner = "jeremy";
     };
     prompts.username = {
-      description = "Username for mqtt.${config.snow.tld}";
+      description = "Username for ${services.mqtt.fqdn}";
       type = "line";
     };
     prompts.password = {
-      description = "Password for mqtt.${config.snow.tld}";
+      description = "Password for ${services.mqtt.fqdn}";
       type = "hidden";
     };
     runtimeInputs = with pkgs; [
@@ -44,7 +46,7 @@ in
 
     script = ''
       ${on-air}/bin/on-air mqtt \
-        --broker mqtts://mqtt.${config.snow.tld} \
+        --broker ${services.mqtt.url} \
         --username $(< ${config.clan.core.vars.generators.mosquitto.files."username".path}) \
         --password-file ${config.clan.core.vars.generators.mosquitto.files."password".path} \
         --device-name ${config.networking.hostName} \

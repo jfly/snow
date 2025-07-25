@@ -5,10 +5,7 @@
   ...
 }:
 let
-  domain = {
-    sld = "home-assistant";
-    fqdn = "${domain.sld}.${config.snow.tld}";
-  };
+  inherit (config.snow) services;
 in
 {
   imports = [
@@ -54,8 +51,8 @@ in
 
       # https://www.home-assistant.io/integrations/homeassistant/
       homeassistant = {
-        external_url = "https://${domain.fqdn}";
-        internal_url = "https://${domain.fqdn}";
+        external_url = services.home-assistant.url;
+        internal_url = services.home-assistant.url;
         unit_system = "us_customary";
       };
 
@@ -179,8 +176,8 @@ in
     };
   };
 
-  services.data-mesher.settings.host.names = [ domain.sld ];
-  services.nginx.virtualHosts.${domain.fqdn} = {
+  services.data-mesher.settings.host.names = [ services.home-assistant.sld ];
+  services.nginx.virtualHosts.${services.home-assistant.fqdn} = {
     enableACME = true;
     forceSSL = true;
     extraConfig = ''

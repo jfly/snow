@@ -1,5 +1,8 @@
 { config, ... }:
 
+let
+  inherit (config.snow) services;
+in
 {
   imports = [
     # This is a hacky workaround for <https://art19.zendesk.com/agent/tickets/40952>
@@ -10,8 +13,8 @@
     # By pure luck, I discovered that proxying through `siftrss.com` seems to
     # work, presumably because of where their datacenter is located.
     {
-      services.data-mesher.settings.host.names = [ "podhacks" ];
-      services.nginx.virtualHosts."podhacks.${config.snow.tld}" = {
+      services.data-mesher.settings.host.names = [ services.podhacks.sld ];
+      services.nginx.virtualHosts.${services.podhacks.fqdn} = {
         enableACME = true;
         forceSSL = true;
 
@@ -50,8 +53,8 @@
 
   users.users.audiobookshelf.extraGroups = [ "media" ];
 
-  services.data-mesher.settings.host.names = [ "audiobookshelf" ];
-  services.nginx.virtualHosts."audiobookshelf.${config.snow.tld}" = {
+  services.data-mesher.settings.host.names = [ services.audiobookshelf.sld ];
+  services.nginx.virtualHosts.${services.audiobookshelf.fqdn} = {
     enableACME = true;
     forceSSL = true;
 
