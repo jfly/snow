@@ -104,7 +104,7 @@
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
-            hash = "sha256-ROfdjyjPmGP7L2uxldeyB6TVUul4IiBxyDz30t+LqFQ=";
+            hash = "sha256-dVThaZWua6N/m4M+kmWrxU3StUILjLNVfDcLnzGUo2M=";
           })
           (fetchpatch {
             name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";

@@ -60,7 +60,7 @@ def sanity_check_private_key():
         stderr.print("")
         # Using `out` rather than `print` to avoid line wrapping.
         stderr.out(
-            f"    age --decrypt --identity ~/sync/linux-secrets/.ssh/id_ed25519 tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}"
+            f"    age --decrypt --identity ~/sync/jfly-linux-secrets/.ssh/id_ed25519 tools/age-private-key.txt.age > {PRIVATE_KEY_PATH}"
         )
         sys.exit(1)
 
