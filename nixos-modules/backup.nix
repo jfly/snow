@@ -88,7 +88,7 @@ in
         passwordFile = config.clan.core.vars.generators.snow-backup-restic.files."password".path;
         paths = cfg.paths;
         exclude = cfg.exclude;
-        repository = "rest:http://fflewddur.${config.snow.tld}:8000/"; # <<<???>>>
+        repository = "rest:http://fflewddur.${config.snow.tld}:8000/";
         timerConfig = {
           OnCalendar = "daily";
         };
