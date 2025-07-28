@@ -113,9 +113,6 @@ in
     nssmdns4 = true;
     enable = true;
     openFirewall = true;
-    # Workaround for avahi crash on name conflicts:
-    # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
-    allowInterfaces = [ config.clan.data-mesher.network.interface ];
   };
 
   # Advertise shares for Windows clients.
