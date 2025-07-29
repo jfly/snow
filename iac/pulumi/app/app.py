@@ -5,7 +5,6 @@ from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
 from .speedtest import Speedtest
-from .miniflux import Miniflux
 from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .snow_state import SnowState
@@ -18,7 +17,6 @@ def build_app():
     snowauth = Snowauth()
     SnowState()
 
-    Miniflux(snowauth)
     Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
     # Useful if you really need to run a service somewhere outside of the

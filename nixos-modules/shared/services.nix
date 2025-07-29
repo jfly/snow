@@ -109,6 +109,13 @@ in
       };
       manman = { };
       media = { };
+      miniflux = {
+        oauth2 = {
+          groups.access = "miniflux_access";
+        };
+        # https://miniflux.app/docs/howto.html#openid-connect
+        paths.oauth2Callback = "/oauth2/oidc/callback";
+      };
       mqtt.scheme = "mqtts";
       nextcloud = { };
       ospi = { };

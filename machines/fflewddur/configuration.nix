@@ -26,6 +26,7 @@
     ./ospi.nix
     ./manman
     ./whoami.nix
+    ./miniflux.nix
   ];
 
   networking.hostName = "fflewddur";

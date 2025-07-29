@@ -112,6 +112,12 @@
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
             hash = "sha256-dVThaZWua6N/m4M+kmWrxU3StUILjLNVfDcLnzGUo2M=";
           })
+          # TODO: submit PR to nixpkgs to upstream this.
+          (fetchpatch {
+            name = "miniflux: add explicit secret files";
+            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:miniflux-add-client-secret-files.diff";
+            hash = "sha256-qQl270n7v1AGBMDNrNTcXGgbSXLSy8Nes0/v1p17Cs0=";
+          })
           (fetchpatch {
             name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";
             url = "https://github.com/NixOS/nixpkgs/pull/423969.diff";

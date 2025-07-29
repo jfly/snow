@@ -107,6 +107,31 @@ in
           valuesByGroup.${services.whoami.oauth2.groups.access} = [ services.whoami.oauth2.groups.access ];
         };
       };
+
+      # Miniflux
+      groups.${services.miniflux.oauth2.groups.access}.members = [ "manman" ];
+      systems.oauth2.${services.miniflux.oauth2.clientId} = {
+        displayName = "Miniflux";
+        imageFile = pkgs.fetchurl {
+          url = "https://www.svgrepo.com/download/204349/rss.svg";
+          hash = "sha256-4bIBbSK6C6f6svL8CyfeRLD0j+gkrDdq4OSZnQmFE7k=";
+        };
+        originUrl = services.miniflux.urls.oauth2Callback;
+        originLanding = services.miniflux.base_url;
+        basicSecretFile = services.miniflux.oauth2.clientSecretPath;
+        preferShortUsername = true;
+        scopeMaps.${services.miniflux.oauth2.groups.access} = [
+          "openid"
+          "email"
+          "profile"
+        ];
+        claimMaps.groups = {
+          joinType = "array";
+          valuesByGroup.${services.miniflux.oauth2.groups.access} = [
+            services.miniflux.oauth2.groups.access
+          ];
+        };
+      };
     };
   };
 
