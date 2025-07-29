@@ -53,13 +53,5 @@ in
   # '';
   plugins.none-ls.enableLspFormat = true;
   plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
-  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or [ ]) ++ [
-      (pkgs.fetchpatch {
-        name = "fix(nix_flake_fmt): ask the user if the project is trusted";
-        url = "https://github.com/nvimtools/none-ls.nvim/pull/280.diff";
-        hash = "sha256-HkvIM4HdOzOJtC5lzvb275LSql5I0T+DWTIaJ8v/Qpg=";
-      })
-    ];
-  });
+  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim;
 }

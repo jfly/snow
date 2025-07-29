@@ -7,11 +7,6 @@
 }:
 
 {
-  # esp32/watchy tinkering
-  services.udev.packages = with pkgs; [
-    platformio-core.udev
-  ];
-
   # I find it pretty useful to do ad-hoc edits of `/etc/hosts`. I know this
   # isn't exactly reproducible, but I'll live with it.
   # Trick copied from

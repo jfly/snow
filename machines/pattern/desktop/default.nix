@@ -330,9 +330,9 @@ in
     ### Media editing (images, audio, video)
     gimp
     (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
-    # Build is broken: https://github.com/NixOS/nixpkgs/issues/376136
-    # avidemux
-    audacity
+    avidemux
+    # Build is broken: https://github.com/NixOS/nixpkgs/issues/428792
+    # audacity
 
     ### Ebooks/audiobooks
     (pkgs.symlinkJoin {
