@@ -100,6 +100,12 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
+          (fetchpatch {
+            name = "audacity: unbreak";
+            url = "https://github.com/NixOS/nixpkgs/commit/952beb58130ee455c8bcb712b9e5e8cbecec2b10.diff";
+            hash = "sha256-mGBK+/HSGbouZEHUSSZsz7Txp99B3nm2c+3QSSKhU98=";
+          })
+
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";

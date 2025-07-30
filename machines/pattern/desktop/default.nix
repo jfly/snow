@@ -331,8 +331,7 @@ in
     gimp
     (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
     avidemux
-    # Build is broken: https://github.com/NixOS/nixpkgs/issues/428792
-    # audacity
+    audacity
 
     ### Ebooks/audiobooks
     (pkgs.symlinkJoin {
