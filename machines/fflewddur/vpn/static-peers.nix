@@ -30,5 +30,6 @@
     "06fda2b62d" # ram mbp
     "8d0ee1ad66" # ram desktop
     "d83fdfb31b" # waydroid
+    "c86a6ffd1f" # ospi
   ];
 }
