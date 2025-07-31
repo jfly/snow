@@ -126,9 +126,9 @@ in
 
     snow.step-ca.role = lib.mkDefault "client";
 
-    # Workaround for avahi crash on name conflicts:
-    # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
-    # Endless logs like "Host name conflict, retrying with ..."
-    services.avahi.allowInterfaces = [ config.clan.data-mesher.network.interface ];
+    # <<< # Workaround for avahi crash on name conflicts:
+    # <<< # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
+    # <<< # Endless logs like "Host name conflict, retrying with ..."
+    # <<< services.avahi.allowInterfaces = [ config.clan.data-mesher.network.interface ];
   };
 }

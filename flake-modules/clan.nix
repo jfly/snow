@@ -41,6 +41,7 @@ in
           name = "data-mesher";
         };
         roles.admin.machines.fflewddur = { };
+        roles.signer.machines.fflewddur = { };
         roles.peer.tags."all" = { };
 
         # This interface name is determined from the network id, but we don't
