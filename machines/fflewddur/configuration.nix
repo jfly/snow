@@ -12,6 +12,7 @@
     ./jellyfin.nix
     ./cryptpad.nix
     ./vpn
+    ./kanidm
     ./prometheus
     ./grafana.nix
     ./healthcheck.nix
@@ -24,6 +25,7 @@
     ./home-assistant
     ./ospi.nix
     ./manman
+    ./whoami.nix
   ];
 
   networking.hostName = "fflewddur";

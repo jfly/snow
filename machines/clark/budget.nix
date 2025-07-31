@@ -1,4 +1,5 @@
 {
+  flake,
   config,
   lib,
   pkgs,
@@ -12,14 +13,22 @@ let
   group = "media";
 in
 {
+  imports = [
+    flake.nixosModules.oauth2-proxies-nginx
+  ];
+
   services.data-mesher.settings.host.names = [ services.budget.sld ];
   services.nginx.virtualHosts.${services.budget.fqdn} = {
     enableACME = true;
     forceSSL = true;
 
+    snow.oauth2 = {
+      enable = true;
+      snowService = services.budget;
+      allowedGroups = [ services.budget.oauth2.groups.access ];
+    };
     locations."/" = {
       proxyPass = "http://localhost:3000";
-      proxyWebsockets = true;
     };
   };
 

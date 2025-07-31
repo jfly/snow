@@ -149,8 +149,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) =
       ((0, xK_Print), spawn "@jscrot@/bin/jscrot --select"),
       ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video"),
       ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot"),
-      ((controlMask .|. altMask, xK_Left), spawn "@autoperipherals@/bin/autoperipherals rotate current right"),
-      ((controlMask .|. altMask, xK_Right), spawn "@autoperipherals@/bin/autoperipherals rotate current left"),
+      ((controlMask .|. altMask, xK_Left), spawn "@autoperipherals@/bin/autoperipherals rotate current left"),
+      ((controlMask .|. altMask, xK_Right), spawn "@autoperipherals@/bin/autoperipherals rotate current right"),
       ((controlMask .|. altMask, xK_Down), spawn "@autoperipherals@/bin/autoperipherals rotate current normal"),
       ((controlMask .|. altMask, xK_Up), spawn "@autoperipherals@/bin/autoperipherals rotate current inverted"),
       -- Dunst shortcuts
