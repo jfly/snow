@@ -105,18 +105,11 @@
             url = "https://github.com/NixOS/nixpkgs/commit/952beb58130ee455c8bcb712b9e5e8cbecec2b10.diff";
             hash = "sha256-mGBK+/HSGbouZEHUSSZsz7Txp99B3nm2c+3QSSKhU98=";
           })
-
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
             hash = "sha256-dVThaZWua6N/m4M+kmWrxU3StUILjLNVfDcLnzGUo2M=";
-          })
-          # TODO: submit PR to nixpkgs to upstream this.
-          (fetchpatch {
-            name = "miniflux: add explicit secret files";
-            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:miniflux-add-client-secret-files.diff";
-            hash = "sha256-qQl270n7v1AGBMDNrNTcXGgbSXLSy8Nes0/v1p17Cs0=";
           })
           (fetchpatch {
             name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";
@@ -127,6 +120,11 @@
             name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13.1";
             url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
             hash = "sha256-+WGWiVuPvGjfjKQE/uUVoYRCC8rVigJjcCU6OePD8SY=";
+          })
+          (fetchpatch {
+            name = "miniflux: add options for all secret files";
+            url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
+            hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
           })
         ];
 
