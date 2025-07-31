@@ -72,7 +72,7 @@ in
           url = "https://www.svgrepo.com/download/314973/piggy-bank.svg";
           hash = "sha256-6avNiA0zQpLBFMHkHHWs1E17iXpLNskDFpvGENuukOY=";
         };
-        originUrl = services.budget.urls.oauth2_callback;
+        originUrl = services.budget.urls.oauth2Callback;
         originLanding = services.budget.base_url;
         basicSecretFile = services.budget.oauth2.clientSecretPath;
         preferShortUsername = true;
@@ -94,7 +94,7 @@ in
           url = "https://www.svgrepo.com/download/483473/detective-face.svg";
           hash = "sha256-44f5uE37wZ6180ppOT4NiigPzgPzaz1sTMuTmVQTdHM=";
         };
-        originUrl = services.whoami.urls.oauth2_callback;
+        originUrl = services.whoami.urls.oauth2Callback;
         originLanding = services.whoami.base_url;
         basicSecretFile = services.whoami.oauth2.clientSecretPath;
         preferShortUsername = true;

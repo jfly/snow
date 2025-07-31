@@ -91,7 +91,7 @@ in
           groups.access = "budget_access";
         };
         # https://oauth2-proxy.github.io/oauth2-proxy/features/endpoints
-        paths.oauth2_callback = "/oauth2/callback";
+        paths.oauth2Callback = "/oauth2/callback";
       };
       ca = { };
       home-assistant = { };
@@ -120,7 +120,7 @@ in
           groups.access = "whoami_access";
         };
         # https://oauth2-proxy.github.io/oauth2-proxy/features/endpoints
-        paths.oauth2_callback = "/oauth2/callback";
+        paths.oauth2Callback = "/oauth2/callback";
       };
       zigbee2mqtt = { };
     };
