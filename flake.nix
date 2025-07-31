@@ -147,6 +147,14 @@
         ];
 
         clan-core = {
+          patches = [
+            # Fixes <https://git.clan.lol/clan/clan-core/issues/4424>.
+            (fetchpatch {
+              name = "Add default bootstrapNodes for data-mesher service";
+              url = "https://git.clan.lol/clan/clan-core/pulls/4555.diff";
+              hash = "sha256-8Zu2A+P14emxFeOpzh5uREDqFKfiDRdJLSQp/LkXM6A=";
+            })
+          ];
           inputs.data-mesher.patches = [
             # Relax data-mesher's `NameRegex` to allow for subdomains.
             # See corresponding feature request: <https://git.clan.lol/clan/data-mesher/issues/213>.
