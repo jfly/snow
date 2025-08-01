@@ -12,6 +12,9 @@ let
   oauth2Services = lib.filterAttrs (name: service: service.oauth2 != null) config.snow.services;
 in
 {
+  # We need access to all OAuth2 client secrets so we can add them to Kanidm.
+  snow.generateAllOauth2ClientSecrets = true;
+
   clan.core.vars.generators = lib.mkMerge (
     [
       {

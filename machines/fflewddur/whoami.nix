@@ -7,6 +7,8 @@ in
     flake.nixosModules.oauth2-proxies-nginx
   ];
 
+  snow.services.whoami.oauth2.generateClientSecret = true;
+
   services.whoami = {
     enable = true;
     port = 41234;

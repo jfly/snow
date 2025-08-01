@@ -6,9 +6,16 @@
 }:
 let
   pathType = lib.types.strMatching "^\/.*";
-  oauth2Services = lib.filterAttrs (name: service: service.oauth2 != null) config.snow.services;
+  oauth2ServiceNeedingClientSecretGenerator = lib.filterAttrs (
+    name: service: service.oauth2.generateClientSecret or false
+  ) config.snow.services;
 in
 {
+  options.snow.generateAllOauth2ClientSecrets = lib.mkEnableOption ''
+    Whether to declare a generator for all OAuth2 client secrets.
+    Only enable this on the machine hosting the OAuth provider (Kanidm).
+  '';
+
   options.snow.services = lib.mkOption {
     type = lib.types.attrsOf (
       lib.types.submodule (
@@ -67,6 +74,16 @@ in
                       };
                       readOnly = true;
                       default = config.clan.core.vars.generators."kanidm-oauth2-${name}".files.basic-secret.path;
+                    };
+                    generateClientSecret = lib.mkOption {
+                      type = lib.types.bool;
+                      default = config.snow.generateAllOauth2ClientSecrets;
+                      description = ''
+                        Whether to generate the client secret.
+                        Only enable this on machines that need it (usually the
+                        machine that hosts the service and the machine that
+                        hosts the OAuth provider: Kanidm).
+                      '';
                     };
                     groups = lib.mkOption {
                       type = lib.types.attrsOf lib.types.str;
@@ -142,6 +159,6 @@ in
           pwgen -s 48 1 | tr -d '\n' > $out/basic-secret
         '';
       }
-    ) oauth2Services;
+    ) oauth2ServiceNeedingClientSecretGenerator;
   };
 }

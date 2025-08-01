@@ -17,6 +17,8 @@ in
     flake.nixosModules.oauth2-proxies-nginx
   ];
 
+  snow.services.budget.oauth2.generateClientSecret = true;
+
   services.data-mesher.settings.host.names = [ services.budget.sld ];
   services.nginx.virtualHosts.${services.budget.fqdn} = {
     enableACME = true;
