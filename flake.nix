@@ -156,7 +156,7 @@
             (fetchpatch {
               name = "Add default bootstrapNodes for data-mesher service";
               url = "https://git.clan.lol/clan/clan-core/pulls/4555.diff";
-              hash = "sha256-8Zu2A+P14emxFeOpzh5uREDqFKfiDRdJLSQp/LkXM6A=";
+              hash = "sha256-8hk4f21jMuIVzKWft7T4qdmHcaariGoe1u3wJDdeAeg=";
             })
           ];
           inputs.data-mesher.patches = [
