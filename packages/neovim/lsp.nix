@@ -46,4 +46,8 @@
 
   # JSON
   lsp.servers.jsonls.enable = true;
+
+  # Typst
+  lsp.servers.tinymist.enable = true;
+  plugins.typst-preview.enable = true;
 }
