@@ -8,7 +8,7 @@ class Bazarr:
             name="bazarr",
             namespace="vpn",
             access=Access.INTERNET_BEHIND_SSO_FAMILY,
-            image="ghcr.io/hotio/bazarr:release-1.5.1",
+            image="ghcr.io/hotio/bazarr:release-1.5.2",
             port=6767,
             env={
                 "TZ": "America/Los_Angeles",

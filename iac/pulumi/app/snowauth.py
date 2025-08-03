@@ -20,7 +20,7 @@ class Access(Enum):
 
 class Snowauth:
     def __init__(self):
-        self.snow_realm = self._declare_keycloak_realm()
+        self._declare_keycloak_realm()
 
         # Middleware to add HSTS headers. TODO: actually use this everywhere we
         # do http, or figure out a generic way of enforicng this (perhaps
