@@ -50,6 +50,7 @@ in
         # interface altnames. See
         # https://git.clan.lol/clan/data-mesher/issues/222.
         roles.peer.settings.network.interface = "zthjzvlscg";
+        roles.admin.settings.network.interface = "zthjzvlscg"; # <<< workaround for https://git.clan.lol/clan/clan-core/pulls/4555#issuecomment-41625 >>>
       };
     };
 
