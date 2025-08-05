@@ -115,34 +115,27 @@ let
     };
   };
 
-  # Somehow these variables ended up unreferenced? I'm very confused how
-  # `wifi-presence` is actually getting installed on our routers.
-  # TODO: Figure this out when documenting how to do custom packages
-  # (https://github.com/astro/nix-openwrt-imagebuilder/issues/38)
-  # hashes = import "${openwrt-imagebuilder}/hashes/${release}.nix";
-  # packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
-  # wifi-presence-by-arch = {
-  #   aarch64_cortex-a53 = {
-  #     file = pkgs.fetchurl {
-  #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
-  #       hash = "sha256-yN2wDs723HGfmEKS4x1QQwCv4938edRQTJaVGwdQe7Y=";
-  #     };
-  #     filename = "wifi-presence_0.3.0-1_aarch64_cortex-a53.ipk";
-  #   };
-
-  #   mipsel_24kc = {
-  #     file = pkgs.fetchurl {
-  #       url = "https://github.com/awilliams/wifi-presence/releases/download/v0.3.0/wifi-presence_0.3.0-1_mipsel_24kc.ipk";
-  #       hash = "sha256-kCPU9q8mc+qKt6/BMgBfGoO3ZqvhZRFsmBkuZTTRou4=";
-  #     };
-  #     filename = "wifi-presence_0.3.0-1_mipsel_24kc.ipk";
-  #   };
-  # };
-  # wifi-presence = wifi-presence-by-arch.${packagesArch};
   built-no-version = (
     openwrt-imagebuilder.lib.build (
       profile
       // {
+        # Override `wifi-presence` with my fork. See
+        # <https://github.com/awilliams/wifi-presence/pull/31> for details.
+        # See
+        # ~/sync/jfly/notes/2025-08-04-building-wifi-presence-for-openwrt.md
+        # for details on how to rebuild this.
+        extraPackages.wifi-presence = {
+          depends = [ "libc" ];
+          provides = null;
+          type = "real";
+
+          file = pkgs.fetchurl {
+            url = "https://github.com/jfly/wifi-presence/releases/download/v0.3.0-with-read-workaround-bigger-buffer/wifi-presence_issue-30-workaround-r1_aarch64_cortex-a53.ipk";
+            hash = "sha256-5HXReNDlzJ3sROFHRnzRKSEnUVuxHg7vNXreCO4ZIVY=";
+          };
+          filename = "wifi-presence_issue-30-workaround-r1_aarch64_cortex-a53.ipk";
+        };
+
         packages = [
           "luci"
           # Remove the stripped down version of hostapd in favor of the full
