@@ -40,10 +40,9 @@ in
     clan.core = {
       settings.state-version.enable = true;
       networking = {
-        # Ideally this would be just `localhost`, and not require ssh to
-        # be enabled on the build machine. See
-        # https://git.clan.lol/clan/clan-core/issues/3556.
-        buildHost = "jfly@localhost";
+        # This unfortunately doesn't work, you need to specify `--build-host`
+        # explicitly. See <https://git.clan.lol/clan/clan-core/issues/4624>
+        buildHost = "see https://git.clan.lol/clan/clan-core/issues/4624";
         targetHost = "jfly@${config.networking.fqdn}";
       };
     };

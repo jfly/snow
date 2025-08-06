@@ -8,7 +8,7 @@ update_nixos() {
         uv lock
     )
     nix flake update
-    clan machines update "$HOSTNAME"
+    clan machines update "$HOSTNAME" --build-host localhost --target-host localhost
 }
 
 fw_check() {
