@@ -70,16 +70,22 @@ in
     users.groups.media.gid = 1002;
     users.groups.bay.gid = 1003;
 
-    # Flakes!
     nix.settings.experimental-features = [
       "recursive-nix"
+      "auto-allocate-uids"
+      "cgroups"
+      # Flakes!
       "nix-command"
       "flakes"
     ];
 
     nix.settings.extra-system-features = [
       "recursive-nix"
+      "uid-range"
+      "cgroups"
     ];
+
+    nix.settings.auto-allocate-uids = true;
 
     # I18N stuff
     i18n.defaultLocale = "en_US.UTF-8";
