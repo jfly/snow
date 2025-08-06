@@ -27,6 +27,9 @@ Host *.cubing.net
 
 Host jfly.cubing.net
     User jeremyfleischman
+
+Host nixpkgs.molybdenum.software
+    User root
 ###
 
 ### cottage
