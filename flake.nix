@@ -100,12 +100,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          (fetchpatch {
-            name = "linux-manual: Handle scripts/kernel-doc.py";
-            url = "https://github.com/NixOS/nixpkgs/commit/40d78d58e3f6e3ee382e97f67dbb893a29d5aa68.diff";
-            hash = "sha256-OCgjCSXXSsHaZAyg91ALemjV89aNRtET0qFE9PHgGbQ=";
-          })
-
           # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
           (fetchpatch {
             name = "fish: 4.0.2 -> 4.1.0-unstable";
@@ -147,6 +141,11 @@
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
             hash = "sha256-owIYa598cbqEAZ5aLK61Owy94kAn1NfoHA6nLsSWNek=";
+          })
+          (fetchpatch {
+            name = "refactor(postfix): fix evaluation warnings";
+            url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/436.diff";
+            hash = "sha256-TsSGziFQkOhB7EiIALuk0FxP8b58hPcjgvR1zhm1ZfU=";
           })
         ];
 

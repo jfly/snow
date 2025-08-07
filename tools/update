@@ -5,7 +5,7 @@ set -euo pipefail
 update_nixos() {
     (
         cd packages/devShell
-        uv lock
+        uv lock --upgrade
     )
     nix flake update
     clan machines update "$HOSTNAME" --build-host localhost --target-host localhost

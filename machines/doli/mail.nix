@@ -34,7 +34,7 @@
     };
   };
 
-  services.postfix.config.virtual_alias_maps = [
+  services.postfix.settings.main.virtual_alias_maps = [
     # Extending https://github.com/NixOS/nixpkgs/blob/a9fe4d6d8ccde780e872ed1446f3746498152663/nixos/modules/services/mail/postfix.nix#L833C87-L833C108
     "hash:/etc/postfix/virtual-jfly-test"
   ];
