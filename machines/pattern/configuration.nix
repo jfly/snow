@@ -19,7 +19,6 @@
     "root"
     "@wheel"
   ];
-  security.sudo.wheelNeedsPassword = false;
 
   programs.nix-ld.enable = true;
 
@@ -35,6 +34,7 @@
     ./sshd.nix
     ./shell
     ./desktop
+    ./fingerprint.nix
     ./android.nix
     ./development.nix
     ./syncthing.nix

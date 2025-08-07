@@ -97,7 +97,7 @@ in
 
     # Enable deployments by non-root user.
     nix.settings.trusted-users = [ "@wheel" ];
-    security.sudo.wheelNeedsPassword = false;
+    security.sudo.wheelNeedsPassword = lib.mkDefault false;
 
     # Enable ssh for all machines.
     services.openssh.enable = true;
