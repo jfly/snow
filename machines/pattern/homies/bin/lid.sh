@@ -15,7 +15,7 @@ if grep -q close /proc/acpi/button/lid/*/state; then
         echo "Ignoring lid close event because we're connected to: $current_connections"
     else
         echo "Lid is closed. Locking screen."
-        slock
+        i3lock
     fi
 elif grep -q open /proc/acpi/button/lid/*/state; then
     echo "Lid is open. Doing nothing."

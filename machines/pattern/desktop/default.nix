@@ -242,21 +242,21 @@ in
 
   # Lock the screen on suspend. Trick copied from
   # https://wiki.archlinux.org/title/Slock#Lock_on_suspend.
-  programs.slock.enable = true;
+  # <<< programs.slock.enable = true;
   systemd.services = {
-    "slock" = {
+    "lock-screen" = {
       enable = true;
-      description = "Lock X session using slock for user";
+      description = "Lock X session";
       before = [ "sleep.target" ];
       wantedBy = [ "sleep.target" ];
       environment.DISPLAY = ":0";
       serviceConfig = {
         User = config.snow.user.name;
-        ExecStartPre = "${pkgs.xorg.xset}/bin/xset dpms force suspend";
-        ExecStart = "/run/wrappers/bin/slock"; # Use the setuid slock wrapper.
+        ExecStart = lib.getExe config.programs.i3lock.package;
       };
     };
   };
+  programs.i3lock.enable = true;
 
   ###
   ### Fonts!
