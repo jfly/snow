@@ -112,11 +112,6 @@
             hash = "sha256-hHFI9oYCuNeaMFAq0NC6tRwrsi9LjOoy4ISSNaVIlKE=";
           })
           (fetchpatch {
-            name = "home-assistant-custom-lovelace-modules.opensprinkler-card: init at 1.13.1";
-            url = "https://github.com/NixOS/nixpkgs/pull/424423.diff";
-            hash = "sha256-+WGWiVuPvGjfjKQE/uUVoYRCC8rVigJjcCU6OePD8SY=";
-          })
-          (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
             hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
@@ -164,7 +159,7 @@
               name = "machines update: support `--target-host localhost`";
               # Patch from <https://git.clan.lol/jfly/clan-core/compare/main...undeprecate-data-mesher>.
               url = "https://git.clan.lol/clan/clan-core/pulls/4623.diff";
-              hash = "sha256-0twkiFGDxipauKY7CWcETwdYV3fkxTWdCeNRk0A5xGM=";
+              hash = "sha256-3DMdX35QXRDgdXZXgqqVg6IoEpkKQnHRO30iMUH3pwQ=";
             })
           ];
           inputs.data-mesher.patches = [

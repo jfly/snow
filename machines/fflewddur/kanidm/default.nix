@@ -50,7 +50,7 @@ in
 
   services.kanidm = {
     enableServer = true;
-    package = pkgs.kanidm.withSecretProvisioning;
+    package = pkgs.kanidm_1_7.withSecretProvisioning;
     serverSettings = {
       domain = services.kanidm.fqdn;
       bindaddress = "127.0.0.1:9443";
