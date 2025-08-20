@@ -26,6 +26,7 @@
   #    on the controller (you may have to wait a while before this works).
   clan.zerotier-static-peers.networkIds = [
     "06557d77cb" # jfly phone
+    "b504d84a2e" # jfly phone (newer)
     "fce56a3a26" # ansible
     "06fda2b62d" # ram mbp
     "8d0ee1ad66" # ram desktop

@@ -73,6 +73,10 @@ in
       #   - Edit a retained MQTT message to reconfigure wifi-presence to
       #     track devices by MAC:
       #     <https://github.com/awilliams/wifi-presence/issues/29>.
+      #     ```console
+      #     $ sd ha mqtt read-one wifi-presence/config
+      #     $ sd ha mqtt publish --retain wifi-presence/config '{...}'
+      #     ```
       #   - Add the resulting tracking devices (there should be one per AP) to
       #     the HA person on <https://home-assistant.m/config/person>.
 
