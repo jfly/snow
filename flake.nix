@@ -107,11 +107,6 @@
             hash = "sha256-dVThaZWua6N/m4M+kmWrxU3StUILjLNVfDcLnzGUo2M=";
           })
           (fetchpatch {
-            name = "python3Packages.pyopensprinkler: init at 0.7.15, home-assistant-custom-components.hass-opensprinkler: init at 1.5.1";
-            url = "https://github.com/NixOS/nixpkgs/pull/423969.diff";
-            hash = "sha256-hHFI9oYCuNeaMFAq0NC6tRwrsi9LjOoy4ISSNaVIlKE=";
-          })
-          (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
             hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
@@ -147,10 +142,10 @@
         clan-core = {
           patches = [
             (fetchpatch {
-              name = "machines update: support `--target-host localhost`";
-              # Patch from <https://git.clan.lol/jfly/clan-core/compare/main...undeprecate-data-mesher>.
-              url = "https://git.clan.lol/clan/clan-core/pulls/4623.diff";
-              hash = "sha256-3DMdX35QXRDgdXZXgqqVg6IoEpkKQnHRO30iMUH3pwQ=";
+              name = ''Reapply "machines update: support `--target-host localhost`"'';
+              # Patch from <https://git.clan.lol/jfly/clan-core/compare/main...localhost-as-target-host-without-ssh-take-2>.
+              url = "https://git.clan.lol/jfly/clan-core/commit/5623a6440c571da021fff48154223a8782dc79f3.diff";
+              hash = "sha256-1V/F24DwQdMQIrVWrfCpQ5tLH8Xw5xw4nTuDiW9JtP4=";
             })
           ];
           inputs.data-mesher.patches = [
