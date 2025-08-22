@@ -5,7 +5,6 @@ from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
 from .speedtest import Speedtest
-from .vaultwarden import Vaultwarden
 from .invidious import Invidious
 from .snow_state import SnowState
 from .dns import Dns
@@ -17,7 +16,6 @@ def build_app():
     snowauth = Snowauth()
     SnowState()
 
-    Vaultwarden(snowauth)
     Invidious(namespace="default", snowauth=snowauth)
     # Useful if you really need to run a service somewhere outside of the
     # cluster (perhaps on your laptop) with a valid https cert.
