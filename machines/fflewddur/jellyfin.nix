@@ -5,7 +5,6 @@ in
 {
   services.jellyfin = {
     enable = true;
-    openFirewall = true;
     group = "media";
   };
   snow.backup.paths = [ config.services.jellyfin.dataDir ];
@@ -15,6 +14,16 @@ in
   services.nginx.virtualHosts.${services.jellyfin.fqdn} = {
     enableACME = true;
     forceSSL = true;
+
+    locations."/" = {
+      # https://jellyfin.org/docs/general/post-install/networking/
+      proxyPass = "http://localhost:8096";
+    };
+  };
+
+  services.nginx.virtualHosts."jellyfin.snow.jflei.com" = {
+    enableACME = false;
+    forceSSL = false;
 
     locations."/" = {
       # https://jellyfin.org/docs/general/post-install/networking/

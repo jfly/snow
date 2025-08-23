@@ -11,11 +11,18 @@ class MiscK8sHttpsProxies:
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
-            destination_port=8096,
+            destination_port=80,
         )
 
         self._add_proxy(
             "healthcheck",
+            access=Access.INTERNET_UNSECURED,
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+            destination_port=80,
+        )
+
+        self._add_proxy(
+            "speedtest",
             access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=80,

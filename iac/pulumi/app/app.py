@@ -4,7 +4,6 @@ from .radarr import Radarr
 from .sonarr import Sonarr
 from .bazarr import Bazarr
 from .torrents import Torrents
-from .speedtest import Speedtest
 from .invidious import Invidious
 from .snow_state import SnowState
 from .dns import Dns
@@ -18,7 +17,6 @@ def build_app():
 
     # Public services.
     MiscK8sHttpsProxies(snowauth=snowauth)
-    Speedtest(namespace="default", snowauth=snowauth)
 
     # Private services.
     Invidious(namespace="default", snowauth=snowauth)
