@@ -2,7 +2,6 @@
   flake,
   inputs,
   pkgs,
-  config,
   ...
 }:
 
@@ -45,6 +44,7 @@
     ./remote-builders.nix
     ./tor.nix
     ./waydroid.nix
+    ./remote-fs.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -78,13 +78,4 @@
     HandlePowerKey=suspend
   '';
 
-  # https://wiki.nixos.org/wiki/Samba#Samba_Client
-  environment.systemPackages = [ pkgs.cifs-utils ];
-  fileSystems."/mnt/archive" = {
-    device = "//fflewddur.${config.snow.tld}/archive";
-    fsType = "cifs";
-    options = [
-      "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s"
-    ];
-  };
 }
