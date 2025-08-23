@@ -1,6 +1,8 @@
 { config, ... }:
 
 let
+  inherit (config.snow) services;
+
   sendgridApiKeyId = "sendgrid-api-key-id";
   zendutyWebhookUrlId = "zenduty-webhook-url-id";
   healthchecksWebhookUrlId = "healthchecks-webhook-url-id";
@@ -47,7 +49,7 @@ in
 
     alertmanager = {
       enable = true;
-      webExternalUrl = "https://alerts.snow.jflei.com";
+      webExternalUrl = services.alerts.base_url;
 
       configuration = {
         global = {
@@ -94,7 +96,11 @@ in
     };
   };
 
-  services.nginx.virtualHosts."alerts.snow.jflei.com" = {
+  services.data-mesher.settings.host.names = [ services.alerts.sld ];
+  services.nginx.virtualHosts.${services.alerts.fqdn} = {
+    enableACME = true;
+    forceSSL = true;
+
     locations."/" = {
       proxyPass = "http://127.0.0.1:${toString config.services.prometheus.alertmanager.port}";
     };

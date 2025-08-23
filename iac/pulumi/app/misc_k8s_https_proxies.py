@@ -7,22 +7,6 @@ class MiscK8sHttpsProxies:
     def __init__(self, snowauth: Snowauth):
         self._snowauth = snowauth
 
-        # Feel free to enable/tweak as necessary.
-        # ```
-        # self._add_proxy(
-        #     "jflysolaptop",
-        #     destination_ip="192.168.28.182",  # pattern.ec (jfly laptop)
-        #     destination_port=8080,
-        # )
-        # ```
-
-        self._add_proxy(
-            "lloyd",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
-            destination_ip="192.168.28.242",  # `lloyd.ec`
-            destination_port=80,
-        )
-
         self._add_proxy(
             "jellyfin",
             access=Access.INTERNET_UNSECURED,
@@ -30,30 +14,12 @@ class MiscK8sHttpsProxies:
             destination_port=8096,
         )
 
-        fflewddur_services = {
-            Access.INTERNET_UNSECURED: [
-                "cryptpad",
-                "cryptpad-ui",
-                "nextcloud",
-                "healthcheck",
-                # Urg, the immich Android app doesn't respect user-installed certificates.
-                "immich",
-            ],
-            Access.INTERNET_BEHIND_SSO_RAREMY: [
-                "prometheus",
-                "alerts",
-                "syncthing",
-                "grafana",
-            ],
-        }
-        for access, services in fflewddur_services.items():
-            for service in services:
-                self._add_proxy(
-                    service,
-                    access=access,
-                    destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
-                    destination_port=80,
-                )
+        self._add_proxy(
+            "healthcheck",
+            access=Access.INTERNET_UNSECURED,
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+            destination_port=80,
+        )
 
     def _add_proxy(
         self,
@@ -65,7 +31,7 @@ class MiscK8sHttpsProxies:
         """
         Create a service without a selector and explicitly add an endpoint to get
         traffic to the destination.
-        (This is sometimes useful for rapid prototyping something that needs a real
+        (This is sometimes useful for rapidly prototyping something that needs a real
         certificate or needs to be exposed to the outside world.)
         For more information about how this works, see:
          - https://kubernetes.io/docs/concepts/services-networking/service/#services-without-selectors
@@ -88,27 +54,6 @@ class MiscK8sHttpsProxies:
         )
 
         # Endpoints resource
-        #
-        # For some reason the traefik ingress controller doesn't seem to work with
-        # `EndpointSlice`, so we have to use Endpoints.
-        # ```yaml
-        # ---
-        # apiVersion: discovery.k8s.io/v1
-        # kind: EndpointSlice
-        # metadata:
-        #   name: {name}
-        #   labels:
-        #     kubernetes.io/service-name: {name}
-        # addressType: IPv4
-        # ports:
-        #   - name: ''
-        #     appProtocol: http
-        #     protocol: TCP
-        #     port: 11000
-        # endpoints:
-        #   - addresses:
-        #       - {destination_ip}
-        # ```
         k8s.core.v1.Endpoints(
             name,
             metadata={

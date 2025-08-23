@@ -1,5 +1,7 @@
 { pkgs, config, ... }:
-
+let
+  inherit (config.snow) services;
+in
 {
   imports = [
     ./alertmanager.nix
@@ -14,7 +16,7 @@
 
   services.prometheus = {
     enable = true;
-    webExternalUrl = "https://prometheus.snow.jflei.com";
+    webExternalUrl = services.prometheus.base_url;
 
     # Set up a dead man's switch to monitor Prometheus itself.
     # Modeled after this blog post:
@@ -40,7 +42,11 @@
     ];
   };
 
-  services.nginx.virtualHosts."prometheus.snow.jflei.com" = {
+  services.data-mesher.settings.host.names = [ services.prometheus.sld ];
+  services.nginx.virtualHosts.${services.prometheus.fqdn} = {
+    enableACME = true;
+    forceSSL = true;
+
     locations."/" = {
       proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
     };

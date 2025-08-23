@@ -1,4 +1,7 @@
 { config, ... }:
+let
+  inherit (config.snow) services;
+in
 {
   services.grafana = {
     enable = true;
@@ -6,7 +9,7 @@
       server = {
         http_port = 3100;
         enforce_domain = true;
-        domain = "grafana.snow.jflei.com";
+        domain = services.grafana.fqdn;
       };
     };
 
@@ -22,7 +25,11 @@
     };
   };
 
-  services.nginx.virtualHosts."grafana.snow.jflei.com" = {
+  services.data-mesher.settings.host.names = [ services.grafana.sld ];
+  services.nginx.virtualHosts.${services.grafana.fqdn} = {
+    enableACME = true;
+    forceSSL = true;
+
     locations."/" = {
       proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
       proxyWebsockets = true;

@@ -1,15 +1,17 @@
 {
-  lib,
+  config,
   ...
 }:
-
+let
+  inherit (config.snow) services;
+in
 {
   services.cryptpad = {
     enable = true;
     configureNginx = true;
     settings = {
-      httpUnsafeOrigin = "https://cryptpad.snow.jflei.com";
-      httpSafeOrigin = "https://cryptpad-ui.snow.jflei.com";
+      httpUnsafeOrigin = services.cryptpad.base_url;
+      httpSafeOrigin = services.cryptpad-ui.base_url;
       adminKeys = [
         "[jfly@cryptpad.snow.jflei.com/ZwwZaxCmQTnfQI7WZ1BRrrhbKKYLvLmanv03UGJPtks=]"
         "[rachel@cryptpad.snow.jflei.com/Su7meyEBZ4vs-kTXFwHHoZghJeun9mRgOUgVGsVhLVg=]"
@@ -17,12 +19,10 @@
     };
   };
 
-  # Disable ACME/SSL. This isn't exposed to the outside, it's all proxied via
-  # our `k3s` cluster which does HTTPS termination.
-  services.nginx.virtualHosts."cryptpad.snow.jflei.com" = {
-    enableACME = false;
-    forceSSL = lib.mkForce false;
-  };
+  services.data-mesher.settings.host.names = [
+    services.cryptpad.sld
+    services.cryptpad-ui.sld
+  ];
 
   snow.backup = {
     paths = [

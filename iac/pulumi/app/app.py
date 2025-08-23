@@ -16,12 +16,12 @@ def build_app():
     snowauth = Snowauth()
     SnowState()
 
-    Invidious(namespace="default", snowauth=snowauth)
-    # Useful if you really need to run a service somewhere outside of the
-    # cluster (perhaps on your laptop) with a valid https cert.
+    # Public services.
     MiscK8sHttpsProxies(snowauth=snowauth)
     Speedtest(namespace="default", snowauth=snowauth)
 
+    # Private services.
+    Invidious(namespace="default", snowauth=snowauth)
     Torrents(snowauth)
     Jackett(snowauth)
     Radarr(snowauth)

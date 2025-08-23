@@ -102,6 +102,7 @@ in
 
   config = {
     snow.services = {
+      alerts = { };
       audiobookshelf = { };
       budget = {
         oauth2 = {
@@ -111,6 +112,9 @@ in
         paths.oauth2Callback = "/oauth2/callback";
       };
       ca = { };
+      cryptpad = { };
+      cryptpad-ui = { };
+      grafana = { };
       home-assistant = { };
       immich = { };
       jellyfin = { };
@@ -136,6 +140,7 @@ in
       mqtt.scheme = "mqtts";
       nextcloud = { };
       ospi = { };
+      prometheus = { };
       podhacks = { };
       step-ca.sld = "ca";
       vaultwarden = { };
