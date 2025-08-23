@@ -171,7 +171,9 @@ pkgs.mkShell {
     (pythonSet.mkVirtualEnv "devshell" workspace.deps.all)
   ];
 
-  env = pulumiCrdsBuildEnv;
+  env = pulumiCrdsBuildEnv // {
+    CLAN_NO_COMMIT = "1";
+  };
 
   shellHook = concatStringsSep "\n" ([ flake'.config.pre-commit.installationScript ] ++ setEnvVars);
 }
