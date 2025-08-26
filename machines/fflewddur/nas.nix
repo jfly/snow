@@ -5,6 +5,7 @@ let
   nasDriveUuids = {
     "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
     "/mnt/disk2" = "dac09fb6-d300-4892-b83b-3acef83cc757";
+    "/mnt/disk3" = "54bf0c49-f945-4905-8bc5-d1f01f305741";
   };
 in
 {
