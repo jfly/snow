@@ -80,7 +80,6 @@ class Dns:
         self._jflei_com = Zone(name="jflei.com", id="6c65a9f3de03e7704531813603576415")
 
         self._github_pages()
-        self._sendgrid()
         self._san_clemente()
         self._legacy_snowdon()
         self._snow()
@@ -117,15 +116,6 @@ class Dns:
                 "185.199.110.153",
                 "185.199.111.153",
             ],
-        )
-
-    def _sendgrid(self):
-        self._jflei_com.cname("em3602.snowdon", "u33213007.wl008.sendgrid.net")
-        self._jflei_com.cname(
-            "s1._domainkey.snowdon", "s1.domainkey.u33213007.wl008.sendgrid.net"
-        )
-        self._jflei_com.cname(
-            "s2._domainkey.snowdon", "s2.domainkey.u33213007.wl008.sendgrid.net"
         )
 
     def _san_clemente(self):

@@ -125,33 +125,18 @@ backup, and multiple "hot" copies of the most important data
 ([Bitwarden](https://bitwarden.com/)/[Vaultwarden](https://github.com/dani-garcia/vaultwarden)
 and [Syncthing](https://syncthing.net/)) on my end devices.
 
-# Monitoring
+# Monitoring + Alerting
 
-I use [Uptime Kuma](https://github.com/louislam/uptime-kuma). I
-picked it because it's simple.
+I use Prometheus for data gathering ("scraping"), Grafana for
+exploring/visualizations/dashboards, and Prometheus Alertmanager for alerts.
 
-Since I don't trust myself to keep Uptime Kuma up, I monitor *it* with a free
-[StatusCake](https://statuscake.com/) account
+I have Alertmanger email me through [my self-hosted mailserver](machines/doli/README.md).
 
-**TODO**: I don't currently don't monitor various host and Kubernetes metrics
-(disk space, cpu, pods flapping, etc). I also don't do much monitoring of
-application health (for example, restarting my NFS server often causes issues
-for my pods that mount it). I suspect I should bring in other tool to help with
-this. Is [Prometheus](https://prometheus.io/) an answer, or is it just a piece
-of a full solution?
+I use [Zenduty](https://www.zenduty.com/dashboard/quick-start/) as a free "on
+call" app. It's nice to have a backup in case emails break for whatever reason.
+I will probably move away from it in favor of something open source.
 
-## Alerting
-
-I've configured Uptime Kuma to email me via [Sendgrid](https://sendgrid.com/).
-
-I've configured StatusCake to notify me via
-[Zenduty](https://www.zenduty.com/). This is because I once missed an email
-from Zenduty (I never got a "down" alert, just the "up" alert), so I don't
-trust them to email me anymore.
-
-**TODO**: Could I get rid of Sendgrid in favor of running my own mail server
-with
-[nixos-mailserver](https://gitlab.com/simple-nixos-mailserver/nixos-mailserver)?
-(I'd also like to set up emailing for my [Nextcloud](https://nextcloud.com/)
-instance.) Should I eliminate Sendgrid entirely in favor of Zenduty? How should
-I handle urgency of alerts?
+In case any of this breaks, or my monitoring server just dies, I'll find out
+about it because I have a deadman switch set up with the excellent
+<https://healthchecks.io>. This approach was inspired by
+<https://jakubstransky.com/2019/01/26/who-monitors-prometheus/>.

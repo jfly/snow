@@ -1,4 +1,5 @@
 {
+  flake,
   flake',
   inputs,
   config,
@@ -10,6 +11,7 @@
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
     ./postsrsd.nix
+    flake.nixosModules.email-credentials-alerts
   ];
 
   mailserver = {
@@ -26,6 +28,8 @@
         config.clan.core.vars.generators.mail-jfly.files."password.bcrypt".path;
       "jeremy@playground.jflei.com".hashedPasswordFile =
         config.clan.core.vars.generators.mail-jeremy.files."password.bcrypt".path;
+      "alerts@playground.jflei.com".hashedPasswordFile =
+        config.clan.core.vars.generators.mail-alerts.files."password.bcrypt".path;
     };
 
     dkimDomainPrivateKeyFiles = {

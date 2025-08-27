@@ -1,23 +1,18 @@
-{ config, ... }:
+{ flake, config, ... }:
 
 let
   inherit (config.snow) services;
 
-  sendgridApiKeyId = "sendgrid-api-key-id";
+  emailPasswordKeyId = "email-password-key-id";
   zendutyWebhookUrlId = "zenduty-webhook-url-id";
   healthchecksWebhookUrlId = "healthchecks-webhook-url-id";
 in
 {
+  imports = [ flake.nixosModules.email-credentials-alerts ];
+
   clan.core.vars.generators.zenduty-webhook = {
     prompts.url = {
       description = "From https://www.zenduty.com/dashboard/teams/daf139eb-24a2-4991-a8c8-04e80e4f16e6/services/7fc79e41-f284-404f-8573-25bf37e62a4f/integrations/08df6240-794b-4885-a8c7-5e2446e4d13a/configure/";
-      persist = true;
-    };
-  };
-
-  clan.core.vars.generators.sendgrid-api = {
-    prompts.key = {
-      description = "From https://app.sendgrid.com/settings/api_keys";
       persist = true;
     };
   };
@@ -30,7 +25,7 @@ in
   };
 
   systemd.services.alertmanager.serviceConfig.LoadCredential = [
-    "${sendgridApiKeyId}:${config.clan.core.vars.generators.sendgrid-api.files."key".path}"
+    "${emailPasswordKeyId}:${config.clan.core.vars.generators.mail-alerts.files."password".path}"
     "${zendutyWebhookUrlId}:${config.clan.core.vars.generators.zenduty-webhook.files."url".path}"
     "${healthchecksWebhookUrlId}:${
       config.clan.core.vars.generators.heathchecks-io-prometheus.files."url".path
@@ -53,10 +48,10 @@ in
 
       configuration = {
         global = {
-          smtp_from = "prometheus@snowdon.jflei.com";
-          smtp_smarthost = "smtp.sendgrid.net:587";
-          smtp_auth_username = "apikey";
-          smtp_auth_password_file = "$CREDENTIALS_DIRECTORY/${sendgridApiKeyId}";
+          smtp_from = "alerts@playground.jflei.com";
+          smtp_smarthost = "mail.playground.jflei.com:587";
+          smtp_auth_username = "alerts@playground.jflei.com";
+          smtp_auth_password_file = "$CREDENTIALS_DIRECTORY/${emailPasswordKeyId}";
         };
         route = {
           receiver = "on-call";
