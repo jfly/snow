@@ -75,6 +75,8 @@
 	submoduleSummary = true
 [fetch]
 	prune = true
+[format]
+    pretty = fuller
 
 ###
 ### Delta configuration (copied from
