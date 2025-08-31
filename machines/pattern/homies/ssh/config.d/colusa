@@ -35,7 +35,7 @@ Host elfstone
 
 Host dallben
     Tag colusa
-    HostName dallben.ec
+    HostName dallben.m
     User jfly
 
 Host thermometer
