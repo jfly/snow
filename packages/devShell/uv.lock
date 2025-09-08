@@ -265,7 +265,7 @@ wheels = [
 
 [[package]]
 name = "pulumi"
-version = "3.190.0"
+version = "3.193.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "debugpy" },
@@ -277,21 +277,21 @@ dependencies = [
     { name = "semver" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0d/c7/25246c8bd05b72986f42d9c2adf561162dbade160a2b52adfa7873b30dc0/pulumi-3.190.0-py3-none-any.whl", hash = "sha256:aff2de5098e7ab24bee0e22b2fde81e0775b65ca03e5f13e9fe9c6cc8a420b63", size = 375069, upload-time = "2025-08-15T17:57:34.315Z" },
+    { url = "https://files.pythonhosted.org/packages/71/e2/8bc8c94dc6da724fc7b2cc77472a4cc831fe759a2d2a1b2a57cae1edffab/pulumi-3.193.0-py3-none-any.whl", hash = "sha256:346ddcdd02d956189473cba0926af2b724b313b934810016ab284b117493e4b7", size = 375534, upload-time = "2025-09-04T13:50:34.171Z" },
 ]
 
 [[package]]
 name = "pulumi-cloudflare"
-version = "6.5.0"
+version = "6.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "parver" },
     { name = "pulumi" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/24/6a/9fec0e20f71d9e3b01389995a87963d91089ba224eb848389d4d04cba799/pulumi_cloudflare-6.5.0.tar.gz", hash = "sha256:27a87bdc8182e1960d66ae94ee8332eded4508fcfcb72e279f6d6b5ebd28311a", size = 1336212, upload-time = "2025-08-14T19:48:47.836Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b6/2a/034002290c3da34835242c8688888a83e532a850f31721e6824c34044ccf/pulumi_cloudflare-6.8.0.tar.gz", hash = "sha256:ead94e438cf36e8cfd5ea44bc98e602a75403370e0f992112059a4a3ddcead4a", size = 1387495, upload-time = "2025-08-30T05:43:14.243Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/27/37/ffd8636513e3687d3bb4a54466ccc9ca3bbfd1d7894dc521c62d0aecd963/pulumi_cloudflare-6.5.0-py3-none-any.whl", hash = "sha256:e9a485d311ff198402844c73e8306390b356181d9598878faa0914f228f73dad", size = 2059148, upload-time = "2025-08-14T19:48:45.681Z" },
+    { url = "https://files.pythonhosted.org/packages/91/cb/d992384df5778b3be0fb6342db52b9f638534ff1d6c57ebd66d9d7b52816/pulumi_cloudflare-6.8.0-py3-none-any.whl", hash = "sha256:907765dd710ae00b1ce9a033a13648dfc497278d827da655ff0da42b3f6078f0", size = 2134108, upload-time = "2025-08-30T05:43:12.21Z" },
 ]
 
 [[package]]
@@ -498,11 +498,11 @@ wheels = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.14.1"
+version = "4.15.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822/typing_extensions-4.14.1.tar.gz", hash = "sha256:38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36", size = 107673, upload-time = "2025-07-04T13:28:34.16Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b5/00/d631e67a838026495268c2f6884f3711a15a9a2a96cd244fdaea53b823fb/typing_extensions-4.14.1-py3-none-any.whl", hash = "sha256:d1e1e3b58374dc93031d6eda2420a48ea44a36c2b4766a4fdeb3710755731d76", size = 43906, upload-time = "2025-07-04T13:28:32.743Z" },
+    { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
 ]
 
 [[package]]

@@ -1,6 +1,8 @@
-commit e5e711e501c0476f3b79a3b5f2c96c919ac6b923
-Author: Jeremy Fleischman <jeremyfleischman@gmail.com>
-Date:   Tue Jan 18 17:30:01 2022 -0800
+commit bbf2563de7da569f1655f977004fff5d33560f0e
+Author:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+AuthorDate: Mon Sep 8 10:51:29 2025 +0200
+Commit:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+CommitDate: Mon Sep 8 10:51:29 2025 +0200
 
     Remove `Qt::BypassWindowManagerHint`
 
@@ -11,17 +13,15 @@ Date:   Tue Jan 18 17:30:01 2022 -0800
     to get this upstreamed someday.
 
 diff --git a/src/widgets/capture/capturewidget.cpp b/src/widgets/capture/capturewidget.cpp
-index c34a5f11..0a4db33d 100644
+index fd866786..177cbba2 100644
 --- a/src/widgets/capture/capturewidget.cpp
 +++ b/src/widgets/capture/capturewidget.cpp
-@@ -135,8 +135,9 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
+@@ -149,7 +149,7 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
  #else
  // Call cmake with -DFLAMESHOT_DEBUG_CAPTURE=ON to enable easier debugging
  #if !defined(FLAMESHOT_DEBUG_CAPTURE)
 -        setWindowFlags(Qt::BypassWindowManagerHint | Qt::WindowStaysOnTopHint |
 +        setWindowFlags(Qt::WindowStaysOnTopHint |
                         Qt::FramelessWindowHint | Qt::Tool);
-+
-         resize(pixmap().size());
- #endif
- #endif
+         // Fix for Qt6 dual monitor offset: position widget to cover entire
+         // desktop

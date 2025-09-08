@@ -65,12 +65,9 @@ in
   services.samba = {
     enable = true;
     openFirewall = true;
-    # `samba4Full` is compiled with avahi support, which is required for samba
+    # `sambaFull` is compiled with avahi support, which is required for samba
     # to register mDNS records for auto discovery
-    package = pkgs.sambaFull.override {
-      # Workaround for <https://github.com/NixOS/nixpkgs/issues/426401>
-      enableCephFS = false;
-    };
+    package = pkgs.sambaFull;
     settings = {
       global = {
         "security" = "user";

@@ -73,9 +73,8 @@
   i18n.defaultLocale = "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
 
-  services.logind.lidSwitch = "ignore";
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
-
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandlePowerKey = "suspend";
+  };
 }

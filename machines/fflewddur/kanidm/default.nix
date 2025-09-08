@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  flake',
   ...
 }:
 
@@ -50,7 +51,7 @@ in
 
   services.kanidm = {
     enableServer = true;
-    package = pkgs.kanidm_1_7.withSecretProvisioning;
+    package = flake'.packages.kanidm.withSecretProvisioning;
     serverSettings = {
       domain = services.kanidm.fqdn;
       bindaddress = "127.0.0.1:9443";

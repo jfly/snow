@@ -130,7 +130,7 @@
           (fetchpatch {
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-owIYa598cbqEAZ5aLK61Owy94kAn1NfoHA6nLsSWNek=";
+            hash = "sha256-dl2QzFdmQxfbCsnifnSEMxEiqWqgk27vRaCwkg0zugg=";
           })
           (fetchpatch {
             name = "refactor(postfix): fix evaluation warnings";
