@@ -15,6 +15,11 @@ Host fflam
     HostName fflam.m
     User jfly
 
+# Experimental new router
+Host rpi4
+    HostName 192.168.5.141
+    User root
+
 # Primary router
 Host strider
     Tag colusa

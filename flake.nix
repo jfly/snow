@@ -6,6 +6,15 @@
   };
 
   inputs = {
+    bpi-r4 = {
+      url = "github:jfly/bpi-r4.nix";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks-nix.follows = "git-hooks-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
+
     clan-core = {
       url = "git+https://git.clan.lol/clan/clan-core";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,7 +80,7 @@
 
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
 
-    systems.url = "github:nix-systems/x86_64-linux";
+    systems.url = "github:nix-systems/default";
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
