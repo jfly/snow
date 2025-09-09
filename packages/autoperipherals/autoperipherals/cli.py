@@ -138,6 +138,14 @@ def _detect() -> Detection:
         for display in displays:
             display.is_active = False
         external_display.is_active = True
+    elif external_display := display_by_edid_name.get("LG HDR 4K 146145280"):
+        # (Visiting Germany)
+        location_name = "projector"
+        dpi = 133
+
+        for display in displays:
+            display.is_active = False
+        external_display.is_active = True
     else:
         location_name = "mobile"
         dpi = mode.mobile_dpi()
