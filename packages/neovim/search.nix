@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   inherit (lib.nixvim) mkRaw;
@@ -6,6 +6,15 @@ in
 {
   plugins.fzf-lua = {
     enable = true;
+    package = pkgs.vimPlugins.fzf-lua.overrideAttrs (oldAttrs: {
+      patches = (oldAttrs.patches or [ ]) ++ [
+        (pkgs.fetchpatch {
+          name = "fix: ts highlighter error on master";
+          url = "https://github.com/ibhagwan/fzf-lua/commit/334c4a74aa9e6421f6d14234dabd9c34c5832c56.diff";
+          hash = "sha256-+wM3UuW8r9qlbxZEZ+c8dAUZGSwmo7uqGxsitQ3F2gA=";
+        })
+      ];
+    });
 
     settings.winopts = {
       split = "belowright new";
@@ -25,6 +34,8 @@ in
   };
 
   extraConfigLuaPre = ''
+    -- vim.opt.rtp:prepend("/home/jeremy/src/github.com/ibhagwan/fzf-lua")
+
     local snow_search = {}
 
     do
