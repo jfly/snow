@@ -5,6 +5,10 @@ Host umbriel
     HostName umbriel.nixos.org
     User root
 
+Host caliban
+    HostName caliban.nixos.org
+    User root
+
 Host wiki.nixos.org
     User root
 
