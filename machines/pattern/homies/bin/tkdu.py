@@ -99,7 +99,7 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
                 usew = usew / 1.5
                 first_height = ff[i][0] / usew * ratio
             want = usew * h / ratio
-            maxcnt = h / 30
+            # maxcnt = h / 30
         else:
             orient = HORIZONTAL
             useh = h - w * 2.0 / 3
@@ -112,7 +112,7 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
                 useh = useh / 1.5
                 first_width = ff[i][0] / useh * ratio
             want = useh * w / ratio
-            maxcnt = w / 30
+            # maxcnt = w / 30
 
         j = i + 1
         use = ff[i][0]
@@ -151,7 +151,7 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
         color = colors[haskids]
         if item[2] is None:
             continue
-        x, y, w, h = pos = item[2]
+        x, y, w, h = item[2]
         if w > 3 * BORDER and h > 3 * BORDER:
             tk_call(
                 canvas._w,
@@ -312,7 +312,7 @@ def item_under_cursor(e):
 
 
 def descend(e):
-    c = e.widget
+    # c = e.widget
     item = item_under_cursor(e)
     chroot(e, item)
 
@@ -336,9 +336,9 @@ def size(n):
 def scroll(e, dir):
     c = e.widget
     offset = c.first + 5 * dir
-    l = len(getkids(c.files, c.cur))
-    if offset + 5 > l:
-        offset = l - 5
+    ell = len(getkids(c.files, c.cur))
+    if offset + 5 > ell:
+        offset = ell - 5
     if offset < 0:
         offset = 0
     if offset != c.first:
@@ -393,7 +393,7 @@ def reconfigure(e):
         nslashes = -1
     else:
         nslashes = c.cur.count(os.sep) - 1
-    parent = os.path.dirname(c.cur)
+    # parent = os.path.dirname(c.cur)
     color = dircolors[nslashes % len(dircolors)]
     c.configure(background=color)
     c.queue = [(allocate, c.cur, c.files, c, 0, 0, w, h, c.first, c.depth)]
@@ -401,17 +401,17 @@ def reconfigure(e):
 
 
 def putname_base(dict, name, base, size):
-    try:
+    if base in dict:
         dict[base][name] = size
-    except:
+    else:
         dict[base] = {name: size}
 
 
 def putname(dict, name, size):
     base = os.path.dirname(name)
-    try:
+    if base in dict:
         dict[base][name] = size
-    except:
+    else:
         dict[base] = {name: size}
 
 
@@ -473,7 +473,7 @@ def setdepth(e, c, i):
 
 def main(f=sys.stdin):
     files = {}
-    firstfile = None
+    # firstfile = None
     errors_found = 0
     for linenum, line in enumerate(f.readlines()):
         try:
@@ -492,9 +492,7 @@ def main(f=sys.stdin):
         try:  # For normal lines of du output
             sz = int(sz) * 1024
             putname(files, name, sz)
-        except (
-            ValueError
-        ):  # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
+        except ValueError:  # For error lines of du output, which is caused by 'Permission denied' when accessing certain folders of other users.
             pass  # do nothing (if met with permission error)!
             # print "Something went wrong {!s}".format(line)   # the problem value
 
@@ -517,7 +515,7 @@ def du(
 
     try:
         fns = os.listdir(dir)
-    except:
+    except Exception:
         return 0
 
     if dir not in files.keys():
@@ -529,7 +527,7 @@ def du(
 
         try:
             info = lstat(fn)
-        except:
+        except Exception:
             continue
 
         if info[ST_MODE] & S_IFMT == S_IFDIR:
@@ -570,7 +568,7 @@ class DirDialog(LoadFileDialog):
         self.set_filter(dir, pat)
         names.sort()
         subdirs = [os.pardir]
-        matchingfiles = []
+        # matchingfiles = []
         for name in names:
             fullname = os.path.join(dir, name)
             if os.path.isdir(fullname):

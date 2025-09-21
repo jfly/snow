@@ -32,12 +32,8 @@ def notify(summary: str, body: str):
     replaces_id = 0  # "A value of value of 0 means that this notification won't replace any existing notifications."
     app_icon = "audio-card"  # "Can be an empty string, indicating no icon." https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html#icons-and-images
     actions = []
-    hints = (
-        {}
-    )  # https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html#hints
-    visible_duration_ms = (
-        -1
-    )  # "If -1, the notification's expiration time is dependent on the notification server's settings, and may vary for the type of notification. If 0, never expire."
+    hints = {}  # https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html#hints
+    visible_duration_ms = -1  # "If -1, the notification's expiration time is dependent on the notification server's settings, and may vary for the type of notification. If 0, never expire."
     notfy_interface.Notify(
         app_name,
         replaces_id,

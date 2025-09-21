@@ -103,7 +103,7 @@ class Timeline:
         longest_prefix = max(*prefixes, key=len)
         line_by_prefix: dict[str, str] = {}
         for prefix in prefixes:
-            (line,) = [l for l in lines if l.startswith(prefix)]
+            (line,) = [line for line in lines if line.startswith(prefix)]
             line_by_prefix[prefix] = line[len(longest_prefix) :]
 
         keyboard_line = line_by_prefix["keyboard: "]
@@ -177,7 +177,7 @@ class ToolBaseTest(unittest.TestCase):
             resulting_events: list[InputEvent] = []
             while (
                 computer_sees_event := self.driver.get_input_event(timeout_seconds=0.1)
-            ) != None:
+            ) is not None:
                 # skip SYN_REPORTS
                 if computer_sees_event.type == SYN_EVENT.type:
                     continue

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from pprint import pprint
 import screenlayout.xrandr
 from screenlayout.auxiliary import Position, NORMAL, InadequateConfiguration
 

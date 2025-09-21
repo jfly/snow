@@ -150,7 +150,7 @@ class Windows:
         return name.decode("utf8")
 
     def get_devices(self, adapter: MacAddress) -> List[BluetoothDevice]:
-        keys_path = rf"ControlSet001\Services\BTHPORT\Parameters\Keys"
+        keys_path = r"ControlSet001\Services\BTHPORT\Parameters\Keys"
         keys_node = self._registry.read_path(keys_path)
         adapter_node = keys_node.subnode_by_name[
             adapter.format(caps=False, separator="")

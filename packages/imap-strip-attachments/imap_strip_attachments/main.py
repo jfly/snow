@@ -130,7 +130,9 @@ def remove_attachments(
             date = email.utils.parsedate_to_datetime(msg["date"])
             assert date
             gmail_labels = [
-                l for l in client.get_gmail_labels(uid)[uid] if l != from_folder
+                label
+                for label in client.get_gmail_labels(uid)[uid]
+                if label != from_folder
             ]
             progress.set_description(
                 f"UID: {uid}"

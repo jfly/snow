@@ -28,7 +28,7 @@ class Zone:
     def a(self, name: str, values: list[str]):
         for i, content in enumerate(values):
             cloudflare.Record(
-                f"a-{name}-{i+1}",
+                f"a-{name}-{i + 1}",
                 name=name,
                 ttl=DEFAULT_TTL,
                 type="A",
@@ -40,7 +40,7 @@ class Zone:
     def aaaa(self, name: str, values: list[str]):
         for i, content in enumerate(values):
             cloudflare.Record(
-                f"aaaa-{name}-{i+1}",
+                f"aaaa-{name}-{i + 1}",
                 name=name,
                 ttl=DEFAULT_TTL,
                 type="AAAA",
@@ -53,7 +53,7 @@ class Zone:
         for priority, values in values_by_priority.items():
             for i, content in enumerate(values):
                 cloudflare.Record(
-                    f"mx-{name}-p{priority}-{i+1}",
+                    f"mx-{name}-p{priority}-{i + 1}",
                     name=name,
                     priority=priority,
                     ttl=DEFAULT_TTL,

@@ -12,7 +12,8 @@
     programs = {
       # Formatters
       nixfmt.enable = true;
-      black.enable = true;
+      ruff-check.enable = true;
+      ruff-format.enable = true;
       clang-format.enable = true;
       fish_indent.enable = true;
       ormolu.enable = true;

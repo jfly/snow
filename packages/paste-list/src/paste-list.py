@@ -14,7 +14,7 @@ def main():
     parser.add_argument("file", type=argparse.FileType(mode="r", encoding="utf-8"))
     args = parser.parse_args()
 
-    choices = [l.strip() for l in args.file.readlines()]
+    choices = [line.strip() for line in args.file.readlines()]
 
     body = [urwid.Text("Clipboard"), urwid.Divider()]
     for c in choices:
