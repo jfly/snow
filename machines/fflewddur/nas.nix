@@ -67,7 +67,10 @@ in
     openFirewall = true;
     # `sambaFull` is compiled with avahi support, which is required for samba
     # to register mDNS records for auto discovery
-    package = pkgs.sambaFull;
+    package = pkgs.sambaFull.override {
+      # Workaround for <https://github.com/NixOS/nixpkgs/issues/442652>
+      enableCephFS = false;
+    };
     settings = {
       global = {
         "security" = "user";
