@@ -263,12 +263,17 @@ in
   ###
   fonts = {
     fontDir.enable = true;
-    packages = with pkgs; [
-      nerd-fonts.ubuntu-mono # My preferred monospace font.
-      noto-fonts-monochrome-emoji # We use this in `polybar` to keep everything nice and black and white.
-      flake'.packages.pica-font
-      flake'.packages.dk-majolica-font
-    ];
+    packages =
+      with pkgs;
+      [
+        nerd-fonts.ubuntu-mono # My preferred monospace font.
+        noto-fonts-monochrome-emoji # We use this in `polybar` to keep everything nice and black and white.
+      ]
+      ++ [
+        flake'.packages.pica-font
+        flake'.packages.dk-majolica-font
+        flake'.packages.gill-sans-font
+      ];
     fontconfig = {
       defaultFonts = {
         monospace = [ "UbuntuMono Nerd Font Mono" ];
