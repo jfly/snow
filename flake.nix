@@ -6,6 +6,13 @@
   };
 
   inputs = {
+    brbd-sync = {
+      url = "github:jfly/brbd-sync";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+
     clan-core = {
       url = "git+https://git.clan.lol/clan/clan-core";
       inputs.nixpkgs.follows = "nixpkgs";

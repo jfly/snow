@@ -28,6 +28,7 @@
     ./whoami.nix
     ./miniflux.nix
     ./speedtest.nix
+    ./brbd-sync.nix
   ];
 
   networking.hostName = "fflewddur";
