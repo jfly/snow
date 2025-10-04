@@ -41,7 +41,7 @@
   # <https://github.com/vuejs/language-tools/wiki/Neovim>, and nixvim
   # does have this logic built into their older `plugins.lsp` api:
   # <https://github.com/nix-community/nixvim/blob/3fa0e487260af16dde609940e49c3ddc6c31c6ed/plugins/lsp/language-servers/default.nix#L155-L185>.
-  # TODO: figure out if this can be PR-ed to nixvim.
+  # TODO: figure out if this can be PR-ed to nixvim, see <https://github.com/nix-community/nixvim/issues/3773>.
   lsp.servers.ts_ls.settings = {
     filetypes = [ "vue" ];
     init_options.plugins = [
