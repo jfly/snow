@@ -1,3 +1,4 @@
+{ lib, config, ... }:
 {
   imports = [ ./lsp-diagnostic-quirks.nix ];
 
@@ -32,8 +33,25 @@
     };
   };
 
-  # TypeScript/JavaScript
+  # TypeScript/JavaScript/Vue
   lsp.servers.ts_ls.enable = true;
+  lsp.servers.vue_ls.enable = true;
+  # This is kind of tricky: `vue_ls` requires that a vue-specific plugin be
+  # added to `ts_ls`. This is documented on
+  # <https://github.com/vuejs/language-tools/wiki/Neovim>, and nixvim
+  # does have this logic built into their older `plugins.lsp` api:
+  # <https://github.com/nix-community/nixvim/blob/3fa0e487260af16dde609940e49c3ddc6c31c6ed/plugins/lsp/language-servers/default.nix#L155-L185>.
+  # TODO: figure out if this can be PR-ed to nixvim.
+  lsp.servers.ts_ls.settings = {
+    filetypes = [ "vue" ];
+    init_options.plugins = [
+      {
+        name = "@vue/typescript-plugin";
+        location = "${lib.getBin config.lsp.servers.vue_ls.package}/lib/language-tools/packages/language-server";
+        languages = [ "vue" ];
+      }
+    ];
+  };
 
   # C/C++
   lsp.servers.clangd.enable = true;
