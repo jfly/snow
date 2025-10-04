@@ -72,10 +72,8 @@ in
       groups.${services.budget.oauth2.groups.access}.members = [ "manman" ];
       systems.oauth2.${services.budget.oauth2.clientId} = {
         displayName = "Budget";
-        imageFile = pkgs.fetchurl {
-          url = "https://www.svgrepo.com/download/314973/piggy-bank.svg";
-          hash = "sha256-6avNiA0zQpLBFMHkHHWs1E17iXpLNskDFpvGENuukOY=";
-        };
+        # https://www.svgrepo.com/download/314973/piggy-bank.svg
+        imageFile = ../../../fods/piggy-bank-svgrepo-com.svg;
         originUrl = services.budget.urls.oauth2Callback;
         originLanding = services.budget.base_url;
         basicSecretFile = services.budget.oauth2.clientSecretPath;
@@ -94,10 +92,8 @@ in
       groups.${services.whoami.oauth2.groups.access}.members = [ "manman" ];
       systems.oauth2.${services.whoami.oauth2.clientId} = {
         displayName = "Whoami";
-        imageFile = pkgs.fetchurl {
-          url = "https://www.svgrepo.com/download/483473/detective-face.svg";
-          hash = "sha256-44f5uE37wZ6180ppOT4NiigPzgPzaz1sTMuTmVQTdHM=";
-        };
+        # https://www.svgrepo.com/download/483473/detective-face.svg
+        imageFile = ../../../fods/detective-face-svgrepo-com.svg;
         originUrl = services.whoami.urls.oauth2Callback;
         originLanding = services.whoami.base_url;
         basicSecretFile = services.whoami.oauth2.clientSecretPath;
@@ -116,10 +112,8 @@ in
       groups.${services.miniflux.oauth2.groups.access}.members = [ "manman" ];
       systems.oauth2.${services.miniflux.oauth2.clientId} = {
         displayName = "Miniflux";
-        imageFile = pkgs.fetchurl {
-          url = "https://www.svgrepo.com/download/204349/rss.svg";
-          hash = "sha256-4bIBbSK6C6f6svL8CyfeRLD0j+gkrDdq4OSZnQmFE7k=";
-        };
+        # https://www.svgrepo.com/download/204349/rss.svg
+        imageFile = ../../../fods/rss-svgrepo-com.svg;
         originUrl = services.miniflux.urls.oauth2Callback;
         originLanding = services.miniflux.base_url;
         basicSecretFile = services.miniflux.oauth2.clientSecretPath;

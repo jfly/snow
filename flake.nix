@@ -100,12 +100,6 @@
 
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
-          # To pull in https://github.com/fish-shell/fish-shell/commit/4ce552bf949a8d09c483bb4da350cfe1e69e3e48
-          (fetchpatch {
-            name = "fish: 4.0.2 -> 4.1.0-unstable";
-            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:fish-4.1.0-unstable.diff";
-            hash = "sha256-dVThaZWua6N/m4M+kmWrxU3StUILjLNVfDcLnzGUo2M=";
-          })
           (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";

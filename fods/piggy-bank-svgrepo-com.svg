@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 -6.23 75.463 75.463" xmlns="http://www.w3.org/2000/svg">
+  <g id="Group_85" data-name="Group 85" transform="translate(-34.537 -37)">
+    <path id="Path_115" data-name="Path 115" d="M98,73.339c0-11.108-12.762-20.113-28.5-20.113A39,39,0,0,0,58.84,54.684a12.562,12.562,0,0,0-16.548.548l5.976,4.687a19.967,19.967,0,0,0-5.817,7.061,2.027,2.027,0,0,1-2.1,1.214H38.167A2.8,2.8,0,0,0,35.6,71.413l1.705,7.67a2.579,2.579,0,0,0,2.365,2.05h1.918A2.681,2.681,0,0,1,43.909,82.2,23.158,23.158,0,0,0,51.12,88.71l-.257,8.184A1.652,1.652,0,0,0,52.452,99h7.362A1.653,1.653,0,0,0,61.4,97.8l1.4-4.913a39.988,39.988,0,0,0,14.748-.258L79.032,97.8A1.653,1.653,0,0,0,80.621,99H88.14a1.652,1.652,0,0,0,1.588-2.106l-.5-9.046C94.63,84.187,98,79.042,98,73.339Z" fill="#ffc2c2" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_116" data-name="Path 116" d="M84.124,56.927" fill="#ffffff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <circle id="Ellipse_26" data-name="Ellipse 26" cx="2" cy="2" r="2" transform="translate(49 66)" fill="#333"/>
+    <g id="Group_84" data-name="Group 84">
+      <circle id="Ellipse_27" data-name="Ellipse 27" cx="16" cy="16" r="16" transform="translate(77 38)" fill="#fff1b6" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+      <g id="Group_83" data-name="Group 83">
+        <line id="Line_131" data-name="Line 131" y2="21" transform="translate(93 43)" fill="#ffffff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+        <g id="Group_82" data-name="Group 82">
+          <path id="Path_117" data-name="Path 117" d="M93.092,53.5a3.752,3.752,0,1,1,3.875-3.75" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+          <path id="Path_118" data-name="Path 118" d="M93.092,53.5a3.752,3.752,0,1,1-3.875,3.75" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+        </g>
+      </g>
+    </g>
+    <path id="Path_119" data-name="Path 119" d="M62,59.006A28.446,28.446,0,0,1,78,59.3" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>
