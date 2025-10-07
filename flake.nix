@@ -105,6 +105,11 @@
             url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
             hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
           })
+          (fetchpatch {
+            name = "nixos/librespeed: init";
+            url = "https://github.com/NixOS/nixpkgs/pull/448889.diff";
+            hash = "sha256-R8ewwLtKgw4CncvcEe+1Tph5QWgOt9KaFsheOKXbXQc=";
+          })
         ];
 
         openwrt-imagebuilder.patches = [
