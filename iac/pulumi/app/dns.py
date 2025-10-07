@@ -15,7 +15,7 @@ class Zone:
         self._id = id
 
     def cname(self, name: str, content: str):
-        cloudflare.Record(
+        cloudflare.DnsRecord(
             f"{name}.{self._name}",
             name=name,
             ttl=DEFAULT_TTL,
@@ -27,7 +27,7 @@ class Zone:
 
     def a(self, name: str, values: list[str]):
         for i, content in enumerate(values):
-            cloudflare.Record(
+            cloudflare.DnsRecord(
                 f"a-{name}-{i + 1}",
                 name=name,
                 ttl=DEFAULT_TTL,
@@ -39,7 +39,7 @@ class Zone:
 
     def aaaa(self, name: str, values: list[str]):
         for i, content in enumerate(values):
-            cloudflare.Record(
+            cloudflare.DnsRecord(
                 f"aaaa-{name}-{i + 1}",
                 name=name,
                 ttl=DEFAULT_TTL,
@@ -52,7 +52,7 @@ class Zone:
     def mx(self, name: str, values_by_priority: dict[int, list[str]]):
         for priority, values in values_by_priority.items():
             for i, content in enumerate(values):
-                cloudflare.Record(
+                cloudflare.DnsRecord(
                     f"mx-{name}-p{priority}-{i + 1}",
                     name=name,
                     priority=priority,
@@ -64,7 +64,7 @@ class Zone:
                 )
 
     def txt(self, name: str, content: str):
-        cloudflare.Record(
+        cloudflare.DnsRecord(
             f"txt-{name}",
             name=name,
             ttl=DEFAULT_TTL,
