@@ -46,7 +46,6 @@ in
     ./polybar
     ./messaging.nix
     ./remote-desktop-client.nix
-    ./email.nix
     flake.nixosModules.colorscheme
   ];
 

@@ -28,10 +28,7 @@
 [branch]
 	sort = -authordate
 [sendemail]
-	smtpEncryption = tls
-	smtpServer = smtp.gmail.com
-	smtpUser = jeremyfleischman@gmail.com
-	smtpServerPort = 587
+	sendmailCmd = msmtp --account=gmail
 [merge]
 	conflictStyle = diff3
 [diff]

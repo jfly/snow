@@ -1,3 +1,0 @@
-{
-  programs.thunderbird.enable = true;
-}

@@ -33,6 +33,7 @@
     ./sshd.nix
     ./shell
     ./desktop
+    ./pim
     ./fingerprint.nix
     ./android.nix
     ./development.nix

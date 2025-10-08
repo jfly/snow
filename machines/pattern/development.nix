@@ -65,7 +65,14 @@
   # Needed by `~/bin/allprocs`
   programs.sysdig.enable = true;
 
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    package = lib.meta.hiPrio (
+      pkgs.git.override {
+        sendEmailSupport = true;
+      }
+    );
+  };
   programs.git.lfs.enable = true;
 
   # Use our fancy configured neovim rather than stock.
