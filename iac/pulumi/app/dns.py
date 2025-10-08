@@ -1,12 +1,28 @@
 import pulumi
+from typing import Self
 from pathlib import Path
 import pulumi_cloudflare as cloudflare
 from .deage import deage
 
 
-# See https://serverfault.com/questions/7478/recommended-dns-ttl for a discussion of this.
+# See <https://serverfault.com/questions/7478/recommended-dns-ttl> for a discussion of this.
 # TL;DR: 5 minutes is a nice balance between short and not crazy short.
 DEFAULT_TTL = 300
+
+
+class SrvValue:
+    def __init__(self, priority: int, weight: int, port: int, target: str):
+        self.priority = priority
+        self.weight = weight
+        self.port = port
+        self.target = target
+
+    @classmethod
+    def no_target(cls) -> Self:
+        # > A Target of "." means that the service is decidedly not
+        # > available at this domain.
+        # From <https://www.ietf.org/rfc/rfc2782.txt>
+        return cls(priority=0, weight=0, port=0, target=".")
 
 
 class Zone:
@@ -64,6 +80,30 @@ class Zone:
                 )
 
     def txt(self, name: str, content: str):
+        # CloudFlare expects all TXT records to be quoted, with quotation marks
+        # escaped accordingly. See
+        # <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>
+        # for details.
+        # Furthermore, it appears the quoted strings must be no longer than 255
+        # characters, and instead must be a space separated list of quoted strings.
+        # This all feels like a leaky abstraction on tope of zonefiles, but it
+        # is what it is.
+        def chunkify[E](arr: list[E], max_length: int) -> list[list[E]]:
+            chunks: list[list[E]] = []
+            for el in arr:
+                if len(chunks) == 0 or len(chunks[-1]) >= max_length:
+                    chunks.append([])
+
+                chunks[-1].append(el)
+
+            return chunks
+
+        def escape_string(s: str) -> str:
+            return '"' + s.replace('"', '\\"') + '"'
+
+        chunks = chunkify(list(content), max_length=255)
+        content = " ".join(escape_string("".join(chunk)) for chunk in chunks)
+
         cloudflare.DnsRecord(
             f"txt-{name}",
             name=name,
@@ -74,17 +114,44 @@ class Zone:
             opts=pulumi.ResourceOptions(protect=True),
         )
 
+    def srv(
+        self,
+        service: str,
+        proto: str,
+        value: SrvValue,
+    ):
+        # This format is explained here:
+        # <https://www.cloudflare.com/learning/dns/dns-records/dns-srv-record/>
+        name = f"_{service}._{proto}"
+        cloudflare.DnsRecord(
+            f"srv-{name}",
+            name=name,
+            ttl=DEFAULT_TTL,
+            type="SRV",
+            priority=value.priority,
+            data=cloudflare.DnsRecordDataArgs(
+                priority=value.priority,
+                weight=value.weight,
+                port=value.port,
+                target=value.target,
+            ),
+            zone_id=self._id,
+            opts=pulumi.ResourceOptions(protect=True),
+        )
+
 
 class Dns:
     def __init__(self):
         self._jflei_com = Zone(name="jflei.com", id="6c65a9f3de03e7704531813603576415")
+        self._jfly_fyi = Zone(name="jfly.fyi", id="ad1bf6d9fca4fee60601e6faa5cc01b6")
 
         self._github_pages()
         self._san_clemente()
         self._legacy_snowdon()
         self._snow()
         self._google_workspace()
-        self._mail()
+        self._self_hosted_mailserver()
+        self._fastmail()
 
         self._secret_projects()
 
@@ -101,7 +168,7 @@ class Dns:
             -----END AGE ENCRYPTED FILE-----
             """
         )
-        self._jflei_com.cname(secret_project, "cname.vercel-dns.com.")
+        self._jflei_com.cname(secret_project, "cname.vercel-dns.com")
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
@@ -153,7 +220,7 @@ class Dns:
         )
         self._jflei_com.txt("jflei.com", "v=spf1 include:_spf.google.com ~all")
 
-    def _mail(self):
+    def _self_hosted_mailserver(self):
         # Keep this in sync with `hosts/doli/mail.nix`.
         # Fairly hidden: this is the domain name of the mailserver.
         mx_domain = "mail.playground.jflei.com"
@@ -195,8 +262,63 @@ class Dns:
         )
         self._jflei_com.txt(f"{selector}._domainkey.{email_domain}", txt_value)
 
-        # Create `DMARC` record
+        # Create `DMARC` record.
         self._jflei_com.txt(
             f"_dmarc.{email_domain}",
             "v=DMARC1; p=reject; adkim=s; aspf=s;",
+        )
+
+    def _fastmail(self):
+        # https://www.fastmail.help/hc/en-us/articles/360060591153-Manual-DNS-configuration
+
+        # Standard Mail
+        self._jfly_fyi.mx(
+            "@",
+            {
+                10: ["in1-smtp.messagingengine.com"],
+                20: ["in2-smtp.messagingengine.com"],
+            },
+        )
+
+        # DKIM
+        self._jfly_fyi.cname("fm1._domainkey", "fm1.jfly.fyi.dkim.fmhosted.com")
+        self._jfly_fyi.cname("fm2._domainkey", "fm2.jfly.fyi.dkim.fmhosted.com")
+        self._jfly_fyi.cname("fm3._domainkey", "fm3.jfly.fyi.dkim.fmhosted.com")
+
+        # SPF
+        self._jfly_fyi.txt("@", "v=spf1 include:spf.messagingengine.com ?all")
+
+        # DMARC
+        self._jfly_fyi.txt("_dmarc", "v=DMARC1; p=none;")
+
+        # Client email auto-discovery
+        self._jfly_fyi.srv("submission", "tcp", value=SrvValue.no_target())
+        self._jfly_fyi.srv("imap", "tcp", value=SrvValue.no_target())
+        self._jfly_fyi.srv("pop3", "tcp", value=SrvValue.no_target())
+        self._jfly_fyi.srv(
+            "submissions", "tcp", value=SrvValue(0, 1, 465, "smtp.fastmail.com")
+        )
+        self._jfly_fyi.srv(
+            "imaps", "tcp", value=SrvValue(0, 1, 993, "imap.fastmail.com")
+        )
+        self._jfly_fyi.srv(
+            "pop3s", "tcp", value=SrvValue(10, 1, 995, "pop.fastmail.com")
+        )
+        self._jfly_fyi.srv("jmap", "tcp", value=SrvValue(0, 1, 443, "api.fastmail.com"))
+        self._jfly_fyi.srv(
+            "autodiscover",
+            "tcp",
+            value=SrvValue(0, 1, 443, "autodiscover.fastmail.com"),
+        )
+
+        # Client CardDAV auto-discovery
+        self._jfly_fyi.srv("carddav", "tcp", value=SrvValue.no_target())
+        self._jfly_fyi.srv(
+            "carddavs", "tcp", value=SrvValue(0, 1, 443, "carddav.fastmail.com")
+        )
+
+        # Client CalDAV auto-discovery
+        self._jfly_fyi.srv("caldav", "tcp", value=SrvValue.no_target())
+        self._jfly_fyi.srv(
+            "caldavs", "tcp", value=SrvValue(0, 1, 443, "caldav.fastmail.com")
         )
