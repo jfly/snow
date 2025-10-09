@@ -12,8 +12,8 @@ let
     "ramfly_cards"
   ];
   localPaths = [
-    "$HOME/pim/contacts/jfly"
-    "$HOME/pim/contacts/ramfly"
+    "~/pim/contacts/jfly"
+    "~/pim/contacts/ramfly"
   ];
   pimsyncConf = pkgs.writeTextFile {
     name = "pimsync.conf";
@@ -83,11 +83,12 @@ in
           script = ''
             # This is a quick hack to ensure all local paths exist, because pimsyncer
             # won't create them for us.
-            # Note: tere's a not-yet-accepted patch upstream that would implement
+            # Note: there's a not-yet-accepted patch upstream that would implement
             # this behavior for us:
             # <https://lists.sr.ht/~whynothugo/vdirsyncer-devel/patches/58251>.
             # Hopefully that lands someday and we can remove this code.
-            mkdir -p ${lib.escapeShellArgs localPaths}
+            # Also note: this has issues if any of the arguments have spaces in them.
+            mkdir -p ${lib.concatStringsSep " " localPaths}
 
             pair="$1"
 
