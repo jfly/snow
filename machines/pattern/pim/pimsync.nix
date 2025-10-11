@@ -2,16 +2,24 @@
   lib,
   pkgs,
   config,
+  inputs',
   ...
 }:
 let
+  gdpBind = "localhost:7654";
+  googleEmail = "jeremyfleischman@gmail.com";
+
   # TODO: port this to a proper nixos module (and upstream it to nixpkgs). Make
   # sure that you can extract the pairs and localPaths from the options.
   pairNames = [
+    "ramfly_cal"
+    "jfly_cal"
     "jfly_cards"
     "ramfly_cards"
   ];
   localPaths = [
+    "~/pim/calendars/ramfly"
+    "~/pim/calendars/jfly"
     "~/pim/contacts/jfly"
     "~/pim/contacts/ramfly"
   ];
@@ -33,13 +41,12 @@ let
         storage jfly_card_local {
           type vdir/vcard
           path ~/pim/contacts/jfly
-          fileext vcf
         }
         pair jfly_cards {
           storage_a jfly_card_local
           storage_b jfly_card_remote
           collections all
-        	conflict_resolution cmd nvim -d
+          conflict_resolution cmd nvim -d
         }
 
         storage ramfly_card_remote {
@@ -53,11 +60,45 @@ let
         storage ramfly_card_local {
           type vdir/vcard
           path ~/pim/contacts/ramfly
-          fileext vcf
         }
         pair ramfly_cards {
           storage_a ramfly_card_local
           storage_b ramfly_card_remote
+          collections all
+        }
+
+        storage ramfly_cal_remote {
+          type caldav
+          url https://caldav.fastmail.com
+          username hello@ramfly.net
+          password {
+            cmd cat ${config.clan.core.vars.generators.fastmail-ramfly-app-password.files."password".path}
+          }
+        }
+        storage ramfly_cal_local {
+          type vdir/icalendar
+          path ~/pim/calendars/ramfly
+        }
+        pair ramfly_cal {
+          storage_a ramfly_cal_local
+          storage_b ramfly_cal_remote
+          collections all
+        }
+
+        storage jfly_cal_remote {
+          type caldav
+          # See "Calendar Paths" in
+          # <https://whynothugo.nl/journal/2025/03/04/design-for-google-caldav-support-in-pimsync/#calendar-paths>.
+          collection_id_segment second-last
+          url http://${gdpBind}/caldav/v2/
+        }
+        storage jfly_cal_local {
+          type vdir/icalendar
+          path ~/pim/calendars/jfly
+        }
+        pair jfly_cal {
+          storage_a jfly_cal_local
+          storage_b jfly_cal_remote
           collections all
         }
       '';
@@ -77,6 +118,20 @@ in
   ];
   systemd.user.services = lib.mkMerge (
     [
+      {
+        "google-dav-proxy" = {
+          script = ''
+            export PATH=$PATH:${lib.getBin config.snow.oama.package}/bin
+            exec ${lib.getExe inputs'.google-dav-proxy.packages.default} --bind ${gdpBind} ${googleEmail}
+          '';
+
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+          };
+          wantedBy = [ "default.target" ];
+        };
+      }
       {
         "pimsync@" = {
           scriptArgs = "%i";

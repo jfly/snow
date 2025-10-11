@@ -31,6 +31,8 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    google-dav-proxy.url = "github:jfly/google-dav-proxy";
+
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
 
     home-manager = {
@@ -116,6 +118,11 @@
             name = "nixos/librespeed: init";
             url = "https://github.com/NixOS/nixpkgs/pull/448889.diff";
             hash = "sha256-R8ewwLtKgw4CncvcEe+1Tph5QWgOt9KaFsheOKXbXQc=";
+          })
+          (fetchpatch {
+            name = "pimsync: 0.4.4 -> 0.5.4";
+            url = "https://github.com/NixOS/nixpkgs/pull/450789.diff";
+            hash = "sha256-aMxhWprVf5J1gSYCyuuKJQTmBoLO/m20CBXN29ogN/I=";
           })
         ];
 
