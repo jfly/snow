@@ -45,6 +45,7 @@ in
     ./xmonad-startup-workaround.nix
     ./polybar
     ./messaging.nix
+    ./pdf-viewer.nix
     ./remote-desktop-client.nix
     flake.nixosModules.colorscheme
   ];
@@ -351,9 +352,6 @@ in
     audible-cli
     flake'.packages.snowcrypt
     flake'.packages.odmpy
-
-    ### PDF
-    evince
 
     ### Remote desktop
     moonlight-qt
