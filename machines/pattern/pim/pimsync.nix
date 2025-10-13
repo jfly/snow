@@ -65,6 +65,7 @@ let
           storage_a ramfly_card_local
           storage_b ramfly_card_remote
           collections all
+          conflict_resolution cmd nvim -d
         }
 
         storage ramfly_cal_remote {
@@ -83,6 +84,7 @@ let
           storage_a ramfly_cal_local
           storage_b ramfly_cal_remote
           collections all
+          conflict_resolution cmd nvim -d
         }
 
         storage jfly_cal_remote {
@@ -100,6 +102,7 @@ let
           storage_a jfly_cal_local
           storage_b jfly_cal_remote
           collections all
+          conflict_resolution cmd nvim -d
         }
       '';
   };
