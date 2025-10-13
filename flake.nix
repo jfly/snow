@@ -117,7 +117,7 @@
           (fetchpatch {
             name = "nixos/librespeed: init";
             url = "https://github.com/NixOS/nixpkgs/pull/448889.diff";
-            hash = "sha256-R8ewwLtKgw4CncvcEe+1Tph5QWgOt9KaFsheOKXbXQc=";
+            hash = "sha256-5zluCYdIt0KR6Bl7ZpKuy+EkAPJcTjEiGIObVtHaiY8=";
           })
           (fetchpatch {
             name = "pimsync: 0.4.4 -> 0.5.4";
