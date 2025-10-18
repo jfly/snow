@@ -333,7 +333,8 @@ in
     yt-dlp
     subdl
 
-    ### Media editing (images, audio, video)
+    ### Media editing (docs, images, audio, video)
+    libreoffice
     gimp
     (inkscape-with-extensions.override { inkscapeExtensions = [ inkscape-extensions.silhouette ]; })
     avidemux
