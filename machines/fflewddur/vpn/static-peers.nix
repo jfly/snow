@@ -37,4 +37,5 @@
 #   - "8d0ee1ad66" # ram desktop
 #   - "d83fdfb31b" # waydroid
 #   - "c86a6ffd1f" # ospi
+#   - "eee8a3e616" # gurgi
 { }
