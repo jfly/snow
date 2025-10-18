@@ -130,8 +130,5 @@
     linux-manual
     man-pages
     man-pages-posix
-
-    ### Virtualization
-    quickemu
   ];
 }
