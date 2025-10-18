@@ -1,0 +1,7 @@
+Host nixcademy-training-eu
+    User jfly
+    HostName training-machine.nixcademy.com
+
+Host nixcademy-training
+    User jfly
+    HostName us.machine.nixcademy.com

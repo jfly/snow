@@ -199,7 +199,7 @@ main = do
                     -- hosts/pattern/audio.nix for details.
                     startupHook = spawn "systemctl --user start xmonad.target",
                     manageHook = manageDocks <+> manageSpawn <+> windowPlacement <+> manageHook desktopConfig,
-                    handleEventHook = handleEventHook def <+> Hacks.windowedFullscreenFixEventHook <+> swallowEventHook (className =? "Alacritty" <&&> fmap ("xmonad-no-swallow" `isNotInfixOf`) title) (return True),
+                    handleEventHook = handleEventHook def <+> Hacks.windowedFullscreenFixEventHook <+> swallowEventHook (className =? "Alacritty" <&&> className =? "Qemu" <&&> fmap ("xmonad-no-swallow" `isNotInfixOf`) title) (return True),
                     layoutHook = myLayout,
                     modMask = myModMask,
                     XMonad.terminal = myTerminal,
