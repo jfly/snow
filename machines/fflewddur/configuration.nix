@@ -11,7 +11,7 @@
     ./backup
     ./jellyfin.nix
     ./cryptpad.nix
-    ./vpn
+    ./zerotier
     ./kanidm
     ./prometheus
     ./grafana.nix
