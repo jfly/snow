@@ -110,19 +110,20 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "miniflux: add options for all secret files";
-            url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
-            hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
-          })
-          (fetchpatch {
             name = "nixos/librespeed: init";
-            url = "https://github.com/NixOS/nixpkgs/pull/448889.diff";
-            hash = "sha256-5zluCYdIt0KR6Bl7ZpKuy+EkAPJcTjEiGIObVtHaiY8=";
+            url = "https://github.com/NixOS/nixpkgs/commit/3e4edac3b451fb737ad925839bd424a3e5cb0d51.diff";
+            hash = "sha256-jeTqoGTgJO3P7IrvlIW79g+PEV776FFQ+zzd6E2hKO4=";
           })
           (fetchpatch {
             name = "pimsync: 0.4.4 -> 0.5.4";
-            url = "https://github.com/NixOS/nixpkgs/pull/450789.diff";
+            url = "https://github.com/NixOS/nixpkgs/commit/07ffd4bf9f94bd4c553c81f13450cb2bed841177.diff";
             hash = "sha256-aMxhWprVf5J1gSYCyuuKJQTmBoLO/m20CBXN29ogN/I=";
+          })
+
+          (fetchpatch {
+            name = "miniflux: add options for all secret files";
+            url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
+            hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
           })
         ];
 
