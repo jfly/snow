@@ -14,6 +14,11 @@
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  # Useful tool for file deduplication.
-  environment.systemPackages = [ pkgs.czkawka-full ];
+  environment.systemPackages = [
+    # Useful tool for file deduplication.
+    pkgs.czkawka-full
+
+    # File browser with "Miller columns".
+    pkgs.pantheon.elementary-files
+  ];
 }

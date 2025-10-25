@@ -107,6 +107,7 @@ in
       extraGroups = [
         "wheel"
         "media"
+        "bay"
       ];
       openssh.authorizedKeys.keys = [ identities.jfly ];
     };
@@ -116,6 +117,7 @@ in
       extraGroups = [
         "wheel"
         "media"
+        "bay"
       ];
       openssh.authorizedKeys.keys = [ identities.rachel ];
     };
