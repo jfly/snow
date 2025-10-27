@@ -114,6 +114,7 @@ in
       ca = { };
       cryptpad = { };
       cryptpad-ui = { };
+      frigate = { };
       grafana = { };
       home-assistant = { };
       immich = { };

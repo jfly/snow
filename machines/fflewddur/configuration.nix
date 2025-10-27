@@ -29,6 +29,7 @@
     ./miniflux.nix
     ./speedtest.nix
     ./brbd-sync.nix
+    ./frigate.nix
   ];
 
   networking.hostName = "fflewddur";
