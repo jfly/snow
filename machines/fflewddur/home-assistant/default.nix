@@ -14,6 +14,12 @@ in
     ./zigbee2mqtt.nix
   ];
 
+  # Home Assistant doesn't honor the system certificate bundle:
+  # <https://github.com/orgs/home-assistant/discussions/1209#discussioncomment-14800589>.
+  # It instead uses `certifi`. Fortunately, `certifi` does honor this
+  # environment variable.
+  # I've asked on `#homeautomation:nixos.org` if there's a "more correct" fix for this.
+  systemd.services.home-assistant.environment.NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
   services.home-assistant = {
     enable = true;
     extraComponents = [
@@ -34,12 +40,14 @@ in
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       hass-opensprinkler
+      frigate
     ];
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
       button-card
       opensprinkler-card
       restriction-card
       vacuum-card
+      advanced-camera-card
     ];
     config = {
       # logger.default = "debug";
@@ -179,6 +187,11 @@ in
       ];
     };
   };
+
+  # Workaround for aiohttp on Home Assistant. It apparently doesn't honor NSS :(
+  networking.extraHosts = ''
+    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.frigate.fqdn}
+  '';
 
   services.data-mesher.settings.host.names = [ services.home-assistant.sld ];
   services.nginx.virtualHosts.${services.home-assistant.fqdn} = {
