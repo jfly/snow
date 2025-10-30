@@ -18,6 +18,16 @@
     # Useful tool for file deduplication.
     pkgs.czkawka-full
 
+    # Another useful (albeit unfree) tool for file deduplication.
+    (pkgs.bcompare.overrideAttrs (oldAttrs: {
+      meta = oldAttrs.meta // {
+        # This license is a lie. It's just a self-contained way for me to
+        # install this software and acknowledge that I'm ok with runnning
+        # something unfree.
+        license = lib.licenses.apsl20;
+      };
+    }))
+
     # File browser with "Miller columns".
     pkgs.pantheon.elementary-files
   ];

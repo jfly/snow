@@ -119,6 +119,11 @@
             url = "https://github.com/NixOS/nixpkgs/commit/07ffd4bf9f94bd4c553c81f13450cb2bed841177.diff";
             hash = "sha256-aMxhWprVf5J1gSYCyuuKJQTmBoLO/m20CBXN29ogN/I=";
           })
+          (fetchpatch {
+            name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
+            url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
+            hash = "sha256-oRxDDjGP6Kaeh70+hls0oL2LbCOrwsJdy/PONEPA/n4=";
+          })
 
           (fetchpatch {
             name = "miniflux: add options for all secret files";
