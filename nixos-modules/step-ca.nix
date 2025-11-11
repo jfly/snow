@@ -150,7 +150,6 @@ in
           enable = true;
           address = "127.0.0.1";
           port = 8443;
-          intermediatePasswordFile = "/dev/null";
           settings = {
             root = config.clan.core.vars.generators.step-root-ca.files."ca.crt".path;
             crt = config.clan.core.vars.generators.step-intermediate-ca.files."intermediate.crt".path;

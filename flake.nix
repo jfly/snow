@@ -110,6 +110,11 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
+            name = "nixos/step-ca: Allow not configuring the intermediatePasswordFile";
+            url = "https://github.com/NixOS/nixpkgs/commit/dfca07d17f26fb043b07fc150fc903d90b81118d.diff";
+            hash = "sha256-ROG/5WT3YtkyuyA+WEyuDuiSNsWeRvyW2BbywVjMXQk=";
+          })
+          (fetchpatch {
             name = "nixos/librespeed: init";
             url = "https://github.com/NixOS/nixpkgs/commit/3e4edac3b451fb737ad925839bd424a3e5cb0d51.diff";
             hash = "sha256-jeTqoGTgJO3P7IrvlIW79g+PEV776FFQ+zzd6E2hKO4=";
