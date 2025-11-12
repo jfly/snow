@@ -18,17 +18,17 @@ pkgs.python3.pkgs.buildPythonApplication rec {
     glib # for glib-compile-resources
     gobject-introspection
     gtk3
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
   ];
 
   propagatedBuildInputs = with pkgs.python3.pkgs; [
     pygobject3
-    dateutil
+    python-dateutil
   ];
 
-  # Nixpkgs 17.12.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+  # Nixpkgs 17.12.4.3. When using wrapGAppsHook3 with special derivers you can end up with double wrapped binaries.
   dontWrapGapps = false;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

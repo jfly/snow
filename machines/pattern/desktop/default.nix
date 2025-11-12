@@ -352,7 +352,7 @@ in
     })
     audible-cli
     flake'.packages.snowcrypt
-    flake'.packages.odmpy
+    odmpy
 
     ### Remote desktop
     moonlight-qt
@@ -366,7 +366,6 @@ in
     xorg.xkill
     xorg.xev
     libva-utils
-    glxinfo
     pciutils
     gucharmap # View fonts.
     usbutils # Provides `lsusb`.
@@ -382,7 +381,10 @@ in
     xdotool
     xmonad
     dmenu
-    gscan2pdf
+    (gscan2pdf.overrideAttrs {
+      # This package seems to regularly be broken :(
+      doCheck = false;
+    })
 
     ### Wi-Fi
     flake'.packages.ap

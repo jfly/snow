@@ -110,30 +110,24 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "nixos/step-ca: Allow not configuring the intermediatePasswordFile";
-            url = "https://github.com/NixOS/nixpkgs/commit/dfca07d17f26fb043b07fc150fc903d90b81118d.diff";
-            hash = "sha256-ROG/5WT3YtkyuyA+WEyuDuiSNsWeRvyW2BbywVjMXQk=";
-          })
-          (fetchpatch {
-            name = "nixos/librespeed: init";
-            url = "https://github.com/NixOS/nixpkgs/commit/3e4edac3b451fb737ad925839bd424a3e5cb0d51.diff";
-            hash = "sha256-jeTqoGTgJO3P7IrvlIW79g+PEV776FFQ+zzd6E2hKO4=";
-          })
-          (fetchpatch {
-            name = "pimsync: 0.4.4 -> 0.5.4";
-            url = "https://github.com/NixOS/nixpkgs/commit/07ffd4bf9f94bd4c553c81f13450cb2bed841177.diff";
-            hash = "sha256-aMxhWprVf5J1gSYCyuuKJQTmBoLO/m20CBXN29ogN/I=";
+            name = "nixos/postfix: allow path values in main.cf";
+            url = "https://github.com/nixos/nixpkgs/pull/460121.diff";
+            hash = "sha256-+a28lEKhnHUuTRczECZqS9nXRzc7tFsKmd3/3VFqLOo=";
           })
           (fetchpatch {
             name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
             url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
             hash = "sha256-oRxDDjGP6Kaeh70+hls0oL2LbCOrwsJdy/PONEPA/n4=";
           })
-
+          (fetchpatch {
+            name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
+            url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
+            hash = "sha256-WQGfnKC6xLsv4MHK1fNLkcV1KT8MhhWLxLabsvsT3rE=";
+          })
           (fetchpatch {
             name = "miniflux: add options for all secret files";
-            url = "https://github.com/NixOS/nixpkgs/pull/429983.diff";
-            hash = "sha256-Uthu66cKkZTpNXCWyNkE/WV4topuuVwRw23Rk61/ilc=";
+            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
+            hash = "sha256-8e/uDUF+FugsGrYZus/pdNgFm4DFFtwoms8K4dGDLzw=";
           })
         ];
 
@@ -156,11 +150,6 @@
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
             hash = "sha256-dl2QzFdmQxfbCsnifnSEMxEiqWqgk27vRaCwkg0zugg=";
           })
-          (fetchpatch {
-            name = "refactor(postfix): fix evaluation warnings";
-            url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/436.diff";
-            hash = "sha256-TsSGziFQkOhB7EiIALuk0FxP8b58hPcjgvR1zhm1ZfU=";
-          })
         ];
 
         clan-core = {
@@ -171,6 +160,13 @@
               url = "https://git.clan.lol/jfly/clan-core/commit/5623a6440c571da021fff48154223a8782dc79f3.diff";
               hash = "sha256-1V/F24DwQdMQIrVWrfCpQ5tLH8Xw5xw4nTuDiW9JtP4=";
             })
+            # We need to allow vars definitions to differ across machines.
+            # See the "Ensure the oauth secrets are readable by the Kanidm
+            # service" comment in machines/fflewddur/kanidm/default.nix for
+            # an explanation why.
+            # TODO: rework the kanidm module to be able to use systemd's
+            # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
+            ./patches/clan-core/allow-differing-shared-generators.patch
           ];
           inputs.data-mesher.patches = [
             # Relax data-mesher's `NameRegex` to allow for subdomains.

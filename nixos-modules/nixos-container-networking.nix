@@ -19,7 +19,8 @@
   system.nssDatabases.hosts = lib.mkBefore [ "datamesher" ];
   system.nssModules =
     let
-      nss-datamesher = inputs.clan-core.inputs.data-mesher.packages.${pkgs.system}.nss-datamesher;
+      nss-datamesher =
+        inputs.clan-core.inputs.data-mesher.packages.${pkgs.stdenv.hostPlatform.system}.nss-datamesher;
     in
     [ nss-datamesher ];
 }

@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 {
   snow.user = {
     name = "jeremy";

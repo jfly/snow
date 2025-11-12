@@ -1,5 +1,4 @@
 {
-  beets,
   pkgs,
   formats,
   makeWrapper,
@@ -19,7 +18,7 @@ in
 symlinkJoin {
   name = "beets";
   paths = [
-    (beets.override {
+    (pkgs.python3.pkgs.beets.override {
       pluginOverrides = {
         fetchartist = {
           enable = true;

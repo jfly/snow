@@ -69,8 +69,8 @@ in
               { pkgs, ... }:
               {
                 _module.args = {
-                  inputs' = withSystem pkgs.system ({ inputs', ... }: inputs');
-                  flake' = withSystem pkgs.system ({ self', ... }: self');
+                  inputs' = withSystem pkgs.stdenv.hostPlatform.system ({ inputs', ... }: inputs');
+                  flake' = withSystem pkgs.stdenv.hostPlatform.system ({ self', ... }: self');
                 };
               }
             )

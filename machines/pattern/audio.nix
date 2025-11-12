@@ -67,7 +67,7 @@ in
 
     #### MPD
     ashuffle
-    mpc-cli
+    mpc
     mcg
   ];
 }

@@ -79,7 +79,7 @@
   snow.neovim.package = flake'.packages.neovim;
 
   # Get debug symbols in gdb.
-  services.nixseparatedebuginfod.enable = true;
+  services.nixseparatedebuginfod2.enable = true;
 
   environment.systemPackages = with pkgs; [
     ### Version control

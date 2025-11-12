@@ -39,7 +39,7 @@ in
       "dlna_dmr"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
-      hass-opensprinkler
+      opensprinkler
       frigate
     ];
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [

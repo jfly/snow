@@ -6,7 +6,7 @@ in
   services.data-mesher.settings.host.names = [ services.nextcloud.sld ];
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud31;
+    package = pkgs.nextcloud32;
     hostName = services.nextcloud.fqdn;
     database.createLocally = true;
     config = {
