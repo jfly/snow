@@ -80,4 +80,7 @@
   # Typst
   lsp.servers.tinymist.enable = true;
   plugins.typst-preview.enable = true;
+
+  # Haskell
+  lsp.servers.hls.enable = true;
 }
