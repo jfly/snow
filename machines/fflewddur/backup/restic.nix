@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 let
   resticPort = 8000;
 in
@@ -21,6 +22,8 @@ in
       "--no-auth"
     ];
   };
+
+  environment.systemPackages = [ pkgs.restic ];
 
   networking.firewall.allowedTCPPorts = [ resticPort ];
 }
