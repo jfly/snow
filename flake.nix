@@ -167,6 +167,16 @@
             # TODO: rework the kanidm module to be able to use systemd's
             # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
             ./patches/clan-core/allow-differing-shared-generators.patch
+            # Clan's intelligent network discovery does not have a mechanism to
+            # pick a username:
+            # <https://git.clan.lol/clan/clan-core/issues/5812>, and the
+            # explicit `targetHost` we specify does not work due to
+            # <https://git.clan.lol/clan/clan-core/issues/5813>.
+            # As an incredibly quick and dirty hack, we just hardcode clan to
+            # use the correct username instead.
+            ./patches/clan-core/username-hack.patch
+            # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
+            ./patches/clan-core/read-build-host-from-env-var.patch
           ];
           inputs.data-mesher.patches = [
             # Relax data-mesher's `NameRegex` to allow for subdomains.

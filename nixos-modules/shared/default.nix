@@ -39,12 +39,6 @@ in
 
     clan.core = {
       settings.state-version.enable = true;
-      networking = {
-        # This unfortunately doesn't work, you need to specify `--build-host`
-        # explicitly. See <https://git.clan.lol/clan/clan-core/issues/4624>
-        buildHost = "see https://git.clan.lol/clan/clan-core/issues/4624";
-        targetHost = "jfly@${config.networking.fqdn}";
-      };
     };
 
     # Ensure that commands like `nix repl` and `nix-shell` have access to the

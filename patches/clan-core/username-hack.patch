@@ -1,0 +1,12 @@
+diff --git a/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py b/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
+index 2bdf8e352..d18ed83f9 100644
+--- a/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
++++ b/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
+@@ -38,6 +38,7 @@ def connection(self, network: Network) -> Iterator[Network]:
+
+     def remote(self, peer: Peer) -> "Remote":
+         return Remote(
++            user="jfly",
+             address=peer.host,
+             command_prefix=peer.name,
+         )

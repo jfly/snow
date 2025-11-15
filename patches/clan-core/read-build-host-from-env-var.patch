@@ -1,0 +1,19 @@
+diff --git a/pkgs/clan-cli/clan_cli/machines/update.py b/pkgs/clan-cli/clan_cli/machines/update.py
+index 1918fc4b1..193ba1d77 100644
+--- a/pkgs/clan-cli/clan_cli/machines/update.py
++++ b/pkgs/clan-cli/clan_cli/machines/update.py
+@@ -1,5 +1,6 @@
+ import argparse
+ import logging
++import os
+ import sys
+ from typing import TYPE_CHECKING, get_args
+
+@@ -246,6 +247,7 @@ def register_update_parser(parser: argparse.ArgumentParser) -> None:
+             "The machine on which to build the machine configuration.\n"
+             "Pass 'localhost' to build on the local machine, or an ssh address like user@host:1234\n"
+         ),
++        default=os.environ.get("CLAN_BUILD_HOST"),
+     )
+     add_dynamic_completer(build_host_parser, complete_build_host)
+     parser.add_argument(

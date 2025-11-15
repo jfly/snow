@@ -83,6 +83,11 @@ let
       allow-import-from-derivation = true
     '';
 
+    # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>
+    # Note: this environment variable doesn't exist upstream, it's only present
+    # because of a patch I've added to clan.
+    CLAN_BUILD_HOST = plaintext "localhost";
+
     SOPS_AGE_KEY_FILE = plaintext "/home/jeremy/sync/jfly-linux-secrets/age/key.txt";
 
     # Credentials to talk to `minio` (a self-hosted file server that
