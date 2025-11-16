@@ -122,12 +122,17 @@
           (fetchpatch {
             name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
             url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
-            hash = "sha256-WQGfnKC6xLsv4MHK1fNLkcV1KT8MhhWLxLabsvsT3rE=";
+            hash = "sha256-kqbEnhJkSh00c7bKcft22deYFP7x6oYB2DivADb4R9Y=";
           })
           (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
             hash = "sha256-8e/uDUF+FugsGrYZus/pdNgFm4DFFtwoms8K4dGDLzw=";
+          })
+          (fetchpatch {
+            name = "immichframe: init at 1.0.29.0, nixos/immichframe: init module";
+            url = "https://github.com/NixOS/nixpkgs/pull/463563.diff";
+            hash = "sha256-PwrKCVr3qZlVpMwFJvxeTryu9pWESj8J1NL78ux+VJw=";
           })
         ];
 

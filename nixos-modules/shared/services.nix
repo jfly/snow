@@ -118,6 +118,7 @@ in
       grafana = { };
       home-assistant = { };
       immich = { };
+      immichframe = { };
       jellyfin = { };
       kanidm = {
         sld = "auth";

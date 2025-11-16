@@ -17,6 +17,7 @@
     ./grafana.nix
     ./healthcheck.nix
     ./immich.nix
+    ./immichframe.nix
     ./remote-desktop.nix
     ./step-ca.nix
     ./vaultwarden.nix
