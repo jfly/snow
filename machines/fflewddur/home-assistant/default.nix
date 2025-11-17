@@ -12,6 +12,7 @@ in
     ./postgresql.nix
     ./mqtt.nix
     ./zigbee2mqtt.nix
+    ./thermostat.nix
   ];
 
   # Home Assistant doesn't honor the system certificate bundle:
@@ -131,16 +132,7 @@ in
       "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
       "script ui" = "!include scripts.yaml";
-      climate = [
-        {
-          unique_id = "snow_therm";
-          platform = "generic_thermostat";
-          name = "Snow Therm";
-          heater = "switch.furnace";
-          target_sensor = "sensor.northeast_bedroom_weather_temperature";
-        }
-      ];
-      "command_line" = [
+      command_line = [
         {
           switch = {
             name = "Fan";
@@ -148,7 +140,7 @@ in
             command_on = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/fan/on";
             command_off = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/fan/off";
             command_state = "${lib.getExe pkgs.curl} -s -X GET http://thermostat.ec/fan";
-            value_template = ''{{ value_json.status == "on" }}'';
+            value_template = /* jinja */ ''{{ value_json.status == "on" }}'';
             icon = "mdi:fan";
           };
         }
