@@ -1,0 +1,13 @@
+diff --git a/crates/tinymist-world/src/args.rs b/crates/tinymist-world/src/args.rs
+index 02377fe5..1af6cb12 100644
+--- a/crates/tinymist-world/src/args.rs
++++ b/crates/tinymist-world/src/args.rs
+@@ -68,7 +68,7 @@ pub struct CompileOnceArgs {
+     pub input: Option<String>,
+
+     /// Configure the project root (for absolute paths).
+-    #[clap(long = "root", value_name = "DIR")]
++    #[clap(long = "root", value_name = "DIR", env = "TYPST_ROOT")]
+     pub root: Option<PathBuf>,
+
+     /// Specify the font related arguments.

@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [ ./lsp-diagnostic-quirks.nix ];
 
@@ -79,6 +84,12 @@
 
   # Typst
   lsp.servers.tinymist.enable = true;
+  lsp.servers.tinymist.package = pkgs.tinymist.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [
+      # Fix for <https://github.com/Myriad-Dreamin/tinymist/issues/2260>
+      ./tinymist-issue-2260.patch
+    ];
+  });
   plugins.typst-preview.enable = true;
 
   # Haskell
