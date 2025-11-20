@@ -7,15 +7,10 @@
   extraPlugins = with pkgs.vimPlugins; [
     (vim-dim.overrideAttrs {
       patches = [
-        # I should get rid of this fork. Looks like stuff might be happening over
-        # on
-        # https://github.com/jeffkreeftmeijer/vim-dim/issues/12#issuecomment-2302537189?
-        # I'm subscribed to the relevant issue.
         (pkgs.fetchpatch {
-          name = "this is such a mess";
-          # https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:nvim-tweaks.patch
-          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/main...jfly:vim-dim:0355ddca4e48aa7e30e5c03fbc002bffeea21ff0.patch";
-          hash = "sha256-H592x1EO9csleoW2t577hVCIzRbX3YCF7wc5fee1rw8=";
+          name = "Add support for neovim >= 0.10.0";
+          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/8320a40f12cf89295afc4f13eb10159f29c43777...1.2.0.diff";
+          hash = "sha256-hynkSvfSa7zPWa59Z7yj4gbVlaOgOCnmodPbj/rFImM=";
         })
       ];
     })
