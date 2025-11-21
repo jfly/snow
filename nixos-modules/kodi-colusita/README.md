@@ -1,7 +1,23 @@
 # `kodi-colusita`
 
-This doesn't fully configure Kodi, because the Jellyfin plugin has a number of
-things to do on first boot. Here's what you need to do to get it working:
+This doesn't fully configure Kodi. Please feel free to improve this when you
+find time.
+
+## CEC
+
+1. Settings > System > Input > Peripherals > CEC Adapter > Connected to HDMI device
+   Set this to "Amplifier / AVR device"
+   NOTE: this keeps changing. Perhaps setting it in a config file would help?
+
+## Audio
+
+1. Settings > System > Audio > Play GUI sounds
+   Set this to "Always"
+
+## Jellyfin
+
+The Jellyfin plugin has a number of things to do on first boot. Here's what you
+need to do to get it working:
 
 1. (If necessary) Add a new Jellyfin user for whatever device you're
    configuring: <https://jellyfin.snow.jflei.com/web/#/dashboard/users>
@@ -26,7 +42,7 @@ things to do on first boot. Here's what you need to do to get it working:
        2. The `systemd-networkd` definition of `network-online.target` doesn't
           actually guarantee that DNS is up. I'm still seeing Jellyfin fail on
           boot.
-7. Finally, you will be asked to "Select the libraries to add". Add "All"
+8. Finally, you will be asked to "Select the libraries to add". Add "All"
    libraries. Note that it's non-obvious how to select things! See
    <https://github.com/jellyfin/jellyfin-kodi/issues/923#issuecomment-2387278578>
    for details.
