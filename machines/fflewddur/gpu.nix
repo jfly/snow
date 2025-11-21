@@ -1,5 +1,4 @@
 # Settings from <https://wiki.nixos.org/wiki/Nvidia>
-
 { lib, ... }:
 {
   nixpkgs.config.allowUnfreePredicate =
@@ -16,5 +15,10 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = false;
+  };
+
+  programs.nix-required-mounts = {
+    enable = true;
+    presets.nvidia-gpu.enable = true;
   };
 }

@@ -9,5 +9,6 @@
     ./formatting.nix
     ./dev-shell.nix
     ./check-hosts.nix
+    ./unfree.nix
   ];
 }
