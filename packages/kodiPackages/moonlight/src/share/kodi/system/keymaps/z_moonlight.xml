@@ -7,5 +7,8 @@
     <keyboard>
       <end>RunScript(script.moonlight)</end>
     </keyboard>
+    <remote>
+      <red>RunScript(script.moonlight)</red>
+    </remote>
   </global>
 </keymap>

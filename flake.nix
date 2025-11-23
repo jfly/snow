@@ -110,6 +110,11 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
+            name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
+            url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
+            hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
+          })
+          (fetchpatch {
             name = "nixos/postfix: allow path values in main.cf";
             url = "https://github.com/nixos/nixpkgs/pull/460121.diff";
             hash = "sha256-+a28lEKhnHUuTRczECZqS9nXRzc7tFsKmd3/3VFqLOo=";
