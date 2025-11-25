@@ -381,10 +381,7 @@ in
     xdotool
     xmonad
     dmenu
-    (gscan2pdf.overrideAttrs {
-      # This package seems to regularly be broken :(
-      doCheck = false;
-    })
+    gscan2pdf
 
     ### Wi-Fi
     flake'.packages.ap

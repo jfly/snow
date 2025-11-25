@@ -1,4 +1,4 @@
-{ lib, helpers, ... }:
+{ lib, ... }:
 
 {
   plugins.lsp-lines = {
@@ -72,7 +72,7 @@
 
   # Cute diagnostics signs in the gutter =)
   diagnostic.settings.signs = {
-    text = helpers.toRawKeys {
+    text = lib.nixvim.toRawKeys {
       "vim.diagnostic.severity.ERROR" = "󰅚";
       "vim.diagnostic.severity.WARN" = "󰀪";
       "vim.diagnostic.severity.INFO" = "󰌶";

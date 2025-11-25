@@ -4,17 +4,7 @@
   # Always use light "dim" colorscheme, which is designed to leave all
   # the careful color choosing up to our terminal emulator itself.
   # See https://jeffkreeftmeijer.com/vim-16-color/ for details.
-  extraPlugins = with pkgs.vimPlugins; [
-    (vim-dim.overrideAttrs {
-      patches = [
-        (pkgs.fetchpatch {
-          name = "Add support for neovim >= 0.10.0";
-          url = "https://github.com/jeffkreeftmeijer/vim-dim/compare/8320a40f12cf89295afc4f13eb10159f29c43777...1.2.0.diff";
-          hash = "sha256-hynkSvfSa7zPWa59Z7yj4gbVlaOgOCnmodPbj/rFImM=";
-        })
-      ];
-    })
-  ];
+  extraPlugins = with pkgs.vimPlugins; [ vim-dim ];
   colorscheme = "dim";
 
   # This is supposed to default to false, but it sometimes gets set to
