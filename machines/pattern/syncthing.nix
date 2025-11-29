@@ -53,6 +53,13 @@ in
             ];
             path = "${syncDir}/manman";
           };
+          "recipes" = {
+            id = "4czek-chqn5";
+            devices = [
+              "fflewddur"
+            ];
+            path = "${syncDir}/recipes";
+          };
         };
       };
     };
