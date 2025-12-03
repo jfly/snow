@@ -137,7 +137,7 @@
           (fetchpatch {
             name = "immichframe: init at 1.0.29.0, nixos/immichframe: init module";
             url = "https://github.com/NixOS/nixpkgs/pull/463563.diff";
-            hash = "sha256-PwrKCVr3qZlVpMwFJvxeTryu9pWESj8J1NL78ux+VJw=";
+            hash = "sha256-5CxEleOqfjUhuKlkLaTyiXJnxciuZVgEQsNA8fd0WRw=";
           })
         ];
 
