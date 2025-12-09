@@ -117,7 +117,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) =
       ((modMask, xK_b), sendMessage ToggleStruts),
       ((modMask, xK_F11), fullscreenChrome),
       -- Launch a terminal
-      ((modMask .|. shiftMask, xK_semicolon), spawn $ "cd $(xcwd); exec " ++ myTerminal),
+      ((modMask .|. shiftMask, xK_semicolon), spawn $ "cd \"$(xcwd)\"; exec " ++ myTerminal),
       -- Toggle layout.
       ((modMask, xK_g), sendMessage ToggleLayout), -- Added as an alternative when using space as meta
 
