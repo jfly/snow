@@ -145,6 +145,7 @@ in
       prometheus = { };
       podhacks = { };
       step-ca.sld = "ca";
+      torrents = { };
       vaultwarden = { };
       whoami = {
         oauth2 = {

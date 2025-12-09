@@ -1258,6 +1258,7 @@
         "systems": "systems_7",
         "treefmt-nix": "treefmt-nix_6",
         "uv2nix": "uv2nix_3",
+        "vpn-confinement": "vpn-confinement",
         "with-alacritty": "with-alacritty"
       }
     },
@@ -1621,6 +1622,21 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "vpn-confinement": {
+      "locked": {
+        "lastModified": 1765185554,
+        "narHash": "sha256-W9OqhyaTk4AjQ5o2yNupi09eJcNn65a4ulBSLr2a81U=",
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
+        "rev": "08cdda8013611e874ac6d3d59d508e56dfee0405",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
         "type": "github"
       }
     },

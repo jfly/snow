@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   # Want to add a new drive? See README.md for instructions.
@@ -61,6 +66,14 @@ in
     group = "bay";
   };
 
+  users.users.dallben = {
+    group = "media";
+    isNormalUser = true; # Not a real human, but necessary to ssh.
+    openssh.authorizedKeys.keys = [
+      (builtins.readFile ../../vars/shared/dallben-ssh/key.pub/value)
+    ];
+  };
+
   # Set up Samba server (from https://wiki.nixos.org/wiki/Samba)
   services.samba = {
     enable = true;
@@ -78,11 +91,14 @@ in
         "server string" = config.networking.hostName;
         "netbios name" = config.networking.hostName;
         "use sendfile" = "yes";
-        # Note: `localhost` is the IPv6 localhost `::1`.
-        # `192.168.28.*` is our trusted home VLAN.
-        # `fdd4:aa51:eed9:426:9f99:93::/88` is our VPN.
-        "hosts allow" = "127.0.0.1 localhost 192.168.28. fdd4:aa51:eed9:426:9f99:93::/88";
-        "hosts deny" = "0.0.0.0/0";
+        # Deny everyone, except for those listed in "hosts allow".
+        "hosts deny" = "ALL";
+        "hosts allow" = lib.concatStringsSep " " [
+          "127.0.0.1"
+          "[::1]"
+          config.snow.subnets.colusa-trusted.ipv4
+          config.snow.subnets.overlay.ipv6
+        ];
         "guest account" = "nobody";
         "map to guest" = "bad user";
       };
@@ -93,7 +109,6 @@ in
         browseable = "yes";
         writeable = "yes";
         "force user" = config.users.users.archive.name;
-        "guest ok" = "no";
       };
 
       dangerzone = {
@@ -102,7 +117,15 @@ in
         browseable = "yes";
         writeable = "yes";
         "force user" = config.users.users.archive.name;
-        "guest ok" = "no";
+      };
+
+      media-writer = {
+        path = "/mnt/media";
+        writeable = "yes";
+        "valid users" = "dallben";
+        "force group" = "media";
+        "force create mode" = "0660"; # rw for user and group.
+        "force directory mode" = "0770"; # rwx for user and group.
       };
     };
   };
@@ -122,5 +145,13 @@ in
     openFirewall = true;
   };
 
-  snow.backup.paths = [ "/mnt/bay/archive" ];
+  snow.backup.paths = [
+    "/mnt/bay/archive"
+    # TODO: stop backing this up. Right now, we just need the
+    # `/var/lib/samba/private/passdb.tdb` file with the samba users + hashed
+    # passwords. Either managed those users declaratively, or integrate Samba
+    # with some other auth provider that can handle this state for us (maybe
+    # someday <https://github.com/kanidm/kanidm/issues/2627>).
+    "/var/lib/samba"
+  ];
 }

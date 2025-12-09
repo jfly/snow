@@ -31,6 +31,37 @@ in
         default = "m";
         readOnly = true;
       };
+
+      subnets = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              ipv4 = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+              };
+              ipv6 = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+              };
+            };
+          }
+        );
+        readOnly = true;
+        default = {
+          # Ideally we'd share this with our router configurations.
+          colusa-trusted.ipv4 = "192.168.28.0/24";
+          colusa-iot.ipv4 = "192.168.29.0/24";
+          colusa-guest.ipv4 = "192.168.30.0/24";
+
+          nixos-containers = {
+            ipv4 = "172.20.0.0/24";
+            ipv6 = "fda0:f78f:a59e:20::/64";
+          };
+
+          overlay.ipv6 = config.clan.core.networking.zerotier.subnet;
+        };
+      };
     };
   };
 
