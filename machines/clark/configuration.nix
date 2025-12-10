@@ -11,7 +11,6 @@ in
     ./network.nix
     ./containers.nix
     ./backup.nix
-    ./dbs.nix
     ./dns.nix
     ./budget.nix
   ];
