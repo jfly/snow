@@ -144,6 +144,7 @@ in
       ospi = { };
       prometheus = { };
       podhacks = { };
+      readeck = { };
       step-ca.sld = "ca";
       torrents = { };
       vaultwarden = { };

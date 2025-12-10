@@ -28,6 +28,9 @@
       };
     }))
 
+    # Video player.
+    pkgs.vlc
+
     # File browser with "Miller columns".
     pkgs.pantheon.elementary-files
   ];

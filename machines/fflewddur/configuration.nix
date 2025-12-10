@@ -31,6 +31,7 @@
     ./speedtest.nix
     ./brbd-sync.nix
     ./frigate.nix
+    ./readeck.nix
   ];
 
   networking.hostName = "fflewddur";
