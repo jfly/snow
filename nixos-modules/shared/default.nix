@@ -115,17 +115,18 @@ in
     i18n.defaultLocale = "en_US.UTF-8";
     services.xserver.xkb.layout = "us";
 
-    # Disable ssh password auth. I'm a little surprised that this isn't the default.
-    # Note that we don't enable openssh itself, that's for individual machines
-    # to decide.
-    services.openssh.settings.PasswordAuthentication = false;
-
     # Enable deployments by non-root user.
     nix.settings.trusted-users = [ "@wheel" ];
     security.sudo.wheelNeedsPassword = lib.mkDefault false;
 
     # Enable ssh for all machines.
-    services.openssh.enable = true;
+    services.openssh = {
+      enable = true;
+      # Disable ssh password auth. I'm a little surprised that this isn't the default.
+      settings.PasswordAuthentication = false;
+    };
+
+    users.mutableUsers = false;
 
     users.users.jfly = {
       isNormalUser = true;

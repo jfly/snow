@@ -33,11 +33,11 @@ awesome as regular NixOS:
 
 We could potentially clean some of this up if we were willing to generate UCI
 ourselves. See
-https://openwrt.org/docs/guide-user/base-system/uci#uci_dataobject_model, and
+<https://openwrt.org/docs/guide-user/base-system/uci#uci_dataobject_model>, and
 some prior art here:
-https://discourse.nixos.org/t/example-on-how-to-configure-openwrt-with-nixos-modules/18942
+<https://discourse.nixos.org/t/example-on-how-to-configure-openwrt-with-nixos-modules/18942>
 However, I think it would be more interesting to explore
-https://www.liminix.org/ as an alternative to all of this.
+<https://www.liminix.org> as an alternative to all of this.
 
 To get a list of routers:
 

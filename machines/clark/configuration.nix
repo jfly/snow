@@ -1,8 +1,4 @@
 { flake, pkgs, ... }:
-
-let
-  identities = flake.lib.identities;
-in
 {
   imports = [
     flake.nixosModules.shared
@@ -31,28 +27,6 @@ in
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
-
-  # Enable ssh.
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-  };
-
-  # Allow ssh access as root user.
-  users.mutableUsers = false;
-  users.users.root = {
-    openssh.authorizedKeys.keys = [
-      identities.jfly
-    ];
-  };
-  users.users.media-ro = {
-    isNormalUser = true;
-    createHome = false;
-
-    openssh.authorizedKeys.keys = [
-      identities.kent-kodi
-    ];
-  };
 
   # Some useful packages to have globally installed.
   environment.systemPackages = [
