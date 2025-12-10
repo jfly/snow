@@ -104,6 +104,7 @@ in
     snow.services = {
       alerts = { };
       audiobookshelf = { };
+      bazarr = { };
       budget = {
         oauth2 = {
           groups.access = "budget_access";
@@ -119,6 +120,7 @@ in
       home-assistant = { };
       immich = { };
       immichframe = { };
+      jackett = { };
       jellyfin = { };
       kanidm = {
         sld = "auth";
@@ -144,7 +146,9 @@ in
       ospi = { };
       prometheus = { };
       podhacks = { };
+      radarr = { };
       readeck = { };
+      sonarr = { };
       step-ca.sld = "ca";
       torrents = { };
       vaultwarden = { };

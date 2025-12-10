@@ -40,11 +40,10 @@ in
   systemd.services.transmission = {
     after = [ "mnt-media.mount" ];
     requires = [ "mnt-media.mount" ];
-  };
-
-  systemd.services.transmission.vpnConfinement = {
-    enable = true;
-    vpnNamespace = "wg";
+    vpnConfinement = {
+      enable = true;
+      vpnNamespace = "wg";
+    };
   };
 
   vpnNamespaces.wg.portMappings = [
