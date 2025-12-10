@@ -7,7 +7,7 @@ class Sonarr:
         snowauth.declare_app(
             name="sonarr",
             namespace="vpn",
-            access=Access.INTERNET_BEHIND_SSO_FAMILY,
+            access=Access.LAN_ONLY,
             image="ghcr.io/hotio/sonarr:release-4.0.15.2941",
             port=8989,
             env={

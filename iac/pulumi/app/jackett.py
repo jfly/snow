@@ -7,7 +7,7 @@ class Jackett:
         snowauth.declare_app(
             name="jackett",
             namespace="vpn",
-            access=Access.INTERNET_BEHIND_SSO_RAREMY,
+            access=Access.LAN_ONLY,
             image="ghcr.io/hotio/jackett:release-0.22.2213",
             port=9117,
             env={

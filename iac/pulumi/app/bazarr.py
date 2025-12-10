@@ -7,7 +7,7 @@ class Bazarr:
         snowauth.declare_app(
             name="bazarr",
             namespace="vpn",
-            access=Access.INTERNET_BEHIND_SSO_FAMILY,
+            access=Access.LAN_ONLY,
             image="ghcr.io/hotio/bazarr:release-1.5.3",
             port=6767,
             env={

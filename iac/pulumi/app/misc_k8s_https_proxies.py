@@ -83,12 +83,10 @@ class MiscK8sHttpsProxies:
         )
 
         # Ingress resource
-        traefik_middlewares = []
-        if access is not None:
-            traefik_middlewares += self._snowauth.middlewares_for_access(access)
+        middlewares = self._snowauth.middlewares_for_access(access)
         http_ingress(
             service,
             ingress_name=name,
-            traefik_middlewares=traefik_middlewares,
+            traefik_middlewares=middlewares,
             base_url=f"https://{name}.snow.jflei.com",
         )
