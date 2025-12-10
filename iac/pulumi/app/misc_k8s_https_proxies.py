@@ -1,29 +1,23 @@
 import pulumi_kubernetes as k8s
-from .snowauth import Access, Snowauth
 from .util import http_ingress
 
 
 class MiscK8sHttpsProxies:
-    def __init__(self, snowauth: Snowauth):
-        self._snowauth = snowauth
-
+    def __init__(self):
         self._add_proxy(
             "jellyfin",
-            access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=80,
         )
 
         self._add_proxy(
             "healthcheck",
-            access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=80,
         )
 
         self._add_proxy(
             "speedtest",
-            access=Access.INTERNET_UNSECURED,
             destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
             destination_port=80,
         )
@@ -33,7 +27,6 @@ class MiscK8sHttpsProxies:
         name: str,
         destination_ip: str,
         destination_port: int,
-        access: Access,
     ):
         """
         Create a service without a selector and explicitly add an endpoint to get
@@ -83,10 +76,8 @@ class MiscK8sHttpsProxies:
         )
 
         # Ingress resource
-        middlewares = self._snowauth.middlewares_for_access(access)
         http_ingress(
             service,
             ingress_name=name,
-            traefik_middlewares=middlewares,
             base_url=f"https://{name}.snow.jflei.com",
         )
