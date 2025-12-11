@@ -29,6 +29,11 @@ in
     ];
   };
 
+  # Allow communication *out* of the network namespace to our `accessibleFrom`
+  # subnets. The reverse (traffic going into the namespace) works out of the
+  # box because [`VPN-Confinment` sets up a
+  # DNAT](https://github.com/Maroka-chan/VPN-Confinement/blob/08cdda8013611e874ac6d3d59d508e56dfee0405/modules/firewall-utils.nix#L16-L25)
+  # Perhaps `VPN-Confinement` would be open to a PR adding this?
   networking.nat = {
     enable = true;
     enableIPv6 = true;
