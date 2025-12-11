@@ -11,16 +11,6 @@
     ./budget.nix
   ];
 
-  fileSystems."/mnt/media" = {
-    device = "fflewddur.ec:/";
-    fsType = "nfs";
-    options = [
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.requires=network-online.target"
-    ];
-  };
-
   networking.hostName = "clark";
 
   # i18n stuff
