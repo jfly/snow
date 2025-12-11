@@ -6,19 +6,19 @@ class MiscK8sHttpsProxies:
     def __init__(self):
         self._add_proxy(
             "jellyfin",
-            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `routers/strider/files/etc/config/dhcp`)
             destination_port=80,
         )
 
         self._add_proxy(
             "healthcheck",
-            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `routers/strider/files/etc/config/dhcp`)
             destination_port=80,
         )
 
         self._add_proxy(
             "speedtest",
-            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `packages/strider-openwrt/files/etc/config/dhcp`)
+            destination_ip="192.168.28.172",  # `fflewddur.ec` (keep this in sync with `routers/strider/files/etc/config/dhcp`)
             destination_port=80,
         )
 

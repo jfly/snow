@@ -168,6 +168,7 @@ in
         paths.oauth2Callback = "/oauth2/callback";
       };
       ca = { };
+      fflewddur = { };
       frigate = { };
       grafana = { };
       home-assistant = { };

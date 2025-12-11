@@ -104,6 +104,8 @@ in
       wget
       curl
       tmux
+      tree
+      psmisc # Provides `pstree`.
     ];
 
     programs.mosh.enable = true;

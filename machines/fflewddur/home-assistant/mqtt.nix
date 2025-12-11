@@ -110,8 +110,8 @@ in
   clan.core.vars.generators = mqttPwGenerators;
   systemd.services.mosquitto.serviceConfig = {
     LoadCredential = [
-      "cert.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/cert.pem"
-      "key.pem:${config.security.acme.certs."mqtt.${config.snow.tld}".directory}/key.pem"
+      "cert.pem:${config.security.acme.certs.${services.mqtt.fqdn}.directory}/cert.pem"
+      "key.pem:${config.security.acme.certs.${services.mqtt.fqdn}.directory}/key.pem"
     ];
 
     # nixpkgs's implementation of `ExecReload` for mosquitto sends a SIGHUP to

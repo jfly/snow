@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
 let
-  device = "//fflewddur.${config.snow.tld}/archive";
+  inherit (config.snow) services;
+
+  device = "//${services.fflewddur.fqdn}/archive";
 in
 {
   clan.core.vars.generators.samba-archive = {
