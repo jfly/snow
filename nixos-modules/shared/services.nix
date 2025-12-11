@@ -148,6 +148,7 @@ in
       podhacks = { };
       radarr = { };
       readeck = { };
+      seerr = { };
       sonarr = { };
       step-ca.sld = "ca";
       torrents = { };

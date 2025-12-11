@@ -28,4 +28,10 @@ in
       config.snow.subnets.overlay.ipv6
     ];
   };
+
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    internalInterfaces = [ "wg-br" ];
+  };
 }

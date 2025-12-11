@@ -7,5 +7,6 @@
     ./radarr.nix
     ./jackett.nix
     ./bazarr.nix
+    ./seerr.nix
   ];
 }
