@@ -91,13 +91,5 @@ in
     };
   };
 
-  services.data-mesher.settings.host.names = [ services.alerts.sld ];
-  services.nginx.virtualHosts.${services.alerts.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString config.services.prometheus.alertmanager.port}";
-    };
-  };
+  snow.services.alerts.proxyPass = "http://127.0.0.1:${toString config.services.prometheus.alertmanager.port}";
 }

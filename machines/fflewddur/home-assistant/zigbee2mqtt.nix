@@ -4,10 +4,6 @@
   pkgs,
   ...
 }:
-
-let
-  inherit (config.snow) services;
-in
 {
   services.zigbee2mqtt = {
     enable = true;
@@ -48,17 +44,7 @@ in
     );
   };
 
-  services.data-mesher.settings.host.names = [ services.zigbee2mqtt.sld ];
-  services.nginx.virtualHosts.${services.zigbee2mqtt.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://[::1]:${toString config.services.zigbee2mqtt.settings.frontend.port}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
-    };
-  };
+  snow.services.zigbee2mqtt.proxyPass = "http://[::1]:${toString config.services.zigbee2mqtt.settings.frontend.port}";
 
   snow.backup.paths = [ config.services.zigbee2mqtt.dataDir ];
 }

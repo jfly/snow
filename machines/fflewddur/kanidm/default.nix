@@ -140,10 +140,5 @@ in
     };
   };
 
-  services.data-mesher.settings.host.names = [ "auth" ];
-  services.nginx.virtualHosts.${services.kanidm.fqdn} = {
-    forceSSL = true;
-    enableACME = true;
-    locations."/".proxyPass = "https://${config.services.kanidm.serverSettings.bindaddress}";
-  };
+  snow.services.kanidm.proxyPass = "https://${config.services.kanidm.serverSettings.bindaddress}";
 }

@@ -57,15 +57,7 @@ in
     );
   };
 
-  services.data-mesher.settings.host.names = [ services.vaultwarden.sld ];
-  services.nginx.virtualHosts.${services.vaultwarden.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://[::1]:${toString config.services.vaultwarden.config.ROCKET_PORT}";
-    };
-  };
+  snow.services.vaultwarden.proxyPass = "http://[::1]:${toString config.services.vaultwarden.config.ROCKET_PORT}";
 
   snow.backup.paths = [ config.services.vaultwarden.backupDir ];
 }

@@ -96,20 +96,14 @@ in
 
   # Note that we use nginx to generate a cert for MQTT because nginx is capable
   # of passing the "host a file" HTTP challenge.
-  security.acme.certs.${services.mqtt.fqdn}.reloadServices = [ "mosquitto.service" ];
-  services.data-mesher.settings.host.names = [ services.mqtt.sld ];
-  services.nginx.virtualHosts.${services.mqtt.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      recommendedProxySettings = true;
-      extraConfig = ''
-        add_header Content-Type text/plain;
-        return 200 "There's a MQTT server here at :${toString ports.mqtt} and a MQTTS server at :${toString ports.mqtts}";
-      '';
-    };
+  snow.services.mqtt = {
+    hostedHere = true;
+    nginxExtraConfig = ''
+      add_header Content-Type text/plain;
+      return 200 "There's a MQTT server here at :${toString ports.mqtt} and a MQTTS server at :${toString ports.mqtts}";
+    '';
   };
+  security.acme.certs.${services.mqtt.fqdn}.reloadServices = [ "mosquitto.service" ];
 
   # TODO: port HA to use MQTTS. I cannot get it to work. See
   # <https://github.com/home-assistant/core/issues/130643>

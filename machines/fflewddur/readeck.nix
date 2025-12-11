@@ -1,7 +1,4 @@
 { config, ... }:
-let
-  inherit (config.snow) services;
-in
 {
   clan.core.vars.generators.readeck-env = {
     files."env" = { };
@@ -21,12 +18,5 @@ in
     environmentFile = config.clan.core.vars.generators.readeck-env.files."env".path;
   };
 
-  services.data-mesher.settings.host.names = [ services.readeck.sld ];
-  services.nginx.virtualHosts.${services.readeck.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${builtins.toString config.services.readeck.settings.server.port}";
-    };
-  };
+  snow.services.readeck.proxyPass = "http://127.0.0.1:${builtins.toString config.services.readeck.settings.server.port}";
 }

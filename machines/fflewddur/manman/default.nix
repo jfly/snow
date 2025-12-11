@@ -5,25 +5,16 @@ in
 {
   services.nginx.package = pkgs.nginx.override { modules = [ pkgs.nginxModules.fancyindex ]; };
 
-  services.data-mesher.settings.host.names = [
-    services.manman.sld
-    services.media.sld
-  ];
-
+  snow.services.manman.hostedHere = true;
   services.nginx.virtualHosts.${services.manman.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
     locations."/" = {
       root = ./webroot;
       index = "index.html";
     };
   };
 
+  snow.services.media.hostedHere = true;
   services.nginx.virtualHosts.${services.media.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
     locations."/" = {
       root = "/mnt/media";
       index = "index.html";

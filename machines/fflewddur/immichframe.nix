@@ -1,31 +1,9 @@
 { config, ... }:
-let
-  inherit (config.snow) services;
-in
 {
-  # TODO: expose publicly.
-  # See
-  # <https://immichframe.online/docs/getting-started/configuration#security>
-  # and <https://github.com/immichFrame/ImmichFrame/issues/513>.
+  # TODO: expose on LAN, rather than overlay network (I don't want to try
+  # installing ZeroTier on the crappy tablet I plan to use).
 
-  services.data-mesher.settings.host.names = [ services.immichframe.sld ];
-  services.nginx.virtualHosts.${services.immichframe.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
-    locations."/" = {
-      proxyPass = "http://localhost:${toString config.services.immichframe.port}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
-      extraConfig = ''
-        client_max_body_size 50000M;
-        proxy_read_timeout   600s;
-        proxy_send_timeout   600s;
-        send_timeout         600s;
-      '';
-    };
-  };
+  snow.services.immichframe.proxyPass = "http://localhost:${toString config.services.immichframe.port}";
 
   clan.core.vars.generators.immichframe-api-key = {
     prompts."api-key" = {
@@ -34,7 +12,7 @@ in
 
         See
         <https://immichframe.online/docs/getting-started/configuration#api-key-permissions>
-        for detials on the required permissions.
+        for details on the required permissions.
       '';
       persist = true;
     };

@@ -35,13 +35,5 @@ in
   };
   snow.backup.paths = [ config.services.postgresqlBackup.location ];
 
-  services.data-mesher.settings.host.names = [ services.miniflux.sld ];
-  services.nginx.virtualHosts.${services.miniflux.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://localhost:8080";
-    };
-  };
+  snow.services.miniflux.proxyPass = "http://localhost:8080";
 }

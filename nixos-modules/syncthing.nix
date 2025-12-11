@@ -1,11 +1,4 @@
 { flake, config, ... }:
-
-let
-  domain = {
-    sld = "syncthing.${config.networking.hostName}";
-    fqdn = "${domain.sld}.${config.snow.tld}";
-  };
-in
 {
   imports = [ flake.nixosModules.nginx ];
 
@@ -24,14 +17,8 @@ in
   };
   systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
-  services.data-mesher.settings.host.names = [ domain.sld ];
-  services.nginx.virtualHosts.${domain.fqdn} = {
-    forceSSL = true;
-    enableACME = true;
-    locations."/" = {
-      proxyPass = "http://${config.services.syncthing.guiAddress}";
-    };
-  };
+  snow.services."syncthing.${config.networking.hostName}".proxyPass =
+    "http://${config.services.syncthing.guiAddress}";
 
   snow.backup.paths = [ config.services.syncthing.dataDir ];
 }

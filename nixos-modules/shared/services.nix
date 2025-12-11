@@ -9,6 +9,10 @@ let
   oauth2ServiceNeedingClientSecretGenerator = lib.filterAttrs (
     name: service: service.oauth2.generateClientSecret or false
   ) config.snow.services;
+  servicesOnThisMachine = lib.attrValues (
+    lib.filterAttrs (name: service: service.hostedHere) config.snow.services
+  );
+  regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
 in
 {
   options.snow.generateAllOauth2ClientSecrets = lib.mkEnableOption ''
@@ -22,6 +26,42 @@ in
         local@{ name, ... }:
         {
           options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              readOnly = true;
+              default =
+                let
+                  hostToServicesFile = ./host-to-services.toml;
+                  hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
+                  serviceToHost = lib.listToAttrs (
+                    lib.flatten (
+                      lib.mapAttrsToList (host: fqdns: map (fqdn: lib.nameValuePair fqdn host) fqdns) hostToServices
+                    )
+                  );
+                  hostOfRecord =
+                    serviceToHost.${local.config.fqdn}
+                      or (throw "${local.config.fqdn} missing from ${hostToServicesFile}.\n\n${regenerateCommand}");
+                  # If we're hosting this service, but the host of record is
+                  # different than us -> uh oh!
+                  isIpWrong = local.config.hostedHere && config.networking.hostName != hostOfRecord;
+                in
+                assert lib.assertMsg (!isIpWrong)
+                  "Incorrect host of record for ${local.config.fqdn} in ${hostToServicesFile}! Expected: ${config.networking.hostName}, got: ${hostOfRecord}\n\n${regenerateCommand}";
+                hostOfRecord;
+            };
+            hostedHere = lib.mkOption {
+              type = lib.types.bool;
+              default = local.config.proxyPass != null;
+            };
+            proxyPass = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+            };
+            nginxExtraConfig = lib.mkOption {
+              type = lib.types.nullOr lib.types.lines;
+              default = null;
+            };
+
             sld = lib.mkOption {
               type = lib.types.str;
               default = name;
@@ -77,7 +117,7 @@ in
                     };
                     generateClientSecret = lib.mkOption {
                       type = lib.types.bool;
-                      default = config.snow.generateAllOauth2ClientSecrets;
+                      default = config.snow.generateAllOauth2ClientSecrets || local.config.hostedHere;
                       description = ''
                         Whether to generate the client secret.
                         Only enable this on machines that need it (usually the
@@ -101,6 +141,34 @@ in
   };
 
   config = {
+    services.data-mesher.settings.host.names = map (service: service.sld) servicesOnThisMachine;
+
+    services.nginx.virtualHosts = lib.mkMerge (
+      map (service: {
+        ${service.fqdn} = {
+          enableACME = true;
+          forceSSL = true;
+
+          locations."/" = {
+            proxyPass = service.proxyPass;
+            proxyWebsockets = true;
+            recommendedProxySettings = true;
+            extraConfig = lib.mkIf (service.nginxExtraConfig != null) service.nginxExtraConfig;
+          };
+        };
+      }) servicesOnThisMachine
+    );
+
+    networking.extraHosts = lib.mkMerge (
+      map (
+        service:
+        let
+          ip = builtins.readFile ../../vars/per-machine/${service.host}/zerotier/zerotier-ip/value;
+        in
+        "${ip} ${service.fqdn}"
+      ) (lib.attrValues config.snow.services)
+    );
+
     snow.services = {
       alerts = { };
       audiobookshelf = { };
@@ -113,8 +181,6 @@ in
         paths.oauth2Callback = "/oauth2/callback";
       };
       ca = { };
-      cryptpad = { };
-      cryptpad-ui = { };
       frigate = { };
       grafana = { };
       home-assistant = { };
@@ -142,10 +208,8 @@ in
         paths.oauth2Callback = "/oauth2/oidc/callback";
       };
       mqtt.scheme = "mqtts";
-      nextcloud = { };
       ospi = { };
       prometheus = { };
-      podhacks = { };
       radarr = { };
       readeck = { };
       seerr = { };

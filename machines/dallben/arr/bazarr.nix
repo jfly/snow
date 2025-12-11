@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.snow) services;
   port = config.services.bazarr.listenPort;
 in
 {
@@ -9,15 +8,7 @@ in
     group = "media";
   };
 
-  services.data-mesher.settings.host.names = [ services.bazarr.sld ];
-  services.nginx.virtualHosts.${services.bazarr.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
-    };
-  };
+  snow.services.bazarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
   systemd.services.bazarr = {
     after = [ "mnt-media.mount" ];

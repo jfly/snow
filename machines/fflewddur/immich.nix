@@ -4,23 +4,10 @@
   lib,
   ...
 }:
-
-let
-  inherit (config.snow) services;
-in
 {
   services.immich = {
     enable = true;
     port = 2283;
-
-    environment = {
-      IMMICH_MACHINE_LEARNING_URL = lib.mkForce "http://localhost:${config.services.immich.machine-learning.environment.IMMICH_PORT}";
-    };
-    machine-learning.environment = {
-      # `cryptpad` uses 3003, urg. How do people handle this sort of stuff in NixOS?
-      # Do they use containers?
-      IMMICH_PORT = lib.mkForce "3004";
-    };
   };
 
   # This is to make `pgvecto-rs` (which is used by immich) happy. See
@@ -34,24 +21,14 @@ in
     "render"
   ];
 
-  services.data-mesher.settings.host.names = [ services.immich.sld ];
-  services.nginx.virtualHosts.${services.immich.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
-    locations."/" = {
-      proxyPass = "http://[::1]:${toString config.services.immich.port}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
-      extraConfig = ''
-        client_max_body_size 50000M;
-        proxy_read_timeout   600s;
-        proxy_send_timeout   600s;
-        send_timeout         600s;
-      '';
-    };
-  };
+  # https://wiki.nixos.org/wiki/Immich#Using_Immich_behind_Nginx
+  snow.services.immich.proxyPass = "http://[::1]:${toString config.services.immich.port}";
+  snow.services.immich.nginxExtraConfig = ''
+    client_max_body_size 50000M;
+    proxy_read_timeout   600s;
+    proxy_send_timeout   600s;
+    send_timeout         600s;
+  '';
 
   snow.backup.paths = [ "/var/lib/immich" ];
 }

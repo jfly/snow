@@ -42,13 +42,5 @@ in
     ];
   };
 
-  services.data-mesher.settings.host.names = [ services.prometheus.sld ];
-  services.nginx.virtualHosts.${services.prometheus.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
-    };
-  };
+  snow.services.prometheus.proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
 }

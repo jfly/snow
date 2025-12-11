@@ -114,14 +114,7 @@ in
       config = lib.mkIf (cfg.role == "server") {
         networking.extraHosts = "127.0.0.1 ${domain.local}";
 
-        services.data-mesher.settings.host.names = [ domain.sld ];
-        services.nginx.virtualHosts.${domain.fqdn} = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "https://localhost:${toString config.services.step-ca.port}";
-          };
-        };
+        snow.services.step-ca.proxyPass = "https://localhost:${toString config.services.step-ca.port}";
 
         clan.core.vars.generators.step-intermediate-ca = {
           files."intermediate.key" = {

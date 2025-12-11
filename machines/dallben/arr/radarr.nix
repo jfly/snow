@@ -1,6 +1,5 @@
 { config, ... }:
 let
-  inherit (config.snow) services;
   port = config.services.radarr.settings.server.port;
 in
 {
@@ -9,15 +8,7 @@ in
     group = "media";
   };
 
-  services.data-mesher.settings.host.names = [ services.radarr.sld ];
-  services.nginx.virtualHosts.${services.radarr.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
-    };
-  };
+  snow.services.radarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
   systemd.services.radarr = {
     after = [ "mnt-media.mount" ];

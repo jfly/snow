@@ -63,16 +63,6 @@ let
   # };
 in
 {
-  # Hack to work around the fact that Prometheus's blackbox exporter doesn't
-  # seem to honor `getaddrinfo`.
-  # TODO: figure out how to get blackbox exporter to use a configured DNS
-  #       server instead (or get it to use `getaddrinfo`).
-  networking.extraHosts = ''
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.ospi.fqdn}
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.manman.fqdn}
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.media.fqdn}
-  '';
-
   services.prometheus = {
     exporters.blackbox = {
       enable = true;

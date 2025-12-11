@@ -1,7 +1,4 @@
 { pkgs, config, ... }:
-let
-  inherit (config.snow) services;
-in
 {
   services.transmission = {
     enable = true;
@@ -54,15 +51,7 @@ in
     }
   ];
 
-  services.data-mesher.settings.host.names = [ services.torrents.sld ];
-  services.nginx.virtualHosts.${services.torrents.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString config.services.transmission.settings.rpc-port}";
-    };
-  };
+  snow.services.torrents.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString config.services.transmission.settings.rpc-port}";
 
   snow.backup.paths = [
     config.services.transmission.home

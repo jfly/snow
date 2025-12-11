@@ -10,7 +10,6 @@
     ./nas.nix
     ./backup
     ./jellyfin.nix
-    ./cryptpad.nix
     ./zerotier
     ./kanidm
     ./prometheus
@@ -22,7 +21,6 @@
     ./step-ca.nix
     ./vaultwarden.nix
     ./audiobookshelf.nix
-    ./nextcloud.nix
     ./home-assistant
     ./ospi.nix
     ./manman

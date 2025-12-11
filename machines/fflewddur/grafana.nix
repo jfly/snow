@@ -25,17 +25,7 @@ in
     };
   };
 
-  services.data-mesher.settings.host.names = [ services.grafana.sld ];
-  services.nginx.virtualHosts.${services.grafana.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
-    };
-  };
+  snow.services.grafana.proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
 
   snow.backup.paths = [ config.services.grafana.dataDir ];
 }

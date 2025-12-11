@@ -11,7 +11,8 @@ in
 {
   services.frigate.enable = true;
   services.frigate.hostname = services.frigate.fqdn;
-  services.data-mesher.settings.host.names = [ services.frigate.sld ];
+  snow.services.frigate.hostedHere = true;
+
   # `checkConfig` doesn't work in the sandbox where we do not have a
   # `FRIGATE_DEERCAM_PASSWORD` env var. It would be nice to provide a hook for people
   # to "stub out" some of the problematic stuff in the sandbox (for instance, I
@@ -57,11 +58,6 @@ in
         };
       };
     };
-  };
-
-  services.nginx.virtualHosts.${services.frigate.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
   };
 
   clan.core.vars.generators.deercam = {

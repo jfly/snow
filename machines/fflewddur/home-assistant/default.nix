@@ -180,25 +180,12 @@ in
     };
   };
 
-  # Workaround for aiohttp on Home Assistant. It apparently doesn't honor NSS :(
-  networking.extraHosts = ''
-    ${builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value} ${services.frigate.fqdn}
-  '';
-
-  services.data-mesher.settings.host.names = [ services.home-assistant.sld ];
-  services.nginx.virtualHosts.${services.home-assistant.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-    extraConfig = ''
+  snow.services.home-assistant = {
+    proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
+    nginxExtraConfig = ''
       proxy_buffering off;
       client_max_body_size 1024M;
     '';
-
-    locations."/" = {
-      recommendedProxySettings = true;
-      proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
-      proxyWebsockets = true;
-    };
   };
 
   snow.backup.paths = [ config.services.home-assistant.configDir ];

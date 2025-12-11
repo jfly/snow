@@ -17,20 +17,13 @@ in
     flake.nixosModules.oauth2-proxies-nginx
   ];
 
-  snow.services.budget.oauth2.generateClientSecret = true;
+  snow.services.budget.proxyPass = "http://localhost:3000";
 
-  services.data-mesher.settings.host.names = [ services.budget.sld ];
   services.nginx.virtualHosts.${services.budget.fqdn} = {
-    enableACME = true;
-    forceSSL = true;
-
     snow.oauth2 = {
       enable = true;
       snowService = services.budget;
       allowedGroups = [ services.budget.oauth2.groups.access ];
-    };
-    locations."/" = {
-      proxyPass = "http://localhost:3000";
     };
   };
 
