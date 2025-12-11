@@ -44,7 +44,7 @@ in
 
     alertmanager = {
       enable = true;
-      webExternalUrl = services.alerts.base_url;
+      webExternalUrl = services.alerts.baseUrl;
 
       configuration = {
         global = {

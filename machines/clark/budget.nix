@@ -42,7 +42,7 @@ in
     serviceConfig = {
       Type = "notify";
       NotifyAccess = "all"; # The service invokes `systemd-notify --ready` as a subprocess.
-      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod ${services.budget.base_url}";
+      ExecStart = "${lib.getExe pkgs.nix} develop --command just run-prod ${services.budget.baseUrl}";
       WorkingDirectory = "/state/git/manmanmon";
       User = user;
       Group = group;

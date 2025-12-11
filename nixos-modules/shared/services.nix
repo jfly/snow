@@ -39,7 +39,7 @@ in
               type = lib.types.str;
               default = "https";
             };
-            base_url = lib.mkOption {
+            baseUrl = lib.mkOption {
               type = lib.types.str;
               readOnly = true;
               default = "${local.config.scheme}://${local.config.fqdn}";
@@ -54,9 +54,9 @@ in
               default = lib.mapAttrs (
                 _name: pathOrFunc:
                 if lib.isString pathOrFunc then
-                  "${local.config.base_url}${pathOrFunc}"
+                  "${local.config.baseUrl}${pathOrFunc}"
                 else
-                  attrs: "${local.config.base_url}${pathOrFunc attrs}"
+                  attrs: "${local.config.baseUrl}${pathOrFunc attrs}"
               ) local.config.paths;
             };
             oauth2 = lib.mkOption {

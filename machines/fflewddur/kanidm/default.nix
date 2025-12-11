@@ -55,7 +55,7 @@ in
     serverSettings = {
       domain = services.kanidm.fqdn;
       bindaddress = "127.0.0.1:9443";
-      origin = services.kanidm.base_url;
+      origin = services.kanidm.baseUrl;
       tls_chain = "${certs.directory}/fullchain.pem";
       tls_key = "${certs.directory}/key.pem";
     };
@@ -75,7 +75,7 @@ in
         # https://www.svgrepo.com/download/314973/piggy-bank.svg
         imageFile = ../../../fods/piggy-bank-svgrepo-com.svg;
         originUrl = services.budget.urls.oauth2Callback;
-        originLanding = services.budget.base_url;
+        originLanding = services.budget.baseUrl;
         basicSecretFile = services.budget.oauth2.clientSecretPath;
         preferShortUsername = true;
         scopeMaps.${services.budget.oauth2.groups.access} = [
@@ -95,7 +95,7 @@ in
         # https://www.svgrepo.com/download/483473/detective-face.svg
         imageFile = ../../../fods/detective-face-svgrepo-com.svg;
         originUrl = services.whoami.urls.oauth2Callback;
-        originLanding = services.whoami.base_url;
+        originLanding = services.whoami.baseUrl;
         basicSecretFile = services.whoami.oauth2.clientSecretPath;
         preferShortUsername = true;
         scopeMaps.${services.whoami.oauth2.groups.access} = [
@@ -115,7 +115,7 @@ in
         # https://www.svgrepo.com/download/204349/rss.svg
         imageFile = ../../../fods/rss-svgrepo-com.svg;
         originUrl = services.miniflux.urls.oauth2Callback;
-        originLanding = services.miniflux.base_url;
+        originLanding = services.miniflux.baseUrl;
         basicSecretFile = services.miniflux.oauth2.clientSecretPath;
         preferShortUsername = true;
         scopeMaps.${services.miniflux.oauth2.groups.access} = [

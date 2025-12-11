@@ -16,7 +16,7 @@ in
 
   services.prometheus = {
     enable = true;
-    webExternalUrl = services.prometheus.base_url;
+    webExternalUrl = services.prometheus.baseUrl;
 
     # Set up a dead man's switch to monitor Prometheus itself.
     # Modeled after this blog post:

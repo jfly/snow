@@ -51,7 +51,7 @@ in
     ];
     ExecStart = lib.mkForce (
       pkgs.writeShellScript "post-fetch" ''
-        export DOMAIN=${services.vaultwarden.base_url}/$(< "$CREDENTIALS_DIRECTORY/subpath")
+        export DOMAIN=${services.vaultwarden.baseUrl}/$(< "$CREDENTIALS_DIRECTORY/subpath")
         exec ${lib.getExe pkgs.vaultwarden}
       ''
     );

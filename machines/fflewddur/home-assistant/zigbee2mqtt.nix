@@ -21,7 +21,7 @@ in
       permit_join = false;
       mqtt = {
         # TODO: figure out why zigbee2mqtt can't seem to resolve mqtt.m. It errors out with a "getaddrinfo EBUSY", as described here: <https://github.com/nodejs/help/issues/2390>
-        # server = services.mqtt.base_url; # Fails with "getaddrinfo EBUSY"
+        # server = services.mqtt.baseUrl; # Fails with "getaddrinfo EBUSY"
         # server = "mqtt://[fdd4:aa51:eed9:426:9f99:93d4:aa51:eed9]"; # This works, but cannot work with HTTPS.
         server = "mqtt://mqtt.ec"; # This works, but cannot work with HTTPS.
 

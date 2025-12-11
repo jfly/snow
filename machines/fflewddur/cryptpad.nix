@@ -10,8 +10,8 @@ in
     enable = true;
     configureNginx = true;
     settings = {
-      httpUnsafeOrigin = services.cryptpad.base_url;
-      httpSafeOrigin = services.cryptpad-ui.base_url;
+      httpUnsafeOrigin = services.cryptpad.baseUrl;
+      httpSafeOrigin = services.cryptpad-ui.baseUrl;
       adminKeys = [
         "[jfly@cryptpad.snow.jflei.com/ZwwZaxCmQTnfQI7WZ1BRrrhbKKYLvLmanv03UGJPtks=]"
         "[rachel@cryptpad.snow.jflei.com/Su7meyEBZ4vs-kTXFwHHoZghJeun9mRgOUgVGsVhLVg=]"
