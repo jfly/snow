@@ -14,9 +14,19 @@
     settings = {
       # Only answer requests on the overlay network.
       interface = config.snow.subnets.overlay.interface;
+      # Only bind on the specific interface for the overlay network.
+      # This avoids a conflict with systemd-resolved's DNSStubListener.
       bind-interfaces = true;
     };
   };
+  systemd.services.dnsmasq =
+    let
+      overlayDeviceService = "sys-subsystem-net-devices-${config.snow.subnets.overlay.interface}.device";
+    in
+    {
+      after = [ overlayDeviceService ];
+      requires = [ overlayDeviceService ];
+    };
 
   clan.core.networking.zerotier.settings = {
     # Make this DNS server available for easy client configuration. Clients can
