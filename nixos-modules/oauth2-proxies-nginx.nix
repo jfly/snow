@@ -169,9 +169,6 @@ in
 
         bindMounts.${oauth2ProxiesDir}.isReadOnly = false;
 
-        # This is required by `flake.nixosModules.nixos-container-networking`.
-        bindMounts."/var/lib/data-mesher/".isReadOnly = true;
-
         # Needed by the nixos modules defined in this flake.
         specialArgs = {
           inherit inputs flake;

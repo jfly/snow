@@ -44,6 +44,10 @@ in
                 type = lib.types.nullOr lib.types.str;
                 default = null;
               };
+              interface = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+              };
             };
           }
         );
@@ -59,7 +63,16 @@ in
             ipv6 = "fda0:f78f:a59e:20::/64";
           };
 
-          overlay.ipv6 = config.clan.core.networking.zerotier.subnet;
+          overlay = {
+            ipv6 = config.clan.core.networking.zerotier.subnet;
+            # This interface name is determined from the network id, but we
+            # don't have eval-time access to it. So, you have to first deploy
+            # the Zerotier network, and *then* fill this in. This could be
+            # done in one shot if everything that needed this supported
+            # Linux's interface altnames. See
+            # https://git.clan.lol/clan/data-mesher/issues/222.
+            interface = "zthjzvlscg";
+          };
         };
       };
     };
@@ -170,6 +183,6 @@ in
     # Workaround for avahi crash on name conflicts:
     # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
     # Endless logs like "Host name conflict, retrying with ..."
-    services.avahi.allowInterfaces = [ config.services.data-mesher.settings.cluster.interface ];
+    services.avahi.allowInterfaces = [ config.snow.subnets.overlay.interface ];
   };
 }

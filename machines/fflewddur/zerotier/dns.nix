@@ -13,7 +13,7 @@
     resolveLocalQueries = false;
     settings = {
       # Only answer requests on the overlay network.
-      interface = config.services.data-mesher.settings.cluster.interface;
+      interface = config.snow.subnets.overlay.interface;
       bind-interfaces = true;
     };
   };

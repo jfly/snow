@@ -13,6 +13,8 @@ let
     lib.filterAttrs (name: service: service.hostedHere) config.snow.services
   );
   regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
+  hostToServicesFile = ./host-to-services.toml;
+  hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
 in
 {
   options.snow.generateAllOauth2ClientSecrets = lib.mkEnableOption ''
@@ -26,29 +28,6 @@ in
         local@{ name, ... }:
         {
           options = {
-            host = lib.mkOption {
-              type = lib.types.str;
-              readOnly = true;
-              default =
-                let
-                  hostToServicesFile = ./host-to-services.toml;
-                  hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
-                  serviceToHost = lib.listToAttrs (
-                    lib.flatten (
-                      lib.mapAttrsToList (host: fqdns: map (fqdn: lib.nameValuePair fqdn host) fqdns) hostToServices
-                    )
-                  );
-                  hostOfRecord =
-                    serviceToHost.${local.config.fqdn}
-                      or (throw "${local.config.fqdn} missing from ${hostToServicesFile}.\n\n${regenerateCommand}");
-                  # If we're hosting this service, but the host of record is
-                  # different than us -> uh oh!
-                  isIpWrong = local.config.hostedHere && config.networking.hostName != hostOfRecord;
-                in
-                assert lib.assertMsg (!isIpWrong)
-                  "Incorrect host of record for ${local.config.fqdn} in ${hostToServicesFile}! Expected: ${config.networking.hostName}, got: ${hostOfRecord}\n\n${regenerateCommand}";
-                hostOfRecord;
-            };
             hostedHere = lib.mkOption {
               type = lib.types.bool;
               default = local.config.proxyPass != null;
@@ -141,8 +120,6 @@ in
   };
 
   config = {
-    services.data-mesher.settings.host.names = map (service: service.sld) servicesOnThisMachine;
-
     services.nginx.virtualHosts = lib.mkMerge (
       map (service: {
         ${service.fqdn} = {
@@ -159,14 +136,24 @@ in
       }) servicesOnThisMachine
     );
 
-    networking.extraHosts = lib.mkMerge (
-      map (
-        service:
+    networking.extraHosts = lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        host: fqdns:
         let
-          ip = builtins.readFile ../../vars/per-machine/${service.host}/zerotier/zerotier-ip/value;
+          ip = builtins.readFile ../../vars/per-machine/${host}/zerotier/zerotier-ip/value;
+          validFqdns =
+            if host != config.networking.hostName then
+              fqdns
+            else
+              let
+                expectedFqdns = map (service: service.fqdn) servicesOnThisMachine;
+              in
+              assert lib.assertMsg (lib.sortOn lib.id expectedFqdns == lib.sortOn lib.id fqdns)
+                "Incorrect fqdns for ${host}. Expected: ${builtins.toJSON expectedFqdns}, got: ${builtins.toJSON fqdns}\n\n${regenerateCommand}";
+              fqdns;
         in
-        "${ip} ${service.fqdn}"
-      ) (lib.attrValues config.snow.services)
+        "${ip} ${lib.concatStringsSep " " validFqdns}"
+      ) hostToServices
     );
 
     snow.services = {
