@@ -81,42 +81,6 @@ function _nix() {
     nix "${EXTRA_NIX_ARGS[@]}" "$@"
 }
 
-function push_containers() {
-    # Our cluster (currently) only has x86 machines in it.
-    local k8s_system=x86_64-linux
-
-    for container_path in containers/*; do
-        # Convert something like `containers/snow-web` to `snow-web`.
-        container=$(basename "$container_path")
-        target=".#containers.${k8s_system}.${container}"
-        result=$(_nix build "$target" --no-link --print-out-paths)
-
-        # Note: we're intentionally using ' here instead of " because we want
-        # the $ chars to be passed as-is to `nix eval`.
-        # shellcheck disable=SC2016
-        immutable_image=$(_nix eval "$target" --raw --apply 'img: "${img.imageName}:${img.imageTag}"')
-        # shellcheck disable=SC2016
-        latest_image=$(_nix eval "$target" --raw --apply 'img: "${img.imageName}:latest"')
-
-        fq_immutable_name=docker://clark.ec:5000/$immutable_image
-        fq_latest_name=docker://clark.ec:5000/$latest_image
-
-        if [ $DRY_RUN == 1 ]; then
-            echo "Dry run: skipping upload of $fq_immutable_name"
-        else
-            # Only build and upload the image if it doesn't already exist remotely.
-            if ! skopeo inspect "$fq_immutable_name" &>/dev/null; then
-                $result | gzip --fast | skopeo --insecure-policy copy --dest-tls-verify=false docker-archive:/dev/stdin "$fq_immutable_name"
-            fi
-
-            # Finally, tag it as the latest version.
-            skopeo --insecure-policy copy --src-tls-verify=false --dest-tls-verify=false --preserve-digests --quiet "$fq_immutable_name" "$fq_latest_name"
-        fi
-
-        # TODO: restart affected deployments, or (better) use immutable image tags in manifests.
-    done
-}
-
 function deploy_iac() {
     for f in iac/k8s/**/*{.yaml,.yaml.secret}; do
         if [ $DRY_RUN == 1 ]; then
@@ -182,10 +146,7 @@ function deploy_nix_router() {
 
 python -m tools.deage
 
-if [ "$TARGET" = "containers" ]; then
-    push_containers
-elif [ "$TARGET" = "iac" ]; then
-    push_containers
+if [ "$TARGET" = "iac" ]; then
     deploy_iac
 elif [[ $TARGET == "openwrt/"* ]]; then
     deploy_nix_router "$TARGET"

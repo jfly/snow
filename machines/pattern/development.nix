@@ -24,25 +24,6 @@
     insecure-registries = [ "clark.ec:5000" ];
   };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
-  clan.core.vars.generators.snow-containers-auth = {
-    files.password = {
-      secret = true;
-      owner = config.snow.user.name;
-    };
-    prompts.password = {
-      type = "hidden";
-    };
-    files.username = {
-      owner = config.snow.user.name;
-    };
-    prompts.username = {
-      type = "line";
-    };
-    script = ''
-      cp $prompts/username $out/username
-      cp $prompts/password $out/password
-    '';
-  };
 
   # `systemd-resolved` is nice for VPNs because it understands how to query
   # different DNS servers for different TLDs.

@@ -2,7 +2,6 @@
   imports = [
     ./lib.nix
     ./packages.nix
-    ./containers.nix
     ./routers.nix
     ./nixos-modules.nix
     ./clan.nix
