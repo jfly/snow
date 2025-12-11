@@ -120,21 +120,32 @@ in
   };
 
   config = {
-    services.nginx.virtualHosts = lib.mkMerge (
-      map (service: {
-        ${service.fqdn} = {
-          enableACME = true;
-          forceSSL = true;
+    services.nginx = lib.mkIf (builtins.length servicesOnThisMachine > 0) {
+      enable = true;
+      recommendedProxySettings = true;
 
-          locations."/" = {
-            proxyPass = service.proxyPass;
-            proxyWebsockets = true;
-            recommendedProxySettings = true;
-            extraConfig = lib.mkIf (service.nginxExtraConfig != null) service.nginxExtraConfig;
+      virtualHosts = lib.mkMerge (
+        map (service: {
+          ${service.fqdn} = {
+            enableACME = true;
+            forceSSL = true;
+
+            locations."/" = {
+              proxyPass = service.proxyPass;
+              proxyWebsockets = true;
+              extraConfig = lib.mkIf (service.nginxExtraConfig != null) service.nginxExtraConfig;
+            };
           };
-        };
-      }) servicesOnThisMachine
-    );
+        }) servicesOnThisMachine
+      );
+    };
+
+    networking.firewall.interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts =
+      lib.mkIf (builtins.length servicesOnThisMachine > 0)
+        [
+          80
+          443
+        ];
 
     networking.extraHosts = lib.concatStringsSep "\n" (
       lib.mapAttrsToList (

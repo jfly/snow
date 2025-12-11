@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   resticPort = 8000;
 in
@@ -25,5 +25,7 @@ in
 
   environment.systemPackages = [ pkgs.restic ];
 
-  networking.firewall.allowedTCPPorts = [ resticPort ];
+  networking.firewall.interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = [
+    resticPort
+  ];
 }

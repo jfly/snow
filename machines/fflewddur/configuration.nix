@@ -2,7 +2,6 @@
 {
   imports = [
     flake.nixosModules.shared
-    flake.nixosModules.nginx
     flake.nixosModules.syncthing
     ./boot.nix
     ./network.nix

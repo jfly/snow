@@ -1,7 +1,5 @@
-{ flake, config, ... }:
+{ config, ... }:
 {
-  imports = [ flake.nixosModules.nginx ];
-
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;

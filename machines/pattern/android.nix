@@ -8,15 +8,17 @@
   # daemon (perhaps that comes baked into the KDE desktop environment
   # (Plasma)?). Home Manager has this set up, but nixpkgs does not.
   home-manager.users.${config.snow.user.name}.services.kdeconnect.enable = true;
-  networking.firewall = rec {
-    allowedTCPPortRanges = [
-      {
+  networking.firewall =
+    let
+      allowedPortRange = {
         from = 1714;
         to = 1764;
-      }
-    ];
-    allowedUDPPortRanges = allowedTCPPortRanges;
-  };
+      };
+    in
+    {
+      allowedTCPPortRanges = [ allowedPortRange ];
+      allowedUDPPortRanges = [ allowedPortRange ];
+    };
 
   programs.adb.enable = true;
   users.users.${config.snow.user.name}.extraGroups = [ "adbusers" ];

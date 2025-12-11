@@ -8,6 +8,10 @@
 let
   inherit (config.snow) services;
 
+  # We run an unencrypted `mqtt` server to play nicely with all our openbeken
+  # lightswitches:
+  # <https://github.com/openshwprojects/OpenBK7231T_App/issues/759>.
+  # Also see <https://github.com/awilliams/wifi-presence/issues/21>.
   ports.mqtt = 1883;
   ports.mqtts = 8883;
   # After adding a user to the list, get their password with:
@@ -148,5 +152,20 @@ in
       }
     ];
   };
-  networking.firewall.allowedTCPPorts = builtins.attrValues ports;
+
+  networking.firewall = {
+    extraCommands = ''
+      for port in ${lib.escapeShellArgs (builtins.attrValues ports)}; do
+        # Allow our various IOT devices (not on the overlay network) to connect to the mqtt server.
+        iptables -A INPUT -p tcp --dport "$port" -s ${config.snow.subnets.colusa-iot.ipv4} -j ACCEPT
+        # Allow wifi-presence (running on our router, which is not on the
+        # overlay network) to connect to the mqtt server. See
+        # <https://github.com/awilliams/wifi-presence/issues/21>.
+        iptables --append INPUT --protocol tcp --dport "$port" --source ${config.snow.subnets.colusa-trusted.ipv4} --jump ACCEPT
+      end
+    '';
+
+    # Allow all traffic from the overlay network.
+    interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = builtins.attrValues ports;
+  };
 }

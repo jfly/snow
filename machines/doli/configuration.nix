@@ -3,7 +3,6 @@
 {
   imports = [
     flake.nixosModules.shared
-    flake.nixosModules.nginx
     flake.nixosModules.syncthing
     ./hardware-configuration.nix
     ./network.nix

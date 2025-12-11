@@ -134,6 +134,8 @@ in
       };
     };
 
+    # We need to keep these ports open on the LAN (rather than just our overlay
+    # network) as a workaround for <https://github.com/xbmc/Kore/issues/1056>.
     networking.firewall.allowedTCPPorts = [
       8080 # Web server
       9090 # JSON/RPC

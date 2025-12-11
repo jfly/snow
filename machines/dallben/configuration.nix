@@ -13,7 +13,6 @@
     ./bluetooth.nix
     flake.nixosModules.xmonad-basic
     flake.nixosModules.kodi-colusita
-    flake.nixosModules.nginx
     ./arr
   ];
 

@@ -2,7 +2,6 @@
 {
   imports = [
     flake.nixosModules.shared
-    flake.nixosModules.nginx
     ./boot.nix
     ./network.nix
     ./containers.nix
