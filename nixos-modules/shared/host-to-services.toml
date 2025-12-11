@@ -1,8 +1,10 @@
 clark = [
     "budget.m",
+    "clark.m",
 ]
 dallben = [
     "bazarr.m",
+    "dallben.m",
     "jackett.m",
     "radarr.m",
     "seerr.m",
@@ -10,11 +12,16 @@ dallben = [
     "torrents.m",
 ]
 doli = [
+    "doli.m",
     "syncthing.doli.m",
+]
+fflam = [
+    "fflam.m",
 ]
 fflewddur = [
     "alerts.m",
     "audiobookshelf.m",
+    "fflewddur.m",
     "frigate.m",
     "grafana.m",
     "home-assistant.m",
@@ -34,5 +41,20 @@ fflewddur = [
     "vaultwarden.m",
     "whoami.m",
     "zigbee2mqtt.m",
+]
+jflyso = [
+    "jflyso.m",
+]
+kent = [
+    "kent.m",
+]
+locked-vm = [
+    "locked-vm.m",
+]
+pattern = [
+    "pattern.m",
+]
+template = [
+    "template.m",
 ]
 
