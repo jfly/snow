@@ -146,8 +146,6 @@ in
       settings.PasswordAuthentication = false;
     };
 
-    users.mutableUsers = false;
-
     users.users.jfly = {
       isNormalUser = true;
       extraGroups = [
