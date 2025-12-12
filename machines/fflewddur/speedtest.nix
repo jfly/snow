@@ -1,20 +1,16 @@
-{ lib, ... }:
+{ config, ... }:
+let
+  inherit (config.snow) services;
+in
 {
-  # Workaround for
-  services.nginx.recommendedBrotliSettings = true;
   services.librespeed = {
     enable = true;
-    domain = "speedtest.snow.jflei.com";
+    domain = services.speedtest.fqdn;
     frontend = {
       enable = true;
       contactEmail = "jeremyfleischman@gmail.com";
     };
   };
 
-  # k8s does https termination and proxies to us.
-  # TODO: remove when k8s is gone.
-  services.nginx.virtualHosts."speedtest.snow.jflei.com" = {
-    enableACME = false;
-    forceSSL = lib.mkForce false;
-  };
+  snow.services.speedtest.hostedHere = true;
 }

@@ -8,16 +8,20 @@
 let
   hostToServices = lib.mapAttrs (
     name: nixosConfiguration:
-    let
-      myServices = lib.filter (service: service.hostedHere) (
-        lib.attrValues nixosConfiguration.config.snow.services
-      );
-    in
-    map (service: service.fqdn) myServices
+    # Only generate entries for domains on the overlay network. For others
+    # ("public" hostnames), we need to figure out better solution for DNS. Right
+    # now, they're handled by <iac/pulumi/app/dns.py>, but there's no glue
+    # with the nixos configuration, and we're also missing out on split
+    # DNS. It might make sense to revisit this if I ever get that bpir4
+    # running nixos. Also read up on [hidden primary
+    # name servers](https://dn.org/hidden-primary-name-servers-why-and-how/).
+    map (service: service.fqdn) nixosConfiguration.config.snow.servicesOnThisMachine.private
   ) flake.nixosConfigurations;
+
   hostToNonemptyServices = lib.filterAttrs (
     host: services: builtins.length services > 0
   ) hostToServices;
+
   json2Toml = writers.writePython3Bin "json2Toml" { libraries = ps: [ ps.tomli-w ]; } ''
     import json
     import sys

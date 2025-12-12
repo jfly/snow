@@ -48,9 +48,9 @@
   '';
 
   # Our step-ca module (used by every machine in the cluster) defaults to
-  # querying ca.snow for certs. However, that ACME server is only able to
-  # generate `*.snow` certs. For "real" domain names, we still need to talk to
-  # Let's Encrypt.
+  # querying our self-hosted step-ca for certs. However, that ACME server is
+  # only able to generate certs for our "fake" overlay domain. For "real"
+  # domain names, we still need to talk to Let's Encrypt.
   # TODO: investigate what would be involved in configuring ACME server globs/regexes.
   security.acme.certs.${config.mailserver.fqdn} = {
     server = "https://acme-v02.api.letsencrypt.org/directory";

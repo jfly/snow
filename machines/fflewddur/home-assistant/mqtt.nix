@@ -100,13 +100,10 @@ in
 
   # Note that we use nginx to generate a cert for MQTT because nginx is capable
   # of passing the "host a file" HTTP challenge.
-  snow.services.mqtt = {
-    hostedHere = true;
-    nginxExtraConfig = ''
-      add_header Content-Type text/plain;
-      return 200 "There's a MQTT server here at :${toString ports.mqtt} and a MQTTS server at :${toString ports.mqtts}";
-    '';
-  };
+  snow.services.mqtt.nginxExtraConfig = ''
+    add_header Content-Type text/plain;
+    return 200 "There's a MQTT server here at :${toString ports.mqtt} and a MQTTS server at :${toString ports.mqtts}";
+  '';
   security.acme.certs.${services.mqtt.fqdn}.reloadServices = [ "mosquitto.service" ];
 
   # TODO: port HA to use MQTTS. I cannot get it to work. See
@@ -162,7 +159,7 @@ in
         # overlay network) to connect to the mqtt server. See
         # <https://github.com/awilliams/wifi-presence/issues/21>.
         iptables --append INPUT --protocol tcp --dport "$port" --source ${config.snow.subnets.colusa-trusted.ipv4} --jump ACCEPT
-      end
+      done
     '';
 
     # Allow all traffic from the overlay network.

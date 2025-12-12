@@ -1,8 +1,6 @@
 {
-  services.nginx.virtualHosts."healthcheck.snow.jflei.com" = {
-    locations."/".extraConfig = ''
-      default_type text/plain;
-      return 200 'all good here!';
-    '';
-  };
+  snow.services.healthcheck.nginxExtraConfig = ''
+    default_type text/plain;
+    return 200 'all good here!';
+  '';
 }

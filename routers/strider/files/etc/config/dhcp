@@ -51,19 +51,16 @@ config host
 	option ip '192.168.29.102'
 	option mac '00:C0:B7:7F:E0:96'
 
-# Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'dallben'
 	option ip '192.168.28.163'
 	option mac '1C:69:7A:AC:4C:E6'
 
-# Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'ospi'
 	option ip '192.168.28.197'
 	option mac 'B8:27:EB:00:60:83'
 
-# Keep this in sync with iac/pulumi/app/misc_k8s_https_proxies.py
 config host
 	option name 'fflewddur'
 	option ip '192.168.28.172'

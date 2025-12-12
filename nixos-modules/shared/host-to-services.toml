@@ -1,10 +1,10 @@
 clark = [
-    "budget.m",
     "clark.m",
+    "budget.m",
 ]
 dallben = [
-    "bazarr.m",
     "dallben.m",
+    "bazarr.m",
     "jackett.m",
     "radarr.m",
     "seerr.m",
@@ -19,16 +19,17 @@ fflam = [
     "fflam.m",
 ]
 fflewddur = [
+    "fflewddur.m",
     "alerts.m",
     "audiobookshelf.m",
-    "fflewddur.m",
+    "auth.m",
+    "ca.m",
     "frigate.m",
     "grafana.m",
     "home-assistant.m",
     "immich.m",
     "immichframe.m",
     "jellyfin.m",
-    "auth.m",
     "manman.m",
     "media.m",
     "miniflux.m",
@@ -36,7 +37,6 @@ fflewddur = [
     "ospi.m",
     "prometheus.m",
     "readeck.m",
-    "ca.m",
     "syncthing.fflewddur.m",
     "vaultwarden.m",
     "whoami.m",
