@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-ssh clark -t -- sudo k3s kubectl -n vpn exec -it deploy/torrents --container torrents -- pirate-get "$@"

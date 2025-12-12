@@ -6,7 +6,7 @@ I manage a mix of things in this repo:
 
 - [A fleet of NixOS machines](#nixos)
 - [A handful of routers running OpenWrt](#openwrt)
-- [IAC for Kubernetes + misc](#iac)
+- [DNS](#dns)
 - [My Kobo](packages/my-kobo/README.md)
 
 # NixOS
@@ -56,24 +56,37 @@ example:
 **Note**: this will be a mess to deal with! There will likely be secrets in the
 files! There will also be files you don't need. Be careful.
 
-# IAC
+# DNS
 
-Most of the infra-as-code (IAC) in this repo manages resources running on a
-Kubernetes cluster ([k3s](https://k3s.io/) running on NixOS).
+My DNS does not spark joy. There are a bunch of places where this happens:
 
-- Most of the resources on the cluster are managed in a Pulumi app in
-  [iac/pulumi](iac/pulumi). There are also some non-k8s resources managed in
-  this Pulumi app as well.
-- Some of the oldest k8s resources are managed as flat yaml files in
-  [iac/k8s](iac/k8s). I'd like to port this all to Pulumi.
+1. We have "private" DNS managed in 2 ways:
+   - Static `/etc/hosts` entries for every NixOS machine in the overlay network.
+     Look for `networking.extraHosts` in
+     [nixos-modules/shared/services.nix](nixos-modules/shared/services.nix).
+   - A dnsmasq server for all the non-NixOS machines in the overlay network (we
+     can't update their `/etc/hosts`). See
+     [machines/fflewddur/zerotier/dns.nix](machines/fflewddur/zerotier/dns.nix).
+     Also note the crazy hacks required to get various devices to play nicely
+     with an IPv6 only overlay network even when connected to an IPv4 only
+     physical network.
+3. Public DNS is on CloudFlare, managed by [iac/pulumi](iac/pulumi). This is
+   overkill: Pulumi has state, which is annoying to deal with. I'd like to
+   explore alternatives to this, perhaps
+   [DNSControl](https://docs.dnscontrol.org/) or running our own [hidden primary
+   name server](https://dn.org/hidden-primary-name-servers-why-and-how/).
+4. There's some "split horizon" DNS managed by OpenWRT. I'd like to port our
+   primary router to NixOS someday, and then this can be managed with nix.
 
 ## Kubernetes
 
-I'm fairly happy with Kubernetes: it does a really good job of running a bunch
-of containers. It's very flexible, and the active community means that most
-things I want to do have already been done by somebody else.
+I ran Kubernetes for many years. It was a great way to learn Kubernetes, and it
+does a really good job of running a bunch of containers. It's very flexible,
+and the active community means that most things I want to do have already been
+done by somebody else.
 
-There are some things I don't love:
+I eventually moved off of Kubernetes in favor of "bare mental" NixOS. Some of
+my reasons:
 
 - Kubernetes makes it really easy to build up circular dependencies that make
   it hard/impossible to recreate your cluster.
@@ -89,22 +102,15 @@ There are some things I don't love:
     of core dependencies out of my Kubernetes cluster. I also wonder if I
     should be regularly recreating my cluster from scratch to make sure I don't
     lose the ability to do so.
-- I miss the NixOS module ecosystem. Going back to configuring software with
+- I missed the NixOS module ecosystem. Going back to configuring software with
   plaintext files, or wiring up an application to its database feel like a
-  tremendous step backwards (Helm Charts are probably supposed to be "the
-  answer" to this, but I've always found them clunky to work with). Moonshot
-  project idea: a tool that could convert NixOS modules to Kubernetes resource
-  definitions. This wouldn't work for all NixOS modules, but I suspect a lot of
-  them are fairly simple (set up a database with a user for this application,
-  create a config file for this application, go), and could be converted to
-  analogous k8s resources.
-
-**TODO**: My cluster currently is a single node. I intend to beef it up a
-collection of 3 servers. This will force me to figure out persistent volumes
-and a better story for load balancing:
-
-- [MetalLB](https://metallb.universe.tf/) looks promising for load balancing.
-- [Rook/Ceph](https://rook.io/) looks promising for persistent volumes.
+  tremendous step backwards (Helm Charts are supposed to be "the
+  answer" to this, but I've always found them clunky to work with).
+- Locking/upgrading containers requires additional tooling. Don't get me
+  started about patching software.
+- I despise the "yaml ops" that is prevelant throughout the k8s ecosystem. I
+  managed the state of my cluster with Pulumi, which was a much better
+  experience, but you're in the minority if you do that.
 
 # Backups
 
@@ -119,11 +125,8 @@ considered going off the deep end and trying out a filesystem that supports
 atomic snapshots (such at [Btrfs](https://en.wikipedia.org/wiki/Btrfs) or
 [Open ZFS](https://en.wikipedia.org/wiki/OpenZFS)).
 
-**TODO**: I intend to back up to an offsite, non-cloud location I control, as
-well as a cloud provider. For now, I've got a single, out of date offsite
-backup, and multiple "hot" copies of the most important data
-([Bitwarden](https://bitwarden.com/)/[Vaultwarden](https://github.com/dani-garcia/vaultwarden)
-and [Syncthing](https://syncthing.net/)) on my end devices.
+Backups regularly go to a Hetzner storage box. I also run a backup NAS that I'd
+like to move to a friend's house someday.
 
 # Monitoring + Alerting
 

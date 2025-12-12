@@ -1,5 +1,0 @@
-{
-  snow.backup = {
-    paths = [ "/state" ];
-  };
-}

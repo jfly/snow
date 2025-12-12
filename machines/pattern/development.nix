@@ -16,13 +16,6 @@
   # Enable docker for the main user.
   # TODO: move closer to docker configuration in `home.nix`
   virtualisation.docker.enable = true;
-  virtualisation.docker.daemon.settings = {
-    # clark hosts its own docker registry, which is plain HTTP because currently all HTTPS
-    # goes through k8s, and that would create an annoying circular
-    # dependency.
-    # TODO: get rid of k8s, and get rid of this
-    insecure-registries = [ "clark.ec:5000" ];
-  };
   users.users.${config.snow.user.name}.extraGroups = [ "docker" ];
 
   # `systemd-resolved` is nice for VPNs because it understands how to query

@@ -1,5 +1,3 @@
-{ ... }:
-
 {
   # TODO: is this still needed? if so, we can restrict it to the overlay network?
   networking.firewall.allowedUDPPorts = [ 53 ];

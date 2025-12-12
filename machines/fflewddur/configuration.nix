@@ -29,6 +29,7 @@
     ./brbd-sync.nix
     ./frigate.nix
     ./readeck.nix
+    ./beets.nix
   ];
 
   networking.hostName = "fflewddur";

@@ -17,7 +17,7 @@ To deploy an OpenWrt router:
 
     $0 openwrt/strider
 
-To deploy infra as code (Kubernetes, etc):
+To deploy infra as code:
 
     $0 iac
 
@@ -82,20 +82,11 @@ function _nix() {
 }
 
 function deploy_iac() {
-    for f in iac/k8s/**/*{.yaml,.yaml.secret}; do
-        if [ $DRY_RUN == 1 ]; then
-            echo "Diffing $f"
-            kubectl diff -f "$f"
-        else
-            echo "Applying $f"
-            kubectl apply -f "$f"
-        fi
-    done
-
+    pulumi_stack=prod
     if [ $DRY_RUN == 1 ]; then
-        pulumi preview --cwd iac/pulumi --stack dev
+        pulumi preview --cwd iac/pulumi --stack "$pulumi_stack"
     else
-        pulumi up --cwd iac/pulumi --stack dev --yes
+        pulumi up --cwd iac/pulumi --stack "$pulumi_stack" --yes
     fi
 }
 

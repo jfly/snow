@@ -1,6 +1,6 @@
-name: k8s-pulumi
+name: snow-pulumi
 backend:
   url: file://~/sync/jfly-linux-secrets/snow-pulumi
 runtime:
   name: python
-description: Declarative management of the snow k8s cluster
+description: Just some IAC here
