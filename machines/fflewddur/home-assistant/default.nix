@@ -50,6 +50,21 @@ in
       vacuum-card
       advanced-camera-card
     ];
+    lovelaceConfig = {
+      title = "Colusa";
+      views = [
+        {
+          title = "Welcome";
+          cards = [
+            {
+              type = "markdown";
+              title = "Lovelace";
+              content = "Try another dashboard for now.";
+            }
+          ];
+        }
+      ];
+    };
     config = {
       # logger.default = "debug";
       http = {
@@ -180,13 +195,21 @@ in
     };
   };
 
-  snow.services.home-assistant = {
-    proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
-    nginxExtraConfig = ''
-      proxy_buffering off;
-      client_max_body_size 1024M;
-    '';
-  };
+  snow.services =
+    let
+      haReverseProxy = {
+        proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
+        nginxExtraConfig = ''
+          proxy_buffering off;
+          client_max_body_size 1024M;
+        '';
+      };
+    in
+    {
+      home-assistant = haReverseProxy;
+      # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
+      home-assistant-lan = haReverseProxy;
+    };
 
   snow.backup.paths = [ config.services.home-assistant.configDir ];
 }

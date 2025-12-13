@@ -14,6 +14,11 @@ let
   hostToServicesFile = ./host-to-services.toml;
   hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
 
+  # Very incomplete. See <routers/strider/files/etc/config/dhcp>.
+  lanIpByHostname = {
+    fflewddur = "192.168.28.172";
+  };
+  lanDomain = "ec";
   listenAddressesByParentDomain = {
     # For services on our overlay network, *only* listen on our overlay network
     # address. Otherwise anyone with regular, non overlay IP connectivity to
@@ -27,6 +32,10 @@ let
 
     # For public services, listen on all IPs. They're public services!
     ${publicDomain} = [ ];
+
+    ${lanDomain} = [
+      lanIpByHostname.${config.networking.hostName}
+    ];
   };
 in
 {
@@ -178,20 +187,26 @@ in
       recommendedProxySettings = true;
 
       virtualHosts = lib.mkMerge (
-        map (service: {
-          ${service.fqdn} = {
-            enableACME = true;
-            forceSSL = true;
+        map (
+          service:
+          let
+            httpsOnly = service.parentDomain != lanDomain;
+          in
+          {
+            ${service.fqdn} = {
+              enableACME = httpsOnly;
+              forceSSL = httpsOnly;
 
-            listenAddresses = listenAddressesByParentDomain.${service.parentDomain};
+              listenAddresses = listenAddressesByParentDomain.${service.parentDomain};
 
-            locations."/" = {
-              proxyPass = service.proxyPass;
-              proxyWebsockets = true;
-              extraConfig = lib.mkIf (service.nginxExtraConfig != null) service.nginxExtraConfig;
+              locations."/" = {
+                proxyPass = service.proxyPass;
+                proxyWebsockets = true;
+                extraConfig = lib.mkIf (service.nginxExtraConfig != null) service.nginxExtraConfig;
+              };
             };
-          };
-        }) config.snow.servicesOnThisMachine.all
+          }
+        ) config.snow.servicesOnThisMachine.all
       );
     };
 
@@ -273,6 +288,10 @@ in
       grafana = { };
       healthcheck.parentDomain = "snow.jflei.com";
       home-assistant = { };
+      home-assistant-lan = {
+        subdomain = "home-assistant";
+        parentDomain = "ec";
+      };
       immich = { };
       immichframe = { };
       jackett = { };
