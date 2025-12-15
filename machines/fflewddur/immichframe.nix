@@ -1,8 +1,5 @@
 { config, ... }:
 {
-  # TODO: expose on LAN, rather than overlay network (I don't want to try
-  # installing ZeroTier on the crappy tablet I plan to use).
-
   snow.services.immichframe.proxyPass = "http://localhost:${toString config.services.immichframe.port}";
 
   clan.core.vars.generators.immichframe-api-key = {

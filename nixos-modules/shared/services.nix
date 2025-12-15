@@ -289,11 +289,16 @@ in
       healthcheck.parentDomain = "snow.jflei.com";
       home-assistant = { };
       home-assistant-lan = {
+        # Keep in sync with <routers/strider/files/etc/config/dhcp>.
         subdomain = "home-assistant";
         parentDomain = "ec";
       };
       immich = { };
-      immichframe = { };
+      immichframe = {
+        # Keep in sync with <routers/strider/files/etc/config/dhcp>.
+        subdomain = "frame";
+        parentDomain = "ec";
+      };
       jackett = { };
       jellyfin = { };
       jellyfin-public = {
