@@ -31,6 +31,7 @@
         "noauto"
         "credentials=${credsPath}"
         "gid=${toString config.users.groups.media.gid}"
+        "forcegid"
         "file_mode=0660" # rw for user and group.
         "dir_mode=0770" # rwx for user and group.
       ];

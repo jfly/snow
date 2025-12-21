@@ -11,8 +11,6 @@ in
   snow.services.sonarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
   systemd.services.sonarr = {
-    after = [ "mnt-media.mount" ];
-    requires = [ "mnt-media.mount" ];
     vpnConfinement = {
       enable = true;
       vpnNamespace = "wg";

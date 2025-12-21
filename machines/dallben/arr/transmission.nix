@@ -35,8 +35,6 @@
   };
 
   systemd.services.transmission = {
-    after = [ "mnt-media.mount" ];
-    requires = [ "mnt-media.mount" ];
     vpnConfinement = {
       enable = true;
       vpnNamespace = "wg";

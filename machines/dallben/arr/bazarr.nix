@@ -11,8 +11,6 @@ in
   snow.services.bazarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
   systemd.services.bazarr = {
-    after = [ "mnt-media.mount" ];
-    requires = [ "mnt-media.mount" ];
     vpnConfinement = {
       enable = true;
       vpnNamespace = "wg";

@@ -11,8 +11,6 @@ in
   snow.services.radarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
   systemd.services.radarr = {
-    after = [ "mnt-media.mount" ];
-    requires = [ "mnt-media.mount" ];
     vpnConfinement = {
       enable = true;
       vpnNamespace = "wg";
