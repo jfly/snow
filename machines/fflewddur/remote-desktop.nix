@@ -33,5 +33,11 @@
 
     # File browser with "Miller columns".
     pkgs.pantheon.elementary-files
+
+    # Web browser
+    pkgs.firefox
+
+    # Advanced search for KDE's dolphin.
+    pkgs.kdePackages.kfind
   ];
 }
