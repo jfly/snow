@@ -38,7 +38,7 @@ in
       mkdir --parents --mode 0777 ${cfg.nodeTextfileDir}
     '';
 
-    # Keep the list of exporters in sync with `scrapeConfigs` in `hosts/fflewddur/prometheus.nix`.
+    # Keep the list of exporters in sync with `scrapeConfigs` in `machines/fflewddur/prometheus/`.
     services.prometheus.exporters = {
       node = {
         enable = true;
@@ -48,6 +48,11 @@ in
         extraFlags = [
           "--collector.textfile.directory=${cfg.nodeTextfileDir}"
         ];
+      };
+
+      smartctl = {
+        enable = true;
+        openFirewall = true;
       };
     };
   };
