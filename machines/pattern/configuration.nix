@@ -45,6 +45,7 @@
     ./tor.nix
     ./waydroid.nix
     ./remote-fs.nix
+    ./steam.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
