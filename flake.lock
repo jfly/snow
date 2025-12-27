@@ -825,6 +825,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-25_05": {
+      "locked": {
+        "lastModified": 1766687554,
+        "narHash": "sha256-DegN7KD/EtFSKXf2jvqL6lvev6GlfAAatYBcRC8goEo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fd0ca39c92fdb4012ed8d60e1683c26fddadd136",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1761765539,
@@ -1248,6 +1264,7 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_5",
+        "nixpkgs-25_05": "nixpkgs-25_05",
         "nixvim": "nixvim",
         "on-air": "on-air",
         "openwrt-imagebuilder": "openwrt-imagebuilder",

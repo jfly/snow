@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  inputs',
+  ...
+}:
 {
   # Remote desktop
   services.xrdp.enable = true;
@@ -16,7 +21,11 @@
 
   environment.systemPackages = [
     # Useful tool for file deduplication.
-    pkgs.czkawka-full
+    # As of 2025-12-26, the latest version has some bugs with gtk: <https://github.com/qarmin/czkawka/issues/1712>
+    # I cannot figure out how to run `krokiet`, so we're using an old version
+    # of `czkawka` for now.
+    inputs'.nixpkgs-25_05.legacyPackages.czkawka-full
+    # pkgs.czkawka-full
 
     # Another useful (albeit unfree) tool for file deduplication.
     (pkgs.bcompare.overrideAttrs (oldAttrs: {

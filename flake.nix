@@ -49,6 +49,10 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # See notes about czkawka in <machines/fflewddur/remote-desktop.nix> for
+    # why we have this input.
+    nixpkgs-25_05.url = "github:NixOS/nixpkgs/nixos-25.05";
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
