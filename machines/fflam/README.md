@@ -18,6 +18,17 @@ The root password is available at `clan vars get fflam rootfs/password`.
 
 Note: this requires the `tor` service to be running (see `machines/pattern/tor.nix`).
 
-## Adding another drive ##
+## Adding another drive
 
-TODO
+Connect the new drive. Find it in `lsblk`. The rest of this example will be for `/dev/sda`.
+
+    nix-shell -p parted
+    DRIVE=/dev/sda
+    parted "$DRIVE" -- mklabel gpt
+    parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
+    mkfs.ext4 "${DRIVE}1"
+
+Get the UUID of the partition you just created (I use `lsblk -f "${DRIVE}1"`).
+Add it to `nasDriveUuids` in `nas.nix`.
+
+(If this is a brand new array, you might want to play with the permissions of the root folder)

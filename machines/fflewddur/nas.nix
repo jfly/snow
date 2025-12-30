@@ -72,14 +72,6 @@ in
     group = "bay";
   };
 
-  users.users.dallben = {
-    group = "media";
-    isNormalUser = true; # Not a real human, but necessary to ssh.
-    openssh.authorizedKeys.keys = [
-      (builtins.readFile ../../vars/shared/dallben-ssh/key.pub/value)
-    ];
-  };
-
   # Set up Samba server (from https://wiki.nixos.org/wiki/Samba)
   services.samba = {
     enable = true;

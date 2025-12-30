@@ -146,7 +146,7 @@ in
   systemd = {
     # Offsite backups.
     timers.fflewddur-backup-to-hetzner = {
-      description = "snow backup timer";
+      description = "fflewddur -> hetzner backup timer";
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "daily";
@@ -154,7 +154,7 @@ in
       };
     };
     services.fflewddur-backup-to-hetzner = {
-      description = "snow backup";
+      description = "fflewddur -> hetzner backup";
       enable = true;
       script = lib.getExe fflewddur-backup-to-hetzner;
     };

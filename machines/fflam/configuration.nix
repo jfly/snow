@@ -7,6 +7,7 @@
     flake.nixosModules.initrd-ssh-tor
     ./hardware-configuration.nix
     ./disko.nix
+    ./nas.nix
   ];
 
   networking.hostName = "fflam";

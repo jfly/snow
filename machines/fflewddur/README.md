@@ -30,5 +30,5 @@ Connect the new drive. Find it in `lsblk`. The rest of this example will be for 
     parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
     mkfs.ext4 "${DRIVE}1"
 
-Get the UUID of the partition you just created (I use `lsblk -f /dev/sda1`).
+Get the UUID of the partition you just created (I use `lsblk -f "${DRIVE}1"`).
 Add it to `nasDriveUuids` in `nas.nix`.
