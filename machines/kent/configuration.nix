@@ -12,6 +12,7 @@
     flake.nixosModules.kodi-colusita
     ./printer.nix
     ./dyndns.nix
+    ./immichframe.nix
   ];
 
   services.openssh.enable = true;

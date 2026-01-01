@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  snow.services.immichframe.proxyPass = "http://localhost:${toString config.services.immichframe.port}";
+  snow.services.immichframe-sc.proxyPass = "http://localhost:${toString config.services.immichframe.port}";
 
   clan.core.vars.generators.immichframe-api-key = {
     prompts."api-key" = {

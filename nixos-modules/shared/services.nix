@@ -14,11 +14,10 @@ let
   hostToServicesFile = ./host-to-services.toml;
   hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
 
-  # Very incomplete. See <routers/strider/files/etc/config/dhcp>.
-  lanIpByHostname = {
-    fflewddur = "192.168.28.172";
+  lanDomains = {
+    ec = "ec";
+    sc = "sc";
   };
-  lanDomain = "ec";
   listenAddressesByParentDomain = {
     # For services on our overlay network, *only* listen on our overlay network
     # address. Otherwise anyone with regular, non overlay IP connectivity to
@@ -33,8 +32,24 @@ let
     # For public services, listen on all IPs. They're public services!
     ${publicDomain} = [ ];
 
-    ${lanDomain} = [
-      lanIpByHostname.${config.networking.hostName}
+    ${lanDomains.ec} = [
+      (
+        # Very incomplete. See <routers/strider/files/etc/config/dhcp>.
+        {
+          fflewddur = "192.168.28.172";
+        }
+        .${config.networking.hostName}
+      )
+    ];
+
+    ${lanDomains.sc} = [
+      (
+        # Incomplete. See <http://primary-router.sc/routers/strider/files/etc/config/dhcp>.
+        {
+          kent = "192.168.1.125";
+        }
+        .${config.networking.hostName}
+      )
     ];
   };
 in
@@ -76,6 +91,13 @@ in
       readOnly = true;
       default = lib.filter (
         service: service.parentDomain == config.snow.tld
+      ) config.snow.servicesOnThisMachine.all;
+    };
+    lan = lib.mkOption {
+      type = lib.types.listOf lib.types.anything;
+      readOnly = true;
+      default = lib.filter (
+        service: lib.elem service.parentDomain (lib.attrValues lanDomains)
       ) config.snow.servicesOnThisMachine.all;
     };
   };
@@ -190,7 +212,8 @@ in
         map (
           service:
           let
-            httpsOnly = service.parentDomain != lanDomain;
+            isLanService = lib.elem service.parentDomain (lib.attrValues lanDomains);
+            httpsOnly = !isLanService;
           in
           {
             ${service.fqdn} = {
@@ -218,8 +241,16 @@ in
         ];
 
     # If there are any public services on this machine, then we must open things up further.
+    # Note: we also open things up if there are any lan interfaces. It would be
+    # better to do this only on the lan interface, but we don't currently track
+    # that. This will be more important in the future if we have any routers
+    # running NixOS.
     networking.firewall.allowedTCPPorts =
-      lib.mkIf (builtins.length config.snow.servicesOnThisMachine.public > 0)
+      lib.mkIf
+        (
+          builtins.length config.snow.servicesOnThisMachine.public > 0
+          || builtins.length config.snow.servicesOnThisMachine.lan > 0
+        )
         [
           80
           443
@@ -298,6 +329,11 @@ in
         # Keep in sync with <routers/strider/files/etc/config/dhcp>.
         subdomain = "frame";
         parentDomain = "ec";
+      };
+      immichframe-sc = {
+        # Keep in sync with <http://primary-router.sc/cgi-bin/luci/admin/network/dhcp>.
+        subdomain = "frame";
+        parentDomain = "sc";
       };
       jackett = { };
       jellyfin = { };
