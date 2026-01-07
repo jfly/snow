@@ -115,7 +115,7 @@ in
                 "http://unix:${oauth2ProxiesDir}/${name}.sock:/oauth2/auth"
                 +
                   lib.optionalString (config.snow.oauth2.allowedGroups != [ ])
-                    "?allowed_groups=${lib.concatStringsSep "," (builtins.map lib.escapeURL config.snow.oauth2.allowedGroups)}";
+                    "?allowed_groups=${lib.concatStringsSep "," (map lib.escapeURL config.snow.oauth2.allowedGroups)}";
               extraConfig = ''
                 auth_request off;
                 internal;

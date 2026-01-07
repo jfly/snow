@@ -21,13 +21,15 @@ in
   # Enable MPD
   services.mpd = {
     enable = true;
-    musicDirectory = "/home/${config.snow.user.name}/media/music";
-    extraConfig = ''
-      audio_output {
-          type "pipewire"
-          name "PipeWire Sound Server"
-      }
-    '';
+    settings = {
+      music_directory = "/home/${config.snow.user.name}/media/music";
+      audio_output = [
+        {
+          type = "pipewire";
+          name = "PipeWire Sound Server";
+        }
+      ];
+    };
     startWhenNeeded = true; # `systemd` feature: only start MPD service upon connection to its socket.
   };
   # Workaround needed because mpd runs as system service, but
@@ -39,7 +41,7 @@ in
   services.mpd.user = config.snow.user.name;
   systemd.services.mpd.environment = {
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609
-    XDG_RUNTIME_DIR = "/run/user/${builtins.toString config.snow.user.uid}";
+    XDG_RUNTIME_DIR = "/run/user/${toString config.snow.user.uid}";
   };
 
   systemd.user.services = {

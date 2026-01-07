@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  pkgs,
   cmake,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "0.2.0";
   pname = "interception-tools-space2meta";
 
-  src = fetchurl {
+  src = pkgs.fetchurl {
     url = "https://gitlab.com/interception/linux/plugins/space2meta/-/archive/v${finalAttrs.version}/space2meta-v${finalAttrs.version}.tar.gz";
     hash = "sha256-dXEtlqkco3e7R5dnJaOedRSA+PYa6pArM3IxCwS0SHo=";
   };

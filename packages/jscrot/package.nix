@@ -14,7 +14,7 @@ pkgs.writeShellApplication {
       flameshot
       savepid
     ]);
-  text = builtins.replaceStrings [ "./bell.oga" ] [ (builtins.toString ./bell.oga) ] (
+  text = builtins.replaceStrings [ "./bell.oga" ] [ (toString ./bell.oga) ] (
     builtins.readFile ./jscrot
   );
 }

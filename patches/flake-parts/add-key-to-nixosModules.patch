@@ -1,26 +1,26 @@
 diff --git a/modules/nixosModules.nix b/modules/nixosModules.nix
-index 737648d..bdcac80 100644
+index 86ee9cc..6dceb92 100644
 --- a/modules/nixosModules.nix
 +++ b/modules/nixosModules.nix
-@@ -15,11 +15,16 @@ in
-       nixosModules = mkOption {
-         type = types.lazyAttrsOf types.deferredModule;
-         default = { };
--        apply = mapAttrs (k: v: {
--          _class = "nixos";
--          _file = "${toString moduleLocation}#nixosModules.${k}";
--          imports = [ v ];
--        });
-+        apply = mapAttrs (k: v:
-+          let
-+            file = "${toString moduleLocation}#nixosModules.${k}";
-+          in
-+            {
-+              _class = "nixos";
-+              _file = file;
-+              key = file;
-+              imports = [ v ];
-+            });
-         description = ''
-           NixOS modules.
-
+@@ -11,11 +11,16 @@ in
+     flake.nixosModules = mkOption {
+       type = types.lazyAttrsOf types.deferredModule;
+       default = { };
+-      apply = mapAttrs (k: v: {
+-        _class = "nixos";
+-        _file = "${toString moduleLocation}#nixosModules.${k}";
+-        imports = [ v ];
+-      });
++      apply = mapAttrs (k: v:
++        let
++          file = "${toString moduleLocation}#nixosModules.${k}";
++        in
++          {
++            _class = "nixos";
++            _file = file;
++            key = file;
++            imports = [ v ];
++          });
+       description = ''
+         NixOS modules.
+ 

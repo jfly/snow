@@ -16,7 +16,7 @@
 
   mailserver = {
     enable = true;
-    certificateScheme = "acme-nginx";
+    x509.useACMEHost = config.mailserver.fqdn;
     stateVersion = 3; # https://nixos-mailserver.readthedocs.io/en/latest/migrations.html
 
     # Keep in sync with `iac/pulumi/app/dns.py`
@@ -46,6 +46,28 @@
   services.postfix.mapFiles.virtual-jfly-test = pkgs.writeText "postfix-virtual-jfly" ''
     me@playground.jflei.com jfly@playground.jflei.com, jeremyfleischman+subscriber@gmail.com
   '';
+
+  # Note that we use nginx to generate a cert because nginx is capable
+  # of passing the "host a file" HTTP challenge.
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+
+    virtualHosts.${config.mailserver.fqdn} = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/" = {
+        extraConfig = ''
+          add_header Content-Type text/plain;
+          return 200 "Welcome";
+        '';
+      };
+    };
+  };
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   # Our step-ca module (used by every machine in the cluster) defaults to
   # querying our self-hosted step-ca for certs. However, that ACME server is

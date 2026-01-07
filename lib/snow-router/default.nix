@@ -14,9 +14,11 @@
 let
   inherit (pkgs.lib)
     attrsToList
-    concatStringsSep
     optionals
     splitString
+    ;
+  inherit (builtins)
+    concatStringsSep
     ;
   inherit (inputs)
     openwrt-imagebuilder

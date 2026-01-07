@@ -12,7 +12,7 @@ let
   publicDomain = "snow.jflei.com";
   regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
   hostToServicesFile = ./host-to-services.toml;
-  hostToServices = builtins.fromTOML (builtins.readFile hostToServicesFile);
+  hostToServices = fromTOML (builtins.readFile hostToServicesFile);
 
   lanDomains = {
     ec = "ec";

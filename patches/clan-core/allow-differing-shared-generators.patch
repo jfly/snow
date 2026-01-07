@@ -1,13 +1,13 @@
-diff --git a/pkgs/clan-cli/clan_cli/vars/generator.py b/pkgs/clan-cli/clan_cli/vars/generator.py
-index d2c9d5e38..71ecda5ad 100644
---- a/pkgs/clan-cli/clan_cli/vars/generator.py
-+++ b/pkgs/clan-cli/clan_cli/vars/generator.py
-@@ -236,7 +236,7 @@ def get_machine_generators(
-                             differences.append("validation_hash")
+diff --git a/pkgs/clan-cli/clan_lib/vars/generator.py b/pkgs/clan-cli/clan_lib/vars/generator.py
+index fd7369d9c..1e95dab94 100644
+--- a/pkgs/clan-cli/clan_lib/vars/generator.py
++++ b/pkgs/clan-cli/clan_lib/vars/generator.py
+@@ -319,7 +319,7 @@ def get_machine_generators(
+                         )
                          if differences:
                              msg = f"Machines {prev_machine} and {machine_name} have different definitions for shared generator '{gen_name}' (differ in: {', '.join(differences)})"
 -                            raise ClanError(msg)
 +                            log.warning(msg)
+
                      else:
                          shared_generators_raw[gen_name] = (
-                             machine_name,

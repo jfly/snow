@@ -20,10 +20,10 @@
       allowedUDPPortRanges = [ allowedPortRange ];
     };
 
-  programs.adb.enable = true;
   users.users.${config.snow.user.name}.extraGroups = [ "adbusers" ];
 
   environment.systemPackages = with pkgs; [
+    android-tools # Provides `adb`.
     scrcpy
   ];
 }

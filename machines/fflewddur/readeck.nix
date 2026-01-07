@@ -18,5 +18,5 @@
     environmentFile = config.clan.core.vars.generators.readeck-env.files."env".path;
   };
 
-  snow.services.readeck.proxyPass = "http://127.0.0.1:${builtins.toString config.services.readeck.settings.server.port}";
+  snow.services.readeck.proxyPass = "http://127.0.0.1:${toString config.services.readeck.settings.server.port}";
 }

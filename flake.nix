@@ -116,9 +116,19 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "luaPackages: update on 2025-11-24";
-            url = "https://github.com/nixos/nixpkgs/commit/91c199b875fc43b3c652c67e90e604845bd6de7c.diff";
-            hash = "sha256-sq/UdnfLa6qBx9AfQz6twHHp++32Ox5JrNp17mCIltA=";
+            name = "linux-wifi-hotspot: fix patch hash";
+            url = "https://github.com/NixOS/nixpkgs/commit/7f889f245d767d10ac4e87695baa85e8f64274a7.diff";
+            hash = "sha256-87+LMeeHJaQ6SYLkwk7I4uTWGuijqjwYE1KgnA3YJNU=";
+          })
+          (fetchpatch {
+            name = "python3Packages.llm: fix build";
+            url = "https://github.com/NixOS/nixpkgs/commit/35606c0780c572993233dcb152613c2d835d58f6.diff";
+            hash = "sha256-Z2RhUyqyTfxbIhe0Le16vCLLZFV9GMiO1AKLlt6FHoU=";
+          })
+          (fetchpatch {
+            name = "python314Packages.llm: disable failing tests";
+            url = "https://github.com/NixOS/nixpkgs/commit/b28eb85200dd9abf93f46012c4cfc31cc0430989.diff";
+            hash = "sha256-yzw5XUv2mxcdKUxqn3a+3dZ54hQmNeqh7aahemIHKa4=";
           })
           (fetchpatch {
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -138,12 +148,7 @@
           (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
-            hash = "sha256-8e/uDUF+FugsGrYZus/pdNgFm4DFFtwoms8K4dGDLzw=";
-          })
-          (fetchpatch {
-            name = "immichframe: init at 1.0.29.0, nixos/immichframe: init module";
-            url = "https://github.com/NixOS/nixpkgs/pull/463563.diff";
-            hash = "sha256-CbvdXKs6g9mysPr7Bee/kPEZrQiEECrePP5bNnam9qE=";
+            hash = "sha256-lASXMmHr3vD9R3xCWTiJ/cA9J3KCi66EDZwJtLjmRKw=";
           })
         ];
 
@@ -164,7 +169,7 @@
           (fetchpatch {
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-uftQwby80cVdi6pTWL6TtQmzStvZmy9YcoO8pguTjjQ=";
+            hash = "sha256-+sgLfoEAGNVgjwQZc4At3ibcW8c9/Zk7g5yiqKdCsdY=";
           })
         ];
 
@@ -173,7 +178,7 @@
             (fetchpatch {
               name = ''Reapply "machines update: support `--target-host localhost`"'';
               url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-wARwH7V3ZY+6CphOf+p8MGt7PDLOgtEM9QOkP/6kcTQ=";
+              hash = "sha256-aVj+fQhMJ8j4Ufl+JWEbpUUPP/Vhu5GrcFQnR6T4+4E=";
             })
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm
