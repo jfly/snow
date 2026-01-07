@@ -9,6 +9,7 @@ let
     "/mnt/disk1" = "bdea6b72-18d2-479d-bd54-f4e85e24449c";
     "/mnt/disk2" = "9ce5e827-9e77-4aef-9d22-3b09bc0d512b";
     "/mnt/disk3" = "f17a98d0-6547-47f5-b9d1-08c1ca4a233a";
+    "/mnt/disk4" = "dac09fb6-d300-4892-b83b-3acef83cc757";
   };
 in
 {

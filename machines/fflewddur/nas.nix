@@ -9,7 +9,6 @@ let
   # Want to add a new drive? See README.md for instructions.
   nasDriveUuids = {
     "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
-    # "/mnt/disk2" = "dac09fb6-d300-4892-b83b-3acef83cc757"; # TODO: <<< move this 12TiB drive to fflam >>>
     "/mnt/disk3" = "54bf0c49-f945-4905-8bc5-d1f01f305741";
     "/mnt/disk4" = "20a88b0b-3f2e-4579-8f86-a47d7b5b343a";
   };
@@ -31,19 +30,6 @@ in
       ];
     }) nasDriveUuids)
     // {
-      "/mnt/old-disk-2-remove-me" = {
-        # TODO: <<< move this 12TiB drive to fflam >>>
-        # Note: we're ignoring the archive folder because Rachel's actively
-        # making changes in there.
-        # `sudo rsync -avP /mnt/old-disk-2-remove-me/ /mnt/bay/ --exclude archive --dry-run`
-        device = "/dev/disk/by-uuid/dac09fb6-d300-4892-b83b-3acef83cc757";
-        fsType = "ext4";
-        options = [
-          "rw"
-          "user"
-          "auto"
-        ];
-      };
       "/mnt/bay" = {
         device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
         fsType = "fuse.mergerfs";

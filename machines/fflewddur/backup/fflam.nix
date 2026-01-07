@@ -27,8 +27,9 @@ let
     ];
     text =
       let
-        # <<< TODO: backup the full `/mnt/bay` >>>
-        backupPath = "/mnt/bay";
+        # Note: the trailing slash here is really important for rsync to do the
+        # right thing!
+        backupPath = "/mnt/bay/";
       in
       ''
         start_time=$(date +%s.%N)
