@@ -114,6 +114,14 @@ in
     };
   };
 
+  # Samba needs a corresponding unix user. Unfortunately, there is currently no
+  # mechanism to declaratively manage sambda credentials. See
+  # <machines/dallben/arr/mnt-media.nix>.
+  users.users.dallben = {
+    group = "media";
+    isSystemUser = true;
+  };
+
   # Advertise shares.
   services.avahi = {
     publish.enable = true;

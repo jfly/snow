@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 {
-  # After generating, fetch the value and create a sambda user with the credentials:
+  # After generating, fetch the value and create a samba user with the credentials:
   # ```console
   # $ clan vars get dallben dallben-samba-credentials/credentials
   # $ ssh fflewddur sudo smbpasswd -a dallben
