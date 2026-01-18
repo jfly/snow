@@ -26,11 +26,41 @@ in
         neovim-lite = flake'.packages.neovim.override { full = false; };
       } "neovim-lite" { };
 
-      tld = lib.mkOption {
-        type = lib.types.str;
-        description = "TLD for services hosted on the overlay network";
-        default = "m";
-        readOnly = true;
+      network = {
+        overlay = {
+          tld = lib.mkOption {
+            type = lib.types.str;
+            description = "TLD for services hosted on the overlay network";
+            default = "m";
+            readOnly = true;
+          };
+          ip = lib.mkOption {
+            description = "IP of this node on the overlay network";
+            default = builtins.readFile ../../vars/per-machine/${config.networking.hostName}/zerotier/zerotier-ip/value;
+            readOnly = true;
+          };
+        };
+
+        lan = lib.mkOption {
+          type = lib.types.nullOr (
+            lib.types.submodule {
+              options = {
+                tld = lib.mkOption {
+                  type = lib.types.nullOr (
+                    lib.types.enum [
+                      "ec"
+                      "sc"
+                    ]
+                  );
+                };
+                ip = lib.mkOption {
+                  type = lib.types.str;
+                };
+              };
+            }
+          );
+          default = null;
+        };
       };
 
       subnets = lib.mkOption {
@@ -80,7 +110,7 @@ in
   };
 
   config = {
-    networking.domain = config.snow.tld;
+    networking.domain = config.snow.network.overlay.tld;
 
     clan.core = {
       settings.state-version.enable = true;

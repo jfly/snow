@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  inherit (config.snow) services;
+in
 {
   services.immich = {
     enable = true;
@@ -31,4 +34,17 @@
   '';
 
   snow.backup.paths = [ "/var/lib/immich" ];
+
+  # Immich Public Proxy
+  services.immich-public-proxy = {
+    enable = true;
+    port = 2284;
+    immichUrl = services.immich.baseUrl;
+    settings.ipp = {
+      showMetadata.description = true;
+      showGalleryTitle = true;
+      allowDownloadAll = 1; # "follow Immich setting per share"
+    };
+  };
+  snow.services.immich-public-proxy.proxyPass = "http://[::1]:${toString config.services.immich-public-proxy.port}";
 }

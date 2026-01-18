@@ -2,6 +2,11 @@
 
 {
   networking.hostName = "kent";
+  snow.network.lan = {
+    tld = "sc";
+    # Keep this in sync with <http://primary-router.sc/routers/strider/files/etc/config/dhcp>.
+    ip = "192.168.1.125";
+  };
 
   imports = [
     flake.nixosModules.shared

@@ -31,7 +31,7 @@ let
   '';
 in
 writeShellApplication {
-  name = "fix-host-to-services";
+  name = "gen-hosts";
   runtimeInputs = [ (python3.withPackages (ps: [ ps.tomli-w ])) ];
   text = ''
     echo ${lib.escapeShellArg (builtins.toJSON hostToNonemptyServices)} | ${lib.getExe json2Toml}

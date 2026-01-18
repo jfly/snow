@@ -9,7 +9,7 @@ let
   inherit (config.snow) services;
 
   domain = {
-    tld = config.snow.tld;
+    tld = config.snow.network.overlay.tld;
     sld = services.step-ca.sld;
     # This domain is handled by nginx (other servers will use this to generate certs).
     fqdn = services.step-ca.fqdn;

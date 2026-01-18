@@ -168,7 +168,7 @@ class Dns:
             -----END AGE ENCRYPTED FILE-----
             """
         )
-        self._jflei_com.cname(secret_project, "cname.vercel-dns.com")
+        self._jflei_com.cname(secret_project, "3881b6ccac0e9f74.vercel-dns-017.com.")
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain

@@ -20,11 +20,11 @@ The Jellyfin plugin has a number of things to do on first boot. Here's what you
 need to do to get it working:
 
 1. (If necessary) Add a new Jellyfin user for whatever device you're
-   configuring: <https://jellyfin.snow.jflei.com/web/#/dashboard/users>
+   configuring: <https://jellyfin.m/web/#/dashboard/users>
    - Do NOT allow media deletion!
 2. Start up Kodi.
 3. It should ask if you want to enable Jellyfin. Say yes.
-4. A "Select main server" modal will pop up. Fill in `jellyfin.snow.jflei.com`
+4. A "Select main server" modal will pop up. Fill in `jellyfin.m`
 5. Fill in the username and password from step 1.
 6. When asked about playback mode, select "Add-on".
 7. Addons > Jellyfin > Settings > Advanced > Startup delay (in seconds): set this to 5.

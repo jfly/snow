@@ -9,49 +9,46 @@ let
   oauth2ServiceNeedingClientSecretGenerator = lib.filterAttrs (
     name: service: service.oauth2.generateClientSecret or false
   ) config.snow.services;
-  publicDomain = "snow.jflei.com";
+  publicDomains = [
+    "snow.jflei.com"
+    "ramfly.net"
+  ];
   regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
   hostToServicesFile = ./host-to-services.toml;
   hostToServices = fromTOML (builtins.readFile hostToServicesFile);
 
-  lanDomains = {
-    ec = "ec";
-    sc = "sc";
-  };
   listenAddressesByParentDomain = {
     # For services on our overlay network, *only* listen on our overlay network
-    # address. Otherwise anyone with regular, non overlay IP connectivity to
+    # address. Otherwise anyone with regular, non-overlay IP connectivity to
     # this machine could talk to the virtualHost, thereby defeating the purpose
     # of the overlay network.
-    ${config.snow.tld} =
-      let
-        myIp = builtins.readFile ../../vars/per-machine/${config.networking.hostName}/zerotier/zerotier-ip/value;
-      in
-      [ "[${myIp}]" ];
-
-    # For public services, listen on all IPs. They're public services!
-    ${publicDomain} = [ ];
-
-    ${lanDomains.ec} = [
-      (
-        # Very incomplete. See <routers/strider/files/etc/config/dhcp>.
-        {
-          fflewddur = "192.168.28.172";
-        }
-        .${config.networking.hostName}
+    ${config.snow.network.overlay.tld} = [ "[${config.snow.network.overlay.ip}]" ];
+  }
+  // (lib.optionalAttrs (config.snow.network.lan != null) {
+    ${config.snow.network.lan.tld} = [ config.snow.network.lan.ip ];
+  })
+  // (lib.listToAttrs (
+    map (
+      publicDomain:
+      lib.nameValuePair publicDomain (
+        # For public services, listen on all IPs. They're public services!
+        [
+          "0.0.0.0"
+          "[::1]"
+        ]
+        # This is a bit strange: we have to explicitly listen on the lan IPs as
+        # well, even though they're covered by the wildcard addresses above.
+        # This is because of how nginx picks `server {}` blocks: it first
+        # looks for server blocks with specific IPs, and only after that does
+        # it consider server blocks listening on wildcard addresses. When
+        # someone inside of the lan tries to talk to a public service, the
+        # source IP will be on the LAN: so we need the public service to have
+        # an explicit LAN IP as well so its server block doesn't "lose" to a
+        # server block for some other lan-only service.
+        ++ (lib.optional (config.snow.network.lan != null) config.snow.network.lan.ip)
       )
-    ];
-
-    ${lanDomains.sc} = [
-      (
-        # Incomplete. See <http://primary-router.sc/routers/strider/files/etc/config/dhcp>.
-        {
-          kent = "192.168.1.125";
-        }
-        .${config.networking.hostName}
-      )
-    ];
-  };
+    ) publicDomains
+  ));
 in
 {
   options.snow.generateAllOauth2ClientSecrets = lib.mkEnableOption ''
@@ -83,21 +80,21 @@ in
       type = lib.types.listOf lib.types.anything;
       readOnly = true;
       default = lib.filter (
-        service: service.parentDomain == publicDomain
+        service: lib.elem service.parentDomain publicDomains
       ) config.snow.servicesOnThisMachine.all;
     };
     private = lib.mkOption {
       type = lib.types.listOf lib.types.anything;
       readOnly = true;
       default = lib.filter (
-        service: service.parentDomain == config.snow.tld
+        service: service.parentDomain == config.snow.network.overlay.tld
       ) config.snow.servicesOnThisMachine.all;
     };
     lan = lib.mkOption {
       type = lib.types.listOf lib.types.anything;
       readOnly = true;
       default = lib.filter (
-        service: lib.elem service.parentDomain (lib.attrValues lanDomains)
+        service: service.parentDomain == config.snow.network.lan.tld
       ) config.snow.servicesOnThisMachine.all;
     };
   };
@@ -129,9 +126,17 @@ in
               default = name;
             };
             parentDomain = lib.mkOption {
-              type = lib.types.enum (lib.attrNames listenAddressesByParentDomain);
+              type = lib.types.enum (
+                [
+                  config.snow.network.overlay.tld
+                  # LAN TLDs.
+                  "ec"
+                  "sc"
+                ]
+                ++ publicDomains
+              );
               # Default to private (only accessible on our overlay network).
-              default = config.snow.tld;
+              default = config.snow.network.overlay.tld;
             };
             fqdn = lib.mkOption {
               type = lib.types.str;
@@ -212,7 +217,7 @@ in
         map (
           service:
           let
-            isLanService = lib.elem service.parentDomain (lib.attrValues lanDomains);
+            isLanService = service.parentDomain == config.snow.network.lan.tld;
             httpsOnly = !isLanService;
           in
           {
@@ -335,12 +340,12 @@ in
         subdomain = "frame";
         parentDomain = "sc";
       };
+      immich-public-proxy = {
+        subdomain = "photos";
+        parentDomain = "ramfly.net";
+      };
       jackett = { };
       jellyfin = { };
-      jellyfin-public = {
-        subdomain = "jellyfin";
-        parentDomain = "snow.jflei.com";
-      };
       kanidm = {
         subdomain = "auth";
         paths = {

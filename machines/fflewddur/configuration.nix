@@ -33,6 +33,11 @@
   ];
 
   networking.hostName = "fflewddur";
+  snow.network.lan = {
+    tld = "ec";
+    # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
+    ip = "192.168.28.172";
+  };
 
   # i18n stuff
   time.timeZone = "America/Los_Angeles";

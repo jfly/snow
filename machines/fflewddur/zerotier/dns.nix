@@ -35,7 +35,7 @@
     # choose to use the DNS settings provided by a ZeroTier controller when
     # they connect.
     dns = {
-      "domain" = config.snow.tld;
+      "domain" = config.snow.network.overlay.tld;
       "servers" = [ config.clan.core.vars.generators.zerotier.files.zerotier-ip.value ];
     };
 
