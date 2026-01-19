@@ -49,6 +49,9 @@ let
       )
     ) publicDomains
   ));
+
+  isLanService =
+    service: config.snow.network.lan != null && service.parentDomain == config.snow.network.lan.tld;
 in
 {
   options.snow.generateAllOauth2ClientSecrets = lib.mkEnableOption ''
@@ -93,9 +96,7 @@ in
     lan = lib.mkOption {
       type = lib.types.listOf lib.types.anything;
       readOnly = true;
-      default = lib.filter (
-        service: service.parentDomain == config.snow.network.lan.tld
-      ) config.snow.servicesOnThisMachine.all;
+      default = lib.filter isLanService config.snow.servicesOnThisMachine.all;
     };
   };
 
@@ -217,8 +218,7 @@ in
         map (
           service:
           let
-            isLanService = service.parentDomain == config.snow.network.lan.tld;
-            httpsOnly = !isLanService;
+            httpsOnly = !(isLanService service);
           in
           {
             ${service.fqdn} = {

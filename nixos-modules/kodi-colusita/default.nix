@@ -41,9 +41,21 @@ let
       ))
     ];
     buildInputs = [ pkgs.makeWrapper ];
+
     # Adding `gdb` to the `PATH` allows Kodi's coredumps to include stack traces.
+    #
+    # Setting `NIX_SSL_CERT_FILE` because Python applications in NixOS seem to
+    # not honor the system certificate bundle. See
+    # <machines/fflewddur/home-assistant/default.nix> for a
+    # similar hack.
+    # This feels like something that NixOS could improve. It already has a
+    # patch in place for `certifi` (which both Kodi and Home Assistant use),
+    # it would probably not be a lot of work to make them honor the system
+    # certificate bundle out of the box.
     postBuild = ''
-      wrapProgram $out/bin/kodi --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]}
+      wrapProgram $out/bin/kodi \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]} \
+        --set-default NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
     '';
   };
 in
@@ -108,8 +120,9 @@ in
       enable = cfg.startOnBoot;
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
+
       serviceConfig = {
-        ExecStart = "${myKodi}/bin/kodi";
+        ExecStart = lib.getExe myKodi;
         # Kodi segfaults periodically :cry:. Start it back up if it crashes.
         Restart = "on-failure";
         # Kodi often hangs when shutting down. I haven't been able to find
