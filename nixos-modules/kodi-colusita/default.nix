@@ -57,6 +57,8 @@ let
         --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]} \
         --set-default NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
     '';
+
+    meta.mainProgram = "kodi";
   };
 in
 
