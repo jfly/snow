@@ -105,17 +105,17 @@ in
       {
         key = cfg.toggle_key;
         options.desc = "Toggle quickfix list";
-        action = mkRaw ''snow_qf.toggle'';
+        action = mkRaw "snow_qf.toggle";
       }
       {
         key = "n";
         options.desc = "Search forwards, or navigate to next quickfix if the quickfix window is open";
-        action = mkRaw ''snow_qf.next'';
+        action = mkRaw "snow_qf.next";
       }
       {
         key = "N";
         options.desc = "Search backwards, or navigate to prev quickfix if the quickfix window is open";
-        action = mkRaw ''snow_qf.prev'';
+        action = mkRaw "snow_qf.prev";
       }
       {
         key = "]q";

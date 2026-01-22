@@ -116,21 +116,6 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "linux-wifi-hotspot: fix patch hash";
-            url = "https://github.com/NixOS/nixpkgs/commit/7f889f245d767d10ac4e87695baa85e8f64274a7.diff";
-            hash = "sha256-87+LMeeHJaQ6SYLkwk7I4uTWGuijqjwYE1KgnA3YJNU=";
-          })
-          (fetchpatch {
-            name = "python3Packages.llm: fix build";
-            url = "https://github.com/NixOS/nixpkgs/commit/35606c0780c572993233dcb152613c2d835d58f6.diff";
-            hash = "sha256-Z2RhUyqyTfxbIhe0Le16vCLLZFV9GMiO1AKLlt6FHoU=";
-          })
-          (fetchpatch {
-            name = "python314Packages.llm: disable failing tests";
-            url = "https://github.com/NixOS/nixpkgs/commit/b28eb85200dd9abf93f46012c4cfc31cc0430989.diff";
-            hash = "sha256-yzw5XUv2mxcdKUxqn3a+3dZ54hQmNeqh7aahemIHKa4=";
-          })
-          (fetchpatch {
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
             url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
             hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
@@ -178,7 +163,7 @@
             (fetchpatch {
               name = ''Reapply "machines update: support `--target-host localhost`"'';
               url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-aVj+fQhMJ8j4Ufl+JWEbpUUPP/Vhu5GrcFQnR6T4+4E=";
+              hash = "sha256-zEM6eFsOefH00k0fyrIHTPW7lUg5efSOctOREKHpPa0=";
             })
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm

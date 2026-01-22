@@ -102,11 +102,11 @@ requires-dist = [
 
 [[package]]
 name = "dill"
-version = "0.4.0"
+version = "0.4.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/12/80/630b4b88364e9a8c8c5797f4602d0f76ef820909ee32f0bacb9f90654042/dill-0.4.0.tar.gz", hash = "sha256:0633f1d2df477324f53a895b02c901fb961bdbf65a17122586ea7019292cbcf0", size = 186976, upload-time = "2025-04-16T00:41:48.867Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/81/e1/56027a71e31b02ddc53c7d65b01e68edf64dea2932122fe7746a516f75d5/dill-0.4.1.tar.gz", hash = "sha256:423092df4182177d4d8ba8290c8a5b640c66ab35ec7da59ccfa00f6fa3eea5fa", size = 187315, upload-time = "2026-01-19T02:36:56.85Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/3d/9373ad9c56321fdab5b41197068e1d8c25883b3fea29dd361f9b55116869/dill-0.4.0-py3-none-any.whl", hash = "sha256:44f54bf6412c2c8464c14e8243eb163690a9800dbe2c367330883b19c7561049", size = 119668, upload-time = "2025-04-16T00:41:47.671Z" },
+    { url = "https://files.pythonhosted.org/packages/1e/77/dc8c558f7593132cf8fefec57c4f60c83b16941c574ac5f619abb3ae7933/dill-0.4.1-py3-none-any.whl", hash = "sha256:1e1ce33e978ae97fcfcff5638477032b801c46c7c65cf717f95fbc2248f79a9d", size = 120019, upload-time = "2026-01-19T02:36:55.663Z" },
 ]
 
 [[package]]
@@ -218,7 +218,7 @@ wheels = [
 
 [[package]]
 name = "pulumi"
-version = "3.214.1"
+version = "3.216.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "debugpy" },
@@ -230,21 +230,21 @@ dependencies = [
     { name = "semver" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/38/30/dbe92774f07501390bfbf4f69ca339d9b3af9b88b53179b28010282746a4/pulumi-3.214.1-py3-none-any.whl", hash = "sha256:9bb7b8da67bc0becf964f00469beed0c41fae99b7605c8a08b82171b8c2ef975", size = 385453, upload-time = "2026-01-03T09:40:35.968Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/18/e11b5971b4871e90d8c0a4c319b0cbb8149707f1519f02b9f6cddf2ced23/pulumi-3.216.0-py3-none-any.whl", hash = "sha256:bb34dc268232c30bbb177ee7c5d20df5117e019ad955ab4c13d1bfe3ec559e93", size = 386481, upload-time = "2026-01-16T11:41:59.902Z" },
 ]
 
 [[package]]
 name = "pulumi-cloudflare"
-version = "6.12.0"
+version = "6.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "parver" },
     { name = "pulumi" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/73/59/07a81aaa1742b7de6c074f91e0e9bce964819e2f33ab231f5ae0aaa79074/pulumi_cloudflare-6.12.0.tar.gz", hash = "sha256:023335dad420d7d547491df0c0ac384ad686ca537bc3043a10c9c0ca3a05e92a", size = 1516204, upload-time = "2025-12-24T19:05:50.299Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bf/9e/f8ab4ab5af0f498235f49243b7f54d8b0c515fc8666e897d25c4df6555aa/pulumi_cloudflare-6.13.0.tar.gz", hash = "sha256:6ff200f72f89aba45258e498abd93e619bf2583e23926bdb5a4ea99961f9d3f6", size = 1523744, upload-time = "2026-01-21T06:34:06.478Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d2/5b/f4af2149659923d2e83ca3b8a4b7de6686f562c699e9a2af21dc21bda288/pulumi_cloudflare-6.12.0-py3-none-any.whl", hash = "sha256:a3a88422edc57c5c578b45469a45a3dd28bf67b468df88d02cb42af46d7af2ff", size = 2312091, upload-time = "2025-12-24T19:05:48.591Z" },
+    { url = "https://files.pythonhosted.org/packages/7d/41/2d48495faa8a126f7831e3f19a705165d82526577f9d49a318c255c34397/pulumi_cloudflare-6.13.0-py3-none-any.whl", hash = "sha256:4caa5203377ec436e338b60a5f702ddbd8e94800bdb981f92ff711250af167fa", size = 2318979, upload-time = "2026-01-21T06:34:04.561Z" },
 ]
 
 [[package]]
