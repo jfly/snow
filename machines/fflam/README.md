@@ -22,13 +22,25 @@ Note: this requires the `tor` service to be running (see `machines/pattern/tor.n
 
 Connect the new drive. Find it in `lsblk`. The rest of this example will be for `/dev/sda`.
 
-    nix-shell -p parted
-    DRIVE=/dev/sda
-    parted "$DRIVE" -- mklabel gpt
-    parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
-    mkfs.ext4 "${DRIVE}1"
+Create a single partition that fills the whole disk (this isn't strictly
+necessary, but probably plays more nicely with other tooling):
 
-Get the UUID of the partition you just created (I use `lsblk -f "${DRIVE}1"`).
-Add it to `nasDriveUuids` in `nas.nix`.
+```console
+nix-shell -p parted
+DRIVE=/dev/sda
+parted "$DRIVE" -- mklabel gpt
+parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
+```
 
-(If this is a brand new array, you might want to play with the permissions of the root folder)
+Now add that drive to the pool (if the pool doesn't exist yet, see next command):
+
+```
+bcachefs device add --rotational /dev/disk/by-uuid/5dc8ec0c-cd70-4549-bd91-adca08356225 "${DRIVE}1"
+```
+
+If creating a new pool (you may want to change the permissions of the root
+folder after this):
+
+```
+bcachefs format --encrypted --metadata_replicas=2 --rotational "${DRIVE}1"
+```

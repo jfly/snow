@@ -131,7 +131,7 @@ in
       ];
     };
 
-    # Retry up to 3 times before giving up.
+    # Retry a few times before giving up.
     unitConfig = {
       StartLimitIntervalSec = "5 min";
       StartLimitBurst = 3;
