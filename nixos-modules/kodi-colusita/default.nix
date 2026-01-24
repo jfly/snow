@@ -126,7 +126,10 @@ in
       serviceConfig = {
         ExecStart = lib.getExe myKodi;
         # Kodi segfaults periodically :cry:. Start it back up if it crashes.
-        Restart = "on-failure";
+        # It also seems to just exit 0 sometimes (which is why we're using
+        # "always" rather than "on-failure")? No idea what's going on there. Oh
+        # well.
+        Restart = "always";
         # Kodi often hangs when shutting down. I haven't been able to find
         # much of a discussion about this, but I have found how 2 other projects handle this:
         #
