@@ -1,0 +1,25 @@
+diff --git a/src/commands/mount.rs b/src/commands/mount.rs
+index 9a2975da..cf9febaf 100644
+--- a/src/commands/mount.rs
++++ b/src/commands/mount.rs
+@@ -221,7 +221,7 @@ fn check_bcachefs_module() -> bool {
+     let path = Path::new("/sys/module/bcachefs");
+
+     path.exists() || {
+-        let _ = std::process::Command::new("modprobe")
++        let _ = std::process::Command::new("modprobe") //<<< this fails to find a `modprobe` in the PATH
+             .arg("bcachefs")
+             .status();
+         path.exists()
+diff --git a/src/key.rs b/src/key.rs
+index 1fd6ce0b..4dd1ee27 100644
+--- a/src/key.rs
++++ b/src/key.rs
+@@ -160,6 +160,7 @@ impl Passphrase {
+             .arg("--icon=drive-harddisk")
+             .arg(format!("--id=bcachefs:{}", uuid.as_hyphenated()))
+             .arg(format!("--keyname={}", uuid.as_hyphenated()))
++            .arg("--timeout=0")
+             .arg("--accept-cached")
+             .arg("-n")
+             .arg("Enter passphrase: ")

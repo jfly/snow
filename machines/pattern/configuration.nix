@@ -10,6 +10,7 @@
     uid = 1000;
   };
 
+  boot.supportedFilesystems = [ "bcachefs" ]; # <<<
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable deployments by non-root user.

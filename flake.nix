@@ -151,6 +151,7 @@
             url = "https://github.com/NixOS/nixpkgs/pull/485251.diff";
             hash = "sha256-6DfWKZKF1Scx5YD60V4RwxDJZmWj0o/m+rzA8CH+Rtw=";
           })
+          ./hack.patch
         ];
 
         openwrt-imagebuilder.patches = [

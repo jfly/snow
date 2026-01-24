@@ -40,3 +40,13 @@ Host kent2
     HostName kent2.cottage
     User jfly
 ###
+
+Host locked-vm-initrd
+    HostName localhost
+    Port 5555
+    User root
+
+Host locked-vm
+    HostName 127.0.0.1
+    Port 5555
+    User jfly

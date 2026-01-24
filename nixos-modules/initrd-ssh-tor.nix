@@ -4,6 +4,7 @@
 {
   flake,
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -43,9 +44,16 @@ in
   boot.initrd.systemd.enable = true;
 
   boot.initrd.systemd.storePaths = [
-    "${pkgs.tor}/bin/tor"
+    (lib.getExe pkgs.tor)
     torRc
   ];
+
+  #<<<
+  boot.initrd.systemd.extraBin = {
+    "nvim" = lib.getExe pkgs.neovim; # <<<
+    "keyctl" = lib.getExe' pkgs.keyutils "keyctl"; # <<<
+  };
+  #<<<
 
   boot.initrd.systemd.services.tor = {
     wantedBy = [ "initrd.target" ];

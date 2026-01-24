@@ -138,24 +138,9 @@
       );
     };
   };
-  # <<< DONE >>>
-  # sudo mount /dev/disk/by-partuuid/4b8111f7-e28d-435d-9c42-d3fe0b6d8e00 /mnt/disk1
-  # sudo rsync -aAXUH --info=progress2 --human-readable --no-inc-recursive /mnt/disk1/ /mnt/bay/
-  # sudo umount /mnt/disk1 && sudo rmdir /mnt/disk1/
-  # sudo bcachefs device add --rotational /dev/disk/by-uuid/5dc8ec0c-cd70-4549-bd91-adca08356225 /dev/disk/by-partuuid/4b8111f7-e28d-435d-9c42-d3fe0b6d8e00
-  #
-  # sudo mount /dev/disk/by-partuuid/8e3f78e3-9941-4c6b-8867-be131adf5b87 /mnt/disk4
-  # <<< IN PROGRESS >>>
-  # NOTE: this will fail as it has 12 TiB on it, but /mnt/bay only has 9.7 TiB of free space.
-  # sudo rsync -aAXUH --info=progress2 --human-readable --no-inc-recursive /mnt/disk4/ /mnt/bay/
-  # sudo umount /mnt/disk4 && sudo rmdir /mnt/disk4/
-  # sudo bcachefs device add --rotational /dev/disk/by-uuid/8e3f78e3-9941-4c6b-8867-be131adf5b87 /dev/disk/by-partuuid/8e3f78e3-9941-4c6b-8867-be131adf5b87
-  #
-  # <<< TODO >>>: confirm there are no leftover mountpoints: /mnt/disk*
 
   # Allow fflewddur to push backups here.
-  # <<< users.users.root.openssh.authorizedKeys.keys = [
-  # <<<   (builtins.readFile ../../vars/shared/fflewddur-fflam-backup-ssh/key.pub/value)
-  # <<< ];
-  # <<< TODO >>>: confirm that `fflewddur-backup-to-fflam.service` succeeds on fflewddur
+  users.users.root.openssh.authorizedKeys.keys = [
+    (builtins.readFile ../../vars/shared/fflewddur-fflam-backup-ssh/key.pub/value)
+  ];
 }

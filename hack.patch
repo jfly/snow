@@ -1,0 +1,32 @@
+diff --git a/nixos/modules/tasks/filesystems/bcachefs.nix b/nixos/modules/tasks/filesystems/bcachefs.nix
+index 362f6ff32b10..516e176cc4b2 100644
+--- a/nixos/modules/tasks/filesystems/bcachefs.nix
++++ b/nixos/modules/tasks/filesystems/bcachefs.nix
+@@ -251,12 +251,12 @@ in
+
+         boot.extraModulePackages = [ cfg.modulePackage ];
+
+-        systemd = {
+-          packages = [ cfg.package ];
+-          services = lib.mapAttrs' (mkUnits "") (
+-            lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems
+-          );
+-        };
++        # <<< systemd = {
++        # <<<   packages = [ cfg.package ];
++        # <<<   services = lib.mapAttrs' (mkUnits "") (
++        # <<<     lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems
++        # <<<   );
++        # <<< };
+       }
+
+       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
+@@ -288,7 +288,7 @@ in
+           commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
+         );
+
+-        boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
++        # <<< boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
+       })
+
+       (lib.mkIf (cfgScrub.enable) {
