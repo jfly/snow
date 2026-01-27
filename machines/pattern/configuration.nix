@@ -46,6 +46,7 @@
     ./waydroid.nix
     ./remote-fs.nix
     ./steam.nix
+    ./irc-client.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

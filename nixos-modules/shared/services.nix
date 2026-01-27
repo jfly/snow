@@ -344,6 +344,7 @@ in
         subdomain = "photos";
         parentDomain = "ramfly.net";
       };
+      irc = { };
       jackett = { };
       jellyfin = { };
       kanidm = {

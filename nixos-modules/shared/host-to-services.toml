@@ -28,6 +28,7 @@ fflewddur = [
     "grafana.m",
     "home-assistant.m",
     "immich.m",
+    "irc.m",
     "jellyfin.m",
     "manman.m",
     "media.m",

@@ -104,7 +104,9 @@ in
     add_header Content-Type text/plain;
     return 200 "There's a MQTT server here at :${toString ports.mqtt} and a MQTTS server at :${toString ports.mqtts}";
   '';
-  security.acme.certs.${services.mqtt.fqdn}.reloadServices = [ "mosquitto.service" ];
+  security.acme.certs.${services.mqtt.fqdn}.reloadServices = [
+    config.systemd.services.mosquitto.name
+  ];
 
   # TODO: port HA to use MQTTS. I cannot get it to work. See
   # <https://github.com/home-assistant/core/issues/130643>
@@ -162,7 +164,7 @@ in
       done
     '';
 
-    # Allow all traffic from the overlay network.
+    # Allow traffic only from the overlay network.
     interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = builtins.attrValues ports;
   };
 }

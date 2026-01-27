@@ -30,6 +30,7 @@
     ./frigate.nix
     ./readeck.nix
     ./beets.nix
+    ./irc-bouncer.nix
   ];
 
   networking.hostName = "fflewddur";
