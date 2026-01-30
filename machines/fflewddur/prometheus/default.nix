@@ -10,6 +10,7 @@ in
     ./scrapers/up.nix
     ./scrapers/node.nix
     ./scrapers/smartctl.nix
+    ./scrapers/prometheus.nix
     # Blackbox is unique: we run the exporter and the corresponding scraper on
     # only this node.
     ./blackbox.nix
