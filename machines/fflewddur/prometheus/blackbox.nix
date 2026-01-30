@@ -113,6 +113,8 @@ in
           services.manman.baseUrl
           services.media.baseUrl
           services.ospi.baseUrl
+          "http://thermostat.ec/fan"
+          "http://garage.ec/garage"
         ];
       })
     ];
