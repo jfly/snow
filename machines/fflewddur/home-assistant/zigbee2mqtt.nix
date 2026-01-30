@@ -10,6 +10,8 @@
     package = pkgs.zigbee2mqtt_2;
     settings = {
       homeassistant.enabled = true;
+      availability.enabled = true;
+      advanced.last_seen = "ISO_8601";
       frontend = {
         enabled = true;
         port = 4040;

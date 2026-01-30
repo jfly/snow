@@ -21,6 +21,13 @@ in
         heater = "switch.furnace";
         target_sensor = "sensor.snow_therm_target";
       }
+      {
+        unique_id = "bed_therm";
+        platform = "generic_thermostat";
+        name = "Bedroom Therm";
+        heater = "switch.south_bedroom_outlet";
+        target_sensor = "sensor.south_bedroom_weather_temperature";
+      }
     ];
     template = [
       {
