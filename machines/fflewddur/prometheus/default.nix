@@ -10,15 +10,23 @@ in
     ./scrapers/up.nix
     ./scrapers/node.nix
     ./scrapers/smartctl.nix
-    ./scrapers/prometheus.nix
     # Blackbox is unique: we run the exporter and the corresponding scraper on
     # only this node.
     ./blackbox.nix
+    # mqtt-exporter is also unique: we run the exporter and the corresponding
+    # scraper on only this node.
+    ./mqtt-exporter.nix
+    # Prometheus is also unique: there's only one node running Prometheus.
+    ./scrapers/prometheus.nix
   ];
 
   services.prometheus = {
     enable = true;
+    extraFlags = [
+      # "--web.enable-admin-api"
+    ];
     webExternalUrl = services.prometheus.baseUrl;
+    retentionTime = "100y";
 
     # Set up a dead man's switch to monitor Prometheus itself.
     # Modeled after this blog post:
@@ -45,4 +53,6 @@ in
   };
 
   snow.services.prometheus.proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
+
+  snow.backup.paths = [ "/var/lib/${config.services.prometheus.stateDir}/data" ];
 }

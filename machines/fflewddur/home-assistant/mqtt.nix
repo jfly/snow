@@ -16,7 +16,7 @@ let
   ports.mqtts = 8883;
   # After adding a user to the list, get their password with:
   # ```console
-  # $ clan vars get fflewddur mqtt-jfly/password
+  # $ clan vars generate fflewddur && clan vars get fflewddur mqtt-[USERNAME]/password
   # ```
   mqttUsers = [
     "jfly"
@@ -25,6 +25,7 @@ let
     "aragorn"
     "elfstone"
     "zigbee2mqtt"
+    "mqtt-exporter"
 
     ### Light switches
     # See
@@ -69,7 +70,7 @@ let
     (map (
       userName:
       (lib.nameValuePair "mqtt-${userName}" {
-        files."password".deploy = userName == "zigbee2mqtt"; # TODO: port to clan's inventory system and put this in machines/fflewddur/home-assistant/zigbee2mqtt.nix instead.
+        files."password".deploy = lib.mkDefault false; # This may be overridden by other modules that need the password (for example, see <machines/fflewddur/home-assistant/zigbee2mqtt.nix>).
         files."password.hashed" = { };
         runtimeInputs = with pkgs; [
           coreutils

@@ -135,6 +135,11 @@
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
             hash = "sha256-lASXMmHr3vD9R3xCWTiJ/cA9J3KCi66EDZwJtLjmRKw=";
           })
+          (fetchpatch {
+            name = "nixos/prometheus/mqtt-exporter: add `package` option";
+            url = "https://github.com/NixOS/nixpkgs/pull/485251.diff";
+            hash = "sha256-6DfWKZKF1Scx5YD60V4RwxDJZmWj0o/m+rzA8CH+Rtw=";
+          })
         ];
 
         openwrt-imagebuilder.patches = [

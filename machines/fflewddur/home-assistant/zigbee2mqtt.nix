@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  mqttUsername = "zigbee2mqtt";
+in
 {
   services.zigbee2mqtt = {
     enable = true;
@@ -11,7 +14,7 @@
     settings = {
       homeassistant.enabled = true;
       availability.enabled = true;
-      advanced.last_seen = "ISO_8601";
+      advanced.last_seen = "epoch";
       frontend = {
         enabled = true;
         port = 4040;
@@ -24,7 +27,7 @@
         server = "mqtt://mqtt.ec"; # This works, but cannot work with HTTPS.
 
         base_topic = "zigbee2mqtt";
-        user = "zigbee2mqtt";
+        user = mqttUsername;
       };
       # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
       serial = {
@@ -33,6 +36,12 @@
       };
     };
   };
+
+  # The default is to not deploy the password, but we need it to configure the service.
+  # Note: this only works because we happen to be deploying this to the same
+  # machine that provisions mqtt users. A more correct version of this would
+  # probably involve something like Clan's inventory system.
+  clan.core.vars.generators."mqtt-${mqttUsername}".files.password.deploy = true;
 
   systemd.services.zigbee2mqtt.serviceConfig = {
     LoadCredential = [
