@@ -35,11 +35,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1760654250,
-        "narHash": "sha256-wkwYzwCLHizh9NA/8H22iPwacCMmNIfSphUhTnBkhCQ=",
+        "lastModified": 1769824869,
+        "narHash": "sha256-1Eskn8BFqIHaS7ttB+Nknb3Cz17tW7G8aG+R4kMYCsU=",
         "owner": "jfly",
         "repo": "brbd-sync",
-        "rev": "aa2dda045408570887b9b7123c6e3971265de06b",
+        "rev": "a99911db4defefc2e3c9b67438d531a82fd8cce3",
         "type": "github"
       },
       "original": {
