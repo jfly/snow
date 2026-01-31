@@ -25,8 +25,8 @@ in
           })
           (pkgs.fetchpatch {
             name = "Add `MQTT_PASSWORD_FILE` option";
-            url = "https://github.com/kpetremann/mqtt-exporter/pull/123.diff";
-            hash = "sha256-MQO6KxzDJjRCv2juSgbMjwigAMCvqmBFUmENyEzii/M=";
+            url = "https://github.com/kpetremann/mqtt-exporter/commit/2bd5f203ebf476e36ac1d41d5c34f04719bcc5ee.diff";
+            hash = "sha256-IsU7PLuiOx2PaiuY2FSPmqUVXDTxIISLRAUH5snBtJ0=";
           })
         ];
       });
