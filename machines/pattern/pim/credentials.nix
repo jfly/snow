@@ -29,4 +29,11 @@
     };
     files.password.owner = config.snow.user.name;
   };
+  clan.core.vars.generators.ram-cal-url = {
+    prompts.url = {
+      description = "ISC URL for ram";
+      persist = true;
+    };
+    files.url.owner = config.snow.user.name;
+  };
 }
