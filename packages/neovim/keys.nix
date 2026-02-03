@@ -17,25 +17,40 @@ in
 
   extraPlugins = with pkgs.vimPlugins; [
     vim-rsi # Readline shortcuts in useful places.
+    treesitter-modules-nvim # Provides tree-sitter based incremental selection.
   ];
 
-  plugins.treesitter.settings.incremental_selection = {
+  imports = [
+    (
+      { lib, ... }:
+      lib.nixvim.plugins.mkNeovimPlugin {
+        name = "treesitter-modules";
+        package = "treesitter-modules-nvim";
+        maintainers = with lib.maintainers; [ jfly ];
+      }
+    )
+  ];
+
+  plugins.treesitter-modules = {
     enable = true;
-    keymaps = {
-      init_selection = "<CR>";
-      node_incremental = "<CR>";
-      node_decremental = "<BS>";
-    };
-    # Workaround for <https://github.com/nvim-treesitter/nvim-treesitter/issues/2634>
-    is_supported = mkRaw ''
-      function()
-        local mode = vim.api.nvim_get_mode().mode
-        if mode == "c" then
-          return false
+    settings.incremental_selection = {
+      enable = true;
+      keymaps = {
+        init_selection = "<CR>";
+        node_incremental = "<CR>";
+        node_decremental = "<BS>";
+      };
+      # Workaround for <https://github.com/nvim-treesitter/nvim-treesitter/issues/2634>
+      is_supported = mkRaw ''
+        function()
+          local mode = vim.api.nvim_get_mode().mode
+          if mode == "c" then
+            return false
+          end
+          return true
         end
-        return true
-      end
-    '';
+      '';
+    };
   };
 
   keymaps = [
