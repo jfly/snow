@@ -62,12 +62,22 @@ in
               rules = [
                 {
                   alert = "LongTimeNoSee";
-                  expr = "time() - (mqtt_last_seen / 1000) > 12 * 60 * 60";
+                  expr = "time() - (mqtt_last_seen / 1000) > 3h";
                   labels = {
                     severity = "error";
                     category = "zigbee";
                   };
                   annotations.summary = "Have not heard from {{ $labels.topic }} in a while";
+                  annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
+                }
+                {
+                  alert = "LongTimeNoChange";
+                  expr = "changes(mqtt_temperature[3h]) == 0";
+                  labels = {
+                    severity = "error";
+                    category = "zigbee";
+                  };
+                  annotations.summary = "Have not seen a temperature change from {{ $labels.topic }} in a while";
                   annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
                 }
                 {
