@@ -23,7 +23,7 @@ let
 in
 
 writeShellApplication {
-  name = "netboot-jflyso";
+  name = "jflyso-netboot";
 
   runtimeInputs = [
     pixiecore
