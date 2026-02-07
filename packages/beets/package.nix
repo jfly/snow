@@ -12,6 +12,7 @@ let
     statefile = "/root/.local/state/beet/state.pickle";
 
     plugins = [
+      "musicbrainz"
       "badfiles"
       "duplicates"
       "embedart"
