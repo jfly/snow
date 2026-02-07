@@ -125,7 +125,12 @@ in
     # same nixpkgs we use to install everything else.
     nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
 
-    nix.package = pkgs.nixVersions.latest;
+    # TODO: switch back to `pkgs.nixVersions.latest` as soon as <https://github.com/NixOS/nix/commit/c6d07ec0aa9568dd99ff5c5d62c37fee90568dac> has been released.
+    # See <https://github.com/nvimtools/none-ls.nvim/discussions/319> for why.
+    # nix.package = pkgs.nixVersions.latest;
+    nix.package =
+      assert pkgs.nixVersions.latest.version == "2.33.1+1";
+      pkgs.nixVersions.nix_2_32;
 
     environment.systemPackages = with pkgs; [
       config.snow.neovim.package
