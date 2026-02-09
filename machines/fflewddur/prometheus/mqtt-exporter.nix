@@ -101,6 +101,18 @@ in
                   annotations.summary = "Zigbee device {{ $labels.topic }} is low on battery available";
                   annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
                 }
+                {
+                  alert = "ChestFreezerTooWarm";
+                  # Alert if the freezer goes above 5 Fahrenheit.
+                  expr = ''1.8 * mqtt_temperature{topic="zigbee2mqtt_freezer_weather"} + 32 > 5'';
+                  for = "5m";
+                  labels = {
+                    severity = "error";
+                    category = "zigbee";
+                  };
+                  annotations.summary = "Chest freeze appears to be too warm";
+                  annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
+                }
               ];
             }
           ];
