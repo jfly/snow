@@ -109,7 +109,7 @@ in
                     severity = "error";
                     category = "zigbee";
                   };
-                  annotations.summary = "Chest freeze appears to be too warm";
+                  annotations.summary = "Chest freezer appears to be too warm";
                   annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
                 }
               ];
