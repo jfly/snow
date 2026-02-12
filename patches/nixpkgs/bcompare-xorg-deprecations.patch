@@ -1,0 +1,37 @@
+diff --git a/pkgs/applications/version-management/bcompare/default.nix b/pkgs/applications/version-management/bcompare/default.nix
+index 4001dbe71d76..6c0437f8ad47 100644
+--- a/pkgs/applications/version-management/bcompare/default.nix
++++ b/pkgs/applications/version-management/bcompare/default.nix
+@@ -49,7 +49,12 @@
+   unzip,
+   util-linux,
+   wayland,
+-  xorg,
++  libX11,
++  libXau,
++  libxcb,
++  libXdmcp,
++  libXfixes,
++  xcbutilkeysyms,
+   xz,
+   zlib,
+   zstd,
+@@ -159,12 +164,12 @@ let
+       solid
+       util-linux
+       wayland
+-      xorg.libX11
+-      xorg.libXau
+-      xorg.libxcb
+-      xorg.libXdmcp
+-      xorg.libXfixes
+-      xorg.xcbutilkeysyms
++      libX11
++      libXau
++      libxcb
++      libXdmcp
++      libXfixes
++      xcbutilkeysyms
+       xz
+       zlib
+       zstd

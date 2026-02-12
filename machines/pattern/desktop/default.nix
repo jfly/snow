@@ -64,7 +64,7 @@ in
           name = "xmonad";
           start = ''
             # Xmonad doesn't set a cursor.
-            ${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr
+            ${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 
             systemd-cat -t xmonad -- ${xmonad}/bin/xmonad &
             waitPID=$!
@@ -253,7 +253,7 @@ in
       environment.DISPLAY = ":0";
       serviceConfig = {
         User = config.snow.user.name;
-        ExecStartPre = "${pkgs.xorg.xset}/bin/xset dpms force suspend";
+        ExecStartPre = "${pkgs.xset}/bin/xset dpms force suspend";
         ExecStart = "/run/wrappers/bin/slock"; # Use the setuid slock wrapper.
       };
     };
@@ -363,8 +363,8 @@ in
 
     ### Debugging
     arandr
-    xorg.xkill
-    xorg.xev
+    xkill
+    xev
     libva-utils
     pciutils
     gucharmap # View fonts.

@@ -116,6 +116,11 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
+            name = "vaultwarden: 1.35.2 -> 1.35.3";
+            url = "https://github.com/NixOS/nixpkgs/commit/01696241af8a576337634776b012881730b364c2.diff";
+            hash = "sha256-KSbsEicIwBWfLgxr/hrB4WM9DJDjo65oL8f+iEx1A/s=";
+          })
+          (fetchpatch {
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
             url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
             hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
@@ -125,6 +130,7 @@
             url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
             hash = "sha256-oRxDDjGP6Kaeh70+hls0oL2LbCOrwsJdy/PONEPA/n4=";
           })
+          ./patches/nixpkgs/bcompare-xorg-deprecations.patch
           (fetchpatch {
             name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
             url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
@@ -168,7 +174,7 @@
             (fetchpatch {
               name = ''Reapply "machines update: support `--target-host localhost`"'';
               url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-zEM6eFsOefH00k0fyrIHTPW7lUg5efSOctOREKHpPa0=";
+              hash = "sha256-thbXiwgS/LePqKtM86iPF5kANxbxZb5zR3L+MexKZ/w=";
             })
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm

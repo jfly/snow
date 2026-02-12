@@ -16,17 +16,16 @@ in
       enable = true;
       port = 9001;
       package = pkgs.mqtt-exporter.overrideAttrs (oldAttrs: {
-        postPatch = ""; # Workaround for <https://github.com/NixOS/nixpkgs/pull/485253>
-        patches = oldAttrs.patches or [ ] ++ [
+        # TODO: re-introduce `oldAttrs.patches` once [this patch] is
+        # is gone. Or more likely, once nixpkgs has the latest version of
+        # mqtt-exporter.
+        # [this patch]: https://github.com/NixOS/nixpkgs/blob/3508c11021d257dfd8709d4f378e8f56b4964bcc/pkgs/by-name/mq/mqtt-exporter/package.nix#L21-L25
+        # patches = oldAttrs.patches or [ ] ++ [
+        patches = [
           (pkgs.fetchpatch {
-            name = "Catchup with master";
-            url = "https://github.com/kpetremann/mqtt-exporter/compare/kpetremann:mqtt-exporter:v1.9.0...4188334fbc51fc277bc50fd66c068482bde9829a.diff";
-            hash = "sha256-XpOiXu3F66ftNokNknq9ogJJU8mdb8flwWO9EkT4SVk=";
-          })
-          (pkgs.fetchpatch {
-            name = "Add `MQTT_PASSWORD_FILE` option";
-            url = "https://github.com/kpetremann/mqtt-exporter/commit/2bd5f203ebf476e36ac1d41d5c34f04719bcc5ee.diff";
-            hash = "sha256-IsU7PLuiOx2PaiuY2FSPmqUVXDTxIISLRAUH5snBtJ0=";
+            name = "Upgrade to v1.10.0";
+            url = "https://github.com/kpetremann/mqtt-exporter/compare/kpetremann:mqtt-exporter:v1.9.0...v1.10.0.diff";
+            hash = "sha256-1MbfRDSZXoTprmbI8ihAUassn8A6oclJQdeyuEhMjcc=";
           })
         ];
       });

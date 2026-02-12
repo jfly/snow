@@ -33,5 +33,5 @@ pkgs.runCommandLocal "xmonad"
   ''
     install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
     makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
-        --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+        --set XMONAD_XMESSAGE "${pkgs.xmessage}/bin/xmessage"
   ''

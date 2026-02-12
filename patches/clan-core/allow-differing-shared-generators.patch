@@ -1,13 +1,13 @@
 diff --git a/pkgs/clan-cli/clan_lib/vars/generator.py b/pkgs/clan-cli/clan_lib/vars/generator.py
-index fd7369d9c..1e95dab94 100644
+index 40234a04d..d3d449ded 100644
 --- a/pkgs/clan-cli/clan_lib/vars/generator.py
 +++ b/pkgs/clan-cli/clan_lib/vars/generator.py
-@@ -319,7 +319,7 @@ def get_machine_generators(
-                         )
-                         if differences:
-                             msg = f"Machines {prev_machine} and {machine_name} have different definitions for shared generator '{gen_name}' (differ in: {', '.join(differences)})"
--                            raise ClanError(msg)
-+                            log.warning(msg)
+@@ -269,7 +269,7 @@ def get_machine_generators(
+                     )
+                     if differences:
+                         msg = f"Machines {prev_machine} and {machine_name} have different definitions for shared generator '{gen_name}' (differ in: {', '.join(differences)})"
+-                        raise ClanError(msg)
++                        log.warning(msg)
 
-                     else:
-                         shared_generators_raw[gen_name] = (
+                 else:
+                     shared_generators_raw[gen_name] = (

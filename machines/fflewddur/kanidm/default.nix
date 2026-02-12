@@ -50,14 +50,16 @@ in
   );
 
   services.kanidm = {
-    enableServer = true;
     package = flake'.packages.kanidm.withSecretProvisioning;
-    serverSettings = {
-      domain = services.kanidm.fqdn;
-      bindaddress = "127.0.0.1:9443";
-      origin = services.kanidm.baseUrl;
-      tls_chain = "${certs.directory}/fullchain.pem";
-      tls_key = "${certs.directory}/key.pem";
+    server = {
+      enable = true;
+      settings = {
+        domain = services.kanidm.fqdn;
+        bindaddress = "127.0.0.1:9443";
+        origin = services.kanidm.baseUrl;
+        tls_chain = "${certs.directory}/fullchain.pem";
+        tls_key = "${certs.directory}/key.pem";
+      };
     };
     provision = {
       enable = true;
@@ -140,5 +142,5 @@ in
     };
   };
 
-  snow.services.kanidm.proxyPass = "https://${config.services.kanidm.serverSettings.bindaddress}";
+  snow.services.kanidm.proxyPass = "https://${config.services.kanidm.server.settings.bindaddress}";
 }
