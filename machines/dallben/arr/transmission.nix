@@ -7,14 +7,16 @@
       download-dir = "/mnt/media/torrents";
       incomplete-dir = "/mnt/media/torrents/incomplete";
 
-      peer-port = 61207;
-      port-forwarding-enabled = false;
-
-      ratio-limit-enabled = true;
-      ratio-limit = 2;
-
+      rpc-bind-address = "0.0.0.0";
+      rpc-whitelist-enabled = false;
+      rpc-host-whitelist-enabled = false;
       rpc-authentication-required = false;
 
+      peer-port = 61207;
+      port-forwarding-enabled = false;
+      download-queue-enabled = false;
+      ratio-limit-enabled = true;
+      ratio-limit = 2;
       # Allow group to write to these files (the default is 022).
       umask = 2;
     };
