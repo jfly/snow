@@ -22,11 +22,11 @@ in
         target_sensor = "sensor.snow_therm_target";
       }
       {
-        unique_id = "bed_therm";
+        unique_id = "laundry_therm";
         platform = "generic_thermostat";
-        name = "Bedroom Therm";
-        heater = "switch.south_bedroom_outlet";
-        target_sensor = "sensor.south_bedroom_weather_temperature";
+        name = "Laundry Therm";
+        heater = "switch.laundry_room_outlet";
+        target_sensor = "sensor.laundry_room_weather_temperature";
       }
     ];
     template = [

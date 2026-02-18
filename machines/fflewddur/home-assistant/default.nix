@@ -50,21 +50,6 @@ in
       vacuum-card
       advanced-camera-card
     ];
-    lovelaceConfig = {
-      title = "Colusa";
-      views = [
-        {
-          title = "Welcome";
-          cards = [
-            {
-              type = "markdown";
-              title = "Lovelace";
-              content = "Try another dashboard for now.";
-            }
-          ];
-        }
-      ];
-    };
     config = {
       # logger.default = "debug";
       http = {
@@ -88,7 +73,7 @@ in
       # I'm not ready to programmatically managed all my dashboards, though.
       # Fortunately, this seems to only require the "Overview" dashboard to be
       # YAML, other dashboards can still be managed in YAML or storage.
-      lovelace.mode = "yaml";
+      lovelace.resource_mode = "yaml";
 
       # Note about people and presence detection:
       # - We currently manage people/users imperatively through the HA ui:
