@@ -61,7 +61,11 @@ in
               rules = [
                 {
                   alert = "LongTimeNoSee";
-                  expr = "time() - (mqtt_last_seen / 1000) > 3h";
+                  # We currently only monitor ".*/weather" devices, as they're important for our house thermostat.
+                  # Other devices report in very infrequently, or just don't
+                  # matter all that much. Feel free to expand this, or add more
+                  # alerting for other critical devices.
+                  expr = ''time() - (mqtt_last_seen{topic=~".*_weather"} / 1000) > 3h'';
                   labels = {
                     severity = "error";
                     category = "zigbee";

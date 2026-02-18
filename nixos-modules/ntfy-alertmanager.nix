@@ -33,11 +33,21 @@ let
 
       resolved {
           tags "resolved"
+          priority 1
       }
 
       ntfy {
           server ${cfg.ntfy.server}
           topic ${cfg.ntfy.topic}
+      }
+
+      # When the alert-mode is set to single, ntfy-alertmanager will cache each single alert
+      # to avoid sending recurrences.
+      cache {
+          # If restarts become annoying, consider setting up valkey instead.
+          type memory
+          duration 24h
+          cleanup-interval 1h
       }
     '';
   };
