@@ -4,18 +4,13 @@ let
   inherit (config.snow) services;
 
   emailPasswordKeyId = "email-password-key-id";
-  zendutyWebhookUrlId = "zenduty-webhook-url-id";
   healthchecksWebhookUrlId = "healthchecks-webhook-url-id";
 in
 {
-  imports = [ flake.nixosModules.email-credentials-alerts ];
-
-  clan.core.vars.generators.zenduty-webhook = {
-    prompts.url = {
-      description = "From https://www.zenduty.com/dashboard/teams/daf139eb-24a2-4991-a8c8-04e80e4f16e6/services/7fc79e41-f284-404f-8573-25bf37e62a4f/integrations/08df6240-794b-4885-a8c7-5e2446e4d13a/configure/";
-      persist = true;
-    };
-  };
+  imports = [
+    flake.nixosModules.email-credentials-alerts
+    ./ntfy-alertmanager.nix
+  ];
 
   clan.core.vars.generators.heathchecks-io-prometheus = {
     prompts.url = {
@@ -26,7 +21,6 @@ in
 
   systemd.services.alertmanager.serviceConfig.LoadCredential = [
     "${emailPasswordKeyId}:${config.clan.core.vars.generators.mail-alerts.files."password".path}"
-    "${zendutyWebhookUrlId}:${config.clan.core.vars.generators.zenduty-webhook.files."url".path}"
     "${healthchecksWebhookUrlId}:${
       config.clan.core.vars.generators.heathchecks-io-prometheus.files."url".path
     }"
@@ -74,7 +68,8 @@ in
             ];
             webhook_configs = [
               {
-                url_file = "$CREDENTIALS_DIRECTORY/${zendutyWebhookUrlId}";
+                send_resolved = true;
+                url = "http://127.0.0.1:${toString config.services.ntfy-alertmanager.port}";
               }
             ];
           }

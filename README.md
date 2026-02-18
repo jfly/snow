@@ -135,11 +135,9 @@ exploring/visualizations/dashboards, and Prometheus Alertmanager for alerts.
 
 I have Alertmanger email me through [my self-hosted mailserver](machines/doli/README.md).
 
-I use [Zenduty](https://www.zenduty.com/dashboard/quick-start/) as a free "on
-call" app. It's nice to have a backup in case emails break for whatever reason.
-I will probably move away from it in favor of something open source.
+I use [ntfy-alertmanager](https://git.xenrox.net/~xenrox/ntfy-alertmanager) to
+forward alerts from Alertmanager to my [ntfy](https://ntfy.sh) topic. ntfy is great!
 
-In case any of this breaks, or my monitoring server just dies, I'll find out
-about it because I have a deadman switch set up with the excellent
-<https://healthchecks.io>. This approach was inspired by
-<https://jakubstransky.com/2019/01/26/who-monitors-prometheus/>.
+In case my monitoring server dies, I'll find out about it because I have a
+deadman switch set up with the excellent <https://healthchecks.io>. This
+approach was inspired by <https://jakubstransky.com/2019/01/26/who-monitors-prometheus/>.
