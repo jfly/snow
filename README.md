@@ -141,3 +141,6 @@ forward alerts from Alertmanager to my [ntfy](https://ntfy.sh) topic. ntfy is gr
 In case my monitoring server dies, I'll find out about it because I have a
 deadman switch set up with the excellent <https://healthchecks.io>. This
 approach was inspired by <https://jakubstransky.com/2019/01/26/who-monitors-prometheus/>.
+
+I also have an account with [uptimeobserver.com](https://uptimeobserver.com/)
+configured to ping my ntfy account [instructions here](https://support.uptimeobserver.com/integrations/ntfy/).

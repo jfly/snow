@@ -129,7 +129,7 @@ in
     # See <https://github.com/nvimtools/none-ls.nvim/discussions/319> for why.
     # nix.package = pkgs.nixVersions.latest;
     nix.package =
-      assert pkgs.nixVersions.latest.version == "2.33.1+1";
+      assert pkgs.nixVersions.latest.version == "2.33.3";
       pkgs.nixVersions.nix_2_32;
 
     environment.systemPackages = with pkgs; [

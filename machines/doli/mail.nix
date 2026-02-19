@@ -117,7 +117,7 @@
       coreutils
       opendkim
       (pkgs.writers.writePython3Bin "parse-bindfile" { libraries = [ flake'.packages.zonefile-parser ]; }
-        ''
+        /* python */ ''
           import fileinput
           import zonefile_parser
 

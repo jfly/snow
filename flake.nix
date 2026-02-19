@@ -116,11 +116,6 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "vaultwarden: 1.35.2 -> 1.35.3";
-            url = "https://github.com/NixOS/nixpkgs/commit/01696241af8a576337634776b012881730b364c2.diff";
-            hash = "sha256-KSbsEicIwBWfLgxr/hrB4WM9DJDjo65oL8f+iEx1A/s=";
-          })
-          (fetchpatch {
             name = "nixos/home-assistant: migrate lovelace config to dashboards format";
             url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
             hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
@@ -129,6 +124,11 @@
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
             url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
             hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
+          })
+          (fetchpatch {
+            name = "linux-manual: fix for Linux 6.19";
+            url = "https://github.com/NixOS/nixpkgs/pull/490939.diff";
+            hash = "sha256-nzWtK3WjE8TdItBR87Yu5EZGl0itYTNKB8ilJztii+E=";
           })
           (fetchpatch {
             name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
@@ -144,7 +144,7 @@
           (fetchpatch {
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
-            hash = "sha256-lASXMmHr3vD9R3xCWTiJ/cA9J3KCi66EDZwJtLjmRKw=";
+            hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
           })
           (fetchpatch {
             name = "nixos/prometheus/mqtt-exporter: add `package` option";

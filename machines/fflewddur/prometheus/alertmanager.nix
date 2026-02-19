@@ -43,8 +43,9 @@ in
       configuration = {
         global = {
           smtp_from = "alerts@playground.jflei.com";
-          smtp_smarthost = "mail.playground.jflei.com:587";
+          smtp_smarthost = "mail.playground.jflei.com:465";
           smtp_auth_username = "alerts@playground.jflei.com";
+          smtp_force_implicit_tls = true;
           smtp_auth_password_file = "$CREDENTIALS_DIRECTORY/${emailPasswordKeyId}";
         };
         route = {
