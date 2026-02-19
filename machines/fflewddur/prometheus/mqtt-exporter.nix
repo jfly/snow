@@ -75,7 +75,7 @@ in
                 }
                 {
                   alert = "LongTimeNoChange";
-                  expr = "changes(mqtt_temperature[3h]) == 0";
+                  expr = "changes(mqtt_temperature[4h]) == 0";
                   labels = {
                     severity = "error";
                     category = "zigbee";
