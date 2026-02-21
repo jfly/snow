@@ -75,7 +75,7 @@ in
                 }
                 {
                   alert = "LongTimeNoChange";
-                  expr = "changes(mqtt_temperature[4h]) == 0";
+                  expr = ''changes(mqtt_temperature{topic=~"zigbee2mqtt_south-bedroom_weather|zigbee2mqtt_northeast-bedroom_weather"}[3h]) == 0'';
                   labels = {
                     severity = "error";
                     category = "zigbee";

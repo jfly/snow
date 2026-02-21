@@ -59,7 +59,7 @@
                       node_systemd_unit_state{state="failed"} == 1
                     '';
                     for = "15m";
-                    labels.severity = "error";
+                    labels.severity = "warning";
                     annotations.summary = "systemd unit {{ $labels.name }} on {{ $labels.instance }} has been down for more than 15 minutes.";
                   }
 
