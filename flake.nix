@@ -116,6 +116,11 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
+            name = "vaultwarden: 1.35.3 -> 1.35.4, vaultwarden.webvault: 2026.1.0+0 -> 2026.1.1+0";
+            url = "https://github.com/NixOS/nixpkgs/commit/6b140108573db0ec57433bca9c72f590785708f4.diff";
+            hash = "sha256-YrmfR8Hp8us8DFEoK5eYUgx8HYqOrLmCwc2H8urTbY8=";
+          })
+          (fetchpatch {
             name = "nixos/home-assistant: migrate lovelace config to dashboards format";
             url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
             hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
@@ -128,7 +133,7 @@
           (fetchpatch {
             name = "linux-manual: fix for Linux 6.19";
             url = "https://github.com/NixOS/nixpkgs/pull/490939.diff";
-            hash = "sha256-nzWtK3WjE8TdItBR87Yu5EZGl0itYTNKB8ilJztii+E=";
+            hash = "sha256-fYbt7GU2LAntPKBbgvARK9nJormndvoKdL20cypA6oM=";
           })
           (fetchpatch {
             name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
