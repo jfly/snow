@@ -146,7 +146,7 @@ in
                     probe_success{job="blackbox-https_success"} == 0 or probe_success{job="blackbox-http_success"} == 0
                   '';
                   for = "15m";
-                  labels.severity = "warning";
+                  labels.severity = "error";
                   annotations.summary = "Endpoint {{ $labels.instance }} is unreachable";
                 }
                 # See note above about not being able to scrape our mailserver.
