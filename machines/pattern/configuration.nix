@@ -1,7 +1,6 @@
 {
   flake,
   inputs,
-  pkgs,
   ...
 }:
 {
@@ -9,9 +8,6 @@
     name = "jeremy";
     uid = 1000;
   };
-
-  boot.supportedFilesystems = [ "bcachefs" ]; # <<<
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable deployments by non-root user.
   nix.settings.trusted-users = [
@@ -25,6 +21,7 @@
     flake.nixosModules.shared
     ./hardware-configuration.nix # Include the results of the hardware scan.
     ./hardware-configuration-custom.nix
+    ./disko.nix
     ./network.nix
     ./users.nix
     ./audio.nix

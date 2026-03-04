@@ -18,6 +18,31 @@ let
     host = "fflam.m";
     port = 22;
   };
+  ensureTrailingSlash =
+    path:
+    let
+      endsInSlash = (lib.strings.match ".*/$" path) != null;
+    in
+    if endsInSlash then path else path + "/";
+
+  # List of rsync flags comes from `man rsync` (search for the `--archive`
+  # docs).
+  # Note: -N (--crtimes) is ommitted because `rsync` on linux doesn't
+  # support it? Hard to find good documentation of this, see
+  # <https://github.com/RsyncProject/rsync/issues/166>.
+  rsyncCmd =
+    path:
+    let
+      pathWithSlash = ensureTrailingSlash path;
+    in
+    /* bash */ ''
+      echo "Backing up ${lib.escapeShellArg pathWithSlash}"
+      rsync \
+        -aAXUHv --delete \
+        --rsh="ssh -i ${keypair.privateKeyfile}" \
+        ${lib.escapeShellArg pathWithSlash} ${box.user}@${box.host}:${lib.escapeShellArg pathWithSlash}
+    '';
+
   fflewddur-backup-to-fflam = pkgs.writeShellApplication {
     name = "fflewddur-backup-to-fflam";
     runtimeInputs = [
@@ -27,22 +52,16 @@ let
     ];
     text =
       let
-        # Note: the trailing slash here is really important for rsync to do the
-        # right thing!
-        backupPath = "/mnt/bay/";
+        backupPaths = [
+          "/mnt/bay/archive/"
+          "/mnt/bay/media/"
+          "/mnt/bay/restic/"
+        ];
       in
-      ''
+      /* bash */ ''
         start_time=$(date +%s.%N)
 
-        # List of rsync flags comes from `man rsync` (search for the `--archive`
-        # docs).
-        # Note: -N (--crtimes) is ommitted because `rsync` on linux doesn't
-        # support it? Hard to find good documentation of this, see
-        # <https://github.com/RsyncProject/rsync/issues/166>.
-        rsync \
-          -aAXUHv --delete \
-          --rsh="ssh -i ${keypair.privateKeyfile}" \
-          ${lib.escapeShellArg backupPath} ${box.user}@${box.host}:${lib.escapeShellArg backupPath}
+        ${lib.concatStringsSep "\n" (map rsyncCmd backupPaths)}
 
         end_time=$(date +%s.%N)
         duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})

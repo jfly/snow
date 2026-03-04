@@ -51,10 +51,5 @@ in
     };
   };
 
-  # bcachefs often requires a very recent kernel, zfs often requires an older
-  # kernel. We don't use zfs, so just disable it.
-  boot.supportedFilesystems = {
-    bcachefs = true;
-    zfs = false;
-  };
+  boot.supportedFilesystems.zfs = true;
 }

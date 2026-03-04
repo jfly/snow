@@ -138,9 +138,8 @@
           (fetchpatch {
             name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
             url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
-            hash = "sha256-oRxDDjGP6Kaeh70+hls0oL2LbCOrwsJdy/PONEPA/n4=";
+            hash = "sha256-2HvpfyUVJx0cb03YDnXtecAIKOgUZ8VZ09sjJk+NJ38=";
           })
-          ./patches/nixpkgs/bcompare-xorg-deprecations.patch
           (fetchpatch {
             name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
             url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
@@ -156,7 +155,6 @@
             url = "https://github.com/NixOS/nixpkgs/pull/485251.diff";
             hash = "sha256-6DfWKZKF1Scx5YD60V4RwxDJZmWj0o/m+rzA8CH+Rtw=";
           })
-          ./hack.patch
         ];
 
         openwrt-imagebuilder.patches = [

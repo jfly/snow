@@ -48,13 +48,6 @@ in
     torRc
   ];
 
-  #<<<
-  boot.initrd.systemd.extraBin = {
-    "nvim" = lib.getExe pkgs.neovim; # <<<
-    "keyctl" = lib.getExe' pkgs.keyutils "keyctl"; # <<<
-  };
-  #<<<
-
   boot.initrd.systemd.services.tor = {
     wantedBy = [ "initrd.target" ];
     after = [

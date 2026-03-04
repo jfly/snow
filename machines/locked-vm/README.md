@@ -12,6 +12,6 @@ accessible via a TOR hidden service.
    - In one terminal: `nix run nixpkgs#tor`
    - In another terminal:
      ```console
-     nix shell nixpkgs#tor nixpkgs#torsocks --command torify ssh -t "root@$(clan vars get locked-vm tor-hidden-service/hostname)" systemctl restart systemd-cryptsetup@crypted.service
+     nix shell nixpkgs#tor nixpkgs#torsocks --command torify ssh -t "root@$(clan vars get locked-vm tor-hidden-service/hostname)" systemd-tty-ask-password-agent --query
      ```
      The password is "passpass".

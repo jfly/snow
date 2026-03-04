@@ -1,8 +1,6 @@
-{ pkgs, config, ... }:
+{ flake, config, ... }:
 {
-  boot.loader.systemd-boot.enable = true;
-
-  boot.supportedFilesystems = [ "bcachefs" ];
+  imports = [ flake.nixosModules.zfs ];
 
   clan.core.vars.generators.rootfs = {
     prompts."password" = {
@@ -29,15 +27,11 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
-            rootfs = {
+            zfs = {
               size = "100%";
               content = {
-                type = "bcachefs";
-                filesystem = "rootfs"; # Refers to `bcachefs_filesystems.rootfs` below.
-                label = "isthisnecessary"; # <<<
-                extraFormatArgs = [
-                  "--discard"
-                ];
+                type = "zfs";
+                pool = "zroot";
               };
             };
           };
@@ -45,32 +39,55 @@
       };
     };
 
-    bcachefs_filesystems = {
-      rootfs = {
-        type = "bcachefs_filesystem";
-        passwordFile = config.clan.core.vars.generators.rootfs.files.password.path;
-        extraFormatArgs = [
-          "--metadata_replicas=2"
-        ];
-        subvolumes = {
-          "subvolumes/root" = {
-            mountpoint = "/";
-            mountOptions = [ "x-systemd.mount-timeout=infinity" ]; # <<<
+    zpool.zroot = {
+      type = "zpool";
+      rootFsOptions = {
+        mountpoint = "none";
+        acltype = "posixacl";
+        xattr = "sa";
+      };
+      options.ashift = "12";
+
+      # We have `keylocation` set for initial bootstrapping so we can provision
+      # the machine, but after that, someone needs to enter the passphrase for
+      # the machine to boot.
+      postCreateHook = "zfs set keylocation=prompt zroot/root";
+
+      datasets = {
+        # Some folks recommend avoiding using using the root filesystem
+        # entirely. See
+        # <https://www.reddit.com/r/zfs/comments/tl0r0s/recommended_not_to_use_top_level_dataset/>.
+        # This pattern is copied from disko's examples, which seem to do
+        # exactly that: use a `zroot/root` "root" dataset rather than the true
+        # root dataset (`zroot`). See
+        # <https://github.com/nix-community/disko/blob/4707eec8d1d2db5182ea06ed48c820a86a42dc13/example/zfs-encrypted-root.nix#L43-L53>.
+        "root" = {
+          type = "zfs_fs";
+          options = {
+            mountpoint = "legacy";
+            encryption = "aes-256-gcm";
+            keyformat = "passphrase";
+            # Note that we only want a file for initial provisioning.
+            # Afterwards, it should be "prompt". See the `postCreateHook` above
+            # for details.
+            keylocation = "file://${config.clan.core.vars.generators.rootfs.files.password.path}";
           };
-          "subvolumes/home" = {
-            mountpoint = "/home";
+          mountpoint = "/";
+        };
+        "root/nix" = {
+          type = "zfs_fs";
+          mountpoint = "/nix";
+          options = {
+            mountpoint = "legacy";
+            "com.sun:auto-snapshot" = "false";
           };
-          "subvolumes/nix" = {
-            mountpoint = "/nix";
-          };
+        };
+        "root/home" = {
+          type = "zfs_fs";
+          mountpoint = "/home";
+          options.mountpoint = "legacy";
         };
       };
     };
   };
-
-  boot.bcachefs.package = pkgs.bcachefs-tools.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      ./bcachefs-mount-timeout.patch
-    ];
-  });
 }

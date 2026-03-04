@@ -15,4 +15,9 @@
   snow.monitoring.alertIfDown = false;
 
   disko.devices.disk.main.device = "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001";
+
+  boot.loader.systemd-boot.enable = true;
+
+  # Dangerous for real machines, but quite useful for this test machine.
+  boot.initrd.systemd.emergencyAccess = true;
 }

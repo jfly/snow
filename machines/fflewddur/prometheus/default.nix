@@ -8,6 +8,7 @@ in
     # Keep the set of scrapers in sync with the exporters enabled in
     # `nixos-modules/monitoring/default.nix`.
     ./scrapers/up.nix
+    ./scrapers/zfs.nix
     ./scrapers/node.nix
     ./scrapers/smartctl.nix
     # Blackbox is unique: we run the exporter and the corresponding scraper on
