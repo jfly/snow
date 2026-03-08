@@ -12,9 +12,6 @@ def compile_all(*res: str):
 
 
 REMOTE_REGEXPS = compile_all(
-    ## First, domain specific rules
-    # clark
-    r"^(?P<protocol>ssh://)    (?P<domain>clark)             /state/git/  (?P<path>.+?)$",
     # github
     r"^(?P<protocol>https://)  (?P<domain>github.com)        /            (?P<path>[^/]+/[^/#]+)  (/.*)?  (\#.*)?$",
     ## And now, generic rules

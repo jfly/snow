@@ -68,13 +68,6 @@ def test_ssh():
         clone_to="~/src/server/path/to/test-repo",
     )
 
-    # Verify special handling of clark (strip the `/state/git`)
-    assert_parse(
-        remote="ssh://clark/state/git/test-repo.git",
-        clone_from="ssh://clark/state/git/test-repo.git",
-        clone_to="~/src/clark/test-repo",
-    )
-
 
 def test_gitlab():
     assert_parse(

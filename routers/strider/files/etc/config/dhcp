@@ -44,11 +44,6 @@ config odhcpd 'odhcpd'
 	option loglevel '4'
 
 config host
-	option name 'clark'
-	option ip '192.168.28.110'
-	option mac 'C0:3F:D5:6B:51:16'
-
-config host
 	option name 'apc'
 	option ip '192.168.29.102'
 	option mac '00:C0:B7:7F:E0:96'

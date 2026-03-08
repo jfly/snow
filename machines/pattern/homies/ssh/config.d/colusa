@@ -1,10 +1,5 @@
 # vi: ft=sshconfig
 
-Host clark
-    Tag colusa
-    HostName clark.m
-    User jfly
-
 Host fflewddur
     Tag colusa
     HostName fflewddur.m
