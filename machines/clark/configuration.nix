@@ -5,8 +5,6 @@
     ./boot.nix
     ./network.nix
     ./focus-dns.nix
-    ./budget.nix
-    ./git-repos.nix
   ];
 
   networking.hostName = "clark";

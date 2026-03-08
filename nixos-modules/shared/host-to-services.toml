@@ -1,6 +1,5 @@
 clark = [
     "clark.m",
-    "budget.m",
 ]
 dallben = [
     "dallben.m",
@@ -23,7 +22,9 @@ fflewddur = [
     "alerts.m",
     "audiobookshelf.m",
     "auth.m",
+    "budget.m",
     "ca.m",
+    "forge.m",
     "frigate.m",
     "grafana.m",
     "home-assistant.m",

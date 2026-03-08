@@ -320,6 +320,7 @@ in
       };
       ca = { };
       fflewddur = { };
+      forge = { };
       frigate = { };
       grafana = { };
       healthcheck.parentDomain = "snow.jflei.com";

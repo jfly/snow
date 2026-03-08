@@ -66,7 +66,7 @@ let
 
   generateStorageBoxUsageMetrics =
     pkgs.writers.writePython3Bin "hetzner-generate-storage-box-usage-metrics" { }
-      ''
+      /* python */ ''
         import subprocess
         from pathlib import Path
 
