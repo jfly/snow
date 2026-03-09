@@ -22,6 +22,7 @@ config dnsmasq
 	list address '/mqtt.ec/192.168.28.172'
 	list address '/home-assistant.ec/192.168.28.172'
 	list address '/frame.ec/192.168.28.172'
+	list address '/tang.ec/192.168.28.110'
 
 config dhcp 'lan'
 	option interface 'lan'

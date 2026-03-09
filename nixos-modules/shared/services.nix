@@ -376,6 +376,11 @@ in
       sonarr = { };
       speedtest.parentDomain = "snow.jflei.com";
       step-ca.subdomain = "ca";
+      tang = {
+        # Keep in sync with <routers/strider/files/etc/config/dhcp>.
+        subdomain = "tang";
+        parentDomain = "ec";
+      };
       torrents = { };
       vaultwarden = { };
       whoami = {

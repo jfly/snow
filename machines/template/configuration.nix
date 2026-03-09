@@ -12,6 +12,12 @@
   clan.core.deployment.requireExplicitUpdate = true; # You likely want to remove this.
   # Remove if this device is expected to be online all the time.
   snow.monitoring.alertIfDown = false;
+  # This lan configuration is only needed if the node hosts services on the
+  # lan.
+  # snow.network.lan = {
+  #   tld = "ec";
+  #   ip = "[fillme]"; # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
+  # };
 
   # Fill in the root device. Run `lsblk --output NAME,ID-LINK,FSTYPE,SIZE,MOUNTPOINT`
   # on the remote machine to get the disk id.
