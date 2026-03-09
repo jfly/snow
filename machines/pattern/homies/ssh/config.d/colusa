@@ -10,6 +10,11 @@ Host fflam
     HostName fflam.m
     User jfly
 
+Host clark
+    Tag colusa
+    HostName clark.m
+    User jfly
+
 # Primary router
 Host strider
     Tag colusa

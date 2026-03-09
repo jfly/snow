@@ -1,3 +1,6 @@
+clark = [
+    "clark.m",
+]
 dallben = [
     "dallben.m",
     "bazarr.m",

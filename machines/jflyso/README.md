@@ -15,7 +15,7 @@ nix build .#jflyso-iso
 To write it to a usb (you probably need `sudo` for this):
 
 ```shell
-cp result/iso/nixos-*.iso /dev/[DEVICE]
+sudo dd status=progress bs=4K if=$(ls result/iso/nixos-*.iso) of=/dev/[DEVICE]
 ```
 
 Plug it into a machine, boot, and have fun hacking!
