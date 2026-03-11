@@ -20,9 +20,8 @@ First, change some BIOS settings.
 
 ## Provision
 
-1. Boot the machine with `jflyso`. F12 is the "select boot device" keypress.
-2. `tools/fleet.py bootstrap --ssh jfly@jflyso dallben`
-3. Make sure you've maxed out the volume with `alsamixer`: ssh to the machine,
+1. See [../README.md](../README.md).
+2. Make sure you've maxed out the volume with `alsamixer`: ssh to the machine,
    `sudo machinectl shell kodi@`, `alsamixer`.
-4. Follow instructions in `nixos-modules/kodi-colusita/README.md` to finish
+3. Follow instructions in `nixos-modules/kodi-colusita/README.md` to finish
    bootstrapping.

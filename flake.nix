@@ -1,6 +1,7 @@
 {
   description = "snow";
 
+  # So many warnings about `x86_64-darwin`...
   # <<< nixConfig = {
   # <<<   abort-on-warn = true;
   # <<< };

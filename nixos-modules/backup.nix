@@ -9,6 +9,7 @@ let
   inherit (config.snow) services;
 
   cfg = config.snow.backup;
+  resticRepository = "rest:http://${services.fflewddur.fqdn}:8000/";
 in
 {
   options.snow.backup = {
@@ -90,7 +91,7 @@ in
         passwordFile = config.clan.core.vars.generators.snow-backup-restic.files."password".path;
         paths = cfg.paths;
         exclude = cfg.exclude;
-        repository = "rest:http://${services.fflewddur.fqdn}:8000/";
+        repository = resticRepository;
         timerConfig = {
           OnCalendar = "daily";
         };

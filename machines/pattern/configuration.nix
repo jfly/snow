@@ -9,17 +9,10 @@
     uid = 1000;
   };
 
-  # Enable deployments by non-root user.
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
-
-  programs.nix-ld.enable = true;
-
   imports = [
     flake.nixosModules.shared
-    ./hardware-configuration.nix # Include the results of the hardware scan.
+    flake.nixosModules.laptop
+    ./hardware-configuration.nix
     ./hardware-configuration-custom.nix
     ./disko.nix
     ./network.nix
@@ -47,34 +40,8 @@
     ./irc-client.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  # Keep only a finite number of boot configurations. This prevents /boot from
-  # filling up.
-  # https://nixos.wiki/wiki/Bootloader#Limiting_amount_of_entries_with_grub_or_systemd-boot
-  boot.loader.systemd-boot.configurationLimit = 100;
-  boot.loader.efi.canTouchEfiVariables = true;
-  # nixos doesn't clear out /tmp on each boot. I'm used to it being a tmpfs
-  # (`boot.tmp.useTmpfs = true`), but nix-shell uses it, and it needs a *lot*
-  # of space, and I'm not sure I want to allocate that much ram?
-  boot.tmp.cleanOnBoot = true;
-
   # This device is not online all the time.
   snow.monitoring.alertIfDown = false;
 
-  swapDevices = [
-    {
-      device = "/swapfile";
-      size = 2048;
-    }
-  ];
-
-  # i18n stuff
-  i18n.defaultLocale = "en_US.UTF-8";
-  services.xserver.xkb.layout = "us";
-
-  services.logind.settings.Login = {
-    HandleLidSwitch = "ignore";
-    HandlePowerKey = "suspend";
-  };
+  programs.nix-ld.enable = true;
 }
