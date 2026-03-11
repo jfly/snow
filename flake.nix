@@ -1,9 +1,9 @@
 {
   description = "snow";
 
-  nixConfig = {
-    abort-on-warn = true;
-  };
+  # <<< nixConfig = {
+  # <<<   abort-on-warn = true;
+  # <<< };
 
   inputs = {
     brbd-sync = {
@@ -16,6 +16,7 @@
     clan-core = {
       url = "git+https://git.clan.lol/clan/clan-core";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
 
     disko = {
@@ -116,14 +117,14 @@
       inputs = patcher.patch unpatchedInputs {
         nixpkgs.patches = [
           (fetchpatch {
-            name = "vaultwarden: 1.35.3 -> 1.35.4, vaultwarden.webvault: 2026.1.0+0 -> 2026.1.1+0";
-            url = "https://github.com/NixOS/nixpkgs/commit/6b140108573db0ec57433bca9c72f590785708f4.diff";
-            hash = "sha256-YrmfR8Hp8us8DFEoK5eYUgx8HYqOrLmCwc2H8urTbY8=";
-          })
-          (fetchpatch {
             name = "nixos/home-assistant: migrate lovelace config to dashboards format";
             url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
             hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
+          })
+          (fetchpatch {
+            name = "mycli: fix build";
+            url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
+            hash = "sha256-cA7hCgonoCJLKvFVo/tGiAUEqMJzglbZoF21wnx70w4=";
           })
           (fetchpatch {
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -131,14 +132,12 @@
             hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
           })
           (fetchpatch {
-            name = "linux-manual: fix for Linux 6.19";
-            url = "https://github.com/NixOS/nixpkgs/pull/490939.diff";
-            hash = "sha256-fYbt7GU2LAntPKBbgvARK9nJormndvoKdL20cypA6oM=";
-          })
-          (fetchpatch {
             name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
-            url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
-            hash = "sha256-2HvpfyUVJx0cb03YDnXtecAIKOgUZ8VZ09sjJk+NJ38=";
+            # TODO: reintroduce once this PR is no longer conflicting with
+            #       nixpkgs latest.
+            # url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
+            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:add-bcompare5.diff";
+            hash = "sha256-514MP/sJvz+8BV83iX2+1fVG0E4D6o7JzPT7QJnBD3Y=";
           })
           (fetchpatch {
             name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
@@ -149,11 +148,6 @@
             name = "miniflux: add options for all secret files";
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
             hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
-          })
-          (fetchpatch {
-            name = "nixos/prometheus/mqtt-exporter: add `package` option";
-            url = "https://github.com/NixOS/nixpkgs/pull/485251.diff";
-            hash = "sha256-6DfWKZKF1Scx5YD60V4RwxDJZmWj0o/m+rzA8CH+Rtw=";
           })
         ];
 
@@ -174,7 +168,7 @@
           (fetchpatch {
             name = "feat: add support for DKIM private key files";
             url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-+sgLfoEAGNVgjwQZc4At3ibcW8c9/Zk7g5yiqKdCsdY=";
+            hash = "sha256-vM5S2oZ6kF58Cofq0vPvmza/XKdjsmDnWKevsRTZ7a8=";
           })
         ];
 
@@ -183,7 +177,7 @@
             (fetchpatch {
               name = ''Reapply "machines update: support `--target-host localhost`"'';
               url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-thbXiwgS/LePqKtM86iPF5kANxbxZb5zR3L+MexKZ/w=";
+              hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
             })
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm
@@ -202,6 +196,8 @@
             ./patches/clan-core/username-hack.patch
             # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
             ./patches/clan-core/read-build-host-from-env-var.patch
+            # Quick-n-dirty workaround for <https://git.clan.lol/clan/clan-core/issues/7021>.
+            ./patches/clan-core/revert-vars-filter.patch
           ];
         };
 

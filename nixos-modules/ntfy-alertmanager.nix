@@ -9,7 +9,7 @@ let
   cfg = config.services.ntfy-alertmanager;
 
   conf = pkgs.writeTextFile {
-    name = "ntfs-alertmanager.conf";
+    name = "ntfy-alertmanager.conf";
     text = /* scfg */ ''
       http-address 127.0.0.1:${toString cfg.port}
       log-level debug

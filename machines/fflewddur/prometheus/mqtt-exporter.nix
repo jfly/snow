@@ -15,20 +15,6 @@ in
     exporters.mqtt = {
       enable = true;
       port = 9001;
-      package = pkgs.mqtt-exporter.overrideAttrs (oldAttrs: {
-        # TODO: re-introduce `oldAttrs.patches` once [this patch] is
-        # is gone. Or more likely, once nixpkgs has the latest version of
-        # mqtt-exporter.
-        # [this patch]: https://github.com/NixOS/nixpkgs/blob/3508c11021d257dfd8709d4f378e8f56b4964bcc/pkgs/by-name/mq/mqtt-exporter/package.nix#L21-L25
-        # patches = oldAttrs.patches or [ ] ++ [
-        patches = [
-          (pkgs.fetchpatch {
-            name = "Upgrade to v1.10.0";
-            url = "https://github.com/kpetremann/mqtt-exporter/compare/kpetremann:mqtt-exporter:v1.9.0...v1.10.0.diff";
-            hash = "sha256-1MbfRDSZXoTprmbI8ihAUassn8A6oclJQdeyuEhMjcc=";
-          })
-        ];
-      });
       # logLevel = "DEBUG";
       zigbee2MqttAvailability = true;
       mqttUsername = "mqtt-exporter";
