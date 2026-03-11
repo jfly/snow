@@ -1,8 +1,18 @@
-{ flake, config, ... }:
+{
+  flake,
+  config,
+  ...
+}:
 {
   imports = [ flake.nixosModules.zfs ];
 
   boot.loader.systemd-boot.enable = true;
+
+  boot.initrd.clevis = {
+    enable = true;
+    useTang = true;
+    devices."zroot/root".secretFile = config.clan.core.vars.generators.rootfs-jwe.files.jwe.path;
+  };
 
   clan.core.vars.generators.rootfs = {
     prompts."password" = {
@@ -10,6 +20,18 @@
       type = "hidden";
     };
     files."password".neededFor = "partitioning";
+  };
+
+  clan.core.vars.generators.rootfs-jwe = {
+    prompts.jwe = {
+      persist = true;
+      description = ''
+        Encrypt a JWE for the root filesystem:
+
+          clan vars get locked-vm rootfs/password | tr -d '\n' | nix run nixpkgs#clevis encrypt tang '{"url": "http://tang.ec"}'
+      '';
+    };
+    files."jwe".neededFor = "activation"; # Used to generate the initrd during system activation.
   };
 
   disko.devices = {
