@@ -30,7 +30,6 @@
     ./syncthing.nix
     ./printers.nix
     ./fuse.nix
-    ./laptop.nix
     ./garage-status.nix
     ./remote-builders.nix
     ./tor.nix
