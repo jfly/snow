@@ -86,6 +86,12 @@
 
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
 
+    systemctl-restore = {
+      url = "github:jfly/systemctl-restore";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+    };
+
     systems.url = "github:nix-systems/x86_64-linux";
 
     treefmt-nix = {

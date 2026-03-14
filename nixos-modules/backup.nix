@@ -1,5 +1,6 @@
 {
   config,
+  inputs',
   lib,
   pkgs,
   ...
@@ -39,6 +40,10 @@ in
   };
 
   config = lib.mkIf (cfg.paths != [ ]) {
+    environment.systemPackages = [
+      inputs'.systemctl-restore.packages.default
+    ];
+
     # This is still tedious. TODO: look into clan's native support for backups instead.
     clan.core.vars.generators.snow-backup-restic = {
       prompts."password" = {
