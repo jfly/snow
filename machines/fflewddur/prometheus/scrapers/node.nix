@@ -140,9 +140,9 @@
                     (map (instance: {
                       alert = "SnowBackupFailed-${instance}";
                       expr = ''
-                        (time() - backup_completion_timestamp_seconds{instance="${instance}"} > ${toString (2 * 24 * 60 * 60)})
+                        (time() - backup_completion_timestamp_seconds{instance="${instance}", site="snow"} > ${toString (2 * 24 * 60 * 60)})
                         or
-                        absent(backup_completion_timestamp_seconds{instance="${instance}"})
+                        absent(backup_completion_timestamp_seconds{instance="${instance}", site="snow"})
                       '';
                       labels.severity = "error";
                       annotations.summary = "backup on {{ $labels.instance }} to site snow has not succeeded recently.";
