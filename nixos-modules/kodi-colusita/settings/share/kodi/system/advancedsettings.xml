@@ -8,4 +8,8 @@
         <webserverauthentication>false</webserverauthentication>
         <zeroconf>true</zeroconf>
     </services>
+    <audiooutput>
+        <!-- https://github.com/xbmc/xbmc/blob/21.3-Omega/system/settings/settings.xml#L3222-L3224 -->
+        <guisoundmode>2</guisoundmode> <!-- AE_SOUND_ALWAYS -->
+    </audiooutput>
 </advancedsettings>
