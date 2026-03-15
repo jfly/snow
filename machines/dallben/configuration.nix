@@ -25,6 +25,8 @@
   # This device regularly goes to sleep.
   snow.monitoring.alertIfDown = false;
 
+  disko.devices.disk.main.device = "/dev/disk/by-id/nvme-CT250P2SSD8_2117E59A4AF5";
+
   # Prevent the screen from going dark. It's a source of endless confusion when
   # we turn on the TV to find that the screen is still dark (until we do
   # something to "wake up" X11).

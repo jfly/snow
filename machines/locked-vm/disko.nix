@@ -4,7 +4,10 @@
   ...
 }:
 {
-  imports = [ flake.nixosModules.zfs ];
+  imports = [
+    flake.nixosModules.initrd-ssh-tor
+    flake.nixosModules.zfs
+  ];
 
   boot.loader.systemd-boot.enable = true;
 
@@ -14,7 +17,7 @@
   boot.loader.systemd-boot.configurationLimit = 100;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # nixos doesn't clear out /tmp on each boot. I'm used to it being a tmpfs
+  # NixOS doesn't clear out /tmp on each boot. I'm used to it being a tmpfs
   # (`boot.tmp.useTmpfs = true`), but nix-shell uses it, and it needs a *lot*
   # of space, and I'm not sure I want to allocate that much ram?
   boot.tmp.cleanOnBoot = true;
@@ -39,7 +42,7 @@
       description = ''
         Encrypt a JWE for the root filesystem:
 
-          clan vars get locked-vm rootfs/password | tr -d '\n' | nix run nixpkgs#clevis encrypt tang '{"url": "http://tang.ec"}'
+          echo -n [rootfs-password] | nix run nixpkgs#clevis encrypt tang '{"url": "http://tang.ec"}'
       '';
     };
     files."jwe".neededFor = "activation"; # Used to generate the initrd during system activation.

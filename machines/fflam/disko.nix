@@ -1,5 +1,13 @@
-{ config, pkgs, ... }:
 {
+  flake,
+  config,
+  ...
+}:
+{
+  imports = [
+    flake.nixosModules.initrd-ssh-tor
+  ];
+
   boot.loader.systemd-boot.enable = true;
 
   # Keep only a finite number of boot configurations. This prevents /boot from

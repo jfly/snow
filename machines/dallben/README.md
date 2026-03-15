@@ -23,5 +23,7 @@ First, change some BIOS settings.
 1. See [../README.md](../README.md).
 2. Make sure you've maxed out the volume with `alsamixer`: ssh to the machine,
    `sudo machinectl shell kodi@`, `alsamixer`.
+3. Pair with gurgi: `moonlight` (frustratingly, this probably requires a
+   keyboard and a mouse).
 3. Follow instructions in `nixos-modules/kodi-colusita/README.md` to finish
    bootstrapping.

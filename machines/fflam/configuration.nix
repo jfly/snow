@@ -4,7 +4,6 @@
   imports = [
     flake.nixosModules.shared
     flake.nixosModules.monitoring
-    flake.nixosModules.initrd-ssh-tor
     ./hardware-configuration.nix
     ./disko.nix
     ./nas.nix

@@ -3,7 +3,6 @@
 {
   imports = [
     flake.nixosModules.shared
-    flake.nixosModules.initrd-ssh-tor
     ./hardware-configuration.nix
     ./disko.nix
   ];

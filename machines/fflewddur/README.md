@@ -15,6 +15,9 @@ Our primary NAS running on that old gaming PC James gave me forever ago.
    $ sudo smbpasswd -a jfly
    $ sudo smbpasswd -a rachel
    ```
+
+   `git grep smbpasswd` to find other users that must be created as well.
+
    TODO: manage this declaratively. See
    https://github.com/kanidm/kanidm/issues/2627 and
    https://github.com/lldap/lldap/issues/599 for promising options. If they don't

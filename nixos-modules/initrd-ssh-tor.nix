@@ -30,6 +30,8 @@ in
     ];
     hostKeys = [ config.clan.core.vars.generators.initrd-ssh.files."ssh_host_ed25519_key".path ];
   };
+
+  # Enable ethernet in initrd.
   boot.initrd.availableKernelModules = [
     "e1000"
     "e1000e"
@@ -77,7 +79,9 @@ in
   };
 
   clan.core.vars.generators.tor-hidden-service = {
-    files."hs_ed25519_secret_key" = { };
+    files."hs_ed25519_secret_key" = {
+      neededFor = "activation"; # Used to generate the initrd during system activation.
+    };
     files."hs_ed25519_public_key".secret = false;
     files."hostname".secret = false;
     runtimeInputs = with pkgs; [
@@ -93,7 +97,9 @@ in
   };
 
   clan.core.vars.generators.initrd-ssh = {
-    files."ssh_host_ed25519_key" = { };
+    files."ssh_host_ed25519_key" = {
+      neededFor = "activation"; # Used to generate the initrd during system activation.
+    };
     files."ssh_host_ed25519_key.pub".secret = false;
     runtimeInputs = with pkgs; [
       coreutils

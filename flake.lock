@@ -1441,11 +1441,11 @@
         "uv2nix": "uv2nix_3"
       },
       "locked": {
-        "lastModified": 1773443892,
-        "narHash": "sha256-w2iPKtAJR5wFGPoZJBzawh43u5RL0b9hjcgbzGbzUIQ=",
+        "lastModified": 1773482056,
+        "narHash": "sha256-ygWlAdSUfQhzQOPuFaMuA1fqa2a+GfG8SGO3jplwXIE=",
         "owner": "jfly",
         "repo": "systemctl-restore",
-        "rev": "402cc7c3d01fd25dbb268ed30cfe3323cd854d04",
+        "rev": "231a02aeb4703362ecdda9fe1ec177b0db80af1e",
         "type": "github"
       },
       "original": {

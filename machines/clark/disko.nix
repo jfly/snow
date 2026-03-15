@@ -1,6 +1,9 @@
 { flake, config, ... }:
 {
-  imports = [ flake.nixosModules.zfs ];
+  imports = [
+    flake.nixosModules.initrd-ssh-tor
+    flake.nixosModules.zfs
+  ];
 
   boot.loader.systemd-boot.enable = true;
 

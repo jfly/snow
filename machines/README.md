@@ -19,7 +19,7 @@ Edit the resulting files to your taste.
 3. If you're reprovisioning an existing machine, you may want to restore from backups.
    - `sudo restic-snow restore latest --target /tmp/restore`: Copy the
      latest backed up data for this host.
-   - `sudo systemctl-restore /tmp/restore/var/lib`: Restore data for systemd services.
+   - `sudo systemctl-restore /tmp/restore`: Restore data.
    - Finally, check `/tmp/restore` for anything else you might want to restore.
 4. Suggestion: now update your `~/.ssh/config` so you can simply `ssh [HOSTNAME]`.
 
