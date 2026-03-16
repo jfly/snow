@@ -38,6 +38,7 @@ in
 
     alertmanager = {
       enable = true;
+      # logLevel = "debug";
       webExternalUrl = services.alerts.baseUrl;
 
       configuration = {
