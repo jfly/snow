@@ -13,6 +13,29 @@ let
     ;
 
   cfg = config.services.kodi-colusita;
+
+  toggleUserService = pkgs.writeShellApplication {
+    name = "toggle-user-service";
+    runtimeInputs = [ pkgs.systemd ];
+    text = ''
+      if [ $# -ne 1 ]; then
+        echo "Must provide exactly 1 service to toggle"
+        exit 1
+      fi
+
+      service=$1
+
+      if systemctl --user is-active --quiet "$service"; then
+        echo "Stopping $service"
+        systemctl --user --no-block stop "$service"
+      else
+        echo "Starting $service"
+        systemctl --user --no-block start "$service"
+      fi
+
+      ${lib.getExe' pkgs.sox "play"} --no-show-progress ${../../nixos-modules/q/wav/owin31.wav}
+    '';
+  };
 in
 
 {
@@ -48,32 +71,23 @@ in
       serviceConfig.ExecStopPost = "${lib.getExe' pkgs.systemd "systemctl"} --user start kodi.service";
     };
 
-    systemd.user.services.cecdaemon =
+    services.actkbd =
       let
-        cecConf = {
-          tv.name = "Gurgi";
-          keymap = { };
-          # This lets the user stop moonlight with the remote control. Note the
-          # chosen button is exactly the same as the one in the moonlight kodi
-          # package (see its share/kodi/system/keymaps/z_moonlight.xml).
-          cmd_stop_moonlight = {
-            key = 114; # Red button.
-            holdtime = 0;
-            command = pkgs.writeShellScript "stop-moonlight" ''
-              ${pkgs.sox}/bin/play -q ${../../nixos-modules/q/wav/owin31.wav} &
-              ${lib.getExe' pkgs.systemd "systemctl"} --user stop moonlight.service
-            '';
-          };
+        # https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
+        keycodes = {
+          KEY_RED = 398;
         };
-
-        settingsFormat = pkgs.formats.ini { };
-        configFile = settingsFormat.generate "cec.conf" cecConf;
       in
       {
         enable = true;
-        wantedBy = [ "moonlight.service" ]; # Start when moonlight starts.
-        partOf = [ "moonlight.service" ]; # Stop when moonlight stops.
-        serviceConfig.ExecStart = "${lib.getExe pkgs.cecdaemon} --config=${configFile}";
+        bindings = [
+          # Let the user start/stop moonlight with the remote control.
+          {
+            keys = [ keycodes.KEY_RED ];
+            events = [ "key" ];
+            command = "systemd-run --user --machine ${config.services.kodi-colusita.user}@ ${lib.getExe toggleUserService} moonlight.service";
+          }
+        ];
       };
   };
 }

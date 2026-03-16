@@ -28,42 +28,55 @@ let
     }
   );
 
-  myKodi = pkgs.symlinkJoin {
-    name = "kodi";
-    paths = [
-      (cfg.package.withPackages (
-        kodiAddons:
-        [
-          settingsAddon
-          kodiAddons.jellyfin
-        ]
-        ++ cfg.extraAddons
-      ))
-    ];
-    buildInputs = [ pkgs.makeWrapper ];
+  myKodi =
+    (cfg.package.withPackages (
+      kodiAddons:
+      [
+        settingsAddon
+        kodiAddons.jellyfin
+      ]
+      ++ cfg.extraAddons
+    )).overrideAttrs
+      (oldAttrs: {
+        nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [
+          (pkgs.xmlstarlet.overrideAttrs (oldAttrs: {
+            patches = oldAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "Add error checking for writing to file";
+                url = "https://sourceforge.net/p/xmlstar/bugs/136/attachment/error-checking.patch";
+                hash = "sha256-KnmXlNvFV5llI6w23fw13O+Obp36aWNbGs6EK3w9ArY=";
+              })
+            ];
+          }))
+        ];
+        postBuild = oldAttrs.postBuild or "" + ''
+          # Adding `gdb` to the `PATH` allows Kodi's coredumps to include stack traces.
+          #
+          # Setting `NIX_SSL_CERT_FILE` because Python applications in NixOS seem to
+          # not honor the system certificate bundle. See
+          # <machines/fflewddur/home-assistant/default.nix> for a
+          # similar hack.
+          # This feels like something that NixOS could improve. It already has a
+          # patch in place for `certifi` (which both Kodi and Home Assistant use),
+          # it would probably not be a lot of work to make them honor the system
+          # certificate bundle out of the box.
+          wrapProgram $out/bin/kodi \
+            --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]} \
+            --set-default NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
 
-    # Adding `gdb` to the `PATH` allows Kodi's coredumps to include stack traces.
-    #
-    # Setting `NIX_SSL_CERT_FILE` because Python applications in NixOS seem to
-    # not honor the system certificate bundle. See
-    # <machines/fflewddur/home-assistant/default.nix> for a
-    # similar hack.
-    # This feels like something that NixOS could improve. It already has a
-    # patch in place for `certifi` (which both Kodi and Home Assistant use),
-    # it would probably not be a lot of work to make them honor the system
-    # certificate bundle out of the box.
-    postBuild = ''
-      wrapProgram $out/bin/kodi \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]} \
-        --set-default NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
-    '';
-
-    meta.mainProgram = "kodi";
-  };
+          # Convert peripherals.xml to a real file, rather than a symlink to the nix store.
+          cp --remove-destination --no-preserve=mode $(readlink $out/share/kodi/system/peripherals.xml) $out/share/kodi/system/peripherals.xml
+          # Now update peripherals.xml.
+          xmlstarlet ed --inplace --update "/peripherals/peripheral[@bus='cec']/setting[@key='enabled']/@value" --value "0" $out/share/kodi/system/peripherals.xml
+        '';
+      });
 in
 
 {
-  imports = [ ./moonlight.nix ];
+  imports = [
+    ./moonlight.nix
+    ./cecdaemon.nix
+  ];
 
   options.services.kodi-colusita = {
     enable = mkEnableOption "kodi-colusita";

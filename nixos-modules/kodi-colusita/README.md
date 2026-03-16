@@ -3,12 +3,6 @@
 This doesn't fully configure Kodi. Please feel free to improve this when you
 find time.
 
-## CEC <<< TODO >>>
-
-1. Settings > System > Input > Peripherals > CEC Adapter > Connected to HDMI device
-   Set this to "Amplifier / AVR device"
-   NOTE: this keeps changing. Perhaps setting it in a config file would help?
-
 ## Jellyfin
 
 The Jellyfin plugin has a number of things to do on first boot. Here's what you

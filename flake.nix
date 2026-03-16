@@ -156,6 +156,16 @@
             url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
             hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
           })
+          (fetchpatch {
+            name = "nixos/actkbd: switch to Type=exec rather than forking";
+            url = "https://github.com/NixOS/nixpkgs/pull/500207.diff";
+            hash = "sha256-3I/VnmMF05KIYMrUBRnqsh+eqCwCKejao6AKy/JEjZo=";
+          })
+          (fetchpatch {
+            name = "kodi: inherit underlying kodi's meta when wrapping";
+            url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
+            hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
+          })
         ];
 
         openwrt-imagebuilder.patches = [
