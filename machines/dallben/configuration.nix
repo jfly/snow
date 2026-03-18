@@ -24,7 +24,11 @@
   services.kodi-colusita = {
     enable = true;
     startOnBoot = true;
-    moonlight.enable = true;
+    cecdaemon.enable = true;
+    moonlight = {
+      enable = true;
+      startOnKeycode = "KEY_RED";
+    };
   };
 
   # This device regularly goes to sleep.

@@ -1,25 +1,29 @@
 diff --git a/pkgs/clan-cli/clan_lib/network/direct.py b/pkgs/clan-cli/clan_lib/network/direct.py
-index 18d8395e9..1f7532982 100644
+index 18d8395e9..7780db899 100644
 --- a/pkgs/clan-cli/clan_lib/network/direct.py
 +++ b/pkgs/clan-cli/clan_lib/network/direct.py
-@@ -45,7 +45,7 @@ def remote(self, peer: Peer) -> list[Remote]:
+@@ -44,8 +44,8 @@ def connection(self, network: Network) -> Iterator[Network]:
+     def remote(self, peer: Peer) -> list[Remote]:
          return [
              Remote(
-                 address=host,
+-                address=host,
 -                user=peer.ssh_user,
++                address=f"{peer.name}.m",
 +                user="jfly",
                  port=peer.port,
                  command_prefix=peer.name,
              )
 diff --git a/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py b/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
-index d23b0c3fb..0cb66b3af 100644
+index d23b0c3fb..d0fc77bfe 100644
 --- a/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
 +++ b/pkgs/clan-cli/clan_lib/network/zerotier/__init__.py
-@@ -40,7 +40,7 @@ def remote(self, peer: Peer) -> list["Remote"]:
+@@ -39,8 +39,8 @@ def connection(self, network: Network) -> Iterator[Network]:
+     def remote(self, peer: Peer) -> list["Remote"]:
          return [
              Remote(
-                 address=host,
+-                address=host,
 -                user=peer.ssh_user,
++                address=f"{peer.name}.m",
 +                user="jfly",
                  port=peer.port,
                  command_prefix=peer.name,

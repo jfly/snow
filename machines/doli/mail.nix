@@ -32,10 +32,8 @@
         config.clan.core.vars.generators.mail-alerts.files."password.bcrypt".path;
     };
 
-    dkimDomainPrivateKeyFiles = {
-      "playground.jflei.com" =
-        config.clan.core.vars.generators."dkim-playground.jflei.com.${config.mailserver.dkimSelector}".files."key".path;
-    };
+    dkim.domains."playground.jflei.com".selectors.${config.mailserver.dkim.defaults.selector}.keyFile =
+      config.clan.core.vars.generators."dkim-playground.jflei.com.${config.mailserver.dkim.defaults.selector}".files."key".path;
   };
 
   services.postfix.settings.main.virtual_alias_maps = [
@@ -107,33 +105,34 @@
     '';
   };
 
-  clan.core.vars.generators."dkim-playground.jflei.com.${config.mailserver.dkimSelector}" = {
-    files."key" = {
-      owner = config.services.rspamd.user;
-      group = config.services.rspamd.group;
+  clan.core.vars.generators."dkim-playground.jflei.com.${config.mailserver.dkim.defaults.selector}" =
+    {
+      files."key" = {
+        owner = config.services.rspamd.user;
+        group = config.services.rspamd.group;
+      };
+      files."txt".secret = false;
+      runtimeInputs = with pkgs; [
+        coreutils
+        opendkim
+        (pkgs.writers.writePython3Bin "parse-bindfile" { libraries = [ flake'.packages.zonefile-parser ]; }
+          /* python */ ''
+            import fileinput
+            import zonefile_parser
+
+            with fileinput.input() as f:
+                content = "".join(f)
+                records = zonefile_parser.parse(content)
+
+                for record in records:
+                    print(record.rdata['value'])
+          ''
+        )
+      ];
+      script = ''
+        opendkim-genkey --selector="${config.mailserver.dkim.defaults.selector}" --domain="playground.jflei.com" --bits=1024
+        mv "${config.mailserver.dkim.defaults.selector}.private" $out/key
+        parse-bindfile "${config.mailserver.dkim.defaults.selector}.txt" > $out/txt
+      '';
     };
-    files."txt".secret = false;
-    runtimeInputs = with pkgs; [
-      coreutils
-      opendkim
-      (pkgs.writers.writePython3Bin "parse-bindfile" { libraries = [ flake'.packages.zonefile-parser ]; }
-        /* python */ ''
-          import fileinput
-          import zonefile_parser
-
-          with fileinput.input() as f:
-              content = "".join(f)
-              records = zonefile_parser.parse(content)
-
-              for record in records:
-                  print(record.rdata['value'])
-        ''
-      )
-    ];
-    script = ''
-      opendkim-genkey --selector="${config.mailserver.dkimSelector}" --domain="playground.jflei.com" --bits=1024
-      mv "${config.mailserver.dkimSelector}.private" $out/key
-      parse-bindfile "${config.mailserver.dkimSelector}.txt" > $out/txt
-    '';
-  };
 }

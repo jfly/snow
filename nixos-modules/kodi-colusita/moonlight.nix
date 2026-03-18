@@ -10,9 +10,16 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
+    mkOption
     ;
 
-  cfg = config.services.kodi-colusita;
+  cfg = config.services.kodi-colusita.moonlight;
+
+  # Very incomplete, lol.
+  # https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
+  keycodes = {
+    KEY_RED = 398;
+  };
 
   toggleUserService = pkgs.writeShellApplication {
     name = "toggle-user-service";
@@ -41,11 +48,23 @@ in
 {
   options.services.kodi-colusita.moonlight = {
     enable = mkEnableOption "kodi-colusita";
+
+    startOnKeycode = mkOption {
+      type = lib.types.nullOr (lib.types.enum (lib.attrNames keycodes));
+      default = null;
+    };
   };
 
-  config = mkIf cfg.moonlight.enable {
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.startOnKeycode != null) -> (config.services.kodi-colusita.user != null);
+        message = "startOnKeycode requires that `config.services.kodi-colusita.user` is enabled.";
+      }
+    ];
+
     services.kodi-colusita.extraAddons = [
-      cfg.package.packages.joystick
+      config.services.kodi-colusita.package.packages.joystick
       flake'.packages.kodiPackages.moonlight
     ];
 
@@ -71,23 +90,16 @@ in
       serviceConfig.ExecStopPost = "${lib.getExe' pkgs.systemd "systemctl"} --user start kodi.service";
     };
 
-    services.actkbd =
-      let
-        # https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
-        keycodes = {
-          KEY_RED = 398;
-        };
-      in
-      {
-        enable = true;
-        bindings = [
-          # Let the user start/stop moonlight with the remote control.
-          {
-            keys = [ keycodes.KEY_RED ];
-            events = [ "key" ];
-            command = "systemd-run --user --machine ${config.services.kodi-colusita.user}@ ${lib.getExe toggleUserService} moonlight.service";
-          }
-        ];
-      };
+    services.actkbd = mkIf (cfg.startOnKeycode != null) {
+      enable = true;
+      bindings = [
+        # Let the user start/stop moonlight with the remote control.
+        {
+          keys = [ keycodes.${cfg.startOnKeycode} ];
+          events = [ "key" ];
+          command = "systemd-run --user --machine ${config.services.kodi-colusita.user}@ ${lib.getExe toggleUserService} moonlight.service";
+        }
+      ];
+    };
   };
 }

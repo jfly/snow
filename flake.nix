@@ -181,14 +181,6 @@
           # })
         ];
 
-        simple-nixos-mailserver.patches = [
-          (fetchpatch {
-            name = "feat: add support for DKIM private key files";
-            url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/merge_requests/344.diff";
-            hash = "sha256-vM5S2oZ6kF58Cofq0vPvmza/XKdjsmDnWKevsRTZ7a8=";
-          })
-        ];
-
         clan-core = {
           patches = [
             (fetchpatch {
@@ -213,8 +205,6 @@
             ./patches/clan-core/username-hack.patch
             # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
             ./patches/clan-core/read-build-host-from-env-var.patch
-            # Quick-n-dirty workaround for <https://git.clan.lol/clan/clan-core/issues/7021>.
-            ./patches/clan-core/revert-vars-filter.patch
           ];
         };
 
