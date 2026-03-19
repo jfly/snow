@@ -76,9 +76,7 @@ in
 {
   imports = [ flake.nixosModules.fflewddur-fflam-backup-ssh-creds ];
 
-  # Generated with `ssh-keyscan fflam.m`
-  programs.ssh.knownHosts."fflam.m".publicKey =
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCoA4aePxYWmpVc2xP3L2etiGfhtAbDwwx4rdqeUxjNWlA/w/vE7bQn1EWzi1WMwsBD0kFqB430H3RtxYqLbxO5a1YvgE3aQzpRQ0c2MCFSpVWPs0+8Kx2S2rIVNbeePKAA5rH03vLJ36b3WlD1gVwqCW6ZBgYXBUJ06zvIkXAHUp6fxPUZ7U9ZKZ5S9j+b/PYv9derwScK8orV35g009pn6za1VNiPmsU4OqiwtUM/dACzJKmq/kGPRbsc+gh/n1+bAXALjCid8ne3ppF5njb2AYCIwli1nw/Vg2MQaIIn+Dq1h8tMne3QQG48H6YeZfrIl/hZkwWuwh6VpSLIeJq2JazPp80LxEIjLHqF0f3CLgn/1IGEamzFgiSYSbrBCY0L33UYVKvTGpUDbipKMJczZ+SIy01OlfQLsz/3Oz9VLyimDKYmXtSCV+rZgfRSiE+MDpODePT92vIavb7vtZ6mnEkinrZFb77OsoW1YRsfI8bb06W9AhFjSwJxv6I38ratwvnRG2/jA+kfHdI2bjfLrMHcdq0pa38y48xVoSIhP6LOTh00Mpvx9h7uMQqq7MrGxs939r/uX9awGghgwsfw85nTsNI3coi9lSWxujzcTd6tT0+zX0XAj1gvPkjKAfnyIBBVNFmeDzC+P6zMiHd8b3ZiedDKBRmzCmmYZdg9aQ==";
+  programs.ssh.knownHosts."fflam.m".publicKey = flake.lib.identities.fflam;
 
   systemd = {
     # Offsite backups.

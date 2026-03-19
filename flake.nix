@@ -181,32 +181,43 @@
           # })
         ];
 
-        clan-core = {
-          patches = [
-            (fetchpatch {
-              name = ''Reapply "machines update: support `--target-host localhost`"'';
-              url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
-            })
-            # We need to allow vars definitions to differ across machines.
-            # See the "Ensure the oauth secrets are readable by the Kanidm
-            # service" comment in machines/fflewddur/kanidm/default.nix for
-            # an explanation why.
-            # TODO: rework the kanidm module to be able to use systemd's
-            # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
-            ./patches/clan-core/allow-differing-shared-generators.patch
-            # Clan's intelligent network discovery does not have a mechanism to
-            # pick a username:
-            # <https://git.clan.lol/clan/clan-core/issues/5812>, and the
-            # explicit `targetHost` we specify does not work due to
-            # <https://git.clan.lol/clan/clan-core/issues/5813>.
-            # As an incredibly quick and dirty hack, we just hardcode clan to
-            # use the correct username instead.
-            ./patches/clan-core/username-hack.patch
-            # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
-            ./patches/clan-core/read-build-host-from-env-var.patch
-          ];
-        };
+        clan-core.patches = [
+          (fetchpatch {
+            name = ''Reapply "machines update: support `--target-host localhost`"'';
+            url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
+            hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
+          })
+          # We need to allow vars definitions to differ across machines.
+          # See the "Ensure the oauth secrets are readable by the Kanidm
+          # service" comment in machines/fflewddur/kanidm/default.nix for
+          # an explanation why.
+          # TODO: rework the kanidm module to be able to use systemd's
+          # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
+          ./patches/clan-core/allow-differing-shared-generators.patch
+          # Clan's intelligent network discovery does not have a mechanism to
+          # pick a username:
+          # <https://git.clan.lol/clan/clan-core/issues/5812>, and the
+          # explicit `targetHost` we specify does not work due to
+          # <https://git.clan.lol/clan/clan-core/issues/5813>.
+          # As an incredibly quick and dirty hack, we just hardcode clan to
+          # use the correct username instead.
+          ./patches/clan-core/username-hack.patch
+          # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
+          ./patches/clan-core/read-build-host-from-env-var.patch
+
+          # Workarounds for <https://git.clan.lol/clan/clan-core/issues/6554>
+          # Commits are from this branch: <https://git.clan.lol/clan/clan-core/compare/main...jfly:issue-6554-workaround>.
+          (fetchpatch {
+            name = "fix: `decrypt_secret` no longer assumes the secret is utf8 text";
+            url = "https://git.clan.lol/jfly/clan-core/commit/5c2ba41e8e719eb30a815240ec4432a9567927d1.patch";
+            hash = "sha256-ulEs7JBqXkYT+AKrFKOZ+mNpOci+iS16/mb6bbI3IKs=";
+          })
+          (fetchpatch {
+            name = "fix: `clan vars get` no longer includes erroneous trailing newline";
+            url = "https://git.clan.lol/jfly/clan-core/commit/1e798d439b4557f8a5c0a2a3424c4a1566bee3c0.patch";
+            hash = "sha256-v/1LHa+F76gVqpqbHRzaNxmUc3pNd3BMJCOAN70v8GU=";
+          })
+        ];
 
         flake-parts.patches = [
           # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
