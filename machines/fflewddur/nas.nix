@@ -103,10 +103,10 @@ in
         "force user" = config.users.users.archive.name;
       };
 
-      media-writer = {
+      media = {
         path = "/mnt/media";
         writeable = "yes";
-        "valid users" = "dallben";
+        "valid users" = "jfly rachel dallben";
         "force group" = "media";
         "force create mode" = "0660"; # rw for user and group.
         "force directory mode" = "0770"; # rwx for user and group.

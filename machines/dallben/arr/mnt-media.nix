@@ -20,7 +20,7 @@
   };
 
   fileSystems."/mnt/media" = {
-    device = "//fflewddur.ec/media-writer";
+    device = "//fflewddur.ec/media";
     fsType = "cifs";
     options =
       let
