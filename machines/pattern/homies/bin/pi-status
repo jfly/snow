@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-ssh pi@raspberrypi systemctl status 'hidproxy@*'

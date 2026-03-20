@@ -2,12 +2,11 @@
 
 import os
 import re
-import sys
 import signal
 import subprocess
 
 def wait_for_key(keycode):
-    cmd = "xinput list | grep -Po 'id=\K\d+(?=.*slave\s*keyboard)' | xargs -P0 -n1 xinput test"
+    cmd = r"xinput list | grep -Po 'id=\K\d+(?=.*slave\s*keyboard)' | xargs -P0 -n1 xinput test"
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     for line in p.stdout:
         line = line.decode('utf-8').strip()

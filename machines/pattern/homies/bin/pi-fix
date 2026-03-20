@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-ssh pi@raspberrypi "bash -c \"sudo systemctl restart 'hidproxy' && sudo systemctl restart 'hidproxy@*'\""
