@@ -57,6 +57,7 @@ in
       ".android/adbkey" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey";
       ".android/adbkey.pub" = "${homeDir}/sync/jfly-linux-secrets/.android/adbkey.pub";
       ".config/adept" = "${homeDir}/sync/jfly-linux-secrets/.config/adept";
+      ".local/share/nvim/site/spell" = "${homeDir}/sync/jfly-linux-secrets/nvim/site/spell"; # neovim spell file
     })
     // {
       ".zshrc".text = ''

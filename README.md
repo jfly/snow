@@ -70,7 +70,7 @@ My DNS does not spark joy. There are a bunch of places where this happens:
      Also note the crazy hacks required to get various devices to play nicely
      with an IPv6 only overlay network even when connected to an IPv4 only
      physical network.
-3. Public DNS is on CloudFlare, managed by [iac/pulumi](iac/pulumi). This is
+3. Public DNS is on CloudFlare, managed by [`iac/pulumi`](iac/pulumi). This is
    overkill: Pulumi has state, which is annoying to deal with. I'd like to
    explore alternatives to this, perhaps
    [DNSControl](https://docs.dnscontrol.org/) or running our own [hidden primary
@@ -90,12 +90,12 @@ my reasons:
 
 - Kubernetes makes it really easy to build up circular dependencies that make
   it hard/impossible to recreate your cluster.
-  - I manage my cluster with a Pulumi app whose state is stored in a
-    [MinIO](https://min.io/) "s3" bucket, but MinIO *itself* is running on
+  - I managed my cluster with a Pulumi app whose state is stored in a
+    [MinIO](https://min.io/) "s3" bucket, but MinIO *itself* was running on
     Kubernetes.
-  - I run an [OCI Registry](https://docs.docker.com/registry/) on my Kubernetes
-    cluster, which my Kubernetes cluster pulls images from. Astonishingly, this
-    works, even with HTTPS (thank you [cert-manager](https://cert-manager.io/)!).
+  - I ran an [OCI Registry](https://docs.docker.com/registry/) on my Kubernetes
+    cluster, which my Kubernetes cluster pulled images from. Astonishingly, this
+    worked, even with HTTPS (thank you [cert-manager](https://cert-manager.io/)!).
   - The one time I had to recreate
     my cluster was a stressful full morning of effort, and my cluster has only
     gotten more complicated since then. I wonder if I should move these sorts
@@ -108,7 +108,7 @@ my reasons:
   answer" to this, but I've always found them clunky to work with).
 - Locking/upgrading containers requires additional tooling. Don't get me
   started about patching software.
-- I despise the "yaml ops" that is prevelant throughout the k8s ecosystem. I
+- I despise the "yaml ops" that is prevalent throughout the k8s ecosystem. I
   managed the state of my cluster with Pulumi, which was a much better
   experience, but you're in the minority if you do that.
 
@@ -133,10 +133,10 @@ like to move to a friend's house someday.
 I use Prometheus for data gathering ("scraping"), Grafana for
 exploring/visualizations/dashboards, and Prometheus Alertmanager for alerts.
 
-I have Alertmanger email me through [my self-hosted mailserver](machines/doli/README.md).
+I have Alertmanager email me through [my self-hosted mailserver](machines/doli/README.md).
 
-I use [ntfy-alertmanager](https://git.xenrox.net/~xenrox/ntfy-alertmanager) to
-forward alerts from Alertmanager to my [ntfy](https://ntfy.sh) topic. ntfy is great!
+I use [`ntfy-alertmanager`](https://git.xenrox.net/~xenrox/ntfy-alertmanager) to
+forward alerts from Alertmanager to my [ntfy](https://ntfy.sh) topic (ntfy is great!)
 
 In case my monitoring server dies, I'll find out about it because I have a
 deadman switch set up with the excellent <https://healthchecks.io>. This
