@@ -6,6 +6,10 @@ in
   services.sonarr = {
     enable = true;
     group = "media";
+
+    settings = {
+      auth.method = "External";
+    };
   };
 
   snow.services.sonarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";

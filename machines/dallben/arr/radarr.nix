@@ -6,6 +6,10 @@ in
   services.radarr = {
     enable = true;
     group = "media";
+
+    settings = {
+      auth.method = "External";
+    };
   };
 
   snow.services.radarr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
