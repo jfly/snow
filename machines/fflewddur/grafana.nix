@@ -32,6 +32,11 @@ in
       # doesn't support references to both env vars and files at the same time, see
       # <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion>
       security.secret_key = "$_file{/run/credentials/${config.systemd.services.grafana.name}/secret_key}";
+
+      "auth.anonymous" = {
+        enabled = true;
+        org_role = "Viewer";
+      };
     };
 
     provision = {
