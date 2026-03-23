@@ -20,4 +20,10 @@ in
       '';
     }
   ];
+
+  # Get rid of garish highlighting for misspellings.
+  highlightOverride.SpellBad.undercurl = true;
+  highlightOverride.SpellCap.undercurl = true;
+  highlightOverride.SpellLocal.undercurl = true;
+  highlightOverride.SpellRare.undercurl = true;
 }
