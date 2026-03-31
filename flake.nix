@@ -131,7 +131,7 @@
           (fetchpatch {
             name = "mycli: fix build";
             url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
-            hash = "sha256-cA7hCgonoCJLKvFVo/tGiAUEqMJzglbZoF21wnx70w4=";
+            hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";
           })
           (fetchpatch {
             name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
