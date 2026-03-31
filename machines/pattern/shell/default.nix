@@ -90,6 +90,7 @@ in
     ### Misc utils
     q
     psmisc # provides pstree
+    flake'.packages.childpids
     acpi # check laptop battery
     pwgen
     htop

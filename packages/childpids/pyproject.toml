@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "childpids"
+version = "0.1.0"
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = []
+authors = [
+  { name = "Jeremy Fleischman", email = "jeremyfleischman@gmail.com" },
+]
+dependencies = [
+  "psutil",
+  "typer",
+]
+
+[project.scripts]
+childpids = "childpids.cli:app"
