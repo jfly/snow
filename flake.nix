@@ -129,6 +129,11 @@
             hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
           })
           (fetchpatch {
+            name = "ntfy-alertmanager: 0.5.0 -> 1.0.0";
+            url = "https://github.com/NixOS/nixpkgs/pull/505443.diff";
+            hash = "sha256-QdwVGpJQXpjcy4DcQ+sFqV6BstbN0QlO8CPmQ5AKOws=";
+          })
+          (fetchpatch {
             name = "mycli: fix build";
             url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
             hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";

@@ -32,6 +32,7 @@ let
       }
 
       resolved {
+          update-notification true
           tags "resolved"
           priority 1
       }
