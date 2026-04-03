@@ -1,4 +1,5 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export DEVSHED_FLAKEREF:/home/jeremy/src/github\x2ecom/jfly/devshed
 SETUVAR __fish_initialized:4300
 SETUVAR fish_key_bindings:fish_default_key_bindings

@@ -86,6 +86,8 @@ in
     ### Explore filesystem
     file
     tree
+    flake'.packages.src-report
+    inputs'.devshell-init.packages.default
 
     ### Misc utils
     q
