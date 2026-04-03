@@ -28,7 +28,7 @@
 [branch]
 	sort = -authordate
 [sendemail]
-	sendmailCmd = msmtp --account=gmail
+	sendmailCmd = msmtp --account=jfly-gmail
 [merge]
 	conflictStyle = diff3
 [diff]
