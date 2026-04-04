@@ -18,8 +18,12 @@ let
       labels {
           order "severity"
 
-          severity "error" {
+          severity "urgent" {
               priority 5
+          }
+
+          severity "error" {
+              priority 4
           }
 
           severity "warning" {

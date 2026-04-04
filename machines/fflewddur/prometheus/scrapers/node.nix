@@ -144,6 +144,7 @@
                         or
                         absent(backup_completion_timestamp_seconds{instance="${instance}", site="snow"})
                       '';
+                      for = "30m";
                       labels.severity = "error";
                       annotations.summary = "backup on {{ $labels.instance }} to site snow has not succeeded recently.";
                     }))
@@ -158,6 +159,7 @@
                       or
                       absent(backup_completion_timestamp_seconds{site="hetzner"})
                     '';
+                    for = "30m";
                     labels.severity = "error";
                     annotations.summary = "backup on {{ $labels.instance }} to site hetzner has not succeeded recently.";
                   }
@@ -168,6 +170,7 @@
                       or
                       absent(backup_completion_timestamp_seconds{site="fflam"})
                     '';
+                    for = "30m";
                     labels.severity = "error";
                     annotations.summary = "backup on {{ $labels.instance }} to site fflam has not succeeded recently.";
                   }

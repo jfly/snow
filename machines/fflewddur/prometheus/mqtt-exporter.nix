@@ -53,7 +53,7 @@ in
                   # alerting for other critical devices.
                   expr = ''time() - (mqtt_last_seen{topic=~".*_weather"} / 1000) > 3h'';
                   labels = {
-                    severity = "error";
+                    severity = "urgent";
                     category = "zigbee";
                   };
                   annotations.summary = "Have not heard from {{ $labels.topic }} in a while";
@@ -63,7 +63,7 @@ in
                   alert = "LongTimeNoChange";
                   expr = ''changes(mqtt_temperature{topic=~"zigbee2mqtt_south-bedroom_weather|zigbee2mqtt_northeast-bedroom_weather"}[3h]) == 0'';
                   labels = {
-                    severity = "error";
+                    severity = "urgent";
                     category = "zigbee";
                   };
                   annotations.summary = "Have not seen a temperature change from {{ $labels.topic }} in a while";
@@ -73,7 +73,7 @@ in
                   alert = "ZigbeeDeviceGone";
                   expr = "mqtt_zigbee_availability == 0";
                   labels = {
-                    severity = "error";
+                    severity = "urgent";
                     category = "zigbee";
                   };
                   annotations.summary = "Zigbee device {{ $labels.topic }} not available";
@@ -96,7 +96,7 @@ in
                   expr = ''1.8 * mqtt_temperature{topic="zigbee2mqtt_freezer_weather"} + 32 > 5'';
                   for = "5m";
                   labels = {
-                    severity = "error";
+                    severity = "urgent";
                     category = "zigbee";
                   };
                   annotations.summary = "Chest freezer appears to be too warm";
