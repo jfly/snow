@@ -3,6 +3,8 @@
 let
   inherit (config.snow) services;
 
+  fflewddurIp = builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value;
+
   mkStaticProbe =
     {
       module,
@@ -93,6 +95,24 @@ in
               ];
             };
           };
+
+          modules.resolve_overlay_host = {
+            prober = "dns";
+            timeout = "5s";
+            dns =
+              let
+                domainName = "home-assistant.m";
+                expectedIp = fflewddurIp;
+              in
+              {
+                query_type = "AAAA";
+                query_name = domainName;
+                preferred_ip_protocol = "ip4";
+                validate_answer_rrs = {
+                  fail_if_not_matches_regexp = [ ".*${expectedIp}" ];
+                };
+              };
+          };
         }
       );
     };
@@ -115,6 +135,12 @@ in
           services.ospi.baseUrl
           "http://thermostat.ec/fan"
           "http://garage.ec/garage"
+        ];
+      })
+      (mkStaticProbe {
+        module = "resolve_overlay_host";
+        targets = [
+          fflewddurIp
         ];
       })
     ];
@@ -148,6 +174,15 @@ in
                   for = "15m";
                   labels.severity = "error";
                   annotations.summary = "Endpoint {{ $labels.instance }} is unreachable";
+                }
+                {
+                  alert = "OverlayNetworkDnsDown";
+                  expr = ''
+                    probe_success{job="blackbox-resolve_overlay_host"} == 0
+                  '';
+                  for = "15m";
+                  labels.severity = "error";
+                  annotations.summary = "Overlay network DNS is down";
                 }
                 # See note above about not being able to scrape our mailserver.
                 # {
