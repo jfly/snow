@@ -7,6 +7,8 @@
 let
   inherit (config.snow) services;
   deercamPasswordKeyId = "deercam-password-id";
+  # TODO: Copy Dan's config to store stuff directly on the NAS.
+  #       Don't forget to set `RequiresMountsFor`!
 in
 {
   services.frigate.enable = true;

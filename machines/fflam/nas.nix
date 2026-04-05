@@ -23,7 +23,7 @@
     options = [
       # Don't block boot if we cannot mount this.
       "nofail"
-      # But also do not allow anyone to write to the rootfs, even if the mount
+      # But also do not allow anyone to write to it, even if the mount
       # fails (this will instead trigger another mount attempt).
       "x-systemd.automount"
     ];

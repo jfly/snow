@@ -24,9 +24,14 @@ in
       device = "/dev/disk/by-uuid/${uuid}";
       fsType = "ext4";
       options = [
+        # Don't block boot if we cannot mount this.
+        "nofail"
+        # But also do not allow anyone to write to it, even if the mount
+        # fails (this will instead trigger another mount attempt).
+        "x-systemd.automount"
+
         "rw"
         "user"
-        "auto"
       ];
     }) nasDriveUuids)
     // {
@@ -34,6 +39,12 @@ in
         device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
         fsType = "fuse.mergerfs";
         options = [
+          # Don't block boot if we cannot mount this.
+          "nofail"
+          # But also do not allow anyone to write to it, even if the mount
+          # fails (this will instead trigger another mount attempt).
+          "x-systemd.automount"
+
           # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
           "cache.files=off"
           "dropcacheonclose=true"
@@ -43,14 +54,21 @@ in
           "inodecalc=path-hash"
           # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
           "func.getattr=newest"
-        ];
+        ]
+        ++ (lib.mapAttrsToList (mntPath: _uuid: "x-systemd.requires=${mntPath}") nasDriveUuids);
       };
       # Set up a bind mount so /mnt/bay/media is accessible at /mnt/media.
       # Why? Partly historical, but this also provides a nice abstraction.
       "/mnt/media" = {
         device = "/mnt/bay/media";
-        options = [ "bind" ];
+        fsType = "none";
+        options = [
+          "bind"
+          "nofail"
+          "x-systemd.automount"
+        ];
       };
+
     };
 
   users.users.archive = {
@@ -111,6 +129,16 @@ in
         "force create mode" = "0660"; # rw for user and group.
         "force directory mode" = "0770"; # rwx for user and group.
       };
+    };
+  };
+
+  systemd.services.samba-smbd = {
+    unitConfig = {
+      RequiresMountsFor = [
+        (lib.mapAttrsToList (key: setting: setting.path) (
+          removeAttrs config.services.samba.settings [ "global" ]
+        ))
+      ];
     };
   };
 

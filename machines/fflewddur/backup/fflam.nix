@@ -10,6 +10,12 @@
   ...
 }:
 let
+  backupPaths = [
+    "/mnt/bay/archive/"
+    "/mnt/bay/media/"
+    "/mnt/bay/restic/"
+  ];
+
   keypair = {
     privateKeyfile = config.clan.core.vars.generators.fflewddur-fflam-backup-ssh.files."key".path;
   };
@@ -50,27 +56,19 @@ let
       pkgs.rsync
       pkgs.openssh
     ];
-    text =
-      let
-        backupPaths = [
-          "/mnt/bay/archive/"
-          "/mnt/bay/media/"
-          "/mnt/bay/restic/"
-        ];
-      in
-      /* bash */ ''
-        start_time=$(date +%s.%N)
+    text = /* bash */ ''
+      start_time=$(date +%s.%N)
 
-        ${lib.concatStringsSep "\n" (map rsyncCmd backupPaths)}
+      ${lib.concatStringsSep "\n" (map rsyncCmd backupPaths)}
 
-        end_time=$(date +%s.%N)
-        duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
+      end_time=$(date +%s.%N)
+      duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
 
-        # Finally, report a successful backup =)
-        echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
-        echo 'backup_completion_timestamp_seconds{site="fflam"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_completion_timestamp_seconds-fflam.prom
-        echo 'backup_duration_seconds{site="fflam"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_duration_seconds-fflam.prom
-      '';
+      # Finally, report a successful backup =)
+      echo "That backup took $duration_seconds seconds. Reporting success to Prometheus"
+      echo 'backup_completion_timestamp_seconds{site="fflam"}' "$(date +%s)" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_completion_timestamp_seconds-fflam.prom
+      echo 'backup_duration_seconds{site="fflam"}' "$duration_seconds" | ${pkgs.moreutils}/bin/sponge ${config.snow.monitoring.nodeTextfileDir}/backup_duration_seconds-fflam.prom
+    '';
   };
 in
 {
@@ -92,6 +90,9 @@ in
       description = "fflewddur -> fflam backup";
       enable = true;
       script = lib.getExe fflewddur-backup-to-fflam;
+      unitConfig = {
+        RequiresMountsFor = [ backupPaths ];
+      };
     };
   };
 }

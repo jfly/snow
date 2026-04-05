@@ -6,6 +6,10 @@
 }:
 
 let
+  backupPaths = [
+    "/mnt/bay/restic"
+  ];
+
   keypair = {
     privateKeyfile = config.clan.core.vars.generators.fflewddur-hetzner-backup-ssh.files."key".path;
   };
@@ -51,7 +55,7 @@ let
         --sftp-known-hosts-file ${hetznerKnownHosts} \
         --checkers=7 \
         --log-level=INFO \
-        /mnt/bay/restic \
+        ${lib.escapeShellArgs backupPaths} \
         :sftp:./manman
 
       end_time=$(date +%s.%N)
@@ -157,6 +161,9 @@ in
       description = "fflewddur -> hetzner backup";
       enable = true;
       script = lib.getExe fflewddur-backup-to-hetzner;
+      unitConfig = {
+        RequiresMountsFor = [ backupPaths ];
+      };
     };
 
     # Regularly generate metrics about the disk usage of our Hetzner storage

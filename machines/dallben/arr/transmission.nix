@@ -27,6 +27,9 @@
       enable = true;
       vpnNamespace = "wg";
     };
+    unitConfig = {
+      RequiresMountsFor = "/mnt/media";
+    };
   };
 
   vpnNamespaces.wg.portMappings = [
