@@ -21,45 +21,46 @@ in
   # could set a dummy value for some secret environment variables).
   services.frigate.checkConfig = false;
   services.frigate.settings.cameras = {
-    ratcam = {
-      enabled = true;
-      ffmpeg = {
-        # https://docs.frigate.video/configuration/hardware_acceleration_video/#setup-decoder
-        hwaccel_args = "preset-nvidia";
-        inputs = [
-          # I configured 2 streams as documented on
-          # <https://docs.frigate.video/frigate/camera_setup#example-camera-configuration>.
-          # The RTSP urls for this camera are documented on
-          # <https://support.amcrest.com/hc/en-us/articles/360052688931-Accessing-Amcrest-Products-Using-RTSP>.
-          {
-            path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=0";
-            roles = [ "record" ];
-          }
-          {
-            path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=2";
-            roles = [ "detect" ];
-          }
-        ];
-      };
-      detect.enabled = false; # As the docs warn: this is just too CPU intensive.
-      record = {
-        enabled = true;
-        # Retain settings copied from
-        # <https://docs.frigate.video/configuration/record/#most-conservative-ensure-all-video-is-saved>
-        retain = {
-          days = 3;
-          mode = "all";
-        };
-        alerts.retain = {
-          days = 30;
-          mode = "motion";
-        };
-        detections.retain = {
-          days = 30;
-          mode = "motion";
-        };
-      };
-    };
+    # TODO: set this up again with new role
+    # ratcam = {
+    #   enabled = true;
+    #   ffmpeg = {
+    #     # https://docs.frigate.video/configuration/hardware_acceleration_video/#setup-decoder
+    #     hwaccel_args = "preset-nvidia";
+    #     inputs = [
+    #       # I configured 2 streams as documented on
+    #       # <https://docs.frigate.video/frigate/camera_setup#example-camera-configuration>.
+    #       # The RTSP urls for this camera are documented on
+    #       # <https://support.amcrest.com/hc/en-us/articles/360052688931-Accessing-Amcrest-Products-Using-RTSP>.
+    #       {
+    #         path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=0";
+    #         roles = [ "record" ];
+    #       }
+    #       {
+    #         path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=2";
+    #         roles = [ "detect" ];
+    #       }
+    #     ];
+    #   };
+    #   detect.enabled = false; # As the docs warn: this is just too CPU intensive.
+    #   record = {
+    #     enabled = true;
+    #     # Retain settings copied from
+    #     # <https://docs.frigate.video/configuration/record/#most-conservative-ensure-all-video-is-saved>
+    #     retain = {
+    #       days = 3;
+    #       mode = "all";
+    #     };
+    #     alerts.retain = {
+    #       days = 30;
+    #       mode = "motion";
+    #     };
+    #     detections.retain = {
+    #       days = 30;
+    #       mode = "motion";
+    #     };
+    #   };
+    # };
   };
 
   clan.core.vars.generators.deercam = {
