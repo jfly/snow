@@ -3,7 +3,8 @@
   imports = [
     flake.nixosModules.shared
     flake.nixosModules.syncthing
-    ./boot.nix
+    ./hardware-configuration.nix
+    ./disko.nix
     ./network.nix
     ./gpu.nix
     ./nas.nix
@@ -34,6 +35,8 @@
     ./forge.nix
     ./budget.nix
   ];
+
+  disko.devices.disk.main.device = "/dev/disk/by-id/ata-P3-2TB_0029270021768";
 
   networking.hostName = "fflewddur";
   snow.network.lan = {

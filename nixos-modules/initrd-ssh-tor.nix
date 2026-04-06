@@ -35,6 +35,8 @@ in
   boot.initrd.availableKernelModules = [
     "e1000"
     "e1000e"
+    # <<< # Find out the required network card driver by running `nix shell nixpkgs#pciutils -c lspci -k` on the target machine
+    "r8169" # <<<
   ];
 
   boot.initrd.secrets = {
