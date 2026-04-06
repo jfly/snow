@@ -17,6 +17,7 @@ in
     flake.nixosModules.backup
     flake.nixosModules.monitoring
     flake.nixosModules.nginx
+    flake.nixosModules.maintenance
     ./services.nix
   ];
 
