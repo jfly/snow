@@ -13,6 +13,10 @@ let
   resticRepository = "rest:http://${services.fflewddur.fqdn}:8000/";
 in
 {
+  imports = [
+    ./postgresql.nix
+  ];
+
   options.snow.backup = {
     paths = lib.mkOption {
       type = lib.types.listOf lib.types.path;
@@ -30,9 +34,9 @@ in
       default = [ ];
     };
 
-    backupPrepareCommand = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
+    backupPrepareCommands = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
       description = ''
         A script that must run before starting the backup process.
       '';
@@ -75,8 +79,8 @@ in
 
         backupPrepareCommand = ''
           date +%s.%N > $RUNTIME_DIRECTORY/start-ts
-        ''
-        + (if cfg.backupPrepareCommand != null then cfg.backupPrepareCommand else "");
+          ${cfg.backupPrepareCommands}
+        '';
 
         # Report success!
         backupCleanupCommand =

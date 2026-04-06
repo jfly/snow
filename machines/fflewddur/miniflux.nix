@@ -29,11 +29,10 @@ in
     oauth2ClientSecretFile = services.miniflux.oauth2.clientSecretPath;
   };
 
-  services.postgresqlBackup = {
-    enable = true;
-    databases = [ "miniflux" ];
-  };
-  snow.backup.paths = [ config.services.postgresqlBackup.location ];
+  snow.backup.postgresql.dbs = [
+    # https://github.com/NixOS/nixpkgs/blob/9acccf00827e39377a117b365061be698b88484d/nixos/modules/services/web-apps/miniflux.nix#L72
+    "miniflux"
+  ];
 
   snow.services.miniflux.proxyPass = "http://localhost:8080";
 }
