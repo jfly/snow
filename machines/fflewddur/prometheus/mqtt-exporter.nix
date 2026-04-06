@@ -73,7 +73,7 @@ in
                   alert = "ZigbeeDeviceGone";
                   expr = "mqtt_zigbee_availability == 0";
                   labels = {
-                    severity = "urgent";
+                    severity = "error";
                     category = "zigbee";
                   };
                   annotations.summary = "Zigbee device {{ $labels.topic }} not available";
