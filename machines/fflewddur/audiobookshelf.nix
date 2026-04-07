@@ -14,6 +14,4 @@
       proxy_redirect http:// $scheme://;
     '';
   };
-
-  snow.backup.paths = [ "/var/lib/${config.services.audiobookshelf.dataDir}" ];
 }

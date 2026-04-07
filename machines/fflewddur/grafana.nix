@@ -63,6 +63,4 @@ in
   };
 
   snow.services.grafana.proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
-
-  snow.backup.paths = [ config.services.grafana.dataDir ];
 }

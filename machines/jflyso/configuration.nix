@@ -32,6 +32,9 @@ in
   # This device is not online all the time.
   snow.monitoring.alertIfDown = false;
 
+  # We don't back up any data from this machine.
+  snow.backup.enable = false;
+
   # Allow ssh as the root user. nixos-anywhere needs this:
   # <https://github.com/nix-community/nixos-anywhere/pull/293#pullrequestreview-1962541552>
   users.users.root.openssh.authorizedKeys.keys = [ identities.jfly ];

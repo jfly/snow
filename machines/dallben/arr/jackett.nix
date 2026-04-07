@@ -24,8 +24,4 @@ in
       protocol = "tcp";
     }
   ];
-
-  snow.backup.paths = [
-    config.services.jackett.dataDir
-  ];
 }

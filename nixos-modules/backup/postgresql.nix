@@ -20,10 +20,7 @@ in
     };
 
     snow.backup = {
-      paths = [
-        config.services.postgresqlBackup.location
-      ];
-
+      # Note: these services back up data to `/var/backup`, which is one of the default locations that get backed up in ./default.nix.
       backupPrepareCommands =
         let
           services = map (dbName: "postgresqlBackup-${dbName}.service") cfg.dbs;

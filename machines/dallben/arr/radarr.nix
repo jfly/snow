@@ -31,8 +31,4 @@ in
       protocol = "tcp";
     }
   ];
-
-  snow.backup.paths = [
-    config.services.radarr.dataDir
-  ];
 }

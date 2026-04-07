@@ -165,13 +165,7 @@ in
     openFirewall = true;
   };
 
-  snow.backup.paths = [
+  snow.backup.extraPaths = [
     "/mnt/bay/archive"
-    # TODO: stop backing this up. Right now, we just need the
-    # `/var/lib/samba/private/passdb.tdb` file with the samba users + hashed
-    # passwords. Either manage those users declaratively, or integrate Samba
-    # with some other auth provider that can handle this state for us (maybe
-    # someday <https://github.com/kanidm/kanidm/issues/2627>).
-    "/var/lib/samba"
   ];
 }

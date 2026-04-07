@@ -24,7 +24,7 @@ in
   services.home-assistant = {
     enable = true;
     extraComponents = [
-      # Components required to complete the onboarding
+      # Components required to complete the onboarding.
       "analytics"
       "google_translate"
       "met"
@@ -195,6 +195,4 @@ in
       # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
       home-assistant-lan = haReverseProxy;
     };
-
-  snow.backup.paths = [ config.services.home-assistant.configDir ];
 }

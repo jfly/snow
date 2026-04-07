@@ -41,8 +41,4 @@
   ];
 
   snow.services.torrents.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString config.services.transmission.settings.rpc-port}";
-
-  snow.backup.paths = [
-    config.services.transmission.home
-  ];
 }

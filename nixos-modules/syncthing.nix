@@ -17,6 +17,4 @@
 
   snow.services."syncthing.${config.networking.hostName}".proxyPass =
     "http://${config.services.syncthing.guiAddress}";
-
-  snow.backup.paths = [ config.services.syncthing.dataDir ];
 }

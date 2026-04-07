@@ -13,6 +13,9 @@
   # This device is not online all the time.
   snow.monitoring.alertIfDown = false;
 
+  # We don't back up any data from this machine.
+  snow.backup.enable = false;
+
   disko.devices.disk.main.device = "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001";
 
   # Dangerous for real machines, but quite useful for this test machine.

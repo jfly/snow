@@ -42,5 +42,8 @@
   # This device is not online all the time.
   snow.monitoring.alertIfDown = false;
 
+  # We don't back up any data from this machine.
+  snow.backup.enable = false;
+
   programs.nix-ld.enable = true;
 }

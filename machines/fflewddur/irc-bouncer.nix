@@ -6,7 +6,6 @@
 }:
 let
   inherit (config.snow) services;
-  dataDir = "/var/lib/soju";
   ports.ircTls = 6697;
 in
 {
@@ -21,10 +20,10 @@ in
     listen = [ ":${toString ports.ircTls}" ];
     # Explicitly specifying the db is necessary not for the soju server (it
     # defaults to `./soju.db`, which is exactly the right place as
-    # `/var/lib/soju` is the working directory for the systemd service.
+    # `/var/lib/soju` is the working directory for the systemd service).
     # We specify it explicitly so the `sojudb` cli works.
     extraConfig = ''
-      db sqlite3 ${dataDir}/soju.db
+      db sqlite3 /var/lib/soju/soju.db
     '';
 
     tlsCertificate = "/run/credentials/${config.systemd.services.soju.name}/cert.pem";
@@ -73,6 +72,4 @@ in
       '';
     })
   ];
-
-  snow.backup.paths = [ dataDir ];
 }

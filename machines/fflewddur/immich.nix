@@ -33,10 +33,7 @@ in
     send_timeout         600s;
   '';
 
-  snow.backup = {
-    paths = [ "/var/lib/immich" ];
-    postgresql.dbs = [ config.services.immich.database.name ];
-  };
+  snow.backup.postgresql.dbs = [ config.services.immich.database.name ];
 
   # Immich Public Proxy
   services.immich-public-proxy = {

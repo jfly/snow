@@ -18,20 +18,19 @@ in
   ];
 
   options.snow.backup = {
-    paths = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
-      description = ''
-        Paths to backup.
-      '';
-      default = [ ];
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      # Yes, this is a strange default for a NixOS module, but I really want it
+      # to be hard to forgot to enable backups!
+      default = true;
     };
 
-    exclude = lib.mkOption {
+    extraPaths = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      description = ''
-        Paths to exclude from the backup.
-      '';
       default = [ ];
+      description = ''
+        Additional paths to backup.
+      '';
     };
 
     backupPrepareCommands = lib.mkOption {
@@ -43,7 +42,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.paths != [ ]) {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       inputs'.systemctl-restore.packages.default
     ];
@@ -98,8 +97,17 @@ in
           '';
 
         passwordFile = config.clan.core.vars.generators.snow-backup-restic.files."password".path;
-        paths = cfg.paths;
-        exclude = cfg.exclude;
+        paths = [
+          # Programs should store their state here. If they don't, try to fix
+          # that rather than adding more paths to back up.
+          "/var/lib"
+
+          # Transactionally consistent backups (such as postgres dumps) get
+          # placed here. Consider getting rid of this once we're all in on ZFS
+          # and can take filesystem snapshots?
+          "/var/backup"
+        ]
+        ++ cfg.extraPaths;
         repository = resticRepository;
         timerConfig = {
           OnCalendar = "daily";

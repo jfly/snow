@@ -19,6 +19,9 @@
   #   ip = "[fillme]"; # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
   # };
 
+  # We don't back up any data from this machine. Make a decision here!
+  snow.backup.enable = false;
+
   # Fill in the root device. Run `lsblk --output NAME,ID-LINK,FSTYPE,SIZE,MOUNTPOINT`
   # on the remote machine to get the disk id.
   # disko.devices.disk.main.device = "/dev/disk/by-id/ata-QEMU_HARDDISK_QM00001";

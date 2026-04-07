@@ -8,8 +8,4 @@
   };
 
   snow.services.forge.proxyPass = "http://localhost:${toString config.services.forgejo.settings.server.HTTP_PORT}";
-
-  snow.backup.paths = [
-    config.services.forgejo.stateDir
-  ];
 }

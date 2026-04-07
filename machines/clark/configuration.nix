@@ -14,4 +14,8 @@
     tld = "ec";
     ip = "192.168.28.110"; # Keep this in sync with <routers/strider/files/etc/config/dhcp>.
   };
+
+  # We don't back up any data from this machine. If we lose the Tang secrets,
+  # that's OK.
+  snow.backup.enable = false;
 }

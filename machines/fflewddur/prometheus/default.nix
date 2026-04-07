@@ -54,6 +54,4 @@ in
   };
 
   snow.services.prometheus.proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
-
-  snow.backup.paths = [ "/var/lib/${config.services.prometheus.stateDir}/data" ];
 }

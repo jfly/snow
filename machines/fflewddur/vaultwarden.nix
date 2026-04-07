@@ -58,6 +58,4 @@ in
   };
 
   snow.services.vaultwarden.proxyPass = "http://[::1]:${toString config.services.vaultwarden.config.ROCKET_PORT}";
-
-  snow.backup.paths = [ config.services.vaultwarden.backupDir ];
 }

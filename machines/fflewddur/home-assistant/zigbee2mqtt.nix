@@ -56,6 +56,4 @@ in
   };
 
   snow.services.zigbee2mqtt.proxyPass = "http://[::1]:${toString config.services.zigbee2mqtt.settings.frontend.port}";
-
-  snow.backup.paths = [ config.services.zigbee2mqtt.dataDir ];
 }

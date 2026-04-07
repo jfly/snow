@@ -27,8 +27,4 @@ in
       protocol = "tcp";
     }
   ];
-
-  snow.backup.paths = [
-    config.services.bazarr.dataDir
-  ];
 }
