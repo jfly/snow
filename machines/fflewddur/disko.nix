@@ -1,9 +1,11 @@
 { flake, config, ... }:
 {
   imports = [
-    flake.nixosModules.initrd-ssh-tor
+    flake.nixosModules.initrd-sshd-tor
     flake.nixosModules.zfs
   ];
+
+  snow.initrd-sshd-tor.networkKernelModule = "r8169";
 
   boot.loader.systemd-boot.enable = true;
 

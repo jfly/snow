@@ -1,0 +1,127 @@
+# References:
+# https://github.com/Lassulus/superconfig/blob/master/2configs/tor-ssh.nix
+# https://wiki.nixos.org/wiki/Remote_disk_unlocking
+{
+  flake,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config.snow.initrd-sshd-tor;
+  identities = flake.lib.identities;
+  torRc = pkgs.writeText "tor.rc" ''
+    DataDirectory /etc/tor
+    SOCKSPort 127.0.0.1:9050 IsolateDestAddr
+    SOCKSPort 127.0.0.1:9063
+    HiddenServiceDir /etc/tor/onion/bootup
+    HiddenServicePort 22 127.0.0.1:22
+  '';
+in
+{
+  options.snow.initrd-sshd-tor = {
+    # Does [NixOS Facter] have enough information to answer this question
+    # rather than requiring the user to specify?
+    # [NixOS Facter]: https://github.com/nix-community/nixos-facter
+    networkKernelModule = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        Kernel module to use in initrd to enable ethernet.
+        Find out the required network card driver by running
+        `nix shell nixpkgs#pciutils -c lspci -k` on the target machine. Look
+        for "Ethernet controller" and the "Kernel driver in use".
+      '';
+    };
+  };
+
+  config = {
+    boot.initrd.network.enable = true;
+    boot.initrd.network.ssh = {
+      enable = true;
+      port = 22;
+      authorizedKeys = [
+        identities.jfly
+        identities.rachel
+      ];
+      hostKeys = [ config.clan.core.vars.generators.initrd-sshd.files."ssh_host_ed25519_key".path ];
+    };
+
+    # Enable ethernet in initrd.
+    boot.initrd.availableKernelModules = [ cfg.networkKernelModule ];
+
+    boot.initrd.secrets = {
+      "/etc/tor/onion/bootup/hs_ed25519_secret_key" = (
+        config.clan.core.vars.generators.tor-hidden-service.files."hs_ed25519_secret_key".path
+      );
+    };
+
+    boot.initrd.systemd.enable = true;
+
+    boot.initrd.systemd.storePaths = [
+      (lib.getExe pkgs.tor)
+      torRc
+    ];
+
+    boot.initrd.systemd.services.tor = {
+      wantedBy = [ "initrd.target" ];
+      after = [
+        "network.target"
+        "initrd-nixos-copy-secrets.service"
+      ];
+      unitConfig.DefaultDependencies = false;
+
+      path = [
+        pkgs.coreutils
+        pkgs.tor
+      ];
+
+      # Have to do this otherwise tor does not want to start.
+      preStart = ''
+        chmod -R 700 /etc/tor
+      '';
+
+      script = ''
+        tor --torrc-file ${torRc}
+      '';
+
+      serviceConfig = {
+        Type = "exec";
+        Restart = "on-failure";
+      };
+    };
+
+    clan.core.vars.generators.tor-hidden-service = {
+      files."hs_ed25519_secret_key" = {
+        neededFor = "activation"; # Used to generate the initrd during system activation.
+      };
+      files."hs_ed25519_public_key".secret = false;
+      files."hostname".secret = false;
+      runtimeInputs = with pkgs; [
+        coreutils
+        mkp224o
+      ];
+      script = ''
+        mkp224o-donna snow -n 1 -d . -q -O addr
+        mv "$(cat addr)"/hs_ed25519_secret_key "$out"/hs_ed25519_secret_key
+        mv "$(cat addr)"/hs_ed25519_public_key "$out"/hs_ed25519_public_key
+        <"$(cat addr)"/hostname tr -d '\n' > "$out"/hostname
+      '';
+    };
+
+    clan.core.vars.generators.initrd-sshd = {
+      files."ssh_host_ed25519_key" = {
+        neededFor = "activation"; # Used to generate the initrd during system activation.
+      };
+      files."ssh_host_ed25519_key.pub".secret = false;
+      runtimeInputs = with pkgs; [
+        coreutils
+        openssh
+      ];
+      script = ''
+        ssh-keygen -t ed25519 -N "" -f "$out/ssh_host_ed25519_key"
+      '';
+    };
+  };
+}
