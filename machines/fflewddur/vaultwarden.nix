@@ -45,6 +45,12 @@ in
     };
   };
 
+  # Ensure Vaultwarden is backed up before our regular backups run.
+  snow.backup.backupPrepareCommands = ''
+    echo "Backing up Vaultwarden"
+    systemctl start ${config.systemd.services.backup-vaultwarden.name}
+  '';
+
   systemd.services.vaultwarden.serviceConfig = {
     LoadCredential = [
       "subpath:${config.clan.core.vars.generators.vaultwarden-subpath.files."subpath".path}"
