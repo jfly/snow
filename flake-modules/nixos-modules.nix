@@ -7,6 +7,6 @@ in
 {
   flake.nixosModules = lib.mapAttrs' (name: type: {
     name = lib.strings.removeSuffix ".nix" name;
-    value = import (moduleDir + "/${name}");
+    value = moduleDir + "/${name}";
   }) (builtins.readDir moduleDir);
 }
