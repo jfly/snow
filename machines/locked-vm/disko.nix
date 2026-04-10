@@ -85,6 +85,7 @@
         mountpoint = "none";
         acltype = "posixacl";
         xattr = "sa";
+        "com.sun:auto-snapshot" = "true";
       };
       options.ashift = "12";
 
