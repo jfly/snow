@@ -43,7 +43,7 @@ concerning.
 > `Reported_Uncorrect` (187), `Command_Timeout` (188), `Current_Pending_Sector` (197),
 > or `Offline_Uncorrectable` (198) are non-zero, replace the disk
 
-Also sanity check `Power_On_Hours`, if the device has gotten a ton of usage,
+Also sanity check `Power_On_Hours` (9), if the device has gotten a ton of usage,
 perhaps reconsider using it?
 
 Not all drives report all of these metrics. Apparently some sellers wipe them

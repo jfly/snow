@@ -14,11 +14,19 @@
     };
   };
 
+  # We don't actually have any ZFS datasets to mount, just a zpool that we push
+  # backups to. Ensure the pool is imported!
+  boot.zfs.extraPools = [ "baykup" ];
+
+  # TODO: <<< freeze fflewddur, do a final sync, move ZFS bay pool to fflewddur,
+  #       remove all the fileSystems below, update ./zrepl.nix accordingly,
+  #       confirm things are still working. >>>
+  #
   # Mount various ZFS datasets. Note that `/mnt/bay` is *not* a parent dataset,
   # so any data in there will land on the rootfs. Don't put anything there! I
   # wonder if we could make it immutable somehow...
   fileSystems."/mnt/bay/archive" = {
-    device = "baykup/archive";
+    device = "bay/archive";
     fsType = "zfs";
     options = [
       # Don't block boot if we cannot mount this.
@@ -29,7 +37,7 @@
     ];
   };
   fileSystems."/mnt/bay/media" = {
-    device = "baykup/media";
+    device = "bay/media";
     fsType = "zfs";
     options = [
       "nofail"
@@ -37,7 +45,7 @@
     ];
   };
   fileSystems."/mnt/bay/restic" = {
-    device = "baykup/restic";
+    device = "bay/restic";
     fsType = "zfs";
     options = [
       "nofail"

@@ -7,6 +7,7 @@
     ./hardware-configuration.nix
     ./disko.nix
     ./nas.nix
+    ./zrepl.nix
   ];
 
   networking.hostName = "fflam";

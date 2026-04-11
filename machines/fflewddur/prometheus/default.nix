@@ -11,6 +11,7 @@ in
     ./scrapers/zfs.nix
     ./scrapers/node.nix
     ./scrapers/smartctl.nix
+    ./scrapers/zrepl.nix
     # Blackbox is unique: we run the exporter and the corresponding scraper on
     # only this node.
     ./blackbox.nix
