@@ -29,38 +29,6 @@ in
   # https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365/3
   documentation.man.cache.enable = false;
 
-  programs.zsh = {
-    enable = true;
-    interactiveShellInit =
-      # bash
-      ''
-        ###
-        ### Powerlevel10k
-        ###
-        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-        if [[ -r "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh" ]]; then
-            source "$${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$${(%):-%n}.zsh"
-        fi
-        ##################################
-
-        ###
-        ### Load ohmyzsh
-        ###
-        plugins=(git)
-        source ${pkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
-        ##################################
-
-        source ${./zsh/zshrc}
-      '';
-
-    promptInit =
-      # bash
-      ''
-        # Load p10k prompt
-        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-        source ${./zsh/p10k.zsh}
-      '';
-  };
   programs.tmux = {
     clock24 = true;
     # Resize the window to the size of the smallest session for which it is the current window.
