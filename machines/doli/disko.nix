@@ -21,6 +21,14 @@
                 mountpoint = "/boot";
               };
             };
+            # TODO: add some swap. 2GiB ram isn't always enough to do nightly backups without OOMing.
+            # encryptedSwap = {
+            #   size = "2GiB";
+            #   content = {
+            #     type = "swap";
+            #     randomEncryption = true;
+            #   };
+            # };
             root = {
               size = "100%";
               content = {

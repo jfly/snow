@@ -4,8 +4,9 @@
   ...
 }:
 {
+  # TODO: >>> can we get rid of this? or at least minimize it's usage? <<<
   snow.user = {
-    name = "jeremy";
+    name = "jfly";
     uid = 1000;
   };
 
@@ -44,6 +45,8 @@
 
   # We don't back up any data from this machine.
   snow.backup.enable = false;
+
+  # <<< disko.devices.disk.main.device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB1T0HALR-000L7_S3TPNE0JB02226";
 
   programs.nix-ld.enable = true;
 }
