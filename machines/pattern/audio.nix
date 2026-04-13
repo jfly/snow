@@ -1,14 +1,9 @@
 {
   config,
-  flake',
   lib,
   pkgs,
   ...
 }:
-
-let
-  mcg = flake'.packages.cover-grid;
-in
 {
   # Enable sound with pipewire.
   services.pipewire = {
@@ -56,7 +51,7 @@ in
       partOf = [ "xmonad.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe mcg;
+        ExecStart = lib.getExe pkgs.mcg;
       };
     };
   };

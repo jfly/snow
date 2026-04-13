@@ -177,6 +177,11 @@
             url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
             hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
           })
+          (fetchpatch {
+            name = "mcg: init at 4.0.2";
+            url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
+            hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
+          })
         ];
 
         openwrt-imagebuilder.patches = [
