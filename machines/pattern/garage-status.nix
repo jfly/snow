@@ -18,7 +18,7 @@ in
       secret = false;
     };
     files."password" = {
-      owner = "jeremy";
+      owner = config.snow.user.name;
     };
     prompts.username = {
       description = "Username for ${services.mqtt.fqdn}";
