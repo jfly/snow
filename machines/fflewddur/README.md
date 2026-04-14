@@ -32,13 +32,4 @@ Our primary NAS running on that old gaming PC James gave me forever ago.
 
 ## Adding another drive
 
-Connect the new drive. Find it in `lsblk`. The rest of this example will be for `/dev/sda`.
-
-    nix-shell -p parted
-    DRIVE=/dev/sda
-    parted "$DRIVE" -- mklabel gpt
-    parted -a optimal "$DRIVE" -- mkpart primary ext4 0% 100%
-    mkfs.ext4 "${DRIVE}1"
-
-Get the UUID of the partition you just created (I use `lsblk -f "${DRIVE}1"`).
-Add it to `nasDriveUuids` in `nas.nix`.
+See [zfs/README.md](../../nixos-modules/zfs/README.md).

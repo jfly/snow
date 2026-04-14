@@ -1,75 +1,64 @@
 {
+  flake,
   lib,
   config,
   pkgs,
   ...
 }:
-
-let
-  # Want to add a new drive? See README.md for instructions.
-  nasDriveUuids = {
-    "/mnt/disk1" = "3d9fbde5-f6ae-49e7-8f13-abe194fbf17a";
-    "/mnt/disk3" = "54bf0c49-f945-4905-8bc5-d1f01f305741";
-    "/mnt/disk4" = "20a88b0b-3f2e-4579-8f86-a47d7b5b343a";
-  };
-in
 {
-  environment.systemPackages = with pkgs; [
-    mergerfs
-    mergerfs-tools
+  imports = [
+    flake.nixosModules.zfs
   ];
 
-  fileSystems =
-    (builtins.mapAttrs (_mntPath: uuid: {
-      device = "/dev/disk/by-uuid/${uuid}";
-      fsType = "ext4";
-      options = [
-        # Don't block boot if we cannot mount this.
-        "nofail"
-        # But also do not allow anyone to write to it, even if the mount
-        # fails (this will instead trigger another mount attempt).
-        "x-systemd.automount"
-
-        "rw"
-        "user"
-      ];
-    }) nasDriveUuids)
-    // {
-      "/mnt/bay" = {
-        device = builtins.concatStringsSep ":" (builtins.attrNames nasDriveUuids);
-        fsType = "fuse.mergerfs";
-        options = [
-          # Don't block boot if we cannot mount this.
-          "nofail"
-          # But also do not allow anyone to write to it, even if the mount
-          # fails (this will instead trigger another mount attempt).
-          "x-systemd.automount"
-
-          # From https://github.com/trapexit/mergerfs#basic-setup "You don't need mmap"
-          "cache.files=off"
-          "dropcacheonclose=true"
-          "category.create=mfs"
-          # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
-          "noforget"
-          "inodecalc=path-hash"
-          # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
-          "func.getattr=newest"
-        ]
-        ++ (lib.mapAttrsToList (mntPath: _uuid: "x-systemd.requires=${mntPath}") nasDriveUuids);
-      };
-      # Set up a bind mount so /mnt/bay/media is accessible at /mnt/media.
-      # Why? Partly historical, but this also provides a nice abstraction.
-      "/mnt/media" = {
-        device = "/mnt/bay/media";
-        fsType = "none";
-        options = [
-          "bind"
-          "nofail"
-          "x-systemd.automount"
-        ];
-      };
-
+  clan.core.vars.generators.nas = {
+    prompts."password" = {
+      persist = true;
+      type = "hidden";
     };
+  };
+
+  # Mount various ZFS datasets. Note that `/mnt/bay` is *not* a parent dataset,
+  # so any data in there will land on the rootfs. Don't put anything there! I
+  # wonder if we could make it immutable somehow...
+  fileSystems."/mnt/bay/archive" = {
+    device = "bay/archive";
+    fsType = "zfs";
+    options = [
+      # Don't block boot if we cannot mount this.
+      "nofail"
+      # But also do not allow anyone to write to it, even if the mount
+      # fails (this will instead trigger another mount attempt).
+      "x-systemd.automount"
+    ];
+  };
+  fileSystems."/mnt/bay/media" = {
+    device = "bay/media";
+    fsType = "zfs";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+    ];
+  };
+  fileSystems."/mnt/bay/restic" = {
+    device = "bay/restic";
+    fsType = "zfs";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+    ];
+  };
+
+  # Make media accessible at `/mnt/media`. This is partially
+  # historical, but also kind of a nice abstraction.
+  fileSystems."/mnt/media" = {
+    device = "/mnt/bay/media";
+    fsType = "none";
+    options = [
+      "bind"
+      "nofail"
+      "x-systemd.automount"
+    ];
+  };
 
   users.users.archive = {
     isSystemUser = true;

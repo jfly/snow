@@ -33,7 +33,7 @@ let
 
   # List of rsync flags comes from `man rsync` (search for the `--archive`
   # docs).
-  # Note: -N (--crtimes) is ommitted because `rsync` on linux doesn't
+  # Note: -N (--crtimes) is omitted because `rsync` on linux doesn't
   # support it? Hard to find good documentation of this, see
   # <https://github.com/RsyncProject/rsync/issues/166>.
   rsyncCmd =
