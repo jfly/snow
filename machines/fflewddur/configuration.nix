@@ -8,7 +8,6 @@
     ./network.nix
     ./gpu.nix
     ./nas.nix
-    ./zrepl.nix
     ./backup
     ./jellyfin.nix
     ./zerotier

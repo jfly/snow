@@ -163,17 +163,6 @@
                     labels.severity = "error";
                     annotations.summary = "backup on {{ $labels.instance }} to site hetzner has not succeeded recently.";
                   }
-                  {
-                    alert = "fflamBackupFailed";
-                    expr = ''
-                      (time() - backup_completion_timestamp_seconds{site="fflam"} > ${toString (2 * 24 * 60 * 60)})
-                      or
-                      absent(backup_completion_timestamp_seconds{site="fflam"})
-                    '';
-                    for = "30m";
-                    labels.severity = "error";
-                    annotations.summary = "backup on {{ $labels.instance }} to site fflam has not succeeded recently.";
-                  }
                 ];
             }
           ];
