@@ -270,6 +270,7 @@ in
         nerd-fonts.ubuntu-mono # My preferred monospace font.
         noto-fonts-monochrome-emoji # We use this in `polybar` to keep everything nice and black and white.
         carlito # Provides something similar to Calibri.
+        noto-fonts-cjk-sans # CJK
       ]
       ++ [
         flake'.packages.pica-font
