@@ -18,6 +18,7 @@
     devshell-init = {
       url = "github:jfly/devshell-init";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
 
     disko = {
@@ -39,16 +40,25 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
-    google-dav-proxy.url = "github:jfly/google-dav-proxy";
+    google-dav-proxy = {
+      url = "github:jfly/google-dav-proxy";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    git-hooks-nix.url = "github:cachix/git-hooks.nix";
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -67,7 +77,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openwrt-imagebuilder.url = "github:astro/nix-openwrt-imagebuilder";
+    openwrt-imagebuilder = {
+      url = "github:astro/nix-openwrt-imagebuilder";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     pyproject-build-systems = {
       url = "github:pyproject-nix/build-system-pkgs";
@@ -86,7 +99,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+    simple-nixos-mailserver = {
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     systemctl-restore = {
       url = "github:jfly/systemctl-restore";
@@ -137,19 +153,29 @@
             # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
+              name = "vaultwarden: 1.35.8 -> 1.36.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/516109.diff";
+              hash = "sha256-y/3RoCbw7rPT12qj0gbTFAVx0EZhDB+LJ2L9ha0ol0Y=";
+            })
+            (fetchpatch {
+              name = "tshark: fix hash";
+              url = "https://github.com/NixOS/nixpkgs/commit/0aa49fb3431c18346103889381ae91120f526626.diff";
+              hash = "sha256-04nZuCtJoZHA7MEUr3e0v9Q2cRg6sjjAVKFRZG0ux+A=";
+            })
+            (fetchpatch {
+              name = "nixos/blueman: remove duplicate ExecStart";
+              url = "https://github.com/NixOS/nixpkgs/pull/516323.diff";
+              hash = "sha256-djHHpBM0M+9SNL1/HPi8PsfO2w3zzgn88vQy45tPCEQ=";
+            })
+            (fetchpatch {
               name = "nixos/home-assistant: migrate lovelace config to dashboards format";
               url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
-              hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
+              hash = "sha256-FHkszUPYil4Jb0HGGfEe+DbeMSLVS/V4vu9YfJvMXCs=";
             })
             (fetchpatch {
-              name = "ntfy-alertmanager: 0.5.0 -> 1.0.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/505443.diff";
-              hash = "sha256-QdwVGpJQXpjcy4DcQ+sFqV6BstbN0QlO8CPmQ5AKOws=";
-            })
-            (fetchpatch {
-              name = "mycli: fix build";
-              url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
-              hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";
+              name = "immichframe: refactor, add updateScript, and 1.0.29.0 -> 1.0.33.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/513463.diff";
+              hash = "sha256-9Fvm6yN8qA3mu23ZM1u45y8bL0kBz/j1d0cu+GQJlnc=";
             })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -157,12 +183,9 @@
               hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
             })
             (fetchpatch {
-              name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
-              # TODO: reintroduce once this PR is no longer conflicting with
-              #       nixpkgs latest.
-              # url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
-              url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:add-bcompare5.diff";
-              hash = "sha256-514MP/sJvz+8BV83iX2+1fVG0E4D6o7JzPT7QJnBD3Y=";
+              name = "bcompare: 4.4.7.28397 -> 5.2.0.31950";
+              url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
+              hash = "sha256-qtjB3cf07CMQW82Ypvik5ike//eN8b4zA7bqASO6Cng=";
             })
             (fetchpatch {
               name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
@@ -180,14 +203,14 @@
               hash = "sha256-3I/VnmMF05KIYMrUBRnqsh+eqCwCKejao6AKy/JEjZo=";
             })
             (fetchpatch {
-              name = "kodi: inherit underlying kodi's meta when wrapping";
-              url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
-              hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
-            })
-            (fetchpatch {
               name = "mcg: init at 4.0.2";
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
+            })
+            (fetchpatch {
+              name = "gscan2pdf: disable a failing test";
+              url = "https://github.com/NixOS/nixpkgs/pull/516066.diff";
+              hash = "sha256-C918ZJSr+pZUavfr+wHb6i9gw5trm7W92Os6w0jRhX4=";
             })
           ];
 
@@ -208,7 +231,7 @@
             (fetchpatch {
               name = ''Reapply "machines update: support `--target-host localhost`"'';
               url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
+              hash = "sha256-DdCkJHqBrn2s7jsNyXq7ASa2jV0z87VdBZH4K5FFl/A=";
             })
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm
@@ -227,27 +250,19 @@
             ./patches/clan-core/username-hack.patch
             # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
             ./patches/clan-core/read-build-host-from-env-var.patch
-
-            # Workarounds for <https://git.clan.lol/clan/clan-core/issues/6554>
-            # Commits are from this branch: <https://git.clan.lol/clan/clan-core/compare/main...jfly:issue-6554-workaround>.
-            (fetchpatch {
-              name = "fix: `decrypt_secret` no longer assumes the secret is utf8 text";
-              url = "https://git.clan.lol/jfly/clan-core/commit/5c2ba41e8e719eb30a815240ec4432a9567927d1.patch";
-              hash = "sha256-ulEs7JBqXkYT+AKrFKOZ+mNpOci+iS16/mb6bbI3IKs=";
-            })
-            (fetchpatch {
-              name = "fix: `clan vars get` no longer includes erroneous trailing newline";
-              url = "https://git.clan.lol/jfly/clan-core/commit/1e798d439b4557f8a5c0a2a3424c4a1566bee3c0.patch";
-              hash = "sha256-v/1LHa+F76gVqpqbHRzaNxmUc3pNd3BMJCOAN70v8GU=";
-            })
           ];
 
           flake-parts.patches = [
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
-            # Workaround for <https://github.com/hercules-ci/flake-parts/issues/288>
-            # and <https://github.com/hercules-ci/flake-parts/issues/348>.
-            ./patches/flake-parts/lazier-formatters.patch
+          ];
+
+          with-alacritty.patches = [
+            (fetchpatch {
+              name = "Remove deprecated `pytestFlagsArray`";
+              url = "https://github.com/FatBoyXPC/with-alacritty/pull/5.diff";
+              hash = "sha256-7mGb6sDrOq39SnMIC2c5w8qI6DXxKhUSwgNPXTgjRwk=";
+            })
           ];
         };
       };

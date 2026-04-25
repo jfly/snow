@@ -213,5 +213,9 @@ in
     # <https://github.com/avahi/avahi/issues/117#issuecomment-401225716>
     # Endless logs like "Host name conflict, retrying with ..."
     services.avahi.allowInterfaces = [ config.snow.subnets.overlay.interface ];
+
+    # The new default, but need to set it explicitly because clan-core unsets it:
+    # <https://git.clan.lol/clan/clan-core/src/commit/f077accd6bf65787b759a0fb80dfad523be5eb2f/nixosModules/clanCore/defaults.nix#L15-L18>
+    boot.initrd.systemd.enable = true;
   };
 }

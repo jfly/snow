@@ -12,6 +12,7 @@ in
 {
   imports = [
     flake.nixosModules.shared
+    flake.nixosModules.zfs
   ];
 
   networking.hostName = "jflyso";
@@ -42,7 +43,10 @@ in
   system.stateVersion = config.system.nixos.release;
 
   # Some minimal config necessary to define a buildable machine.
-  fileSystems."/".device = "/dev/null";
+  fileSystems."/" = {
+    device = "/dev/null";
+    fsType = "auto";
+  };
   boot.loader.systemd-boot.enable = true;
 
   # WiFi

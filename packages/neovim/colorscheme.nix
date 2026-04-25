@@ -1,10 +1,21 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Always use light "dim" colorscheme, which is designed to leave all
   # the careful color choosing up to our terminal emulator itself.
   # See https://jeffkreeftmeijer.com/vim-16-color/ for details.
-  extraPlugins = with pkgs.vimPlugins; [ vim-dim ];
+  extraPlugins = with pkgs.vimPlugins; [
+    (vim-dim.overrideAttrs (oldAttrs: {
+      meta.license =
+        # nixpkgs has the license conservatively listed as unfree. That should
+        # fix itself once
+        # <https://github.com/jeffkreeftmeijer/vim-dim/commit/e06f4c29f9bd3971dc27882e67d013fbbafe0596>
+        # gets pulled into. The assert is here to remind us to remove this code
+        # once it has.
+        assert oldAttrs.meta.license == lib.licenses.unfree;
+        [ lib.licenses.mit ];
+    }))
+  ];
   colorscheme = "dim";
 
   # This is supposed to default to false, but it sometimes gets set to

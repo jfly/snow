@@ -1,0 +1,16 @@
+diff --git a/pkgs/top-level/default.nix b/pkgs/top-level/default.nix
+index 521745d67ec9..5ebdd86e0e5e 100644
+--- a/pkgs/top-level/default.nix
++++ b/pkgs/top-level/default.nix
+@@ -29,10 +29,7 @@ let
+   # that it’s still likely users will see multiple warnings, but
+   # there’s nothing we can do about that within the constraints of the
+   # Nix language.
+-  x86_64DarwinDeprecationWarning =
+-    pristineLib.warn
+-      "Nixpkgs 26.05 will be the last release to support x86_64-darwin; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.05"
+-      (x: x);
++  x86_64DarwinDeprecationWarning = pristineLib.id;
+
+   pristineLib = import ../../lib;
+ in

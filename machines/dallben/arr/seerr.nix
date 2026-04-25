@@ -1,15 +1,15 @@
 { config, ... }:
 let
-  port = config.services.jellyseerr.port;
+  port = config.services.seerr.port;
 in
 {
-  services.jellyseerr.enable = true;
+  services.seerr.enable = true;
 
   snow.services.seerr.proxyPass = "http://${config.vpnNamespaces.wg.namespaceAddress}:${toString port}";
 
-  systemd.services.jellyseerr = {
+  systemd.services.seerr = {
     # Set `HOME` as a workaround for <https://github.com/Maroka-chan/VPN-Confinement/issues/36>.
-    environment.HOME = config.services.jellyseerr.configDir;
+    environment.HOME = config.services.seerr.configDir;
     vpnConfinement = {
       enable = true;
       vpnNamespace = "wg";

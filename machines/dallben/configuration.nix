@@ -1,4 +1,4 @@
-{ flake, lib, ... }:
+{ flake, ... }:
 
 {
   networking.hostName = "dallben";
@@ -15,11 +15,6 @@
     flake.nixosModules.kodi-colusita
     ./arr
   ];
-
-  # Workaround for <https://github.com/NixOS/nixpkgs/issues/493934>, copied
-  # from
-  # <https://github.com/pinpox/opencrow/commit/3623a1a30c0ba8aabd0de43255d08bc318100fb0>.
-  security.pam.services.login.updateWtmp = lib.mkForce false;
 
   services.kodi-colusita = {
     enable = true;
