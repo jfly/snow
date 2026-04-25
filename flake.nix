@@ -14,7 +14,9 @@
     };
 
     clan-core = {
-      url = "git+https://git.clan.lol/clan/clan-core";
+      # TODO: <<< resolve conflicting patches below >>>
+      url = "git+https://git.clan.lol/clan/clan-core?rev=3c1546ecfb3d0322fce0a2eb5ff664ae47b280cd"; # <<<
+      # <<< url = "git+https://git.clan.lol/clan/clan-core";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };
@@ -22,6 +24,7 @@
     devshell-init = {
       url = "github:jfly/devshell-init";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
 
     disko = {
@@ -137,22 +140,23 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
-            # Yes, I know this won't be supported soon.
+            # We really need some way to suppress "expected" warnings. I'm doing
+            # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
+            (fetchpatch {
+              name = "python3Packages.cli-helpers: 2.10.0 -> 2.14.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/493910.diff";
+              hash = "sha256-hT4BA0vRdYg4z28OukMeYWI+ZBlstpkV6LH0AsI98QM=";
+            })
             (fetchpatch {
               name = "nixos/home-assistant: migrate lovelace config to dashboards format";
               url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
               hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
             })
             (fetchpatch {
-              name = "ntfy-alertmanager: 0.5.0 -> 1.0.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/505443.diff";
-              hash = "sha256-QdwVGpJQXpjcy4DcQ+sFqV6BstbN0QlO8CPmQ5AKOws=";
-            })
-            (fetchpatch {
-              name = "mycli: fix build";
-              url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
-              hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";
+              name = "immichframe: refactor, add updateScript, and 1.0.29.0 -> 1.0.33.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/513463.diff";
+              hash = "sha256-9Fvm6yN8qA3mu23ZM1u45y8bL0kBz/j1d0cu+GQJlnc=";
             })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -181,11 +185,6 @@
               name = "nixos/actkbd: switch to Type=exec rather than forking";
               url = "https://github.com/NixOS/nixpkgs/pull/500207.diff";
               hash = "sha256-3I/VnmMF05KIYMrUBRnqsh+eqCwCKejao6AKy/JEjZo=";
-            })
-            (fetchpatch {
-              name = "kodi: inherit underlying kodi's meta when wrapping";
-              url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
-              hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
             })
             (fetchpatch {
               name = "mcg: init at 4.0.2";

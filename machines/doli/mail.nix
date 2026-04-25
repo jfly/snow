@@ -23,7 +23,7 @@
     fqdn = "mail.playground.jflei.com";
     domains = [ "playground.jflei.com" ];
 
-    loginAccounts = {
+    accounts = {
       "jfly@playground.jflei.com".hashedPasswordFile =
         config.clan.core.vars.generators.mail-jfly.files."password.bcrypt".path;
       "jeremy@playground.jflei.com".hashedPasswordFile =
