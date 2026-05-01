@@ -1,10 +1,9 @@
 {
   description = "snow";
 
-  # So many warnings about `x86_64-darwin`...
-  # <<< nixConfig = {
-  # <<<   abort-on-warn = true;
-  # <<< };
+  nixConfig = {
+    abort-on-warn = true;
+  };
 
   inputs = {
     brbd-sync = {
@@ -31,12 +30,18 @@
     };
 
     flake-input-patcher = {
-      url = "github:jfly/flake-input-patcher";
+      # TODO: finish <https://github.com/jfly/flake-input-patcher/pull/3> and
+      #       switch back to main.
+      # url = "github:jfly/flake-input-patcher";
+      url = "github:jfly/flake-input-patcher/follows";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };
 
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
 
     google-dav-proxy.url = "github:jfly/google-dav-proxy";
 
@@ -127,118 +132,124 @@
       patcher = unpatchedInputs.flake-input-patcher.lib.x86_64-linux;
       fetchpatch = patcher.fetchpatch;
 
-      inputs = patcher.patch unpatchedInputs {
-        nixpkgs.patches = [
-          (fetchpatch {
-            name = "nixos/home-assistant: migrate lovelace config to dashboards format";
-            url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
-            hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
-          })
-          (fetchpatch {
-            name = "ntfy-alertmanager: 0.5.0 -> 1.0.0";
-            url = "https://github.com/NixOS/nixpkgs/pull/505443.diff";
-            hash = "sha256-QdwVGpJQXpjcy4DcQ+sFqV6BstbN0QlO8CPmQ5AKOws=";
-          })
-          (fetchpatch {
-            name = "mycli: fix build";
-            url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
-            hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";
-          })
-          (fetchpatch {
-            name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
-            url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
-            hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
-          })
-          (fetchpatch {
-            name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
-            # TODO: reintroduce once this PR is no longer conflicting with
-            #       nixpkgs latest.
-            # url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
-            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:add-bcompare5.diff";
-            hash = "sha256-514MP/sJvz+8BV83iX2+1fVG0E4D6o7JzPT7QJnBD3Y=";
-          })
-          (fetchpatch {
-            name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
-            url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
-            hash = "sha256-kqbEnhJkSh00c7bKcft22deYFP7x6oYB2DivADb4R9Y=";
-          })
-          (fetchpatch {
-            name = "miniflux: add options for all secret files";
-            url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
-            hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
-          })
-          (fetchpatch {
-            name = "nixos/actkbd: switch to Type=exec rather than forking";
-            url = "https://github.com/NixOS/nixpkgs/pull/500207.diff";
-            hash = "sha256-3I/VnmMF05KIYMrUBRnqsh+eqCwCKejao6AKy/JEjZo=";
-          })
-          (fetchpatch {
-            name = "kodi: inherit underlying kodi's meta when wrapping";
-            url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
-            hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
-          })
-          (fetchpatch {
-            name = "mcg: init at 4.0.2";
-            url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
-            hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
-          })
-        ];
+      inputs = patcher.patch {
+        inherit unpatchedInputs;
+        flakePath = ./.;
+        patchSpec = {
+          nixpkgs.patches = [
+            # Yes, I know this won't be supported soon.
+            ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
+            (fetchpatch {
+              name = "nixos/home-assistant: migrate lovelace config to dashboards format";
+              url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
+              hash = "sha256-4Zi7eeW5xgn+dUjcVTTBYqFSLETZxnuOP41PSbNA1r8=";
+            })
+            (fetchpatch {
+              name = "ntfy-alertmanager: 0.5.0 -> 1.0.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/505443.diff";
+              hash = "sha256-QdwVGpJQXpjcy4DcQ+sFqV6BstbN0QlO8CPmQ5AKOws=";
+            })
+            (fetchpatch {
+              name = "mycli: fix build";
+              url = "https://github.com/NixOS/nixpkgs/pull/498758.diff";
+              hash = "sha256-eNnhHBimiWuzOHmHk6drjgnFm6H7Zc4rR6nO0tlLAJI=";
+            })
+            (fetchpatch {
+              name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
+              url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
+              hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
+            })
+            (fetchpatch {
+              name = "bcompare: 4.4.7.28397 -> 5.1.2.31185";
+              # TODO: reintroduce once this PR is no longer conflicting with
+              #       nixpkgs latest.
+              # url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
+              url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:nixpkgs:add-bcompare5.diff";
+              hash = "sha256-514MP/sJvz+8BV83iX2+1fVG0E4D6o7JzPT7QJnBD3Y=";
+            })
+            (fetchpatch {
+              name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
+              url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
+              hash = "sha256-kqbEnhJkSh00c7bKcft22deYFP7x6oYB2DivADb4R9Y=";
+            })
+            (fetchpatch {
+              name = "miniflux: add options for all secret files";
+              url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
+              hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
+            })
+            (fetchpatch {
+              name = "nixos/actkbd: switch to Type=exec rather than forking";
+              url = "https://github.com/NixOS/nixpkgs/pull/500207.diff";
+              hash = "sha256-3I/VnmMF05KIYMrUBRnqsh+eqCwCKejao6AKy/JEjZo=";
+            })
+            (fetchpatch {
+              name = "kodi: inherit underlying kodi's meta when wrapping";
+              url = "https://github.com/NixOS/nixpkgs/pull/500272.diff";
+              hash = "sha256-4Ut7wVbDlN8GE5Hdz5iAvvnMzl05PZyL4K/m02+huaY=";
+            })
+            (fetchpatch {
+              name = "mcg: init at 4.0.2";
+              url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
+              hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
+            })
+          ];
 
-        openwrt-imagebuilder.patches = [
-          (fetchpatch {
-            name = "Add an `extraPackages` parameter for easier custom packages";
-            url = "https://github.com/astro/nix-openwrt-imagebuilder/pull/58.diff";
-            hash = "sha256-E3HQCl7ptlv8E4XFpV8Jx9150wL05nQPAXHR6ZNY4c0=";
-          })
-          # (fetchpatch {
-          #   name = "update hashes";
-          #   url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
-          #   hash = "sha256-T1NFROM7j56DI1QjTBQX3icly04sUEtwv+D5qI4Nblo=";
-          # })
-        ];
+          openwrt-imagebuilder.patches = [
+            (fetchpatch {
+              name = "Add an `extraPackages` parameter for easier custom packages";
+              url = "https://github.com/astro/nix-openwrt-imagebuilder/pull/58.diff";
+              hash = "sha256-E3HQCl7ptlv8E4XFpV8Jx9150wL05nQPAXHR6ZNY4c0=";
+            })
+            # (fetchpatch {
+            #   name = "update hashes";
+            #   url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
+            #   hash = "sha256-T1NFROM7j56DI1QjTBQX3icly04sUEtwv+D5qI4Nblo=";
+            # })
+          ];
 
-        clan-core.patches = [
-          (fetchpatch {
-            name = ''Reapply "machines update: support `--target-host localhost`"'';
-            url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-            hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
-          })
-          # We need to allow vars definitions to differ across machines.
-          # See the "Ensure the oauth secrets are readable by the Kanidm
-          # service" comment in machines/fflewddur/kanidm/default.nix for
-          # an explanation why.
-          # TODO: rework the kanidm module to be able to use systemd's
-          # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
-          ./patches/clan-core/allow-differing-shared-generators.patch
-          # Clan's intelligent network discovery does not have a mechanism to
-          # pick a username:
-          # <https://git.clan.lol/clan/clan-core/issues/5812>, and the
-          # explicit `targetHost` we specify does not work due to
-          # <https://git.clan.lol/clan/clan-core/issues/5813>.
-          # As an incredibly quick and dirty hack, we just hardcode clan to
-          # use the correct username instead.
-          ./patches/clan-core/username-hack.patch
-          # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
-          ./patches/clan-core/read-build-host-from-env-var.patch
+          clan-core.patches = [
+            (fetchpatch {
+              name = ''Reapply "machines update: support `--target-host localhost`"'';
+              url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
+              hash = "sha256-KxrdPc4FN4WcL38Kbo+WvyLWn1t9H3Zb+f3ng0iPkH0=";
+            })
+            # We need to allow vars definitions to differ across machines.
+            # See the "Ensure the oauth secrets are readable by the Kanidm
+            # service" comment in machines/fflewddur/kanidm/default.nix for
+            # an explanation why.
+            # TODO: rework the kanidm module to be able to use systemd's
+            # `LoadCredential` instead (see the `postStartScript`), and get rid of this.
+            ./patches/clan-core/allow-differing-shared-generators.patch
+            # Clan's intelligent network discovery does not have a mechanism to
+            # pick a username:
+            # <https://git.clan.lol/clan/clan-core/issues/5812>, and the
+            # explicit `targetHost` we specify does not work due to
+            # <https://git.clan.lol/clan/clan-core/issues/5813>.
+            # As an incredibly quick and dirty hack, we just hardcode clan to
+            # use the correct username instead.
+            ./patches/clan-core/username-hack.patch
+            # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
+            ./patches/clan-core/read-build-host-from-env-var.patch
 
-          # Workarounds for <https://git.clan.lol/clan/clan-core/issues/6554>
-          # Commits are from this branch: <https://git.clan.lol/clan/clan-core/compare/main...jfly:issue-6554-workaround>.
-          (fetchpatch {
-            name = "fix: `decrypt_secret` no longer assumes the secret is utf8 text";
-            url = "https://git.clan.lol/jfly/clan-core/commit/5c2ba41e8e719eb30a815240ec4432a9567927d1.patch";
-            hash = "sha256-ulEs7JBqXkYT+AKrFKOZ+mNpOci+iS16/mb6bbI3IKs=";
-          })
-          (fetchpatch {
-            name = "fix: `clan vars get` no longer includes erroneous trailing newline";
-            url = "https://git.clan.lol/jfly/clan-core/commit/1e798d439b4557f8a5c0a2a3424c4a1566bee3c0.patch";
-            hash = "sha256-v/1LHa+F76gVqpqbHRzaNxmUc3pNd3BMJCOAN70v8GU=";
-          })
-        ];
+            # Workarounds for <https://git.clan.lol/clan/clan-core/issues/6554>
+            # Commits are from this branch: <https://git.clan.lol/clan/clan-core/compare/main...jfly:issue-6554-workaround>.
+            (fetchpatch {
+              name = "fix: `decrypt_secret` no longer assumes the secret is utf8 text";
+              url = "https://git.clan.lol/jfly/clan-core/commit/5c2ba41e8e719eb30a815240ec4432a9567927d1.patch";
+              hash = "sha256-ulEs7JBqXkYT+AKrFKOZ+mNpOci+iS16/mb6bbI3IKs=";
+            })
+            (fetchpatch {
+              name = "fix: `clan vars get` no longer includes erroneous trailing newline";
+              url = "https://git.clan.lol/jfly/clan-core/commit/1e798d439b4557f8a5c0a2a3424c4a1566bee3c0.patch";
+              hash = "sha256-v/1LHa+F76gVqpqbHRzaNxmUc3pNd3BMJCOAN70v8GU=";
+            })
+          ];
 
-        flake-parts.patches = [
-          # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
-          ./patches/flake-parts/add-key-to-nixosModules.patch
-        ];
+          flake-parts.patches = [
+            # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
+            ./patches/flake-parts/add-key-to-nixosModules.patch
+          ];
+        };
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
