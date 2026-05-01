@@ -1,12 +1,27 @@
 {
+  config,
   lib,
   pkgs,
   ...
 }:
+let
+  inherit (config.snow) services;
+in
 {
+  # Gross: xrdp needs access to the ssl certs, but they're owned by acme:nginx.
+  # A cleaner alternative would probably be to use systemd's LoadCredential, as
+  # we do in home-assistant/mqtt.nix.
+  users.users.xrdp.extraGroups = [ "nginx" ];
+
   # Remote desktop
-  services.xrdp.enable = true;
-  services.xrdp.openFirewall = true;
+  services.xrdp = {
+    enable = true;
+    openFirewall = true;
+    # I'm surprised we don't have to configure xrdp to restart when these certs
+    # are regenerated. I guess it reads them from disk as needed?
+    sslCert = "${config.security.acme.certs.${services.fflewddur.fqdn}.directory}/cert.pem";
+    sslKey = "${config.security.acme.certs.${services.fflewddur.fqdn}.directory}/key.pem";
+  };
 
   services.desktopManager.plasma6.enable = true;
   services.xrdp.defaultWindowManager = lib.getExe' pkgs.kdePackages.plasma-workspace "startplasma-x11";
