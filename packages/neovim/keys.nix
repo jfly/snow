@@ -144,7 +144,15 @@ in
   snow.quickfix.toggle_key = "<leader>q";
 
   # Pop up the diagnostics window automatically when jumping.
-  diagnostic.settings.jump.float = true;
+  diagnostic.settings.jump.on_jump = mkRaw ''
+    function(_, bufnr)
+      vim.diagnostic.open_float({
+        bufnr = bufnr,
+        scope = 'cursor',
+        focus = false,
+      })
+    end
+  '';
 
   lsp.keymaps = [
     {
