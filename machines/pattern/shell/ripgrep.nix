@@ -9,7 +9,8 @@
 
       # By default, ripgrep (rg) honors .gitignore folders, but it still looks in
       # `.git` folders. This gets it to also ignore those `.git` folders.
-      --glob '!.git'
+      # https://github.com/BurntSushi/ripgrep/discussions/1578
+      --glob=!.git
     '';
   };
 }

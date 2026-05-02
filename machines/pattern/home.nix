@@ -60,6 +60,27 @@ in
       ".local/share/nvim/site/spell" = "${homeDir}/sync/jfly-linux-secrets/nvim/site/spell"; # neovim spell file
     })
     // {
+      ".profile".text = ''
+        ###
+        ### Misc default programs
+        ###
+        export VISUAL=vim
+        export EDITOR=vim
+
+        if [ -n "$DISPLAY" ]; then
+            export BROWSER=chromium
+        else
+            export BROWSER=elinks
+        fi
+        ##################################
+
+        # Need to check for _DID_SYSTEMD_CAT to avoid double sourcing.
+        # This is a workaround for
+        # https://github.com/NixOS/nixpkgs/issues/188545.
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          export PATH=$HOME/bin:$PATH
+        fi
+      '';
       ".docker/config.json".text = builtins.toJSON {
         "detachKeys" = "ctrl-^,q";
       };
