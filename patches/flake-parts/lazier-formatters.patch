@@ -1,0 +1,22 @@
+diff --git a/modules/formatter.nix b/modules/formatter.nix
+index e2959ed..99d1760 100644
+--- a/modules/formatter.nix
++++ b/modules/formatter.nix
+@@ -35,16 +35,10 @@ in
+     };
+   };
+   config = {
+-    flake.formatter =
+-      mapAttrs
+-        (k: v: v.formatter)
+-        (filterAttrs
+-          (k: v: v.formatter != null)
+-          config.allSystems
+-        );
++    flake.formatter = mapAttrs (k: v: v.formatter) config.allSystems;
+
+     perInput = system: flake:
+-      optionalAttrs (flake?formatter.${system}) {
++      {
+         formatter = flake.formatter.${system};
+       };

@@ -1,10 +1,6 @@
 {
   description = "snow";
 
-  nixConfig = {
-    abort-on-warn = true;
-  };
-
   inputs = {
     brbd-sync = {
       url = "github:jfly/brbd-sync";
@@ -137,7 +133,8 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
-            # Yes, I know this won't be supported soon.
+            # We really need some way to suppress "expected" warnings. I'm doing
+            # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
               name = "nixos/home-assistant: migrate lovelace config to dashboards format";
@@ -248,6 +245,9 @@
           flake-parts.patches = [
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
+            # Workaround for <https://github.com/hercules-ci/flake-parts/issues/288>
+            # and <https://github.com/hercules-ci/flake-parts/issues/348>.
+            ./patches/flake-parts/lazier-formatters.patch
           ];
         };
       };
