@@ -8,6 +8,7 @@ import XMonad.Actions.SpawnOn
 import XMonad.Config.Desktop
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Layout.Hidden
@@ -61,6 +62,8 @@ windowPlacement =
         className =? "Mcg" --> doShift musicWs,
         title =? "CoverGrid" --> doShift musicWs,
         appName =? "picker" --> doFloat,
+        -- Screenshots
+        className =? "satty" --> doFullFloat,
         -- Messaging
         appName =? "signal" --> doShift msgsWs
       ]
@@ -145,10 +148,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) =
       ((modMask, xK_s), spawn "xdotool key --clearmodifiers XF86AudioPlay"),
       ((modMask, xK_d), spawn "xdotool key --clearmodifiers XF86AudioNext"),
       ((modMask .|. shiftMask, xK_d), spawn "xdotool key --clearmodifiers XF86AudioPrev"),
-      -- Prompt the user for an area of the screen
-      ((0, xK_Print), spawn "@jscrot@/bin/jscrot --select"),
-      ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot --video"),
-      ((shiftMask, xK_Print), spawn "@jscrot@/bin/jscrot"),
+      ((0, xK_Print), spawn "@jscrot@/bin/jscrot select"),
+      ((controlMask, xK_Print), spawn "@jscrot@/bin/jscrot video"),
       ((controlMask .|. altMask, xK_Left), spawn "@autoperipherals@/bin/autoperipherals rotate current left"),
       ((controlMask .|. altMask, xK_Right), spawn "@autoperipherals@/bin/autoperipherals rotate current right"),
       ((controlMask .|. altMask, xK_Down), spawn "@autoperipherals@/bin/autoperipherals rotate current normal"),

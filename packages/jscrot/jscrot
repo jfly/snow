@@ -38,23 +38,33 @@ ask_user_for_region() {
     read -r W H X Y < <(echo "$flameshot" | python -c 'import sys, re; print(" ".join(re.split(r"[x+]", sys.stdin.read())), end="")')
 }
 
-if [ $# -eq 0 ]; then
-    file=${file_noext}.png
-    flameshot full --path "$file"
-elif [ "$1" == "--video" ]; then
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 [video|select]"
+    exit 1
+fi
+
+mode=$1
+
+if [ "$mode" == "video" ]; then
     file=${file_noext}.gif
     ask_user_for_region
     byzanz-record --verbose --cursor --exec="savepid '$PID_FILE' bash -c 'while true; do sleep 1; done'" --delay=0 --x="$X" --y="$Y" --width="$W" --height="$H" "$file"
     beep
     # TODO - copying this file doesn't work. see https://bugs.chromium.org/p/chromium/issues/detail?id=356210
-elif [ "$1" == "--select" ]; then
+elif [ "$mode" == "select" ]; then
     file=${file_noext}.png
-    flameshot gui --path "$file"
+    shotgun /dev/stdout | satty \
+        --filename - \
+        --initial-tool crop \
+        --corner-roundness 0 \
+        --early-exit \
+        --actions-on-enter save-to-file \
+        --output-filename "$file"
     if [ ! -f "$file" ]; then
         exit 1
     fi
 else
-    echo "Unrecognized parameter: $1"
+    echo "Unrecognized mode: $mode"
     exit 1
 fi
 
