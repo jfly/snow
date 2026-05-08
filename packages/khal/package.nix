@@ -18,7 +18,7 @@ let
         longdatetimeformat = %Y-%m-%d %H:%M
 
         [default]
-        default_calendar = jeremyfleischman@gmail.com
+        default_calendar = jfly
       '';
   };
 in

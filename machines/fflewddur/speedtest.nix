@@ -8,7 +8,7 @@ in
     domain = services.speedtest.fqdn;
     frontend = {
       enable = true;
-      contactEmail = "jeremyfleischman@gmail.com";
+      contactEmail = "me@jfly.fyi";
     };
   };
 

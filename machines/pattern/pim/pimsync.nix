@@ -14,13 +14,16 @@ let
   pairNames = [
     "ramfly_cal"
     "jfly_cal"
+    "jfly_gcal"
+    "ram_cal"
     "jfly_cards"
     "ramfly_cards"
-    "ram_cal"
   ];
   localPaths = [
     "~/pim/calendars/ramfly"
     "~/pim/calendars/jfly"
+    "~/pim/calendars/jfly-google"
+    "~/pim/calendars/ram"
     "~/pim/contacts/jfly"
     "~/pim/contacts/ramfly"
   ];
@@ -106,12 +109,31 @@ let
           conflict_resolution cmd nvim -d
         }
 
-        storage jfly_cal_remote {
+        storage jfly_gcal_remote {
           type caldav
           # See "Calendar Paths" in
           # <https://whynothugo.nl/journal/2025/03/04/design-for-google-caldav-support-in-pimsync/#calendar-paths>.
           collection_id_segment second-last
           url http://${gdpBind}/caldav/v2/
+        }
+        storage jfly_gcal_local {
+          type vdir/icalendar
+          path ~/pim/calendars/jfly-google
+        }
+        pair jfly_gcal {
+          storage_a jfly_gcal_local
+          storage_b jfly_gcal_remote
+          collections all
+          conflict_resolution cmd nvim -d
+        }
+
+        storage jfly_cal_remote {
+          type caldav
+          url https://caldav.fastmail.com
+          username me@jfly.fyi
+          password {
+            cmd cat ${config.clan.core.vars.generators.fastmail-jfly-app-password.files."password".path}
+          }
         }
         storage jfly_cal_local {
           type vdir/icalendar
@@ -164,7 +186,11 @@ in
             # this behavior for us:
             # <https://lists.sr.ht/~whynothugo/vdirsyncer-devel/patches/58251>.
             # Hopefully that lands someday and we can remove this code.
-            # Also note: this has issues if any of the arguments have spaces in them.
+            # Note: We're not using `lib.escapeShellArgs` here, as it will turn `~`
+            # characters into literal characters, rather than leaving them to
+            # be treated as a home directory.
+            # NOTE: This does mean this code has issues if any of the arguments
+            # have spaces in them.
             mkdir -p ${lib.concatStringsSep " " localPaths}
 
             pair="$1"

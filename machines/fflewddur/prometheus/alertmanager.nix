@@ -65,7 +65,7 @@ in
             email_configs = [
               {
                 send_resolved = true;
-                to = "jeremyfleischman@gmail.com";
+                to = "me@jfly.fyi";
               }
             ];
             webhook_configs = [

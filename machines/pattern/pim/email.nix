@@ -1,5 +1,4 @@
 {
-  lib,
   config,
   pkgs,
   flake',
@@ -14,16 +13,18 @@
       port = 465;
       auth = "on";
     };
-    accounts.jfly-gmail =
+
+    accounts.jfly =
       let
-        email = "jeremyfleischman@gmail.com";
+        email = "me@jfly.fyi";
       in
       {
         from = email;
         user = email;
-        auth = "oauthbearer";
-        passwordeval = "${lib.getExe config.snow.oama.package} access ${email}";
-        host = "smtp.gmail.com";
+        passwordeval = "cat ${
+          config.clan.core.vars.generators.fastmail-jfly-app-password.files."password".path
+        }";
+        host = "smtp.fastmail.com";
       };
 
     accounts.ramfly =
@@ -40,7 +41,7 @@
       };
 
     extraConfig = ''
-      account default : jfly-gmail
+      account default : jfly
     '';
   };
 

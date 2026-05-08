@@ -11,7 +11,7 @@
 	sed = ! git grep -I -z --full-name -l '.' ':(exclude).gitmodules' | xargs -0 sed
 [user]
 	name = Jeremy Fleischman
-	email = jeremyfleischman@gmail.com
+	email = me@jfly.fyi
 	signingkey = ~/sync/jfly-linux-secrets/.ssh/id_ed25519.pub
 [commit]
 	gpgSign = true
@@ -28,7 +28,7 @@
 [branch]
 	sort = -authordate
 [sendemail]
-	sendmailCmd = msmtp --account=jfly-gmail
+	sendmailCmd = msmtp --account=jfly
 [merge]
 	conflictStyle = diff3
 [diff]

@@ -48,7 +48,7 @@ in
     security.acme = {
       acceptTerms = true;
       defaults = {
-        email = "jeremyfleischman@gmail.com";
+        email = "me@jfly.fyi";
         server =
           if cfg.role == "server" then
             "https://${domain.local}:${toString config.services.step-ca.port}/acme/acme/directory"
