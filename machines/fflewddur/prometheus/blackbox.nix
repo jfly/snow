@@ -34,7 +34,8 @@ let
       ];
     };
 
-  # See note below for why we currently cannot scrape our mailserver.
+  # See note below for why we must use `mkStaticProbe` to scrape our mailserver
+  # instead of this more correct `mkDnsSdProbe`.
   # mkDnsSdProbe = module: dns_sd_config: {
   #   job_name = "blackbox-${module}";
   #   metrics_path = "/probe";
@@ -75,6 +76,18 @@ in
             prober = "http";
             tcp.tls = true;
             http.headers.User-Agent = "blackbox-exporter";
+          };
+
+          modules.ipv6_https_success = {
+            prober = "http";
+            tcp.tls = true;
+            http = {
+              headers.User-Agent = "blackbox-exporter";
+              # Try IPv6...
+              preferred_ip_protocol = "ip6";
+              # And do *not* fallback to IPv4.
+              ip_protocol_fallback = false;
+            };
           };
 
           # From https://github.com/prometheus/blackbox_exporter/blob/53e78c2b3535ecedfd072327885eeba2e9e51ea2/example.yml#L120-L133
@@ -118,15 +131,25 @@ in
     };
 
     scrapeConfigs = [
-      # This probe doesn't work because our home internet doesn't have
-      # permission to talk to port 25 on the internet :cry:
-      # I intend to solve this problem by putting all our nodes on an overlay
-      # network.
+      # Ideally we'd use the following commented out code and use the MX record
+      # for the mailserver, but that resolves to a public ip which we cannot
+      # talk to over port 25 from home (our ISP blocks it).
       # (mkDnsSdProbe "smtp_starttls" {
-      #   names = [ "playground.jflei.com" ];
+      #   names = [
+      #     "playground.jflei.com"
+      #   ];
       #   type = "MX";
       #   port = 25;
       # })
+      (mkStaticProbe {
+        module = "smtp_starttls";
+        targets = [
+          # `doli` hosts email at `playground.jflei.com`. We connect using its overlay network IP
+          # because our home internet (where this probe is running) doesn't have
+          # permission to talk to port 25 on the internet :cry:
+          "doli.m:25"
+        ];
+      })
       (mkStaticProbe {
         module = "https_success";
         targets = [
@@ -135,6 +158,12 @@ in
           services.ospi.baseUrl
           "http://thermostat.ec/fan"
           "http://garage.ec/garage"
+        ];
+      })
+      (mkStaticProbe {
+        module = "ipv6_https_success";
+        targets = [
+          "https://www.jflei.com"
         ];
       })
       (mkStaticProbe {
@@ -176,6 +205,15 @@ in
                   annotations.summary = "Endpoint {{ $labels.instance }} is unreachable";
                 }
                 {
+                  alert = "IPv6HttpUnreachable";
+                  expr = ''
+                    probe_success{job="blackbox-ipv6_https_success"} == 0
+                  '';
+                  for = "15m";
+                  labels.severity = "error";
+                  annotations.summary = "Endpoint {{ $labels.instance }} is unreachable over IPv6";
+                }
+                {
                   alert = "OverlayNetworkDnsDown";
                   expr = ''
                     probe_success{job="blackbox-resolve_overlay_host"} == 0
@@ -184,16 +222,15 @@ in
                   labels.severity = "error";
                   annotations.summary = "Overlay network DNS is down";
                 }
-                # See note above about not being able to scrape our mailserver.
-                # {
-                #   alert = "MxUnreachable";
-                #   expr = ''
-                #     probe_success{job=~"blackbox-smtp_starttls.*"} == 0
-                #   '';
-                #   for = "15m";
-                #   labels.severity = "warning";
-                #   annotations.summary = "Mail server {{ $labels.instance }} is unreachable";
-                # }
+                {
+                  alert = "MxUnreachable";
+                  expr = ''
+                    probe_success{job="blackbox-smtp_starttls"} == 0
+                  '';
+                  for = "15m";
+                  labels.severity = "error";
+                  annotations.summary = "Mail server {{ $labels.instance }} is unreachable";
+                }
               ];
             }
           ];
