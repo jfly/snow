@@ -27,3 +27,4 @@ First, change some BIOS settings.
    keyboard and a mouse).
 3. Follow instructions in `nixos-modules/kodi-colusita/README.md` to finish
    bootstrapping.
+4. Confirm bluetooth works. Pair devices if necessary.
