@@ -216,15 +216,10 @@
 
           openwrt-imagebuilder.patches = [
             (fetchpatch {
-              name = "Add an `extraPackages` parameter for easier custom packages";
-              url = "https://github.com/astro/nix-openwrt-imagebuilder/pull/58.diff";
-              hash = "sha256-E3HQCl7ptlv8E4XFpV8Jx9150wL05nQPAXHR6ZNY4c0=";
+              name = "update hashes";
+              url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
+              hash = "sha256-HzLGZAwMC4yiG0rJ34vs8TKsKglzMYRZBf+kn8RBgF0=";
             })
-            # (fetchpatch {
-            #   name = "update hashes";
-            #   url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
-            #   hash = "sha256-T1NFROM7j56DI1QjTBQX3icly04sUEtwv+D5qI4Nblo=";
-            # })
           ];
 
           clan-core.patches = [

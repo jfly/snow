@@ -28,7 +28,7 @@ let
     identities
     ;
 
-  release = "24.10.2";
+  release = "25.12.3";
   profiles = openwrt-imagebuilder.lib.profiles {
     inherit pkgs release;
   };
@@ -128,7 +128,6 @@ let
         # for details on how to rebuild this.
         extraPackages.wifi-presence = {
           depends = [ "libc" ];
-          provides = null;
           type = "real";
 
           file = pkgs.fetchurl {

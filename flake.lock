@@ -1160,11 +1160,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1777800832,
-        "narHash": "sha256-CexB5BmjT0U060QGH6aJZumWbFYZ/9QviBxXO5r5ZmY=",
+        "lastModified": 1778232795,
+        "narHash": "sha256-I2kKXyxfyXddz3g5DDdANiy+gsKDVMLgyqZdrLUkwVo=",
         "owner": "astro",
         "repo": "nix-openwrt-imagebuilder",
-        "rev": "23a51f238ae9f362a38eca4788ed17a1a1250391",
+        "rev": "5dde21136ebbbaff39fbd1513f46b8e1d0b487f5",
         "type": "github"
       },
       "original": {
