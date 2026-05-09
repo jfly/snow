@@ -2,7 +2,6 @@ import pulumi
 from typing import Self
 from pathlib import Path
 import pulumi_cloudflare as cloudflare
-from .deage import deage
 
 
 # See <https://serverfault.com/questions/7478/recommended-dns-ttl> for a discussion of this.
@@ -153,23 +152,6 @@ class Dns:
         self._self_hosted_mailserver()
         self._fastmail()
 
-        self._secret_projects()
-
-    def _secret_projects(self):
-        # Hush now
-        secret_project = deage(
-            """
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNejhBK0hydFplRUtBaEFl
-            akloN2puT3BCRU91dlBSaCtBamdzaytxUURvClJ6cjNYUXBNTkM2N1NXUlJZVFJ4
-            RXRFSHF0Z25DdzlGMXVnSDVRTXdGSE0KLS0tIHJpbUNXQnlrUXdJd3FRYVRPZ2Jo
-            YUdnbzNibWpUbkhUSko4Mk5oYUdUbzQKtrMSCZydHJJL96zTVufVp94xXu2eS2EV
-            VNnwBd1UyDweXbQ2s4FW
-            -----END AGE ENCRYPTED FILE-----
-            """
-        )
-        self._jflei_com.cname(secret_project, "3881b6ccac0e9f74.vercel-dns-017.com.")
-
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
         self._jflei_com.cname("www", "jfly.github.io")
@@ -182,6 +164,15 @@ class Dns:
                 "185.199.109.153",
                 "185.199.110.153",
                 "185.199.111.153",
+            ],
+        )
+        self._jflei_com.aaaa(
+            "jflei.com",
+            [
+                "2606:50c0:8000::153",
+                "2606:50c0:8001::153",
+                "2606:50c0:8002::153",
+                "2606:50c0:8003::153",
             ],
         )
 

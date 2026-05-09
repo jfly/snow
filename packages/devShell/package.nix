@@ -101,7 +101,15 @@ pkgs.mkShell {
 
     # Pulumi stuff
     (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-python ]))
-    (pythonSet.mkVirtualEnv "devshell" workspace.deps.all)
+    (pythonSet.mkVirtualEnv "devshell" (
+      workspace.deps.all
+      // {
+        # We don't really need `pip`. It's just to make `pulumi` happy (it does
+        # some unwarranted runtime introspection [0] on the environment).
+        # [0]: https://github.com/pulumi/pulumi/blob/v3.237.0/sdk/python/toolchain/pip.go#L147
+        pip = [ ];
+      }
+    ))
   ];
 
   env = {
