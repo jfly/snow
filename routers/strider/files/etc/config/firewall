@@ -208,19 +208,3 @@ config rule
 	option src 'guest'
 	option dest_port '67'
 	option target 'ACCEPT'
-
-config rule
-	option name 'Allow-HTTP-guest-to-lan'
-	option src 'guest'
-	option dest 'lan'
-	list dest_ip '192.168.28.110'
-	option dest_port '80'
-	option target 'ACCEPT'
-
-config rule
-	option name 'Allow-HTTPs-guest-to-lan'
-	option src 'guest'
-	option dest 'lan'
-	list dest_ip '192.168.28.110'
-	option dest_port '443'
-	option target 'ACCEPT'
