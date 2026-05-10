@@ -23,6 +23,13 @@ config dnsmasq
 	list address '/home-assistant.ec/192.168.28.172'
 	list address '/frame.ec/192.168.28.172'
 	list address '/tang.ec/192.168.28.110'
+	# Hardcoding doli.m's overlay network IP address here. This is a workaround
+	# for the fact that our home ISP blocks outbound traffic to port 25.
+	# Why are we even trying to talk to this server over port 25? Just to
+	# monitor that it's up. See corresponding Prometheus probe in
+	# <machines/fflewddur/prometheus/blackbox.nix>.
+	list address '/mail.playground.jflei.com/'
+	list address '/mail.playground.jflei.com/fdd4:aa51:eed9:426:9f99:938b:ebf9:7433'
 
 config dhcp 'lan'
 	option interface 'lan'

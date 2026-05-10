@@ -34,36 +34,34 @@ let
       ];
     };
 
-  # See note below for why we must use `mkStaticProbe` to scrape our mailserver
-  # instead of this more correct `mkDnsSdProbe`.
-  # mkDnsSdProbe = module: dns_sd_config: {
-  #   job_name = "blackbox-${module}";
-  #   metrics_path = "/probe";
-  #   params = {
-  #     module = [ module ];
-  #   };
-  #   dns_sd_configs = [
-  #     dns_sd_config
-  #   ];
-  #   relabel_configs = [
-  #     {
-  #       source_labels = [ "__address__" ];
-  #       target_label = "__param_target";
-  #     }
-  #     {
-  #       source_labels = [ "__address__" ];
-  #       target_label = "host";
-  #     }
-  #     {
-  #       source_labels = [ "__meta_dns_name" ];
-  #       target_label = "instance";
-  #     }
-  #     {
-  #       target_label = "__address__";
-  #       replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
-  #     }
-  #   ];
-  # };
+  mkDnsSdProbe = module: dns_sd_config: {
+    job_name = "blackbox-${module}";
+    metrics_path = "/probe";
+    params = {
+      module = [ module ];
+    };
+    dns_sd_configs = [
+      dns_sd_config
+    ];
+    relabel_configs = [
+      {
+        source_labels = [ "__address__" ];
+        target_label = "__param_target";
+      }
+      {
+        source_labels = [ "__address__" ];
+        target_label = "host";
+      }
+      {
+        source_labels = [ "__meta_dns_name" ];
+        target_label = "instance";
+      }
+      {
+        target_label = "__address__";
+        replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
+      }
+    ];
+  };
 in
 {
   services.prometheus = {
@@ -131,24 +129,12 @@ in
     };
 
     scrapeConfigs = [
-      # Ideally we'd use the following commented out code and use the MX record
-      # for the mailserver, but that resolves to a public ip which we cannot
-      # talk to over port 25 from home (our ISP blocks it).
-      # (mkDnsSdProbe "smtp_starttls" {
-      #   names = [
-      #     "playground.jflei.com"
-      #   ];
-      #   type = "MX";
-      #   port = 25;
-      # })
-      (mkStaticProbe {
-        module = "smtp_starttls";
-        targets = [
-          # `doli` hosts email at `playground.jflei.com`. We connect using its overlay network IP
-          # because our home internet (where this probe is running) doesn't have
-          # permission to talk to port 25 on the internet :cry:
-          "doli.m:25"
+      (mkDnsSdProbe "smtp_starttls" {
+        names = [
+          "playground.jflei.com"
         ];
+        type = "MX";
+        port = 25;
       })
       (mkStaticProbe {
         module = "https_success";
