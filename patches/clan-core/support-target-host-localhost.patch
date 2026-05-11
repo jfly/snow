@@ -1,0 +1,166 @@
+diff --git a/checks/update/flake-module.nix b/checks/update/flake-module.nix
+index b5281bd4a6..ca48f0980c 100644
+--- a/checks/update/flake-module.nix
++++ b/checks/update/flake-module.nix
+@@ -117,7 +117,7 @@
+                           # Add the SSH key to the agent
+                           subprocess.run(["ssh-add", ssh_conn.ssh_key], check=True)
+ 
+-                          print("TEST: update with --build-host local")
++                          print("TEST: update with --build-host localhost --target-host localhost")
+                           with open(machine_config_path, "w") as f:
+                               f.write("""
+                           {
+@@ -139,15 +139,6 @@
+                             check=True
+                           )
+ 
+-                          # allow machine to ssh into itself
+-                          subprocess.run([
+-                              "ssh",
+-                              "-o", "UserKnownHostsFile=/dev/null",
+-                              "-o", "StrictHostKeyChecking=no",
+-                              "root@192.168.1.1",
+-                              "mkdir -p /root/.ssh && chmod 700 /root/.ssh && echo \"$(cat \"${../assets/ssh/privkey}\")\" > /root/.ssh/id_ed25519 && chmod 600 /root/.ssh/id_ed25519",
+-                          ], check=True)
+-
+                           # install the clan-cli package into the container's Nix store
+                           subprocess.run(
+                             [
+@@ -189,7 +180,7 @@
+                               "--flake", "/flake",
+                           ], check=True)
+ 
+-                          # Run ssh on the host to run the clan update command via --build-host local
++                          # Run ssh on the host to run the clan update command via --build-host localhost
+                           subprocess.run([
+                               "ssh",
+                               "-o", "UserKnownHostsFile=/dev/null",
+@@ -204,7 +195,7 @@
+                               "--upload-inputs",  # Use local store instead of fetching from network
+                               "--build-host", "localhost",
+                               "test-update-machine",
+-                              "--target-host", "root@localhost",
++                              "--target-host", "localhost",
+                           ], check=True)
+ 
+                           # Verify the update was successful
+diff --git a/pkgs/clan-cli/clan_cli/machines/update.py b/pkgs/clan-cli/clan_cli/machines/update.py
+index f9fd4010db..59eae32aea 100644
+--- a/pkgs/clan-cli/clan_cli/machines/update.py
++++ b/pkgs/clan-cli/clan_cli/machines/update.py
+@@ -44,7 +44,7 @@ def run_update_with_network(
+     build_host: Remote | LocalHost | None,
+     upload_inputs: bool,
+     host_key_check: HostKeyCheck,
+-    target_host_override: str | None = None,
++    target_host_override: Remote | LocalHost | str | None,
+     specialisation: str | None = None,
+ ) -> None:
+     """Run machine update with proper network context handling.
+@@ -56,12 +56,13 @@ def run_update_with_network(
+         msg = f"--specialisation is not supported for darwin machine {machine.name}"
+         raise ClanError(msg)
+ 
+-    if target_host_override:
+-        # Direct connection without network context
+-        target_host = Remote.from_ssh_uri(
++    if isinstance(target_host_override, str):
++        target_host_override = Remote.from_ssh_uri(
+             machine_name=machine.name,
+             address=target_host_override,
+-        ).override(host_key_check=host_key_check)
++        )
++
++    def run_update(target_host: Remote | LocalHost) -> None:
+         run_machine_update(
+             machine=machine,
+             target_host=target_host,
+@@ -69,17 +70,14 @@ def run_update_with_network(
+             upload_inputs=upload_inputs,
+             specialisation=specialisation,
+         )
++
++    if target_host_override:
++        run_update(target_host_override)
+     else:
+         # Use network context
+         with get_best_remote(machine) as remote:
+             target_host = remote.override(host_key_check=host_key_check)
+-            run_machine_update(
+-                machine=machine,
+-                target_host=target_host,
+-                build_host=build_host,
+-                upload_inputs=upload_inputs,
+-                specialisation=specialisation,
+-            )
++            run_update(target_host)
+ 
+ 
+ def requires_explicit_update(
+@@ -210,7 +208,17 @@ def update_command(args: argparse.Namespace) -> None:
+                     msg = f"--specialisation is not supported for darwin machine {machine.name}"
+                     raise ClanError(msg)
+ 
+-                # Schedule the update with network handling
++                # Figure out the target host
++                target_host: Remote | LocalHost | None = None
++                if args.target_host:
++                    if args.target_host == "localhost":
++                        target_host = LocalHost()
++                    else:
++                        target_host = Remote.from_ssh_uri(
++                            machine_name=machine.name,
++                            address=args.target_host,
++                        ).override(host_key_check=args.host_key_check)
++
+                 runtime.async_run(
+                     AsyncOpts(
+                         tid=machine.name,
+@@ -221,7 +229,7 @@ def update_command(args: argparse.Namespace) -> None:
+                     build_host=build_host,
+                     upload_inputs=args.upload_inputs,
+                     host_key_check=args.host_key_check,
+-                    target_host_override=args.target_host,
++                    target_host_override=target_host,
+                     specialisation=args.specialisation,
+                 )
+             runtime.join_all()
+diff --git a/pkgs/clan-cli/clan_lib/ssh/localhost.py b/pkgs/clan-cli/clan_lib/ssh/localhost.py
+index a0e119d76a..bdf38598d0 100644
+--- a/pkgs/clan-cli/clan_lib/ssh/localhost.py
++++ b/pkgs/clan-cli/clan_lib/ssh/localhost.py
+@@ -16,7 +16,7 @@ class LocalHost:
+ 
+     command_prefix: str = "localhost"
+     _user: str = field(default_factory=lambda: os.environ.get("USER", "root"))
+-    _askpass_path: str | None = None
++    _sudo: bool = False
+ 
+     @property
+     def address(self) -> str:
+@@ -54,11 +54,10 @@ class LocalHost:
+             env.update(extra_env)
+ 
+         # Handle sudo if needed
+-        if self._askpass_path is not None:
++        if self._sudo:
+             # Prepend sudo command
+             sudo_cmd = ["sudo", "-A", "--"]
+             cmd = sudo_cmd + cmd
+-            env["SUDO_ASKPASS"] = self._askpass_path
+ 
+         # Set options
+         opts.env = env
+@@ -85,9 +84,8 @@ class LocalHost:
+             yield self
+             return
+ 
+-        # For local execution, we can use sudo with askpass if GUI is available
+-        # This is a simplified version - could be enhanced with sudo askpass proxy
+-        yield self
++        # This is a simplified version - could be enhanced with sudo askpass proxy.
++        yield LocalHost(_sudo=True)
+ 
+     @contextmanager
+     def host_connection(self) -> Iterator["LocalHost"]:

@@ -223,11 +223,17 @@
           ];
 
           clan-core.patches = [
-            (fetchpatch {
-              name = ''Reapply "machines update: support `--target-host localhost`"'';
-              url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-              hash = "sha256-DdCkJHqBrn2s7jsNyXq7ASa2jV0z87VdBZH4K5FFl/A=";
-            })
+            # (fetchpatch {
+            #   name = ''Reapply "machines update: support `--target-host localhost`"'';
+            #   url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
+            #   hash = "sha256-DdCkJHqBrn2s7jsNyXq7ASa2jV0z87VdBZH4K5FFl/A=";
+            # })
+            # NOTE: not using fetchpatch (as above) right now because
+            # git.clan.lol recently started requiring authentication to
+            # download diffs. I've asked about relaxing that constraint, we'll
+            # see if it changes in the future.
+            # https://git.clan.lol/clan/clan-core/pulls/4851
+            ./patches/clan-core/support-target-host-localhost.patch
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm
             # service" comment in machines/fflewddur/kanidm/default.nix for
