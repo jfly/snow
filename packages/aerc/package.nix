@@ -20,7 +20,7 @@ let
     quoted-reply = ''
       X-Mailer: aerc {{version}}
 
-      {{ if has "[Gmail]" .OriginalLabels -}}
+      {{ if contains "[Gmail]" .OriginalLabels -}}
       FYI: My personal email address is now me@jfly.fyi. I'll continue to
       receive emails here indefinitely, but I'd appreciate it if you would
       update your address book.
@@ -103,8 +103,13 @@ symlinkJoin {
       patches = oldAttrs.patches or [ ] ++ [
         (fetchpatch {
           name = "Add `OriginalLabels` to `templateData`";
-          url = "https://lists.sr.ht/~rjarry/aerc-devel/patches/69336/mbox";
-          hash = "sha256-NmvuONllc6SpFs2z67rkD6qFLVAuwu5pt4mwKCiiBmM=";
+          url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260508071717.1513745-1-me@jfly.fyi%3E/raw";
+          hash = "sha256-uyHHxBJf1c6HJYG2K/Um6MHeycwbnbhf6N8bJjjsV1g=";
+        })
+        (fetchpatch {
+          name = ''"Genericize" the `contains` template function'';
+          url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260511202533.568513-2-me@jfly.fyi%3E/raw";
+          hash = "sha256-f9aO5I5jtFLBVRHF9ns2QMntHrJlpYHf7geCsmUVujI=";
         })
       ];
     }))
