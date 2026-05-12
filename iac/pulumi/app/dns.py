@@ -146,9 +146,7 @@ class Dns:
 
         self._github_pages()
         self._san_clemente()
-        self._legacy_snowdon()
         self._snow()
-        self._google_workspace()
         self._self_hosted_mailserver()
         self._fastmail()
 
@@ -182,34 +180,12 @@ class Dns:
         # Raspberry Pi in San Clemente, but that's currently broken.
         self._jflei_com.cname("*.sc", "sc.jflei.com")
 
-    def _legacy_snowdon(self):
-        # `snowdon.jflei.com`
-        # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
-        # primary Colusa router).
-        self._jflei_com.cname("*.snowdon", "colusa.jflei.com")
-        self._jflei_com.cname("snowdon", "colusa.jflei.com")
-
     def _snow(self):
         # `snow.jflei.com`
         # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
         # primary Colusa router).
         self._jflei_com.cname("*.snow", "colusa.jflei.com")
         self._jflei_com.cname("snow", "colusa.jflei.com")
-
-    def _google_workspace(self):
-        self._jflei_com.mx(
-            "jflei.com",
-            {
-                1: ["aspmx.l.google.com"],
-                5: ["alt1.aspmx.l.google.com", "alt2.aspmx.l.google.com"],
-                10: ["alt3.aspmx.l.google.com", "alt4.aspmx.l.google.com"],
-            },
-        )
-        self._jflei_com.txt(
-            "google._domainkey",
-            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj8SEHdHgkBVlTXdYyahiOOjzgdOa1H87eO74KsWqkMGP4eJ+9lpJWqBuHz9Ql48JNOZgpve7lDy8UTjW68RCg/0QOccXW07dqHNCJETsvRVWj+Z0qpWcoJbdrf+GJqGUgHdPUZ9JQZU3RoFti7Uuz/anpuzE8P8WjQ5JWIy5xCvliHf7liiy7/fdOMzoclieem8SMZ5Bote7vwOlWZ/H9XRYpuZRRlHvp7KXRDjVTgtpliyQ15GLZTKd/mvHfG78Kz9dnsf1I6EqFe1k8US68b3IoWtTVa+anrIXRFtREbwl/y3XpwX1Z6FtLiPwwdWqiQb91C/uYmF4DA1XU7sVnwIDAQAB",
-        )
-        self._jflei_com.txt("jflei.com", "v=spf1 include:_spf.google.com ~all")
 
     def _self_hosted_mailserver(self):
         # Keep this in sync with `hosts/doli/mail.nix`.
