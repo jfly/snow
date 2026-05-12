@@ -24,6 +24,11 @@ in
       # https://github.com/miniflux/v2/pull/994#issuecomment-780691681
       # for details.
       FETCH_YOUTUBE_WATCH_TIME = 1;
+
+      # Keep trying to fetch feeds forever, despite parsing errors.
+      # Unfortunately, the default of 3 tries isn't enough for most of my feeds
+      # (especially youtube), so they often end up stuck forever without this.
+      POLLING_PARSING_ERROR_LIMIT = 0;
     };
 
     oauth2ClientSecretFile = services.miniflux.oauth2.clientSecretPath;
