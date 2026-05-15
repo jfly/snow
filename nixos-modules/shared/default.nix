@@ -122,10 +122,6 @@ in
       return 200 "Welcome to ${config.snow.services.${config.networking.hostName}.fqdn}!";
     '';
 
-    # Ensure that commands like `nix repl` and `nix-shell` have access to the
-    # same nixpkgs we use to install everything else.
-    nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
-
     nix.package = pkgs.nixVersions.latest;
 
     environment.systemPackages = with pkgs; [
