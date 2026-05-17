@@ -29,6 +29,9 @@ in
     ];
     webExternalUrl = services.prometheus.baseUrl;
     retentionTime = "100y";
+    globalConfig = {
+      scrape_interval = "1m";
+    };
 
     # Set up a dead man's switch to monitor Prometheus itself.
     # Modeled after this blog post:

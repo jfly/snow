@@ -123,6 +123,12 @@ in
       MQTT_PASSWORD_FILE = "/run/credentials/${config.systemd.services.prometheus-mqtt-exporter.name}/${mqttPasswordKeyId}";
       MQTT_ENABLE_TLS = "True";
       MAX_METRICS = "0"; # Unlimited metrics.
+
+      # "Set the TTL to several times your Prometheus scrape_interval to avoid flapping"
+      MQTT_METRICS_EXPIRE_SECONDS =
+        assert config.services.prometheus.globalConfig.scrape_interval == "1m";
+        toString (5 * 60);
+
       STATE_VALUES = lib.concatStringsSep "," (
         lib.mapAttrsToList (key: value: "${key}=${toString value}") {
           # This is a hack that might only apply to Tuya zigbee devices, which

@@ -153,6 +153,11 @@
             # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
+              name = "mqtt-exporter: 1.11.2 -> 1.12.1";
+              url = "https://github.com/NixOS/nixpkgs/commit/cb45eefc904a8377f5b3f86e4ade35f0b42862fd.diff";
+              hash = "sha256-EMtH6QtWkhrf0PnEph/yagSKgoxOmqAv+ZX1YnbleJM=";
+            })
+            (fetchpatch {
               name = "vaultwarden: 1.35.8 -> 1.36.0";
               url = "https://github.com/NixOS/nixpkgs/pull/516109.diff";
               hash = "sha256-y/3RoCbw7rPT12qj0gbTFAVx0EZhDB+LJ2L9ha0ol0Y=";
