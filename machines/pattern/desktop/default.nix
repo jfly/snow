@@ -183,10 +183,7 @@ in
     );
 
   hardware.bluetooth.enable = true;
-  services.blueman = {
-    enable = true;
-    withApplet = true;
-  };
+  services.blueman.enable = true;
 
   services.interception-tools =
     let

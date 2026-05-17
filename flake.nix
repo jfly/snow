@@ -168,9 +168,9 @@
               hash = "sha256-04nZuCtJoZHA7MEUr3e0v9Q2cRg6sjjAVKFRZG0ux+A=";
             })
             (fetchpatch {
-              name = "nixos/blueman: remove duplicate ExecStart";
-              url = "https://github.com/NixOS/nixpkgs/pull/516323.diff";
-              hash = "sha256-djHHpBM0M+9SNL1/HPi8PsfO2w3zzgn88vQy45tPCEQ=";
+              name = ''Revert "nixos/blueman: Add option to enable Blueman tray applet" (#521288)'';
+              url = "https://github.com/NixOS/nixpkgs/commit/3c53cb036ac5dad5d190a130b970c6f8ffcf89fe.diff";
+              hash = "sha256-VVymVOaX9GTkOQ8ObLUOOYA6RML62JYimQ3bzb/4GEs=";
             })
             (fetchpatch {
               name = "nixos/home-assistant: migrate lovelace config to dashboards format";
