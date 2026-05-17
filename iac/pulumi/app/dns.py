@@ -1,12 +1,6 @@
-import pulumi
 from typing import Self
 from pathlib import Path
 import pulumi_cloudflare as cloudflare
-
-
-# See <https://serverfault.com/questions/7478/recommended-dns-ttl> for a discussion of this.
-# TL;DR: 5 minutes is a nice balance between short and not crazy short.
-DEFAULT_TTL = 300
 
 
 class SrvValue:
@@ -26,56 +20,62 @@ class SrvValue:
 
 class Zone:
     def __init__(self, name: str, id: str):
-        self._name = name
-        self._id = id
+        self.name = name
+        self.id = id
+
+    def _ttl(self, proxied: bool) -> int:
+        if proxied:
+            return 1
+
+        # See <https://serverfault.com/questions/7478/recommended-dns-ttl> for a discussion of this.
+        # TL;DR: 5 minutes is a nice balance between short and not crazy short.
+        return 300
 
     def cname(self, name: str, content: str):
         cloudflare.DnsRecord(
-            f"{name}.{self._name}",
+            f"{name}.{self.name}",
             name=name,
-            ttl=DEFAULT_TTL,
+            ttl=self._ttl(proxied=False),
             type="CNAME",
             content=content,
-            zone_id=self._id,
-            opts=pulumi.ResourceOptions(protect=True),
+            zone_id=self.id,
         )
 
-    def a(self, name: str, values: list[str]):
+    def a(self, name: str, values: list[str], proxied: bool = False):
         for i, content in enumerate(values):
             cloudflare.DnsRecord(
-                f"a-{name}-{i + 1}",
+                f"a-{name}.{self.name}-{i + 1}",
                 name=name,
-                ttl=DEFAULT_TTL,
+                ttl=self._ttl(proxied=proxied),
                 type="A",
+                proxied=proxied,
                 content=content,
-                zone_id=self._id,
-                opts=pulumi.ResourceOptions(protect=True),
+                zone_id=self.id,
             )
 
-    def aaaa(self, name: str, values: list[str]):
+    def aaaa(self, name: str, values: list[str], proxied: bool = False):
         for i, content in enumerate(values):
             cloudflare.DnsRecord(
-                f"aaaa-{name}-{i + 1}",
+                f"aaaa-{name}.{self.name}-{i + 1}",
                 name=name,
-                ttl=DEFAULT_TTL,
+                ttl=self._ttl(proxied=proxied),
                 type="AAAA",
+                proxied=proxied,
                 content=content,
-                zone_id=self._id,
-                opts=pulumi.ResourceOptions(protect=True),
+                zone_id=self.id,
             )
 
     def mx(self, name: str, values_by_priority: dict[int, list[str]]):
         for priority, values in values_by_priority.items():
             for i, content in enumerate(values):
                 cloudflare.DnsRecord(
-                    f"mx-{name}-p{priority}-{i + 1}",
+                    f"mx-{name}.{self.name}-p{priority}-{i + 1}",
                     name=name,
                     priority=priority,
-                    ttl=DEFAULT_TTL,
+                    ttl=self._ttl(proxied=False),
                     type="MX",
                     content=content,
-                    zone_id=self._id,
-                    opts=pulumi.ResourceOptions(protect=True),
+                    zone_id=self.id,
                 )
 
     def txt(self, name: str, content: str):
@@ -85,7 +85,7 @@ class Zone:
         # for details.
         # Furthermore, it appears the quoted strings must be no longer than 255
         # characters, and instead must be a space separated list of quoted strings.
-        # This all feels like a leaky abstraction on tope of zonefiles, but it
+        # This all feels like a leaky abstraction on top of zonefiles, but it
         # is what it is.
         def chunkify[E](arr: list[E], max_length: int) -> list[list[E]]:
             chunks: list[list[E]] = []
@@ -104,13 +104,12 @@ class Zone:
         content = " ".join(escape_string("".join(chunk)) for chunk in chunks)
 
         cloudflare.DnsRecord(
-            f"txt-{name}",
+            f"txt-{name}.{self.name}",
             name=name,
-            ttl=DEFAULT_TTL,
+            ttl=self._ttl(proxied=False),
             type="TXT",
             content=content,
-            zone_id=self._id,
-            opts=pulumi.ResourceOptions(protect=True),
+            zone_id=self.id,
         )
 
     def srv(
@@ -123,9 +122,9 @@ class Zone:
         # <https://www.cloudflare.com/learning/dns/dns-records/dns-srv-record/>
         name = f"_{service}._{proto}"
         cloudflare.DnsRecord(
-            f"srv-{name}",
+            f"srv-{name}.{self.name}",
             name=name,
-            ttl=DEFAULT_TTL,
+            ttl=self._ttl(proxied=False),
             type="SRV",
             priority=value.priority,
             data=cloudflare.DnsRecordDataArgs(
@@ -134,8 +133,7 @@ class Zone:
                 port=value.port,
                 target=value.target,
             ),
-            zone_id=self._id,
-            opts=pulumi.ResourceOptions(protect=True),
+            zone_id=self.id,
         )
 
 
@@ -145,6 +143,7 @@ class Dns:
         self._jfly_fyi = Zone(name="jfly.fyi", id="ad1bf6d9fca4fee60601e6faa5cc01b6")
 
         self._github_pages()
+        self._legacy_homepage_redirects()
         self._san_clemente()
         self._snow()
         self._self_hosted_mailserver()
@@ -152,11 +151,11 @@ class Dns:
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
-        self._jflei_com.cname("www", "jfly.github.io")
+        self._jfly_fyi.cname("www", "jfly.github.io")
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain
         # Note: CloudFlare does not support ALIAS or ANAME records, so we've gotta list these IPs instead.
-        self._jflei_com.a(
-            "jflei.com",
+        self._jfly_fyi.a(
+            "@",
             [
                 "185.199.108.153",
                 "185.199.109.153",
@@ -164,8 +163,8 @@ class Dns:
                 "185.199.111.153",
             ],
         )
-        self._jflei_com.aaaa(
-            "jflei.com",
+        self._jfly_fyi.aaaa(
+            "@.",
             [
                 "2606:50c0:8000::153",
                 "2606:50c0:8001::153",
@@ -173,6 +172,43 @@ class Dns:
                 "2606:50c0:8003::153",
             ],
         )
+
+    def _legacy_homepage_redirects(self):
+        # Note that Cloudflare requires you to specify A/AAAA records to use redirects,
+        # even if you don't actually have an underlying domain you're "proxying" to.
+        # That's where these random IPs come from.
+        # https://developers.cloudflare.com/fundamentals/manage-domains/redirect-domain/
+        # https://www.jonathanbecerra.dev/blog/redirect-a-non-resolving-domain-using-cloudflare
+
+        cloudflare.Ruleset(
+            "jflei.com-redirects",
+            kind="zone",
+            name="jflei.com-redirects",
+            phase="http_request_dynamic_redirect",
+            rules=[
+                {
+                    "action": "redirect",
+                    "action_parameters": {
+                        "from_value": {
+                            "preserve_query_string": True,
+                            "status_code": 307,
+                            "target_url": {
+                                "expression": 'concat("https://www.jfly.fyi", http.request.uri.path)',
+                            },
+                        },
+                    },
+                    "description": "redirect jflei.com to www.jfly.fyi",
+                    "enabled": True,
+                    "expression": '(http.host eq "jflei.com") or (http.host eq "www.jflei.com")',
+                    "ref": "jflei.com-redirects",
+                }
+            ],
+            zone_id=self._jflei_com.id,
+        )
+
+        for subdomain in ["@", "www"]:
+            self._jflei_com.a(subdomain, ["192.0.2.1"], proxied=True)
+            self._jflei_com.aaaa(subdomain, ["100::"], proxied=True)
 
     def _san_clemente(self):
         # `sc.jflei.com`

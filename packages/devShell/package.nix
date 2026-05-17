@@ -68,11 +68,12 @@ let
     # https://dash.cloudflare.com/profile/api-tokens
     CLOUDFLARE_API_TOKEN = secret ''
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzZ3N2WHlBclZHWFI4L1NR
-      K2MzQzJMbnVtdEFhei9VNEpTSWtwSDFjVFg4Cmt2WWd2b0tKaVNHUmFwWHJ0SzRE
-      bENHS2dra3pGZUMvS045OXhvTzJmbWcKLS0tIDdLNlF2UjdzZERLVS93ck02RHB0
-      dXozSTh5d2s2UStWUjg0cHJlUWRxYVEKX/TReXYpi1At4fYpLvCmEgnE2GUgiqBF
-      mXity+YrzMYSevmN58otx7C8qiHtMbIhrX+fpgPseku5BvHUad2XloHk5m1d/26K
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpWkIxazdOWEJQUHRwNk1C
+      Z1ZGVDU4bDhLelJMa2ljLzA3MTA4RDlXSWg4CmFRbE5ZTkM0WjBuOUIzbFN4Y0h2
+      S0NGOHQ0ZElwbkpYSmFTVDFLWTJzdzgKLS0tIHB1UCtQK3ZIYndqMW85Nm1pN01v
+      dkJreWowSmpXei81eE1pWHpkRy90R1UKtqP/Swt6lAKvT4G+unV09LJXtlq+4Z9J
+      hdzpo98io1foWO1NitvAWLyNwZAmU4SjDMkZLd1aj2z8Gl9c5v8RIlpykwq1wES8
+      MRxmhWdYB+7S3tAgKA==
       -----END AGE ENCRYPTED FILE-----
     '';
   };
