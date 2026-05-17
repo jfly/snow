@@ -180,7 +180,7 @@
             (fetchpatch {
               name = "immichframe: refactor, add updateScript, and 1.0.29.0 -> 1.0.33.0";
               url = "https://github.com/NixOS/nixpkgs/pull/513463.diff";
-              hash = "sha256-9Fvm6yN8qA3mu23ZM1u45y8bL0kBz/j1d0cu+GQJlnc=";
+              hash = "sha256-qvzsGe5aMfxwuytIvYYDKWhFMgwAZ/FWSBmIANAkdG8=";
             })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
