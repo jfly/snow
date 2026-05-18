@@ -375,7 +375,7 @@ in
     xdotool
     xmonad
     dmenu
-    gscan2pdf
+    scantpaper
 
     ### Wi-Fi
     flake'.packages.ap

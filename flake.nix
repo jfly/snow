@@ -153,6 +153,11 @@
             # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
+              name = "scantpaper: init at 3.0.6";
+              url = "https://github.com/NixOS/nixpkgs/commit/d79b2f9d2045df709f5a4e185117a6bb256ff3cc.diff";
+              hash = "sha256-ueQ/PO4nvz23qtuFVEsdrB2QWrQst3jAJsuKJrq25og=";
+            })
+            (fetchpatch {
               name = "mqtt-exporter: 1.11.2 -> 1.12.1";
               url = "https://github.com/NixOS/nixpkgs/commit/cb45eefc904a8377f5b3f86e4ade35f0b42862fd.diff";
               hash = "sha256-EMtH6QtWkhrf0PnEph/yagSKgoxOmqAv+ZX1YnbleJM=";
@@ -211,11 +216,6 @@
               name = "mcg: init at 4.0.2";
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
-            })
-            (fetchpatch {
-              name = "gscan2pdf: disable a failing test";
-              url = "https://github.com/NixOS/nixpkgs/pull/516066.diff";
-              hash = "sha256-C918ZJSr+pZUavfr+wHb6i9gw5trm7W92Os6w0jRhX4=";
             })
           ];
 
