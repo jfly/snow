@@ -117,6 +117,26 @@ let
     };
   };
 
+  hashes = import "${openwrt-imagebuilder}/cache/${release}";
+  packagesArch = hashes.targets.${profile.target}.${profile.variant}.packagesArch;
+  wifi-presence-by-arch = {
+    aarch64_cortex-a53 = {
+      file = pkgs.fetchurl {
+        url = "https://github.com/jfly/wifi-presence/releases/download/v0.3.0.1/wifi-presence-0.3.0.1-r2-aarch64_cortex-a53.apk";
+        hash = "sha256-uLMsMMovoDg8067u+p3ba8VD6plPOjXzqBMV3ta6yls=";
+      };
+      filename = "wifi-presence-0.3.0.1-r2.apk";
+    };
+
+    mipsel_24kc = {
+      file = pkgs.fetchurl {
+        url = "https://github.com/jfly/wifi-presence/releases/download/v0.3.0.1/wifi-presence-0.3.0.1-r2-mipsel_24kc.apk";
+        hash = "sha256-A5B/JlNopVY7eJ08rqfVg6sASczgG0DTG47oTXfqMsc=";
+      };
+      filename = "wifi-presence-0.3.0.1-r2.apk";
+    };
+  };
+  wifi-presence = wifi-presence-by-arch.${packagesArch};
   built-no-version = (
     openwrt-imagebuilder.lib.build (
       profile
@@ -130,11 +150,7 @@ let
           depends = [ "libc" ];
           type = "real";
 
-          file = pkgs.fetchurl {
-            url = "https://github.com/jfly/wifi-presence/releases/download/v0.3.0-with-read-workaround-bigger-buffer/wifi-presence_issue-30-workaround-r1_aarch64_cortex-a53.ipk";
-            hash = "sha256-5HXReNDlzJ3sROFHRnzRKSEnUVuxHg7vNXreCO4ZIVY=";
-          };
-          filename = "wifi-presence_issue-30-workaround-r1_aarch64_cortex-a53.ipk";
+          inherit (wifi-presence) file filename;
         };
 
         packages = [

@@ -223,7 +223,7 @@
             (fetchpatch {
               name = "update hashes";
               url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
-              hash = "sha256-HzLGZAwMC4yiG0rJ34vs8TKsKglzMYRZBf+kn8RBgF0=";
+              hash = "sha256-OfRx2nJy7j0MXqVEYVACWPzjzGDXOgeYXNCN4Q4PkOE=";
             })
           ];
 
