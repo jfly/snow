@@ -153,34 +153,14 @@
             # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
-              name = "scantpaper: init at 3.0.6";
-              url = "https://github.com/NixOS/nixpkgs/commit/d79b2f9d2045df709f5a4e185117a6bb256ff3cc.diff";
-              hash = "sha256-ueQ/PO4nvz23qtuFVEsdrB2QWrQst3jAJsuKJrq25og=";
-            })
-            (fetchpatch {
-              name = "mqtt-exporter: 1.11.2 -> 1.12.1";
-              url = "https://github.com/NixOS/nixpkgs/commit/cb45eefc904a8377f5b3f86e4ade35f0b42862fd.diff";
-              hash = "sha256-EMtH6QtWkhrf0PnEph/yagSKgoxOmqAv+ZX1YnbleJM=";
-            })
-            (fetchpatch {
-              name = "vaultwarden: 1.35.8 -> 1.36.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/516109.diff";
-              hash = "sha256-y/3RoCbw7rPT12qj0gbTFAVx0EZhDB+LJ2L9ha0ol0Y=";
-            })
-            (fetchpatch {
-              name = "tshark: fix hash";
-              url = "https://github.com/NixOS/nixpkgs/commit/0aa49fb3431c18346103889381ae91120f526626.diff";
-              hash = "sha256-04nZuCtJoZHA7MEUr3e0v9Q2cRg6sjjAVKFRZG0ux+A=";
+              name = "nixos/oauth2-proxy: fix warning condition";
+              url = "https://github.com/NixOS/nixpkgs/commit/deaf02d3d250018ccc0587cc7124a3d12836448a.diff";
+              hash = "sha256-UVDibIqDQ04t3iY3SxLhkt+OsA6cmqth9d/6/mtgWw4=";
             })
             (fetchpatch {
               name = ''Revert "nixos/blueman: Add option to enable Blueman tray applet" (#521288)'';
               url = "https://github.com/NixOS/nixpkgs/commit/3c53cb036ac5dad5d190a130b970c6f8ffcf89fe.diff";
               hash = "sha256-VVymVOaX9GTkOQ8ObLUOOYA6RML62JYimQ3bzb/4GEs=";
-            })
-            (fetchpatch {
-              name = "nixos/home-assistant: migrate lovelace config to dashboards format";
-              url = "https://github.com/NixOS/nixpkgs/pull/490587.diff";
-              hash = "sha256-FHkszUPYil4Jb0HGGfEe+DbeMSLVS/V4vu9YfJvMXCs=";
             })
             (fetchpatch {
               name = "immichframe: refactor, add updateScript, and 1.0.29.0 -> 1.0.33.0";
@@ -191,11 +171,6 @@
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
               hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
-            })
-            (fetchpatch {
-              name = "bcompare: 4.4.7.28397 -> 5.2.0.31950";
-              url = "https://github.com/NixOS/nixpkgs/pull/435513.diff";
-              hash = "sha256-qtjB3cf07CMQW82Ypvik5ike//eN8b4zA7bqASO6Cng=";
             })
             (fetchpatch {
               name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
@@ -261,14 +236,6 @@
           flake-parts.patches = [
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
-          ];
-
-          with-alacritty.patches = [
-            (fetchpatch {
-              name = "Remove deprecated `pytestFlagsArray`";
-              url = "https://github.com/FatBoyXPC/with-alacritty/pull/5.diff";
-              hash = "sha256-7mGb6sDrOq39SnMIC2c5w8qI6DXxKhUSwgNPXTgjRwk=";
-            })
           ];
         };
       };
