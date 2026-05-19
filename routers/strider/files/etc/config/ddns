@@ -5,7 +5,10 @@ config service 'myddns'
 	option enabled '1'
 	option lookup_host 'colusa.jflei.com'
 	option domain 'colusa@jflei.com'
-	option username 'jflei.com'
+	# Not obvious: but if username is "Bearer", then an
+	# `Authorization: Bearer $password` header is used.
+	# See <https://github.com/openwrt/packages/blob/openwrt-25.12/net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh#L18-L19>
+	option username 'Bearer'
 	option password '@cloudflare_api_token@'
 	option use_https '1'
 	option cacert '/etc/ssl/certs/ca-certificates.crt'
@@ -16,4 +19,3 @@ config service 'myddns'
 	option check_unit 'minutes'
 	option force_unit 'minutes'
 	option retry_unit 'seconds'
-
