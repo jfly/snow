@@ -46,6 +46,7 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
       ./spell.nix
       ./notifications.nix
       ./completion
+      ./fuzzy-find.nix
     ]
     ++ lib.optionals full [
       ./lsp.nix
