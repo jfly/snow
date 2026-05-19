@@ -16,11 +16,12 @@ snow-router {
     "/etc/config/ddns" = {
       "@cloudflare_api_token@" = deage.impureString ''
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSArQjNRYWxLdyszY0dBRmNL
-        RmJiY3R1NTk1TVcvWDlvVVAwM1luNzZvN2cwCnFrNjRwMDBONFlGTmZ4aXBLV0Rj
-        UElRc2tOL0Zlc1VRRVpmOXZwMU1HSzgKLS0tIHNVMVhKU3EzN0x5NlVkN0J2b1NL
-        M2tkb3BiVUJ0SmRwZ3JtS1c0WmNDeVkKd6aIxcBae2D9laj8XgGYow6dUmb2GJQk
-        iIrz94V8b59mPw9d8plEQdCBN4L3auY9H2EJQ8ltPMiF4o5Pl2cWT/G5RlRjda+d
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBrSENFbDRQOTRhMTUzWHRo
+        NDBjbWxZN2RJNjRldEpoTE51ajJaWDdUN3g0Cml3ZXFCWFNlVncrMllyUVgzbWsz
+        Ti8wUkV1WW5laVVlU1NHWDhqU21jT2MKLS0tIFJPaEQ4RTB5NDBsMGVmSXl3UURa
+        d21aUW1rbTBOQkVxelo4OFhuWUZvekEKebLytJ0jsXhe8DN0q8xM30QQ/O3sokQa
+        8RklmmCFI0aGaz0fNA8VqnmIDe7Pm/WyaHb0E6OOppA3V8E+Bxfzgh3h9SZZqm3u
+        IzKa2gEU1QgvCBAKzA==
         -----END AGE ENCRYPTED FILE-----
       '';
     };

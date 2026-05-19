@@ -184,12 +184,6 @@ class Dns:
         )
 
     def _legacy_homepage_redirects(self):
-        # Note that Cloudflare requires you to specify A/AAAA records to use redirects,
-        # even if you don't actually have an underlying domain you're "proxying" to.
-        # That's where these random IPs come from.
-        # https://developers.cloudflare.com/fundamentals/manage-domains/redirect-domain/
-        # https://www.jonathanbecerra.dev/blog/redirect-a-non-resolving-domain-using-cloudflare
-
         cloudflare.Ruleset(
             "jflei.com-redirects",
             kind="zone",
@@ -216,6 +210,11 @@ class Dns:
             zone_id=self._jflei_com.id,
         )
 
+        # Note that Cloudflare requires you to specify A/AAAA records to use redirects,
+        # even if you don't actually have an underlying domain you're "proxying" to.
+        # That's where these random IPs come from.
+        # https://developers.cloudflare.com/fundamentals/manage-domains/redirect-domain/
+        # https://www.jonathanbecerra.dev/blog/redirect-a-non-resolving-domain-using-cloudflare
         for subdomain in ["@", "www"]:
             self._jflei_com.a(subdomain, ["192.0.2.1"], proxied=True)
             self._jflei_com.aaaa(subdomain, ["100::"], proxied=True)
