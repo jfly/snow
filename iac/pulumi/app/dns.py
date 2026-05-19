@@ -1,6 +1,7 @@
 from typing import Self
 from pathlib import Path
 import pulumi_cloudflare as cloudflare
+from .deage import deage
 
 
 class SrvValue:
@@ -141,13 +142,22 @@ class Dns:
     def __init__(self):
         self._jflei_com = Zone(name="jflei.com", id="6c65a9f3de03e7704531813603576415")
         self._jfly_fyi = Zone(name="jfly.fyi", id="ad1bf6d9fca4fee60601e6faa5cc01b6")
+        # TODO: clean up old DNS records
+        self._ramfly_net = Zone(
+            name="ramfly.net", id="8870560b0df2e294a2164cb3f18b6237"
+        )
 
         self._github_pages()
         self._legacy_homepage_redirects()
         self._san_clemente()
         self._snow()
         self._self_hosted_mailserver()
-        self._fastmail()
+        self._fastmail(self._jfly_fyi)
+        self._fastmail(self._ramfly_net)
+        self._fastmail(self._ramfly_net, subdomain="wi")
+        self._fastmail(self._ramfly_net, subdomain="rb")
+        self._secret_projects()
+        self._photos()
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
@@ -164,7 +174,7 @@ class Dns:
             ],
         )
         self._jfly_fyi.aaaa(
-            "@.",
+            "@",
             [
                 "2606:50c0:8000::153",
                 "2606:50c0:8001::153",
@@ -271,12 +281,49 @@ class Dns:
             "v=DMARC1; p=reject; adkim=s; aspf=s;",
         )
 
-    def _fastmail(self):
+    def _secret_projects(self):
+        # Hush now
+        secret_project = deage(
+            """
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxTFF6RmxvTVgxYWFYc0kv
+            dGNOQ2tUYnpMQVcwMkM4cFVvQm9UQnFPZUI4CkZndk1tVGtsTzdsZHAvRVNnL1p6
+            emV2SzNuUlltVjcyT3hEUFpxQ2RpRWMKLS0tIHBQYlJtd3dQUlhzbm40Z3Rmd1BM
+            RnorQUhYMzRMMkJVNktEb0hpV0ZUNVEK3lOjD5s0BYsBIYToMx2rtqKG54YnX/pw
+            DpreKuDaMYptedcDNe1w
+            -----END AGE ENCRYPTED FILE-----
+            """
+        )
+        self._ramfly_net.cname(secret_project, "3881b6ccac0e9f74.vercel-dns-017.com")
+
+    def _photos(self):
+        self._ramfly_net.cname("photos", "colusa.jflei.com")
+
+    def _fastmail(self, zone: Zone, subdomain: str | None = None):
         # https://www.fastmail.help/hc/en-us/articles/360060591153-Manual-DNS-configuration
+        domain = zone.name
+        if subdomain is not None:
+            domain = f"{subdomain}.{domain}"
+
+        def zone_name(prefix: str) -> str:
+            """
+            Given a "prefix" (such as "team1"), return a name suitable for use as a dns entry.
+            """
+            nonlocal subdomain
+
+            parts = []
+            if prefix != "@":
+                parts.append(prefix)
+
+            if subdomain is not None:
+                parts.append(subdomain)
+
+            name = ".".join(parts)
+            return "@" if name == "" else name
 
         # Standard Mail
-        self._jfly_fyi.mx(
-            "@",
+        zone.mx(
+            zone_name("@"),
             {
                 10: ["in1-smtp.messagingengine.com"],
                 20: ["in2-smtp.messagingengine.com"],
@@ -284,44 +331,73 @@ class Dns:
         )
 
         # DKIM
-        self._jfly_fyi.cname("fm1._domainkey", "fm1.jfly.fyi.dkim.fmhosted.com")
-        self._jfly_fyi.cname("fm2._domainkey", "fm2.jfly.fyi.dkim.fmhosted.com")
-        self._jfly_fyi.cname("fm3._domainkey", "fm3.jfly.fyi.dkim.fmhosted.com")
+        zone.cname(zone_name("fm1._domainkey"), f"fm1.{domain}.dkim.fmhosted.com")
+        zone.cname(zone_name("fm2._domainkey"), f"fm2.{domain}.dkim.fmhosted.com")
+        zone.cname(zone_name("fm3._domainkey"), f"fm3.{domain}.dkim.fmhosted.com")
 
         # SPF
-        self._jfly_fyi.txt("@", "v=spf1 include:spf.messagingengine.com ?all")
+        zone.txt(zone_name("@"), "v=spf1 include:spf.messagingengine.com ?all")
 
         # DMARC
-        self._jfly_fyi.txt("_dmarc", "v=DMARC1; p=none;")
+        if domain in ["ramfly.net", "wi.ramfly.net", "rb.ramfly.net"]:
+            # Looks like we forgot to configure DMARC for these domains.
+            # TODO: fix it!
+            pass
+        else:
+            zone.txt(zone_name("_dmarc"), "v=DMARC1; p=none;")
+
+        # We forgot to set up auto-discovery for these domains. Bail out!
+        # TODO: fix this
+        if domain in ["wi.ramfly.net", "rb.ramfly.net"]:
+            return
 
         # Client email auto-discovery
-        self._jfly_fyi.srv("submission", "tcp", value=SrvValue.no_target())
-        self._jfly_fyi.srv("imap", "tcp", value=SrvValue.no_target())
-        self._jfly_fyi.srv("pop3", "tcp", value=SrvValue.no_target())
-        self._jfly_fyi.srv(
-            "submissions", "tcp", value=SrvValue(0, 1, 465, "smtp.fastmail.com")
+        zone.srv(zone_name("submission"), "tcp", value=SrvValue.no_target())
+        zone.srv(zone_name("imap"), "tcp", value=SrvValue.no_target())
+        zone.srv(zone_name("pop3"), "tcp", value=SrvValue.no_target())
+        if domain == "ramfly.net":
+            # This was set up incorrectly. Per [0], the priority should be 0 and the weight should be 1,
+            # but it's actually priority = 0 and weight = 0.
+            # [0]: https://www.fastmail.help/hc/en-us/articles/360060591153-Manual-DNS-configuration
+            # TODO: fix it!
+            zone.srv(
+                zone_name("submissions"),
+                "tcp",
+                value=SrvValue(0, 0, 465, "smtp.fastmail.com"),
+            )
+        else:
+            zone.srv(
+                zone_name("submissions"),
+                "tcp",
+                value=SrvValue(0, 1, 465, "smtp.fastmail.com"),
+            )
+        zone.srv(
+            zone_name("imaps"), "tcp", value=SrvValue(0, 1, 993, "imap.fastmail.com")
         )
-        self._jfly_fyi.srv(
-            "imaps", "tcp", value=SrvValue(0, 1, 993, "imap.fastmail.com")
+        zone.srv(
+            zone_name("pop3s"), "tcp", value=SrvValue(10, 1, 995, "pop.fastmail.com")
         )
-        self._jfly_fyi.srv(
-            "pop3s", "tcp", value=SrvValue(10, 1, 995, "pop.fastmail.com")
+        zone.srv(
+            zone_name("jmap"), "tcp", value=SrvValue(0, 1, 443, "api.fastmail.com")
         )
-        self._jfly_fyi.srv("jmap", "tcp", value=SrvValue(0, 1, 443, "api.fastmail.com"))
-        self._jfly_fyi.srv(
-            "autodiscover",
+        zone.srv(
+            zone_name("autodiscover"),
             "tcp",
             value=SrvValue(0, 1, 443, "autodiscover.fastmail.com"),
         )
 
         # Client CardDAV auto-discovery
-        self._jfly_fyi.srv("carddav", "tcp", value=SrvValue.no_target())
-        self._jfly_fyi.srv(
-            "carddavs", "tcp", value=SrvValue(0, 1, 443, "carddav.fastmail.com")
+        zone.srv(zone_name("carddav"), "tcp", value=SrvValue.no_target())
+        zone.srv(
+            zone_name("carddavs"),
+            "tcp",
+            value=SrvValue(0, 1, 443, "carddav.fastmail.com"),
         )
 
         # Client CalDAV auto-discovery
-        self._jfly_fyi.srv("caldav", "tcp", value=SrvValue.no_target())
-        self._jfly_fyi.srv(
-            "caldavs", "tcp", value=SrvValue(0, 1, 443, "caldav.fastmail.com")
+        zone.srv(zone_name("caldav"), "tcp", value=SrvValue.no_target())
+        zone.srv(
+            zone_name("caldavs"),
+            "tcp",
+            value=SrvValue(0, 1, 443, "caldav.fastmail.com"),
         )
