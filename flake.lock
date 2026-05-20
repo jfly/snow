@@ -996,6 +996,38 @@
         "type": "github"
       }
     },
+    "jnix": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "git-hooks-nix": [
+          "git-hooks-nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779265115,
+        "narHash": "sha256-Y04aTnLNm7cWS6Hj+v+bW0viethaSY1kfkWsd5TsUm4=",
+        "owner": "jfly",
+        "repo": "jnix",
+        "rev": "494451d39a9ed71d69869eb3130b6fa5b165900a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "repo": "jnix",
+        "type": "github"
+      }
+    },
     "neovim-nightly-overlay": {
       "inputs": {
         "flake-parts": "flake-parts_5",
@@ -1430,6 +1462,7 @@
         "git-hooks-nix": "git-hooks-nix_2",
         "google-dav-proxy": "google-dav-proxy",
         "home-manager": "home-manager",
+        "jnix": "jnix",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",

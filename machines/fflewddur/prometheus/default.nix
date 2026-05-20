@@ -18,6 +18,9 @@ in
     # mqtt-exporter is also unique: we run the exporter and the corresponding
     # scraper on only this node.
     ./mqtt-exporter.nix
+    # mullvad-exporter is also unique: we run the exporter and the corresponding
+    # scraper on only this node.
+    ./mullvad-exporter.nix
     # Prometheus is also unique: there's only one node running Prometheus.
     ./scrapers/prometheus.nix
   ];
