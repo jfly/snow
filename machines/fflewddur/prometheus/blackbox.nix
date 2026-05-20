@@ -184,7 +184,7 @@ in
                 {
                   alert = "HttpUnreachable";
                   expr = ''
-                    probe_success{job="blackbox-https_success"} == 0 or probe_success{job="blackbox-http_success"} == 0
+                    probe_success{job="blackbox-https_success"} == 0
                   '';
                   for = "15m";
                   labels.severity = "error";
