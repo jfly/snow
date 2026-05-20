@@ -142,7 +142,6 @@ class Dns:
     def __init__(self):
         self._jflei_com = Zone(name="jflei.com", id="6c65a9f3de03e7704531813603576415")
         self._jfly_fyi = Zone(name="jfly.fyi", id="ad1bf6d9fca4fee60601e6faa5cc01b6")
-        # TODO: clean up old DNS records
         self._ramfly_net = Zone(
             name="ramfly.net", id="8870560b0df2e294a2164cb3f18b6237"
         )
@@ -338,38 +337,17 @@ class Dns:
         zone.txt(zone_name("@"), "v=spf1 include:spf.messagingengine.com ?all")
 
         # DMARC
-        if domain in ["ramfly.net", "wi.ramfly.net", "rb.ramfly.net"]:
-            # Looks like we forgot to configure DMARC for these domains.
-            # TODO: fix it!
-            pass
-        else:
-            zone.txt(zone_name("_dmarc"), "v=DMARC1; p=none;")
-
-        # We forgot to set up auto-discovery for these domains. Bail out!
-        # TODO: fix this
-        if domain in ["wi.ramfly.net", "rb.ramfly.net"]:
-            return
+        zone.txt(zone_name("_dmarc"), "v=DMARC1; p=none;")
 
         # Client email auto-discovery
         zone.srv(zone_name("submission"), "tcp", value=SrvValue.no_target())
         zone.srv(zone_name("imap"), "tcp", value=SrvValue.no_target())
         zone.srv(zone_name("pop3"), "tcp", value=SrvValue.no_target())
-        if domain == "ramfly.net":
-            # This was set up incorrectly. Per [0], the priority should be 0 and the weight should be 1,
-            # but it's actually priority = 0 and weight = 0.
-            # [0]: https://www.fastmail.help/hc/en-us/articles/360060591153-Manual-DNS-configuration
-            # TODO: fix it!
-            zone.srv(
-                zone_name("submissions"),
-                "tcp",
-                value=SrvValue(0, 0, 465, "smtp.fastmail.com"),
-            )
-        else:
-            zone.srv(
-                zone_name("submissions"),
-                "tcp",
-                value=SrvValue(0, 1, 465, "smtp.fastmail.com"),
-            )
+        zone.srv(
+            zone_name("submissions"),
+            "tcp",
+            value=SrvValue(0, 1, 465, "smtp.fastmail.com"),
+        )
         zone.srv(
             zone_name("imaps"), "tcp", value=SrvValue(0, 1, 993, "imap.fastmail.com")
         )
