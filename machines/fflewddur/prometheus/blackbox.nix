@@ -149,7 +149,7 @@ in
       (mkStaticProbe {
         module = "ipv6_https_success";
         targets = [
-          "https://www.jflei.com"
+          "https://www.jfly.fyi"
         ];
       })
       (mkStaticProbe {
