@@ -217,6 +217,15 @@ in
                   labels.severity = "error";
                   annotations.summary = "Mail server {{ $labels.instance }} is unreachable";
                 }
+                {
+                  alert = "ThermostatUnreachable";
+                  expr = ''
+                    probe_success{job="blackbox-https_success", instance="http://thermostat.ec/fan"} == 0
+                  '';
+                  for = "5m";
+                  labels.severity = "urgent";
+                  annotations.summary = "The thermostat {{ $labels.instance }} is unreachable";
+                }
               ];
             }
           ];
