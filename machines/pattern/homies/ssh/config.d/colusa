@@ -52,13 +52,6 @@ Host thermostat
     # Urg
     SetEnv TERM=xterm-256color
 
-Host garage
-    Tag colusa
-    HostName garage.ec
-    User root
-    # Urg
-    SetEnv TERM=xterm-256color
-
 Host ramscan
     Tag colusa
     User alarm

@@ -155,27 +155,6 @@ in
             icon = "mdi:fire";
           };
         }
-        {
-          switch =
-            let
-              toggleCommand = "${lib.getExe pkgs.curl} -s -X POST http://garage.ec/garage/toggle";
-            in
-            {
-              name = "Garage";
-              unique_id = "garage";
-              command_on = toggleCommand;
-              command_off = toggleCommand;
-              command_state = "${lib.getExe pkgs.curl} -s -X GET http://garage.ec/garage";
-              value_template = ''{{ value_json.status == "open" }}'';
-              icon = ''
-                {% if value_json.status == "open" %}
-                  mdi:garage-open
-                {% else %}
-                  mdi:garage
-                {% endif %}
-              '';
-            };
-        }
       ];
     };
   };

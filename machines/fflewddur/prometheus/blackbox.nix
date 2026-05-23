@@ -124,6 +124,16 @@ in
                 };
               };
           };
+
+          # Simple test for now: can we establish a TCP handshake.
+          # Feel free to evolve this into something that can speak the protobuf
+          # api. There's a ping/pong endpoint [0] that would be perfect for
+          # this.
+          # [0]: https://github.com/esphome/esphome/blob/2026.5.0/esphome/components/api/api.proto#L15
+          modules.esphome_api = {
+            prober = "tcp";
+            timeout = "5s";
+          };
         }
       );
     };
@@ -143,7 +153,13 @@ in
           services.media.baseUrl
           services.ospi.baseUrl
           "http://thermostat.ec/fan"
-          "http://garage.ec/garage"
+        ];
+      })
+      (mkStaticProbe {
+        module = "esphome_api";
+        targets = [
+          "on-air-led.ec:6053"
+          "garage-door.ec:6053"
         ];
       })
       (mkStaticProbe {
@@ -216,6 +232,15 @@ in
                   for = "15m";
                   labels.severity = "error";
                   annotations.summary = "Mail server {{ $labels.instance }} is unreachable";
+                }
+                {
+                  alert = "EspHomeDeviceGone";
+                  expr = ''
+                    probe_success{job="blackbox-esphome_api"} == 0
+                  '';
+                  for = "5m";
+                  labels.severity = "error";
+                  annotations.summary = "ESP Home device {{ $labels.instance }} is unreachable";
                 }
                 {
                   alert = "ThermostatUnreachable";
