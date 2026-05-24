@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -38,6 +37,8 @@ in
       "enphase_envoy"
       "esphome"
       "dlna_dmr"
+      # Notifications that actually work.
+      "ntfy"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       opensprinkler
@@ -120,42 +121,18 @@ in
         {
           platform = "group";
           name = "jeremy";
-          services = [ { service = "mobile_app_jflysolineage"; } ];
+          services = [ { service = "mobile_app_jflysopixel6"; } ];
         }
         {
           platform = "group";
           name = "rachel";
-          services = [ { service = "mobile_app_rachels_iphone_2"; } ];
+          services = [ { service = "mobile_app_ansible"; } ];
         }
       ];
 
       "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
       "script ui" = "!include scripts.yaml";
-      command_line = [
-        {
-          switch = {
-            name = "Fan";
-            unique_id = "fan";
-            command_on = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/fan/on";
-            command_off = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/fan/off";
-            command_state = "${lib.getExe pkgs.curl} -s -X GET http://thermostat.ec/fan";
-            value_template = /* jinja */ ''{{ value_json.status == "on" }}'';
-            icon = "mdi:fan";
-          };
-        }
-        {
-          switch = {
-            name = "Furnace";
-            unique_id = "furnace";
-            command_on = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/furnace/on";
-            command_off = "${lib.getExe pkgs.curl} -s -X POST http://thermostat.ec/furnace/off";
-            command_state = "${lib.getExe pkgs.curl} -s -X GET http://thermostat.ec/furnace";
-            value_template = ''{{ value_json.status == "on" }}'';
-            icon = "mdi:fire";
-          };
-        }
-      ];
     };
   };
 

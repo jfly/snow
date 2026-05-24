@@ -152,7 +152,6 @@ in
           services.manman.baseUrl
           services.media.baseUrl
           services.ospi.baseUrl
-          "http://thermostat.ec/fan"
         ];
       })
       (mkStaticProbe {
@@ -160,6 +159,7 @@ in
         targets = [
           "on-air-led.ec:6053"
           "garage-door.ec:6053"
+          "thermostat.ec:6053"
         ];
       })
       (mkStaticProbe {
@@ -245,7 +245,7 @@ in
                 {
                   alert = "ThermostatUnreachable";
                   expr = ''
-                    probe_success{job="blackbox-https_success", instance="http://thermostat.ec/fan"} == 0
+                    probe_success{job="blackbox-esphome_api", instance="thermostat.ec:6053"} == 0
                   '';
                   for = "5m";
                   labels.severity = "urgent";

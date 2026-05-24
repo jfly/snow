@@ -18,7 +18,7 @@ in
         unique_id = "snow_therm";
         platform = "generic_thermostat";
         name = "Snow Therm";
-        heater = "switch.furnace";
+        heater = "switch.thermostat_house_furnace";
         target_sensor = "sensor.snow_therm_target";
       }
       {
@@ -36,10 +36,12 @@ in
             name = "Snow Therm Target";
             unique_id = "snow_therm_target";
             device_class = "temperature";
-            unit_of_measurement = /* jinja */ ''
-              ${sensorMapping}
-              {{ state_attr(mapping[states('input_select.snow_therm_target_select')], 'unit_of_measurement') }}
-            '';
+            # All the targets *should* be Fahrenheit. But I sure which this could just be
+            # a template like this:
+            # ${sensorMapping}
+            # {{ state_attr(mapping[states('input_select.snow_therm_target_select')], 'unit_of_measurement') }}
+            # Oh well.
+            unit_of_measurement = "°F";
             state = /* jinja */ ''
               ${sensorMapping}
               {{ states(mapping[states('input_select.snow_therm_target_select')]) }}
@@ -47,6 +49,23 @@ in
           }
         ];
       }
+      {
+        switch = {
+          name = "Garage Door Switch";
+          unique_id = "garage_door";
+          turn_on = {
+            service = "button.press";
+            target.entity_id = "button.garage_door_garage_remote";
+          };
+          turn_off = {
+            service = "button.press";
+            target.entity_id = "button.garage_door_garage_remote";
+          };
+          state = "{{ is_state('binary_sensor.garage_door_garage_door', 'on') }}";
+          icon = "{{ is_state('binary_sensor.garage_door_garage_door', 'on') | iif(' mdi:garage-open', 'mdi:garage') }}";
+        };
+      }
+
     ];
     input_select = {
       snow_therm_target_select = {

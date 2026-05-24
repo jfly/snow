@@ -38,20 +38,6 @@ Host dallben
     HostName dallben.m
     User jfly
 
-Host thermometer
-    Tag colusa
-    HostName thermometer.ec
-    User root
-    # Urg
-    SetEnv TERM=xterm-256color
-
-Host thermostat
-    Tag colusa
-    HostName thermostat.ec
-    User root
-    # Urg
-    SetEnv TERM=xterm-256color
-
 Host ramscan
     Tag colusa
     User alarm
