@@ -34,6 +34,12 @@ in
     enable = true;
     defaultApplications = {
       "text/html" = [ "chromium-browser.desktop" ];
+      # This is pretty strange: aerc has started saving html parts of emails to .ehtml files.
+      # Not their fault, see
+      # <https://github.com/golang/go/commit/08afc50bea9a94e86adfc8cd852c6ae5b698cdaa> for details.
+      # Seems like something is weird here (it sure seems to me that mime type
+      # `text/html; charset=utf-8` should correspond to the `.html` extension).
+      "application/xhtml+xml" = [ "chromium-browser.desktop" ];
       "x-scheme-handler/mailto" = [ "chromium-browser.desktop" ];
     };
   };
