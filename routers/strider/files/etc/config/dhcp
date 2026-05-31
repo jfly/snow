@@ -57,6 +57,11 @@ config host
 	option mac 'C0:3F:D5:6B:51:16'
 
 config host
+	option name 'babycam'
+	option ip '192.168.28.198'
+	option mac '9C:8E:CD:27:F6:4C'
+
+config host
 	option name 'apc'
 	option ip '192.168.29.102'
 	option mac '00:C0:B7:7F:E0:96'

@@ -1,86 +1,72 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ config, ... }:
 let
   inherit (config.snow) services;
-  deercamPasswordKeyId = "deercam-password-id";
-  # TODO: Copy Dan's config to store stuff directly on the NAS.
-  #       Don't forget to set `RequiresMountsFor`!
+  babycamPasswordKeyId = "babycam-password-id";
 in
 {
+  services.go2rtc = {
+    enable = true;
+    settings = {
+      # I configured 2 streams as documented on
+      # <https://docs.frigate.video/frigate/camera_setup#example-camera-configuration>.
+      # The RTSP urls for this camera are documented on
+      # <https://support.amcrest.com/hc/en-us/articles/360052688931-Accessing-Amcrest-Products-Using-RTSP>.
+      streams.babycam-record = "rtsp://admin:\${${babycamPasswordKeyId}}@babycam.ec:554/cam/realmonitor?channel=1&subtype=0";
+      streams.babycam-detect = "rtsp://admin:\${${babycamPasswordKeyId}}@babycam.ec:554/cam/realmonitor?channel=1&subtype=2";
+      rtsp.listen = ":8554";
+    };
+  };
+
+  systemd.services.go2rtc.serviceConfig.LoadCredential = [
+    "${babycamPasswordKeyId}:${config.clan.core.vars.generators.babycam.files."password".path}"
+  ];
+
   services.frigate.enable = true;
   services.frigate.hostname = services.frigate.fqdn;
   snow.services.frigate.hostedHere = true;
 
-  # `checkConfig` doesn't work in the sandbox where we do not have a
-  # `FRIGATE_DEERCAM_PASSWORD` env var. It would be nice to provide a hook for people
-  # to "stub out" some of the problematic stuff in the sandbox (for instance, I
-  # could set a dummy value for some secret environment variables).
-  services.frigate.checkConfig = false;
   services.frigate.settings.cameras = {
-    # TODO: set this up again with new role
-    # ratcam = {
-    #   enabled = true;
-    #   ffmpeg = {
-    #     # https://docs.frigate.video/configuration/hardware_acceleration_video/#setup-decoder
-    #     hwaccel_args = "preset-nvidia";
-    #     inputs = [
-    #       # I configured 2 streams as documented on
-    #       # <https://docs.frigate.video/frigate/camera_setup#example-camera-configuration>.
-    #       # The RTSP urls for this camera are documented on
-    #       # <https://support.amcrest.com/hc/en-us/articles/360052688931-Accessing-Amcrest-Products-Using-RTSP>.
-    #       {
-    #         path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=0";
-    #         roles = [ "record" ];
-    #       }
-    #       {
-    #         path = "rtsp://admin:{FRIGATE_DEERCAM_PASSWORD}@deercam.ec:554/cam/realmonitor?channel=1&subtype=2";
-    #         roles = [ "detect" ];
-    #       }
-    #     ];
-    #   };
-    #   detect.enabled = false; # As the docs warn: this is just too CPU intensive.
-    #   record = {
-    #     enabled = true;
-    #     # Retain settings copied from
-    #     # <https://docs.frigate.video/configuration/record/#most-conservative-ensure-all-video-is-saved>
-    #     retain = {
-    #       days = 3;
-    #       mode = "all";
-    #     };
-    #     alerts.retain = {
-    #       days = 30;
-    #       mode = "motion";
-    #     };
-    #     detections.retain = {
-    #       days = 30;
-    #       mode = "motion";
-    #     };
-    #   };
-    # };
-  };
-
-  clan.core.vars.generators.deercam = {
-    prompts.password = {
-      description = "Password for deercam";
-      persist = true;
+    babycam = {
+      enabled = true;
+      ffmpeg = {
+        # https://docs.frigate.video/configuration/hardware_acceleration_video/#setup-decoder
+        hwaccel_args = "preset-nvidia";
+        inputs = [
+          {
+            path = "rtsp://127.0.0.1:8554/babycam-record";
+            input_args = "preset-rtsp-restream";
+            roles = [ "record" ];
+          }
+          {
+            path = "rtsp://127.0.0.1:8554/babycam-detect";
+            input_args = "preset-rtsp-restream";
+            roles = [ "detect" ];
+          }
+        ];
+      };
+      detect.enabled = false; # As the docs warn: this is just too CPU intensive.
+      record = {
+        enabled = true;
+        # Retain settings copied from
+        # <https://docs.frigate.video/configuration/record/#most-conservative-ensure-all-video-is-saved>
+        continuous.days = 3;
+        motion.days = 7;
+        alerts.retain = {
+          days = 30;
+          mode = "motion";
+        };
+        detections.retain = {
+          days = 30;
+          mode = "motion";
+        };
+      };
     };
   };
 
-  systemd.services.frigate.serviceConfig = {
-    ExecStart = lib.mkForce (
-      pkgs.writeShellScript "frigate-with-secrets" ''
-        export FRIGATE_DEERCAM_PASSWORD=$(< "$CREDENTIALS_DIRECTORY/${deercamPasswordKeyId}")
-        # Entrypoint copied from upstream
-        # <https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/video/frigate.nix#L642>.
-        exec ${config.services.frigate.package.python.interpreter} -m frigate
-      ''
-    );
-    LoadCredential = [
-      "${deercamPasswordKeyId}:${config.clan.core.vars.generators.deercam.files."password".path}"
-    ];
+  clan.core.vars.generators.babycam = {
+    prompts.password = {
+      description = "Password for babycam";
+      persist = true;
+    };
   };
 }
