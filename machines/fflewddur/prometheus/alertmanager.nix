@@ -84,6 +84,20 @@ in
             ];
           }
         ];
+
+        inhibit_rules = [
+          # Suppress all other `NotUp` alerts if the node exporter is down.
+          {
+            source_matchers = [
+              ''alertname="NotUp"''
+              ''job="node"''
+            ];
+            target_matchers = [
+              ''alertname="NotUp"''
+              ''job!="node"''
+            ];
+          }
+        ];
       };
     };
   };
