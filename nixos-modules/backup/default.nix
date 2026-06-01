@@ -33,6 +33,16 @@ in
       '';
     };
 
+    exclude = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Patterns to exclude when backing up. See
+        https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
+        details on syntax.
+      '';
+    };
+
     backupPrepareCommands = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -108,6 +118,7 @@ in
           "/var/backup"
         ]
         ++ cfg.extraPaths;
+        inherit (cfg) exclude;
         repository = resticRepository;
         timerConfig = {
           OnCalendar = "daily";

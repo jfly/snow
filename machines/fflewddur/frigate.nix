@@ -2,6 +2,12 @@
 let
   inherit (config.snow) services;
   babycamPasswordKeyId = "babycam-password-id";
+  secondsPer = {
+    minute = 60;
+    hour = 60 * secondsPer.minute;
+    day = 24 * secondsPer.hour;
+    month = 30 * secondsPer.day;
+  };
 in
 {
   services.go2rtc = {
@@ -21,22 +27,19 @@ in
     "${babycamPasswordKeyId}:${config.clan.core.vars.generators.babycam.files."password".path}"
   ];
 
-  # If this is too slow, consider putting this data on the SSD rootfs and backing it up some other way.
-  # I'm intentionally avoiding our snow.backup infrastructure, as that keeps all
-  # historical data, which would quickly grow unreasonable with frigate's data.
-  fileSystems."/var/lib/frigate" = {
-    device = "/mnt/bay/media/videos/frigate";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-
-  systemd.services.frigate.unitConfig = {
-    RequiresMountsFor = "/mnt/bay/media/videos/frigate";
-  };
+  # We don't back up frigate, as that keeps all historical data, which would
+  # quickly grow unreasonable with frigate's ever changing data.
+  # The expectation is that we quickly export anything "interesting" to somewhere persistent.
+  snow.backup.exclude = [ "/var/lib/frigate" ];
 
   services.frigate.enable = true;
   services.frigate.hostname = services.frigate.fqdn;
   snow.services.frigate.hostedHere = true;
+
+  services.frigate.settings.auth = {
+    cookie_secure = true;
+    session_length = 3 * secondsPer.month;
+  };
 
   services.frigate.settings.cameras = {
     babycam = {
