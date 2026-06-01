@@ -5,13 +5,15 @@
 
 let
   metricsPort = 9811;
-  sinkPort = 3912;
-  doliIp = builtins.readFile ../../../vars/per-machine/doli/zerotier/zerotier-ip/value;
+
 in
 {
+  # Note: this is pretty much a copy of <machines/fflewddur/backup/zrepl.nix>.
+  # Once there's a 3rd copy of this, we should move this to `snow.backup`.
+  snow.backup.enable = false;
+
   networking.firewall.interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = [
     metricsPort
-    sinkPort
   ];
 
   services.zrepl = {
@@ -37,21 +39,14 @@ in
 
       jobs = [
         {
-          name = "bay_to_baykup";
+          name = "doli_to_bay";
           type = "push";
           connect = {
             type = "tcp";
-            address = "fflam.m:3912";
+            address = "fflewddur.m:3912";
           };
           filesystems = {
-            "bay<" = true;
-            # Do *not* take snapshots of datasets that were sent here, it'll
-            # break replication (see
-            # <https://github.com/zrepl/zrepl/issues/248>).
-            # Ideally we *would* still send those datasets somewhere else for
-            # redundancy. I suspect that would require a separate job. This is
-            # too difficult to get right :(
-            "bay/zrepl<" = false;
+            "zroot/root/var/lib" = true;
           };
 
           # Note that the snapshots zrepl creates are in addition to whatever
@@ -112,19 +107,6 @@ in
                 ];
               }
             ];
-          };
-        }
-        {
-          name = "bay_sink";
-          type = "sink";
-          root_fs = "bay/zrepl/sink";
-          recv.placeholder.encryption = "inherit"; # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
-          serve = {
-            type = "tcp";
-            listen = ":${toString sinkPort}";
-            clients = {
-              ${doliIp} = "doli";
-            };
           };
         }
       ];

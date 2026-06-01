@@ -49,6 +49,9 @@
                   expr = ''
                     time() - zrepl_replication_last_successful > ${toString (2 * 24 * 60 * 60)}
                   '';
+                  # When the zrepl daemon restarts, this metric drops back to
+                  # zero. To reduce the probability of false alarms, we wait
+                  # long enough for the backup to succeed before we let it fire.
                   for = "30m";
                   labels.severity = "error";
                   annotations.summary = "zrepl job {{ $labels.zrepl_job }} has not succeeded recently.";

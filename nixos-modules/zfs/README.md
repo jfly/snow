@@ -96,3 +96,21 @@ Now add that drive to the pool (if the pool doesn't exist yet, see next command)
 ```
 zpool add [poolname] /dev/disk/by-id/[FILLME]
 ```
+
+## zrepl
+
+We use `zrepl` for efficiently backing up snapshots of ZFS datasets.
+
+You don't want the destination taking its own snapshots of the datasets it has
+received, as that will break backups
+(<https://github.com/zrepl/zrepl/issues/248>). So, disable auto snapshot:
+
+```console
+$ zfs set com.sun:auto-snapshot=false bay/zrepl
+```
+
+Also, set readonly to avoid any modifications to the backed up datasets:
+
+```
+$ zfs set readonly=on bay/zrepl
+```

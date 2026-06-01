@@ -34,6 +34,7 @@
     ./irc-bouncer.nix
     ./forge.nix
     ./budget.nix
+    ./doli-to-restic.nix
   ];
 
   disko.devices.disk.main.device = "/dev/disk/by-id/ata-P3-2TB_0029270021768";

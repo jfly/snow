@@ -40,6 +40,7 @@ in
           name = "baykup_sink";
           type = "sink";
           root_fs = "baykup/zrepl/sink";
+          recv.placeholder.encryption = "inherit"; # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
           serve = {
             type = "tcp";
             listen = ":${toString sinkPort}";
