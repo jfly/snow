@@ -21,6 +21,19 @@ in
     "${babycamPasswordKeyId}:${config.clan.core.vars.generators.babycam.files."password".path}"
   ];
 
+  # If this is too slow, consider putting this data on the SSD rootfs and backing it up some other way.
+  # I'm intentionally avoiding our snow.backup infrastructure, as that keeps all
+  # historical data, which would quickly grow unreasonable with frigate's data.
+  fileSystems."/var/lib/frigate" = {
+    device = "/mnt/bay/media/videos/frigate";
+    fsType = "none";
+    options = [ "bind" ];
+  };
+
+  systemd.services.frigate.unitConfig = {
+    RequiresMountsFor = "/mnt/bay/media/videos/frigate";
+  };
+
   services.frigate.enable = true;
   services.frigate.hostname = services.frigate.fqdn;
   snow.services.frigate.hostedHere = true;
