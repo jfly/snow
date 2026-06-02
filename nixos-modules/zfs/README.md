@@ -114,3 +114,11 @@ Also, set readonly to avoid any modifications to the backed up datasets:
 ```
 $ zfs set readonly=on bay/zrepl
 ```
+
+## Discarding a drive
+
+```console
+nix run nixpkgs#wipe /dev/sdX
+```
+
+<img title="" src="./discardme.jpeg" alt="Drive that is ready for the dumpster">
