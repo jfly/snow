@@ -101,9 +101,12 @@ in
       enable = true;
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.xsettingsd}/bin/xsettingsd";
-      };
+      script = ''
+        # xsettingsd refuses to start if it cannot find a config file, so ensure
+        # one exists.
+        touch ~/.xsettingsd
+        exec ${lib.getExe pkgs.xsettingsd}
+      '';
     };
     "pasystray" = {
       enable = true;
