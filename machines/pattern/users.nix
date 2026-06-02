@@ -11,6 +11,7 @@ in
 {
   options = {
     snow = {
+      # TODO: Can we get rid of this? Or at least minimize usage of it?
       user = {
         name = lib.mkOption {
           type = lib.types.str;

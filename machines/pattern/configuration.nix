@@ -5,7 +5,7 @@
 }:
 {
   snow.user = {
-    name = "jeremy";
+    name = "jfly";
     uid = 1000;
   };
 
