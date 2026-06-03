@@ -180,6 +180,10 @@ in
       description = "Generate Hetzner storage box usage metrics";
       enable = true;
       script = lib.getExe generateStorageBoxUsageMetrics;
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = 3;
+      };
     };
   };
 }
