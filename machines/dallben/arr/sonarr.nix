@@ -43,23 +43,18 @@ in
   # As a workaround, set up a IPv4 -> IPv6 proxy locally for the needed
   # services.
   # [0]: https://github.com/Sonarr/Sonarr/issues/7534
-  #
-  # Note: this breaks IPv4 jellyfin.m outside of the network namespace. That's
-  # fine, as IPv6 still works (thanks to Happy Eyeballs).
   networking.extraHosts = ''
-    127.0.0.1 jellyfin.m
+    ${config.vpnNamespaces.wg.bridgeAddress} jellyfin.m
   '';
+  networking.firewall.interfaces.wg-br.allowedTCPPorts = [
+    443
+  ];
   systemd.services.jellyfin-ipv4-proxy = {
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    vpnConfinement = {
-      enable = true;
-      vpnNamespace = "wg";
-    };
-
     script = ''
-      exec ${lib.getExe pkgs.socat} TCP4-LISTEN:443,fork,reuseaddr TCP6:[${fflewddurIp}]:443
+      exec ${lib.getExe pkgs.socat} TCP4-LISTEN:443,fork,reuseaddr,bind=${config.vpnNamespaces.wg.bridgeAddress} TCP6:[${fflewddurIp}]:443
     '';
     serviceConfig = {
       Type = "exec";
