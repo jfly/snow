@@ -37,6 +37,7 @@
     ./remote-fs.nix
     ./steam.nix
     ./irc-client.nix
+    ./applicative.nix
   ];
 
   # This device is not online all the time.
