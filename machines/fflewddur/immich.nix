@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-let
-  inherit (config.snow) services;
-in
 {
   services.immich = {
     enable = true;
@@ -36,15 +33,30 @@ in
   snow.backup.postgresql.dbs = [ config.services.immich.database.name ];
 
   # Immich Public Proxy
-  services.immich-public-proxy = {
-    enable = true;
-    port = 2284;
-    immichUrl = services.immich.baseUrl;
-    settings.ipp = {
-      showMetadata.description = true;
-      showGalleryTitle = true;
-      allowDownloadAll = 1; # "follow Immich setting per share"
-    };
-  };
-  snow.services.immich-public-proxy.proxyPass = "http://[::1]:${toString config.services.immich-public-proxy.port}";
+  # Disabled so family can upload vacation pictures.
+  # TODO: decide how to handle this.
+  # services.immich-public-proxy =
+  #   let
+  #     inherit (config.snow) services;
+  #   in
+  #   {
+  #     enable = true;
+  #     port = 2284;
+  #     immichUrl = services.immich.baseUrl;
+  #     settings.ipp = {
+  #       showMetadata.description = true;
+  #       showGalleryTitle = true;
+  #       allowDownloadAll = 1; # "follow Immich setting per share"
+  #     };
+  #   };
+  # snow.services.immich-public-proxy.proxyPass = "http://[::1]:${toString config.services.immich-public-proxy.port}";
+
+  # Expose immich directly (as opposed to immich public proxy, see above).
+  snow.services.immich-public-proxy.proxyPass = "http://[::1]:${toString config.services.immich.port}";
+  snow.services.immich-public-proxy.nginxExtraConfig = ''
+    client_max_body_size 50000M;
+    proxy_read_timeout   600s;
+    proxy_send_timeout   600s;
+    send_timeout         600s;
+  '';
 }

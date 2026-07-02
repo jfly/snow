@@ -66,6 +66,8 @@ in
     htop
     moreutils # vidir
     shtuff
+    rbw # Bitwarden client
+    pinentry-curses # rbw needs a `pinentry` implementation
 
     ### data graphing
     (pkgs.writeShellScriptBin "qcsv" ''
