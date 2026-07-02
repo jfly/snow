@@ -24,3 +24,8 @@ Host darwin-build-box.nix-community.org
     # Urg, "alacritty" is not recognized yet :(
     SetEnv TERM=xterm-256color
     User jfly
+
+# ngi
+Host makemake
+    User root
+    HostName makemake.ngi.nixos.org
