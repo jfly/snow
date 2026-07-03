@@ -162,19 +162,14 @@
             # this so I can leave `abort-on-warn` enabled.
             ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
             (fetchpatch {
-              name = "nixos/oauth2-proxy: fix warning condition";
-              url = "https://github.com/NixOS/nixpkgs/commit/deaf02d3d250018ccc0587cc7124a3d12836448a.diff";
-              hash = "sha256-UVDibIqDQ04t3iY3SxLhkt+OsA6cmqth9d/6/mtgWw4=";
+              name = "nixos/fish: `programs.fish.generateCompletions` fix spaces in filenames";
+              url = "https://github.com/NixOS/nixpkgs/commit/9fc0d99003e17955900f6a6067fba7fdcb31b519.diff";
+              hash = "sha256-OcqLSvKOTrhCsNw1U0vV6jQ0CWQz0npKEM54g0w3qFs=";
             })
             (fetchpatch {
-              name = ''Revert "nixos/blueman: Add option to enable Blueman tray applet" (#521288)'';
-              url = "https://github.com/NixOS/nixpkgs/commit/3c53cb036ac5dad5d190a130b970c6f8ffcf89fe.diff";
-              hash = "sha256-VVymVOaX9GTkOQ8ObLUOOYA6RML62JYimQ3bzb/4GEs=";
-            })
-            (fetchpatch {
-              name = "immichframe: refactor, add updateScript, and 1.0.29.0 -> 1.0.33.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/513463.diff";
-              hash = "sha256-qvzsGe5aMfxwuytIvYYDKWhFMgwAZ/FWSBmIANAkdG8=";
+              name = "python3Packages.ai-edge-litert: unbreak";
+              url = "https://github.com/NixOS/nixpkgs/commit/00d642560bd1d2daf9939eb710c552d5dcddd737.diff";
+              hash = "sha256-auWRLTCfGTC7YeLH1PWTXpA0iDx15x+DKuJ/XVTH+kw=";
             })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -245,6 +240,17 @@
           flake-parts.patches = [
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
+          ];
+
+          nixvim.patches = [
+            # Quick 'n dirty workaround for <https://github.com/neovim/neovim/issues/40631>.
+            (fetchpatch {
+              name = "[REVERT] modules/output: load wrapped config via VIMINIT";
+              url = "https://github.com/nix-community/nixvim/commit/d82f383100817a140b8d4654cabc4f73667f3ac6.patch";
+              revert = true;
+              excludes = [ "tests/test-sources/modules/output.nix" ];
+              hash = "sha256-vGS0JTJxa4PoOFv7y4LYayc5ItZP3NAfN6ApJW3F1uI=";
+            })
           ];
         };
       };

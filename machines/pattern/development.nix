@@ -98,7 +98,15 @@
     miller
     jq
     inotify-info
-    nix-output-monitor
+    (nix-output-monitor.overrideAttrs (oldAttrs: {
+      patches = oldAttrs.patches or [ ] ++ [
+        (pkgs.fetchpatch {
+          name = "Add 'nom flake' subcommand";
+          url = "https://github.com/maralorn/nix-output-monitor/commit/0cf2d570c2f204616205ae98958f6d09a1a792cd.diff";
+          hash = "sha256-FyL2sJdSAEcsT9Vq2IZz9rBkmfLvx43TAq+C5Vp1ybQ=";
+        })
+      ];
+    }))
 
     ### Docs
     linux-manual

@@ -37,7 +37,7 @@ in
           };
           ip = lib.mkOption {
             description = "IP of this node on the overlay network";
-            default = builtins.readFile ../../vars/per-machine/${config.networking.hostName}/zerotier/zerotier-ip/value;
+            default = builtins.readFile ../../vars/shared/zerotier-ip-${config.networking.hostName}-manman/ip/value;
             readOnly = true;
           };
         };
@@ -96,7 +96,9 @@ in
           };
 
           overlay = {
-            ipv6 = config.clan.core.networking.zerotier.subnet;
+            # Clan generated this. There must be some way to access the value
+            # at eval time, but I haven't found it.
+            ipv6 = "fdd4:aa51:eed9:0426:9f99:9300::/88";
             # This interface name is determined from the network id, but we
             # don't have eval-time access to it. So, you have to first deploy
             # the Zerotier network, and *then* fill this in. This could be

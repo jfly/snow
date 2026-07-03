@@ -26,6 +26,8 @@ in
       options.desc = "Note List: open a list of notes";
       key = "<leader>nl";
       mode = "n";
+      # Note: we use :Explore rather than `vim.cmd.edit` in order to use netrw.
+      # See <https://github.com/neovim/neovim/discussions/40640>
       action = mkRaw ''
         function()
           vim.g.netrw_sort_by = 'time'
@@ -33,7 +35,7 @@ in
           vim.g.netrw_list_hide = [[\(^\|\s\s\)\zs\.\S\+]]
 
           local notes_dir = vim.fn.expand('${notesDir}')
-          vim.cmd.edit(notes_dir)
+          vim.cmd.Explore(notes_dir)
         end
       '';
     }

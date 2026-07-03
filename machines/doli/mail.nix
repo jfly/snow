@@ -9,7 +9,7 @@
 
 {
   imports = [
-    inputs.simple-nixos-mailserver.nixosModule
+    inputs.simple-nixos-mailserver.nixosModules.default
     ./postsrsd.nix
     flake.nixosModules.email-credentials-alerts
   ];

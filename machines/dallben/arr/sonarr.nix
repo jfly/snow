@@ -6,7 +6,7 @@
 }:
 let
   port = config.services.sonarr.settings.server.port;
-  fflewddurIp = builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value;
+  fflewddurIp = builtins.readFile ../../../vars/shared/zerotier-ip-fflewddur-manman/ip/value;
 in
 {
   services.sonarr = {

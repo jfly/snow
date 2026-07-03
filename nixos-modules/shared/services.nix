@@ -289,7 +289,7 @@ in
       lib.mapAttrsToList (
         host: fqdns:
         let
-          ip = builtins.readFile ../../vars/per-machine/${host}/zerotier/zerotier-ip/value;
+          ip = builtins.readFile ../../vars/shared/zerotier-ip-${host}-manman/ip/value;
           validFqdns =
             if host != config.networking.hostName then
               fqdns

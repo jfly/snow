@@ -6,7 +6,7 @@
 let
   metricsPort = 9811;
   sinkPort = 3912;
-  fflewddurIp = builtins.readFile ../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value;
+  fflewddurIp = builtins.readFile ../../vars/shared/zerotier-ip-fflewddur-manman/ip/value;
 in
 {
   networking.firewall.interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = [

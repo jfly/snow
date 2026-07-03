@@ -6,7 +6,7 @@
 let
   metricsPort = 9811;
   sinkPort = 3912;
-  doliIp = builtins.readFile ../../../vars/per-machine/doli/zerotier/zerotier-ip/value;
+  doliIp = builtins.readFile ../../../vars/shared/zerotier-ip-doli-manman/ip/value;
 in
 {
   networking.firewall.interfaces.${config.snow.subnets.overlay.interface}.allowedTCPPorts = [

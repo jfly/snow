@@ -3,7 +3,7 @@
 let
   inherit (config.snow) services;
 
-  fflewddurIp = builtins.readFile ../../../vars/per-machine/fflewddur/zerotier/zerotier-ip/value;
+  fflewddurIp = builtins.readFile ../../../vars/shared/zerotier-ip-fflewddur-manman/ip/value;
 
   mkStaticProbe =
     {

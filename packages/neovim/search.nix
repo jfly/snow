@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 let
   inherit (lib.nixvim) mkRaw;
@@ -6,6 +6,16 @@ in
 {
   plugins.fzf-lua = {
     enable = true;
+    package = pkgs.vimPlugins.fzf-lua.overrideAttrs (oldAttrs: {
+      patches = oldAttrs.patches or [ ] ++ [
+        # Workaround for some bugginess introduced by <https://github.com/neovim/neovim/pull/39937>.
+        (pkgs.fetchpatch {
+          name = "fix(rpc): schedule quit";
+          url = "https://github.com/ibhagwan/fzf-lua/commit/5403b36b2a50495d472596d8f9fbe57554ecc84b.patch";
+          hash = "sha256-uU6xb4nWisTvihBdoGKZK+yAKiVy9thGWVSdXquc2zg=";
+        })
+      ];
+    });
     settings.winopts = {
       split = "belowright new";
       height = 0.4;
