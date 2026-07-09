@@ -241,17 +241,6 @@
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
           ];
-
-          nixvim.patches = [
-            # Quick 'n dirty workaround for <https://github.com/neovim/neovim/issues/40631>.
-            (fetchpatch {
-              name = "[REVERT] modules/output: load wrapped config via VIMINIT";
-              url = "https://github.com/nix-community/nixvim/commit/d82f383100817a140b8d4654cabc4f73667f3ac6.patch";
-              revert = true;
-              excludes = [ "tests/test-sources/modules/output.nix" ];
-              hash = "sha256-vGS0JTJxa4PoOFv7y4LYayc5ItZP3NAfN6ApJW3F1uI=";
-            })
-          ];
         };
       };
     in
