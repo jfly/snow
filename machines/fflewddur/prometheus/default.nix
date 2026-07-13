@@ -21,8 +21,10 @@ in
     # mullvad-exporter is also unique: we run the exporter and the corresponding
     # scraper on only this node.
     ./mullvad-exporter.nix
-    # Prometheus is also unique: there's only one node running Prometheus.
+    # Prometheus is also unique: there's only one node running it..
     ./scrapers/prometheus.nix
+    # Immich is also unique: there's only one node running it.
+    ./scrapers/immich.nix
   ];
 
   services.prometheus = {

@@ -29,6 +29,8 @@ fflewddur = [
     "grafana.m",
     "home-assistant.m",
     "immich.m",
+    "immich-metrics-api.m",
+    "immich-metrics-microservices.m",
     "irc.m",
     "jellyfin.m",
     "manman.m",

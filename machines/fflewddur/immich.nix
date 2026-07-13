@@ -1,13 +1,19 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }:
 {
   services.immich = {
     enable = true;
     port = 2283;
+    environment = {
+      # Enable Prometheus metrics endpoints.
+      # <https://docs.immich.app/features/monitoring/#configuration>
+      IMMICH_TELEMETRY_INCLUDE = "all";
+      IMMICH_API_METRICS_PORT = "2284";
+      IMMICH_MICROSERVICES_METRICS_PORT = "2285";
+    };
   };
 
   # This is to make `pgvecto-rs` (which is used by immich) happy. See
@@ -15,7 +21,7 @@
   services.postgresql.package = pkgs.postgresql_16;
 
   # https://wiki.nixos.org/wiki/Immich#Enabling_Hardware_Accelerated_Video_Transcoding
-  systemd.services."immich-server".serviceConfig.PrivateDevices = lib.mkForce false;
+  services.immich.accelerationDevices = null; # Allow access to all devices.
   users.users.immich.extraGroups = [
     "video"
     "render"
@@ -29,6 +35,9 @@
     proxy_send_timeout   600s;
     send_timeout         600s;
   '';
+
+  snow.services.immich-metrics-api.proxyPass = "http://[::1]:${toString config.services.immich.environment.IMMICH_API_METRICS_PORT}";
+  snow.services.immich-metrics-microservices.proxyPass = "http://[::1]:${toString config.services.immich.environment.IMMICH_MICROSERVICES_METRICS_PORT}";
 
   snow.backup.postgresql.dbs = [ config.services.immich.database.name ];
 

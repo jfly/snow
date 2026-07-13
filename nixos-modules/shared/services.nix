@@ -331,6 +331,8 @@ in
         parentDomain = "ec";
       };
       immich = { };
+      immich-metrics-api = { };
+      immich-metrics-microservices = { };
       immichframe = {
         # Keep in sync with <routers/strider/files/etc/config/dhcp>.
         subdomain = "frame";
