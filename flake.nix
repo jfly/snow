@@ -27,10 +27,7 @@
     };
 
     flake-input-patcher = {
-      # TODO: finish <https://github.com/jfly/flake-input-patcher/pull/3> and
-      #       switch back to main.
-      # url = "github:jfly/flake-input-patcher";
-      url = "github:jfly/flake-input-patcher/follows";
+      url = "github:jfly/flake-input-patcher";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };
@@ -43,6 +40,7 @@
     google-dav-proxy = {
       url = "github:jfly/google-dav-proxy";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
 
     git-hooks-nix = {
@@ -158,19 +156,6 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
-            # We really need some way to suppress "expected" warnings. I'm doing
-            # this so I can leave `abort-on-warn` enabled.
-            ./patches/nixpkgs/suppress-x86_64-darwin-warning.patch
-            (fetchpatch {
-              name = "nixos/fish: `programs.fish.generateCompletions` fix spaces in filenames";
-              url = "https://github.com/NixOS/nixpkgs/commit/9fc0d99003e17955900f6a6067fba7fdcb31b519.diff";
-              hash = "sha256-OcqLSvKOTrhCsNw1U0vV6jQ0CWQz0npKEM54g0w3qFs=";
-            })
-            (fetchpatch {
-              name = "python3Packages.ai-edge-litert: unbreak";
-              url = "https://github.com/NixOS/nixpkgs/commit/00d642560bd1d2daf9939eb710c552d5dcddd737.diff";
-              hash = "sha256-auWRLTCfGTC7YeLH1PWTXpA0iDx15x+DKuJ/XVTH+kw=";
-            })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
