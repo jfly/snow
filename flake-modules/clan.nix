@@ -39,16 +39,6 @@ in
             #      - Note: iOS has a bug where this doesn't work. Instead, select "Custom
             #              DNS" and add fflewddur's IPv6 address. See
             #              https://github.com/zerotier/ZeroTierOne/issues/2464
-            #
-            #    - For Android, enable "Route all traffic through ZeroTier. Requires external
-            #      configuration of the network".
-            #
-            #      Why? This allows the `2000::` hack (see
-            #      below) to work, which enables AAAA DNS lookups over ZeroTier even when
-            #      you're on an IPv4-only network.
-            #
-            #      TODO: figure out why this requires checking this box, it doesn't
-            #            seem to do what I'd expect from the name.
             #    - For macOS, disable DNS service coupling: `sudo scutil --disable-service-coupling on`
             #      TODO: write up a proper explanation for this. See notes in
             #            <https://github.com/apple-oss-distributions/configd/compare/main...jfly:configd:notes?expand=1>.

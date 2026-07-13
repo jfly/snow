@@ -34,7 +34,7 @@ let
         # For public services, listen on all IPs. They're public services!
         [
           "0.0.0.0"
-          "[::1]"
+          "[::]"
         ]
         # This is a bit strange: we have to explicitly listen on the lan IPs as
         # well, even though they're covered by the wildcard addresses above.
