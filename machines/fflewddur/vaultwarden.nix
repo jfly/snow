@@ -40,7 +40,7 @@ in
       # https://github.com/dani-garcia/vaultwarden/wiki/Hardening-Guide#disable-password-hint-display
       SHOW_PASSWORD_HINT = false;
       # https://github.com/dani-garcia/vaultwarden/wiki/Logging
-      # LOG_LEVEL = trace;
+      # LOG_LEVEL = "trace";
       # EXTENDED_LOGGING = true;
     };
   };

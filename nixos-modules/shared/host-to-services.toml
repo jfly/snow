@@ -13,6 +13,7 @@ dallben = [
 doli = [
     "doli.m",
     "syncthing.doli.m",
+    "vw-overlay.m",
 ]
 fflam = [
     "fflam.m",

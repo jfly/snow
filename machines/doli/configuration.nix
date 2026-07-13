@@ -9,6 +9,7 @@
     ./disko.nix
     ./mail.nix
     ./zrepl.nix
+    ./vaultwarden-test.nix
   ];
 
   networking.hostName = "doli";

@@ -158,6 +158,12 @@ class Dns:
         self._secret_projects()
         self._photos()
 
+        # TODO: remove once done bisecting bitwarden android.
+        self._jfly_fyi.aaaa(
+            name="vw-public",
+            values=["2a01:4ff:1f0:ad06::"],  # `hosts/doli/network.nix`
+        )
+
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
         self._jfly_fyi.cname("www", "jfly.github.io")

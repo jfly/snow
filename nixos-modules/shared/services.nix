@@ -12,6 +12,7 @@ let
   publicDomains = [
     "snow.jflei.com"
     "ramfly.net"
+    "jfly.fyi"
   ];
   regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
   hostToServicesFile = ./host-to-services.toml;
@@ -385,6 +386,14 @@ in
       };
       torrents = { };
       vaultwarden = { };
+
+      # TODO: remove once done bisecting bitwarden android.
+      vw-public = {
+        subdomain = "vw-public";
+        parentDomain = "jfly.fyi";
+      };
+      vw-overlay = { }; # TODO: remove once done bisecting bitwarden android.
+
       whoami = {
         oauth2 = {
           groups.access = "whoami_access";
