@@ -22,8 +22,8 @@ let
 
       {{ if contains "[Gmail]" .OriginalLabels -}}
       FYI: My personal email address is now me@jfly.fyi. I'll continue to
-      receive emails here indefinitely, but I'd appreciate it if you would
-      update your address book.
+      receive emails to jeremyfleischman@gmail.com indefinitely, but I'd
+      appreciate it if you would update your address book.
 
       {{ end }}
       On {{dateFormat (.OriginalDate | toLocal) "Mon Jan 2, 2006 at 3:04 PM MST"}}, {{.OriginalFrom | names | join ", "}} wrote:
