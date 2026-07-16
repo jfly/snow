@@ -12,17 +12,11 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
       patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-        # This is a workaround for <https://github.com/neovim/neovim/issues/33864>.
-        (pkgs.fetchpatch {
-          name = "fix(lsp): ignore diagnostics from a LSP we're detached from";
-          url = "https://github.com/neovim/neovim/commit/d42ee194a3d249ac90cb5548fa41281bbe9eab82.patch";
-          hash = "sha256-rYLZk4HXD0FhuPNA22WER1g+yTYcfyRU/uX4t3SIj3s=";
-        })
         # This is a fix for <https://github.com/neovim/neovim/issues/40631>.
         (pkgs.fetchpatch {
           name = "fix(lua): preserve startup source context";
           url = "https://github.com/neovim/neovim/pull/40647.diff";
-          hash = "sha256-LAaEJti6sgsokgCNUkYc/r88SdaFOLubZwCfir1yQ2A=";
+          hash = "sha256-Ds7OuK9jnKEkCHBHFZqRAGbrcpKF076XB4TZcRnJrLI=";
         })
       ];
     });
