@@ -351,6 +351,10 @@ in
       irc = { };
       jackett = { };
       jellyfin = { };
+      jf = {
+        subdomain = "jf";
+        parentDomain = "jfly.fyi";
+      };
       kanidm = {
         subdomain = "auth";
         paths = {

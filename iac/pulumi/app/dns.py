@@ -163,6 +163,7 @@ class Dns:
             name="vw-public",
             values=["2a01:4ff:1f0:ad06::"],  # `hosts/doli/network.nix`
         )
+        self._jfly_fyi.cname("jf", "colusa.jflei.com")
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain

@@ -50,3 +50,8 @@ Host locked-vm
     HostName 127.0.0.1
     Port 5555
     User jfly
+
+Host usbpi
+    # HostName fe80::dea6:32ff:fe2e:9fc1%%enp0s13f0u1u3
+    HostName usbpi.ec
+    User root
