@@ -390,14 +390,6 @@ in
       };
       torrents = { };
       vaultwarden = { };
-
-      # TODO: remove once done bisecting bitwarden android.
-      vw-public = {
-        subdomain = "vw-public";
-        parentDomain = "jfly.fyi";
-      };
-      vw-overlay = { }; # TODO: remove once done bisecting bitwarden android.
-
       whoami = {
         oauth2 = {
           groups.access = "whoami_access";
