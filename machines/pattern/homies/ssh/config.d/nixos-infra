@@ -27,5 +27,5 @@ Host darwin-build-box.nix-community.org
 
 # ngi
 Host makemake
-    User root
+    User jfly
     HostName makemake.ngi.nixos.org

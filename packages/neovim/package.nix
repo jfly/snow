@@ -11,12 +11,12 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
 
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
-      patches = (if oldAttrs ? patches then oldAttrs.patches else [ ]) ++ [
-        # This is a fix for <https://github.com/neovim/neovim/issues/40631>.
+      patches = oldAttrs.patches or [ ] ++ [
+        # This is a workaround for <https://github.com/neovim/neovim/issues/40631>.
         (pkgs.fetchpatch {
-          name = "fix(lua): preserve startup source context";
-          url = "https://github.com/neovim/neovim/pull/40647.diff";
-          hash = "sha256-Ds7OuK9jnKEkCHBHFZqRAGbrcpKF076XB4TZcRnJrLI=";
+          name = "bg_user_set: hack always return true";
+          url = "https://github.com/jfly/neovim/commit/14464f31dcb45849e6f259d80cad55b250e6126e.diff";
+          hash = "sha256-PVWy7IV9+osHS4E+EX53/HWvYRsI00s1puxQ3+iiP4U=";
         })
       ];
     });

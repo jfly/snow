@@ -157,6 +157,11 @@
         patchSpec = {
           nixpkgs.patches = [
             (fetchpatch {
+              name = "home-assistant-custom-components.opensprinkler: 1.5.5 -> 1.5.6";
+              url = "https://github.com/NixOS/nixpkgs/pull/545122.diff";
+              hash = "sha256-Faoc+DgpPZE9LwpISk6vAnrlvHx4R72O0vyh85WoB4s=";
+            })
+            (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
               hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
