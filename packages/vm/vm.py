@@ -1,6 +1,6 @@
 import argparse
-import sys
 import os
+import sys
 from pathlib import Path
 
 VM_OVMF_FIRMWARE = os.environ["VM_OVMF_FIRMWARE"]

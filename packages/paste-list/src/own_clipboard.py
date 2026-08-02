@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
 import logging
 import time
 
-from Xlib import X, display, Xatom
+from Xlib import X, Xatom, display
 from Xlib.protocol import event
 
 logger = logging.getLogger(__name__)
@@ -145,7 +143,7 @@ def main():
     def generator() -> bytes:
         nonlocal count
         count += 1
-        return f"paste {count}".encode("utf-8")
+        return f"paste {count}".encode()
 
     own_clipboard(generator)
 

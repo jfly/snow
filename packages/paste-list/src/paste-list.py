@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-from own_clipboard import own_clipboard, not_too_often
-import urwid
-import threading
-import os
 import argparse
+import os
+import threading
+
+import urwid
+from own_clipboard import not_too_often, own_clipboard
 
 
 def main():

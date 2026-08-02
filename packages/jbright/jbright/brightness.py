@@ -1,8 +1,9 @@
-from typing import Dict
-import dataclasses
-import subprocess
-import logging
 import csv
+import dataclasses
+import logging
+import subprocess
+
+logger = logging.getLogger(__name__)
 
 MIN_BRIGHTNESS_PERCENTAGE = 5
 
@@ -58,13 +59,13 @@ class Device:
             new_percentage_brightness = int(value.removesuffix("%"))
 
         if new_percentage_brightness < MIN_BRIGHTNESS_PERCENTAGE:
-            logging.warning(
+            logger.warning(
                 "Refusing to lower the brightness below %s%%", MIN_BRIGHTNESS_PERCENTAGE
             )
             new_percentage_brightness = MIN_BRIGHTNESS_PERCENTAGE
 
         if new_percentage_brightness > 100:
-            logging.warning("Refusing to raise the brightness above 100%")
+            logger.warning("Refusing to raise the brightness above 100%")
             new_percentage_brightness = 100
 
         _brightnessctl(["--device", self.name, "set", f"{new_percentage_brightness}%"])
@@ -78,7 +79,7 @@ class Device:
 
 
 class Devices:
-    _devices: Dict[str, Device]
+    _devices: dict[str, Device]
 
     def __init__(self):
         raw_device_infos = _brightnessctl(["--list"])

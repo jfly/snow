@@ -1,6 +1,7 @@
+from typing import Annotated
+
 import psutil
 import typer
-from typing import Annotated
 
 app = typer.Typer()
 

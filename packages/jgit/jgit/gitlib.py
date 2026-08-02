@@ -1,6 +1,6 @@
+import configparser
 import re
 from pathlib import Path
-import configparser
 
 
 class NotCloneableException(Exception):

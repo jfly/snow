@@ -101,16 +101,21 @@ symlinkJoin {
   paths = [
     (aerc.overrideAttrs (oldAttrs: {
       patches = oldAttrs.patches or [ ] ++ [
-        (fetchpatch {
-          name = "Add `OriginalLabels` to `templateData`";
-          url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260508071717.1513745-1-me@jfly.fyi%3E/raw";
-          hash = "sha256-uyHHxBJf1c6HJYG2K/Um6MHeycwbnbhf6N8bJjjsV1g=";
-        })
-        (fetchpatch {
-          name = ''"Genericize" the `contains` template function'';
-          url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260511202533.568513-2-me@jfly.fyi%3E/raw";
-          hash = "sha256-f9aO5I5jtFLBVRHF9ns2QMntHrJlpYHf7geCsmUVujI=";
-        })
+        # Cannot successfully fetch this patch anymore due sourcehut's `go-away` bot blocker.
+        # (fetchpatch {
+        #   name = "Add `OriginalLabels` to `templateData`";
+        #   url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260508071717.1513745-1-me@jfly.fyi%3E/raw";
+        #   hash = "sha256-uyHHxBJf1c6HJYG2K/Um6MHeycwbnbhf6N8bJjjsV1g=";
+        # })
+        ./patches/add-originallabels-to-templatedata.patch
+
+        # Cannot successfully fetch this patch anymore due sourcehut's `go-away` bot blocker.
+        # (fetchpatch {
+        #   name = ''"Genericize" the `contains` template function'';
+        #   url = "https://lists.sr.ht/~rjarry/aerc-devel/%3C20260511202533.568513-2-me@jfly.fyi%3E/raw";
+        #   hash = "sha256-f9aO5I5jtFLBVRHF9ns2QMntHrJlpYHf7geCsmUVujI=";
+        # })
+        ./patches/genericize-contains-function.patch
       ];
     }))
   ];

@@ -1,6 +1,7 @@
 from contextlib import contextmanager
-import pulsectl
+
 import dbus
+import pulsectl
 
 # Names from `nix-shell -p pulseaudio --run 'pactl list sinks | grep "Name:\|Description:"'`
 DESK_SPEAKERS = (

@@ -1,0 +1,6 @@
+[lint]
+ignore = [
+    "EXE005",
+    "SIM103",
+    "TRY201",
+]

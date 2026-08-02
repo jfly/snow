@@ -3,7 +3,6 @@ import pathlib
 import subprocess
 import tempfile
 from dataclasses import dataclass
-from typing import Dict, List
 
 from .types import (
     BleKey,
@@ -24,8 +23,8 @@ def get_only_element(arr):
 class RegistryNode:
     parent_path: str
     name: str
-    subnode_by_name: Dict[str, "RegistryNode"]
-    value_by_name: Dict[str, bytes]
+    subnode_by_name: dict[str, "RegistryNode"]
+    value_by_name: dict[str, bytes]
 
 
 class Registry:
@@ -149,7 +148,7 @@ class Windows:
         name = name[:-1]
         return name.decode("utf8")
 
-    def get_devices(self, adapter: MacAddress) -> List[BluetoothDevice]:
+    def get_devices(self, adapter: MacAddress) -> list[BluetoothDevice]:
         keys_path = r"ControlSet001\Services\BTHPORT\Parameters\Keys"
         keys_node = self._registry.read_path(keys_path)
         adapter_node = keys_node.subnode_by_name[

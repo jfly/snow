@@ -1,16 +1,15 @@
-from dataclasses import dataclass
-import sys
-import subprocess
-from pathlib import Path
 import logging
+import subprocess
+import sys
 import traceback
+from dataclasses import dataclass
+from pathlib import Path
+
 import click
-from . import highlander_rule
-from . import data
+
+from . import data, highlander_rule, xrandr
 from .audio import set_loopback
-from . import xrandr
-from .util import notify_send
-from .util import set_dpi
+from .util import notify_send, set_dpi
 
 logger = logging.getLogger(__name__)
 

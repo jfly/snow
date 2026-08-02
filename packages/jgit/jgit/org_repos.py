@@ -1,9 +1,8 @@
-from .gitlib import parse_gitconfig
-from .gitlib import InvalidGitRepo
-from .gitlib import Cloneable
-import sys
 import configparser
+import sys
 from pathlib import Path
+
+from .gitlib import Cloneable, InvalidGitRepo, parse_gitconfig
 
 
 def organize(path: Path, dry_run: bool):
@@ -50,7 +49,7 @@ def try_git(p: Path, dry_run: bool):
     try:
         config = parse_gitconfig(p)
     except InvalidGitRepo as e:
-        return False, f"Skipping {p}: {str(e)}"
+        return False, f"Skipping {p}: {e!s}"
 
     remote_section = find_remote(config)
     if remote_section is None:

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import subprocess
 from typing import Literal
 
@@ -7,7 +5,9 @@ Stream = Literal["sink", "source"]
 
 
 def _pamixer(args):
-    p = subprocess.run(["pamixer", *args], text=True, stdout=subprocess.PIPE)
+    p = subprocess.run(
+        ["pamixer", *args], text=True, stdout=subprocess.PIPE, check=True
+    )
     return p.stdout
 
 

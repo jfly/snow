@@ -1,11 +1,14 @@
-import string
-import unittest
 import datetime as dt
 import re
+import string
+import unittest
 from textwrap import dedent
-from .tool_driver import ToolDriver, InputEvent, TimeVal
+from typing import ClassVar
+
 from evdev import ecodes
 from evdev.events import KeyEvent
+
+from .tool_driver import InputEvent, TimeVal, ToolDriver
 
 EV_SYN: int = ecodes.EV_SYN  # type: ignore
 EV_KEY: int = ecodes.EV_KEY  # type: ignore
@@ -157,7 +160,7 @@ class Timeline:
 
 
 class ToolBaseTest(unittest.TestCase):
-    tool_cmd: list[str]
+    tool_cmd: ClassVar[list[str]]
 
     def setUp(self):
         self.time_sec = 0

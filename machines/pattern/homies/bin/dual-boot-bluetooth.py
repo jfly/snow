@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
+import argparse
 import os
 import sys
-import argparse
-from typing import List
 from pathlib import Path
 
 from dual_blueoot import linux
@@ -20,9 +19,9 @@ def require_root():
 
 def diff_devices(
     left_description: str,
-    left_devices: List[BluetoothDevice],
+    left_devices: list[BluetoothDevice],
     right_description: str,
-    right_devices: List[BluetoothDevice],
+    right_devices: list[BluetoothDevice],
 ):
     """
     Prints out devices that exist in one list but not the other, and vice
@@ -45,14 +44,14 @@ def diff_devices(
         right_device = right_device_by_mac[mac]
         print(f"\t{right_device}")
 
-    print("")
+    print()
     print(f"Found these devices in {left_description}, but not in {right_description}:")
     for mac in right_missing:
         found_diff = True
         left_device = left_device_by_mac[mac]
         print(f"\t{left_device}")
 
-    print("")
+    print()
     for mac in intersection:
         found_diff = True
         left_device = left_device_by_mac[mac]
@@ -62,7 +61,7 @@ def diff_devices(
                 f"Differing link keys!: {left_description} {left_device} which is not the same as {right_description} {right_device}"
             )
 
-    print("")
+    print()
     for mac in intersection:
         found_diff = True
         left_device = left_device_by_mac[mac]

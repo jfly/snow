@@ -1,9 +1,9 @@
 import os
-import pytest
 from pathlib import Path
 
-from .gitlib import Cloneable
-from .gitlib import NotCloneableException
+import pytest
+
+from .gitlib import Cloneable, NotCloneableException
 
 
 def collapseuser(path: Path):

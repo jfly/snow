@@ -1,10 +1,10 @@
 import ctypes
-from dataclasses import dataclass
-import time
 import datetime as dt
-import os
 import io
+import os
 import subprocess
+import time
+from dataclasses import dataclass
 
 
 class TimeVal(ctypes.Structure):

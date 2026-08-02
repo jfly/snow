@@ -1,7 +1,7 @@
+import logging
+import re
 import subprocess
 import sys
-import re
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,10 @@ class AlreadyLinkedError(Exception):
 
 def _link(source_id: int, sink_id: int):
     cp = subprocess.run(
-        ["pw-link", str(source_id), str(sink_id)], text=True, capture_output=True
+        ["pw-link", str(source_id), str(sink_id)],
+        text=True,
+        capture_output=True,
+        check=False,  # We check the exist code ourselves.
     )
     if cp.returncode == 0:
         return
@@ -51,6 +54,7 @@ def _unlink(source_id: int, sink_id: int):
         ["pw-link", "--disconnect", str(source_id), str(sink_id)],
         text=True,
         capture_output=True,
+        check=False,  # We check the exit code ourselves below.
     )
     if cp.returncode == 0:
         return

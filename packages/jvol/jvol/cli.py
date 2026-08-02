@@ -1,7 +1,6 @@
-#!/usr/bin/python3
-
 import argparse
 import subprocess
+
 from . import pa
 
 EXPIRATION_MILLIS = 2000

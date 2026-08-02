@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-import sys
 import argparse
 import subprocess
-from rich import print
-from textwrap import dedent
+import sys
 from pathlib import Path
+from textwrap import dedent
+
+from rich import print
 
 
 def root() -> Path:

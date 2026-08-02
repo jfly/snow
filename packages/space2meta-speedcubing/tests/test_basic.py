@@ -1,8 +1,10 @@
+from typing import ClassVar
+
 from .testing import ToolBaseTest
 
 
 class TestSpace2MetaFancy(ToolBaseTest):
-    tool_cmd = ["space2meta-speedcubing"]
+    tool_cmd: ClassVar = ["space2meta-speedcubing"]
 
     def test_tap_a(self):
         self.expect(

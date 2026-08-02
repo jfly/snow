@@ -161,6 +161,16 @@
               url = "https://github.com/NixOS/nixpkgs/pull/545122.diff";
               hash = "sha256-Faoc+DgpPZE9LwpISk6vAnrlvHx4R72O0vyh85WoB4s=";
             })
+            # <<< (fetchpatch {
+            # <<<   name = "python3Packages.pyopensprinkler: 0.7.17 -> 0.7.18";
+            # <<<   url = "https://github.com/NixOS/nixpkgs/pull/547402.diff";
+            # <<<   hash = "sha256-6+L6xwre+FvBRX+QtA6x4SIYl/dbVIkgFznkCR4KvHY=";
+            # <<< })
+            (fetchpatch {
+              name = "immichframe: 1.0.35.0 -> 1.0.37.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/544856.diff";
+              hash = "sha256-k30+zsh2oSi8sSVqmjY7ZC9qMhYVjCQRlIv72bXYqEk=";
+            })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
@@ -197,17 +207,6 @@
           ];
 
           clan-core.patches = [
-            # (fetchpatch {
-            #   name = ''Reapply "machines update: support `--target-host localhost`"'';
-            #   url = "https://git.clan.lol/clan/clan-core/pulls/4851.diff";
-            #   hash = "sha256-DdCkJHqBrn2s7jsNyXq7ASa2jV0z87VdBZH4K5FFl/A=";
-            # })
-            # NOTE: not using fetchpatch (as above) right now because
-            # git.clan.lol recently started requiring authentication to
-            # download diffs. I've asked about relaxing that constraint, we'll
-            # see if it changes in the future.
-            # https://git.clan.lol/clan/clan-core/pulls/4851
-            ./patches/clan-core/support-target-host-localhost.patch
             # We need to allow vars definitions to differ across machines.
             # See the "Ensure the oauth secrets are readable by the Kanidm
             # service" comment in machines/fflewddur/kanidm/default.nix for

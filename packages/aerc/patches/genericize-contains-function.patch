@@ -1,0 +1,139 @@
+Authentication-Results: mail-a.sr.ht; dkim=pass header.d=jfly.fyi header.i=@jfly.fyi; dkim=pass header.d=messagingengine.com header.i=@messagingengine.com
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+	by mail-a.sr.ht (Postfix) with ESMTPS id 2E78F20F20
+	for <~rjarry/aerc-devel@lists.sr.ht>; Mon, 11 May 2026 20:25:53 +0000 (UTC)
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id F0FDA1D0011C;
+	Mon, 11 May 2026 16:25:51 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Mon, 11 May 2026 16:25:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jfly.fyi; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1778531151; x=
+	1778617551; bh=ugfsuBKye/4rPuWpKwrl/Mz/q8HFixyZzX57BXrr89I=; b=h
+	NNBDb20WxXgO9ibiPWO9MC4QbD3rgwkXvs7KPQlwl+FckJ7tCelhvjnlIYEDDFjX
+	R0beSA2Aex1aCHLk+SCJvI4LFyVOyK+97hMyBZhQDrNX/ArlCJ1iRE+BDjIsCHsf
+	QvTtxON/vtpd2GZMif7yhVEHO/GCKU7WxLL3BbXmWzTqzirCx+rJinphZ2irUXm/
+	6SyKusRQatH5aSQvpAbpeV10Wi8+0ygrZL4qj4mBzSGLsVvGqJFbGaAuPLYUKyJ5
+	JJRdUYWoub3MExm2cSMiKqkyHpVTUW1cjEcXxIFG4EgO6GBZtOcOp8a+WuLmJxoD
+	Z4u1OPpAd6aFEXN7FqNOQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1778531151; x=1778617551; bh=u
+	gfsuBKye/4rPuWpKwrl/Mz/q8HFixyZzX57BXrr89I=; b=BTkBaShMVUbmSX7sc
+	fANm9DWighJvhiaQnh0O9oez2uPHgChXvY6nRQ3NoAOiXjm48xYIP1RQO4hdX4ZC
+	28GPNsPV6qo6VPmSYQZJweqKQr+nsKp77m7oRZOS/N/jT01OL/BlFC3ehWJuXk2H
+	qRqSAuE5O73vPOuL4r6lm7/I52ZYzTZ/ti3jIpluaZHi0lfeV7uOgJ4hGxcEE9Vh
+	p/kW5ITT4PCJClvPp3xNZ8BGLNKmyEDTMFv5un8HMHf1/G+v2NmOiCm9RBAf4iA1
+	Lt4qNnBG8Uv1sl6FG154xQ2O6A8+WRBMKbl6Nyx+UMFeVUspSJBTa0nwsmnXDMqL
+	oycRw==
+X-ME-Sender: <xms:TzsCaokS3NkAmqL9WGwrHEkSmVqeyYxpc36UeSSiO8x4fuj80qLakg>
+    <xme:TzsCat2ZOjibtO81oApJVu5gXwQXnzGGZUmgQqSXui0PxQ3knsdOEr6fgiZjar34O
+    0D0tX1W-_4ETnY-5czGcx7vPEmLW27oynbrhOu-EuTwLqibijt7D5c>
+X-ME-Received: <xmr:TzsCakQHNUk87hQaWmLY7EmlFj_TfthiYlDhDzFt3nuP_YHmYbdqRv8rwj0vJeWRSfqFGm2G_Yj7Ixxg5uTwDITOa9t5KLVJNQLQvswhcQNp6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduudelkeekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflvghrvghmhicuhfhlvghishgthhhmrghnuceomhgvsehjfhhl
+    hidrfhihiheqnecuggftrfgrthhtvghrnhepudejffetgfdvieeitdetteduhefhgfegve
+    dvgeektedvkeeikeegheeffeeuleffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomhepmhgvsehjfhhlhidrfhihihdpnhgspghrtghpthhtohepvd
+    dpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmihrjhgrrhhrhidsrggvrhgtqdgu
+    vghvvghlsehlihhsthhsrdhsrhdrhhhtpdhrtghpthhtohepmhgvsehjfhhlhidrfhihih
+X-ME-Proxy: <xmx:TzsCavt4paJ_bfYL8__LxC703yeDpUDJg0WKYUfAiPp-k3--om7z7w>
+    <xmx:TzsCapaCUAaA5pxJKsgggzBwTSAM1sJhvkgUVcPNHlNnHyNIGCw8cw>
+    <xmx:TzsCaktJehktxBaZ2nkbQhfXQcKEBrBQmf9YkeSojSqv3a2xy1qUDQ>
+    <xmx:TzsCarFJoy0EyywQW4PFIfVfssIJNSiahLj0vPjKUkn4YLmUjfUpew>
+    <xmx:TzsCapKJ8ijTeg5mP7rYA1PUAfvtga8IwpXBCUaxKagWByxaNqArm77t>
+Feedback-ID: i012e4801:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 May 2026 16:25:51 -0400 (EDT)
+From: Jeremy Fleischman <me@jfly.fyi>
+To: ~rjarry/aerc-devel@lists.sr.ht
+Cc: Jeremy Fleischman <me@jfly.fyi>
+Subject: [PATCH v2] "Genericize" the `contains` template function
+Date: Mon, 11 May 2026 13:24:36 -0700
+Message-ID: <20260511202533.568513-2-me@jfly.fyi>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260508071717.1513745-3-me@jfly.fyi>
+References: <20260508071717.1513745-3-me@jfly.fyi>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+Previously, it was very awkward to check if an array contained a given
+value (I was able to accomplish it with a `map`, but it wasn't
+particularly pretty). Now, `contains` can be used both to check if a
+string contains a substring and to check if a slice contains a specific
+element.
+---
+Per septante's feedback, I've taken a more awkward approach here
+involving runtime introspection vs inventing a new function.
+ lib/templates/functions.go | 41 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 2 deletions(-)
+
+diff --git a/lib/templates/functions.go b/lib/templates/functions.go
+index cf92800b..f5ae6ba9 100644
+--- a/lib/templates/functions.go
++++ b/lib/templates/functions.go
+@@ -8,6 +8,7 @@ import (
+ 	"os/exec"
+ 	"path/filepath"
+ 	"regexp"
++	"slices"
+ 	"strings"
+ 	"text/template"
+ 	"time"
+@@ -344,8 +345,44 @@ func replace(pattern, subst, value string) string {
+ 	return re.ReplaceAllString(value, subst)
+ }
+ 
+-func contains(substring, s string) bool {
+-	return strings.Contains(s, substring)
++// This function dispatches to the appropriate `*.Contains` function based on
++// the types of its arguments. This is useful for go templates which can't call
++// "uninstantiated" generic functions.
++//
++// The dispatching logic:
++// - If both `needle` and `haystack` are strings, then we check `needle` is a
++//   substring of `haystack`.
++// - If `haystack` is a slice (and `needle` is the same type as the elements of
++//   that slice!), we check if `needle` is contained in the slice.
++//   Note that we must explicitly list the types of slices we support. Ideally
++//   we'd support anything `comparable`, but go's monomorphization means it
++//   needs to know all the possible types at compile time. Feel free to add
++//   more as needed.
++// - Otherwise, we return an error about invalid types.
++func contains(needle any, haystack any) (bool, error) {
++	switch c := haystack.(type) {
++	case string:
++		switch i := needle.(type) {
++		case string:
++			return strings.Contains(c, i), nil
++		default:
++			return false, fmt.Errorf("needle must be a string (actually a %T) when haystack is itself a string", needle)
++		}
++	case []string:
++		i, ok := needle.(string)
++		if !ok {
++			return false, fmt.Errorf("needle type (expected string, got %T) must match haystack type", needle)
++		}
++		return slices.Contains(c, i), nil
++	case []int:
++		i, ok := needle.(int)
++		if !ok {
++			return false, fmt.Errorf("needle type (expected int, got %T) must match haystack type", needle)
++		}
++		return slices.Contains(c, i), nil
++	default:
++		return false, fmt.Errorf("unsupported haystack type %T", haystack)
++	}
+ }
+ 
+ func hasPrefix(prefix, s string) bool {
+-- 
+2.53.0
+

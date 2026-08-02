@@ -1,10 +1,10 @@
-import sys
 import argparse
 import pathlib
+import sys
 import textwrap
 
-from .org_repos import organize
 from .co import co
+from .org_repos import organize
 
 
 # Subclass ArgumentParser to get help to print to stderr. This is nice because

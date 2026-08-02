@@ -1,14 +1,15 @@
-import shlex
 import base64
+import enum
 import logging
+import shlex
 import subprocess
 from dataclasses import dataclass
-import pyedid
 from typing import Any
+
+import pyedid
 from Xlib.display import Display as XDisplay
-from Xlib.ext.randr import PROPERTY_RANDR_EDID
 from Xlib.ext import randr
-import enum
+from Xlib.ext.randr import PROPERTY_RANDR_EDID
 
 logger = logging.getLogger(__name__)
 

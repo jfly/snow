@@ -2,18 +2,19 @@
 #!nix-shell -i python -p audible-cli
 
 import argparse
-import urllib.request
-import shutil
-import glob
-import tempfile
-import subprocess
-import math
-import datetime as dt
 import asyncio
+import datetime as dt
+import glob
+import math
+import shutil
+import subprocess
+import tempfile
+import urllib.request
+from pathlib import Path
+
 import audible_cli
 import audible_cli.config
 import audible_cli.models
-from pathlib import Path
 
 
 async def main():

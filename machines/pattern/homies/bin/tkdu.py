@@ -1,6 +1,10 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p "python3.withPackages (p: with p; [ tkinter ])"
 
+# ruff: noqa
+# Linters are not happy with this code.
+# Rather than fix this in this repo, invest in an out of tree fork: <https://github.com/jfly/tkdu>.
+
 # Copied from https://github.com/zeehio/tkdu/blob/master/tkdu.py
 #    This is tkdu.py, an interactive program to display disk usage
 #    Copyright 2004 Jeff Epler <jepler@unpythonic.net>
@@ -19,22 +23,19 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys
+import gzip
 import os
 import stat
+import sys
 import time
-import gzip
-from typing import Optional
-
 import tkinter
-from tkinter.filedialog import LoadFileDialog
-from tkinter.filedialog import askdirectory
+from tkinter.filedialog import LoadFileDialog, askdirectory
 
 # Limit the number of printed error messages from parsing `du -ak` output
-ERRORS_FOUND_THRESHOLD: Optional[int] = 10
+ERRORS_FOUND_THRESHOLD: int | None = 10
 # Limit the graphical representation of directories/files nested more than
 # LEVELS_DEEP_THRESHOLD to reduce tkdu memory usage.
-LEVELS_DEEP_THRESHOLD: Optional[int] = None
+LEVELS_DEEP_THRESHOLD: int | None = None
 
 
 MIN_PSZ = 1000
@@ -90,10 +91,8 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
         if w > h:
             orient = VERTICAL
             usew = w - h * 2.0 / 3
-            if usew < 50:
-                usew = 50
-            if usew > 200:
-                usew = 200
+            usew = max(usew, 50)
+            usew = min(usew, 200)
             first_height = ff[i][0] / usew * ratio
             while first_height < 0.65 * usew:
                 usew = usew / 1.5
@@ -103,10 +102,8 @@ def allocate(path, files, canvas, x, y, w, h, first, depth):
         else:
             orient = HORIZONTAL
             useh = h - w * 2.0 / 3
-            if useh < 50:
-                useh = 50
-            if useh > 100:
-                useh = 100
+            useh = max(useh, 50)
+            useh = min(useh, 100)
             first_width = ff[i][0] / useh * ratio
             while first_width < 0.65 * useh:
                 useh = useh / 1.5
@@ -339,8 +336,7 @@ def scroll(e, dir):
     ell = len(getkids(c.files, c.cur))
     if offset + 5 > ell:
         offset = ell - 5
-    if offset < 0:
-        offset = 0
+    offset = max(offset, 0)
     if offset != c.first:
         c.first = offset
         e.width = c.winfo_width()
@@ -561,7 +557,7 @@ class DirDialog(LoadFileDialog):
         dir, pat = self.get_filter()
         try:
             names = os.listdir(dir)
-        except os.error:
+        except OSError:
             self.master.bell()
             return
         self.directory = dir

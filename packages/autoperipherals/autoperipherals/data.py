@@ -1,7 +1,9 @@
-import xdg.BaseDirectory
 import json
-from pydantic import BaseModel
 from pathlib import Path
+
+import xdg.BaseDirectory
+from pydantic import BaseModel
+
 from .xrandr import Rotation
 
 

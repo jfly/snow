@@ -1,5 +1,5 @@
-import sys
 import subprocess
+import sys
 
 from .gitlib import Cloneable
 

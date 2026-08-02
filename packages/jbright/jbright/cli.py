@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+
 from . import brightness
 
 EXPIRATION_MILLIS = 2000

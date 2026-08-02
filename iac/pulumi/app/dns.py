@@ -1,6 +1,8 @@
-from typing import Self
 from pathlib import Path
+from typing import Self
+
 import pulumi_cloudflare as cloudflare
+
 from .deage import deage
 
 

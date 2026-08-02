@@ -1,7 +1,8 @@
+import contextlib
 import errno
 import fcntl
-import contextlib
 from pathlib import Path
+
 from .data import data_dir
 
 

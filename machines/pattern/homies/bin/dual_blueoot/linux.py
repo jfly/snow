@@ -1,6 +1,5 @@
 import configparser
 from pathlib import Path
-from typing import List
 
 from .types import (
     BleKey,
@@ -15,7 +14,7 @@ from .util import chunkify
 BLUETOOTH_DIR = Path("/var/lib/bluetooth")
 
 
-def get_local_bluetooth_adapters() -> List[MacAddress]:
+def get_local_bluetooth_adapters() -> list[MacAddress]:
     """
     Finds all locally attached bluetooth adapters. Returns their MAC addresses.
     """

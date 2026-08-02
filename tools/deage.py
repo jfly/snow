@@ -2,13 +2,15 @@
 
 import os
 import re
-import sys
 import subprocess
-from rich.console import Console
-from .encrypt import decrypt
+import sys
 from hashlib import sha256
-from textwrap import dedent
 from pathlib import Path
+from textwrap import dedent
+
+from rich.console import Console
+
+from .encrypt import decrypt
 
 AGE_ARMOR_RE = re.compile(
     r"^(?P<ws_prefix> *)-----BEGIN AGE ENCRYPTED FILE-----.*?-----END AGE ENCRYPTED FILE-----",

@@ -1,0 +1,147 @@
+Authentication-Results: mail-a.sr.ht; dkim=pass header.d=jfly.fyi header.i=@jfly.fyi; dkim=pass header.d=messagingengine.com header.i=@messagingengine.com
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+	by mail-a.sr.ht (Postfix) with ESMTPS id 6547920CF2
+	for <~rjarry/aerc-devel@lists.sr.ht>; Fri, 08 May 2026 07:17:39 +0000 (UTC)
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 3E6407A00C6;
+	Fri,  8 May 2026 03:17:37 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Fri, 08 May 2026 03:17:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jfly.fyi; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm1; t=1778224657; x=1778311057; bh=C+6C8GMV7zKtw7XI45VuG
+	UqRqduMhsK+qdqn+mIpBUk=; b=WQ1P1n1lgGM3p4jQ07ldZ3wQfBIzph3vuS3QF
+	3L12y93k0633KnATck43GLGi5JmpdF/vJnSNAwOPW/KRbE2vMzqYH8Ht0/UlU4aj
+	/QhxLf4vgUvpRagp1msdQTftnUdLTCdNgShPhZdvVky5ExutGqN+u9N5QlSiFHp2
+	WmcJ1Exactu2r5UCJsMMvTJub4bxNjiBjdijq005bExZyJKPiiFQ+fDYZgMgyj69
+	89PvzksjBeSII+RHUklQAFq9Zl5n/8mOfSnD3YbUibgZEcng7UE287iroyzP7hW2
+	+PYj+vQc8WJ2HRtBm/WyIG6+BXJST+OEa9yTwOzVi1QgUmHSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1778224657; x=1778311057; bh=C+6C8GMV7zKtw7XI45VuGUqRqduMhsK+qdq
+	n+mIpBUk=; b=S5hXa41Ezn1e7jOF8ClFqWNODya4iNVk+UPyxqOVnzyxcGcUuXY
+	9Zw+mNng3/VEzX/4k1lCH9RK8KlWiLb1/VwXDKsDFTt+bGMiZZmr70UiPju0EBFj
+	PW+ETsYJ94/nkm/NEUrwaHE3WIKMcYVNX09CmgcyO58RFHy1UB8C2IJjGhGv1epD
+	ScIctNYF9UruYUE2nF0+yL0kNV/mTIcoHUldq4e2IWk1gS/1FDwlDRTZF1V518E3
+	JU75HubxQ6m2vKt2UtYz7wnAWX1FQ50DmrM84ZwQAJp+Nh9jjLEUOdQXE1VzrvsA
+	7poOh6UeAdTEwnC5XC4yVNlBj+2Ku1NMi2g==
+X-ME-Sender: <xms:EY79aSsWdnjKyjelvHPLRelljGHLj8EaO6iDOC2bxr17nLB34XvRRw>
+    <xme:EY79aXoIH1CDYZELrIgs04r29syGKqEtnVSd5dRCd4N8ozlzMpk9hzHCO1WZSnKOA
+    16SEBN0WNa-FgK_pqhlGvpk6ag-dOHozFneqmmUrIdO_N_3nrxWKg>
+X-ME-Received: <xmr:EY79afmAJsMXtC4QKwm03cHq-psSLPRa_1djuEv4hACgvwwv4Ri0LcVBqZ0GD0ckT5wdFFwikkFjFGpQPJypsmJvstOharC8S-jKHjkJU1l0uw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutdeljeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeflvghrvghmhicuhfhlvghishgthhhmrghnuceomhgvsehjfhhlhidr
+    fhihiheqnecuggftrfgrthhtvghrnhepieehheegffehueehteffvefhfeffvddtffevgf
+    ekieefjeelvefhkeeiteeitdffnecuffhomhgrihhnpegvnhhvvghlohhpvgdruggrthgv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgvse
+    hjfhhlhidrfhihihdpnhgspghrtghpthhtohepvddpmhhouggvpehsmhhtphhouhhtpdhr
+    tghpthhtohepmihrjhgrrhhrhidsrggvrhgtqdguvghvvghlsehlihhsthhsrdhsrhdrhh
+    htpdhrtghpthhtohepmhgvsehjfhhlhidrfhihih
+X-ME-Proxy: <xmx:EY79abwdl2yX0NuxJ2B6V9xWVKSFvk_7fAyUVEJfRrD3AAuK47_zQA>
+    <xmx:EY79aXl89g8-8qzt8NHcE4sbwyZ44WGIlgCj-LFOSa9-oUAUh4sM5w>
+    <xmx:EY79aUdo6MjyvA62kGotSHImocETSFzZ52enq9ETGxOot4z9Up3iqw>
+    <xmx:EY79adon6r2-KxhggEgPTf1FS3IWfEgbaifubPF6lkRFU8s7KbxPuA>
+    <xmx:EY79aZTOpYhX-u4xC1k8XeVP2Eq25ulSSn9dglCkOH9Aja9isrGEArLS>
+Feedback-ID: i012e4801:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 8 May 2026 03:17:37 -0400 (EDT)
+From: Jeremy Fleischman <me@jfly.fyi>
+To: ~rjarry/aerc-devel@lists.sr.ht
+Cc: Jeremy Fleischman <me@jfly.fyi>
+Subject: [PATCH 1/2] Add `OriginalLabels` to `templateData`
+Date: Fri,  8 May 2026 00:17:16 -0700
+Message-ID: <20260508071717.1513745-1-me@jfly.fyi>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+I'm in the process of switching email addresses. My mailserver
+automatically labels all emails to my old email address with a
+"old-email" label.
+
+My `quoted-reply` template looks at this `OriginalLabels` value to check
+if "old-email" is one of the labels. If it is, then I include a message
+asking people to update their address book.
+---
+ commands/msg/reply.go  | 1 +
+ config/templates.go    | 1 +
+ lib/state/templates.go | 7 +++++++
+ models/models.go       | 1 +
+ models/templates.go    | 1 +
+ 5 files changed, 11 insertions(+)
+
+diff --git a/commands/msg/reply.go b/commands/msg/reply.go
+index 8abd57e3..53e54747 100644
+--- a/commands/msg/reply.go
++++ b/commands/msg/reply.go
+@@ -159,6 +159,7 @@ func (r reply) Execute(args []string) error {
+ 		From:          format.FormatAddresses(msg.Envelope.From),
+ 		Date:          msg.Envelope.Date,
+ 		RFC822Headers: msg.RFC822Headers,
++		Labels:        &msg.Labels,
+ 	}
+ 
+ 	mv, isMsgViewer := app.SelectedTabContent().(*app.MessageViewer)
+diff --git a/config/templates.go b/config/templates.go
+index 670c7ed3..687ed583 100644
+--- a/config/templates.go
++++ b/config/templates.go
+@@ -111,6 +111,7 @@ func (d *dummyData) Size() int                       { return 420 }
+ func (d *dummyData) OriginalText() string            { return "Blah blah blah" }
+ func (d *dummyData) OriginalDate() time.Time         { return time.Now() }
+ func (d *dummyData) OriginalFrom() []*mail.Address   { return d.From() }
++func (d *dummyData) OriginalLabels() []string        { return nil }
+ func (d *dummyData) OriginalMIMEType() string        { return "text/plain" }
+ func (d *dummyData) OriginalHeader(string) string    { return "" }
+ func (d *dummyData) Recent(...string) int            { return 1 }
+diff --git a/lib/state/templates.go b/lib/state/templates.go
+index 039eb297..28947f5f 100644
+--- a/lib/state/templates.go
++++ b/lib/state/templates.go
+@@ -572,6 +572,13 @@ func (d *templateData) OriginalHeader(name string) string {
+ 	return text
+ }
+ 
++func (d *templateData) OriginalLabels() []string {
++	if d.parent == nil || d.parent.Labels == nil {
++		return nil
++	}
++	return *d.parent.Labels
++}
++
+ func (d *templateData) rue(folders ...string) (int, int, int) {
+ 	var recent, unread, exists int
+ 	if d.getRUEcount != nil {
+diff --git a/models/models.go b/models/models.go
+index 8a520062..96346083 100644
+--- a/models/models.go
++++ b/models/models.go
+@@ -267,6 +267,7 @@ type OriginalMail struct {
+ 	MIMEType      string
+ 	RFC822Headers *mail.Header
+ 	Folder        string
++	Labels        *[]string
+ }
+ 
+ type SignatureValidity int32
+diff --git a/models/templates.go b/models/templates.go
+index 3809b5c5..df5c92f9 100644
+--- a/models/templates.go
++++ b/models/templates.go
+@@ -50,6 +50,7 @@ type TemplateData interface {
+ 	OriginalText() string
+ 	OriginalDate() time.Time
+ 	OriginalFrom() []*mail.Address
++	OriginalLabels() []string
+ 	OriginalMIMEType() string
+ 	OriginalHeader(name string) string
+ 	Recent(folders ...string) int
+-- 
+2.53.0
+
