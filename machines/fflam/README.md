@@ -1,4 +1,4 @@
-Our backup NAS running on a ThinkCentre M710.
+Our backup NAS running on a ThinkCentre M710q.
 
 ## Bootstrapping
 
