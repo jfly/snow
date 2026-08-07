@@ -12,6 +12,7 @@ in
     ${destination} = {
       device = "bay/zrepl/sink/doli/zroot/root/var/lib";
       fsType = "zfs";
+      options = [ "ro" ];
     };
   };
 
