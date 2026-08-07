@@ -35,7 +35,7 @@ DRY_RUN=0
 BUILD_REMOTE=0
 FORCE=0
 EXTRA_NIX_ARGS=()
-EXTRA_SWITCH_ARGS=()
+EXTRA_REMOTE_SWITCH_ARGS=()
 for i in "$@"; do
     case $i in
         --dry-run)
@@ -48,7 +48,7 @@ for i in "$@"; do
             EXTRA_NIX_ARGS+=("--show-trace")
             ;;
         --use-substitutes)
-            EXTRA_SWITCH_ARGS+=("--use-substitutes")
+            EXTRA_REMOTE_SWITCH_ARGS+=("--use-substitutes")
             ;;
         --build-remote)
             BUILD_REMOTE=1
@@ -113,9 +113,9 @@ function deploy_nix() {
     fi
 
     if [ "$target" = "$(hostname)" ]; then
-        nixos-rebuild switch --use-remote-sudo --flake ".#$target"
+        nixos-rebuild switch --elevate=sudo --flake ".#$target"
     else
-        nixos-rebuild switch --use-remote-sudo --flake ".#$target" --target-host "$target" "${EXTRA_SWITCH_ARGS[@]}"
+        nixos-rebuild switch --elevate=sudo --flake ".#$target" --target-host "$target" "${EXTRA_REMOTE_SWITCH_ARGS[@]}"
     fi
 }
 
@@ -143,7 +143,7 @@ elif [[ $TARGET == "openwrt/"* ]]; then
     deploy_nix_router "$TARGET"
 else
     if [ $BUILD_REMOTE == 1 ]; then
-        EXTRA_SWITCH_ARGS+=("--build-host" "$TARGET")
+        EXTRA_REMOTE_SWITCH_ARGS+=("--build-host" "$TARGET")
     fi
     deploy_nix "$TARGET"
 fi

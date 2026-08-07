@@ -1,6 +1,10 @@
 {
   description = "snow";
 
+  nixConfig = {
+    abort-on-warn = true;
+  };
+
   inputs = {
     brbd-sync = {
       url = "github:jfly/brbd-sync";
@@ -156,20 +160,15 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
+            # Need the updated grammars because
+            # <https://github.com/nixos/nixpkgs/commit/2705e78c7ed9eb399f0653e793e17b3d1cfa5e2e>
+            # pulled in
+            # <https://github.com/nvim-treesitter/nvim-treesitter/commit/a45a920ec04cda5624f6dea0ff6454c81c3ad2d5>,
+            # which requires a newer version of `tree-sitter-diff`.
             (fetchpatch {
-              name = "home-assistant-custom-components.opensprinkler: 1.5.5 -> 1.5.6";
-              url = "https://github.com/NixOS/nixpkgs/pull/545122.diff";
-              hash = "sha256-Faoc+DgpPZE9LwpISk6vAnrlvHx4R72O0vyh85WoB4s=";
-            })
-            # <<< (fetchpatch {
-            # <<<   name = "python3Packages.pyopensprinkler: 0.7.17 -> 0.7.18";
-            # <<<   url = "https://github.com/NixOS/nixpkgs/pull/547402.diff";
-            # <<<   hash = "sha256-6+L6xwre+FvBRX+QtA6x4SIYl/dbVIkgFznkCR4KvHY=";
-            # <<< })
-            (fetchpatch {
-              name = "immichframe: 1.0.35.0 -> 1.0.37.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/544856.diff";
-              hash = "sha256-k30+zsh2oSi8sSVqmjY7ZC9qMhYVjCQRlIv72bXYqEk=";
+              name = "vimPlugins.nvim-treesitter: update grammars";
+              url = "https://github.com/nixos/nixpkgs/commit/fe5a73b1ed6b251a79b37bc8b1b1559dcbfa5f9c.diff";
+              hash = "sha256-BvtseFELodw2HjvnzmfzNKXF8xN/5K2JtcNlz76y4C0=";
             })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
@@ -184,7 +183,7 @@
             (fetchpatch {
               name = "miniflux: add options for all secret files";
               url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
-              hash = "sha256-+PLcqH2kxXzx7ykvZRHgnUM4T9lEwpdIaLtaqxC6Lkw=";
+              hash = "sha256-Kv5PnJbTLl5lT6nzHJjfHMTsQZv9bSSWJWFqlLZPew8=";
             })
             (fetchpatch {
               name = "nixos/actkbd: switch to Type=exec rather than forking";

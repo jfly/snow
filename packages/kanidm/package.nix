@@ -1,3 +1,3 @@
 { pkgs, ... }:
 
-pkgs.kanidm_1_10
+pkgs.kanidm_1_11
