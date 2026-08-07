@@ -5,7 +5,6 @@
   symlinkJoin,
   writeTextFile,
   linkFarm,
-  fetchpatch,
 }:
 let
   toIniFile =
