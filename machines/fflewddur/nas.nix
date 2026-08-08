@@ -132,7 +132,7 @@
   };
 
   # Samba needs a corresponding unix user. Unfortunately, there is currently no
-  # mechanism to declaratively manage sambda credentials. See
+  # mechanism to declaratively manage samba credentials. See
   # <machines/dallben/arr/mnt-media.nix>.
   users.users.dallben = {
     group = "media";
