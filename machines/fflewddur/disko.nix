@@ -124,6 +124,27 @@
           mountpoint = "/home";
           options.mountpoint = "legacy";
         };
+        "zrepl/sink" = {
+          type = "zfs_fs";
+          options = {
+            mountpoint = "legacy";
+            "com.sun:auto-snapshot" = "false";
+            readonly = "on";
+          };
+        };
+        # Note: you'll likely have to delete this dataset to get zrepl going.
+        # This allows for first boot of a newly provisioned machine (as this
+        # filesystem blocks local-fs.target).
+        # Alternatively, we could probably break that dependency, but I'm not
+        # sure it's a great idea: if we successfully boot without mounting this
+        # dataset, restic could back up the empty directory, thereby deleting
+        # our backups.
+        "zrepl/sink/doli/zroot/root/var/lib" = {
+          type = "zfs_fs";
+          options = {
+            mountpoint = "legacy";
+          };
+        };
       };
     };
   };

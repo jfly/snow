@@ -45,13 +45,6 @@ in
           };
           filesystems = {
             "bay<" = true;
-            # Do *not* take snapshots of datasets that were sent here, it'll
-            # break replication (see
-            # <https://github.com/zrepl/zrepl/issues/248>).
-            # Ideally we *would* still send those datasets somewhere else for
-            # redundancy. I suspect that would require a separate job. This is
-            # too difficult to get right :(
-            "bay/zrepl<" = false;
           };
 
           # Note that the snapshots zrepl creates are in addition to whatever
@@ -114,10 +107,12 @@ in
             ];
           };
         }
+        # Note that the full `zroot` pool is not backed up. We instead back up
+        # pieces of it with restic.
         {
-          name = "bay_sink";
+          name = "zroot_sink";
           type = "sink";
-          root_fs = "bay/zrepl/sink";
+          root_fs = "zroot/zrepl/sink";
           recv.placeholder.encryption = "inherit"; # https://zrepl.github.io/configuration/sendrecvoptions.html#placeholders
           serve = {
             type = "tcp";

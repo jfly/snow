@@ -101,18 +101,26 @@ zpool add [poolname] /dev/disk/by-id/[FILLME]
 
 We use `zrepl` for efficiently backing up snapshots of ZFS datasets.
 
-You don't want the destination taking its own snapshots of the datasets it has
-received, as that will break backups
+To create a destination ("sink") dataset:
+
+```console
+zfs create -o mountpoint=legacy zroot/zrepl/sink
+```
+
+You don't want the destination ("sink") taking its own snapshots of the
+datasets it has received, as that will break backups
 (<https://github.com/zrepl/zrepl/issues/248>). So, disable auto snapshot:
 
 ```console
-$ zfs set com.sun:auto-snapshot=false bay/zrepl
+$ zfs set com.sun:auto-snapshot=false zroot/zrepl/sink
 ```
 
-Also, set readonly to avoid any modifications to the backed up datasets:
+Also, set readonly to avoid any modifications to the backed up datasets. Note
+that this won't help you if you mount the dataset somewhere without specifying
+`ro`, the dataset will get marked as "temporarily" read-write.
 
-```
-$ zfs set readonly=on bay/zrepl
+```console
+$ zfs set readonly=on zroot/zrepl/sink
 ```
 
 ## Discarding a drive

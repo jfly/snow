@@ -10,7 +10,7 @@ in
 
   fileSystems = {
     ${destination} = {
-      device = "bay/zrepl/sink/doli/zroot/root/var/lib";
+      device = "zroot/zrepl/sink/doli/zroot/root/var/lib";
       fsType = "zfs";
       options = [ "ro" ];
     };
