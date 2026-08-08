@@ -196,6 +196,12 @@ in
       openssh.authorizedKeys.keys = [ identities.rachel ];
     };
 
+    # We often don't need this, but when we do, it's really useful to have.
+    # Access to initrd (gated by a password).
+    boot.initrd.systemd.emergencyAccess = "$y$j9T$DDuln4LXdYHNZZSxiKjKg0$wBUNaWgOYQCvoojr4SiqvORPjqJhAiy0VkNQsdZH6N9";
+    # Access to systemd emergency mode (after initrd).
+    users.users.root.hashedPassword = "$y$j9T$DDuln4LXdYHNZZSxiKjKg0$wBUNaWgOYQCvoojr4SiqvORPjqJhAiy0VkNQsdZH6N9";
+
     nix.gc = {
       automatic = true;
       dates = "weekly";
