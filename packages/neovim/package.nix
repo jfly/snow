@@ -16,8 +16,8 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
         # This is a workaround for <https://github.com/neovim/neovim/issues/40631>.
         (pkgs.fetchpatch {
           name = "bg_user_set: hack always return true";
-          url = "https://github.com/jfly/neovim/commit/14464f31dcb45849e6f259d80cad55b250e6126e.diff";
-          hash = "sha256-PVWy7IV9+osHS4E+EX53/HWvYRsI00s1puxQ3+iiP4U=";
+          url = "https://github.com/jfly/neovim/commit/d6305eac9a76c829fb46fda85d64ae73802f174b.diff";
+          hash = "sha256-FPpPHwgNqwo1GnbqHnbUuJCLAtMqxM3NU5MdJjtgNss=";
         })
       ];
     });
