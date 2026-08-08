@@ -8,6 +8,7 @@
 
 inputs'.nixvim.legacyPackages.makeNixvimWithModule {
   inherit pkgs;
+  extraSpecialArgs = { inherit flake'; };
 
   module = {
     package = inputs'.neovim-nightly-overlay.packages.default.overrideAttrs (oldAttrs: {
@@ -20,7 +21,6 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
         })
       ];
     });
-    _module.args.flake' = flake';
 
     viAlias = true;
     vimAlias = true;
