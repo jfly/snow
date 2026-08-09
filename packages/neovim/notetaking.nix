@@ -5,6 +5,31 @@ let
   notesDir = "~/sync/jfly/notes/";
 in
 {
+  # Sort the notes dir by modification time, newest first.
+  extraConfigLuaPre = ''
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'DirReadPost',
+      callback = function(args)
+        local dir = vim.api.nvim_buf_get_name(args.buf)
+
+        if dir ~= vim.fn.expand('${notesDir}') then
+          return
+        end
+
+        local names = vim.api.nvim_buf_get_lines(args.buf, 0, -1, true)
+        local mtime = {} --- @type table<string, integer>
+        for _, name in ipairs(names) do
+          local stat = vim.uv.fs_stat(vim.fs.joinpath(dir, name))
+          mtime[name] = stat and stat.mtime.sec or 0
+        end
+        table.sort(names, function(a, b)
+          return mtime[a] > mtime[b]
+        end)
+        vim.api.nvim_buf_set_lines(args.buf, 0, -1, true, names)
+      end,
+    })
+  '';
+
   keymaps = [
     {
       options.desc = "Note New: start a new note";
@@ -26,16 +51,10 @@ in
       options.desc = "Note List: open a list of notes";
       key = "<leader>nl";
       mode = "n";
-      # Note: we use :Explore rather than `vim.cmd.edit` in order to use netrw.
-      # See <https://github.com/neovim/neovim/discussions/40640>
       action = mkRaw ''
         function()
-          vim.g.netrw_sort_by = 'time'
-          vim.g.netrw_sort_direction = 'reversed'
-          vim.g.netrw_list_hide = [[\(^\|\s\s\)\zs\.\S\+]]
-
           local notes_dir = vim.fn.expand('${notesDir}')
-          vim.cmd.Explore(notes_dir)
+          vim.cmd.edit(notes_dir)
         end
       '';
     }
