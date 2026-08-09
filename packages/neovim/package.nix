@@ -19,6 +19,11 @@ inputs'.nixvim.legacyPackages.makeNixvimWithModule {
           url = "https://github.com/jfly/neovim/commit/d6305eac9a76c829fb46fda85d64ae73802f174b.diff";
           hash = "sha256-FPpPHwgNqwo1GnbqHnbUuJCLAtMqxM3NU5MdJjtgNss=";
         })
+        (pkgs.fetchpatch {
+          name = "feat(dir): user can sort/filter listings, DirReadPost event";
+          url = "https://github.com/neovim/neovim/commit/0af3b9827bc3c45b315e5ede3f358b4ced678ea3.diff";
+          hash = "sha256-xifd7lBOY2RTiWdm9XX61TzQnCeFA6dM+vOJCxJ+u7E=";
+        })
       ];
     });
 
