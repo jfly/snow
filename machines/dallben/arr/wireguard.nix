@@ -1,6 +1,8 @@
 {
   inputs,
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
@@ -8,6 +10,10 @@ let
 in
 {
   imports = [ inputs.vpn-confinement.nixosModules.default ];
+
+  environment.systemPackages = [
+    pkgs.wireguard-tools # Useful for debugging.
+  ];
 
   clan.core.vars.generators.wireguard-conf = {
     prompts."wg.conf" = {
@@ -50,5 +56,31 @@ in
     enable = true;
     enableIPv6 = true;
     internalInterfaces = [ "wg-br" ];
+  };
+
+  systemd.timers.wg-connectivity-check = {
+    description = "regularly check wg connectivity";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "minutely";
+      Unit = "wg-connectivity-check.service";
+    };
+  };
+  systemd.services.wg-connectivity-check = {
+    description = "check wg connectivity";
+    vpnConfinement = {
+      enable = true;
+      vpnNamespace = "wg";
+    };
+    serviceConfig = {
+      Type = "exec";
+    };
+    script = ''
+      if [ "$(${lib.getExe pkgs.curl} --no-progress-meter --max-time 5 --retry 3 https://am.i.mullvad.net/json | ${lib.getExe pkgs.jq} '.mullvad_exit_ip')" = "true" ]; then
+        exit 0
+      else
+        exit 1
+      fi
+    '';
   };
 }
