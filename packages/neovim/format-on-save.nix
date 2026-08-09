@@ -44,5 +44,13 @@ in
   # '';
   plugins.none-ls.enableLspFormat = true;
   plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
-  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim;
+  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        name = "nix_flake_fmt: drop legacy codepath, fix timeouts";
+        url = "https://github.com/nvimtools/none-ls.nvim/pull/350.diff";
+        hash = "sha256-Mx5+nuT0s+8cARfd+wSNRTlJGu//+Ox8IZ/NMXRW2ZM=";
+      })
+    ];
+  });
 }
