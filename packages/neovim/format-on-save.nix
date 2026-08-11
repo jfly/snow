@@ -48,8 +48,8 @@ in
     patches = oldAttrs.patches or [ ] ++ [
       (pkgs.fetchpatch {
         name = "nix_flake_fmt: drop legacy codepath, fix timeouts";
-        url = "https://github.com/nvimtools/none-ls.nvim/pull/350.diff";
-        hash = "sha256-Mx5+nuT0s+8cARfd+wSNRTlJGu//+Ox8IZ/NMXRW2ZM=";
+        url = "https://github.com/nvimtools/none-ls.nvim/commit/c4b82bb63b13856ba4d6b971b7aad3bb38fc6fe2.diff";
+        hash = "sha256-QGtYarjxCqrF0PNXy4jEpT1+ng8jRWVvXdl+uZ8l+hU=";
       })
     ];
   });
