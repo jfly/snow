@@ -57,6 +57,9 @@ locked-vm = [
 pattern = [
     "pattern.m",
 ]
+strongbad = [
+    "strongbad.m",
+]
 template = [
     "template.m",
 ]

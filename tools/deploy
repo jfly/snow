@@ -115,7 +115,7 @@ function deploy_nix() {
     if [ "$target" = "$(hostname)" ]; then
         nixos-rebuild switch --elevate=sudo --flake ".#$target"
     else
-        nixos-rebuild switch --elevate=sudo --flake ".#$target" --target-host "$target" "${EXTRA_REMOTE_SWITCH_ARGS[@]}"
+        nixos-rebuild switch --elevate=sudo --flake ".#$target" --target-host "jfly@$target" "${EXTRA_REMOTE_SWITCH_ARGS[@]}"
     fi
 }
 
