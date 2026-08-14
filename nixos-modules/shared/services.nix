@@ -12,6 +12,8 @@ let
   publicDomains = [
     "snow.jflei.com"
     "ramfly.net"
+    "cloud.ramfly.net"
+    "snow.ramfly.net"
     "jfly.fyi"
   ];
   regenerateCommand = "To fix: nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml";
@@ -381,7 +383,11 @@ in
       readeck = { };
       seerr = { };
       sonarr = { };
-      speedtest.parentDomain = "snow.jflei.com";
+      speedtest.parentDomain = "snow.ramfly.net";
+      speedtest-cloud = {
+        subdomain = "speedtest";
+        parentDomain = "cloud.ramfly.net";
+      };
       step-ca.subdomain = "ca";
       tang = {
         # Keep in sync with <routers/strider/files/etc/config/dhcp>.

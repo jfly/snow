@@ -9,6 +9,7 @@
     ./disko.nix
     ./mail.nix
     ./zrepl.nix
+    ./speedtest.nix
   ];
 
   networking.hostName = "doli";

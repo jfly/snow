@@ -152,6 +152,7 @@ class Dns:
         self._legacy_homepage_redirects()
         self._san_clemente()
         self._snow()
+        self._doli()
         self._self_hosted_mailserver()
         self._fastmail(self._jfly_fyi)
         self._fastmail(self._ramfly_net)
@@ -159,8 +160,13 @@ class Dns:
         self._fastmail(self._ramfly_net, subdomain="rb")
         self._secret_projects()
         self._photos()
+        self._misc()
 
+    def _misc(self):
         self._jfly_fyi.cname("jf", "colusa.jflei.com")
+
+        self._ramfly_net.cname("speedtest.snow", "colusa.jflei.com")
+        self._ramfly_net.cname("speedtest.cloud", "doli.ramfly.net")
 
     def _github_pages(self):
         # https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-a-subdomain
@@ -223,17 +229,29 @@ class Dns:
             self._jflei_com.aaaa(subdomain, ["100::"], proxied=True)
 
     def _san_clemente(self):
-        # `sc.jflei.com`
         # NOTE: `sc.jflei.com` is a DDNS entry that should be updated by a
         # Raspberry Pi in San Clemente, but that's currently broken.
         self._jflei_com.cname("*.sc", "sc.jflei.com")
 
     def _snow(self):
-        # `snow.jflei.com`
         # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
         # primary Colusa router).
         self._jflei_com.cname("*.snow", "colusa.jflei.com")
         self._jflei_com.cname("snow", "colusa.jflei.com")
+
+    def _doli(self):
+        self._ramfly_net.a(
+            name="doli",
+            values=[
+                "5.78.116.143",  # `hosts/doli/network.nix`
+            ],
+        )
+        self._ramfly_net.aaaa(
+            name="doli",
+            values=[
+                "2a01:4ff:1f0:ad06::",  # `hosts/doli/network.nix`
+            ],
+        )
 
     def _self_hosted_mailserver(self):
         # Keep this in sync with `hosts/doli/mail.nix`.
@@ -242,14 +260,7 @@ class Dns:
         # Very public. This is the thing after the @ sign in email addresses.
         email_domain = "playground.jflei.com"
 
-        self._jflei_com.a(
-            name=mx_domain,
-            values=["5.78.116.143"],  # `hosts/doli/network.nix`
-        )
-        self._jflei_com.aaaa(
-            name=mx_domain,
-            values=["2a01:4ff:1f0:ad06::"],  # `hosts/doli/network.nix`
-        )
+        self._jflei_com.cname(mx_domain, "doli.ramfly.net")
 
         # Create MX record.
         self._jflei_com.mx(
