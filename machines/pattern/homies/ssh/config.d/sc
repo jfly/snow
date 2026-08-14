@@ -4,6 +4,10 @@ Host kent
     HostName kent.m
     User jfly
 
+Host strongbad
+    HostName strongbad.m
+    User jfly
+
 Host sc-router
     User root
     HostName 192.168.1.1
