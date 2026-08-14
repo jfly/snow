@@ -65,7 +65,7 @@ let
       -----END AGE ENCRYPTED FILE-----
     '';
 
-    # https://dash.cloudflare.com/profile/api-tokens
+    # https://dash.cloudflare.com/1f455426c43e3842a2d6629835081b75/api-tokens
     CLOUDFLARE_API_TOKEN = secret ''
       -----BEGIN AGE ENCRYPTED FILE-----
       YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpWkIxazdOWEJQUHRwNk1C

@@ -150,8 +150,6 @@ class Dns:
 
         self._github_pages()
         self._legacy_homepage_redirects()
-        self._san_clemente()
-        self._snow()
         self._doli()
         self._self_hosted_mailserver()
         self._fastmail(self._jfly_fyi)
@@ -163,9 +161,11 @@ class Dns:
         self._misc()
 
     def _misc(self):
-        self._jfly_fyi.cname("jf", "colusa.jflei.com")
+        self._jfly_fyi.cname("jf", "ec.ramfly.net")
 
-        self._ramfly_net.cname("speedtest.snow", "colusa.jflei.com")
+        self._jflei_com.cname("healthcheck.snow", "ec.ramfly.net")
+
+        self._ramfly_net.cname("speedtest.ec", "ec.ramfly.net")
         self._ramfly_net.cname("speedtest.cloud", "doli.ramfly.net")
 
     def _github_pages(self):
@@ -227,17 +227,6 @@ class Dns:
         for subdomain in ["@", "www"]:
             self._jflei_com.a(subdomain, ["192.0.2.1"], proxied=True)
             self._jflei_com.aaaa(subdomain, ["100::"], proxied=True)
-
-    def _san_clemente(self):
-        # NOTE: `sc.jflei.com` is a DDNS entry that should be updated by a
-        # Raspberry Pi in San Clemente, but that's currently broken.
-        self._jflei_com.cname("*.sc", "sc.jflei.com")
-
-    def _snow(self):
-        # NOTE: `colusa.jflei.com` is a DDNS entry that's managed by `strider` (our
-        # primary Colusa router).
-        self._jflei_com.cname("*.snow", "colusa.jflei.com")
-        self._jflei_com.cname("snow", "colusa.jflei.com")
 
     def _doli(self):
         self._ramfly_net.a(
@@ -310,7 +299,7 @@ class Dns:
         self._ramfly_net.cname(secret_project, "3881b6ccac0e9f74.vercel-dns-017.com")
 
     def _photos(self):
-        self._ramfly_net.cname("photos", "colusa.jflei.com")
+        self._ramfly_net.cname("photos", "ec.ramfly.net")
 
     def _fastmail(self, zone: Zone, subdomain: str | None = None):
         # https://www.fastmail.help/hc/en-us/articles/360060591153-Manual-DNS-configuration
