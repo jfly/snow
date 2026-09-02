@@ -75,5 +75,8 @@ in
       exec ${q-text-as-data}/bin/q "$@"
     '')
     smag
+
+    ### Pairing
+    inputs'.jnix.packages.shpair
   ];
 }
