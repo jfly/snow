@@ -122,7 +122,7 @@ in
     serviceConfig = {
       Type = "oneshot";
       DynamicUser = true;
-      ExecStart = "${lib.getExe pkgs.curl} --no-progress-meter -X POST ${unprotectedBaseUrl}/api/fetch?commit=1";
+      ExecStart = "${lib.getExe pkgs.curl} --fail-with-body --no-progress-meter -X POST ${unprotectedBaseUrl}/api/fetch?commit=1";
     };
   };
   systemd.timers.manmanmon-fetch = {
