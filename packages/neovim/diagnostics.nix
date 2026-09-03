@@ -1,17 +1,12 @@
 { lib, ... }:
 
 {
-  plugins.lsp-lines = {
-    enable = true;
-    luaConfig.post =
-      # lua
-      ''
-        vim.diagnostic.config({
-          virtual_text = true,
-          virtual_lines = false,
-        })
-      '';
-  };
+  extraConfigLuaPost = ''
+    vim.diagnostic.config({
+      virtual_text = true,
+      virtual_lines = false,
+    })
+  '';
 
   lsp.keymaps = [
     {
