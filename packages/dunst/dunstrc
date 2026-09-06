@@ -3,7 +3,7 @@
     monitor = 0
     follow = mouse
     width = 400
-    height = 300
+    height = (0, 300)
     indicate_hidden = true
     shrink = false
     transparency = 0
