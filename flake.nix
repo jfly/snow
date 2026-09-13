@@ -176,6 +176,11 @@
               hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
             })
             (fetchpatch {
+              name = "pimsync: 0.5.11 -> 0.6.0";
+              url = "https://github.com/NixOS/nixpkgs/pull/562847.diff";
+              hash = "sha256-BKAYBQtDMjsL8w5HeB3vlcNFZVAVj6KTMbGCQrQS1dI=";
+            })
+            (fetchpatch {
               name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
               url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
               hash = "sha256-kqbEnhJkSh00c7bKcft22deYFP7x6oYB2DivADb4R9Y=";

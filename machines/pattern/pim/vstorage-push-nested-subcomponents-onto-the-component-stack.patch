@@ -1,0 +1,82 @@
+DKIM-Signature: a=rsa-sha256; bh=fb8rxaGrkcplpc+dkJ5pmwj93atCIBfpy5zg1jAfISE=;
+ c=simple/simple; d=git.sr.ht; h=From:Date:Subject:Reply-to:To; q=dns/txt;
+ s=20240113; t=1789295181; v=1;
+ b=W2hL2WsfspB7U1jgX4cMVY2f6Se4MsBFWPV7pvVaNHLwVLAJgs00JXdPxvAowiS5auxYMJgj
+ sf9zjEWmie5NDSPcCRb6exksJ9k+WWMTPtaZ6sm+ZCBlIovLKlX6cGcqof3/61cqv6u8vMkopgk
+ aC+DxggFcP+VtH3bnKDuH78r7Ih5ImS86wS629fQ5QSUZsbtN3vXcREMe8Pmqny6wrAfMnx4fUN
+ JRkKjVJjfV0uu3iYHbrD1otFdQGUVKpyG1fWYkel6IG08Lo9Td18ST7cYHjuZiiXKOflVzOyvBI
+ j+zQI8PY1y+YPY27q+PbRphQ3017vcLdquqVUaXMO5/bA==
+Received: from git.sr.ht (unknown [46.23.81.155])
+	by mail-a.sr.ht (Postfix) with ESMTPSA id CDDD622289
+	for <~whynothugo/vdirsyncer-devel@lists.sr.ht>; Sun, 13 Sep 2026 10:26:21 +0000 (UTC)
+From: ~randogoth <randogoth@git.sr.ht>
+Date: Sun, 13 Sep 2026 13:17:17 +0300
+Subject: [PATCH vstorage] Push nested subcomponents onto the component stack
+Message-ID: <178929518181.17287.11968853769603087037-0@git.sr.ht>
+X-Mailer: git.sr.ht
+Reply-to: ~randogoth <kflux@posteo.de>
+To: ~whynothugo/vdirsyncer-devel@lists.sr.ht
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+From: randogoth <kflux@posteo.de>
+
+ItemBuilder::push_subcomponent() appended the new subcomponent straight
+into the parent's subcomponents list instead of pushing it onto
+component_stack. pop_subcomponent() (called on the matching END: line)
+still pops component_stack unconditionally, so the first nested
+component (e.g. a VALARM inside a VEVENT) empties the stack on its
+END: line, and the next current() call panics with "component_stack
+non-empty".
+
+This affects any VEVENT/VTODO/VJOURNAL containing a nested
+sub-component parsed via Component::parse_split, which is used by
+WebCalStorage::list_items to split a feed into individual items. In
+practice this reliably crashes pimsync when syncing any webcal feed
+containing an alarm.
+---
+ src/simple_component.rs | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/src/simple_component.rs b/src/simple_component.rs
+index 7a4d6cc..8b0bdb9 100644
+--- a/src/simple_component.rs
++++ b/src/simple_component.rs
+@@ -294,7 +294,7 @@ impl<'a> ItemBuilder<'a> {
+     }
+
+     fn push_subcomponent(&mut self, component: Component<'a>) {
+-        self.current().subcomponents.push(component);
++        self.component_stack.push(component);
+     }
+
+     fn pop_subcomponent(&mut self) {
+@@ -631,4 +631,25 @@ mod test {
+             Err(ComponentError::DataAfterEnd)
+         );
+     }
++
++    #[test]
++    fn test_event_with_valarm() {
++        use super::Component;
++
++        let calendar = [
++            "BEGIN:VCALENDAR",
++            "BEGIN:VEVENT",
++            "UID:test-event",
++            "BEGIN:VALARM",
++            "ACTION:DISPLAY",
++            "TRIGGER:-PT15M",
++            "END:VALARM",
++            "END:VEVENT",
++            "END:VCALENDAR",
++        ]
++        .join("\r\n");
++
++        let components = Component::parse_split(&calendar).unwrap();
++        assert_eq!(components.len(), 1);
++    }
+ }
+--
+2.49.1
