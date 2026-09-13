@@ -199,7 +199,7 @@ in
         "pimsync@" = {
           scriptArgs = "%i";
           script = ''
-            # This is a quick hack to ensure all local paths exist, because pimsyncer
+            # This is a quick hack to ensure all local paths exist, because pimsync
             # won't create them for us.
             # Note: there's a not-yet-accepted patch upstream that would implement
             # this behavior for us:
