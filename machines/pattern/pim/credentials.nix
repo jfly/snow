@@ -36,4 +36,11 @@
     };
     files.url.owner = config.snow.user.name;
   };
+  clan.core.vars.generators.ram-alt-cal-url = {
+    prompts.url = {
+      description = "ISC URL for ram alt";
+      persist = true;
+    };
+    files.url.owner = config.snow.user.name;
+  };
 }

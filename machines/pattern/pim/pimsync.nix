@@ -16,6 +16,7 @@ let
     "jfly_cal"
     "jfly_gcal"
     "ram_cal"
+    "ram_alt_cal"
     "jfly_cards"
     "ramfly_cards"
   ];
@@ -105,6 +106,24 @@ let
         pair ram_cal {
           storage_a ram_cal_local
           storage_b ram_cal_remote
+          collections all
+          conflict_resolution cmd nvim -d
+        }
+
+        storage ram_alt_cal_remote {
+          type webcal
+          collection_id ram_alt_cal
+          url {
+            cmd cat ${config.clan.core.vars.generators.ram-alt-cal-url.files."url".path}
+          }
+        }
+        storage ram_alt_cal_local {
+          type vdir/icalendar
+          path ~/pim/calendars/ram
+        }
+        pair ram_alt_cal {
+          storage_a ram_alt_cal_local
+          storage_b ram_alt_cal_remote
           collections all
           conflict_resolution cmd nvim -d
         }
