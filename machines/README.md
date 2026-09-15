@@ -1,8 +1,8 @@
-# NixOS Machines
+# NixOS machines
 
 All machines in this folder are Clan machines. See <https://docs.clan.lol/guides/getting-started/configure/>.
 
-## Defining a New Host in the Fleet
+## Defining a new host in the fleet
 
 Just copy the template:
 
@@ -12,7 +12,7 @@ cp -r machines/template/ machines/[HOSTNAME]
 
 Edit the resulting files to your taste.
 
-## Bootstrapping a Machine
+## Bootstrapping a machine over ssh
 
 1. Boot the machine into [jflyso](./jflyso/README.md).
 2. `clan machines install --update-hardware-config nixos-generate-config --target-host jfly@jflyso [HOSTNAME]`
@@ -27,7 +27,7 @@ Edit the resulting files to your taste.
    - `sudo systemctl unmask restic-backups-snow.service --runtime`: Re-enable backups.
 4. Suggestion: now update your `~/.ssh/config` so you can simply `ssh [HOSTNAME]`.
 
-## Deploying Updates
+## Deploying updates
 
 Subsequent updates to the machine:
 

@@ -1,8 +1,8 @@
 { flake, ... }:
 
 {
-  networking.hostName = "dallben";
-  time.timeZone = "America/Los_Angeles";
+  networking.hostName = "dallage";
+  time.timeZone = "America/Chicago";
 
   imports = [
     flake.nixosModules.shared
@@ -12,7 +12,6 @@
     ./bluetooth.nix
     flake.nixosModules.xmonad-basic
     flake.nixosModules.kodi-colusita
-    ./arr
   ];
 
   services.kodi-colusita = {
@@ -28,7 +27,11 @@
   # This device regularly goes to sleep.
   snow.monitoring.alertIfDown = false;
 
-  disko.devices.disk.main.device = "/dev/disk/by-id/nvme-CT250P2SSD8_2117E59A4AF5";
+  # Not worth backing up: this machine is stateless and easier to recreate from
+  # scratch.
+  snow.backup.enable = false;
+
+  disko.devices.disk.main.device = "/dev/disk/by-id/nvme-eui.0025388101c88cbd";
 
   # Prevent the screen from going dark. It's a source of endless confusion when
   # we turn on the TV to find that the screen is still dark (until we do

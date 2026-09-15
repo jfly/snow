@@ -15,6 +15,11 @@ let
           imports = [ "${modulesPath}/installer/netboot/netboot-minimal.nix" ];
           # The default compression algorithm produces the smallest images, but takes a *while*.
           netboot.squashfsCompression = "gzip -Xcompression-level 1";
+
+          # This is necessary to avoid a conflict with the empty
+          # `users.users."root".initialHashedPassword` the netboot
+          # profile (above) sets.
+          users.users.root.hashedPassword = null;
         }
       )
     ];
