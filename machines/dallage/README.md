@@ -19,9 +19,7 @@ We have full disk encryption enabled for this machine. If it reboots, you must
 manually unlock it:
 
 ```console
-torsocks ssh -t "root@$(clan vars get dallage tor-hidden-service/hostname)" systemd-tty-ask-password-agent --query
+unlock dallage
 ```
-
-The root password is available at `clan vars get dallage rootfs/password`.
 
 Note: this requires the `tor` service to be running (see `machines/pattern/tor.nix`).

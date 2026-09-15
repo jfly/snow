@@ -97,8 +97,10 @@ in
 pkgs.mkShell {
   nativeBuildInputs = [
     inputs'.clan-core.packages.default
+    inputs'.clan-core.packages.default
     pkgs.uv
     pkgs.age
+    flake'.packages.unlock
 
     # Pulumi stuff
     (pkgs.pulumi.withPackages (pulumiPackages: with pulumiPackages; [ pulumi-python ]))
