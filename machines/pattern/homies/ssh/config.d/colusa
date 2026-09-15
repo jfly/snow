@@ -4,6 +4,7 @@ Host fflewddur
     Tag colusa
     HostName fflewddur.m
     User jfly
+    ForwardAgent yes
 
 Host fflam
     Tag colusa

@@ -14,9 +14,10 @@ Edit the resulting files to your taste.
 
 ## Bootstrapping a machine over ssh
 
-1. Boot the machine into [jflyso](./jflyso/README.md).
-2. `clan machines install --update-hardware-config nixos-generate-config --target-host jfly@jflyso [HOSTNAME]`
-3. If you're reprovisioning an existing machine, you may want to restore from backups.
+1. `nix run .#gen-hosts > nixos-modules/shared/host-to-services.toml`
+2. Boot the machine into [jflyso](./jflyso/README.md).
+3. `clan machines install --update-hardware-config nixos-generate-config --target-host jfly@jflyso [HOSTNAME]`
+4. If you're reprovisioning an existing machine, you may want to restore from backups.
    - `sudo systemctl mask restic-backups-snow.service --runtime`: Prevent any
      backups from happening until we've restored.
    - `sudo restic-snow restore latest --target /mnt/restore`: Copy the
@@ -25,7 +26,9 @@ Edit the resulting files to your taste.
    - Check `/mnt/restore` for anything else you might want to restore.
    - Remove the now empty `/mnt/restore` directory.
    - `sudo systemctl unmask restic-backups-snow.service --runtime`: Re-enable backups.
-4. Suggestion: now update your `~/.ssh/config` so you can simply `ssh [HOSTNAME]`.
+5. Suggestion: now update your `~/.ssh/config` so you can simply `ssh [HOSTNAME]`.
+6. Suggestion: redeploy fflewddur (the ZeroTier controller) to admit the new
+   machine to the overlay network.
 
 ## Deploying updates
 
