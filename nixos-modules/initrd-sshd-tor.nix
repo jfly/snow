@@ -51,6 +51,14 @@ in
     # Enable ethernet in initrd.
     boot.initrd.availableKernelModules = [ cfg.networkKernelModule ];
 
+    # Give the machine a different hostname in initrd. This makes it easier to
+    # distinguish when it's in initrd or not.
+    boot.initrd.systemd.contents = {
+      # TODO: should we add a mkDefault upstream? <https://github.com/nixos/nixpkgs/blob/994196cfd050b62afec00fda3dabe672aba870ac/nixos/modules/system/boot/systemd/initrd.nix#L596-L597>
+      # Or even a new `config.boot.initrd.networking.hostname` option?
+      "/etc/hostname".text = lib.mkForce "${config.networking.hostName}-initrd";
+    };
+
     boot.initrd.secrets = {
       "/etc/tor/onion/bootup/hs_ed25519_secret_key" = (
         config.clan.core.vars.generators.tor-hidden-service.files."hs_ed25519_secret_key".path

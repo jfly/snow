@@ -1,5 +1,4 @@
 { flake, ... }:
-
 {
   networking.hostName = "dallage";
   time.timeZone = "America/Chicago";
@@ -17,7 +16,7 @@
   services.kodi-colusita = {
     enable = true;
     startOnBoot = true;
-    cecdaemon.enable = true;
+    cecdaemon.enable = false;
     moonlight = {
       enable = true;
       startOnKeycode = "KEY_RED";

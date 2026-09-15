@@ -1,6 +1,9 @@
 clark = [
     "clark.m",
 ]
+dallage = [
+    "dallage.m",
+]
 dallben = [
     "dallben.m",
     "bazarr.m",
