@@ -289,7 +289,7 @@ in
     );
 
     networking.extraHosts = lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
+      (lib.mapAttrsToList (
         host: fqdns:
         let
           ip = builtins.readFile ../../vars/shared/zerotier-ip-${host}-manman/ip/value;
@@ -307,7 +307,13 @@ in
               fqdns;
         in
         "${ip} ${lib.concatStringsSep " " validFqdns}"
-      ) hostToServices
+      ) hostToServices)
+      ++ [
+        # Add non-nixos machines as well.
+        # This is incomplete and a hack: ideally we'd generate this list from
+        # the node ids (see the lits in flake-modules/clan.nix).
+        "fdd4:aa51:eed9:426:9f99:93ee:e8a3:e616 gurgi.m"
+      ]
     );
 
     snow.services = {

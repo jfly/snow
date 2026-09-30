@@ -21,7 +21,7 @@ aspect_ratio=1920x1080
 # control of the mod key (Windows key). However, if I'm really going to be
 # spending some time in the stream, I can enable fullscreen mode
 # (ctrl+alt+shift+x), and now the stream gets all my keys.
-moonlight stream "gurgi.ec" Desktop \
+moonlight stream "gurgi.m" Desktop \
     -resolution $aspect_ratio \
     --capture-system-keys fullscreen --display-mode windowed
 

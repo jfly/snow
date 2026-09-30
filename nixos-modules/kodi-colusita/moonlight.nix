@@ -74,7 +74,7 @@ in
       serviceConfig.ExecStart = lib.escapeShellArgs [
         (lib.getExe pkgs.moonlight-qt)
         "stream"
-        "gurgi.ec"
+        "gurgi.m"
         "Desktop" # So-called "app".
         "--resolution"
         "1920x1080"
