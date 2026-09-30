@@ -28,8 +28,17 @@ let
     }
   );
 
+  patchedKodi = cfg.package.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [
+      # Backport of <https://github.com/xbmc/xbmc/pull/28967> to Kodi 21.3.
+      # Hopefully addresses scenario where playback "crashes" shortly after
+      # starting playback after pausing.
+      # https://github.com/jellyfin/jellyfin-kodi/issues/594
+      ./backport-treat-CURLE_SEND_ERROR-as-a-transient-error.patch
+    ];
+  });
   myKodi =
-    (cfg.package.withPackages (
+    (patchedKodi.withPackages (
       kodiAddons:
       [
         settingsAddon
@@ -64,8 +73,23 @@ let
             --prefix PATH : ${lib.makeBinPath [ pkgs.gdb ]} \
             --set-default NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
 
+          # Strange: sometimes peripherals.xml is a symlink to a file in the
+          # nix store, and sometimes it's in a symlink to a directory in the
+          # nix store. I don't know an elegant way to handle both cases, so we
+          # do this grossness.
+          # I don't know why things are different: seems to be the hydra built
+          # unwrapped kodi vs locally built? IDK.
+
           # Convert peripherals.xml to a real file, rather than a symlink to the nix store.
-          cp --remove-destination --no-preserve=mode $(readlink $out/share/kodi/system/peripherals.xml) $out/share/kodi/system/peripherals.xml
+          # cp --remove-destination --no-preserve=mode $(readlink $out/share/kodi/system/peripherals.xml) $out/share/kodi/system/peripherals.xml
+
+          # We need peripherals.xml to be mutable, but it's inside a symlink to
+          # an immutable directory in the nix store. Remove that symlink and
+          # replace it with a copy of the directory it points to.
+          og_system=$(readlink $out/share/kodi/system)
+          rm $out/share/kodi/system  # Remove the symlink.
+          cp --recursive --no-preserve=mode "$og_system" $out/share/kodi/system
+
           # Now update peripherals.xml.
           xmlstarlet ed --inplace --update "/peripherals/peripheral[@bus='cec']/setting[@key='enabled']/@value" --value "0" $out/share/kodi/system/peripherals.xml
         '';

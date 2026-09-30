@@ -1,0 +1,14 @@
+diff --git a/xbmc/filesystem/CurlFile.cpp b/xbmc/filesystem/CurlFile.cpp
+index ec78006b05..48e2dc51b8 100644
+--- a/xbmc/filesystem/CurlFile.cpp
++++ b/xbmc/filesystem/CurlFile.cpp
+@@ -1749,7 +1749,8 @@ int8_t CCurlFile::CReadState::FillBuffer(unsigned int want)
+                   msg->data.result == CURLE_PARTIAL_FILE       ||
+                   msg->data.result == CURLE_COULDNT_CONNECT    ||
+                   msg->data.result == CURLE_HTTP2_STREAM       ||
+-                  msg->data.result == CURLE_RECV_ERROR)        &&
++                  msg->data.result == CURLE_RECV_ERROR         ||
++                  msg->data.result == CURLE_SEND_ERROR)        &&
+                   !m_bFirstLoop)
+             {
+               bRetryNow = false; // Leave it to caller whether the operation is retried
