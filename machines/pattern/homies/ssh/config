@@ -39,7 +39,8 @@ Host openwrt.cottage
 Host dallage-initrd.cottage
     User root
 
-Host dallage.cottage
+Host dallage
+    HostName dallage.cottage
     User jfly
 
 Host kent2
