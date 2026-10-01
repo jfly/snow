@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 let
   inherit (lib.nixvim) mkRaw;
@@ -44,13 +44,5 @@ in
   # '';
   plugins.none-ls.enableLspFormat = true;
   plugins.none-ls.sources.formatting.nix_flake_fmt.enable = true;
-  plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "nix_flake_fmt: drop legacy codepath, fix timeouts";
-        url = "https://github.com/nvimtools/none-ls.nvim/commit/c4b82bb63b13856ba4d6b971b7aad3bb38fc6fe2.diff";
-        hash = "sha256-QGtYarjxCqrF0PNXy4jEpT1+ng8jRWVvXdl+uZ8l+hU=";
-      })
-    ];
-  });
+  # plugins.none-ls.package = pkgs.vimPlugins.none-ls-nvim.overrideAttrs (...);
 }

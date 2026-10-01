@@ -11,6 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
       inputs.flake-parts.follows = "flake-parts";
+      inputs.uv2nix.follows = "uv2nix";
     };
 
     clan-core = {
@@ -160,35 +161,15 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
-            # Need the updated grammars because
-            # <https://github.com/nixos/nixpkgs/commit/2705e78c7ed9eb399f0653e793e17b3d1cfa5e2e>
-            # pulled in
-            # <https://github.com/nvim-treesitter/nvim-treesitter/commit/a45a920ec04cda5624f6dea0ff6454c81c3ad2d5>,
-            # which requires a newer version of `tree-sitter-diff`.
-            (fetchpatch {
-              name = "vimPlugins.nvim-treesitter: update grammars";
-              url = "https://github.com/nixos/nixpkgs/commit/fe5a73b1ed6b251a79b37bc8b1b1559dcbfa5f9c.diff";
-              hash = "sha256-BvtseFELodw2HjvnzmfzNKXF8xN/5K2JtcNlz76y4C0=";
-            })
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
-              hash = "sha256-Xuhx1R8OvMR+KPNAMrJ5MzZFHntO37EfaRjw7jt6l4k=";
-            })
-            (fetchpatch {
-              name = "pimsync: 0.5.11 -> 0.6.0";
-              url = "https://github.com/NixOS/nixpkgs/pull/562847.diff";
-              hash = "sha256-BKAYBQtDMjsL8w5HeB3vlcNFZVAVj6KTMbGCQrQS1dI=";
-            })
-            (fetchpatch {
-              name = "odmpy: init at 0.8.1, python3.pkgs.iso639-lang: init at 2.6.3";
-              url = "https://github.com/NixOS/nixpkgs/pull/460870.diff";
-              hash = "sha256-kqbEnhJkSh00c7bKcft22deYFP7x6oYB2DivADb4R9Y=";
+              hash = "sha256-5Qkk3bOkpbS3ehZAgTkO1gF9aZl2tn0xo3GjQ+YF/IQ=";
             })
             (fetchpatch {
               name = "miniflux: add options for all secret files";
               url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
-              hash = "sha256-Kv5PnJbTLl5lT6nzHJjfHMTsQZv9bSSWJWFqlLZPew8=";
+              hash = "sha256-Kee85meB2eys26HYyxot2iSFZL8Xi+ZndH1s/TJIsR0=";
             })
             (fetchpatch {
               name = "nixos/actkbd: switch to Type=exec rather than forking";
@@ -198,17 +179,17 @@
             (fetchpatch {
               name = "mcg: init at 4.0.2";
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
-              hash = "sha256-dfv8NPSqeS51a8b/7GZueZxzEmNDK1rQ3cYk9dMcj34=";
+              hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
             })
           ];
 
-          openwrt-imagebuilder.patches = [
-            (fetchpatch {
-              name = "update hashes";
-              url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
-              hash = "sha256-MME9HUfM3AfiwCaacJf9K6P1QpIRbBm7fRVGseI/lZU=";
-            })
-          ];
+          # openwrt-imagebuilder.patches = [
+          #   (fetchpatch {
+          #     name = "update hashes";
+          #     url = "https://github.com/astro/nix-openwrt-imagebuilder/compare/main...jfly:nix-openwrt-imagebuilder:update-hashes.diff";
+          #     hash = "sha256-MME9HUfM3AfiwCaacJf9K6P1QpIRbBm7fRVGseI/lZU=";
+          #   })
+          # ];
 
           clan-core.patches = [
             # We need to allow vars definitions to differ across machines.
@@ -233,6 +214,10 @@
           flake-parts.patches = [
             # Workaround for <https://github.com/hercules-ci/flake-parts/issues/299>
             ./patches/flake-parts/add-key-to-nixosModules.patch
+          ];
+
+          simple-nixos-mailserver.patches = [
+            ./patches/simple-nixos-mailserver/fix-configurePostfix-warning.patch
           ];
         };
       };

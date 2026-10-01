@@ -349,7 +349,6 @@ in
     })
     audible-cli
     flake'.packages.snowcrypt
-    odmpy
 
     ### Remote desktop
     moonlight-qt

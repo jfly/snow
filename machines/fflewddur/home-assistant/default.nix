@@ -139,7 +139,7 @@ in
   snow.services =
     let
       haReverseProxy = {
-        proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
+        proxyPass = "http://[::1]:8123";
         nginxExtraConfig = ''
           proxy_buffering off;
           client_max_body_size 1024M;

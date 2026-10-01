@@ -52,8 +52,8 @@ let
             patches = oldAttrs.patches or [ ] ++ [
               (pkgs.fetchpatch {
                 name = "Add error checking for writing to file";
-                url = "https://sourceforge.net/p/xmlstar/bugs/136/attachment/error-checking.patch";
-                hash = "sha256-KnmXlNvFV5llI6w23fw13O+Obp36aWNbGs6EK3w9ArY=";
+                url = "https://sourceforge.net/p/xmlstar/bugs/_discuss/thread/5e3961dee3/2f9b/attachment/error-checking.patch";
+                hash = "sha256-1YYYxKiibpaAWncNBsHU/xN/ZrMXPVxNqzUhG1Y5Ofs=";
               })
             ];
           }))

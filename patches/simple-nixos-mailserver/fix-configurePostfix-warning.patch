@@ -1,0 +1,13 @@
+diff --git a/mail-server/postfix.nix b/mail-server/postfix.nix
+index 7777b10..d8eb8a6 100644
+--- a/mail-server/postfix.nix
++++ b/mail-server/postfix.nix
+@@ -259,7 +259,7 @@ in
+     # Sender Rewriting Scheme (https://www.libsrs2.net/srs/srs.pdf)
+     services.postsrsd = {
+       inherit (cfg.srs) enable;
+-      configurePostfix = true;
++      configurePostfix = "socketmap";
+       settings = {
+         domains = lib.unique (
+           [
