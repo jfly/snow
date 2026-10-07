@@ -139,7 +139,24 @@ in
       }
     ];
 
-    environment.systemPackages = [ myKodi ];
+    environment.systemPackages = [
+      myKodi
+      (pkgs.writeShellApplication {
+        name = "kodi-play";
+        runtimeInputs = [ pkgs.curl ];
+        text = ''
+          if [ $# -ne 1 ]; then
+            echo "Please provide exactly one file to play." >&2
+            exit 1
+          fi
+
+          file=$1
+          curl -s -X POST http://localhost:8080/jsonrpc \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg f "$file" '{jsonrpc:"2.0",id:1,method:"Player.Open",params:{item:{file:$f}}}')"
+        '';
+      })
+    ];
 
     users.users.${cfg.user} = mkIf (cfg.user != null) {
       isNormalUser = true; # Kodi needs a home directory to store `~/.kodi/`.
