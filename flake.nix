@@ -181,6 +181,11 @@
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
             })
+            (fetchpatch {
+              name = "kodiPackages.jellyfin: fix dependencies";
+              url = "https://github.com/NixOS/nixpkgs/pull/571740.diff";
+              hash = "sha256-7+VBwk7Lcwo5lNTwF98/keB/SRq/Zp6+hG1jNb4Z8uc=";
+            })
           ];
 
           # openwrt-imagebuilder.patches = [
