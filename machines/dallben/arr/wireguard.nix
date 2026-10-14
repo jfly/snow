@@ -29,7 +29,14 @@ in
     namespaceAddressIPv6 = "fda0:f78f:a59e:20::1";
     bridgeAddress = "172.20.0.254";
     bridgeAddressIPv6 = "fda0:f78f:a59e:20::ff";
+    # Allow communication from the local network.
     accessibleFrom = [
+      config.snow.subnets.colusa-trusted.ipv4
+      config.snow.subnets.overlay.ipv6
+    ];
+    # Allow communication to the local network.
+    # For example, seerr (confined) talks to jellyfin (unconfined).
+    allowedEgress = [
       config.snow.subnets.colusa-trusted.ipv4
       config.snow.subnets.overlay.ipv6
     ];
