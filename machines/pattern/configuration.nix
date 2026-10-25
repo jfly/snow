@@ -38,6 +38,7 @@
     ./steam.nix
     ./irc-client.nix
     ./applicative.nix
+    ./newer-kernel-without-power-button-issue.nix
   ];
 
   # This device is not online all the time.
