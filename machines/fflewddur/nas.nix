@@ -141,8 +141,10 @@
 
   # Advertise shares.
   services.avahi = {
-    publish.enable = true;
-    publish.userServices = true;
+    settings.publish = {
+      disable-publishing = false;
+      publish-addresses = true;
+    };
     nssmdns4 = true;
     enable = true;
     openFirewall = true;

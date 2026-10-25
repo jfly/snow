@@ -46,7 +46,7 @@
   services.avahi = {
     enable = true;
     nssmdns4 = true;
-    publish = {
+    settings.publish = {
       enable = true;
       userServices = true;
     };

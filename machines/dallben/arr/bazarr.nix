@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  port = config.services.bazarr.listenPort;
+  port = config.services.bazarr.settings.general.port;
 in
 {
   services.bazarr = {

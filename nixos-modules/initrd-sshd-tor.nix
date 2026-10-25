@@ -65,8 +65,6 @@ in
       );
     };
 
-    boot.initrd.systemd.enable = true;
-
     boot.initrd.systemd.storePaths = [
       (lib.getExe pkgs.tor)
       torRc

@@ -226,7 +226,9 @@ in
     # I see that Home Manager *does* have this logic, but it also sounds like
     # there's some hope it'll end up in core `nixpkgs` someday.
     services.avahi.enable = true;
-    services.avahi.publish.enable = true;
-    services.avahi.publish.userServices = true;
+    services.avahi.settings.publish = {
+      disable-publishing = false;
+      publish-addresses = true;
+    };
   };
 }

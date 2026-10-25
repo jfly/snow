@@ -164,7 +164,7 @@
             (fetchpatch {
               name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
               url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
-              hash = "sha256-5Qkk3bOkpbS3ehZAgTkO1gF9aZl2tn0xo3GjQ+YF/IQ=";
+              hash = "sha256-5uUS+jDla/kK2KmzJEie+pkSdZ/+i6exvKfT+FJlJgs=";
             })
             (fetchpatch {
               name = "miniflux: add options for all secret files";
@@ -182,9 +182,22 @@
               hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
             })
             (fetchpatch {
-              name = "kodiPackages.jellyfin: fix dependencies";
-              url = "https://github.com/NixOS/nixpkgs/pull/571740.diff";
-              hash = "sha256-7+VBwk7Lcwo5lNTwF98/keB/SRq/Zp6+hG1jNb4Z8uc=";
+              name = "linux-manual: fix build with Linux 7.3";
+              url = "https://github.com/NixOS/nixpkgs/pull/578964.diff";
+              hash = "sha256-McIurOoeRZBq3nmJyxP9LWzyt4bRFHs1qWFSklrGMR0=";
+            })
+
+            # Commits plucked from <https://github.com/NixOS/nixpkgs/pull/578004>,
+            # which fixes the build of the sysdig kernel module.
+            (fetchpatch {
+              name = "linuxPackages.kernelModuleInstallHook: add setup hook";
+              url = "https://github.com/B4dM4n/nixpkgs/commit/a537398caef0e5cf99f47a26ef45ef0a97408907.diff";
+              hash = "sha256-Lx0lQcMTURVEozXJyx12yQhkoNjY8D4pYFXG5Fb+ac4=";
+            })
+            (fetchpatch {
+              name = "sysdig: install kernel module via kernelModuleInstallHook";
+              url = "https://github.com/B4dM4n/nixpkgs/commit/aee1406fb846423c77a0b1b760033ce0fb867113.diff";
+              hash = "sha256-DDsDY/yInLy1j35JR8evHHF8DVMUYIrdrHqD6pRCq5Q=";
             })
           ];
 
@@ -214,6 +227,8 @@
             ./patches/clan-core/username-hack.patch
             # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
             ./patches/clan-core/read-build-host-from-env-var.patch
+            # Fix for <https://git.clan.lol/clan/clan-core/issues/8284>
+            ./patches/clan-core/revert-clan-cli-pin-nix-2.31.patch
           ];
 
           flake-parts.patches = [

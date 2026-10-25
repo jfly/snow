@@ -41,9 +41,9 @@ in
     (pkgs.bcompare.overrideAttrs (oldAttrs: {
       meta = oldAttrs.meta // {
         # This license is a lie. It's just a self-contained way for me to
-        # install this software and acknowledge that I'm ok with runnning
+        # install this software and acknowledge that I'm ok with running
         # something unfree.
-        license = lib.licenses.apsl20;
+        license = lib.licenses.mit;
       };
     }))
 
