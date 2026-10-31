@@ -904,11 +904,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786952642,
-        "narHash": "sha256-lYb5ryPGa7f26ErR+ZGO87Lk/jNiDS1HkzIX1vKQqu4=",
+        "lastModified": 1793333241,
+        "narHash": "sha256-qC/4ZRXmHCDjLK9Z6vPiM1iwwVjV11iJujEBpq01dcY=",
         "owner": "jfly",
         "repo": "jnix",
-        "rev": "f73bd118f6947d3cde4169250767d8169e0de5a3",
+        "rev": "151ce797f06eb58dfe1be3f74db590600340e5a7",
         "type": "github"
       },
       "original": {

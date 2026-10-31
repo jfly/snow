@@ -78,5 +78,6 @@ in
 
     ### Pairing
     inputs'.jnix.packages.shpair
+    mob
   ];
 }
