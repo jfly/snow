@@ -158,7 +158,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) =
       ((controlMask, xK_space), spawn "@dunst@/bin/dunstctl close"),
       ((controlMask, xK_grave), spawn "@dunst@/bin/dunstctl history-pop"),
       ((controlMask .|. shiftMask, xK_period), spawn "@dunst@/bin/dunstctl context"),
-      ((modMask, xK_a), spawn "systemctl restart --user autoperipherals")
+      ((modMask, xK_a), spawn "@autoperipherals@/bin/autoperipherals sync")
     ]
       ++
       -- mod-[1..9] %! Switch to workspace N
