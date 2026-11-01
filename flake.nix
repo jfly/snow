@@ -181,11 +181,6 @@
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
             })
-            (fetchpatch {
-              name = "linux-manual: fix build with Linux 7.3";
-              url = "https://github.com/NixOS/nixpkgs/pull/578964.diff";
-              hash = "sha256-McIurOoeRZBq3nmJyxP9LWzyt4bRFHs1qWFSklrGMR0=";
-            })
 
             # Commits plucked from <https://github.com/NixOS/nixpkgs/pull/578004>,
             # which fixes the build of the sysdig kernel module.
@@ -227,8 +222,6 @@
             ./patches/clan-core/username-hack.patch
             # Workaround for <https://git.clan.lol/clan/clan-core/issues/4624>.
             ./patches/clan-core/read-build-host-from-env-var.patch
-            # Fix for <https://git.clan.lol/clan/clan-core/issues/8284>
-            ./patches/clan-core/revert-clan-cli-pin-nix-2.31.patch
           ];
 
           flake-parts.patches = [
