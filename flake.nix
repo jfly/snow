@@ -181,6 +181,16 @@
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
             })
+            (fetchpatch {
+              name = "librespeed-rust: fix build with system sqlite";
+              url = "https://github.com/NixOS/nixpkgs/pull/585622.diff";
+              hash = "sha256-AGhH8APBGJ5+IAGMXi97HkpJfEiJ+WQZIqmAHY9Vc88=";
+            })
+            (fetchpatch {
+              name = "scantpaper: 3.0.11 -> 4.0.3";
+              url = "https://github.com/NixOS/nixpkgs/pull/588469.diff";
+              hash = "sha256-shE8o0uZpEK0xle3m08GdWD4IkQj3Jsxri9h9hsbb54=";
+            })
 
             # Commits plucked from <https://github.com/NixOS/nixpkgs/pull/578004>,
             # which fixes the build of the sysdig kernel module.

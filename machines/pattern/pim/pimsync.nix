@@ -169,35 +169,7 @@ let
   myPimsync = pkgs.symlinkJoin {
     inherit (pkgs.pimsync) name meta;
     paths = [
-      (
-        let
-          vstorageVersion = "0.11.0";
-          patchedVstorage = pkgs.applyPatches {
-            src = pkgs.fetchCrate {
-              pname = "vstorage";
-              version = "0.11.0";
-              hash = "sha256-jwrqXOr+FRl9pQOknIpkUEE0iAUhvuzzWEFnuHGRLWk=";
-            };
-            patches = [
-              # Fixes a bug with handling of VEVENTs with VALARMs in them:
-              # https://lists.sr.ht/~whynothugo/vdirsyncer-devel/patches/71418
-              ./vstorage-push-nested-subcomponents-onto-the-component-stack.patch
-            ];
-          };
-        in
-        pkgs.pimsync.overrideAttrs (oldAttrs: {
-          postPatch = ''
-            # Confirm we've pulled + patched the correct version of vstorage.
-            grep 'vstorage = { version = "${vstorageVersion}", default-features = false }' Cargo.toml
-
-            # Note: the Cargo.toml ends with a `[patch.crates-io]` section, so
-            # we can just append to it.
-            cat >> Cargo.toml <<EOF
-            vstorage = { path = "${patchedVstorage}" }
-            EOF
-          '';
-        })
-      )
+      pkgs.pimsync
     ];
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
