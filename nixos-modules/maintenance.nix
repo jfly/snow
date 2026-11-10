@@ -6,6 +6,12 @@ let
   units = [
     "local-fs.target"
     "network-online.target"
+
+    # Some services needed for `nixos-rebuild switch`
+    "dbus.service"
+    "nix-daemon.service"
+
+    # Network/overlay network
     "systemd-networkd.service"
     "sshd.service"
     "zerotierone.service"
