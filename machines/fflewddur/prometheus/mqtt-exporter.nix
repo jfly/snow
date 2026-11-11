@@ -60,16 +60,6 @@ in
                   annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
                 }
                 {
-                  alert = "LongTimeNoChange";
-                  expr = ''changes(mqtt_temperature{topic=~"zigbee2mqtt_south-bedroom_weather|zigbee2mqtt_northeast-bedroom_weather"}[3h]) == 0'';
-                  labels = {
-                    severity = "urgent";
-                    category = "zigbee";
-                  };
-                  annotations.summary = "Have not seen a temperature change from {{ $labels.topic }} in a while";
-                  annotations.grafana = "https://grafana.m/d/admf9zr/zigbee";
-                }
-                {
                   alert = "ZigbeeDeviceGone";
                   expr = "mqtt_zigbee_availability == 0";
                   labels = {
