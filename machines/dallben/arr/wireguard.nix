@@ -30,7 +30,7 @@ in
     bridgeAddress = "172.20.0.254";
     bridgeAddressIPv6 = "fda0:f78f:a59e:20::ff";
     # Allow communication from the local network.
-    accessibleFrom = [
+    allowedIngress = [
       config.snow.subnets.colusa-trusted.ipv4
       config.snow.subnets.overlay.ipv6
     ];

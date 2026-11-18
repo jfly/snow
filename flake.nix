@@ -161,10 +161,12 @@
         flakePath = ./.;
         patchSpec = {
           nixpkgs.patches = [
+            # https://nginx2root.com/
+            # https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities
             (fetchpatch {
-              name = "python3Packages.cec: init at 0.2.8, cecdaemon: init at 1.0.0-unstable-2025-11-12";
-              url = "https://github.com/NixOS/nixpkgs/pull/464399.diff";
-              hash = "sha256-5uUS+jDla/kK2KmzJEie+pkSdZ/+i6exvKfT+FJlJgs=";
+              name = "Nginx Security Updates";
+              url = "https://github.com/NixOS/nixpkgs/pull/589961.diff";
+              hash = "sha256-ISSXU/rsAHoHsIiqWZDRVXc3h7PsrPRH10uEMKSMV9M=";
             })
             (fetchpatch {
               name = "miniflux: add options for all secret files";
@@ -180,11 +182,6 @@
               name = "mcg: init at 4.0.2";
               url = "https://github.com/NixOS/nixpkgs/pull/509402.diff";
               hash = "sha256-anyIRfTLNk/4bIejSDXNJqUQfRAhX8W2hE0RhHve//Q=";
-            })
-            (fetchpatch {
-              name = "librespeed-rust: fix build with system sqlite";
-              url = "https://github.com/NixOS/nixpkgs/pull/585622.diff";
-              hash = "sha256-AGhH8APBGJ5+IAGMXi97HkpJfEiJ+WQZIqmAHY9Vc88=";
             })
             (fetchpatch {
               name = "scantpaper: 3.0.11 -> 4.0.3";

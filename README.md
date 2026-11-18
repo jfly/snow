@@ -13,7 +13,7 @@ I manage a mix of things in this repo:
 
 To get a list of hosts:
 
-    ls hosts
+    ls machines
 
 To deploy a machine:
 
