@@ -6,6 +6,10 @@ Host fflewddur
     User jfly
     ForwardAgent yes
 
+Host fflewddur-initrd
+    HostName fflewddur.ec
+    User root
+
 Host fflam
     Tag colusa
     HostName fflam.m
