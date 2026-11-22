@@ -17,7 +17,6 @@ in
     flake.nixosModules.yazi
     flake.nixosModules.zoxide
     flake.nixosModules.newpy
-    flake.nixosModules.nix-hack
     flake.nixosModules.fzf
     ./ripgrep.nix
   ];
