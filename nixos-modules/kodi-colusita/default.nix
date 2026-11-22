@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs',
   ...
 }:
 
@@ -28,17 +29,8 @@ let
     }
   );
 
-  patchedKodi = cfg.package.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      # Backport of <https://github.com/xbmc/xbmc/pull/28967> to Kodi 21.3.
-      # Hopefully addresses scenario where playback "crashes" shortly after
-      # starting playback after pausing.
-      # https://github.com/jellyfin/jellyfin-kodi/issues/594
-      ./backport-treat-CURLE_SEND_ERROR-as-a-transient-error.patch
-    ];
-  });
   myKodi =
-    (patchedKodi.withPackages (
+    (cfg.package.withPackages (
       kodiAddons:
       [
         settingsAddon
@@ -81,14 +73,14 @@ let
           # unwrapped kodi vs locally built? IDK.
 
           # Convert peripherals.xml to a real file, rather than a symlink to the nix store.
-          # cp --remove-destination --no-preserve=mode $(readlink $out/share/kodi/system/peripherals.xml) $out/share/kodi/system/peripherals.xml
+          cp --remove-destination --no-preserve=mode $(readlink $out/share/kodi/system/peripherals.xml) $out/share/kodi/system/peripherals.xml
 
-          # We need peripherals.xml to be mutable, but it's inside a symlink to
-          # an immutable directory in the nix store. Remove that symlink and
-          # replace it with a copy of the directory it points to.
-          og_system=$(readlink $out/share/kodi/system)
-          rm $out/share/kodi/system  # Remove the symlink.
-          cp --recursive --no-preserve=mode "$og_system" $out/share/kodi/system
+          # # We need peripherals.xml to be mutable, but it's inside a symlink to
+          # # an immutable directory in the nix store. Remove that symlink and
+          # # replace it with a copy of the directory it points to.
+          # og_system=$(readlink $out/share/kodi/system)
+          # rm $out/share/kodi/system  # Remove the symlink.
+          # cp --recursive --no-preserve=mode "$og_system" $out/share/kodi/system
 
           # Now update peripherals.xml.
           xmlstarlet ed --inplace --update "/peripherals/peripheral[@bus='cec']/setting[@key='enabled']/@value" --value "0" $out/share/kodi/system/peripherals.xml
@@ -105,7 +97,11 @@ in
   options.services.kodi-colusita = {
     enable = mkEnableOption "kodi-colusita";
 
-    package = lib.mkPackageOption pkgs "kodi" { };
+    package = mkOption {
+      type = types.package;
+      default = inputs'.nixpkgs-kodi-piers.legacyPackages.kodi;
+      readOnly = true;
+    };
 
     startOnBoot = mkOption {
       type = types.bool;

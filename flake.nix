@@ -78,6 +78,7 @@
     };
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-kodi-piers.url = "github:jfly/nixpkgs/staging-next-kodi-22.0";
 
     nixvim = {
       url = "github:nix-community/nixvim";

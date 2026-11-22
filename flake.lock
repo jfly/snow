@@ -1025,6 +1025,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-kodi-piers": {
+      "locked": {
+        "lastModified": 1795334919,
+        "narHash": "sha256-0Rha5lCUKH2wfzvQok0oRFqnhLjCJPSRKdlKQyOWp4A=",
+        "owner": "jfly",
+        "repo": "nixpkgs",
+        "rev": "43271ea043306ca030ee4f807b0cefd8d0fc17f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfly",
+        "ref": "staging-next-kodi-22.0",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_6",
@@ -1355,6 +1371,7 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-kodi-piers": "nixpkgs-kodi-piers",
         "nixvim": "nixvim",
         "on-air": "on-air",
         "openwrt-imagebuilder": "openwrt-imagebuilder",
