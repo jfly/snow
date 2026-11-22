@@ -40,3 +40,4 @@ need to do to get it working:
    To force a refresh, go to Addons > Jellyfin > Manage libraries > Update libraries > Select "All"
    When you get it right, there will be a very obvious progress bar at the top
    right of the screen.
+9. Audio: set the correct number of channels and enable passthru if appropriate for your receiver.

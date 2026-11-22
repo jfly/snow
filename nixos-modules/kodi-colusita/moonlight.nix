@@ -63,10 +63,14 @@ in
       }
     ];
 
-    services.kodi-colusita.extraAddons = [
-      config.services.kodi-colusita.package.packages.joystick
-      flake'.packages.kodiPackages.moonlight
-    ];
+    services.kodi-colusita.extraAddons =
+      let
+        kodiPackages = config.services.kodi-colusita.package.packages;
+      in
+      [
+        kodiPackages.joystick
+        (flake'.packages.kodi-moonlight.override { inherit kodiPackages; })
+      ];
 
     systemd.user.services.moonlight = {
       enable = true;

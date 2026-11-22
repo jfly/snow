@@ -1,7 +1,7 @@
-{ pkgs }:
+{ stdenv, kodiPackages }:
 
-pkgs.kodiPackages.toKodiAddon (
-  pkgs.stdenv.mkDerivation {
+kodiPackages.toKodiAddon (
+  stdenv.mkDerivation {
     name = "kodi-moonlight";
     namespace = "script.moonlight";
 
