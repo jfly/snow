@@ -56,7 +56,7 @@ let
         --checkers=7 \
         --log-level=INFO \
         ${lib.escapeShellArgs backupPaths} \
-        :sftp:./manman
+        :sftp:manman
 
       end_time=$(date +%s.%N)
       duration_seconds=$(echo "$end_time - $start_time" | ${lib.getExe pkgs.bc})
