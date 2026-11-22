@@ -47,8 +47,8 @@
     enable = true;
     nssmdns4 = true;
     settings.publish = {
-      enable = true;
-      userServices = true;
+      disable-publishing = false;
+      publish-addresses = true;
     };
   };
 
