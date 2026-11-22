@@ -43,7 +43,7 @@ in
             "4" = "KEY_RIGHT";
             # Home
             "9" = "KEY_ESC";
-            # Options
+            # Options ("Menu" on my remote)
             "10" = "KEY_C";
             # Return
             "13" = "KEY_BACKSPACE";
@@ -62,6 +62,10 @@ in
             "42" = "KEY_DOT";
             # Enter
             "43" = "KEY_ENTER";
+            # Channel Up
+            "48" = "KEY_L"; # Kodi treats "l" as "pick a subtitle"
+            # Channel Down
+            "49" = "KEY_T"; # Kodi treats "t" as "toggle subtitles"
             # Jump
             "50" = "KEY_CYCLEWINDOWS";
             # Play
