@@ -52,7 +52,7 @@
     };
   };
 
-  # Set up samba (from https://nixos.wiki/wiki/Samba#Printer_sharing)
+  # Set up samba (from https://wiki.nixos.org/wiki/Samba#Printer_sharing)
   services.samba = {
     enable = true;
     package = pkgs.sambaFull.override {

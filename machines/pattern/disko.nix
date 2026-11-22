@@ -6,7 +6,7 @@
 
   # Keep only a finite number of boot configurations. This prevents /boot from
   # filling up.
-  # https://nixos.wiki/wiki/Bootloader#Limiting_amount_of_entries_with_grub_or_systemd-boot
+  # https://wiki.nixos.org/wiki/Bootloader#Limiting_amount_of_entries_with_grub_or_systemd-boot
   boot.loader.systemd-boot.configurationLimit = 100;
   boot.loader.efi.canTouchEfiVariables = true;
 
