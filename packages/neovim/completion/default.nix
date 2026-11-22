@@ -18,6 +18,22 @@ let
         "body" = [ "breakpoint() # ${conflictMarker}" ];
       };
     };
+    "nix" = {
+      "add a patch with overrideAttrs" = {
+        "prefix" = ".overrideAttrs";
+        "body" = [
+          ".overrideAttrs (oldAttrs: {"
+          "  patches = oldAttrs.patches or [] ++ ["
+          "    (pkgs.fetchpatch {"
+          "      name = \"$1\";"
+          "      url = \"$2\";"
+          "      hash = \"$3\";"
+          "    })"
+          "  ];"
+          "})"
+        ];
+      };
+    };
   };
   snippetsPkg = pkgs.symlinkJoin {
     name = "snippets";
