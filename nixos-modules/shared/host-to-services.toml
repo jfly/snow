@@ -19,9 +19,6 @@ doli = [
 ]
 fflam = [
     "fflam.m",
-    "immich.m",
-    "immich-metrics-api.m",
-    "immich-metrics-microservices.m",
 ]
 fflewddur = [
     "fflewddur.m",
@@ -34,6 +31,9 @@ fflewddur = [
     "frigate.m",
     "grafana.m",
     "home-assistant.m",
+    "immich.m",
+    "immich-metrics-api.m",
+    "immich-metrics-microservices.m",
     "irc.m",
     "jellyfin.m",
     "manman.m",

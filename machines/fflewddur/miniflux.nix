@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 let
   inherit (config.snow) services;
 in
@@ -38,9 +38,6 @@ in
     # https://github.com/NixOS/nixpkgs/blob/9acccf00827e39377a117b365061be698b88484d/nixos/modules/services/web-apps/miniflux.nix#L72
     "miniflux"
   ];
-
-  # Urg, stateVersion...
-  services.postgresql.package = pkgs.postgresql_16;
 
   snow.services.miniflux.proxyPass = "http://localhost:8080";
 }

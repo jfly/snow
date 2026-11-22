@@ -15,7 +15,7 @@
     ./prometheus
     ./grafana.nix
     ./healthcheck.nix
-    ./immich-public.nix
+    ./immich.nix
     ./immichframe.nix
     ./remote-desktop.nix
     ./step-ca.nix

@@ -169,6 +169,11 @@
               hash = "sha256-ISSXU/rsAHoHsIiqWZDRVXc3h7PsrPRH10uEMKSMV9M=";
             })
             (fetchpatch {
+              name = "immich: 3.4.1 -> 3.4.2";
+              url = "https://github.com/NixOS/nixpkgs/commit/c2c75e54245f168f1422df570c1427b782ce7cbd.diff";
+              hash = "sha256-h+yraw8DuoGrSpADA44rFEjSzW105ysTZdl6uY+CXug=";
+            })
+            (fetchpatch {
               name = "miniflux: add options for all secret files";
               url = "https://github.com/NixOS/nixpkgs/compare/master...jfly:miniflux-add-client-secret-files.diff";
               hash = "sha256-Kee85meB2eys26HYyxot2iSFZL8Xi+ZndH1s/TJIsR0=";

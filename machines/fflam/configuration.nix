@@ -8,7 +8,6 @@
     ./disko.nix
     ./nas.nix
     ./zrepl.nix
-    ./immich.nix
   ];
 
   networking.hostName = "fflam";
