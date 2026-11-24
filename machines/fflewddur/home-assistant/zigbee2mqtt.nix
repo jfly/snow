@@ -15,6 +15,22 @@ in
       homeassistant.enabled = true;
       availability.enabled = true;
       advanced.last_seen = "epoch";
+
+      # Retain messages so tools like mqtt-exporter* will not see data until a
+      # device happens to send new information. For alerts like LongTimeNoSee,
+      # where we're alerting about a device that has likely disappears, that
+      # device is never going to send more data. In other words: without retain,
+      # if mqtt-exporter restarts, prometheus will completely forget about Zigbee
+      # devices that have stopped reporting, and we won't get paged about them.
+      # There's discussion about making this the default behavior upstream
+      # <https://github.com/Koenkk/zigbee2mqtt/issues/27216>, but it's not getting
+      # a lot of traction because most people probably just wire this up to
+      # Home Assistant, which implements birth/last will messages that instruct
+      # zigbee2mqtt to re-send data.
+      #
+      # *Which is how metrics like zigbee device "last seen" get to prometheus for alerting
+      device_options.retain = true;
+
       frontend = {
         enabled = true;
         port = 4040;
